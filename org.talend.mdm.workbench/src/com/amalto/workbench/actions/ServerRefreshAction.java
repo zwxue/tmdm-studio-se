@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
@@ -19,6 +21,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
+import org.talend.mdm.commmon.util.core.CommonUtil;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -55,6 +58,7 @@ public class ServerRefreshAction extends Action {
         setToolTipText("Refresh the " + IConstants.TALEND + " Server Object(s)");
     }
 
+    @Override
     public void run() {
         try {
             doRun();
@@ -76,8 +80,8 @@ public class ServerRefreshAction extends Action {
                 return;
             server = (String) serverRoot.getWsKey(); // we are at server root
 
-            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server, serverRoot.getUsername(),
-                    serverRoot.getPassword(), serverRoot.getUser().getUniverse(), view);
+            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverRoot.getDesc(), server,
+                    serverRoot.getUsername(), serverRoot.getPassword(), serverRoot.getUser().getUniverse(), view);
 
             new ProgressMonitorDialog(view.getSite().getShell()).run(true, true, retriever);
             ServerRefreshAction.this.serverRoot.synchronizeWith(retriever.getServerRoot());
@@ -85,10 +89,16 @@ public class ServerRefreshAction extends Action {
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new Exception("Error while refreshing the " + IConstants.TALEND + " Server Objects: " + e.getLocalizedMessage());
+            String msg;
+            if (e instanceof InvocationTargetException)
+                msg = CommonUtil.getErrMsgFromException(e.getCause());
+            else
+                msg = e.getLocalizedMessage();
+            throw new Exception("Error while refreshing the " + IConstants.TALEND + " Server Objects: " + msg);
         }
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
@@ -32,8 +33,10 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
@@ -49,15 +52,18 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
+import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
-    private static Log log = LogFactory.getLog(XtentisServerObjectsRetriever.class);
+    private static final Log log = LogFactory.getLog(XtentisServerObjectsRetriever.class);
 
-    ServerView view;
-
+    private ServerView view;
+    
+    private String desc;
+    
     private String endpointaddress;
 
     private String username;
@@ -70,8 +76,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
     private boolean isExistUniverse = true;
 
-    public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe,
+    public XtentisServerObjectsRetriever(String desc, String endpointaddress, String username, String password, String universe,
             ServerView view) {
+        this.desc = desc;
         this.endpointaddress = endpointaddress;
         this.username = username;
         this.password = password;
@@ -85,10 +92,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
     public synchronized void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
         try {
+            if (password == null || password.length() == 0) {
+                throw new Exception("Password has not been specified!");
+            }
             monitor.beginTask("Loading " + IConstants.TALEND + " Server Objects", "admin".equals(username) ? 12 : 9);
             // server
-            String displayName = endpointaddress;
-            serverRoot = new TreeParent(displayName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
+            serverRoot = new TreeParent(desc, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                     : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
             // init load category
@@ -105,16 +114,15 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             monitor.worked(1);
 
             // fetch version info
-            // try {
-            // WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
-            // displayName +=
-            // " (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";
-            // } catch (Exception e) {
-            //
-            // log.error(e.getMessage(), e);
-            // }
-            WSUniverse wUuniverse = null;
-            wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
+            try {
+                WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager, null));
+                String versionStr = version.getMajor() + "." + version.getMinor() + "." + version.getRevision() + "_" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                        + version.getBuild();
+                log.info("Server version = " + versionStr); //$NON-NLS-1$
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+
             if (monitor.isCanceled())
                 throw new InterruptedException("User Cancel");
 
@@ -124,7 +132,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             user.setPassword(password);
             user.setServerUrl(endpointaddress);
             user.setUniverse(universe);
-            user.setWsUuniverse(wUuniverse);
 
             serverRoot.setUser(user);
 
@@ -363,6 +370,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 model.addTreeObjects(port, monitor, serverRoot);
             }
 
+            WSUniverse wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
             addRevision(wUuniverse);
 
             monitor.done();

@@ -14,9 +14,7 @@ package com.amalto.workbench.views;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.Authenticator;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -125,9 +123,7 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSLogout;
-import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -648,14 +644,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
         java.util.List<MDMServerDef> servers = MDMServerHelper.getServers();
         for (MDMServerDef server : servers) {
-            if (!server.isConnected())
-                continue;
-            String url = server.getUrl();
-            String user = server.getUser();
-            String password = server.getPasswd();
-            String universe = server.getUniverse();
-            if (!("".equalsIgnoreCase(url) || "".equalsIgnoreCase(user) || "".equalsIgnoreCase(password)))//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                initServerTreeParent(url, user, password, universe);
+            initServerTreeParent(server);
         }
     }
 
@@ -1058,32 +1047,39 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         super.dispose();
     }
 
-    public void initServerTreeParent(String url, String username, String password, String universe) {
-        TreeParent serverRoot = new TreeParent(url, null, TreeObject._SERVER_, url, ("".equals(universe) ? "" : universe + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                + username + ":" + (password == null ? "" : password)); //$NON-NLS-1$ //$NON-NLS-2$
+    public void initServerTreeParent(MDMServerDef server) {
+        String url = server.getUrl();
+        String username = server.getUser();
+        String password = server.getPasswd();
+        String universe = server.getUniverse();
+        TreeParent serverRoot = new TreeParent(server.getDesc(), null, TreeObject._SERVER_, url,
+                ("".equals(universe) ? "" : universe + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                        + username + ":" + (password == null ? "" : password)); //$NON-NLS-1$ //$NON-NLS-2$
         UserInfo user = new UserInfo();
-        WSUniverse wUuniverse = null;
-        XtentisPort port;
-        try {
-            port = Util.getPort(new URL(url), universe, username, password);
-            wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
-        } catch (MalformedURLException e) {
-            log.error(e.getMessage(), e);
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
-        }
+        user.setDesc(server.getDesc());
         user.setUsername(username);
         user.setPassword(password);
         user.setServerUrl(url);
         user.setUniverse(universe);
-        user.setWsUuniverse(wUuniverse);
 
         serverRoot.setUser(user);
-        if ("".equalsIgnoreCase(universe))//$NON-NLS-1$
-            universe = "HEAD";//$NON-NLS-1$
-        serverRoot.setDisplayName(url + " [" + universe + "] " + username);//$NON-NLS-1$//$NON-NLS-2$
+        if (Util.IsEnterPrise()) {
+            if (universe == null || universe.length() == 0)
+                universe = "HEAD";//$NON-NLS-1$
+        }
+        StringBuilder displayName = new StringBuilder();
+        displayName.append(serverRoot.getDisplayName());
+        if (universe != null && universe.length() != 0) {
+            displayName.append(" ["); //$NON-NLS-1$
+            displayName.append(universe);
+            displayName.append("] "); //$NON-NLS-1$
+        } else {
+            displayName.append(" "); //$NON-NLS-1$
+        }
+        
+        displayName.append(username);
+        serverRoot.setDisplayName(displayName.toString());
+
         TreeObject obj = new TreeObject("Pending...", serverRoot, TreeObject._INVISIBLE, null, null);
         ArrayList list = new ArrayList() {
         };
@@ -1101,7 +1097,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         Authenticator.setDefault(null);
 
         try {
-            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(url, username, password, universe, this);
+            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(desc, url, username, password, universe,
+                    this);
             new ProgressMonitorDialog(this.getSite().getShell()).run(true, true, retriever);
 
             TreeParent serverRoot = retriever.getServerRoot();

@@ -86,7 +86,6 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
-import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
@@ -114,7 +113,6 @@ import com.amalto.workbench.webservices.WSRunQuery;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUpdateMetadataItem;
 import com.amalto.workbench.webservices.WSVersioningGetItemContent;
@@ -126,7 +124,7 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener, IPagingListener {
 
-    private static Log log = LogFactory.getLog(DataClusterBrowserMainPage.class);
+    private static final Log log = LogFactory.getLog(DataClusterBrowserMainPage.class);
 
     protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
 
@@ -150,9 +148,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     protected boolean[] ascending = { true, false, false };
 
-    private static int DEFAULT_VIEWER_HEIGHT = 500;
-
-    KeyListener keylistener = new KeyListener() {
+    private KeyListener keylistener = new KeyListener() {
 
         public void keyPressed(KeyEvent e) {
         }
@@ -319,9 +315,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     }// createFormContent
 
     public void doSearch() {
-        // @temp yguo , show taskid column
-        // DataClusterBrowserMainPage.this.resultsViewer.refresh(true);
-        // DataClusterBrowserMainPage.this.resultsViewer.
         if (showTaskIdCB.getSelection()) {
             if (DataClusterBrowserMainPage.this.resultsViewer.getTable().getColumnCount() != 4) {
                 final TableColumn column3 = new TableColumn(DataClusterBrowserMainPage.this.resultsViewer.getTable(), SWT.LEFT, 3);
@@ -329,7 +322,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 column3.setWidth(150);
             }
         } else {
-            // @temp yguo , remove the taskid column
             if (DataClusterBrowserMainPage.this.resultsViewer.getTable().getColumnCount() == 4) {
                 DataClusterBrowserMainPage.this.resultsViewer.getTable().getColumn(3).dispose();
             }
@@ -346,14 +338,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
      * readjust the viewer height
      */
     private void readjustViewerHeight() {
-        // LineItem[] items = (LineItem[]) resultsViewer.getInput();
-        // GridData grid = (GridData) resultsViewer.getTable().getLayoutData();
-        // int actualHeight = 14 * items.length;
-        // if (actualHeight < DEFAULT_VIEWER_HEIGHT)
-        // actualHeight = DEFAULT_VIEWER_HEIGHT;
-        // grid.heightHint = actualHeight;
         resultsViewer.refresh();
-        // getManagedForm().reflow(true);
     }
 
     public TableViewer getResultsViewer() {
@@ -463,17 +448,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         // return table;
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
         // Everything is implemented in createFormContent
-    }// createCharacteristicsContent
+    }
 
+    @Override
     protected void refreshData() {
         try {
             if (conceptCombo.isDisposed())
                 return;
-            // if (! this.String xml =
-            // (String)((IStructuredSelection)event.getSelection()).getFirstElement();equals(getEditor().getActivePageInstance()))
-            // return;
             XtentisPort port = Util.getPort(getXObject());
 
             WSDataCluster cluster = null;
@@ -483,15 +467,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             } else { // it has been opened by an editor - use the object there
                 cluster = (WSDataCluster) getXObject().getWsObject();
             }
-
-            // String[] concepts = port.getConceptsInDataCluster(
-            // new WSGetConceptsInDataCluster(
-            // new WSDataClusterPK(cluster.getName())
-            // )
-            // ).getStrings();
-            // Arrays.sort(concepts);
-            // //add revision ID for concepts
-            // addRevisionID(concepts);
 
             WSUniverse currentUniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
             String currentUniverseName = "";//$NON-NLS-1$
@@ -584,24 +559,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
     }
 
-    private void addRevisionID(String[] concepts) {
-
-        WSUniverse wsUniverse = getXObject().getServerRoot().getUser().getWsUuniverse();
-        WSUniverseItemsRevisionIDs[] ids = wsUniverse.getItemsRevisionIDs();
-        for (int i = 0; i < concepts.length; i++) {
-            boolean isSet = false;
-            for (WSUniverseItemsRevisionIDs id : ids) {
-                if (Pattern.compile(id.getConceptPattern()).matcher(concepts[i]).matches()) {
-                    concepts[i] = concepts[i] + " [" + id.getRevisionID() + "]";//$NON-NLS-1$//$NON-NLS-2$
-                    isSet = true;
-                    break;
-                }
-            }
-            if (!isSet)
-                concepts[i] = concepts[i] + " [" + IConstants.HEAD + "]";//$NON-NLS-1$//$NON-NLS-2$
-        }
-    }
-
+    @Override
     protected void commit() {
         try {
 
@@ -612,8 +570,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
     }
 
+    @Override
     protected void createActions() {
-
     }
 
     private void hookKeyboard() {

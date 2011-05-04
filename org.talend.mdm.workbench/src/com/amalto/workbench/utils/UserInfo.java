@@ -12,10 +12,11 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
-import com.amalto.workbench.webservices.WSUniverse;
 
 public class UserInfo {
 
+    private String desc;
+    
     private String username;
 
     private String password;
@@ -24,11 +25,17 @@ public class UserInfo {
 
     private String universe;
 
-    private WSUniverse wsUuniverse;
-
     public UserInfo() {
     }
 
+    public String getDesc() {
+        return desc;
+    }
+    
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+    
     public String getUsername() {
         return username;
     }
@@ -60,13 +67,4 @@ public class UserInfo {
     public void setUniverse(String universe) {
         this.universe = universe;
     }
-
-    public WSUniverse getWsUuniverse() {
-        return wsUuniverse;
-    }
-
-    public void setWsUuniverse(WSUniverse wsUuniverse) {
-        this.wsUuniverse = wsUuniverse;
-    }
-
 }

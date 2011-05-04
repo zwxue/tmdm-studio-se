@@ -354,6 +354,12 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         this.user = user;
     }
 
+    public String getDesc() {
+        if (getServerRoot() != null)
+            return getServerRoot().getUser().getDesc();
+        return null;
+    }
+    
     public String getUsername() {
         if (getServerRoot() != null)
             return getServerRoot().getUser().getUsername();

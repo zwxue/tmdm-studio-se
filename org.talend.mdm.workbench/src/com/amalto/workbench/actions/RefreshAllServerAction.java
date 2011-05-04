@@ -38,10 +38,9 @@ public class RefreshAllServerAction extends Action {
         setToolTipText("Refresh All the Server");
     }
 
+    @Override
     public void run() {
-
         doRun();
-
     }
 
     public void doRun() {
@@ -49,18 +48,15 @@ public class RefreshAllServerAction extends Action {
             try {
                 String server = (String) serverRoot.getWsKey(); // we are at server root
 
-                XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server, serverRoot.getUsername(),
-                        serverRoot.getPassword(), serverRoot.getUser().getUniverse(), view);
+                XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverRoot.getDesc(), server,
+                        serverRoot.getUsername(), serverRoot.getPassword(), serverRoot.getUser().getUniverse(), view);
 
                 new ProgressMonitorDialog(view.getSite().getShell()).run(true, true, retriever);
                 serverRoot.synchronizeWith(retriever.getServerRoot());
                 ServerView.show().getViewer().refresh();
                 LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
-
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                // throw new
-                // Exception("Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());
             }
         }
     }

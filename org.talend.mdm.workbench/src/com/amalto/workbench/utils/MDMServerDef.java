@@ -16,6 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MDMServerDef {
+    
+    public static final String DEFAULT_PATH = "/talend/TalendPort";//$NON-NLS-1$
 
     private String desc = "";//$NON-NLS-1$
 
@@ -26,19 +28,14 @@ public class MDMServerDef {
     private String user = "";//$NON-NLS-1$
 
     private String passwd = "";//$NON-NLS-1$
-    
+
     private String universe = ""; //$NON-NLS-1$
 
-    private boolean saved = false;
-
-    private boolean connected = false;
-
-    private String path = "/talend/TalendPort";//$NON-NLS-1$
+    private String path = DEFAULT_PATH;
 
     public static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
-
-    public MDMServerDef(String desc, String host, String port, String path, String user, String passwd, String universe, boolean saved,
-            boolean connected) {
+    
+    public MDMServerDef(String desc, String host, String port, String path, String user, String passwd, String universe) {
 
         this.desc = desc;
         this.host = host;
@@ -47,20 +44,9 @@ public class MDMServerDef {
         this.user = user;
         this.passwd = passwd;
         this.universe = universe;
-        this.saved = saved;
-        this.connected = connected;
     }
 
     public MDMServerDef() {
-
-    }
-
-    public boolean isSaved() {
-        return saved;
-    }
-
-    public boolean isConnected() {
-        return connected;
     }
 
     public String getDesc() {
@@ -110,11 +96,11 @@ public class MDMServerDef {
     public void setPath(String path) {
         this.path = path;
     }
-    
+
     public String getUniverse() {
         return universe;
     }
-    
+
     public void setUniverse(String universe) {
         this.universe = universe;
     }
@@ -130,7 +116,7 @@ public class MDMServerDef {
         return sb.toString();
     }
 
-    public static MDMServerDef parse(String url, String user, String passwd, String universe, String desc, boolean saved, boolean connected) {
+    public static MDMServerDef parse(String url, String user, String passwd, String universe, String desc) {
 
         Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
 
@@ -141,6 +127,6 @@ public class MDMServerDef {
         String port = m.group(2);
         String path = m.group(3);
 
-        return new MDMServerDef(desc, host, port, path, user, passwd, universe, saved, connected);
+        return new MDMServerDef(desc, host, port, path, user, passwd, universe);
     }
 }

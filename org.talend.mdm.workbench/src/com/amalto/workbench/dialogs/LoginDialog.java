@@ -27,7 +27,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -39,12 +38,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -73,10 +70,6 @@ public class LoginDialog extends Dialog {
     private Text passwordText = null;
 
     private Text urlText;
-
-    private Button savePasswordButton;
-
-    private Button connectOnStartupButton;
 
     private SelectionListener caller = null;
 
@@ -181,25 +174,6 @@ public class LoginDialog extends Dialog {
             // universeCombo.select(0);
         }
 
-        savePasswordButton = new Button(composite, SWT.CHECK);
-        savePasswordButton.setText("Save password");
-        savePasswordButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-        savePasswordButton.addSelectionListener(new SelectionListener() {
-
-            public void widgetDefaultSelected(SelectionEvent e) {
-            }
-
-            public void widgetSelected(SelectionEvent e) {
-                boolean savePassword = savePasswordButton.getSelection();
-                connectOnStartupButton.setEnabled(savePassword);
-            }
-        });
-
-        connectOnStartupButton = new Button(composite, SWT.CHECK);
-        connectOnStartupButton.setEnabled(false);
-        connectOnStartupButton.setText("Automatically connect on startup");
-        connectOnStartupButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-
         descCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent arg0) {
@@ -269,13 +243,10 @@ public class LoginDialog extends Dialog {
             server = null;
         }
 
-        boolean savePassword = savePasswordButton.getSelection();
-        boolean connectOnStartup = savePassword && connectOnStartupButton.getSelection();
-
         if (server == null) {
-            addServer(root, savePassword, connectOnStartup);
+            addServer(root);
         } else {
-            setServerProperties(server, savePassword, connectOnStartup);
+            setServerProperties(server);
         }
 
         XMLWriter writer;
@@ -305,16 +276,16 @@ public class LoginDialog extends Dialog {
         return null;
     }
 
-    private void addServer(Element root, boolean savePassword, boolean connectOnStartup) {
+    private void addServer(Element root) {
         Element prop = root.addElement(MDMServerHelper.PROPERTIES);
-        setServerProperties(prop, savePassword, connectOnStartup);
+        setServerProperties(prop);
         Element desc = prop.element(MDMServerHelper.DESC);
         if (desc == null)
             desc = prop.addElement(MDMServerHelper.DESC);
         desc.setText(descCombo.getCombo().getText().trim());
     }
 
-    private void setServerProperties(Element prop, boolean savePassword, boolean connectOnStartup) {
+    private void setServerProperties(Element prop) {
         Element url = prop.element(MDMServerHelper.URL);
         if (url == null)
             url = prop.addElement(MDMServerHelper.URL);
@@ -328,25 +299,12 @@ public class LoginDialog extends Dialog {
         Element password = prop.element(MDMServerHelper.PASSWORD);
         if (password == null)
             password = prop.addElement(MDMServerHelper.PASSWORD);
-        if (savePassword)
-            password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
-        else
-            password.setText(""); //$NON-NLS-1$
+        password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
 
         Element universe = prop.element(MDMServerHelper.UNIVERSE);
         if (universe == null)
             universe = prop.addElement(MDMServerHelper.UNIVERSE);
         universe.setText(getUniverse());
-
-        Element saved = prop.element(MDMServerHelper.SAVED);
-        if (saved == null)
-            saved = prop.addElement(MDMServerHelper.SAVED);
-        saved.setText(String.valueOf(savePassword));
-
-        Element connected = prop.element(MDMServerHelper.CONNECTED);
-        if (connected == null)
-            connected = prop.addElement(MDMServerHelper.CONNECTED);
-        connected.setText(String.valueOf(connectOnStartup));
     }
 
     public void saveUserTypes() {
@@ -404,9 +362,8 @@ public class LoginDialog extends Dialog {
         passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
         urlText.setText(selectedServer == null ? "" : selectedServer.getUrl());//$NON-NLS-1$
         userText.setFocus();
-        savePasswordButton.setSelection(selectedServer == null ? false : selectedServer.isSaved());
-        connectOnStartupButton.setSelection(selectedServer == null ? false : selectedServer.isConnected());
-        connectOnStartupButton.setEnabled(selectedServer == null ? false : selectedServer.isSaved());
+        if (universeCombo != null)
+            universeCombo.setText(selectedServer == null ? "" : selectedServer.getUniverse());//$NON-NLS-1$
     }
 }
 

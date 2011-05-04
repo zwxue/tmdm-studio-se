@@ -47,10 +47,6 @@ public class MDMServerHelper {
 
     public static final String UNIVERSE = "universe"; //$NON-NLS-1$
 
-    public static final String SAVED = "saved"; //$NON-NLS-1$
-
-    public static final String CONNECTED = "connected"; //$NON-NLS-1$
-
     public static final String workbenchConfigFile = Platform.getInstanceLocation().getURL().getPath()
             + "/mdm_workbench_config.xml"; //$NON-NLS-1$
 
@@ -73,36 +69,23 @@ public class MDMServerHelper {
             logininfoDocument = DocumentHelper.createDocument();
             root = logininfoDocument.addElement(ROOT);
         }
-        
+
         List<?> properties = root.elements(PROPERTIES);
         for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();
             String password = ele.element(PASSWORD).getText();
-            boolean con = false;
-            if (ele.element(CONNECTED) != null) {
-                String connected = ele.element(CONNECTED).getText();
-                if (connected != null && Boolean.valueOf(connected) == true) {
-                    con = true;
-                }
-            }
-            boolean sav = false;
-            if (ele.element(SAVED) != null) {
-                String saved = ele.element(SAVED).getText();
-                if (saved != null && Boolean.valueOf(saved) == true) {
-                    sav = true;
-                }
-            }
+
             String universe = ele.element(UNIVERSE) != null ? ele.element(UNIVERSE).getText() : ""; //$NON-NLS-1$
             String desc = ele.element(DESC) != null ? ele.element(DESC).getText() : ""; //$NON-NLS-1$
-            
+
             password = PasswordUtil.decryptPassword(password);
-            MDMServerDef def = MDMServerDef.parse(ele.element(URL).getText(), ele.element(USER).getText(), password, universe, desc, sav,
-                    con);
+            MDMServerDef def = MDMServerDef.parse(ele.element(URL).getText(), ele.element(USER).getText(), password, universe,
+                    desc);
             defs.add(def);
         }
         return defs;
     }
-    
+
     public void deleteServer(String desc) {
         SAXReader reader = new SAXReader();
         File file = new File(MDMServerHelper.workbenchConfigFile);
