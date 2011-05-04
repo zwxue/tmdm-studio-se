@@ -16,7 +16,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -25,7 +24,6 @@ import java.util.regex.Pattern;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -53,15 +51,13 @@ import org.talend.core.prefs.ITalendCorePrefConstants;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
-import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.proxy.ProxyUtil;
-import org.talend.mdm.engines.client.ui.preferences.MDMPreferenceInitializer;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
-import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
+import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.ui.utils.ZipToFile;
 import org.talend.repository.ui.wizards.exportjob.JavaJobExportReArchieveCreator;
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobJavaScriptsWSManager;
@@ -88,14 +84,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected Combo contextCombo;
 
     protected JobScriptsManager manager;
-
-    // protected LabelledText jobLabel;
-    //
-    // protected LabelledText jobName;
-    //
-    // protected LabelledText jobDescription;
-
-    // protected Button spagoVisible;
 
     protected String jobLabelName;
 
@@ -442,15 +430,15 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 	        	}
 	        }
         }else{
-        	server= new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(), mdmServer.getLogin(), mdmServer.getPassword(),true,true);
+        	server= new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(), MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), ""); //$NON-NLS-1$
         }
 
-        String user = server.getUser();// "admin";
-        String password = server.getPasswd();// "talend";
+        String user = server.getUser();
+        String password = server.getPasswd();
         String host = server.getHost();
         String port = server.getPort();
-        // todo deploy to mdm server
-
+        
+        //deploy to mdm server
         String filename = getDestinationValue();
         String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$
                 + new File(filename).getName()+"&jobpath="+jobPath; //$NON-NLS-1$
