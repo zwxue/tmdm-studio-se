@@ -12,12 +12,13 @@
 // ============================================================================
 package com.amalto.workbench.providers;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
@@ -33,17 +34,18 @@ import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 
-public class ServerTreeLabelProvider extends LabelProvider implements IColorProvider, IFontProvider {
+public class ServerTreeLabelProvider extends ColumnLabelProvider implements IColorProvider, IFontProvider {
 
     // ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
     Font font = FontUtils.getBoldFont(Display.getCurrent().getSystemFont());
 
     Color color = new Color(null, 150, 150, 150);
 
+    @Override
     public String getText(Object obj) {
         if (obj instanceof TreeObject)
             if (((TreeObject) obj).getType() == TreeObject._ACTION_) {
-                Class actionClass = (Class) ((TreeObject) obj).getWsKey();
+                Class<?> actionClass = (Class<?>) ((TreeObject) obj).getWsKey();
                 try {
                     AServerViewAction action = (AServerViewAction) actionClass.newInstance();
                     return action.getText();
@@ -55,6 +57,7 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
         return obj.toString();
     }
 
+    @Override
     public Image getImage(Object obj) {
         // if (obj instanceof TreeParent) {
         TreeObject object = (TreeObject) obj;
@@ -125,13 +128,12 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 
     }
 
+    @Override
     public Color getBackground(Object element) {
-        // TODO Auto-generated method stub
         return null;
     }
 
-    private IColorProvider colorProvider;
-
+    @Override
     public Color getForeground(Object element) {
         TreeObject tb = (TreeObject) element;
         if (XSystemObjects.isExist(tb.getType(), tb.getDisplayName())) {
@@ -141,15 +143,26 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 
     }
 
+    @Override
     public Font getFont(Object element) {
-        // TODO Auto-generated method stub
-
         TreeObject tb = (TreeObject) element;
         if (XSystemObjects.isExist(tb.getType(), tb.getDisplayName())) {
             return font;
         } else
             return null;
-
     }
 
+    @Override
+    public String getToolTipText(Object object) {
+        if (object instanceof TreeObject)
+            if (((TreeObject) object).getType() == TreeObject._SERVER_) {
+                return ((TreeObject) object).getEndpointAddress();
+            }
+        return null;
+    }
+    
+    @Override
+    public Point getToolTipShift(Object object) {
+        return new Point(5,5);
+    }
 }
