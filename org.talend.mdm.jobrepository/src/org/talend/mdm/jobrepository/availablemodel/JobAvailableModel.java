@@ -14,6 +14,8 @@ package org.talend.mdm.jobrepository.availablemodel;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IMenuManager;
 import org.talend.core.model.properties.Item;
@@ -35,6 +37,9 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class JobAvailableModel extends AbstractAvailableModel {
 
+    private static Log log = LogFactory.getLog(JobAvailableModel.class);
+    
+    @Override
     public void addTreeObjects(XtentisPort port, IProgressMonitor monitor, TreeParent serverRoot) {
         monitor.subTask("Loading Jobs");
 
@@ -50,14 +55,15 @@ public class JobAvailableModel extends AbstractAvailableModel {
                 for (IRepositoryViewObject o : listJobs) {
                     Item item = o.getProperty().getItem();
                     if (item instanceof ProcessItem) {
-                        String name = o.getLabel() + "_" + o.getProperty().getVersion();
+                        String name = o.getLabel() + "_" + o.getProperty().getVersion(); //$NON-NLS-1$
                         // add the category information for the jobs.
                         String path = ((ProcessItem) item).getState().getPath();
-                        System.out.println("name-->" + name + " path--->" + path);
+                        if (log.isDebugEnabled())
+                            log.debug("name-->" + name + " path--->" + path); //$NON-NLS-1$ //$NON-NLS-2$
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.TIS_JOB, o, null);
                         obj.setWsObject(new OpenJobAction());
-                        if (path != null && !"".equalsIgnoreCase(path)) {
-                            String[] categories = path.split("/");
+                        if (path != null && path.length()==0) {
+                            String[] categories = path.split("/"); //$NON-NLS-1$
                             TreeParent parentFolder = null;
                             for (String folder : categories) {
                                 if (parentFolder == null)
