@@ -37,8 +37,8 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class JobAvailableModel extends AbstractAvailableModel {
 
-    private static Log log = LogFactory.getLog(JobAvailableModel.class);
-    
+    private static final Log log = LogFactory.getLog(JobAvailableModel.class);
+
     @Override
     public void addTreeObjects(XtentisPort port, IProgressMonitor monitor, TreeParent serverRoot) {
         monitor.subTask("Loading Jobs");
@@ -62,7 +62,7 @@ public class JobAvailableModel extends AbstractAvailableModel {
                             log.debug("name-->" + name + " path--->" + path); //$NON-NLS-1$ //$NON-NLS-2$
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.TIS_JOB, o, null);
                         obj.setWsObject(new OpenJobAction());
-                        if (path != null && path.length()==0) {
+                        if (path != null && path.length() != 0) {
                             String[] categories = path.split("/"); //$NON-NLS-1$
                             TreeParent parentFolder = null;
                             for (String folder : categories) {
@@ -78,7 +78,7 @@ public class JobAvailableModel extends AbstractAvailableModel {
                 jobs.addChild(tosJob);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         serverRoot.addChild(jobs);
         monitor.worked(1);
