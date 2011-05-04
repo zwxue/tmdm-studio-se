@@ -19,7 +19,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
@@ -128,6 +127,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             monitor.subTask("Accessing server....");
             UserInfo user = new UserInfo();
+            user.setDesc(desc);
             user.setUsername(username);
             user.setPassword(password);
             user.setServerUrl(endpointaddress);
@@ -142,7 +142,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     null, null);
             WSDataModelPK[] xdmPKs = null;
             try {
-                xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
+                xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs(); //$NON-NLS-1$
             } catch (Exception e) {
 
                 log.error(e.getMessage(), e);
@@ -420,7 +420,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 }
             }
             String name = serverRoot.getDisplayName() + " ["//$NON-NLS-1$
-                    + universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]" + " " + username;//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                    + universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]" + " " + username;//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
             serverRoot.setDisplayName(name);
         } else {
             String name = serverRoot.getDisplayName() + " " + username;//$NON-NLS-1$
