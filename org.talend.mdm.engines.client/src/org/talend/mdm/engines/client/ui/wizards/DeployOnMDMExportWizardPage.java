@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -74,6 +76,8 @@ import com.amalto.workbench.utils.MDMServerDef;
  */
 public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResourceExportPage1 {
 
+    private static final Log log = LogFactory.getLog(DeployOnMDMExportWizardPage.class);
+
     // widgets
     protected Button contextButton;
 
@@ -92,11 +96,11 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     private String jobVersion;
 
     private String jobPath;
-    
+
     private LabelledCombo exportTypeCombo;
 
     private SpagoBiServer mdmServer = null;
-    
+
     /**
      * Create an instance of this class.
      * 
@@ -125,7 +129,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     jobLabelName = processItem.getProperty().getLabel();
                     jobVersion = processItem.getProperty().getVersion();
                     jobPurposeDescription = processItem.getProperty().getPurpose();
-                    jobPath=processItem.getState().getPath();//TODO
+                    jobPath = processItem.getState().getPath();
                     list.add(resource);
                 }
             }
@@ -168,9 +172,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * (non-Javadoc) Method declared on IDialogPage.
      */
-    /**
-     * (non-Javadoc) Method declared on IDialogPage.
-     */
+    @Override
     public void createControl(Composite parent) {
 
         initializeDialogUnits(parent);
@@ -201,6 +203,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * 
      * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1#validateSourceGroup()
      */
+    @Override
     protected boolean validateSourceGroup() {
         return true;
     }
@@ -209,6 +212,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * Create the export options specification widgets.
      * 
      */
+    @Override
     protected void createOptionsGroupButtons(Group optionsGroup) {
         Font font = optionsGroup.getFont();
         optionsGroup.setLayout(new GridLayout(1, true));
@@ -233,10 +237,10 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         List<String> listEngine = new ArrayList<String>();
 
         if (mdmServer == null) {
-        
-        	for(MDMServerDef serv:listServerSapgo){
-        		listEngine.add(serv.getDesc());
-        	}
+
+            for (MDMServerDef serv : listServerSapgo) {
+                listEngine.add(serv.getDesc());
+            }
             serverSpagoBi = new LabelledCombo(
                     optionsGroup,
                     Messages.getString("DeployOnMDMExportWizardPage.SpagoBI.Server"), Messages.getString("DeployOnMDMExportWizardPage.SpecifyServer.PublishJob"), listEngine); //$NON-NLS-1$ //$NON-NLS-2$
@@ -345,6 +349,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * 
      * @returns boolean
      */
+    @Override
     public boolean finish() {
 
         Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap();
@@ -358,8 +363,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             }
         }
         if (!canExport) {
-            MessageDialog.openInformation(getContainer().getShell(), Messages
-                    .getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
+            MessageDialog.openInformation(getContainer().getShell(),
+                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
                     Messages.getString("DeployOnMDMExportWizardPage.chooseResource")); //$NON-NLS-1$
             return false;
         }
@@ -392,7 +397,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // boolean ok = executeExportOperation(new ArchiveFileExportOperationFullPath(process));
         ArchiveFileExportOperationFullPath exporterOperation = getExporterOperation(resourcesToExport);
         boolean ok = executeExportOperation(exporterOperation);
-
+        //TODO What if not ok ????
+        
         // path can like name/name
         manager.deleteTempFiles();
 
@@ -419,37 +425,43 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // retrieve user, password, host, port from selected SpagoBiServer
 
         MDMServerDef server = null;
-        if(mdmServer==null){
-	        String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
-	
-	        List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
-	        for(MDMServerDef serv:listServerSapgo){
-	        	if(selectedSpagoBiEngineName.equals(serv.getDesc())){
-	        		server=serv;
-	        		break;
-	        	}
-	        }
-        }else{
-        	server= new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(), MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), ""); //$NON-NLS-1$
+        if (mdmServer == null) {
+            String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
+
+            List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
+            for (MDMServerDef serv : listServerSapgo) {
+                if (selectedSpagoBiEngineName.equals(serv.getDesc())) {
+                    server = serv;
+                    break;
+                }
+            }
+        } else {
+            server = new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(),
+                    MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), ""); //$NON-NLS-1$
         }
 
         String user = server.getUser();
         String password = server.getPasswd();
         String host = server.getHost();
         String port = server.getPort();
-        
-        //deploy to mdm server
+
+        // deploy to mdm server
         String filename = getDestinationValue();
-        String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$
-                + new File(filename).getName()+"&jobpath="+jobPath; //$NON-NLS-1$
+        String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                + new File(filename).getName() + "&jobpath=" + jobPath; //$NON-NLS-1$
         try {
             ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
         } catch (Exception e) {
-            System.err.println("ERROR: " + e.getMessage()); //$NON-NLS-1$
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
+            MessageDialog.openError(getContainer().getShell(),
+                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
+                    e.getLocalizedMessage());
+            return false;
         }
+        MessageDialog.openInformation(getContainer().getShell(),
+                Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
+                Messages.getString("DeployOnMDMExportWizardPage.publishJobSuccess")); //$NON-NLS-1$
         return ok;
-        // return true;
     }
 
     /**
@@ -536,6 +548,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * 
      * @return java.lang.String
      */
+    @Override
     protected String getDestinationLabel() {
         return DataTransferMessages.ArchiveExport_destinationLabel;
     }
@@ -592,13 +605,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * Answer the contents of self's destination specification widget. If this value does not have a suffix then add it
      * first.
      */
+    @Override
     protected String getDestinationValue() {
         String idealSuffix = getOutputSuffix();
 
         String filename = jobLabelName + "_" + jobVersion + idealSuffix; //$NON-NLS-1$
         IPath tempPath;
-        tempPath = Path.fromOSString(CorePlugin.getDefault().getPreferenceStore().getString(
-                ITalendCorePrefConstants.FILE_PATH_TEMP));
+        tempPath = Path.fromOSString(CorePlugin.getDefault().getPreferenceStore()
+                .getString(ITalendCorePrefConstants.FILE_PATH_TEMP));
         tempPath = tempPath.append(filename);
         return tempPath.toOSString();
     }
@@ -618,6 +632,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Open an appropriate destination browser so that the user can specify a source to import from.
      */
+    @Override
     protected void handleDestinationBrowseButtonPressed() {
         FileDialog dialog = new FileDialog(getContainer().getShell(), SWT.SAVE);
         dialog.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
@@ -638,6 +653,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Hook method for saving widget values for restoration by the next instance of this class.
      */
+    @Override
     protected void internalSaveWidgetValues() {
     }
 
@@ -645,6 +661,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * Hook method for restoring widget values to the values that they held last time this wizard was used to
      * completion.
      */
+    @Override
     protected void restoreWidgetValues() {
     }
 
@@ -653,10 +670,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * 
      * @see org.eclipse.ui.wizards.datatransfer.WizardFileSystemResourceExportPage1#destinationEmptyMessage()
      */
+    @Override
     protected String destinationEmptyMessage() {
         return ""; //$NON-NLS-1$
     }
 
+    @Override
     protected void createOptionsGroup(Composite parent) {
         // options group
         Group optionsGroup = new Group(parent, SWT.NONE);
