@@ -122,7 +122,7 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
 
         btnMoveDown = new Button(compBtns, SWT.NONE);
         btnMoveDown.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-        btnMoveUp.setToolTipText("Move down");
+        btnMoveDown.setToolTipText("Move down");
 
         btnCopy = new Button(compBtns, SWT.NONE);
         btnCopy.setImage(ImageCache.getCreatedImage(EImage.COPY.getPath()));
