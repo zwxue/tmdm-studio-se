@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -38,6 +39,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
@@ -49,6 +51,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorPart;
@@ -154,8 +157,6 @@ public class ImportItemsWizard extends Wizard {
 
     private FileSelectWidget zip;
 
-    private String zipfile;
-
     private ServerView view;
 
     // private List<TreeObject> objList =new ArrayList<TreeObject>();
@@ -166,6 +167,7 @@ public class ImportItemsWizard extends Wizard {
     private XtentisPort port = null;
 
     public ImportItemsWizard(IStructuredSelection sel, ServerView view) {
+        setNeedsProgressMonitor(true);
         this.sel = sel;
         this.view = view;
         serverRoot = ((TreeObject) sel.getFirstElement()).getServerRoot();
@@ -179,11 +181,12 @@ public class ImportItemsWizard extends Wizard {
     @Override
     public boolean performFinish() {
         closeOpenEditors();
+
         if (zipBtn.getSelection()) {
-            zipfile = zip.getText().getText();
+
             // importFolder= System.getProperty("user.dir")+"/temp";
             try {
-                ZipToFile.unZipFile(zipfile, importFolder);
+                ZipToFile.unZipFile(getZipFilePath(), importFolder);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -217,7 +220,7 @@ public class ImportItemsWizard extends Wizard {
 
                     }.schedule();
 
-                    if (zipfile != null) {
+                    if (getZipFilePath() != null) {
                         importFolder = System.getProperty("user.dir") + "/temp";//$NON-NLS-1$//$NON-NLS-2$
                         ZipToFile.deleteDirectory(new File(importFolder));
                     }
@@ -228,6 +231,10 @@ public class ImportItemsWizard extends Wizard {
         job.schedule();
 
         return true;
+    }
+
+    private String getZipFilePath() {
+        return zip.getText().getText();
     }
 
     private void closeOpenEditors() {
@@ -287,25 +294,62 @@ public class ImportItemsWizard extends Wizard {
 
     }
 
-    public void parse() {
-        if (zipBtn.getSelection()) {
-            zipfile = zip.getText().getText();
-            importFolder = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "tmp"//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                    + System.currentTimeMillis();
+    private void parse() {
+        try {
+            boolean importFromArchieve = zipBtn.getSelection();
+            if (importFromArchieve) {
+                importFolder = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "tmp"//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                        + System.currentTimeMillis();
+            }
+            if (folderBtn.getSelection()) {
+                importFolder = folder.getText().getText();
+            }
+            getContainer().run(true, false, new ImportProcess(importFromArchieve, getZipFilePath()));
+        } catch (InvocationTargetException e) {
+            log.error(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            log.debug(e.getMessage(), e);
+        }
+    }
+
+    class ImportProcess implements IRunnableWithProgress {
+
+        private final boolean importFromArchieve;
+
+        private final String zipFilePath;
+
+        public ImportProcess(boolean importFromArchieve, String zipFilePath) {
+            this.importFromArchieve = importFromArchieve;
+            this.zipFilePath = zipFilePath;
+
+        }
+
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+            parses(importFromArchieve, zipFilePath, monitor);
+        }
+    };
+
+    private void parses(boolean importFromArchieve, String zipFilePath, IProgressMonitor monitor) {
+        // init var for progressMonitor
+        int total = 500, zipCount = 200,readCount=100;
+        int step = 1, interval = 1;
+        //
+        monitor.beginTask("ImportItem", total);
+
+        if (importFromArchieve) {
             checkUpExchangeImport(true);
             try {
-                ZipToFile.unZipFile(zipfile, importFolder);
+                ZipToFile.unZipFile(zipFilePath, importFolder,zipCount,monitor);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
-        if (folderBtn.getSelection()) {
-            importFolder = folder.getText().getText();
-        }
+        monitor.worked(zipCount);
+        monitor.setTaskName("Reading items...");
         InputStreamReader reader = null;
         try {
             reader = new InputStreamReader(new FileInputStream(importFolder + "/exportitems.xml"), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
-            Exports exports = (Exports) Unmarshaller.unmarshal(Exports.class, reader);
+            final Exports exports = (Exports) Unmarshaller.unmarshal(Exports.class, reader);
             String[] orgSchemas = exports.getSchemas();
             int idx = 0;
 
@@ -326,6 +370,7 @@ public class ImportItemsWizard extends Wizard {
                 LocalTreeObjectRepository.getInstance().makeUpDocWithImportCategory(orgSchemas, serverRoot);
             } catch (Exception e) {
             }
+
             // import autoincrement
             if (exports.getAutoIncrement() != null) {
                 try {
@@ -334,7 +379,7 @@ public class ImportItemsWizard extends Wizard {
                 }
             }
             // new server root
-            TreeParent reserverRoot = new TreeParent(serverRoot.getDisplayName(), null, TreeObject._SERVER_,
+            final TreeParent reserverRoot = new TreeParent(serverRoot.getDisplayName(), null, TreeObject._SERVER_,
                     serverRoot.getWsKey(), serverRoot.getWsObject());
             reserverRoot.setUser(serverRoot.getUser());
             // serverRoot=reserverRoot;
@@ -376,7 +421,20 @@ public class ImportItemsWizard extends Wizard {
             reserverRoot.addChild(workflow);
             reserverRoot.addChild(universes);
             reserverRoot.addChild(views);
-
+            monitor.worked(readCount);
+            // caculate step and interval
+            float val = (total - zipCount-readCount) / exports.getItems().length;
+            if (val > 0) {
+                interval = 1;
+                step = Math.round(val);
+            } else {
+                step = 1;
+                interval = Math.round(exports.getItems().length / (total - zipCount-readCount) + 0.5f);
+            }
+//            System.out.println("count:" + exports.getItems().length + "\tinterval:" + interval + "\tstep:" + step);
+            monitor.setTaskName("Importing item...");
+            //
+            int tmp = 1;
             for (TreeObject obj : exports.getItems()) {
                 obj.setServerRoot(reserverRoot);
                 switch (obj.getType()) {
@@ -424,15 +482,31 @@ public class ImportItemsWizard extends Wizard {
                         }
                     }
                 }
+                // update monitor
+                if (interval == 1) {
+                    monitor.worked(step);
+                } else {
+                    if (tmp >= interval) {
+                        monitor.worked(step);
+                        tmp = 1;
+                    } else {
+                        tmp++;
+                    }
+                }
             }
+            Display.getDefault().syncExec(new Runnable() {
 
-            treeViewer.setRoot(reserverRoot);
-            treeViewer.getViewer().setInput(view.getSite());
-            treeViewer.setCheckItems(Arrays.asList(exports.getItems()));
-            GridData gd = (GridData) treeViewer.getViewer().getControl().getLayoutData();
-            gd.heightHint = 300;
-            treeViewer.getViewer().getControl().getParent().layout(true);
-            treeViewer.getViewer().getControl().getShell().layout(true);
+                public void run() {
+                    treeViewer.setRoot(reserverRoot);
+                    treeViewer.getViewer().setInput(view.getSite());
+                    treeViewer.setCheckItems(Arrays.asList(exports.getItems()));
+                    GridData gd = (GridData) treeViewer.getViewer().getControl().getLayoutData();
+                    gd.heightHint = 300;
+                    treeViewer.getViewer().getControl().getParent().layout(true);
+                    treeViewer.getViewer().getControl().getShell().layout(true);
+                }
+            });
+
             try {
                 LocalTreeObjectRepository.getInstance().setOriginalXobjectsToImport(treeViewer.getCheckNodes());
             } catch (Exception e) {
@@ -445,6 +519,7 @@ public class ImportItemsWizard extends Wizard {
                     reader.close();
             } catch (Exception e) {
             }
+            monitor.done();
         }
 
     }
