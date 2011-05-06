@@ -55,11 +55,13 @@ public class RenameXObjectAction extends Action {
         this.page = view.getSite().getWorkbenchWindow().getActivePage();
         try {
 	        IEditorInput input= new XObjectEditorInput(xobject, xobject.getDisplayName());
+	        IEditorPart part=null;
 	        if(xobject.getType()==TreeObject.DATA_MODEL){
 	            IFile pathToTempFile = XSDEditorUtil.createFile(xobject);
+	            if(pathToTempFile!=null) 
 	            input = new XSDEditorInput(pathToTempFile);
 	        }
-	        IEditorPart part= page.findEditor(input);
+	        part= page.findEditor(input);
 	        page.closeEditor(part, true);
 	            if (TreeObjectUtil.renameTreeOjects(xobject, view))
 	                TreeObjectUtil.deleteTreeObject(xobject, view);

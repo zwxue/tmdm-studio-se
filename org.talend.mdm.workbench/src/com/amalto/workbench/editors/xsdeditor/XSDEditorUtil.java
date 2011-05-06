@@ -56,7 +56,7 @@ public class XSDEditorUtil {
 
     public static IFile createFile(TreeObject xobject) throws Exception {
         WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
-
+        if(wsDataModel==null) return null;
         String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
 
