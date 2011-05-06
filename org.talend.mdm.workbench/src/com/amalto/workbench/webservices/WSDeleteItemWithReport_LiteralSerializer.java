@@ -18,19 +18,20 @@ import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.ArrayList;
 
-public class WSUpdateMetadataItem_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
+public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
     private static final QName ns1_wsItemPK_QNAME = new QName("", "wsItemPK");
     private static final QName ns2_WSItemPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
     private CombinedSerializer ns2_myWSItemPK_LiteralSerializer;
-    private static final QName ns1_taskId_QNAME = new QName("", "taskId");
+    private static final QName ns1_source_QNAME = new QName("", "source");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
+    private static final QName ns1_user_QNAME = new QName("", "user");
     
-    public WSUpdateMetadataItem_LiteralSerializer(QName type, String encodingStyle) {
+    public WSDeleteItemWithReport_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
     }
     
-    public WSUpdateMetadataItem_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
+    public WSDeleteItemWithReport_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
         super(type, true, encodingStyle, encodeType);
     }
     
@@ -41,7 +42,7 @@ public class WSUpdateMetadataItem_LiteralSerializer extends LiteralObjectSeriali
     
     public Object doDeserialize(XMLReader reader,
         SOAPDeserializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSUpdateMetadataItem instance = new com.amalto.workbench.webservices.WSUpdateMetadataItem();
+        com.amalto.workbench.webservices.WSDeleteItemWithReport instance = new com.amalto.workbench.webservices.WSDeleteItemWithReport();
         Object member=null;
         QName elementName;
         List values;
@@ -66,11 +67,29 @@ public class WSUpdateMetadataItem_LiteralSerializer extends LiteralObjectSeriali
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_taskId_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_taskId_QNAME, reader, context);
-                instance.setTaskId((java.lang.String)member);
+            if (elementName.equals(ns1_source_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_source_QNAME, reader, context);
+                instance.setSource((java.lang.String)member);
                 reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_source_QNAME, reader.getName() });
             }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_user_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_user_QNAME, reader, context);
+                instance.setUser((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_user_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
@@ -78,16 +97,17 @@ public class WSUpdateMetadataItem_LiteralSerializer extends LiteralObjectSeriali
     }
     
     public void doSerializeAttributes(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSUpdateMetadataItem instance = (com.amalto.workbench.webservices.WSUpdateMetadataItem)obj;
+        com.amalto.workbench.webservices.WSDeleteItemWithReport instance = (com.amalto.workbench.webservices.WSDeleteItemWithReport)obj;
         
     }
     public void doSerialize(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSUpdateMetadataItem instance = (com.amalto.workbench.webservices.WSUpdateMetadataItem)obj;
+        com.amalto.workbench.webservices.WSDeleteItemWithReport instance = (com.amalto.workbench.webservices.WSDeleteItemWithReport)obj;
         
         if (instance.getWsItemPK() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
         ns2_myWSItemPK_LiteralSerializer.serialize(instance.getWsItemPK(), ns1_wsItemPK_QNAME, null, writer, context);
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTaskId(), ns1_taskId_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getSource(), ns1_source_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getUser(), ns1_user_QNAME, null, writer, context);
     }
 }

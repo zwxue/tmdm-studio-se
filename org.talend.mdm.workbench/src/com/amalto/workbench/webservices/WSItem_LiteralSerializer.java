@@ -158,17 +158,9 @@ public class WSItem_LiteralSerializer extends LiteralObjectSerializerBase implem
         if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_taskId_QNAME)) {
                 member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_taskId_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
                 instance.setTaskId((java.lang.String)member);
                 reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_taskId_QNAME, reader.getName() });
             }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
@@ -217,9 +209,6 @@ public class WSItem_LiteralSerializer extends LiteralObjectSerializerBase implem
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3__long__long_Long_Serializer.serialize(new Long(instance.getInsertionTime()), ns1_insertionTime_QNAME, null, writer, context);
-        if (instance.getTaskId() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTaskId(), ns1_taskId_QNAME, null, writer, context);
         if (instance.getContent() == null) {
             throw new SerializationException("literal.unexpectedNull");

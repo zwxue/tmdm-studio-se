@@ -93,7 +93,7 @@ import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDeleteItem;
+import com.amalto.workbench.webservices.WSDeleteItemWithReport;
 import com.amalto.workbench.webservices.WSDropItem;
 import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
@@ -107,6 +107,7 @@ import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSPutItem;
+import com.amalto.workbench.webservices.WSPutItemWithReport;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSRunQuery;
@@ -803,14 +804,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                                     null,
                                                     "Confirm",
                                                     "This object was also modified by somebody else. If you save now, you will overwrite his or her changes. Are you sure you want to do that?")) {
-                                        port.putItem(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
-                                                ""//$NON-NLS-1$
-                                                .equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
-                                                false));
+                                       	WSPutItemWithReport item=
+                                    		new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
+                                                .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false), "genericUI", true);//$NON-NLS-1$
+                                        Util.getPort(getXObject()).putItemWithReport(item);                                    	                                        
                                     }
                                 } else {
-                                    port.putItem(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d//$NON-NLS-1$
-                                            .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false));
+                                   	WSPutItemWithReport item=
+                                		new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
+                                            .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false), "genericUI", true);//$NON-NLS-1$
+                                    Util.getPort(getXObject()).putItemWithReport(item);
                                 }
                                 // previousDataModel = d.getDataModelName();
                             } catch (Exception e) {
@@ -1235,8 +1238,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                             + "Some Records may have not been deleted");
                             return;
                         }
-                        port.deleteItem(new WSDeleteItem(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem
-                                .getConcept(), lineItem.getIds())));
+                        WSItemPK itempk=new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem
+                                .getConcept(), lineItem.getIds());
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,"genericUI",getXObject().getUsername()));//$NON-NLS-1$
                         monitor.worked(1);
                     }// for
 
@@ -1300,9 +1304,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (event.button == DOMViewDialog.BUTTON_SAVE) {
                             // attempt to save
                             try {
-                                Util.getPort(getXObject()).putItem(
-                                        new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d
-                                                .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false));
+                            	WSPutItemWithReport item=
+                            		new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
+                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false), "genericUI", true);//$NON-NLS-1$
+                                Util.getPort(getXObject()).putItemWithReport(item);
                             } catch (Exception e) {
                                 MessageDialog.openError(shell, "Error saving the Record",
                                         "An error occured trying save the Record:\n\n " + e.getLocalizedMessage());

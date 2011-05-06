@@ -122,6 +122,8 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPK deleteItem(com.amalto.workbench.webservices.WSDeleteItem wsDeleteItem) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSString deleteItemWithReport(com.amalto.workbench.webservices.WSDeleteItemWithReport wsDeleteItem) throws 
+         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSInt deleteItems(com.amalto.workbench.webservices.WSDeleteItems wsDeleteItems) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSDroppedItemPK dropItem(com.amalto.workbench.webservices.WSDropItem wsDropItem) throws 

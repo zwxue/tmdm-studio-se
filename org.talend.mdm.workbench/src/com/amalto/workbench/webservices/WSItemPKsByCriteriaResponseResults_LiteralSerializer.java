@@ -88,17 +88,9 @@ public class WSItemPKsByCriteriaResponseResults_LiteralSerializer extends Litera
         if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_taskId_QNAME)) {
                 member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_taskId_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
                 instance.setTaskId((java.lang.String)member);
                 reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_taskId_QNAME, reader.getName() });
             }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
@@ -120,9 +112,6 @@ public class WSItemPKsByCriteriaResponseResults_LiteralSerializer extends Litera
             throw new SerializationException("literal.unexpectedNull");
         }
         ns2_myWSItemPK_LiteralSerializer.serialize(instance.getWsItemPK(), ns1_wsItemPK_QNAME, null, writer, context);
-        if (instance.getTaskId() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTaskId(), ns1_taskId_QNAME, null, writer, context);
     }
 }

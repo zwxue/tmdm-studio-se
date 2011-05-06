@@ -776,7 +776,7 @@
 			<xsd:element maxOccurs="1" minOccurs="1" name="conceptName" nillable="false" type="xsd:string"/>
 			<xsd:element maxOccurs="unbounded" minOccurs="1" name="ids" nillable="false" type="xsd:string"/>
 			<xsd:element maxOccurs="1" minOccurs="1" name="insertionTime" nillable="false" type="xsd:long"/>
-			<xsd:element maxOccurs="1" minOccurs="1" name="taskId" nillable="false" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="taskId" nillable="true" type="xsd:string"/>
 			<xsd:element maxOccurs="1" minOccurs="1" name="content" nillable="false" type="xsd:string"/>
 		</xsd:sequence>
 	</xsd:complexType>
@@ -899,7 +899,7 @@
 					<xsd:sequence>
 						<xsd:element maxOccurs="1" minOccurs="1" name="date" nillable="false" type="xsd:long"/>
 						<xsd:element maxOccurs="1" minOccurs="1" name="wsItemPK" nillable="false" type="tns:WSItemPK"/>						
-						<xsd:element maxOccurs="1" minOccurs="1" name="taskId" nillable="false" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="0" name="taskId" nillable="true" type="xsd:string"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -1120,7 +1120,7 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element maxOccurs="1" minOccurs="1" name="wsItemPK" nillable="false" type="tns:WSItemPK"/>
-            <xsd:element maxOccurs="1" minOccurs="1" name="taskId" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="taskId" nillable="true" type="xsd:string"/>
         </xsd:sequence>     
     </xsd:complexType>
     <xsd:element name="WSUpdateMetadataItem" type="tns:WSUpdateMetadataItem"/>
@@ -1251,7 +1251,19 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSDeleteItem" type="tns:WSDeleteItem"/>
-
+	<xsd:complexType name="WSDeleteItemWithReport">
+		<xsd:annotation>
+			<xsd:documentation>
+				Deletes an item based on its cluster pk and its key(s) with report
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="1" name="wsItemPK" nillable="false" type="tns:WSItemPK"/>		
+			<xsd:element maxOccurs="1" minOccurs="1" name="source" nillable="true" type="xsd:string"/>	
+			<xsd:element maxOccurs="1" minOccurs="1" name="user" nillable="true" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSDeleteItemWithReport" type="tns:WSDeleteItemWithReport"/>
 	<xsd:complexType name="WSDeleteItems">
 		<xsd:annotation>
 			<xsd:documentation>
