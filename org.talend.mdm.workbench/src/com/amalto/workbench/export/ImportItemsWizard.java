@@ -181,12 +181,13 @@ public class ImportItemsWizard extends Wizard {
     @Override
     public boolean performFinish() {
         closeOpenEditors();
-
+        final String zipFilePath = getZipFilePath();
         if (zipBtn.getSelection()) {
 
             // importFolder= System.getProperty("user.dir")+"/temp";
             try {
-                ZipToFile.unZipFile(getZipFilePath(), importFolder);
+
+                ZipToFile.unZipFile(zipFilePath, importFolder);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -220,7 +221,7 @@ public class ImportItemsWizard extends Wizard {
 
                     }.schedule();
 
-                    if (getZipFilePath() != null) {
+                    if (zipFilePath != null) {
                         importFolder = System.getProperty("user.dir") + "/temp";//$NON-NLS-1$//$NON-NLS-2$
                         ZipToFile.deleteDirectory(new File(importFolder));
                     }
@@ -331,7 +332,7 @@ public class ImportItemsWizard extends Wizard {
 
     private void parses(boolean importFromArchieve, String zipFilePath, IProgressMonitor monitor) {
         // init var for progressMonitor
-        int total = 500, zipCount = 200,readCount=100;
+        int total = 500, zipCount = 200, readCount = 100;
         int step = 1, interval = 1;
         //
         monitor.beginTask("ImportItem", total);
@@ -339,7 +340,7 @@ public class ImportItemsWizard extends Wizard {
         if (importFromArchieve) {
             checkUpExchangeImport(true);
             try {
-                ZipToFile.unZipFile(zipFilePath, importFolder,zipCount,monitor);
+                ZipToFile.unZipFile(zipFilePath, importFolder, zipCount, monitor);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -423,15 +424,15 @@ public class ImportItemsWizard extends Wizard {
             reserverRoot.addChild(views);
             monitor.worked(readCount);
             // caculate step and interval
-            float val = (total - zipCount-readCount) / exports.getItems().length;
+            float val = (total - zipCount - readCount) / exports.getItems().length;
             if (val > 0) {
                 interval = 1;
                 step = Math.round(val);
             } else {
                 step = 1;
-                interval = Math.round(exports.getItems().length / (total - zipCount-readCount) + 0.5f);
+                interval = Math.round(exports.getItems().length / (total - zipCount - readCount) + 0.5f);
             }
-//            System.out.println("count:" + exports.getItems().length + "\tinterval:" + interval + "\tstep:" + step);
+            // System.out.println("count:" + exports.getItems().length + "\tinterval:" + interval + "\tstep:" + step);
             monitor.setTaskName("Importing item...");
             //
             int tmp = 1;
