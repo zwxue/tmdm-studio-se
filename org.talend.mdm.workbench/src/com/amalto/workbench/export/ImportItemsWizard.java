@@ -340,7 +340,7 @@ public class ImportItemsWizard extends Wizard {
         if (importFromArchieve) {
             checkUpExchangeImport(true);
             try {
-                ZipToFile.unZipFile(zipFilePath, importFolder, zipCount, monitor);
+                Util.unZipFile(zipFilePath, importFolder, zipCount, monitor);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
