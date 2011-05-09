@@ -225,31 +225,31 @@ public class LoginDialog extends Dialog {
     protected void okPressed() {
         String name = getName();
         if (name.length() == 0) {
-            MessageDialog.openError(null, "Error", "Name is mandatory!");
+            MessageDialog.openError(null, "Error", "Name can't be empty!");
             nameText.setFocus();
             isOK = false;
             return;
         }
         if (MDMServerHelper.getServer(name) != null) {
-            MessageDialog.openError(null, "Error", "Server with same name already exist!");
+            MessageDialog.openError(null, "Error", "A server with same name already exists!");
             isOK = false;
             return;
         }
 
         if (getServer().length() == 0) {
-            MessageDialog.openError(null, "Error", "Server is mandatory!");
+            MessageDialog.openError(null, "Error", "Server can't be empty!");
             urlText.setFocus();
             isOK = false;
             return;
         }
         if (getUsernameText().length() == 0) {
-            MessageDialog.openError(null, "Error", "Username is mandatory!");
+            MessageDialog.openError(null, "Error", "Username can't be empty!");
             userText.setFocus();
             isOK = false;
             return;
         }
         if (getPasswordText().length() == 0) {
-            MessageDialog.openError(null, "Error", "Password is mandatory!");
+            MessageDialog.openError(null, "Error", "Password can't be empty!");
             passwordText.setFocus();
             isOK = false;
             return;
