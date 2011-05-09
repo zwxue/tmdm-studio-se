@@ -239,7 +239,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         if (mdmServer == null) {
 
             for (MDMServerDef serv : listServerSapgo) {
-                listEngine.add(serv.getDesc());
+                listEngine.add(serv.getName());
             }
             serverSpagoBi = new LabelledCombo(
                     optionsGroup,
@@ -430,7 +430,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
             List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
             for (MDMServerDef serv : listServerSapgo) {
-                if (selectedSpagoBiEngineName.equals(serv.getDesc())) {
+                if (selectedSpagoBiEngineName.equals(serv.getName())) {
                     server = serv;
                     break;
                 }
