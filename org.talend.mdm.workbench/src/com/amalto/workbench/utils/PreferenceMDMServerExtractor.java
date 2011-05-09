@@ -81,7 +81,7 @@ public class PreferenceMDMServerExtractor {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(serverDef.getDesc());
+        sb.append(serverDef.getName());
         sb.append(ENGINE_DESCRIPTION_DELIMITER);
 
         sb.append(serverDef.getHost());

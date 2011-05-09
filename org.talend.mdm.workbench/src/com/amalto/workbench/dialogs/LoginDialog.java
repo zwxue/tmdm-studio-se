@@ -15,7 +15,7 @@ package com.amalto.workbench.dialogs;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,14 +30,11 @@ import org.dom4j.io.XMLWriter;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -52,18 +49,19 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.providers.ListContentProvider;
 import com.amalto.workbench.utils.MDMServerDef;
 import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.XtentisPort;
 
 public class LoginDialog extends Dialog {
 
     private static final Log log = LogFactory.getLog(LoginDialog.class);
 
-    private ComboViewer descCombo = null;
+    private Text nameText = null;
 
     private Text userText = null;
 
@@ -81,18 +79,15 @@ public class LoginDialog extends Dialog {
 
     private Document logininfoDocument;
 
-    private List<WSUniversePK> universes;
-
     private boolean isOK;
 
     /**
      * @param parentShell
      */
-    public LoginDialog(SelectionListener caller, Shell parentShell, String title, List<WSUniversePK> universes) {
+    public LoginDialog(SelectionListener caller, Shell parentShell, String title) {
         super(parentShell);
         this.caller = caller;
         this.title = title;
-        this.universes = universes;
         setDefaultImage(ImageCache.getCreatedImage(EImage.TALEND_PICTO.getPath()));
     }
 
@@ -105,29 +100,20 @@ public class LoginDialog extends Dialog {
 
         GridLayout layout = (GridLayout) composite.getLayout();
         layout.numColumns = 2;
-        // layout.verticalSpacing = 10;
 
-        Label endpointsLabel = new Label(composite, SWT.NONE);
-        endpointsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        endpointsLabel.setText("Description(*)");
-        endpointsLabel.setForeground(endpointsLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
-        endpointsLabel.setToolTipText("Description is unique and mandatory!");
-        descCombo = new ComboViewer(composite, SWT.NONE);
-        descCombo.setContentProvider(new ListContentProvider());
-        descCombo.setLabelProvider(new MDMServerLabelProvider());
-        descCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        ((GridData) descCombo.getCombo().getLayoutData()).widthHint = 400;
-        // for (Iterator<String> iter = endpoints.iterator(); iter.hasNext();) {
-        // String host = iter.next();
-        // endpointsCombo.add(host);
-        // }
-        // endpointsCombo.select(0);
-        MDMServerDef[] serverDefs = getInitMDMServers();
-        descCombo.setInput(serverDefs);
+        Label nameLabel = new Label(composite, SWT.NONE);
+        nameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        nameLabel.setText("Name");
+        nameLabel.setForeground(nameLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
+        nameLabel.setToolTipText("Name is mandatory and must be unique!");
+        nameText = new Text(composite, SWT.BORDER);
+        nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        ((GridData) nameText.getLayoutData()).widthHint = 400;
+        nameText.setFocus();
 
-        Label descriptionLabel = new Label(composite, SWT.NONE);
-        descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        descriptionLabel.setText("Server");
+        Label urlLabel = new Label(composite, SWT.NONE);
+        urlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        urlLabel.setText("Server");
         urlText = new Text(composite, SWT.BORDER);
         urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
@@ -140,7 +126,6 @@ public class LoginDialog extends Dialog {
         Label usernameLabel = new Label(authenticationGroup, SWT.NONE);
         usernameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         usernameLabel.setText("Username");
-
         userText = new Text(authenticationGroup, SWT.BORDER);
         userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         userText.setDoubleClickEnabled(false);
@@ -148,7 +133,6 @@ public class LoginDialog extends Dialog {
         Label passwordLabel = new Label(authenticationGroup, SWT.NONE);
         passwordLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         passwordLabel.setText("Password");
-
         passwordText = new Text(authenticationGroup, SWT.PASSWORD | SWT.BORDER);
         passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
@@ -161,29 +145,70 @@ public class LoginDialog extends Dialog {
             universeCombo = new Combo(composite, SWT.NONE);
             universeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
             ((GridData) universeCombo.getLayoutData()).widthHint = 300;
-            if (universes != null) {
-                java.util.List<String> hostList = new ArrayList<String>();
-                for (int i = 0; i < universes.size(); i++) {
-                    String host = universes.get(i).getPk();
-                    if (!hostList.contains(host)) {
-                        universeCombo.add(host);
-                        hostList.add(host);
-                    }
-                }
-            }
-            // universeCombo.select(0);
         }
 
-        descCombo.addSelectionChangedListener(new ISelectionChangedListener() {
-
-            public void selectionChanged(SelectionChangedEvent arg0) {
-                onSelectMDMServer();
-
-            }
-        });
-        descCombo.setSelection(new StructuredSelection(serverDefs[0]));
+        initDefaultValues();
 
         return composite;
+    }
+
+    private void initDefaultValues() {
+        MDMServerDef defaultMDMServerDef = new MDMServerDef();
+        nameText.setText(defaultMDMServerDef.getName());
+        urlText.setText(defaultMDMServerDef.getUrl());
+        userText.setText(defaultMDMServerDef.getUser());
+        passwordText.setText(defaultMDMServerDef.getPasswd());
+        universeCombo.setText(defaultMDMServerDef.getUniverse());
+
+        if (Util.IsEnterPrise()) {
+            FocusListener listener = new FocusListener() {
+
+                public void focusGained(FocusEvent e) {
+                }
+
+                public void focusLost(FocusEvent e) {
+                    updateUniverseValues();
+                }
+            };
+            urlText.addFocusListener(listener);
+            userText.addFocusListener(listener);
+            passwordText.addFocusListener(listener);
+        }
+    }
+
+    private void updateUniverseValues() {
+        if (Util.IsEnterPrise()) {
+
+            String name = getName();
+            if (name.length() == 0)
+                return;
+            String url = getServer();
+            if (url.length() == 0)
+                return;
+            String user = getUsernameText();
+            if (user.length() == 0)
+                return;
+            String password = getPasswordText();
+            if (password.length() == 0)
+                return;
+
+            try {
+                XtentisPort port = Util.getPort(new URL(url), null, user, password);
+                WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
+                universeCombo.removeAll();
+                universeCombo.add(""); //$NON-NLS-1$
+                if (universePKs != null && universePKs.length > 0) {
+                    for (int i = 0; i < universePKs.length; i++) {
+                        String universe = universePKs[i].getPk();
+                        universeCombo.add(universe);
+                    }
+                }
+            } catch (Exception e) {
+                if (log.isDebugEnabled())
+                    log.debug(e.getMessage(), e);
+                universeCombo.removeAll();
+            }
+        }
     }
 
     @Override
@@ -198,27 +223,33 @@ public class LoginDialog extends Dialog {
 
     @Override
     protected void okPressed() {
-        String desc = descCombo.getCombo().getText().trim();
-        if (desc.length() == 0) {
-            MessageDialog.openWarning(null, "Warning", "Description is mandatory!");
-            descCombo.getCombo().setFocus();
+        String name = getName();
+        if (name.length() == 0) {
+            MessageDialog.openError(null, "Error", "Name is mandatory!");
+            nameText.setFocus();
             isOK = false;
             return;
         }
-        if (urlText.getText().trim().length() == 0) {
-            MessageDialog.openWarning(null, "Warning", "Server is mandatory!");
+        if (MDMServerHelper.getServer(name) != null) {
+            MessageDialog.openError(null, "Error", "Server with same name already exist!");
+            isOK = false;
+            return;
+        }
+
+        if (getServer().length() == 0) {
+            MessageDialog.openError(null, "Error", "Server is mandatory!");
             urlText.setFocus();
             isOK = false;
             return;
         }
-        if (userText.getText().trim().length() == 0) {
-            MessageDialog.openWarning(null, "Warning", "Username is mandatory!");
+        if (getUsernameText().length() == 0) {
+            MessageDialog.openError(null, "Error", "Username is mandatory!");
             userText.setFocus();
             isOK = false;
             return;
         }
-        if (passwordText.getText().trim().length() == 0) {
-            MessageDialog.openWarning(null, "Warning", "Password is mandatory!");
+        if (getPasswordText().length() == 0) {
+            MessageDialog.openError(null, "Error", "Password is mandatory!");
             passwordText.setFocus();
             isOK = false;
             return;
@@ -236,7 +267,7 @@ public class LoginDialog extends Dialog {
                 return;
             }
             root = logininfoDocument.getRootElement();
-            server = getServer(root, desc);
+            server = getServer(root, name);
         } else {
             logininfoDocument = DocumentHelper.createDocument();
             root = logininfoDocument.addElement(MDMServerHelper.ROOT);
@@ -265,12 +296,12 @@ public class LoginDialog extends Dialog {
         // no close let Action Handler handle it
     }
 
-    private Element getServer(Element root, String matchingDesc) {
+    private Element getServer(Element root, String matchingName) {
         List<?> properties = root.elements(MDMServerHelper.PROPERTIES);
         for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();
-            String desc = ele.element(MDMServerHelper.DESC) != null ? ele.element(MDMServerHelper.DESC).getText() : ""; //$NON-NLS-1$
-            if (matchingDesc.equals(desc))
+            String name = ele.element(MDMServerHelper.NAME) != null ? ele.element(MDMServerHelper.NAME).getText() : ""; //$NON-NLS-1$
+            if (matchingName.equals(name))
                 return ele;
         }
         return null;
@@ -279,10 +310,10 @@ public class LoginDialog extends Dialog {
     private void addServer(Element root) {
         Element prop = root.addElement(MDMServerHelper.PROPERTIES);
         setServerProperties(prop);
-        Element desc = prop.element(MDMServerHelper.DESC);
-        if (desc == null)
-            desc = prop.addElement(MDMServerHelper.DESC);
-        desc.setText(descCombo.getCombo().getText().trim());
+        Element name = prop.element(MDMServerHelper.NAME);
+        if (name == null)
+            name = prop.addElement(MDMServerHelper.NAME);
+        name.setText(nameText.getText().trim());
     }
 
     private void setServerProperties(Element prop) {
@@ -311,8 +342,8 @@ public class LoginDialog extends Dialog {
 
     }
 
-    public String getDescription() {
-        return descCombo.getCombo().getText().trim();
+    public String getName() {
+        return nameText.getText().trim();
     }
 
     public String getPasswordText() {
@@ -331,39 +362,6 @@ public class LoginDialog extends Dialog {
         if (Util.IsEnterPrise())
             return universeCombo.getText().trim();
         return "";//$NON-NLS-1$
-    }
-
-    private MDMServerDef[] getInitMDMServers() {
-
-        List<MDMServerDef> servers = MDMServerHelper.getServers();
-        MDMServerDef defaultMDMServerDef = new MDMServerDef();
-
-        // add the default url to the first position
-        servers.add(0, defaultMDMServerDef);
-
-        return servers.toArray(new MDMServerDef[0]);
-    }
-
-    private MDMServerDef getSelectedMDMServerDef() {
-
-        IStructuredSelection selection = (IStructuredSelection) descCombo.getSelection();
-        if (selection.isEmpty())
-            return null;
-
-        return (MDMServerDef) selection.getFirstElement();
-    }
-
-    private void onSelectMDMServer() {
-
-        MDMServerDef selectedServer = getSelectedMDMServerDef();
-
-        descCombo.getCombo().setText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
-        userText.setText(selectedServer == null ? "" : selectedServer.getUser());//$NON-NLS-1$
-        passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
-        urlText.setText(selectedServer == null ? "" : selectedServer.getUrl());//$NON-NLS-1$
-        userText.setFocus();
-        if (universeCombo != null)
-            universeCombo.setText(selectedServer == null ? "" : selectedServer.getUniverse());//$NON-NLS-1$
     }
 }
 
@@ -391,6 +389,6 @@ class MDMServerLabelProvider implements ILabelProvider {
         if (!(element instanceof MDMServerDef))
             return "";//$NON-NLS-1$
 
-        return ((MDMServerDef) element).getDesc();
+        return ((MDMServerDef) element).getName();
     }
 }

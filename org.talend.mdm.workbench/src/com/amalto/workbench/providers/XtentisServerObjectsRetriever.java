@@ -60,9 +60,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
     private static final Log log = LogFactory.getLog(XtentisServerObjectsRetriever.class);
 
     private ServerView view;
-    
-    private String desc;
-    
+
+    private String serverName;
+
     private String endpointaddress;
 
     private String username;
@@ -75,9 +75,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
     private boolean isExistUniverse = true;
 
-    public XtentisServerObjectsRetriever(String desc, String endpointaddress, String username, String password, String universe,
-            ServerView view) {
-        this.desc = desc;
+    public XtentisServerObjectsRetriever(String serverName, String endpointaddress, String username, String password,
+            String universe, ServerView view) {
+        this.serverName = serverName;
         this.endpointaddress = endpointaddress;
         this.username = username;
         this.password = password;
@@ -96,7 +96,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             monitor.beginTask("Loading " + IConstants.TALEND + " Server Objects", "admin".equals(username) ? 12 : 9);
             // server
-            serverRoot = new TreeParent(desc, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
+            serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                     : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
             // init load category
@@ -127,7 +127,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             monitor.subTask("Accessing server....");
             UserInfo user = new UserInfo();
-            user.setDesc(desc);
             user.setUsername(username);
             user.setPassword(password);
             user.setServerUrl(endpointaddress);

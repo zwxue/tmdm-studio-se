@@ -19,7 +19,7 @@ public class MDMServerDef {
     
     public static final String DEFAULT_PATH = "/talend/TalendPort";//$NON-NLS-1$
 
-    private String desc = "";//$NON-NLS-1$
+    private String name = "";//$NON-NLS-1$
 
     private String host = "localhost";//$NON-NLS-1$
 
@@ -35,9 +35,8 @@ public class MDMServerDef {
 
     public static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
     
-    public MDMServerDef(String desc, String host, String port, String path, String user, String passwd, String universe) {
-
-        this.desc = desc;
+    public MDMServerDef(String name, String host, String port, String path, String user, String passwd, String universe) {
+        this.name = name;
         this.host = host;
         this.port = port;
         this.path = path;
@@ -49,12 +48,12 @@ public class MDMServerDef {
     public MDMServerDef() {
     }
 
-    public String getDesc() {
-        return desc;
+    public String getName() {
+        return name;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getHost() {
@@ -116,7 +115,7 @@ public class MDMServerDef {
         return sb.toString();
     }
 
-    public static MDMServerDef parse(String url, String user, String passwd, String universe, String desc) {
+    public static MDMServerDef parse(String url, String user, String passwd, String universe, String name) {
 
         Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
 
@@ -127,6 +126,6 @@ public class MDMServerDef {
         String port = m.group(2);
         String path = m.group(3);
 
-        return new MDMServerDef(desc, host, port, path, user, passwd, universe);
+        return new MDMServerDef(name, host, port, path, user, passwd, universe);
     }
 }

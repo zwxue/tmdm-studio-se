@@ -37,7 +37,7 @@ public class MDMServerHelper {
 
     public static final String PROPERTIES = "properties"; //$NON-NLS-1$
 
-    public static final String DESC = "desc"; //$NON-NLS-1$
+    public static final String NAME = "name"; //$NON-NLS-1$
 
     public static final String URL = "url"; //$NON-NLS-1$
 
@@ -76,17 +76,27 @@ public class MDMServerHelper {
             String password = ele.element(PASSWORD).getText();
 
             String universe = ele.element(UNIVERSE) != null ? ele.element(UNIVERSE).getText() : ""; //$NON-NLS-1$
-            String desc = ele.element(DESC) != null ? ele.element(DESC).getText() : ""; //$NON-NLS-1$
+            String name = ele.element(NAME) != null ? ele.element(NAME).getText() : ""; //$NON-NLS-1$
 
             password = PasswordUtil.decryptPassword(password);
             MDMServerDef def = MDMServerDef.parse(ele.element(URL).getText(), ele.element(USER).getText(), password, universe,
-                    desc);
+                    name);
             defs.add(def);
         }
         return defs;
     }
 
-    public static void deleteServer(String desc) {
+    public static MDMServerDef getServer(String name) {
+        List<MDMServerDef> servers = getServers();
+        for (MDMServerDef server : servers) {
+            if (server.getName().equals(name)) {
+                return server;
+            }
+        }
+        return null;
+    }
+
+    public static void deleteServer(String name) {
         SAXReader reader = new SAXReader();
         File file = new File(MDMServerHelper.workbenchConfigFile);
         if (file.exists()) {
@@ -98,7 +108,7 @@ public class MDMServerHelper {
                 return;
             }
             Element root = logininfoDocument.getRootElement();
-            deleteServer(root, desc);
+            deleteServer(root, name);
             try {
                 XMLWriter writer = new XMLWriter(new FileWriter(MDMServerHelper.workbenchConfigFile));
                 writer.write(logininfoDocument);
@@ -109,11 +119,11 @@ public class MDMServerHelper {
         }
     }
 
-    private static void deleteServer(Element root, String desc) {
+    private static void deleteServer(Element root, String name) {
         java.util.List<?> properties = root.elements(MDMServerHelper.PROPERTIES);
         for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();
-            if (ele.element(MDMServerHelper.DESC).getText().equals(desc))
+            if (ele.element(MDMServerHelper.NAME).getText().equals(name))
                 root.remove(ele);
         }
     }

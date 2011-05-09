@@ -64,7 +64,7 @@ public class ServerLogoutAction extends Action {
 
         if (remove
                 && !MessageDialog.openConfirm(this.view.getSite().getShell(), "Delete server",
-                        "Are you sure you want to delete the server connection '" + serverRoot.getDesc() + "' ?"))
+                        "Are you sure you want to delete the server connection '" + serverRoot.getName() + "' ?"))
             return;
 
         final String universe = serverRoot.getUniverse();
@@ -102,9 +102,6 @@ public class ServerLogoutAction extends Action {
             }
         }
 
-        serverRoot.getParent().removeChild(serverRoot);
-        view.getViewer().refresh();
-
         // attempt logout on the server side
         view.getViewer().getControl().getDisplay().syncExec(new Runnable() {
 
@@ -116,10 +113,16 @@ public class ServerLogoutAction extends Action {
                 }
             }
         });
-
+        
         if (remove) {
-            MDMServerHelper.deleteServer(serverRoot.getDesc());
+            serverRoot.getParent().removeChild(serverRoot);
+            MDMServerHelper.deleteServer(serverRoot.getName());
+        } else {
+            serverRoot.removeChildren();
+            view.initServerTreeChildren(serverRoot);
         }
+        
+        view.getViewer().refresh();
 
     }
 }

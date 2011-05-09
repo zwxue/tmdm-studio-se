@@ -14,8 +14,6 @@ package com.amalto.workbench.utils;
 
 
 public class UserInfo {
-
-    private String desc;
     
     private String username;
 
@@ -26,14 +24,6 @@ public class UserInfo {
     private String universe;
 
     public UserInfo() {
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-    
-    public void setDesc(String desc) {
-        this.desc = desc;
     }
     
     public String getUsername() {

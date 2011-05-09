@@ -80,7 +80,7 @@ public class ServerRefreshAction extends Action {
                 return;
             server = (String) serverRoot.getWsKey(); // we are at server root
 
-            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverRoot.getDesc(), server,
+            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverRoot.getName(), server,
                     serverRoot.getUsername(), serverRoot.getPassword(), serverRoot.getUser().getUniverse(), view);
 
             new ProgressMonitorDialog(view.getSite().getShell()).run(true, true, retriever);

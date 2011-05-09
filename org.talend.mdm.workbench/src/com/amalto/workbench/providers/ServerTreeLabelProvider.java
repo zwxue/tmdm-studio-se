@@ -27,19 +27,20 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.image.OverlayImageProvider;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXObjectStatus;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 
 public class ServerTreeLabelProvider extends ColumnLabelProvider implements IColorProvider, IFontProvider {
 
-    // ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
-    Font font = FontUtils.getBoldFont(Display.getCurrent().getSystemFont());
+    private Font font = FontUtils.getBoldFont(Display.getCurrent().getSystemFont());
 
-    Color color = new Color(null, 150, 150, 150);
+    private Color color = new Color(null, 150, 150, 150);
 
     @Override
     public String getText(Object obj) {
@@ -119,8 +120,7 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         else if (object.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER) {
             if (object.getDisplayName().equals("Deployed Jobs"))//$NON-NLS-1$
                 return ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");//$NON-NLS-1$
-            else
-                return ImageCache.getCreatedImage("icons/folder_source-jobs.png");//$NON-NLS-1$
+            return ImageCache.getCreatedImage("icons/folder_source-jobs.png");//$NON-NLS-1$
         } else if (object.getType() == TreeObject._INVISIBLE)
             return ImageCache.getCreatedImage(EImage.SANDGLASS.getPath());
 
@@ -138,9 +138,11 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         TreeObject tb = (TreeObject) element;
         if (XSystemObjects.isExist(tb.getType(), tb.getDisplayName())) {
             return color;
-        } else
+        } else if (tb.getType() == TreeObject._SERVER_)
+            // TODO remove ServerView dependency
+            return ServerView.isServerPending((TreeParent) tb) ? color : null;
+        else
             return null;
-
     }
 
     @Override
@@ -148,8 +150,8 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         TreeObject tb = (TreeObject) element;
         if (XSystemObjects.isExist(tb.getType(), tb.getDisplayName())) {
             return font;
-        } else
-            return null;
+        }
+        return null;
     }
 
     @Override
@@ -160,9 +162,14 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
             }
         return null;
     }
-    
+
     @Override
     public Point getToolTipShift(Object object) {
-        return new Point(5,5);
+        return new Point(5, 5);
+    }
+
+    @Override
+    public void dispose() {
+        color.dispose();
     }
 }

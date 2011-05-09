@@ -148,6 +148,8 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public final static String BARFILE_PATH = "/workflow/";//$NON-NLS-1$
 
+    private String name;
+
     private String displayName;
 
     private TreeParent parent;
@@ -188,13 +190,14 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
      * @param wsKey
      * @param wsObject
      */
-    public TreeObject(String displayName, TreeParent serverRoot, int type, Object wsKey, Object wsObject) {
-        this(displayName, serverRoot, type, wsKey, wsObject, null);
+    public TreeObject(String name, TreeParent serverRoot, int type, Object wsKey, Object wsObject) {
+        this(name, serverRoot, type, wsKey, wsObject, null);
     }
 
-    public TreeObject(String displayName, TreeParent serverRoot, int type, Object wsKey, Object wsObject, Object[] additionalInfo) {
+    public TreeObject(String name, TreeParent serverRoot, int type, Object wsKey, Object wsObject, Object[] additionalInfo) {
         super();
-        this.displayName = displayName;
+        this.name = name;
+        this.displayName = name;
         this.serverRoot = serverRoot;
         this.type = type;
         this.wsKey = wsKey;
@@ -213,6 +216,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         return parent;
     }
 
+    @Override
     public String toString() {
         return getDisplayName();
     }
@@ -258,6 +262,14 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Object getWsKey() {
@@ -354,12 +366,6 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         this.user = user;
     }
 
-    public String getDesc() {
-        if (getServerRoot() != null)
-            return getServerRoot().getUser().getDesc();
-        return null;
-    }
-    
     public String getUsername() {
         if (getServerRoot() != null)
             return getServerRoot().getUser().getUsername();

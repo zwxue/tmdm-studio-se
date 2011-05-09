@@ -12,11 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
@@ -31,9 +26,6 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
-import com.amalto.workbench.webservices.WSGetUniversePKs;
-import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.XtentisPort;
 
 public class ServerLoginAction extends Action implements SelectionListener {
 
@@ -42,8 +34,6 @@ public class ServerLoginAction extends Action implements SelectionListener {
     private LoginDialog dialog = null;
 
     private ServerView view = null;
-
-    private List<WSUniversePK> universes = new ArrayList<WSUniversePK>();;
 
     public ServerLoginAction(ServerView view) {
         super();
@@ -57,21 +47,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
     public void run() {
         try {
             super.run();
-            if (Util.IsEnterPrise()) {
-                universes = new ArrayList<WSUniversePK>();
-                WSUniversePK[] universePKs = null;
-                List<XtentisPort> ports = view.getPorts();
-                if (ports != null) {
-                    for (Iterator<XtentisPort> iterator = ports.iterator(); iterator.hasNext();) {
-                        XtentisPort port = iterator.next();
-                        universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-
-                        if (universePKs != null && universePKs.length > 0)
-                            CollectionUtils.addAll(universes, universePKs);
-                    }
-                }
-            }
-            dialog = new LoginDialog(this, view.getSite().getShell(), IConstants.TALEND + " Login", universes);
+            dialog = new LoginDialog(this, view.getSite().getShell(), IConstants.TALEND + " Login");
             dialog.setBlockOnOpen(true);
             dialog.open();
         } catch (Exception e) {
@@ -92,7 +68,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
         int buttonId = ((Integer) e.widget.getData()).intValue();
         if (IDialogConstants.OK_ID != buttonId || !dialog.isOK())
             return;
-        String desc = dialog.getDescription();
+        String name = dialog.getName();
         String url = dialog.getServer();
         String username = dialog.getUsernameText();
         String password = dialog.getPasswordText();
@@ -105,7 +81,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
             return;
         }
 
-        view.initServerTree(desc, url, username, password, universe);
+        view.addServerTree(name, url, username, password, universe);
 
     }
 

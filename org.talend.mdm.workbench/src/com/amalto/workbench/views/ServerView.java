@@ -127,7 +127,9 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class ServerView extends ViewPart implements IXObjectModelListener {
 
-    private static Log log = LogFactory.getLog(ServerView.class);
+    private static final Log log = LogFactory.getLog(ServerView.class);
+
+    private static final String PENDING_TREE_OBJECT = "PENDING";//$NON-NLS-1$
 
     public static final String VIEW_ID = "org.talend.mdm.workbench.views.ServerView";//$NON-NLS-1$
 
@@ -155,7 +157,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     protected Action refreshAllServerAction;
 
-    // protected Action serverInitAction;
     protected Action browseViewAction;
 
     protected Action copyAction;
@@ -213,8 +214,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
             for (TreeObject server : servers) {
                 if (server instanceof TreeParent) {
-                    if (!(((TreeParent) server).getChildren().length == 1 && ((TreeParent) server).getChildren()[0]
-                            .getDisplayName().equalsIgnoreCase("Pending...")))
+                    if (!isServerPending((TreeParent) server))
                         ports.add(Util.getPort(server));
                 }
             }
@@ -229,13 +229,16 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
         for (TreeObject server : servers) {
             if (server instanceof TreeParent) {
-                if (!(((TreeParent) server).getChildren().length == 1 && ((TreeParent) server).getChildren()[0].getDisplayName()
-                        .equalsIgnoreCase("Pending..."))) {
+                if (!isServerPending((TreeParent) server)) {
                     servs.add((TreeParent) server);
                 }
             }
         }
         return servs;
+    }
+
+    public static boolean isServerPending(TreeParent server) {
+        return ((server.getChildren().length == 1 && (server).getChildren()[0].getName().equals(PENDING_TREE_OBJECT)));
     }
 
     private DragSource createTreeDragSource() {
@@ -607,7 +610,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
      * @return
      */
     public boolean refreshServerRoot(final ServerView view, final TreeParent serverRoot) {
-        // TODO Auto-generated method stub
         UIJob job = new UIJob("Pending ...") {
 
             @Override
@@ -637,7 +639,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     public void initView() {
-
         java.util.List<MDMServerDef> servers = MDMServerHelper.getServers();
         for (MDMServerDef server : servers) {
             initServerTreeParent(server);
@@ -666,9 +667,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     private void fillLocalPullDown(IMenuManager manager) {
         manager.add(loginAction);
-        /*
-         * manager.add(new Separator()); manager.add(logoutAction);
-         */
     }
 
     protected void fillContextMenu(IMenuManager manager) {
@@ -689,13 +687,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
             switch (xobject.getType()) {
             case TreeObject._SERVER_:
-                manager.add(loginAction);
-                manager.add(logoutAction);
-                manager.add(logoutAndRemoveAction);
                 manager.add(serverRefreshAction);
                 manager.add(serverRefreshCacheAction);
+                manager.add(new Separator());
                 manager.add(importAction);
                 manager.add(exportAction);
+                manager.add(new Separator());
+                manager.add(logoutAction);
+                manager.add(logoutAndRemoveAction);
 
                 if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
                     manager.add(pasteAction);
@@ -819,6 +818,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     private void makeActions() {
         loginAction = new ServerLoginAction(this);
+
         logoutAction = new ServerLogoutAction(this, false);
         logoutAndRemoveAction = new ServerLogoutAction(this, true);
 
@@ -830,7 +830,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         serverRefreshAction = new ServerRefreshAction(this);
         serverRefreshCacheAction = new ServerRefreshCacheAction(this);
         refreshAllServerAction = new RefreshAllServerAction(this);
-        // serverInitAction = new ServerInitAction(this);
+
         browseViewAction = new BrowseViewAction(this);
         copyAction = new CopyXObjectAction(this);
         pasteAction = new PasteXObjectAction(this);
@@ -985,17 +985,16 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         String username = server.getUser();
         String password = server.getPasswd();
         String universe = server.getUniverse();
-        TreeParent serverRoot = new TreeParent(server.getDesc(), null, TreeObject._SERVER_, url,
+        TreeParent serverRoot = new TreeParent(server.getName(), null, TreeObject._SERVER_, url,
                 ("".equals(universe) ? "" : universe + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                         + username + ":" + (password == null ? "" : password)); //$NON-NLS-1$ //$NON-NLS-2$
-        UserInfo user = new UserInfo();
-        user.setDesc(server.getDesc());
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setServerUrl(url);
-        user.setUniverse(universe);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername(username);
+        userInfo.setPassword(password);
+        userInfo.setServerUrl(url);
+        userInfo.setUniverse(universe);
 
-        serverRoot.setUser(user);
+        serverRoot.setUser(userInfo);
         if (Util.IsEnterPrise()) {
             if (universe == null || universe.length() == 0)
                 universe = "HEAD";//$NON-NLS-1$
@@ -1012,24 +1011,27 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
         displayName.append(username);
         serverRoot.setDisplayName(displayName.toString());
+        initServerTreeChildren(serverRoot);
 
-        TreeObject obj = new TreeObject("Pending...", serverRoot, TreeObject._INVISIBLE, null, null);
+        TreeParent invisibleRoot = getTreeContentProvider().getInvisibleRoot();
+        invisibleRoot.addChild(serverRoot);
+    }
+
+    public void initServerTreeChildren(TreeParent serverRoot) {
+        TreeObject obj = new TreeObject(PENDING_TREE_OBJECT, serverRoot, TreeObject._INVISIBLE, null, null);
+        obj.setDisplayName("Pending...");
         ArrayList list = new ArrayList();
         list.add(obj);
         serverRoot.setChildren(list);
-        TreeParent invisibleRoot = getTreeContentProvider().getInvisibleRoot();
-        invisibleRoot.addChild(serverRoot);
-
-        // getViewer().refresh();
     }
 
-    public void initServerTree(String desc, String url, String username, String password, String universe) {
+    public void addServerTree(String name, String url, String username, String password, String universe) {
 
         // Remove authenticator dialog
         Authenticator.setDefault(null);
 
         try {
-            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(desc, url, username, password, universe,
+            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(name, url, username, password, universe,
                     this);
             new ProgressMonitorDialog(this.getSite().getShell()).run(true, true, retriever);
 

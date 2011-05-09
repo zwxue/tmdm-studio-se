@@ -20,9 +20,9 @@ public class TreeParent extends TreeObject {
 
     private ArrayList children;
 
-    public TreeParent(String displayName, TreeParent serverRoot, int type, Object wsKey, Object wsObject) {
+    public TreeParent(String name, TreeParent serverRoot, int type, Object wsKey, Object wsObject) {
 
-        super(displayName, serverRoot, type, wsKey, wsObject);
+        super(name, serverRoot, type, wsKey, wsObject);
         children = new ArrayList();
         this.setXObject(false);
     }
