@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -39,6 +40,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ICellEditor;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -56,6 +58,8 @@ public class ValidationRuleDialog extends Dialog {
 
     String pattern;
 
+    XSDAnnotationsStructure struc;
+    
     private ComplexTableViewerColumn[] columns;
 
     String conceptName;
@@ -71,6 +75,18 @@ public class ValidationRuleDialog extends Dialog {
         this.title = title;
         this.conceptName = conceptName;
     }
+    
+    public ValidationRuleDialog(Shell parentShell, String title, String pattern, DataModelMainPage page, String conceptName,XSDAnnotationsStructure struc) {
+        super(parentShell);
+        this.pattern = pattern;
+        this.page = page;
+        this.title = title;
+        this.conceptName = conceptName;
+        this.struc = struc;
+    }
+    
+    
+    
 
     @Override
     protected Control createDialogArea(Composite parent) {
@@ -112,6 +128,24 @@ public class ValidationRuleDialog extends Dialog {
             }
         });
         return composite;
+    }
+
+    
+    private boolean doCheck() {
+        // TODO Auto-generated method stub
+        
+        if(checkNameIsDuplicated(struc,name)){
+            MessageDialog.openWarning(page.getSite().getShell(),"Warning","You can not input a duplicated name"); 
+            return false;
+        }
+        
+        if(name == null || name.trim().equals("")){ //$NON-NLS-1$
+            MessageDialog.openWarning(page.getSite().getShell(),"Warning","You can not input a blank name"); 
+            return false;
+        }
+        return true;
+        
+        
     }
 
     @Override
@@ -160,6 +194,12 @@ public class ValidationRuleDialog extends Dialog {
     @Override
     protected void okPressed() {
         name = text.getText();
+        if( struc != null){
+            if ( !doCheck() ){
+                return;
+            }
+        }
+        
         XpathSelectDialog.setContext(null);
         deactiveAllCellEditors();
         getValidationRules();
@@ -227,4 +267,27 @@ public class ValidationRuleDialog extends Dialog {
     public String getName() {
         return name;
     }
+    
+    
+    // add by xie
+    private  String  getValidationRuleName(String primary){ 
+        String splitcontent ="<pattern name=\""; //$NON-NLS-1$
+        if(primary.indexOf(splitcontent) != -1 ){
+            String part[] = primary.split(splitcontent);
+            String nameString []= part[1].split("\""); //$NON-NLS-1$
+            return nameString[0];
+        }
+        return ""; //$NON-NLS-1$ 
+    }
+    
+    private boolean checkNameIsDuplicated(XSDAnnotationsStructure struc, String inputName){
+        for (String eachValidationRule : struc.getSchematrons().values()){
+            String name = getValidationRuleName(eachValidationRule);
+            if( name.equals(inputName) ) {
+                // duplicated name
+                return true;
+            }
+        }
+        return false;
+    } 
 }
