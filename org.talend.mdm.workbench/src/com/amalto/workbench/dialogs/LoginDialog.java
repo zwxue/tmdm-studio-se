@@ -158,9 +158,9 @@ public class LoginDialog extends Dialog {
         urlText.setText(defaultMDMServerDef.getUrl());
         userText.setText(defaultMDMServerDef.getUser());
         passwordText.setText(defaultMDMServerDef.getPasswd());
-        universeCombo.setText(defaultMDMServerDef.getUniverse());
 
         if (Util.IsEnterPrise()) {
+        	universeCombo.setText(defaultMDMServerDef.getUniverse());
             FocusListener listener = new FocusListener() {
 
                 public void focusGained(FocusEvent e) {
