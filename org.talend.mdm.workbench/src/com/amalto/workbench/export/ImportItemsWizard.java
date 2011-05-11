@@ -505,13 +505,14 @@ public class ImportItemsWizard extends Wizard {
                     gd.heightHint = 300;
                     treeViewer.getViewer().getControl().getParent().layout(true);
                     treeViewer.getViewer().getControl().getShell().layout(true);
+                    try {
+                        LocalTreeObjectRepository.getInstance().setOriginalXobjectsToImport(treeViewer.getCheckNodes());
+                    } catch (Exception e) {
+                    }
                 }
             });
 
-            try {
-                LocalTreeObjectRepository.getInstance().setOriginalXobjectsToImport(treeViewer.getCheckNodes());
-            } catch (Exception e) {
-            }
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
