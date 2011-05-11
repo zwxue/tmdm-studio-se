@@ -32,7 +32,7 @@ public class MdmJavaRoutinesProvider implements IRoutinesProvider {
     }
 
     public List<URL> getSystemRoutines() {
-        List<URL> toReturn = FilesUtils.getFilesFromFolder(Activator.getDefault().getBundle(), "resources/java/routines/system", //$NON-NLS-1$
+        List<URL> toReturn = FilesUtils.getFilesFromFolder(Activator.getDefault().getBundle(), "resources/java/routines", //$NON-NLS-1$
                 ".java", false, false); //$NON-NLS-1$
 
         return toReturn;
