@@ -1361,11 +1361,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     return 116;
                 } else if (source.equals("X_Default_Value_Rule")) {//$NON-NLS-1$
                     return 117;
-                } else if (source.equals("X_Create")) {//$NON-NLS-1$
+                } else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
                     return 118;
-                } else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
+                } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
                     return 119;
-                } else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
+                } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
                     return 120;
                 }
             }
