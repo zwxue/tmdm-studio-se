@@ -77,8 +77,6 @@ public class LoginDialog extends Dialog {
 
     private Group authenticationGroup;
 
-    private Document logininfoDocument;
-
     private boolean isOK;
 
     /**
@@ -160,7 +158,7 @@ public class LoginDialog extends Dialog {
         passwordText.setText(defaultMDMServerDef.getPasswd());
 
         if (Util.IsEnterPrise()) {
-        	universeCombo.setText(defaultMDMServerDef.getUniverse());
+            universeCombo.setText(defaultMDMServerDef.getUniverse());
             FocusListener listener = new FocusListener() {
 
                 public void focusGained(FocusEvent e) {
@@ -235,7 +233,6 @@ public class LoginDialog extends Dialog {
             isOK = false;
             return;
         }
-
         if (getServer().length() == 0) {
             MessageDialog.openError(null, "Error", "Server can't be empty!");
             urlText.setFocus();
@@ -254,88 +251,9 @@ public class LoginDialog extends Dialog {
             isOK = false;
             return;
         }
-
-        Element root;
-        Element server;
-        if (new File(MDMServerHelper.workbenchConfigFile).exists()) {
-            try {
-                SAXReader reader = new SAXReader();
-                logininfoDocument = reader.read(new File(MDMServerHelper.workbenchConfigFile));
-            } catch (DocumentException e) {
-                log.error(e.getMessage(), e);
-                isOK = false;
-                return;
-            }
-            root = logininfoDocument.getRootElement();
-            server = getServer(root, name);
-        } else {
-            logininfoDocument = DocumentHelper.createDocument();
-            root = logininfoDocument.addElement(MDMServerHelper.ROOT);
-            server = null;
-        }
-
-        if (server == null) {
-            addServer(root);
-        } else {
-            setServerProperties(server);
-        }
-
-        XMLWriter writer;
-        try {
-            writer = new XMLWriter(new FileWriter(MDMServerHelper.workbenchConfigFile));
-            writer.write(logininfoDocument);
-            writer.close();
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-            isOK = false;
-            return;
-        }
-
         isOK = true;
         setReturnCode(OK);
         // no close let Action Handler handle it
-    }
-
-    private Element getServer(Element root, String matchingName) {
-        List<?> properties = root.elements(MDMServerHelper.PROPERTIES);
-        for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
-            Element ele = (Element) iterator.next();
-            String name = ele.element(MDMServerHelper.NAME) != null ? ele.element(MDMServerHelper.NAME).getText() : ""; //$NON-NLS-1$
-            if (matchingName.equals(name))
-                return ele;
-        }
-        return null;
-    }
-
-    private void addServer(Element root) {
-        Element prop = root.addElement(MDMServerHelper.PROPERTIES);
-        setServerProperties(prop);
-        Element name = prop.element(MDMServerHelper.NAME);
-        if (name == null)
-            name = prop.addElement(MDMServerHelper.NAME);
-        name.setText(nameText.getText().trim());
-    }
-
-    private void setServerProperties(Element prop) {
-        Element url = prop.element(MDMServerHelper.URL);
-        if (url == null)
-            url = prop.addElement(MDMServerHelper.URL);
-        url.setText(urlText.getText().trim());
-
-        Element user = prop.element(MDMServerHelper.USER);
-        if (user == null)
-            user = prop.addElement(MDMServerHelper.USER);
-        user.setText(userText.getText());
-
-        Element password = prop.element(MDMServerHelper.PASSWORD);
-        if (password == null)
-            password = prop.addElement(MDMServerHelper.PASSWORD);
-        password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
-
-        Element universe = prop.element(MDMServerHelper.UNIVERSE);
-        if (universe == null)
-            universe = prop.addElement(MDMServerHelper.UNIVERSE);
-        universe.setText(getUniverse());
     }
 
     public void saveUserTypes() {

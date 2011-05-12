@@ -29,8 +29,6 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.Platform;
 
-import com.amalto.workbench.dialogs.LoginDialog;
-
 public class MDMServerHelper {
 
     public static final String ROOT = "MDMServer"; //$NON-NLS-1$
@@ -50,81 +48,142 @@ public class MDMServerHelper {
     public static final String workbenchConfigFile = Platform.getInstanceLocation().getURL().getPath()
             + "/mdm_workbench_config.xml"; //$NON-NLS-1$
 
-    private static final Log log = LogFactory.getLog(LoginDialog.class);
+    private static final Log log = LogFactory.getLog(MDMServerHelper.class);
 
     public static List<MDMServerDef> getServers() {
         List<MDMServerDef> defs = new ArrayList<MDMServerDef>();
-        SAXReader reader = new SAXReader();
-        Element root;
-        Document logininfoDocument;
-        if (new File(workbenchConfigFile).exists()) {
-            try {
-                logininfoDocument = reader.read(new File(workbenchConfigFile));
-            } catch (DocumentException e) {
-                log.error(e.getMessage(), e);
-                return defs;
-            }
-            root = logininfoDocument.getRootElement();
-        } else {
-            logininfoDocument = DocumentHelper.createDocument();
-            root = logininfoDocument.addElement(ROOT);
-        }
+        Element rootElement = getRootElement();
+        if (rootElement == null)
+            return defs;
 
-        List<?> properties = root.elements(PROPERTIES);
+        List<?> properties = rootElement.elements(PROPERTIES);
         for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
-            Element ele = (Element) iterator.next();
-            String password = ele.element(PASSWORD).getText();
-
-            String universe = ele.element(UNIVERSE) != null ? ele.element(UNIVERSE).getText() : ""; //$NON-NLS-1$
-            String name = ele.element(NAME) != null ? ele.element(NAME).getText() : ""; //$NON-NLS-1$
-
-            password = PasswordUtil.decryptPassword(password);
-            MDMServerDef def = MDMServerDef.parse(ele.element(URL).getText(), ele.element(USER).getText(), password, universe,
-                    name);
+            Element serverElement = (Element) iterator.next();
+            MDMServerDef def = getServer(serverElement);
             defs.add(def);
         }
         return defs;
     }
 
     public static MDMServerDef getServer(String name) {
-        List<MDMServerDef> servers = getServers();
-        for (MDMServerDef server : servers) {
-            if (server.getName().equals(name)) {
-                return server;
+        Element rootElement = getRootElement();
+        if (rootElement == null)
+            return null;
+        Element serverElement = getServerElement(rootElement, name);
+        if (serverElement != null)
+            return getServer(serverElement);
+        return null;
+    }
+
+    private static MDMServerDef getServer(Element serverElement) {
+        String name = serverElement.element(NAME).getText();
+        String url = serverElement.element(URL).getText();
+        String user = serverElement.element(USER).getText();
+        String password = serverElement.element(PASSWORD).getText();
+        String universe = serverElement.element(UNIVERSE) != null ? serverElement.element(UNIVERSE).getText() : ""; //$NON-NLS-1$
+        password = PasswordUtil.decryptPassword(password);
+        MDMServerDef def = MDMServerDef.parse(url, user, password, universe, name);
+        return def;
+    }
+
+    public static boolean deleteServer(String name) {
+        boolean deleted = false;
+        Element rootElement = getRootElement();
+        Element serverElement = getServerElement(rootElement, name);
+        if (serverElement != null) {
+            rootElement.remove(serverElement);
+            deleted = saveRootElement(rootElement);
+        }
+        return deleted;
+    }
+
+    public static boolean saveServer(MDMServerDef serverDef) {
+        Element rootElement = getRootElement();
+        Element serverElement = getServerElement(rootElement, serverDef.getName());
+
+        if (serverElement == null) {
+            addServerElement(rootElement, serverDef);
+        } else {
+            addServerProperties(serverElement, serverDef);
+        }
+        return saveRootElement(rootElement);
+    }
+
+    private static void addServerElement(Element root, MDMServerDef serverDef) {
+        Element prop = root.addElement(MDMServerHelper.PROPERTIES);
+        addServerProperties(prop, serverDef);
+        Element name = prop.element(MDMServerHelper.NAME);
+        if (name == null)
+            name = prop.addElement(MDMServerHelper.NAME);
+        name.setText(serverDef.getName());
+    }
+
+    private static void addServerProperties(Element prop, MDMServerDef serverDef) {
+        Element url = prop.element(MDMServerHelper.URL);
+        if (url == null)
+            url = prop.addElement(MDMServerHelper.URL);
+        url.setText(serverDef.getUrl());
+
+        Element user = prop.element(MDMServerHelper.USER);
+        if (user == null)
+            user = prop.addElement(MDMServerHelper.USER);
+        user.setText(serverDef.getUser());
+
+        Element password = prop.element(MDMServerHelper.PASSWORD);
+        if (password == null)
+            password = prop.addElement(MDMServerHelper.PASSWORD);
+        password.setText(PasswordUtil.encryptPassword(serverDef.getPasswd()));
+
+        if (serverDef.getUniverse() != null) {
+            Element universe = prop.element(MDMServerHelper.UNIVERSE);
+            if (universe == null)
+                universe = prop.addElement(MDMServerHelper.UNIVERSE);
+            universe.setText(serverDef.getUniverse());
+        }
+    }
+
+    private static Element getRootElement() {
+        Document logininfoDocument;
+        Element rootElement;
+        if (new File(workbenchConfigFile).exists()) {
+            try {
+                SAXReader reader = new SAXReader();
+                logininfoDocument = reader.read(new File(workbenchConfigFile));
+            } catch (DocumentException e) {
+                log.error(e.getMessage(), e);
+                return null;
+            }
+            rootElement = logininfoDocument.getRootElement();
+        } else {
+            logininfoDocument = DocumentHelper.createDocument();
+            rootElement = logininfoDocument.addElement(ROOT);
+        }
+        return rootElement;
+    }
+
+    private static Element getServerElement(Element rootElement, String matchingName) {
+        List<?> properties = rootElement.elements(MDMServerHelper.PROPERTIES);
+        for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
+            Element serverElement = (Element) iterator.next();
+            Element nameElement = serverElement.element(MDMServerHelper.NAME);
+            if (nameElement != null) {
+                String name = nameElement.getText();
+                if (matchingName.equals(name))
+                    return serverElement;
             }
         }
         return null;
     }
 
-    public static void deleteServer(String name) {
-        SAXReader reader = new SAXReader();
-        File file = new File(MDMServerHelper.workbenchConfigFile);
-        if (file.exists()) {
-            Document logininfoDocument = null;
-            try {
-                logininfoDocument = reader.read(file);
-            } catch (DocumentException e) {
-                log.error(e.getMessage(), e);
-                return;
-            }
-            Element root = logininfoDocument.getRootElement();
-            deleteServer(root, name);
-            try {
-                XMLWriter writer = new XMLWriter(new FileWriter(MDMServerHelper.workbenchConfigFile));
-                writer.write(logininfoDocument);
-                writer.close();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-    }
-
-    private static void deleteServer(Element root, String name) {
-        java.util.List<?> properties = root.elements(MDMServerHelper.PROPERTIES);
-        for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
-            Element ele = (Element) iterator.next();
-            if (ele.element(MDMServerHelper.NAME).getText().equals(name))
-                root.remove(ele);
+    private static boolean saveRootElement(Element rootElement) {
+        try {
+            XMLWriter writer = new XMLWriter(new FileWriter(MDMServerHelper.workbenchConfigFile));
+            writer.write(rootElement.getDocument());
+            writer.close();
+            return true;
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            return false;
         }
     }
 }

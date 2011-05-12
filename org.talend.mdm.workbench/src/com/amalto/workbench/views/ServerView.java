@@ -1058,6 +1058,15 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
             getViewer().refresh();
             getViewer().expandToLevel(serverRoot, 1);
+
+            // store server definition
+            MDMServerDef serverDef = MDMServerDef.parse(url, username, password, universe, name);
+            boolean saved = MDMServerHelper.saveServer(serverDef);
+            if (!saved) {
+                MessageDialog.openError(null, "Error", "Unable to store server definition");
+                return;
+            }
+
         } catch (InterruptedException ie) {
             return;
         } catch (InvocationTargetException e) {
