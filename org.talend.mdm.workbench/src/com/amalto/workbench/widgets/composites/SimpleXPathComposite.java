@@ -14,6 +14,8 @@ package com.amalto.workbench.widgets.composites;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -45,7 +47,7 @@ public class SimpleXPathComposite extends Composite {
     public static final String DEFAULTTITLE = "Enter an xPath for the Foreign Key - Leave BLANK to delete the Foreign Key";
     protected BasePropertySection section;
     public SimpleXPathComposite(Composite parent, int style, String title, IAllDataModelHolder allDataModelHolder,
-            String defaultDataModelForSelect,BasePropertySection section) {
+            String defaultDataModelForSelect,final BasePropertySection section) {
         super(parent, style);
         this.section=section;
         this.defaultDataModelForSelect = defaultDataModelForSelect;
@@ -75,7 +77,19 @@ public class SimpleXPathComposite extends Composite {
         txtXPath = new Text(composite, SWT.BORDER);
         final GridData gd_txtXPath = new GridData(SWT.FILL, SWT.CENTER, true, false);
         txtXPath.setLayoutData(gd_txtXPath);
+     
+        txtXPath.addKeyListener(new KeyListener() {
+            public void keyPressed(KeyEvent e) {
+              if( e.character =='\r'){ 
+                  if(section!=null ){
+                      section.autoCommit();
+                  }
+              }
+            }
 
+            public void keyReleased(KeyEvent e) {
+            }
+        });
         btnSelectXPath = new Button(composite, SWT.NONE);
         btnSelectXPath.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
         btnSelectXPath.setToolTipText("Select Xpath");
