@@ -241,15 +241,15 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                         break;
                     }
                 }
+                //updated by hhb,comment all it works,   fix bug:0021466
                 // modified by jsxie; fix the bug: 0019688 
+//                if (!anonymous) {
+//                    complexType.setName(typeName);
+//                }
+//                else{
+//                	 complexType.setName(decl.getTypeDefinition().getName());
+//                }
  
-                if (!anonymous) {
-                    complexType.setName(typeName);
-                }
-                else{
-                	 complexType.setName(decl.getTypeDefinition().getName());
-                }
-               
                 
                 if (superType != null) {
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
