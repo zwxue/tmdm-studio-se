@@ -1133,8 +1133,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                             + "Some Records may have not been logically deleted");
                             return;
                         }
-                        port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
-                                lineItem.getIds()), partPath));
+                        WSItemPK itempk=new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem
+                                .getConcept(), lineItem.getIds());
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,"genericUI","LOGIC_DELETE",partPath,getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
+                        
+//                        port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
+//                                lineItem.getIds()), partPath));
                         monitor.worked(1);
                     }// for
 
@@ -1240,7 +1244,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         }
                         WSItemPK itempk=new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem
                                 .getConcept(), lineItem.getIds());
-                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,"genericUI",getXObject().getUsername()));//$NON-NLS-1$
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,"genericUI","PHYSICAL_DELETE",null,getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
                         monitor.worked(1);
                     }// for
 
