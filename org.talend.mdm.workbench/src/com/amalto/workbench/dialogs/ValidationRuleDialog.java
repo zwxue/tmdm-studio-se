@@ -241,9 +241,9 @@ public class ValidationRuleDialog extends Dialog {
                 String msg = line.keyValues.get(3).value;
                 if (conceptName != null) {
                     if (context.equals(conceptName)) {
-                        context = context.replaceAll(conceptName, "/");//$NON-NLS-1$
-                    } else {
-                        context = context.replaceAll(conceptName + "/", "");//$NON-NLS-1$//$NON-NLS-2$
+                        context = context.replace(conceptName, "/");//$NON-NLS-1$
+                    } else if(context.startsWith(conceptName+"/")){//$NON-NLS-1$
+                        context = context.substring((conceptName + "/").length());//$NON-NLS-1$
                     }
                 }
                 sb = sb.append(context).append("\">");//$NON-NLS-1$
