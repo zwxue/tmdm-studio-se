@@ -25,6 +25,8 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
     private static final QName ns1_source_QNAME = new QName("", "source");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
+    private static final QName ns1_operateType_QNAME = new QName("", "operateType");
+    private static final QName ns1_updatePath_QNAME = new QName("", "updatePath");
     private static final QName ns1_user_QNAME = new QName("", "user");
     
     public WSDeleteItemWithReport_LiteralSerializer(QName type, String encodingStyle) {
@@ -80,6 +82,32 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_operateType_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_operateType_QNAME, reader, context);
+                instance.setOperateType((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_operateType_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_updatePath_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_updatePath_QNAME, reader, context);
+                instance.setUpdatePath((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_updatePath_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_user_QNAME)) {
                 member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_user_QNAME, reader, context);
                 instance.setUser((java.lang.String)member);
@@ -108,6 +136,8 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
         }
         ns2_myWSItemPK_LiteralSerializer.serialize(instance.getWsItemPK(), ns1_wsItemPK_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getSource(), ns1_source_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getOperateType(), ns1_operateType_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getUpdatePath(), ns1_updatePath_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getUser(), ns1_user_QNAME, null, writer, context);
     }
 }
