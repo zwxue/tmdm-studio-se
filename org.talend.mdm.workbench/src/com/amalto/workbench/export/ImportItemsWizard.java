@@ -182,7 +182,8 @@ public class ImportItemsWizard extends Wizard {
     public boolean performFinish() {
         closeOpenEditors();
         final String zipFilePath = getZipFilePath();
-        if (zipBtn.getSelection()) {
+        final boolean selectZip = zipBtn.getSelection();
+        if (selectZip) {
 
             // importFolder= System.getProperty("user.dir")+"/temp";
             try {
@@ -220,8 +221,8 @@ public class ImportItemsWizard extends Wizard {
                         }
 
                     }.schedule();
-
-                    if (zipFilePath != null) {
+                    //modified by honghb ,fix bug 21552
+                    if (selectZip && zipFilePath != null) {
                         importFolder = System.getProperty("user.dir") + "/temp";//$NON-NLS-1$//$NON-NLS-2$
                         ZipToFile.deleteDirectory(new File(importFolder));
                     }
