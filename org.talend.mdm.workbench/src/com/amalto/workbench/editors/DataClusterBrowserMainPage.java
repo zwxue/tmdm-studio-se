@@ -89,12 +89,12 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
+import com.amalto.workbench.webservices.WSCount;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteItemWithReport;
-import com.amalto.workbench.webservices.WSDropItem;
 import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetDataCluster;
@@ -110,9 +110,7 @@ import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSPutItemWithReport;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
-import com.amalto.workbench.webservices.WSRunQuery;
 import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUpdateMetadataItem;
@@ -225,7 +223,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             conceptCombo.addKeyListener(keylistener);
 
             // search
-            Button bSearch = toolkit.createButton(compFirstLine, "", SWT.CENTER);
+            Button bSearch = toolkit.createButton(compFirstLine, "", SWT.CENTER); //$NON-NLS-1$
             bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
             bSearch.setToolTipText("Search");
             bSearch.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
@@ -479,19 +477,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             // add by myli; fix the bug:0013077: if the data is too much, just get the entities from the model instead
             // of from the container.
             String[] concepts;
-            // long beforeTime = System .currentTimeMillis();
 
             String clusterName = URLEncoder.encode(cluster.getName(), "utf-8");//$NON-NLS-1$
-            String query = "count(collection('" + clusterName + "')/ii/n)";//$NON-NLS-1$//$NON-NLS-2$
-            WSStringArray array = port.runQuery(new WSRunQuery(null, new WSDataClusterPK(clusterName), query, null));
-            // WSString count2 = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100));
-            long count = Long.valueOf(array.getStrings()[0]);
-            // long count=Long.parseLong(count2.getValue());
-            /*
-             * long afterTime = System .currentTimeMillis(); System.out.println("before" + beforeTime);
-             * System.out.println("after" + afterTime);
-             * System.out.println("cost Time of count 500K"+(beforeTime-afterTime));
-             */
+
+            WSString countStr = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100)); //$NON-NLS-1$
+            long count = Long.parseLong(countStr.getValue());
+
             if (count > 100000) {
                 // if (false) {
                 DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell());
@@ -524,18 +515,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     conceptCombo.add("*");//$NON-NLS-1$
                     for (int i = 0; i < concepts.length; i++)
                         conceptCombo.add(concepts[i]);
-                    // System.out.println(count.getValue());
                 }
             } else {
-                // long beforeTime1 = System .currentTimeMillis();
                 WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = port.getConceptsInDataClusterWithRevisions(
                         new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(clusterName), new WSUniversePK(
                                 currentUniverseName))).getMapEntry();
-                long afterTime1 = System.currentTimeMillis();
-                /*
-                 * System.out.println("before"+beforeTime1); System.out.println("after"+afterTime1);
-                 * System.out.println("cost Time of read 100K"+(beforeTime1-afterTime1));
-                 */
+
                 concepts = new String[wsConceptRevisionMapMapEntries.length];
                 for (int i = 0; i < wsConceptRevisionMapMapEntries.length; i++) {
                     WSConceptRevisionMapMapEntry entry = wsConceptRevisionMapMapEntries[i];
@@ -627,9 +612,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     }
 
     protected void fillContextMenu(IMenuManager manager) {
-        // IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-
-        return;
     }
 
     protected LineItem[] getResults(boolean showResultInfo) {
@@ -666,7 +648,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
             }
 
-            if (!"".equals(toText.getText())) {
+            if (!"".equals(toText.getText())) { //$NON-NLS-1$
                 String dateTimeText = toText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
@@ -720,7 +702,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             .getTextContent());
                     continue;
                 }
-                // port.getItem(new WSGetItem(results[i].getWsItemPK()));
                 ress.add(new LineItem(results[i].getDate(), results[i].getWsItemPK().getConceptName(), results[i].getWsItemPK()
                         .getIds(), results[i].getTaskId()));
             }
@@ -804,15 +785,17 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                                     null,
                                                     "Confirm",
                                                     "This object was also modified by somebody else. If you save now, you will overwrite his or her changes. Are you sure you want to do that?")) {
-                                       	WSPutItemWithReport item=
-                                    		new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                                .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false), "genericUI", true);//$NON-NLS-1$
-                                        Util.getPort(getXObject()).putItemWithReport(item);                                    	                                        
+                                        WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem(
+                                                (WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
+                                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
+                                                false), "genericUI", true);//$NON-NLS-1$
+                                        Util.getPort(getXObject()).putItemWithReport(item);
                                     }
                                 } else {
-                                   	WSPutItemWithReport item=
-                                		new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                            .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false), "genericUI", true);//$NON-NLS-1$
+                                    WSPutItemWithReport item = new WSPutItemWithReport(
+                                            new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
+                                                    .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
+                                            "genericUI", true);//$NON-NLS-1$
                                     Util.getPort(getXObject()).putItemWithReport(item);
                                 }
                                 // previousDataModel = d.getDataModelName();
@@ -836,6 +819,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -910,6 +894,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             setToolTipText("Compare With Each Other");
         }
 
+        @Override
         public void run() {
 
             try {
@@ -974,6 +959,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             setToolTipText("Compare With Latest Revision");
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -1049,6 +1035,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             setToolTipText("Logically delete the Selected Record" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -1092,6 +1079,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -1133,12 +1121,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                             + "Some Records may have not been logically deleted");
                             return;
                         }
-                        WSItemPK itempk=new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem
-                                .getConcept(), lineItem.getIds());
-                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,"genericUI","LOGIC_DELETE",partPath,getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
-                        
-//                        port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
-//                                lineItem.getIds()), partPath));
+                        WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
+                                lineItem.getIds());
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
+                                "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
+
+                        // port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(),
+                        // lineItem.getConcept(),
+                        // lineItem.getIds()), partPath));
                         monitor.worked(1);
                     }// for
 
@@ -1173,6 +1163,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             setToolTipText("Physically delete the selected Record" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -1204,6 +1195,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -1242,9 +1234,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                             + "Some Records may have not been deleted");
                             return;
                         }
-                        WSItemPK itempk=new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem
-                                .getConcept(), lineItem.getIds());
-                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,"genericUI","PHYSICAL_DELETE",null,getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
+                        WSItemPK itempk = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem.getConcept(),
+                                lineItem.getIds());
+                        port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
+                                "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
                         monitor.worked(1);
                     }// for
 
@@ -1276,26 +1269,24 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif")); //$NON-NLS-1$
             setText("New Record");
             setToolTipText("Add a new Record");
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
 
-                // IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-                // LineItem li = (LineItem) selection.getFirstElement();
+                String xml = "<NewItem><NewElement></NewElement></NewItem>"; //$NON-NLS-1$
 
-                String xml = "<NewItem><NewElement></NewElement></NewItem>";
-
-                WSDataModelPK[] dmPKs = Util.getPort(getXObject()).getDataModelPKs(new WSRegexDataModelPKs("*"))
+                WSDataModelPK[] dmPKs = Util.getPort(getXObject()).getDataModelPKs(new WSRegexDataModelPKs("*")) //$NON-NLS-1$
                         .getWsDataModelPKs();
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
                     for (int i = 0; i < dmPKs.length; i++) {
-                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk()))
+                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk())) //$NON-NLS-1$
                             dataModels.add(dmPKs[i].getPk());
                     }
                 }
@@ -1308,9 +1299,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (event.button == DOMViewDialog.BUTTON_SAVE) {
                             // attempt to save
                             try {
-                            	WSPutItemWithReport item=
-                            		new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false), "genericUI", true);//$NON-NLS-1$
+                                WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject()
+                                        .getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
+                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
+                                        "genericUI", true);//$NON-NLS-1$
                                 Util.getPort(getXObject()).putItemWithReport(item);
                             } catch (Exception e) {
                                 MessageDialog.openError(shell, "Error saving the Record",
@@ -1333,6 +1325,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -1364,6 +1357,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             setToolTipText("Route the Selected Record" + (selection.size() > 1 ? "s" : ""));
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -1392,6 +1386,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -1426,7 +1421,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 int i = 0;
                 for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext();) {
                     LineItem lineItem = iter.next();
-                    String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."
+                    String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."  //$NON-NLS-1$  //$NON-NLS-2$
                             + Util.joinStrings(lineItem.getIds(), ".");
                     monitor.subTask("Processing Record " + (i++) + " - " + itemID);
                     if (monitor.isCanceled()) {
@@ -1473,11 +1468,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             case 1:
                 return li.getConcept();
             case 2:
-                return Util.joinStrings(li.getIds(), ".");
+                return Util.joinStrings(li.getIds(), "."); //$NON-NLS-1$
             case 3:
                 return li.getTaskId();
             default:
-                return "???????";
+                return "???????"; //$NON-NLS-1$
             }
         }
 
@@ -1529,7 +1524,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 res = li1.getConcept().compareToIgnoreCase(li2.getConcept());
                 break;
             case 2:
-                res = Util.joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), "."));
+                res = Util.joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), ".")); //$NON-NLS-1$
                 break;
             default:
                 res = 0;
