@@ -103,8 +103,6 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
     private Composite composite;
 
-    private boolean smartViewSelected = true;
-
     private boolean isTransfor = false;
 
     private static String Smart_view = "Smart_view_";//$NON-NLS-1$
@@ -140,6 +138,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         this.isBtnShow = isBtnShow;
     }
 
+    @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
             value = text.getText();
@@ -149,6 +148,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         super.buttonPressed(buttonId);
     }
 
+    @Override
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         if (title != null) {
@@ -156,6 +156,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         }
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         // create OK and Cancel buttons by default
         okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
@@ -165,9 +166,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         okButton.setEnabled(false);
     }
 
-    /*
-     * (non-Javadoc) Method declared on Dialog.
-     */
+    @Override
     protected Control createDialogArea(final Composite parent) {
         // create composite
         composite = (Composite) super.createDialogArea(parent);
@@ -212,7 +211,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
             Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
             radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
             radioGroup.setLayout(new GridLayout(1, false));
-            radioGroup.setText("select one type");
+            radioGroup.setText("Select one Type");
 
             transformeButton = new Button(radioGroup, SWT.RADIO);
             transformeButton.setText("Create a Normal Process");
@@ -227,7 +226,6 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
                 public void widgetSelected(SelectionEvent e) {
                     text.setText("");//$NON-NLS-1$
                     label.setText(message);
-                    smartViewSelected = false;
                     openDLG.setVisible(false);
                     parent.layout(true);
                     value = "";//$NON-NLS-1$
@@ -249,7 +247,6 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
                 public void widgetSelected(SelectionEvent e) {
                     text.setText(Smart_view);
                     label.setText("Enter a name that follows: Smart_view_<EntityName>_<language ISO code>");
-                    smartViewSelected = true;
                     openDLG.setVisible(true);
                     value = Smart_view;
                 }
@@ -291,7 +288,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
             });
 
             runnableProcessButton = new Button(radioGroup, SWT.RADIO);
-            runnableProcessButton.setText("Create a Runable Process");
+            runnableProcessButton.setText("Create a Runnable Process");
             runnableProcessButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             runnableProcessButton.addSelectionListener(new SelectionListener() {
 
@@ -386,15 +383,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         dlg.open();
 
         if (dlg.getReturnCode() == Window.OK) {
-            // if (dlg.getXpath() != null && dlg.getXpath().length() > 0) {
-            // int point = dlg.getXpath().indexOf("/");
-            // if (point >= 0)
-            // text.setText(value + dlg.getXpath().substring(0, point));
-            // else
-            // text.setText(value + dlg.getXpath());
-            // }
             text.setText(value + dlg.getEntityName());
-
             dlg.close();
         }
     }
