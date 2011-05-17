@@ -166,21 +166,23 @@ public class SimpleTypeConfigComposite extends Composite {
     }
 
     private void initUIContentForComboBuildInTypes() {
+    	comboBuildInTypes.removeSelectionChangedListener(buildInChangedListener);
         comboBuildInTypes.setInput(Util.getAllBuildInTypes(xsdSimpleType.getSchema()));
         comboBuildInTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType()));
 
         radBuildInTypes.setSelection(!comboBuildInTypes.getSelection().isEmpty());
-
+        comboBuildInTypes.addSelectionChangedListener(buildInChangedListener);
     }
 
     private void initUIContentsForComboCustomTypes() {
-
+    	comboCustomTypes.removeSelectionChangedListener(customChangedListener);
         List<String> allCustomTypeNames = Util.getAllCustomTypeNames(xsdSimpleType.getSchema());
         allCustomTypeNames.remove(xsdSimpleType.getName());
         comboCustomTypes.setInput(allCustomTypeNames);
         comboCustomTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType().getName()));
 
         radCustomTypes.setSelection(!comboCustomTypes.getSelection().isEmpty());
+        comboCustomTypes.addSelectionChangedListener(customChangedListener);
     }
 
     private void initUIContentForCompFacet(XSDSimpleTypeDefinition baseTypeDef) {
@@ -253,7 +255,7 @@ public class SimpleTypeConfigComposite extends Composite {
     }
     private void removeNameTxtListener(){
     	txtName.removeModifyListener(nameTxtListener);
-    }
+    }    
     private void initUIListenerForBaseTypeRadioBtns() {
 
         radCustomTypes.addSelectionListener(new SelectionAdapter() {
@@ -275,17 +277,18 @@ public class SimpleTypeConfigComposite extends Composite {
         });
 
     }
-
+    ISelectionChangedListener customChangedListener;
+    ISelectionChangedListener buildInChangedListener;
     private void initUIListenerForBaseTypeCombos() {
-
-        comboCustomTypes.addSelectionChangedListener(new ISelectionChangedListener() {
+    	customChangedListener=new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 if(section!=null && getSelectedBaseTypeName().length()>0){
 					section.autoCommit();			
                 }
             }
-        });
+        };
+
 
         comboCustomTypes.getCombo().addMouseListener(new MouseAdapter() {
 
@@ -302,14 +305,14 @@ public class SimpleTypeConfigComposite extends Composite {
             }
         });
 
-        comboBuildInTypes.addSelectionChangedListener(new ISelectionChangedListener() {
+        buildInChangedListener=new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 if(section!=null && getSelectedBaseTypeName().length()>0){
 					section.autoCommit();			
                 }
             }
-        });
+        };
 
         comboBuildInTypes.getCombo().addMouseListener(new MouseAdapter() {
 
