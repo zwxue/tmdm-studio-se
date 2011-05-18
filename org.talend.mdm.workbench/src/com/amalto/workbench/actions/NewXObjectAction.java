@@ -108,6 +108,7 @@ public class NewXObjectAction extends Action {
         setToolTipText("Create a new instance of an " + IConstants.TALEND + " Object");
     }
 
+    @Override
     public void run() {
         try {
             super.run();
@@ -181,7 +182,7 @@ public class NewXObjectAction extends Action {
             case TreeObject.TRANSFORMER:
                 ViewInputDialog vid = new ViewInputDialog(
                         view.getSite(),
-                        (TreeParent) view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER),
+                        xfolder,
                         view.getSite().getShell(),
                         title,// "New "+IConstants.TALEND+" Object Instance",
                         "Enter a Name for the New Instance                                                                                  ",
@@ -210,7 +211,7 @@ public class NewXObjectAction extends Action {
             case TreeObject.VIEW:
 
                 ViewInputDialog tid = new ViewInputDialog(view.getSite(),
-                        (TreeParent) view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER), view.getSite()
+                        xfolder, view.getSite()
                                 .getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
                         "Enter a Name for the New Instance", "Browse_items_", new IInputValidator() {//$NON-NLS-2$
 
@@ -565,6 +566,7 @@ public class NewXObjectAction extends Action {
         }
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
