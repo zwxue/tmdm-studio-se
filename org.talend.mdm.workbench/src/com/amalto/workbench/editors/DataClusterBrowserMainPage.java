@@ -788,13 +788,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                         WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem(
                                                 (WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
-                                                false), "genericUI", true);//$NON-NLS-1$
+                                                true), "genericUI", true);//$NON-NLS-1$
                                         Util.getPort(getXObject()).putItemWithReport(item);
                                     }
                                 } else {
                                     WSPutItemWithReport item = new WSPutItemWithReport(
                                             new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                                    .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
+                                                    .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), true),
                                             "genericUI", true);//$NON-NLS-1$
                                     Util.getPort(getXObject()).putItemWithReport(item);
                                 }
