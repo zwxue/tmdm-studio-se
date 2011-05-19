@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -72,8 +73,6 @@ public class ServerLogoutAction extends Action {
         final String password = serverRoot.getPassword();
         final String endpointAddress = serverRoot.getEndpointAddress();
 
-        TreeParent root = serverRoot.getParent();
-
         LocalTreeObjectRepository.getInstance().switchOffListening();
         LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, (TreeParent) serverRoot);
         // add by ymli; fix the bug:0011948:
@@ -113,16 +112,20 @@ public class ServerLogoutAction extends Action {
                 }
             }
         });
-        
+
         if (remove) {
             serverRoot.getParent().removeChild(serverRoot);
             MDMServerHelper.deleteServer(serverRoot.getName());
+            serverRoot = null;
         } else {
             serverRoot.removeChildren();
             view.initServerTreeChildren(serverRoot);
-        }
-        
-        view.getViewer().refresh();
 
+        }
+
+        view.getViewer().refresh();
+        
+        if (serverRoot != null)
+            view.getViewer().collapseToLevel(serverRoot, AbstractTreeViewer.ALL_LEVELS);
     }
 }
