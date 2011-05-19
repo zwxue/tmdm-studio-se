@@ -35,6 +35,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -96,6 +97,8 @@ public class DOMViewDialog extends Dialog {
     private String desc;
 
     private Collection<Listener> listeners = new ArrayList<Listener>();
+
+	private Button triggerBtn;
 
     public DOMViewDialog(Shell parentShell, Node node) {
         this(parentShell, node, false, null, TREE_VIEWER, null);
@@ -227,7 +230,8 @@ public class DOMViewDialog extends Dialog {
 
             // this.getShell().setSize(600, 600);
             // this.getShell().layout();
-
+        	 triggerBtn=new Button(composite,SWT.CHECK);
+        	triggerBtn.setText("Trigger the process");
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -237,7 +241,9 @@ public class DOMViewDialog extends Dialog {
         }
 
     }
-
+    public boolean isTriggerProcess(){
+    	return triggerBtn.getSelection();
+    }
     public int getButtonPressed() {
         return buttonPressed;
     }

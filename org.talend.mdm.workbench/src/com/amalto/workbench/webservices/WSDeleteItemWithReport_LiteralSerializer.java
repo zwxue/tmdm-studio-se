@@ -28,6 +28,10 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
     private static final QName ns1_operateType_QNAME = new QName("", "operateType");
     private static final QName ns1_updatePath_QNAME = new QName("", "updatePath");
     private static final QName ns1_user_QNAME = new QName("", "user");
+    private static final QName ns1_invokeBeforeSaving_QNAME = new QName("", "invokeBeforeSaving");
+    private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
+    private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
+    private static final QName ns1_pushToUpdateReport_QNAME = new QName("", "pushToUpdateReport");
     
     public WSDeleteItemWithReport_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -40,6 +44,7 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns2_myWSItemPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSItemPK.class, ns2_WSItemPK_TYPE_QNAME);
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Boolean.class, ns3_boolean_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -73,12 +78,7 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
                 member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_source_QNAME, reader, context);
                 instance.setSource((java.lang.String)member);
                 reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_source_QNAME, reader.getName() });
             }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
@@ -86,12 +86,7 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
                 member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_operateType_QNAME, reader, context);
                 instance.setOperateType((java.lang.String)member);
                 reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_operateType_QNAME, reader.getName() });
             }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
@@ -99,12 +94,7 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
                 member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_updatePath_QNAME, reader, context);
                 instance.setUpdatePath((java.lang.String)member);
                 reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_updatePath_QNAME, reader.getName() });
             }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
@@ -112,12 +102,23 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
                 member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_user_QNAME, reader, context);
                 instance.setUser((java.lang.String)member);
                 reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_user_QNAME, reader.getName() });
             }
         }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_invokeBeforeSaving_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_invokeBeforeSaving_QNAME, reader, context);
+                instance.setInvokeBeforeSaving((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_pushToUpdateReport_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_pushToUpdateReport_QNAME, reader, context);
+                instance.setPushToUpdateReport((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
         }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
@@ -139,5 +140,7 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getOperateType(), ns1_operateType_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getUpdatePath(), ns1_updatePath_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getUser(), ns1_user_QNAME, null, writer, context);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getInvokeBeforeSaving(), ns1_invokeBeforeSaving_QNAME, null, writer, context);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getPushToUpdateReport(), ns1_pushToUpdateReport_QNAME, null, writer, context);
     }
 }

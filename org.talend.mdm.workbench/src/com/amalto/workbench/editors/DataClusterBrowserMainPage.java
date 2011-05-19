@@ -788,14 +788,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                         WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem(
                                                 (WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
-                                                true), "genericUI", true);//$NON-NLS-1$
+                                                true), "genericUI", d.isTriggerProcess());//$NON-NLS-1$
                                         Util.getPort(getXObject()).putItemWithReport(item);
                                     }
                                 } else {
                                     WSPutItemWithReport item = new WSPutItemWithReport(
                                             new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                                     .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), true),
-                                            "genericUI", true);//$NON-NLS-1$
+                                            "genericUI", d.isTriggerProcess());//$NON-NLS-1$
                                     Util.getPort(getXObject()).putItemWithReport(item);
                                 }
                                 // previousDataModel = d.getDataModelName();
@@ -1124,7 +1124,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
                                 lineItem.getIds());
                         port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
+                                "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername(),false,true));//$NON-NLS-1$ //$NON-NLS-2$
 
                         // port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(),
                         // lineItem.getConcept(),
@@ -1237,7 +1237,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem.getConcept(),
                                 lineItem.getIds());
                         port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername()));//$NON-NLS-1$ //$NON-NLS-2$
+                                "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername(),false,true));//$NON-NLS-1$ //$NON-NLS-2$
                         monitor.worked(1);
                     }// for
 
@@ -1302,7 +1302,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject()
                                         .getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
-                                        "genericUI", true);//$NON-NLS-1$
+                                        "genericUI", d.isTriggerProcess());//$NON-NLS-1$
                                 Util.getPort(getXObject()).putItemWithReport(item);
                             } catch (Exception e) {
                                 MessageDialog.openError(shell, "Error saving the Record",
