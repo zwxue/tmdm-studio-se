@@ -220,8 +220,10 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                     alreadyExists = false;
             }
             // partCnt.setMaxOccurs(1);
-
-            if (complexType != null) {
+         // Modified by hbhong,to fix bug 0021725
+//            if (complexType != null) {
+            if (parent != null && complexType != null) {   
+           // The ending| bug:0021725
                 XSDParticleImpl partCnt = (XSDParticleImpl) complexType.getContentType();
                 XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
                 if (isChoice)
