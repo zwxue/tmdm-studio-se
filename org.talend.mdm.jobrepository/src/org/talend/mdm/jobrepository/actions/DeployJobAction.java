@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -58,6 +59,14 @@ public class DeployJobAction extends Action {
         }
 
         IStructuredSelection selection = (IStructuredSelection) view.getViewer().getSelection();
+        
+     // add by xie to fix bug 20084
+        int size = selection.size();
+        if( size > 1){
+            MessageDialog.openWarning( Display.getCurrent().getActiveShell(),"Warning","Only one job can be deployed in one time"); 
+            return;
+        }
+        
         List<Object> ojbs = new ArrayList<Object>();
         TreeParent serverRoot = null;
         RepositoryNode root = new RepositoryNode(null, null, null);
