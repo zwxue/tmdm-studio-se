@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.widgets.SchematronExpressBuilder;
 
 public class ValidationRuleExcpressDialog extends Dialog {
@@ -32,13 +33,15 @@ public class ValidationRuleExcpressDialog extends Dialog {
     String conceptName;
 
     private boolean isAbsoluteXPath = false;
-
-    public ValidationRuleExcpressDialog(Shell parentShell, String title, String value, String conceptName) {
-        this(parentShell, title, value, conceptName, false);
+    // Modified by hbhong,to fix bug 21784, add a treeParent field to receive TreeParent object
+    protected TreeParent treeParent;
+    public ValidationRuleExcpressDialog(Shell parentShell, TreeParent treeParent,String title, String value, String conceptName) {
+        this(parentShell,treeParent, title, value, conceptName, false);
     }
 
-    public ValidationRuleExcpressDialog(Shell parentShell, String title, String value, String conceptName, boolean isAbsoluteXPath) {
+    public ValidationRuleExcpressDialog(Shell parentShell,TreeParent treeParent, String title, String value, String conceptName, boolean isAbsoluteXPath) {
         super(parentShell);
+        this.treeParent=treeParent;
         this.title = title;
         this.value = value;
         this.conceptName = conceptName;
@@ -50,9 +53,10 @@ public class ValidationRuleExcpressDialog extends Dialog {
         parent.getShell().setText(this.title);
         Composite composite = (Composite) super.createDialogArea(parent);
         builder = new SchematronExpressBuilder(composite, value, conceptName, isAbsoluteXPath);
+        builder.setTreeParent(treeParent);
         return composite;
     }
-
+    // The ending| bug:21784
     @Override
     protected void okPressed() {
         express = builder.getText();

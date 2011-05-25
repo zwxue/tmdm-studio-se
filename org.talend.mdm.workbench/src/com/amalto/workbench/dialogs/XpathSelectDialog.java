@@ -207,9 +207,11 @@ public class XpathSelectDialog extends Dialog {
         dg.widthHint = 400;
         dataModelCombo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
         dataModelCombo.setLayoutData(dg);
-        if (this.parent == null) {
-            this.parent = (TreeParent) ServerView.show().getRoot().getChildren()[0];
-        }
+        // Modified by hbhong,to fix bug 21784|the following can cause potential error,so comment it
+        // if (this.parent == null) {
+        // this.parent = (TreeParent) ServerView.show().getRoot().getChildren()[0];
+        // }
+        // The ending| bug:21784
         final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
 
         // filter the datamodel according to conceptName

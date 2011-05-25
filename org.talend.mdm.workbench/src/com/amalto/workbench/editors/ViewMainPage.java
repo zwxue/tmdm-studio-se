@@ -53,6 +53,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -175,11 +176,16 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             /****
              * /viewable Business Elements
              ****/
-
+            // Modified by hbhong,to fix bug 21784
+            TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
+            // The ending| bug:21784
             Composite viewablehGroup = this.getNewSectionComposite("Viewable Business Elements");
             viewablehGroup.setLayout(new GridLayout(2, false));
             viewableElementColumns[0].setColumnWidth(220);
             viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns), toolkit, viewablehGroup);
+            // Modified by hbhong,to fix bug 21784
+            viewableViewer.setTreeParent(treeParent);
+            // The ending| bug:21784
             viewableViewer.setXpath(true);
             if (viewName.startsWith("Browse_items_")) {
                 concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -196,6 +202,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             searchGroup.setLayout(new GridLayout(2, false));
             searchableElementColumns[0].setColumnWidth(220);
             searchableViewer = new TisTableViewer(Arrays.asList(searchableElementColumns), toolkit, searchGroup);
+            // Modified by hbhong,to fix bug 21784
+            searchableViewer.setTreeParent(treeParent);
+            // The ending| bug:21784
             searchableViewer.setXpath(true);
             searchableViewer.setConceptName(concept);
             searchableViewer.setMainPage(this);
@@ -217,6 +226,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             conditionsColumns[2].setColumnWidth(250);
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer = new TisTableViewer(Arrays.asList(conditionsColumns), toolkit, wcGroup);
+            // Modified by hbhong,to fix bug 21784
+            conditionViewer.setTreeParent(treeParent);
+            // The ending| bug:21784
             conditionViewer.setXpath(true);
             conditionViewer.setConceptName(concept);
             conditionViewer.setMainPage(this);
@@ -607,4 +619,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
         return true;
     }
+  //Modified by hhb,to fix bug 21784
+    @Override
+    public Object getAdapter(Class adapter) {
+        if(adapter==TreeParent.class){
+            return Util.getServerTreeParent( getXObject());
+        }
+        return super.getAdapter(adapter);
+    }
+    //The ending| bug:21784
 }

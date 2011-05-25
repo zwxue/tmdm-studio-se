@@ -90,16 +90,22 @@ public class XpathWidget implements SelectionListener {
         this.dataModelName = dataModelName;
     }
 
-    public XpathWidget(Composite parent, AMainPageV2 page, boolean isMulti) {
-        this("", page.getXObject().getParent(), null, parent, page, false, false, "");//$NON-NLS-1$//$NON-NLS-2$
+    // Modified by hhb,to fix bug 21784
+    // public XpathWidget(Composite parent, AMainPageV2 page, boolean isMulti) {
+    //        this("", page.getXObject().getParent(), null, parent, page, false, false, "");//$NON-NLS-1$//$NON-NLS-2$
+    // this.isMulti = isMulti;
+    // }
+    //
+    // public XpathWidget(Composite parent, boolean isMulti) {
+    //        this("", null, null, parent, null, false, false, "");//$NON-NLS-1$//$NON-NLS-2$
+    // this.isMulti = isMulti;
+    // }
+    public XpathWidget(Composite parent, TreeParent treeParent, boolean isMulti) {
+        this("", treeParent, null, parent, null, false, false, "");//$NON-NLS-1$//$NON-NLS-2$
         this.isMulti = isMulti;
     }
 
-    public XpathWidget(Composite parent, boolean isMulti) {
-        this("", null, null, parent, null, false, false, "");//$NON-NLS-1$//$NON-NLS-2$
-        this.isMulti = isMulti;
-    }
-
+    // The ending| bug:21784
     public XpathWidget(String buttonName, TreeParent treeParent, FormToolkit toolkit, Composite parent, AMainPageV2 dialog,
             boolean isButtonLeft, boolean readOnly, String dataModelName) {
 

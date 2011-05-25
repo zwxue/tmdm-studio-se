@@ -45,6 +45,7 @@ import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.KeyValue;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.models.XPathFunc;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.views.ServerView;
@@ -76,12 +77,18 @@ public class SchematronExpressBuilder {
     String concept;
 
     private boolean isAbsoluteXPath = false;
-
-    public SchematronExpressBuilder(Composite parent, String value, String conceptName) {
+    // Modified by hbhong,to fix bug 21784, add a treeParent field to receive TreeParent object
+    protected TreeParent treeParent;
+    
+    public void setTreeParent(TreeParent treeParent) {
+        this.treeParent = treeParent;
+    }
+    // The ending| bug:21784
+    public SchematronExpressBuilder(Composite parent ,String value, String conceptName) {
         this(parent, value, conceptName, false);
     }
 
-    public SchematronExpressBuilder(Composite parent, String value, String conceptName, boolean isAbsoluteXPath) {
+    public SchematronExpressBuilder(Composite parent,  String value, String conceptName, boolean isAbsoluteXPath) {
         this.parent = parent;
         this.value = value;
         this.conceptName = conceptName;
@@ -271,7 +278,7 @@ public class SchematronExpressBuilder {
         xpathButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                XpathSelectDialog dlg = new XpathSelectDialog(parent.getShell(), null, "Select Xpath ...", ServerView.show()
+                XpathSelectDialog dlg = new XpathSelectDialog(parent.getShell(), treeParent, "Select Xpath ...", ServerView.show()
                         .getSite(), false, null, isAbsoluteXPath);
                 dlg.setConceptName(conceptName);
                 // dlg.setContext(context);

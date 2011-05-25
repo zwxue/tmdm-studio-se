@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.utils.Util;
 
@@ -205,4 +206,12 @@ public class UndoAction extends Action {
     public IOperationHistory getOperationHistory() {
         return PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
     }
+    
+    // Modified by hbhong,to fix bug 21784
+    protected TreeParent getTreeParent() {
+        TreeParent treeParent = (TreeParent) page.getAdapter(TreeParent.class);
+        return treeParent;
+    }
+    // The ending| bug:21784
+    
 }

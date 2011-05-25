@@ -38,6 +38,7 @@ import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -112,6 +113,10 @@ public class ValidationRuleDialog extends Dialog {
         columns[2].setColumnWidth(300);
         columns[3].setColumnWidth(300);
         viewer = new TisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
+      //Modified by hhb,to fix bug 21784
+        TreeParent treeParent=(TreeParent) page.getAdapter(TreeParent.class);
+        viewer.setTreeParent(treeParent);
+      //The ending| bug:21784
         viewer.setXpath(true);
         // viewer.setMainPage(page);
         viewer.setConceptName(conceptName);

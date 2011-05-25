@@ -80,9 +80,10 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             if (struc == null || struc.getAnnotation() == null) {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
-
-            ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),
+            // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
+            ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),getTreeParent(),
                     "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName);
+            // The ending| bug:21784
             dlg.create();
             dlg.getShell().setMaximized(false);
             // dlg.getShell().setSize(new Point(640,560));

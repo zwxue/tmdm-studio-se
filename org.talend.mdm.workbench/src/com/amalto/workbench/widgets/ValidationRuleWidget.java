@@ -28,6 +28,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.amalto.workbench.dialogs.ValidationRuleExcpressDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeParent;
 
 public class ValidationRuleWidget {
 
@@ -49,12 +50,16 @@ public class ValidationRuleWidget {
 
     TableColumn column;
 
-    public ValidationRuleWidget(Composite parent, String conceptName) {
+    // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
+    private final TreeParent treeParent;
+
+    public ValidationRuleWidget(Composite parent, TreeParent treeParent,String conceptName) {
         this.parent = parent;
+        this.treeParent = treeParent;
         this.conceptName = conceptName;
         create();
     }
-
+    // The ending| bug:21784
     private void create() {
         composite = toolkit.createComposite(parent, SWT.NO_FOCUS);
         // composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
@@ -77,7 +82,7 @@ public class ValidationRuleWidget {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 Shell shell = new Shell(composite.getDisplay(), SWT.BORDER);
-                dlg = new ValidationRuleExcpressDialog(shell, "Build Validation Rule Expression ", text.getText(), conceptName);
+                dlg = new ValidationRuleExcpressDialog(shell,treeParent, "Build Validation Rule Expression ", text.getText(), conceptName);
                 dlg.create();
                 dlg.getShell().setMaximized(false);
                 // dlg.getShell().setSize(new Point(640,560));

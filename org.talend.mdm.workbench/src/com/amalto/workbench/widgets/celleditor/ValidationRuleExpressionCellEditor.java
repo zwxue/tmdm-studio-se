@@ -16,22 +16,30 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.amalto.workbench.dialogs.ValidationRuleExcpressDialog;
+import com.amalto.workbench.models.TreeParent;
 
 
 public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor {
 
     private String conceptName;
+    // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
+    private   TreeParent treeParent;
 
-    public ValidationRuleExpressionCellEditor(Composite parent, String conceptName) {
+    
+    public void setTreeParent(TreeParent treeParent) {
+        this.treeParent = treeParent;
+    }
+
+    public ValidationRuleExpressionCellEditor(Composite parent,TreeParent treeParent, String conceptName) {
         super(parent);
-
+        this.treeParent = treeParent;
         this.conceptName = conceptName;
     }
 
     @Override
     protected Object openDialogBox(Control cellEditorWindow) {
-
-        ValidationRuleExcpressDialog dialog = new ValidationRuleExcpressDialog(cellEditorWindow.getShell(),
+        
+        ValidationRuleExcpressDialog dialog = new ValidationRuleExcpressDialog(cellEditorWindow.getShell(),treeParent,
                 "Build Validation Rule Expression ", getValue() == null ? "" : getValue().toString(), conceptName);
 
         if (dialog.open() != Window.OK)
@@ -39,5 +47,5 @@ public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor
 
         return dialog.getExpression();
     }
-
+    // The ending| bug:21784
 }

@@ -198,6 +198,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.providers.TypesLabelProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
@@ -2833,5 +2834,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     public WSDataModel getDataModel() {
         return datamodel;
     }
+
+    //Modified by hhb,to fix bug 21784
+    @Override
+    public Object getAdapter(Class adapter) {
+        if(adapter==TreeParent.class){
+            return Util.getServerTreeParent( getXObject());
+        }
+        return super.getAdapter(adapter);
+    }
+    //The ending| bug:21784
 
 }

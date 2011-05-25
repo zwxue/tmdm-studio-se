@@ -85,6 +85,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.Util;
@@ -485,7 +486,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             if (count > 100000) {
                 // if (false) {
-                DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell());
+                // Modified by hbhong,to fix bug 21784|
+                TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
+                DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell(),treeParent);
+                // The ending| bug:21784
                 dialog.setBlockOnOpen(true);
                 dialog.open();
                 if (dialog.getReturnCode() == Window.OK) {
@@ -496,8 +500,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     concepts = new String[Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).size()];
                     Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).toArray(concepts);
                     TreeObject object = null;
-                    for (int i = 0; i < this.getXObject().getServerRoot().getChildren().length; i++) {
-                        object = this.getXObject().getServerRoot().getChildren()[i];
+                    TreeObject[] children = this.getXObject().getServerRoot().getChildren();
+                    for (int i = 0; i < children.length; i++) {
+                        object = children[i];
                         if (object.getType() == TreeObject.DATA_MODEL)
                             break;
                     }
@@ -1536,5 +1541,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
 
     }
-
+    //Modified by hbhong,to fix bug 21784
+    @Override
+    public Object getAdapter(Class adapter) {
+        if(adapter==TreeParent.class){
+            return Util.getServerTreeParent( getXObject());
+        }
+        return super.getAdapter(adapter);
+    }
+    //The ending| bug:21784
 }

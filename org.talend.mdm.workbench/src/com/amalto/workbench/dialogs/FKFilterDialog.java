@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ICellEditor;
@@ -89,6 +90,11 @@ public class FKFilterDialog extends Dialog {
         // viewer.setMainPage(page);//TODO
         // viewer.setConceptName(conceptName);
         // viewer.setContext(true);
+
+        // Modified by hbhong,to fix bug 21784
+        TreeParent treeParent=(TreeParent) page.getAdapter(TreeParent.class);
+        viewer.setTreeParent(treeParent);
+        // The ending| bug:21784
         viewer.create();
         viewer.setHeight(140);
         viewer.setWidth(680);

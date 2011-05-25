@@ -38,11 +38,14 @@ import com.amalto.workbench.views.ServerView;
 
 public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
-    public DataModelSelectDialog(Shell parentShell) {
+    // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
+    private final TreeParent treeParent;
+
+    public DataModelSelectDialog(Shell parentShell, TreeParent treeParent) {
         super(parentShell);
-
+        this.treeParent = treeParent;
     }
-
+    // The ending| bug:21784
     private static final long serialVersionUID = 1L;
 
     protected Label schemaLabel = null;
@@ -79,11 +82,14 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
     private void changeToResource() {
         TreeParent parent = null;
-        for (int i = 0; i < ((TreeParent) ServerView.show().getRoot().getChildren()[0]).getChildren().length; i++) {
-            parent = (TreeParent) ((TreeParent) ServerView.show().getRoot().getChildren()[0]).getChildren()[i];
+        // Modified by hbhong,to fix bug 21784
+        TreeObject[] children = treeParent.getChildren();
+        for (int i = 0; i < children.length; i++) {
+            parent = (TreeParent)children[i];
             if (parent.getType() == TreeObject.DATA_MODEL)
                 break;
         }
+        // The ending| bug:21784
         contentProvider = new ServerTreeContentProvider(ServerView.show().getSite(), parent);
         setTreeContentProvider(contentProvider);
         domViewer.setLabelProvider(new ServerTreeLabelProvider());

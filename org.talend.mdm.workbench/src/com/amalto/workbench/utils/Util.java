@@ -1184,15 +1184,14 @@ public class Util {
                          * findOutSpecialSonElement( (XSDElementDeclaration) pt.getContent(), son, complexTypes); if
                          * (spec != null) return spec.getName();
                          */
-//                        if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-//    	
-//                        	return ele.getName() + "/"//$NON-NLS-1$
-//                                    + getTopElement(ele, son, (XSDComplexTypeDefinition) ele.getTypeDefinition());
-//
-//
-//                        }
-                        
-                        
+                        // if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                        //
+                        //                        	return ele.getName() + "/"//$NON-NLS-1$
+                        // + getTopElement(ele, son, (XSDComplexTypeDefinition) ele.getTypeDefinition());
+                        //
+                        //
+                        // }
+
                     }
                 }
             }
@@ -1450,6 +1449,29 @@ public class Util {
         return objs;
     }
 
+    // Modified by hbhong,to fix bug 21784
+    public static TreeParent getServerTreeParent(TreeObject tObj) {
+        TreeParent serverRoot = tObj.getServerRoot();
+        if (serverRoot == null)
+            return getTreeParent(tObj, TreeObject._SERVER_);
+        return serverRoot;
+    }
+
+    private static TreeParent getTreeParent(TreeObject tObj, int type) {
+        if (tObj == null)
+            throw new IllegalArgumentException("Parameter TreeObject is null!");
+        if (tObj instanceof TreeParent) {
+            if (tObj.getType() == type)
+                return (TreeParent) tObj;
+        }
+        TreeParent parent = tObj.getParent();
+        if (parent != null) {
+            return getTreeParent(parent, type);
+        }
+        return null;
+    }
+
+    // The ending| bug:21784
     public static List<String> getDataModel(TreeObject obj, String datamodel, String conceptName) {
         List<String> systemDataModelValues = Util.getChildren(obj.getServerRoot(), TreeObject.DATA_MODEL);
 
@@ -1525,23 +1547,25 @@ public class Util {
         }
         return childNames;
     }
-    public static List<String> getChildElementNames(XSDSchema schema, String concept) throws Exception{
-    	List<String> childNames = new ArrayList<String>();
-    	EList xsdElementDeclarations = schema.getElementDeclarations();
+
+    public static List<String> getChildElementNames(XSDSchema schema, String concept) throws Exception {
+        List<String> childNames = new ArrayList<String>();
+        EList xsdElementDeclarations = schema.getElementDeclarations();
         List<String> list = new ArrayList<String>();
-        XSDElementDeclaration conceptEl=null;
+        XSDElementDeclaration conceptEl = null;
         for (XSDElementDeclaration el : (XSDElementDeclaration[]) xsdElementDeclarations
                 .toArray(new XSDElementDeclaration[xsdElementDeclarations.size()])) {
             if (el.getName().equals(concept)) {
-                conceptEl=el;
+                conceptEl = el;
                 break;
             }
         }
-        if(conceptEl!=null){
-        	childNames.addAll(getChildElementNames(conceptEl.getName(), conceptEl));
+        if (conceptEl != null) {
+            childNames.addAll(getChildElementNames(conceptEl.getName(), conceptEl));
         }
         return childNames;
     }
+
     public static IStatus changeElementTypeToSequence(XSDElementDeclaration decl, int maxOccurs) {
         if (maxOccurs < -1) {
             MessageDialog.openError(null, "error", "max occurance value should be greater than -1");
@@ -1618,10 +1642,10 @@ public class Util {
             return true;
         try {
             String xsd = nodeToString(schema.getDocument().getDocumentElement());
-//            if(true){
-//            	return false;
-//            }
-            
+            // if(true){
+            // return false;
+            // }
+
             if (xsd.indexOf(componentName) != -1) {
                 return false;
             }
@@ -2185,26 +2209,25 @@ public class Util {
         return list;
     }
 
-
     public static boolean hasUniverse(TreeObject xobject) {
-	    if (xobject.isXObject())
-	        return false;
-	    switch (xobject.getType()) {
-	    case TreeObject.DATA_MODEL:
-	    case TreeObject.VIEW:
-	    case TreeObject.MENU:
-	    case TreeObject.ROLE:
-	    case TreeObject.ROUTING_RULE:
-	    case TreeObject.SYNCHRONIZATIONPLAN:
-	    case TreeObject.STORED_PROCEDURE:
-	    case TreeObject.TRANSFORMER:
-	        return true;
-	    default:
-	        return false;
-	    }
-	}
+        if (xobject.isXObject())
+            return false;
+        switch (xobject.getType()) {
+        case TreeObject.DATA_MODEL:
+        case TreeObject.VIEW:
+        case TreeObject.MENU:
+        case TreeObject.ROLE:
+        case TreeObject.ROUTING_RULE:
+        case TreeObject.SYNCHRONIZATIONPLAN:
+        case TreeObject.STORED_PROCEDURE:
+        case TreeObject.TRANSFORMER:
+            return true;
+        default:
+            return false;
+        }
+    }
 
-	public static boolean hasTags(TreeObject xobject) {
+    public static boolean hasTags(TreeObject xobject) {
         if (xobject.isXObject())
             return true;
         switch (xobject.getType()) {
@@ -2970,6 +2993,7 @@ public class Util {
         }
         return null;
     }
+
     /**
      * DOC hbhong Comment method "unZipFile". same with unZipFile(String zipfile, String unzipdir) method except having
      * a progressMonitor

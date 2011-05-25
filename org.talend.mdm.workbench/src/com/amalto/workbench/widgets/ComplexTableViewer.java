@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
@@ -63,6 +64,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.models.TreeParent;
 
 /**
  * This table viewer has: 1.input Texts, add button 2.normal tableviewer with up/down/delete button
@@ -120,6 +122,21 @@ public class ComplexTableViewer {
         this.context = context;
     }
 
+    // Modified by hhb,to fix bug 21784
+
+    TreeParent treeParent;
+
+    public void setTreeParent(TreeParent treeParent) {
+        this.treeParent = treeParent;
+    }
+
+    protected TreeParent getCurrentTreeParent() {
+        if (treeParent != null)
+            return treeParent;
+        return (TreeParent) ((IAdaptable) mainPage).getAdapter(TreeParent.class);
+    }
+
+    // The ending| bug:21784
     List<XpathWidget> xpaths = new ArrayList<XpathWidget>();
 
     protected DescAnnotationComposite multiMsg;
@@ -762,7 +779,7 @@ public class ComplexTableViewer {
 
         @Override
         protected Control createControl(Composite parent) {
-            validationRule = new ValidationRuleWidget(parent, conceptName);
+            validationRule = new ValidationRuleWidget(parent,getCurrentTreeParent(), conceptName);
 
             ((GridData) validationRule.getComposite().getChildren()[0].getLayoutData()).heightHint = 15;
             ((GridData) validationRule.getComposite().getChildren()[1].getLayoutData()).heightHint = 15;
@@ -930,12 +947,16 @@ public class ComplexTableViewer {
             super(parent);
         }
 
+        // Modified by hhb,to fix bug 21784
         @Override
         protected Control createControl(Composite parent) {
-            if (mainPage != null)
-                xpath = new XpathWidget(parent, mainPage, false);
-            else
-                xpath = new XpathWidget(parent, false);
+            // if (mainPage != null)
+            // xpath = new XpathWidget(parent, mainPage, false);
+            // else
+            // xpath = new XpathWidget(parent, false);
+
+            xpath = new XpathWidget(parent, treeParent, false);
+            // The ending| bug:21784
             xpaths.add(xpath);
             xpath.setConceptName(conceptName);
             xpath.setDataModelName(datamodelName);
