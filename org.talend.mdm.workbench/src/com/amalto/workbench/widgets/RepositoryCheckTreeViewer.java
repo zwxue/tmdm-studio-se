@@ -66,7 +66,9 @@ public class RepositoryCheckTreeViewer {
     private ServerView repositoryView = ServerView.show();
 
     Collection<TreeObject> repositoryNodes = new ArrayList<TreeObject>();
-
+    
+    Collection<TreeObject> optimizedCheckNodes = new ArrayList<TreeObject>();
+    
     private IStructuredSelection selection;
 
     private SashForm sash;
@@ -204,12 +206,85 @@ public class RepositoryCheckTreeViewer {
     public void refresh() {
         // if user has select some items in repository view, mark them as checked
         for (TreeObject obj : checkItems) {
-            if (obj instanceof TreeParent)
+            if (obj instanceof TreeParent){
                 repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
+                // use this to resolve the bug 21723,by jsxie 
+                setOptimizedCheckNodes((TreeParent) obj);
+            }
             else
                 repositoryNodes.add(obj);
         }
-        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
+
+        
+        
+//        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
+        
+    }
+
+    private void setOptimizedCheckNodes(TreeParent obj) {
+        for(TreeObject treeObj : obj.getChildren()){
+            if(treeObj.getName().equals("Data Container")){
+                if(treeObj instanceof TreeParent){
+                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
+                    if(!(child instanceof TreeParent)){
+                        optimizedCheckNodes.add(child);
+                        
+                    }
+                    else{
+                        if(child.getName().equals("System")){
+                            for(TreeObject chld : ((TreeParent)child).getChildren() ){
+                                if(chld.getName().equals("PROVISIONING"))
+                                    optimizedCheckNodes.add(chld);
+                                if(chld.getName().equals("CONF"))
+                                    optimizedCheckNodes.add(chld);
+                            }
+                        }
+                    }
+                }
+                }
+            }
+            if(treeObj.getName().equals("Event Management")){
+                if(treeObj instanceof TreeParent){
+                    optimizedCheckNodes.add(treeObj);
+                }
+            }
+
+            if(treeObj.getName().equals("Menu") || treeObj.getName().equals("Role") ){
+                if(treeObj instanceof TreeParent){
+                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
+                    if(!(child instanceof TreeParent)){
+                        optimizedCheckNodes.add(child); 
+                    } 
+                  } 
+                }
+            }
+            if(treeObj.getName().equals("Resources")){
+                if(treeObj instanceof TreeParent){
+                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
+                        if(child.getName().equals("Pictures"))
+                        optimizedCheckNodes.add(child); 
+                  } 
+                }
+            }
+        }
+        
+        for(TreeObject treeObj : obj.getChildren()){
+            if(treeObj.getName().equals("Data Model")){
+                if(treeObj instanceof TreeParent){
+                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
+                    if(!(child instanceof TreeParent)){
+                        optimizedCheckNodes.add(child); 
+                    } 
+                    else{
+                        optimizedCheckNodes.remove(child);
+                    }
+                  } 
+                }
+            }
+        }
+        
+        ((CheckboxTreeViewer) viewer).setCheckedElements(optimizedCheckNodes.toArray());
+        
     }
 
     public void setItemText(String text) {
