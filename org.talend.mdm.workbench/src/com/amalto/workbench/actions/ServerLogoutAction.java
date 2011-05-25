@@ -127,5 +127,10 @@ public class ServerLogoutAction extends Action {
         
         if (serverRoot != null)
             view.getViewer().collapseToLevel(serverRoot, AbstractTreeViewer.ALL_LEVELS);
+        
+        // add by jsxie to fix the bug 0020497
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(true);
+        
+        
     }
 }
