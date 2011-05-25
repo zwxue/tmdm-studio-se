@@ -134,11 +134,12 @@ public class MDM {
      * {talendTypes} String
      * 
      * {Category} MDM
-     * @param xml
-     * @param xpath
-     * @param position
-     * @return
-     * @throws Exception
+     * 
+     * {param} string(xml) xml: xml
+     * 
+     * {param} string(xpath) xpath: xpath.
+     * 
+     * {param} int(0) position: position.
      */
     public static String getRepeatingElement(String xml, String xpath, int position)throws Exception{
 
@@ -158,12 +159,13 @@ public class MDM {
      * 
      * {talendTypes} Boolean
      * 
-     * {Category} MDM 
-     * @param xml
-     * @param xpath
-     * @param text
-     * @return
-     * @throws Exception
+     * {Category} MDM
+     * 
+     * {param} string(xml) xml: xml.
+     * 
+     * {param} string(xpath) xpath: xpath.
+     * 
+     * {param} String(text) text: text.
      */
     public static boolean hasRepeatingElement(String xml, String xpath, String text)throws Exception{
     	Node node =parse(xml);
@@ -182,12 +184,13 @@ public class MDM {
      * 
      * {talendTypes} String
      * 
-     * {Category} MDM 
-     * @param xml
-     * @param xpath
-     * @param delimiter
-     * @return
-     * @throws Exception
+     * {Category} MDM
+     * 
+     * {param} string(xml) xml: xml.
+     * 
+     * {param} string(xpath) xpath: xpath.
+     * 
+     * {param} char(delimiter) delimiter: delimiter.
      */
     public static String listRepeatingElement(String xml, String xpath, char delimiter)throws Exception{
     	Node node =parse(xml);
@@ -209,11 +212,13 @@ public class MDM {
 	 * 
      * {talendTypes} String
      * 
-     * {Category} MDM 
-	 * @param xml
-	 * @param xpath
-	 * @param text
-	 * @return
+     * {Category} MDM
+     * 
+     * {param} string(xml) xml: xml
+     * 
+     * {param} string(xpath) xpath: xpath
+     * 
+     * {param} String(text) text: text
 	 */
 	public static String addRepeatingElement(String xml, String xpath, String text)throws Exception{
 		Node node =parse(xml);
