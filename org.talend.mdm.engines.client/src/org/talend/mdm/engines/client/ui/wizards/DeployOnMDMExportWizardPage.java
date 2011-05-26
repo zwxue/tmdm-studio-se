@@ -397,8 +397,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // boolean ok = executeExportOperation(new ArchiveFileExportOperationFullPath(process));
         ArchiveFileExportOperationFullPath exporterOperation = getExporterOperation(resourcesToExport);
         boolean ok = executeExportOperation(exporterOperation);
-        //TODO What if not ok ????
-        
+        // TODO What if not ok ????
+
         // path can like name/name
         manager.deleteTempFiles();
 
@@ -458,8 +458,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     e.getLocalizedMessage());
             return false;
         }
-        MessageDialog.openInformation(getContainer().getShell(),
-                Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
+        MessageDialog.openInformation(getContainer().getShell(), Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
                 Messages.getString("DeployOnMDMExportWizardPage.publishJobSuccess")); //$NON-NLS-1$
         return ok;
     }
@@ -476,6 +475,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         try {
             // unzip to tmpFolder
             ZipToFile.unZipFile(zipFile, tmpFolder);
+            // remove jaxrpc.jar from lib , see 0021706
+            String javxRpc = tmpFolder + File.separator + "WEB-INF" + File.separator + "lib" + File.separator + "jaxrpc.jar";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            File rpcfile = new File(javxRpc);
+            if (rpcfile.exists()) {
+                rpcfile.delete();
+            }
             // build new jar
             for (int i = 0; i < process.length; i++) {
                 if (process[i] != null) {
