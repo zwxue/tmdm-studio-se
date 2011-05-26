@@ -207,7 +207,7 @@ public class RepositoryCheckTreeViewer {
         // if user has select some items in repository view, mark them as checked
         for (TreeObject obj : checkItems) {
             if (obj instanceof TreeParent){
-                repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
+//                repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
                 // use this to resolve the bug 21723,by jsxie 
                 setOptimizedCheckNodes((TreeParent) obj);
             }
@@ -223,7 +223,7 @@ public class RepositoryCheckTreeViewer {
 
     private void setOptimizedCheckNodes(TreeParent obj) {
         for(TreeObject treeObj : obj.getChildren()){
-            if(treeObj.getName().equals("Data Container")){
+            if(treeObj.getName().equals("Data Container")){ //$NON-NLS-1$
                 if(treeObj instanceof TreeParent){
                 for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
                     if(!(child instanceof TreeParent)){
@@ -231,11 +231,11 @@ public class RepositoryCheckTreeViewer {
                         
                     }
                     else{
-                        if(child.getName().equals("System")){
+                        if(child.getName().equals("System")){  //$NON-NLS-1$
                             for(TreeObject chld : ((TreeParent)child).getChildren() ){
-                                if(chld.getName().equals("PROVISIONING"))
+                                if(chld.getName().equals("PROVISIONING")) //$NON-NLS-1$
                                     optimizedCheckNodes.add(chld);
-                                if(chld.getName().equals("CONF"))
+                                if(chld.getName().equals("CONF")) //$NON-NLS-1$
                                     optimizedCheckNodes.add(chld);
                             }
                         }
@@ -243,13 +243,13 @@ public class RepositoryCheckTreeViewer {
                 }
                 }
             }
-            if(treeObj.getName().equals("Event Management")){
+            if(treeObj.getName().equals("Event Management")){ //$NON-NLS-1$
                 if(treeObj instanceof TreeParent){
                     optimizedCheckNodes.add(treeObj);
                 }
             }
 
-            if(treeObj.getName().equals("Menu") || treeObj.getName().equals("Role") ){
+            if(treeObj.getName().equals("Menu") || treeObj.getName().equals("Role") || treeObj.getName().equals("Data Model")){   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 if(treeObj instanceof TreeParent){
                 for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
                     if(!(child instanceof TreeParent)){
@@ -258,26 +258,11 @@ public class RepositoryCheckTreeViewer {
                   } 
                 }
             }
-            if(treeObj.getName().equals("Resources")){
+            if(treeObj.getName().equals("Resources")){ //$NON-NLS-1$
                 if(treeObj instanceof TreeParent){
                 for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
-                        if(child.getName().equals("Pictures"))
+                        if(child.getName().equals("Pictures")) //$NON-NLS-1$
                         optimizedCheckNodes.add(child); 
-                  } 
-                }
-            }
-        }
-        
-        for(TreeObject treeObj : obj.getChildren()){
-            if(treeObj.getName().equals("Data Model")){
-                if(treeObj instanceof TreeParent){
-                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
-                    if(!(child instanceof TreeParent)){
-                        optimizedCheckNodes.add(child); 
-                    } 
-                    else{
-                        optimizedCheckNodes.remove(child);
-                    }
                   } 
                 }
             }
