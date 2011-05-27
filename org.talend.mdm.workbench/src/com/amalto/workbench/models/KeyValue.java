@@ -22,4 +22,17 @@ public class KeyValue {
         this.key = key;
         this.value = value;
     }
+    // Modified by hbhong,to fix bug 0021977
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof KeyValue)) {
+            return false;
+        }
+        KeyValue other=(KeyValue) obj;
+        return key.equals(other.key)&&value.equals(other.value);
+    }
+
+    public String toString() {
+      return "key["+key+"] value["+value+"]";
+    }
+    // The ending| bug:0021977
 }

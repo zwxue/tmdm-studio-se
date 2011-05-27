@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -97,6 +98,8 @@ public class AddBrowseItemsWizard extends Wizard {
             new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             new ComplexTableViewerColumn("Access", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0) };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
+    private ConfigureRolePage configureRolePage;
+
     public AddBrowseItemsWizard(DataModelMainPage launchPage, List<XSDElementDeclaration> list) {
         super();
         setWindowTitle("Generate default Browse Items Views");
@@ -108,10 +111,16 @@ public class AddBrowseItemsWizard extends Wizard {
     }
 
     public void addPages() {
-        addPage(new ConfigureRolePage());
+     // Modified by hbhong,to fix bug 0021977
+        configureRolePage = new ConfigureRolePage();
+        addPage(configureRolePage);
+     // The ending| bug:0021977
     }
 
     public boolean performFinish() {
+        // Modified by hbhong,to fix bug 0021977
+        configureRolePage.applyChangeToRoles();
+        // The ending| bug:0021977
         if (saveConfiguration()) {
             // page.getXObject().fireEvent(IXObjectModelListener.NEED_REFRESH,
             // null, page.getXObject().getParent().getParent());
@@ -253,7 +262,7 @@ public class AddBrowseItemsWizard extends Wizard {
         public void createControl(Composite parent) {
             Composite composite = new Composite(parent, SWT.BORDER);
             composite.setLayout(new GridLayout(1, false));
-            browseViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL);
+            browseViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL);
             GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
             gd.widthHint = 600;
             browseViewer.getControl().setLayoutData(gd);
@@ -354,10 +363,20 @@ public class AddBrowseItemsWizard extends Wizard {
             browseViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
                 public void selectionChanged(SelectionChangedEvent event) {
-                    XSDElementDeclaration decl = (XSDElementDeclaration) ((IStructuredSelection) event.getSelection())
-                            .getFirstElement();
-                    refreshRoleView(BROWSE_ITEMS + decl.getName());
-                    UpdateComplexViewButton(true);
+                    // Modified by hbhong,to fix bug 0021977
+                    applyChangeToRoles();
+                    IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+                    if (selection.size() > 1) {
+                        List selectObjs = selection.toList();
+                        refreshRoleView(selectObjs);
+                        UpdateComplexViewButton(true);
+                    } else if (selection.size() == 1) {
+
+                        XSDElementDeclaration decl = (XSDElementDeclaration) selection.getFirstElement();
+                        refreshRoleView(BROWSE_ITEMS + decl.getName());
+                        UpdateComplexViewButton(true);
+                    }
+                    // The ending| bug:0021977
                 }
             });
             browseViewer.setInput(declList);
@@ -402,5 +421,41 @@ public class AddBrowseItemsWizard extends Wizard {
             }
         }
 
+
+        // Modified by hbhong,to fix bug 0021977
+        private boolean isCommitMultiChanges = false;
+
+        private List selectedMultiViews = null;
+
+        private List<Line> multiChanges = new LinkedList<Line>();
+
+        private void refreshRoleView(List selectObjs) {
+            isCommitMultiChanges = true;
+            selectedMultiViews = selectObjs;
+            multiChanges.clear();
+            //
+            complexTableViewer.getViewer().setInput(multiChanges);
+            complexTableViewer.getViewer().refresh();
+        }
+
+        private void applyChangeToRoles() {
+            if (isCommitMultiChanges&&selectedMultiViews!=null&&multiChanges.size()>0) {
+                for (Object obj : selectedMultiViews) {
+                    XSDElementDeclaration decl = (XSDElementDeclaration) obj;
+                    String browseItem = BROWSE_ITEMS + decl.getName();
+                    for (Line line : multiChanges) {
+                        List<Line> lines = browseItemToRoles.get(browseItem);
+                        Line newLine = line.clone();
+                        if(!lines.contains(newLine)){
+                            lines.add(line);
+                        }
+                    }
+                }
+                selectedMultiViews=null;
+                isCommitMultiChanges = false;
+                multiChanges.clear();
+            }
+        }
+        // The ending| bug:0021977
     }
 }

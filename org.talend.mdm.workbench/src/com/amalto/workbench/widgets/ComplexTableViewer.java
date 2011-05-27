@@ -573,7 +573,7 @@ public class ComplexTableViewer {
 
             @SuppressWarnings("unchecked")
             public Object[] getElements(Object inputElement) {
-                ArrayList<Line> lines = (ArrayList<Line>) inputElement;
+                List<Line> lines = (List<Line>) inputElement;
                 return lines.toArray(new Line[lines.size()]);
             }
         });
