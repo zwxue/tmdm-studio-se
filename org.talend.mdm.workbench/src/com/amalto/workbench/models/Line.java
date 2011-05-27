@@ -49,7 +49,6 @@ public class Line implements Cloneable {
         return new Line(copyKeyValues);
     }
 
-    // Modified by hbhong,to fix bug 0021977
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof Line)) {
             return false;
@@ -63,5 +62,4 @@ public class Line implements Cloneable {
         }
         return true;
     }
-    // The ending| bug:0021977
 }

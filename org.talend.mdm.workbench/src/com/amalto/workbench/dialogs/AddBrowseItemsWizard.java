@@ -111,16 +111,12 @@ public class AddBrowseItemsWizard extends Wizard {
     }
 
     public void addPages() {
-     // Modified by hbhong,to fix bug 0021977
         configureRolePage = new ConfigureRolePage();
         addPage(configureRolePage);
-     // The ending| bug:0021977
     }
 
     public boolean performFinish() {
-        // Modified by hbhong,to fix bug 0021977
         configureRolePage.applyChangeToRoles();
-        // The ending| bug:0021977
         if (saveConfiguration()) {
             // page.getXObject().fireEvent(IXObjectModelListener.NEED_REFRESH,
             // null, page.getXObject().getParent().getParent());
@@ -363,7 +359,6 @@ public class AddBrowseItemsWizard extends Wizard {
             browseViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
                 public void selectionChanged(SelectionChangedEvent event) {
-                    // Modified by hbhong,to fix bug 0021977
                     applyChangeToRoles();
                     IStructuredSelection selection = (IStructuredSelection) event.getSelection();
                     if (selection.size() > 1) {
@@ -376,7 +371,6 @@ public class AddBrowseItemsWizard extends Wizard {
                         refreshRoleView(BROWSE_ITEMS + decl.getName());
                         UpdateComplexViewButton(true);
                     }
-                    // The ending| bug:0021977
                 }
             });
             browseViewer.setInput(declList);
@@ -422,7 +416,6 @@ public class AddBrowseItemsWizard extends Wizard {
         }
 
 
-        // Modified by hbhong,to fix bug 0021977
         private boolean isCommitMultiChanges = false;
 
         private List selectedMultiViews = null;
@@ -456,6 +449,5 @@ public class AddBrowseItemsWizard extends Wizard {
                 multiChanges.clear();
             }
         }
-        // The ending| bug:0021977
     }
 }

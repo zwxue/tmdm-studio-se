@@ -22,7 +22,6 @@ public class KeyValue {
         this.key = key;
         this.value = value;
     }
-    // Modified by hbhong,to fix bug 0021977
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof KeyValue)) {
             return false;
@@ -32,7 +31,6 @@ public class KeyValue {
     }
 
     public String toString() {
-      return "key["+key+"] value["+value+"]";
+      return "key["+key+"] value["+value+"]";   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
     }
-    // The ending| bug:0021977
 }
