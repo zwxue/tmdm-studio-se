@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -31,8 +32,8 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
-import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
+import org.talend.repository.model.RepositoryNode;
 
 import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.models.TreeObject;
@@ -104,6 +105,11 @@ public class DeployJobAction extends Action {
                 selectedObj=obj;
         }
         new RefreshXObjectAction(ServerView.show(),selectedObj).run();
+        
+        // modified by jsxie to fix bug 21371
+        TreeObject obj =(TreeObject) selection.getFirstElement();
+        ((AbstractTreeViewer) view.getViewer()).expandToLevel(obj, 2) ;
+        
 
     }
 
