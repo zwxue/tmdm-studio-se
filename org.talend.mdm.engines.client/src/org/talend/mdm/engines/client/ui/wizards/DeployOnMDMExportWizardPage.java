@@ -251,7 +251,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         types.add("Axis WebService (War)");
         types.add("Automonus Job (Zip)");
         exportTypeCombo = new LabelledCombo(optionsGroup, "Export type:", "Export type", types); //$NON-NLS-1$ //$NON-NLS-2$
-        exportTypeCombo.select(0);
+        exportTypeCombo.select(1);
 
         contextButton = new Button(optionsGroup, SWT.CHECK | SWT.LEFT);
         contextButton.setText(Messages.getString("JobScriptsExportWizardPage.contextPerlScripts")); //$NON-NLS-1$
