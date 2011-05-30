@@ -93,6 +93,7 @@ import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.RefreshAllServerAction;
 import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
+import com.amalto.workbench.actions.ServerEditAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerLogoutAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
@@ -142,6 +143,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     protected Action logoutAction;
 
     protected Action logoutAndRemoveAction;
+
+    protected Action editServerAction;
 
     protected Action newXObjectAction;
 
@@ -695,6 +698,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 manager.add(new Separator());
                 manager.add(logoutAction);
                 manager.add(logoutAndRemoveAction);
+                manager.add(editServerAction);
 
                 if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
                     manager.add(pasteAction);
@@ -821,6 +825,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
         logoutAction = new ServerLogoutAction(this, false);
         logoutAndRemoveAction = new ServerLogoutAction(this, true);
+        editServerAction = new ServerEditAction(this);
 
         editXObjectAction = new EditXObjectAction(this);
         newXObjectAction = new NewXObjectAction(this);
@@ -1025,7 +1030,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         serverRoot.setChildren(list);
     }
 
-    public void addServerTree(String name, String url, String username, String password, String universe) {
+    public boolean addServerTree(String name, String url, String username, String password, String universe) {
 
         // Remove authenticator dialog
         Authenticator.setDefault(null);
@@ -1042,7 +1047,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             boolean found = false;
             for (int i = 0; i < serverRoots.length; i++) {
                 // aiming add root displayName as unique ID of each server
-                if (serverRoots[i].getDisplayName().equalsIgnoreCase(serverRoot.getDisplayName())) {
+                if (serverRoots[i].getDisplayName().equals(serverRoot.getDisplayName())) {
                     if (serverRoots[i].getWsKey().equals(serverRoot.getWsKey())) {
                         // server & universe already exists --> synchronize
                         if (serverRoots[i].getUser().getUniverse().equalsIgnoreCase(serverRoot.getUser().getUniverse())) {
@@ -1064,14 +1069,85 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             boolean saved = MDMServerHelper.saveServer(serverDef);
             if (!saved) {
                 MessageDialog.openError(null, "Error", "Unable to store server definition");
-                return;
+                return false;
             }
-
+            return true;
         } catch (InterruptedException ie) {
-            return;
+            return false;
         } catch (InvocationTargetException e) {
             log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(this.getSite().getShell(), "Error", CommonUtil.getErrMsgFromException(e.getCause()));
+            return false;
         }
+    }
+
+    private boolean isRename(MDMServerDef oldServerDef, String name, String url, String username, String password, String universe) {
+        return (!oldServerDef.getName().equals(name)) && oldServerDef.getUrl().equals(url)
+                && oldServerDef.getUser().equals(username) && oldServerDef.getPasswd().equals(password)
+                && oldServerDef.getUniverse().equals(universe);
+    }
+
+    private boolean isSame(MDMServerDef oldServerDef, String name, String url, String username, String password, String universe) {
+        return (oldServerDef.getName().equals(name)) && oldServerDef.getUrl().equals(url)
+                && oldServerDef.getUser().equals(username) && oldServerDef.getPasswd().equals(password)
+                && oldServerDef.getUniverse().equals(universe);
+    }
+
+    public void updateServerTree(MDMServerDef oldServerDef, String name, String url, String username, String password,
+            String universe) {
+        if (isSame(oldServerDef, name, url, username, password, universe))
+            return;
+        // Remove authenticator dialog
+        Authenticator.setDefault(null);
+
+//        TreeParent serverRoot = (TreeParent) ((IStructuredSelection) getViewer().getSelection()).getFirstElement();
+        TreeParent serverRoot =null;
+        for(TreeObject treeObj:getTreeContentProvider().getInvisibleRoot().getChildren()){
+            if(treeObj.getName().equals(oldServerDef.getName())&&treeObj.getType()==TreeObject._SERVER_){
+                serverRoot=(TreeParent) treeObj;
+                break;
+            }
+        }
+        if (isRename(oldServerDef, name, url, username, password, universe)) {
+
+            serverRoot.setName(name);
+            StringBuilder displayName = new StringBuilder();
+            displayName.append(serverRoot.getName());
+            String universeStr = universe;
+            if (Util.IsEnterPrise()) {
+                if (universe == null || universe.length() == 0)
+                    universeStr = "HEAD";//$NON-NLS-1$
+            }
+            if (universeStr != null && universeStr.length() != 0) {
+                displayName.append(" [");   //$NON-NLS-1$
+                displayName.append(universeStr);
+                displayName.append("] "); //$NON-NLS-1$
+            } else {
+                displayName.append(" "); //$NON-NLS-1$
+            }
+
+            displayName.append(username);
+            serverRoot.setDisplayName(displayName.toString());
+            getViewer().refresh();
+            // // store server definition
+            MDMServerDef newServerDef = MDMServerDef.parse(url, username, password, universe, name);
+            boolean updated = MDMServerHelper.updateServer(oldServerDef, newServerDef);
+            if (!updated) {
+                MessageDialog.openError(null, "Error", "Unable to store server definition");
+                return;
+            }
+        } else {
+            String tmp = String.valueOf(System.currentTimeMillis());
+            //to prevent to delete current server when the new connection is refused 
+            boolean success = addServerTree(tmp, url, username, password, universe);
+            if (success) {
+                new ServerLogoutAction(this).run();
+                MDMServerDef tmpServerDef = MDMServerDef.parse(url, username, password, universe, tmp);
+                
+                updateServerTree(tmpServerDef, name, url, username, password, universe);
+            }
+
+        }
+
     }
 }

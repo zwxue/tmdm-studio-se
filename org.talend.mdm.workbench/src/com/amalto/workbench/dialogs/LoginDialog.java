@@ -79,6 +79,9 @@ public class LoginDialog extends Dialog {
 
     private boolean isOK;
 
+    // for edit the server location
+    private MDMServerDef selectedServerDef;
+
     /**
      * @param parentShell
      */
@@ -87,6 +90,12 @@ public class LoginDialog extends Dialog {
         this.caller = caller;
         this.title = title;
         setDefaultImage(ImageCache.getCreatedImage(EImage.TALEND_PICTO.getPath()));
+    }
+
+    // for edit the server location
+    public LoginDialog(SelectionListener caller, Shell parentShell, String title, MDMServerDef serverDef) {
+        this(caller, parentShell, title);
+        this.selectedServerDef = serverDef;
     }
 
     @Override
@@ -150,8 +159,15 @@ public class LoginDialog extends Dialog {
         return composite;
     }
 
+    private boolean isUpdateServerLocation() {
+        return selectedServerDef != null;
+    }
+
     private void initDefaultValues() {
         MDMServerDef defaultMDMServerDef = new MDMServerDef();
+        if (isUpdateServerLocation()) {
+            defaultMDMServerDef = selectedServerDef;
+        }
         nameText.setText(defaultMDMServerDef.getName());
         urlText.setText(defaultMDMServerDef.getUrl());
         userText.setText(defaultMDMServerDef.getUser());
@@ -228,10 +244,15 @@ public class LoginDialog extends Dialog {
             isOK = false;
             return;
         }
-        if (MDMServerHelper.getServer(name) != null) {
-            MessageDialog.openError(null, "Error", "A server with same name already exists!");
-            isOK = false;
-            return;
+        MDMServerDef server = MDMServerHelper.getServer(name);
+
+        if (server != null) {
+            if ((!isUpdateServerLocation())
+                    ||( isUpdateServerLocation() && (!server.getName().equalsIgnoreCase(selectedServerDef.getName())))) {
+                MessageDialog.openError(null, "Error", "A server with same name already exists!");
+                isOK = false;
+                return;
+            }
         }
         if (getServer().length() == 0) {
             MessageDialog.openError(null, "Error", "Server can't be empty!");

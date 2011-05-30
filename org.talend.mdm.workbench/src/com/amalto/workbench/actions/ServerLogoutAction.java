@@ -57,6 +57,14 @@ public class ServerLogoutAction extends Action {
             setToolTipText("Logout from the " + IConstants.TALEND + " Server");
         }
         setImageDescriptor(ImageCache.getImage(EImage.LOGOUT.getPath()));
+        needConfirm=true;
+    }
+    
+    private boolean needConfirm=true;
+    //this constructor is for updating server location without confirm to delete
+    public ServerLogoutAction(ServerView view) {
+        this(view,true);
+        needConfirm=false;
     }
 
     @Override
@@ -64,6 +72,7 @@ public class ServerLogoutAction extends Action {
         TreeParent serverRoot = (TreeParent) ((IStructuredSelection) view.getViewer().getSelection()).getFirstElement();
 
         if (remove
+                && needConfirm
                 && !MessageDialog.openConfirm(this.view.getSite().getShell(), "Delete server",
                         "Are you sure you want to delete the server connection '" + serverRoot.getName() + "' ?"))
             return;

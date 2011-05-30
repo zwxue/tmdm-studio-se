@@ -109,6 +109,29 @@ public class MDMServerHelper {
         return saveRootElement(rootElement);
     }
 
+    public static boolean updateServer(MDMServerDef oldServerDef, MDMServerDef newServerDef) {
+        Element rootElement = getRootElement();
+        String oldName = oldServerDef.getName();
+        Element serverElement = null;
+        String newName = newServerDef.getName();
+        if (oldName.equals(newName)) {
+            serverElement = getServerElement(rootElement, oldName);
+        } else {
+            serverElement = getServerElement(rootElement, oldName);
+            if (serverElement != null) {
+                rootElement.remove(serverElement);
+            }
+            serverElement = getServerElement(rootElement, newName);
+        }
+        if (serverElement == null) {
+            addServerElement(rootElement, newServerDef);
+        } else {
+            addServerProperties(serverElement, newServerDef);
+        }
+
+        return saveRootElement(rootElement);
+    }
+
     private static void addServerElement(Element root, MDMServerDef serverDef) {
         Element prop = root.addElement(MDMServerHelper.PROPERTIES);
         addServerProperties(prop, serverDef);
