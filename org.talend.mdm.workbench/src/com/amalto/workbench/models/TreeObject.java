@@ -447,12 +447,12 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
             TreeObject o = (TreeObject) obj;
 
             if(o.getParent()  == null )
-                return o.getDisplayName().equals(getDisplayName()) && getType() == o.getType();
+                return o.getName().equals(getName()) && getType() == o.getType();
             else {
         
-             if( o.getDisplayName().equals(getDisplayName()) && getType() == o.getType()) {
+             if( o.getName().equals(getName()) && getType() == o.getType()) {
                 if(o.getParent() !=null && getParent() !=null ) {
-                if(o.getParent().getDisplayName().equals(getParent().getDisplayName()) ){
+                if(o.getParent().getName().equals(getParent().getName()) ){
                     return true;
                 } 
               }
