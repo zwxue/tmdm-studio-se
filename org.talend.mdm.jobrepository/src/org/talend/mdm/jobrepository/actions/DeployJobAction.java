@@ -61,13 +61,6 @@ public class DeployJobAction extends Action {
 
         IStructuredSelection selection = (IStructuredSelection) view.getViewer().getSelection();
         
-     // add by xie to fix bug 20084
-        int size = selection.size();
-        if( size > 1){
-            MessageDialog.openWarning( Display.getCurrent().getActiveShell(),"Warning","Only one job can be deployed in one time"); 
-            return;
-        }
-        
         List<Object> ojbs = new ArrayList<Object>();
         TreeParent serverRoot = null;
         RepositoryNode root = new RepositoryNode(null, null, null);
@@ -97,14 +90,17 @@ public class DeployJobAction extends Action {
 
         Shell activeShell = Display.getCurrent().getActiveShell();
         WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-        dialog.open();
-        TreeObject[] objs = serverRoot.getChildren();
-        TreeObject selectedObj=null;
-        for (TreeObject obj : objs) {
-            if(obj.getType()==TreeObject.JOB_REGISTRY)
-                selectedObj=obj;
-        }
+     // modified by xie to fix the bug 22048   
+        if (dialog.open() == WizardDialog.OK) { 
+            TreeObject[] objs = serverRoot.getChildren();
+            TreeObject selectedObj=null;
+            for (TreeObject obj : objs) {
+                if(obj.getType()==TreeObject.JOB_REGISTRY)
+                    selectedObj=obj;
+            }
+            
         new RefreshXObjectAction(ServerView.show(),selectedObj).run();
+        }
         
         // modified by jsxie to fix bug 21371
         TreeObject obj =(TreeObject) selection.getFirstElement();
