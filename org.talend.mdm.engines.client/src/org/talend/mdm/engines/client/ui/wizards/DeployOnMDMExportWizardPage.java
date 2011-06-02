@@ -13,6 +13,8 @@
 package org.talend.mdm.engines.client.ui.wizards;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -46,6 +48,7 @@ import org.talend.commons.ui.swt.formtools.LabelledCombo;
 import org.talend.core.CorePlugin;
 import org.talend.core.language.ECodeLanguage;
 import org.talend.core.language.LanguageManager;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -101,6 +104,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private SpagoBiServer mdmServer = null;
 
+    protected List<JobDeploymentInfo> jobInfoList = new ArrayList<JobDeploymentInfo>();
+
     /**
      * Create an instance of this class.
      * 
@@ -131,6 +136,15 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     jobPurposeDescription = processItem.getProperty().getPurpose();
                     jobPath = processItem.getState().getPath();
                     list.add(resource);
+                    
+                    // add by jsxie to fix bug 20084
+                    JobDeploymentInfo jobInfo = new JobDeploymentInfo();
+                    jobInfo.setJobLabelName(processItem.getProperty().getLabel());
+                    jobInfo.setJobPath(processItem.getState().getPath());
+                    jobInfo.setJobVersion(processItem.getProperty().getVersion());
+                    jobInfo.setJobPurposeDescription(jobPurposeDescription);
+                    
+                    jobInfoList.add(jobInfo);
                 }
             }
         }
@@ -383,7 +397,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         List<ExportFileResource> resourcesToExport = null;
         try {
-            resourcesToExport = getExportResources();
+            resourcesToExport = getExportResources();     
         } catch (ProcessorException e) {
             MessageBoxExceptionHandler.process(e);
             return false;
@@ -419,6 +433,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         if (curLanguage == ECodeLanguage.JAVA) {
             reBuildJobZipFile();
         }
+        // added by xie to fix bug 20084
+        setDesValueForJob();
+        processForEachJob();
         // Project project = ((RepositoryContext)
         // CorePlugin.getContext().getProperty(Context.REPOSITORY_CONTEXT_KEY)).getProject();
 
@@ -446,18 +463,37 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         String port = server.getPort();
 
         // deploy to mdm server
-        String filename = getDestinationValue();
-        String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                + new File(filename).getName() + "&jobpath=" + jobPath; //$NON-NLS-1$
-        try {
-            ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            MessageDialog.openError(getContainer().getShell(),
-                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
-                    e.getLocalizedMessage());
-            return false;
+//        String filename = getDestinationValue();
+//        String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+//                + new File(filename).getName() + "&jobpath=" + jobPath; //$NON-NLS-1$
+//        try {
+//            ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//            MessageDialog.openError(getContainer().getShell(),
+//                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
+//                    e.getLocalizedMessage());
+//            return false;
+//        }
+        
+     // modified by xie to fix bug 20084 ,do the multi jobs deployment in one time. 
+        for(JobDeploymentInfo jobInfo : jobInfoList ){
+           
+            String filename = jobInfo.getDescValue();
+            String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath(); //$NON-NLS-1$
+            try {
+                ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                MessageDialog.openError(getContainer().getShell(),
+                        Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
+                        e.getLocalizedMessage());
+                return false;
+            }
+            
         }
+
         MessageDialog.openInformation(getContainer().getShell(), Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
                 Messages.getString("DeployOnMDMExportWizardPage.publishJobSuccess")); //$NON-NLS-1$
         return ok;
@@ -505,7 +541,91 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             JavaJobExportReArchieveCreator.deleteTempFiles();
         }
     }
+    
+    /**
+     * process each job,unzip to a temp folder , copy the necessary folder for each job , 
+     * and zip to the MDM temp folder for uploading.
+     */
+    protected void processForEachJob(){ 
+        
+        String zipFile = getDestinationValue();
 
+        String tmpFolder = JavaJobExportReArchieveCreator.getTmpFolder()+ File.separator + "forJob"; //$NON-NLS-1$
+
+        try {
+            // unzip to tmpFolder
+            ZipToFile.unZipFile(zipFile, tmpFolder );
+            
+           File desFile = new File(tmpFolder+ File.separator +jobLabelName + "_" + jobVersion);//$NON-NLS-1$
+            
+            if(desFile.isDirectory()){
+
+            for(JobDeploymentInfo jobInfo : jobInfoList ){
+                File sourFile = new File(tmpFolder+ File.separator +jobLabelName + "_" + jobVersion +File.separator +  jobInfo.getJobLabelName() );  //$NON-NLS-1$ 
+                File sourLibFile = new File(tmpFolder+ File.separator +jobLabelName + "_" + jobVersion +File.separator +  "lib" );  //$NON-NLS-1$ //$NON-NLS-2$
+                
+                String  jobDescPath = tmpFolder+ File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() +"job"; //$NON-NLS-1$ //$NON-NLS-2$
+            
+                File jobDescDir = new File(jobDescPath);
+                if (!jobDescDir.exists())  
+                    jobDescDir.mkdir();  
+                File jobDescDir_in = new File(jobDescPath +  File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion()); //$NON-NLS-1$
+                if (!jobDescDir_in.exists())  
+                    jobDescDir_in.mkdir(); 
+                File jobDescDir_main = new File(jobDescPath +  File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() +  File.separator +jobInfo.getJobLabelName()); //$NON-NLS-1$
+                if (!jobDescDir_main.exists())  
+                    jobDescDir_main.mkdir();  
+                 
+                File jobDescDirLib = new File(jobDescPath +  File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() +  File.separator +"lib"); //$NON-NLS-1$ //$NON-NLS-2$
+                if (!jobDescDirLib.exists())  
+                    jobDescDirLib.mkdir(); 
+                
+                copy(sourFile.listFiles(), jobDescDir_main);  
+                copy(sourLibFile.listFiles(), jobDescDirLib);  
+   
+                ZipToFile.zipFile(jobDescPath, jobInfo.getDescValue());
+              }
+            }
+        } catch (Exception e) {
+            ExceptionHandler.process(e);
+        } finally {
+            JavaJobExportReArchieveCreator.deleteTempFiles();
+        }
+        
+    }
+    /**
+     *  copy all the files of this folder to another
+     */
+    
+    private  void copy(File[] s, File d) {
+        if (!d.exists())  
+            d.mkdir();  
+        for (int i = 0; i < s.length; i++) {
+            if (s[i].isFile()) {  
+                try {
+                    FileInputStream fis = new FileInputStream(s[i]);
+                    FileOutputStream out = new FileOutputStream(new File(
+                            d.getPath() + File.separator + s[i].getName()));
+                    int count = fis.available();
+                    byte[] data = new byte[count];
+                    if ((fis.read(data)) != -1) {
+                        out.write(data);  
+                    }
+                    out.close();  
+                    fis.close();  
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (s[i].isDirectory()) {  
+                File des = new File(d.getPath() + File.separator
+                        + s[i].getName());
+                des.mkdir();  
+                copy(s[i].listFiles(), des);  
+            }
+        }
+    }
+    
     /**
      * Get the export operation.
      * 
@@ -518,6 +638,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return exporterOperation;
     }
 
+    
+    protected ArchiveFileExportOperationFullPath getExporterOperationForOneJob(List<ExportFileResource> resourcesToExport,String descValue) {
+        ArchiveFileExportOperationFullPath exporterOperation = new ArchiveFileExportOperationFullPath(resourcesToExport,
+                descValue);
+        return exporterOperation;
+    }
+    
     /**
      * Returns the root folder name.
      * 
@@ -569,6 +696,31 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return manager.getExportResources(process, exportChoiceMap, contextCombo.getText(), "All", IProcessor.NO_STATISTICS, //$NON-NLS-1$
                 IProcessor.NO_TRACES);
     }
+    
+    /**
+     * set the destinationValue for each job
+     */
+    
+    protected  void setDesValueForJob()  { 
+
+        for( ExportFileResource each: process ){ 
+      
+            for(JobDeploymentInfo jobInfo : jobInfoList){
+                Item item =each.getItem();
+                if(item instanceof ProcessItem){
+                   String name= ((ProcessItem)each.getItem()).getProperty().getLabel();
+                    if(jobInfo.getJobLabelName().equals(name)){
+                        setDestinationValueForJob(jobInfo);
+                    }
+                    
+                }
+               
+                
+            }
+            
+        } 
+    }
+    
 
     private Map<ExportChoice, Object> getExportChoiceMap() {
         Map<ExportChoice, Object> exportChoiceMap = new EnumMap<ExportChoice, Object>(ExportChoice.class);
@@ -620,6 +772,19 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 .getString(ITalendCorePrefConstants.FILE_PATH_TEMP));
         tempPath = tempPath.append(filename);
         return tempPath.toOSString();
+    }
+
+    /**
+     * set the destinationValue for each job
+     */
+    protected void setDestinationValueForJob(JobDeploymentInfo jobInfo) {
+        String idealSuffix = getOutputSuffix();
+        String filename = jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() + idealSuffix; //$NON-NLS-1$
+        IPath tempPath;
+        tempPath = Path.fromOSString(CorePlugin.getDefault().getPreferenceStore()
+                .getString(ITalendCorePrefConstants.FILE_PATH_TEMP));
+        tempPath = tempPath.append(filename);
+        jobInfo.setDescValue(tempPath.toOSString());
     }
 
     /**
