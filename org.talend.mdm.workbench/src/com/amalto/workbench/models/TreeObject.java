@@ -262,6 +262,12 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+        if (name == null) {
+            // We shouldn't be forced to set the name too. Unfortunately due to a wrong design, most of the code is
+            // based on the displayName of a TreeObject instead of its name. Below is a workaround to ensure name
+            // is always set.
+            this.name = displayName;
+        }
     }
 
     public String getName() {
@@ -289,7 +295,6 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     }
 
     public void addListener(IXObjectModelListener listener) {
-        // System.out.println("ADD LISTENER: "+listener.getClass().getName());
         if (listeners == null) {
             listeners = new ArrayList<IXObjectModelListener>();
             listeners.add(listener);
@@ -310,15 +315,10 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         TreeObject current = this;
         do {
             if (current.listeners != null) {
-                // System.out.println("FIRE EVENT on "+current.getDisplayName()+"  type: "+type+" Parent: "+(parent==null
-                // ? "no parent ":parent.getDisplayName())+"-->"+child.getDisplayName()
-                // +" --- "+current.listeners.size()+" listeners");
                 for (Iterator<IXObjectModelListener> iter = current.listeners.iterator(); iter.hasNext();) {
                     IXObjectModelListener listener = iter.next();
                     listener.handleEvent(eventType, objectParent, child);
                 }
-            } else {
-                // System.out.println("SKIP FIRE ON: "+current.getDisplayName());
             }
             current = current.getParent();
         } while ((current != null));
@@ -331,11 +331,6 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public void setAdditionalInfo(Object[] additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
-
-    /*
-     * public TreeObject findObject(int type, String name) { if ( (this.getType() == type)
-     * &&(this.getDisplayName().equals(name))) return this; return null; }
-     */
 
     public TreeParent findServerFolder(int objectType) {
         if (this.getServerRoot() == null)
@@ -442,23 +437,23 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     @Override
     public boolean equals(Object obj) {
-     
+
         if (obj instanceof TreeObject) {
             TreeObject o = (TreeObject) obj;
 
-            if(o.getParent()  == null )
+            if (o.getParent() == null)
                 return o.getName().equals(getName()) && getType() == o.getType();
             else {
-        
-             if( o.getName().equals(getName()) && getType() == o.getType()) {
-                if(o.getParent() !=null && getParent() !=null ) {
-                if(o.getParent().getName().equals(getParent().getName()) ){
-                    return true;
-                } 
-              }
+
+                if (o.getName().equals(getName()) && getType() == o.getType()) {
+                    if (o.getParent() != null && getParent() != null) {
+                        if (o.getParent().getName().equals(getParent().getName())) {
+                            return true;
+                        }
+                    }
+                }
             }
-          }
-        
+
         }
         return false;
     }
