@@ -288,6 +288,55 @@ public class XSDAnnotationsStructure {
     }
 
     /****************************************************************************
+     * Auto Expand
+     * @throws Exception 
+     ****************************************************************************/
+
+    public boolean setAutoExpand(String value) throws Exception {
+    	if(!(declaration.getTypeDefinition() instanceof XSDComplexTypeDefinition)){
+    		return false;
+    	}
+        ArrayList<Object> objList = new ArrayList<Object>();
+
+        XSDSchema xsd = schema != null ? schema : declaration.getSchema();
+        String auto="X_AutoExpand"; //$NON-NLS-1$
+        String xsdString = Util.nodeToString(xsd.getDocument().getDocumentElement());
+        ArrayList<Object> objs = Util.getAllComplexTypeChildren(declaration);
+        for(Object obj: objs){
+            if (obj instanceof XSDElementDeclaration || obj instanceof XSDParticle) {
+                boolean isImported = false;
+
+                if (obj instanceof XSDParticle) {
+                    XSDParticle particle = (XSDParticle) obj;
+                    if (particle.getTerm() instanceof XSDElementDeclaration) {
+                        XSDElementDeclaration decl = (XSDElementDeclaration) particle.getTerm();
+                        if (Util.IsAImporedElement(decl, xsdString)) {
+                            XSDTypeDefinition typeDef = decl.getTypeDefinition();
+                            if (Util.IsAImporedElement(typeDef, xsdString))
+                                isImported = true;
+                        }
+                    }
+                } else if (obj instanceof XSDElementDeclaration) {
+                    XSDElementDeclaration decl = (XSDElementDeclaration) obj;
+                    if (Util.IsAImporedElement(decl, xsdString))
+                        isImported = true;
+                }
+
+
+                if (!isImported) {
+                    XSDAnnotationsStructure annotion = new XSDAnnotationsStructure((XSDComponent) obj);                                        
+                    annotion.setAppInfo(auto, value,true);                    
+                }
+           }
+        }
+        return true;
+    }
+
+    public String getAutoExpand() {
+        return getAppInfoValue("X_AutoExpand");//$NON-NLS-1$
+    }
+    
+    /****************************************************************************
      * FOREIGN KEY
      ****************************************************************************/
 

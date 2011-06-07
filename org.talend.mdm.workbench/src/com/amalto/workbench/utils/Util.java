@@ -2462,7 +2462,73 @@ public class Util {
         }
         return null;
     }
+    /**
+     * get all complex types's complextype children
+     * @param complexTypeDefinition
+     * @return
+     */
+    public static ArrayList<Object> getAllComplexTypeChildren(XSDElementDeclaration declaration) {
+    	XSDComplexTypeDefinition complexTypeDefinition =(XSDComplexTypeDefinition)declaration.getTypeDefinition();
+        XSDComplexTypeContent xsdComplexTypeContent = complexTypeDefinition.getContent();
+        ArrayList<Object> list = new ArrayList<Object>();
 
+        // Now determine whether ref. If ref look at the base Type definition
+        if (xsdComplexTypeContent == null) {
+            XSDTypeDefinition typeDefinition = complexTypeDefinition.getBaseTypeDefinition();
+            if (typeDefinition instanceof XSDComplexTypeDefinition) {
+                list.add(((XSDComplexTypeDefinition) typeDefinition).getContent());                
+            } 
+        }
+
+        // check if we are extending a complex Definition
+        if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {//$NON-NLS-1$
+            if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
+            	XSDComplexTypeDefinition complex=(XSDComplexTypeDefinition)complexTypeDefinition.getBaseTypeDefinition();
+            	XSDParticle particle=(XSDParticle)complex.getContent();
+                if (particle.getTerm() instanceof XSDModelGroup) {
+                    XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+                    EList<XSDParticle> elist = group.getContents();
+                    for (XSDParticle pt : elist) {
+                        if (pt.getContent() instanceof XSDElementDeclaration) {
+                            XSDTypeDefinition typeDef = ((XSDElementDeclaration) pt.getContent()).getTypeDefinition();
+                            if (typeDef instanceof XSDComplexTypeDefinition) {
+                            	list.addAll(getAllComplexTypeChildren((XSDElementDeclaration) pt.getContent()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        // now check what we have in the content
+
+        //if (xsdComplexTypeContent instanceof XSDComplexTypeDefinition) {
+            list.add(declaration);
+        //}
+
+        // xsd Particle: we have a model group
+        
+        if (xsdComplexTypeContent instanceof XSDParticle) {
+            XSDParticle particle = (XSDParticle) xsdComplexTypeContent;
+            if (particle.getTerm() instanceof XSDModelGroup) {
+                XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+                EList<XSDParticle> elist = group.getContents();
+                for (XSDParticle pt : elist) {
+                    if (pt.getContent() instanceof XSDElementDeclaration) {
+                        XSDTypeDefinition typeDef = ((XSDElementDeclaration) pt.getContent()).getTypeDefinition();
+                        if (typeDef instanceof XSDComplexTypeDefinition) {
+                        	list.addAll(getAllComplexTypeChildren((XSDElementDeclaration) pt.getContent()));
+                        }
+                    }
+                }
+            }
+        }
+        
+
+        return list;
+    }
     public static ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
         // log.info("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
 

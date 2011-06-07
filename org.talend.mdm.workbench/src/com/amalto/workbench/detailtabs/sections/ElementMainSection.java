@@ -48,7 +48,7 @@ public class ElementMainSection extends CommitBarListenerSection<XSDParticle> {
     protected ISubmittable getSubmittedObj() {
         elementWrapper = new ElementWrapper(curXSDParticle, compElementInfoCfg.getElementName(),
                 compElementInfoCfg.getElementReference(), compElementInfoCfg.getMinCardinality(),
-                compElementInfoCfg.getMaxCardinality());
+                compElementInfoCfg.getMaxCardinality(), compElementInfoCfg.isAutoExpand());
 
         return elementWrapper;
     }

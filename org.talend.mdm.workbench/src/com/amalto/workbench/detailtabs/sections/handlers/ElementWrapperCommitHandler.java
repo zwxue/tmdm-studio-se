@@ -27,6 +27,7 @@ import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.element.ElementWrapper;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
 
@@ -53,7 +54,11 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
             if (decl.isElementDeclarationReference()) {
                 ref = decl.getResolvedElementDeclaration();
             }
-
+            XSDAnnotationsStructure struct=new XSDAnnotationsStructure(getCommitedObj().getSourceElement());
+            //remove first
+            //struct.setAutoExpand(null);
+            struct.setAutoExpand(String.valueOf(getCommitedObj().isAutoExpand()));
+            
             XSDElementDeclaration newRef = Util.findReference(getCommitedObj().getNewReference(), getCommitedObj().getSchema());
 
             XSDIdentityConstraintDefinition identify = null;

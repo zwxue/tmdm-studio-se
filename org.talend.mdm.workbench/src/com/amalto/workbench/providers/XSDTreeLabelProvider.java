@@ -196,6 +196,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
                             // add by ymli; bugId 0009157
+                        }else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
+                            return "Auto Expand : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.startsWith("X_Facet")) {//$NON-NLS-1$
                             return source.substring(2, 7) + "_Msg_" + source.substring(8) + ": "
                                     + e.getChildNodes().item(0).getNodeValue();
@@ -423,6 +425,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
                             return ImageCache.getCreatedImage(EImage.ROUTINE.getPath());
                         } else if (source.equals("X_Workflow")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.WORKFLOW_PROCESS.getPath());
+                        }else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.DEFAULT.getPath());
                         }
                         if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.FILTER_PS.getPath());

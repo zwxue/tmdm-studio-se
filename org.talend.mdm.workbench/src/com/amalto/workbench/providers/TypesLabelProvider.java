@@ -204,6 +204,8 @@ public class TypesLabelProvider extends LabelProvider {
                             return "No Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
+                            return "Auto Expand : " + e.getChildNodes().item(0).getNodeValue();
                         } else {
                             return source + ": " + Util.nodeToString((Element) obj);//$NON-NLS-1$
                         }
@@ -399,6 +401,8 @@ public class TypesLabelProvider extends LabelProvider {
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
                         } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
+                        } else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.DEFAULT.getPath());
                         } else {
                             return ImageCache.getCreatedImage(EImage.DOCUMENTATION.getPath());
                         }

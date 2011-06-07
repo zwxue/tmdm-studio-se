@@ -32,19 +32,17 @@ public class ElementWrapper implements ISubmittable {
     private int newMinOcur = 1;
 
     private int newMaxOcur = 1;
+    
+    private boolean autoExpand;
 
-    public ElementWrapper(XSDParticle sourceElement) {
-        this(sourceElement, Util.getParticleName(sourceElement), Util.getParticleReferenceName(sourceElement), sourceElement
-                .getMinOccurs(), sourceElement.getMaxOccurs());
-    }
-
-    public ElementWrapper(XSDParticle sourceElement, String newName, String newReference, int newMinOcur, int newMaxOcur) {
+    public ElementWrapper(XSDParticle sourceElement, String newName, String newReference, int newMinOcur, int newMaxOcur, boolean autoExpand) {
 
         this.sourceElement = sourceElement;
         this.newName = newName;
         this.newReference = newReference;
         this.newMinOcur = newMinOcur;
         this.newMaxOcur = newMaxOcur;
+        this.autoExpand=autoExpand;
     }
 
     public XSDParticle getSourceElement() {
@@ -84,7 +82,9 @@ public class ElementWrapper implements ISubmittable {
             this.newReference = "";//$NON-NLS-1$
 
     }
-
+    public boolean isAutoExpand(){
+    	return autoExpand;
+    }
     public int getNewMinOcur() {
         return newMinOcur;
     }

@@ -23,6 +23,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -35,6 +36,7 @@ import org.eclipse.xsd.XSDParticle;
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class ElementInfoConfigComposite extends Composite {
 
@@ -50,6 +52,8 @@ public class ElementInfoConfigComposite extends Composite {
 
 	private Spinner spinMin;
 	private BasePropertySection section;
+
+	private Button autoExpandBtn;
 
 	public ElementInfoConfigComposite(Composite parent, int style,
 			BasePropertySection section, XSDParticle curXSDParticle) {
@@ -95,7 +99,13 @@ public class ElementInfoConfigComposite extends Composite {
 	public XSDParticle getElement() {
 		return curXSDParticle;
 	}
-
+	
+	public boolean isAutoExpand(){
+		if(autoExpandBtn!=null){
+			return autoExpandBtn.getSelection();
+		}
+		return false;
+	}
 	public void refresh() {
 
 		refreshCardinalityArea();
@@ -106,7 +116,11 @@ public class ElementInfoConfigComposite extends Composite {
 	private void refreshCardinalityArea() {
 		if (occurenceGroup == null)
 			return;
-
+			if(autoExpandBtn!=null){
+			boolean isComplex=!Util.isSimpleTypedParticle(curXSDParticle);
+			autoExpandBtn.setVisible(isComplex);
+			}
+		//}
 		// if (!hasElementReference() &&
 		// Util.isSimpleTypedParticle(curXSDParticle)) {
 		// spinMin.setSelection(1);
@@ -134,7 +148,11 @@ public class ElementInfoConfigComposite extends Composite {
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		setLayout(gridLayout);
-
+		
+		autoExpandBtn=new Button(this,SWT.CHECK);
+		autoExpandBtn.setText("Auto Expand");
+		autoExpandBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+		
 		final Label lblName = new Label(this, SWT.NONE);
 		lblName.setText("Name");
 
@@ -142,7 +160,7 @@ public class ElementInfoConfigComposite extends Composite {
 		final GridData gd_txtName = new GridData(SWT.FILL, SWT.CENTER, true,
 				false);
 		txtName.setLayoutData(gd_txtName);
-
+		
 		final Label lblReference = new Label(this, SWT.NONE);
 		lblReference.setText("Reference");//$NON-NLS-1$
 
@@ -188,6 +206,7 @@ public class ElementInfoConfigComposite extends Composite {
 		spinMax.setMinimum(-1);
 		spinMax.setSelection(1);
 
+
 		initUIContents();
 
 		initUIListeners();
@@ -215,16 +234,35 @@ public class ElementInfoConfigComposite extends Composite {
 		if (curXSDParticle != null) {
 			spinMin.setSelection(curXSDParticle.getMinOccurs());
 			spinMax.setSelection(curXSDParticle.getMaxOccurs());
+			if(autoExpandBtn!=null){
+				XSDAnnotationsStructure struct=new XSDAnnotationsStructure(curXSDParticle);
+				String auto=struct.getAutoExpand();
+				if(auto!=null){
+					autoExpandBtn.setSelection(Boolean.valueOf(auto));
+				}else{
+					autoExpandBtn.setSelection(false);
+				}
+			}
 		}
 	}
-
+	
 	private void initUIListeners() {
 
 		initUIListenerForComboReference();
 		initTextListener();
 		initSpinListener();
+		initButtonListener();
 	}
-
+	private void initButtonListener(){
+		if(autoExpandBtn!=null){
+			autoExpandBtn.addSelectionListener(new SelectionAdapter() {				
+				public void widgetSelected(SelectionEvent e) {
+					if (section != null	)
+						section.autoCommit();
+				}
+			});
+		}
+	}
 	private void initSpinListener() {
 		spinMin.addModifyListener(new ModifyListener() {
 
