@@ -93,6 +93,8 @@ public class RepositoryCheckTreeViewer {
 
     private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
 
+    private boolean isImport =false;
+
     public RepositoryCheckTreeViewer(IStructuredSelection selection, String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
         serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
@@ -106,7 +108,14 @@ public class RepositoryCheckTreeViewer {
         serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
         checkItems = selection.toList();
     }
-
+    
+    public RepositoryCheckTreeViewer(IStructuredSelection selection, boolean isImport) {
+        this.isImport  = isImport;
+        this.selection = selection;
+        serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
+        checkItems = selection.toList();
+    }
+    
     public void setCheckItems(List<TreeObject> list) {
         checkItems = list;
         refresh();
@@ -204,20 +213,41 @@ public class RepositoryCheckTreeViewer {
     }
 
     public void refresh() {
+        TreeObject selectedObject =null;
+        boolean isRoot = false;
+        if(selection.getFirstElement() instanceof TreeObject){
+            selectedObject = (TreeObject) selection.getFirstElement(); 
+        }
+        if (selectedObject.getType() == TreeObject._SERVER_){
+            isRoot =true;
+        }
+        
         // if user has select some items in repository view, mark them as checked
         for (TreeObject obj : checkItems) {
             if (obj instanceof TreeParent){
 //                repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
                 // use this to resolve the bug 21723,by jsxie 
-                setOptimizedCheckNodes((TreeParent) obj);
+                
+                if( !isImport && isRoot ){
+                    setOptimizedCheckNodes((TreeParent) obj);
+                }
+                else{
+                    repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
+//                    ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
+                }
+                
+                
             }
-            else
+            else{
                 repositoryNodes.add(obj);
+//                ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
+            
+            }
         }
 
         
-        
-//        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
+        if( isImport || !isRoot )
+        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
         
     }
 
