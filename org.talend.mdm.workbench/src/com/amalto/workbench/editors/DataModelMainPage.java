@@ -689,7 +689,33 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 "XSD: The type may not have duplicate name and target namespace",
                 "XSD: The attribute group may not have duplicate name and target namespace",
                 "The complex type may not have duplicate name" };
+        
+        final String msg_shouldRefresh[] = {
+                "XSD: The attribute 'null' is not permitted",
+                 };
+ 
+        // do not force to refresh every time  just when an error throws.
+        String error = validateDiagnoses(msg_omit);
+        for (String msg : msg_shouldRefresh) {
+            if (error.indexOf(msg) != -1) {
+                refreshModelPageSchema();
+            }
+        }
+        // refreshModelPageSchema and validate again
+        error = validateDiagnoses(msg_omit);
+        
+        
+        if (!error.equals("")) {//$NON-NLS-1$
+            throw new IllegalAccessException(error);
+        }
 
+        validateType();
+        validateElementation();
+    }
+    
+   
+    private String validateDiagnoses(String msg_omit[]) { 
+        
         xsdSchema.clearDiagnostics();
         xsdSchema.validate();
         EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
@@ -712,12 +738,34 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
             }
         }
-        if (!error.equals("")) {//$NON-NLS-1$
-            throw new IllegalAccessException(error);
-        }
+        
+        return error;
+        
+    }
 
-        validateType();
-        validateElementation();
+   
+    private void refreshModelPageSchema() {
+      
+        String content = null; 
+        try {
+         content = Util.nodeToString(xsdSchema.getDocument());
+          } catch (Exception e) {  
+        e.printStackTrace();
+    }
+        
+        XSDSchema schema = null;
+        try {
+            schema = Util.createXsdSchema(content, xobject);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        setXsdSchema(schema);
+        getTypeContentProvider().setXsdSchema(schema);
+        getSchemaContentProvider().setXsdSchema(schema);
+        refresh();
+        
     }
 
     protected void addOrDelLanguage(boolean isAdd) {
