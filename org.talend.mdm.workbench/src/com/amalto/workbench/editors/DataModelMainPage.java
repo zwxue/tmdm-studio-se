@@ -746,19 +746,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
    
     private void refreshModelPageSchema() {
       
-        String content = null; 
+        String content = null;  
+        
         try {
          content = Util.nodeToString(xsdSchema.getDocument());
           } catch (Exception e) {  
-        e.printStackTrace();
-    }
+              log.error(e.getMessage(), e);
+       }
         
         XSDSchema schema = null;
         try {
             schema = Util.createXsdSchema(content, xobject);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         
         setXsdSchema(schema);
@@ -2841,7 +2841,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     @Override
     public void doSaveAs() {
-        // TODO Auto-generated method stub
+
         commit();
     }
 
