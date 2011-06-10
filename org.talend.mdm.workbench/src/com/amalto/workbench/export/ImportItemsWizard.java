@@ -1261,8 +1261,7 @@ public class ImportItemsWizard extends Wizard {
             folder.getText().addListener(SWT.Modify, new PageListener(this));
             // folder.getButton().addListener(SWT.Selection, new PageListener(this));
             // create viewer
-//            treeViewer = new RepositoryCheckTreeViewer(sel);
-            treeViewer = new RepositoryCheckTreeViewer(sel,true);
+            treeViewer = new RepositoryCheckTreeViewer(sel);
             Composite itemcom = treeViewer.createItemList(composite);
             treeViewer.getViewer().setInput(null);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 5));

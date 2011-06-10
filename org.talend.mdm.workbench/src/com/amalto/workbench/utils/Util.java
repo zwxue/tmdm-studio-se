@@ -127,6 +127,7 @@ import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
+import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.commmon.util.workbench.Version;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 import org.w3c.dom.DOMImplementation;
@@ -1502,15 +1503,44 @@ public class Util {
             avaiList.addAll(systemDataModelValues);
         return avaiList;
     }
-
+    // modify this to resolve the bug 21723,by jsxie 
     public static List<TreeObject> getChildrenObj(TreeParent xObject) {
         List<TreeObject> objs = new ArrayList<TreeObject>();
+
         if (xObject.getChildren() != null)
             for (TreeObject obj : xObject.getChildren()) {
                 if (obj instanceof TreeParent) {
                     TreeParent parent = (TreeParent) obj;
-                    if (parent != null)
+                    if (parent != null) {
+                         // system folder
+                        if( obj.getType()== TreeObject.CATEGORY_FOLDER ){
+                            // Data container
+                            if ( obj.getParent().getType() == TreeObject.DATA_CLUSTER){ 
+                                for(TreeObject chld : ((TreeParent)obj).getChildren() ){
+                                    if(  chld.getName().equals(XSystemObjects.DC_PROVISIONING.getName()))
+                                        objs.add(chld);
+                                    if(chld.getName().equals(XSystemObjects.DC_CONF.getName()))  
+                                        objs.add(chld);
+                                }
+                                continue;
+                            }
+                            else{
+                                continue;
+                            }
+                          }
+                        
+                        if( obj.getType()== TreeObject.RESOURCES ){
+                            for(TreeObject child : ((TreeParent)obj).getChildren() ){
+                                if(child.getType() == TreeObject.PICTURES_RESOURCE)  { 
+                                    objs.add(child);  
+                                }
+                          } 
+                            continue;  
+                          }
                         objs.addAll(getChildrenObj(parent));
+                    
+                    }
+                    
                 } else {
                     if (obj.isXObject())
                         objs.add(obj);
@@ -1628,6 +1658,21 @@ public class Util {
             }
 
             mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+            
+           
+            
+            String ss = null;
+            try {
+             ss = Util.nodeToString(partCnt.getElement());
+        } catch (Exception e) { 
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+          
+
+//            partCnt.getElement().setAttribute("maxOccurs", "unbounded");
+//            partCnt.setMinOccurs(0);
+            
             compx.updateElement();
         }
 

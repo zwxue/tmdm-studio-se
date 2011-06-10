@@ -93,8 +93,6 @@ public class RepositoryCheckTreeViewer {
 
     private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
 
-    private boolean isImport =false;
-
     public RepositoryCheckTreeViewer(IStructuredSelection selection, String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
         serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
@@ -109,12 +107,6 @@ public class RepositoryCheckTreeViewer {
         checkItems = selection.toList();
     }
     
-    public RepositoryCheckTreeViewer(IStructuredSelection selection, boolean isImport) {
-        this.isImport  = isImport;
-        this.selection = selection;
-        serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
-        checkItems = selection.toList();
-    }
     
     public void setCheckItems(List<TreeObject> list) {
         checkItems = list;
@@ -213,94 +205,24 @@ public class RepositoryCheckTreeViewer {
     }
 
     public void refresh() {
-        TreeObject selectedObject =null;
-        boolean isRoot = false;
-        if(selection.getFirstElement() instanceof TreeObject){
-            selectedObject = (TreeObject) selection.getFirstElement(); 
-        }
-        if (selectedObject.getType() == TreeObject._SERVER_){
-            isRoot =true;
-        }
-        
+
         // if user has select some items in repository view, mark them as checked
         for (TreeObject obj : checkItems) {
-            if (obj instanceof TreeParent){
-//                repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
-                // use this to resolve the bug 21723,by jsxie 
-                
-                if( !isImport && isRoot ){
-                    setOptimizedCheckNodes((TreeParent) obj);
-                }
-                else{
+            if (obj instanceof TreeParent){ 
+               
                     repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
-//                    ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
-                }
-                
-                
+
             }
             else{
                 repositoryNodes.add(obj);
-//                ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
             
             }
         }
 
-        
-        if( isImport || !isRoot )
         ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
         
     }
-
-    private void setOptimizedCheckNodes(TreeParent obj) {
-        for(TreeObject treeObj : obj.getChildren()){
-            if(treeObj.getName().equals("Data Container")){ //$NON-NLS-1$
-                if(treeObj instanceof TreeParent){
-                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
-                    if(!(child instanceof TreeParent)){
-                        optimizedCheckNodes.add(child);
-                        
-                    }
-                    else{
-                        if(child.getName().equals("System")){  //$NON-NLS-1$
-                            for(TreeObject chld : ((TreeParent)child).getChildren() ){
-                                if(chld.getName().equals("PROVISIONING")) //$NON-NLS-1$
-                                    optimizedCheckNodes.add(chld);
-                                if(chld.getName().equals("CONF")) //$NON-NLS-1$
-                                    optimizedCheckNodes.add(chld);
-                            }
-                        }
-                    }
-                }
-                }
-            }
-            if(treeObj.getName().equals("Event Management")){ //$NON-NLS-1$
-                if(treeObj instanceof TreeParent){
-                    optimizedCheckNodes.add(treeObj);
-                }
-            }
-
-            if(treeObj.getName().equals("Menu") || treeObj.getName().equals("Role") || treeObj.getName().equals("Data Model")){   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                if(treeObj instanceof TreeParent){
-                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
-                    if(!(child instanceof TreeParent)){
-                        optimizedCheckNodes.add(child); 
-                    } 
-                  } 
-                }
-            }
-            if(treeObj.getName().equals("Resources")){ //$NON-NLS-1$
-                if(treeObj instanceof TreeParent){
-                for(TreeObject child : ((TreeParent)treeObj).getChildren() ){
-                        if(child.getName().equals("Pictures")) //$NON-NLS-1$
-                        optimizedCheckNodes.add(child); 
-                  } 
-                }
-            }
-        }
-        
-        ((CheckboxTreeViewer) viewer).setCheckedElements(optimizedCheckNodes.toArray());
-        
-    }
+ 
 
     public void setItemText(String text) {
         itemLabel.setText(text);

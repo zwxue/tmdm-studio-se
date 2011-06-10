@@ -611,8 +611,7 @@ public class ExportItemsWizard extends Wizard {
             folder.getText().addListener(SWT.Modify, new PageListener(this));
             folder.getButton().addListener(SWT.Selection, new PageListener(this));
             // create viewer
-//            treeViewer = new RepositoryCheckTreeViewer(sel);
-            treeViewer = new RepositoryCheckTreeViewer(sel,false);
+            treeViewer = new RepositoryCheckTreeViewer(sel);
             Composite itemcom = treeViewer.createItemList(composite);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 5));
             treeViewer.setItemText("Select items to export:");
