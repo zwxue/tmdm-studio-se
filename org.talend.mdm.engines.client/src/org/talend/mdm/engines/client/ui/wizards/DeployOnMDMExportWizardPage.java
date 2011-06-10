@@ -98,8 +98,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private String jobVersion;
 
-    private String jobPath;
-
     private LabelledCombo exportTypeCombo;
 
     private SpagoBiServer mdmServer = null;
@@ -134,16 +132,15 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     jobLabelName = processItem.getProperty().getLabel();
                     jobVersion = processItem.getProperty().getVersion();
                     jobPurposeDescription = processItem.getProperty().getPurpose();
-                    jobPath = processItem.getState().getPath();
                     list.add(resource);
-                    
+
                     // add by jsxie to fix bug 20084
                     JobDeploymentInfo jobInfo = new JobDeploymentInfo();
                     jobInfo.setJobLabelName(processItem.getProperty().getLabel());
                     jobInfo.setJobPath(processItem.getState().getPath());
                     jobInfo.setJobVersion(processItem.getProperty().getVersion());
                     jobInfo.setJobPurposeDescription(jobPurposeDescription);
-                    
+
                     jobInfoList.add(jobInfo);
                 }
             }
@@ -212,9 +209,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     }
 
     /*
-     * It's not a good method to resovle the problem of null pointer, which is led by commenting the //
-     * createResourcesGroup(composite); and createButtonsGroup(composite); (non-Javadoc)
-     * 
      * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1#validateSourceGroup()
      */
     @Override
@@ -262,8 +256,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         }
 
         List<String> types = new ArrayList<String>();
-        types.add("Axis WebService (War)");
-        types.add("Automonus Job (Zip)");
+        types.add("Distributed (War)");
+        types.add("Hosted (Zip)");
         exportTypeCombo = new LabelledCombo(optionsGroup, "Export type:", "Export type", types); //$NON-NLS-1$ //$NON-NLS-2$
         exportTypeCombo.select(1);
 
@@ -397,7 +391,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         List<ExportFileResource> resourcesToExport = null;
         try {
-            resourcesToExport = getExportResources();     
+            resourcesToExport = getExportResources();
         } catch (ProcessorException e) {
             MessageBoxExceptionHandler.process(e);
             return false;
@@ -408,7 +402,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         saveDirtyEditors();
         // about to invoke the operation so save our state
         saveWidgetValues();
-        // boolean ok = executeExportOperation(new ArchiveFileExportOperationFullPath(process));
         ArchiveFileExportOperationFullPath exporterOperation = getExporterOperation(resourcesToExport);
         boolean ok = executeExportOperation(exporterOperation);
         // TODO What if not ok ????
@@ -436,11 +429,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // added by xie to fix bug 20084
         setDesValueForJob();
         processForEachJob();
-        // Project project = ((RepositoryContext)
-        // CorePlugin.getContext().getProperty(Context.REPOSITORY_CONTEXT_KEY)).getProject();
-
-        // retrieve user, password, host, port from selected SpagoBiServer
-
+        
+        // retrieve user, password, host, port from selected server
         MDMServerDef server = null;
         if (mdmServer == null) {
             String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
@@ -462,23 +452,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         String host = server.getHost();
         String port = server.getPort();
 
-        // deploy to mdm server
-//        String filename = getDestinationValue();
-//        String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//                + new File(filename).getName() + "&jobpath=" + jobPath; //$NON-NLS-1$
-//        try {
-//            ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
-//        } catch (Exception e) {
-//            log.error(e.getMessage(), e);
-//            MessageDialog.openError(getContainer().getShell(),
-//                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
-//                    e.getLocalizedMessage());
-//            return false;
-//        }
-        
-     // modified by xie to fix bug 20084 ,do the multi jobs deployment in one time. 
-        for(JobDeploymentInfo jobInfo : jobInfoList ){
-           
+        // modified by xie to fix bug 20084 ,do the multi jobs deployment in one time.
+        for (JobDeploymentInfo jobInfo : jobInfoList) {
+
             String filename = jobInfo.getDescValue();
             String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                     + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath() + "&contextStr=" + contextCombo.getText();; //$NON-NLS-1$//$NON-NLS-2$
@@ -491,7 +467,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                         e.getLocalizedMessage());
                 return false;
             }
-            
+
         }
 
         MessageDialog.openInformation(getContainer().getShell(), Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
@@ -541,91 +517,96 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             JavaJobExportReArchieveCreator.deleteTempFiles();
         }
     }
-    
+
     /**
-     * process each job,unzip to a temp folder , copy the necessary folder for each job , 
-     * and zip to the MDM temp folder for uploading.
+     * process each job,unzip to a temp folder , copy the necessary folder for each job , and zip to the MDM temp folder
+     * for uploading.
      */
-    protected void processForEachJob(){ 
-        
+    protected void processForEachJob() {
+
         String zipFile = getDestinationValue();
 
-        String tmpFolder = JavaJobExportReArchieveCreator.getTmpFolder()+ File.separator + "forJob"; //$NON-NLS-1$
+        String tmpFolder = JavaJobExportReArchieveCreator.getTmpFolder() + File.separator + "forJob"; //$NON-NLS-1$
 
         try {
             // unzip to tmpFolder
-            ZipToFile.unZipFile(zipFile, tmpFolder );
-            
-           File desFile = new File(tmpFolder+ File.separator +jobLabelName + "_" + jobVersion);//$NON-NLS-1$
-            
-            if(desFile.isDirectory()){
+            ZipToFile.unZipFile(zipFile, tmpFolder);
 
-            for(JobDeploymentInfo jobInfo : jobInfoList ){
-                File sourFile = new File(tmpFolder+ File.separator +jobLabelName + "_" + jobVersion +File.separator +  jobInfo.getJobLabelName() );  //$NON-NLS-1$ 
-                File sourLibFile = new File(tmpFolder+ File.separator +jobLabelName + "_" + jobVersion +File.separator +  "lib" );  //$NON-NLS-1$ //$NON-NLS-2$
-                
-                String  jobDescPath = tmpFolder+ File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() +"job"; //$NON-NLS-1$ //$NON-NLS-2$
-            
-                File jobDescDir = new File(jobDescPath);
-                if (!jobDescDir.exists())  
-                    jobDescDir.mkdir();  
-                File jobDescDir_in = new File(jobDescPath +  File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion()); //$NON-NLS-1$
-                if (!jobDescDir_in.exists())  
-                    jobDescDir_in.mkdir(); 
-                File jobDescDir_main = new File(jobDescPath +  File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() +  File.separator +jobInfo.getJobLabelName()); //$NON-NLS-1$
-                if (!jobDescDir_main.exists())  
-                    jobDescDir_main.mkdir();  
-                 
-                File jobDescDirLib = new File(jobDescPath +  File.separator +jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() +  File.separator +"lib"); //$NON-NLS-1$ //$NON-NLS-2$
-                if (!jobDescDirLib.exists())  
-                    jobDescDirLib.mkdir(); 
-                
-                copy(sourFile.listFiles(), jobDescDir_main);  
-                copy(sourLibFile.listFiles(), jobDescDirLib);  
-   
-                ZipToFile.zipFile(jobDescPath, jobInfo.getDescValue());
-              }
+            File desFile = new File(tmpFolder + File.separator + jobLabelName + "_" + jobVersion);//$NON-NLS-1$
+
+            if (desFile.isDirectory()) {
+
+                for (JobDeploymentInfo jobInfo : jobInfoList) {
+                    File sourFile = new File(tmpFolder + File.separator + jobLabelName
+                            + "_" + jobVersion + File.separator + jobInfo.getJobLabelName()); //$NON-NLS-1$ 
+                    File sourLibFile = new File(tmpFolder + File.separator + jobLabelName
+                            + "_" + jobVersion + File.separator + "lib"); //$NON-NLS-1$ //$NON-NLS-2$
+
+                    String jobDescPath = tmpFolder + File.separator + jobInfo.getJobLabelName()
+                            + "_" + jobInfo.getJobVersion() + "job"; //$NON-NLS-1$ //$NON-NLS-2$
+
+                    File jobDescDir = new File(jobDescPath);
+                    if (!jobDescDir.exists())
+                        jobDescDir.mkdir();
+                    File jobDescDir_in = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
+                            + "_" + jobInfo.getJobVersion()); //$NON-NLS-1$
+                    if (!jobDescDir_in.exists())
+                        jobDescDir_in.mkdir();
+                    File jobDescDir_main = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
+                            + "_" + jobInfo.getJobVersion() + File.separator + jobInfo.getJobLabelName()); //$NON-NLS-1$
+                    if (!jobDescDir_main.exists())
+                        jobDescDir_main.mkdir();
+
+                    File jobDescDirLib = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
+                            + "_" + jobInfo.getJobVersion() + File.separator + "lib"); //$NON-NLS-1$ //$NON-NLS-2$
+                    if (!jobDescDirLib.exists())
+                        jobDescDirLib.mkdir();
+
+                    copy(sourFile.listFiles(), jobDescDir_main);
+                    copy(sourLibFile.listFiles(), jobDescDirLib);
+
+                    ZipToFile.zipFile(jobDescPath, jobInfo.getDescValue());
+                }
             }
         } catch (Exception e) {
             ExceptionHandler.process(e);
         } finally {
             JavaJobExportReArchieveCreator.deleteTempFiles();
         }
-        
+
     }
+
     /**
-     *  copy all the files of this folder to another
+     * copy all the files of this folder to another
      */
-    
-    private  void copy(File[] s, File d) {
-        if (!d.exists())  
-            d.mkdir();  
+
+    private void copy(File[] s, File d) {
+        if (!d.exists())
+            d.mkdir();
         for (int i = 0; i < s.length; i++) {
-            if (s[i].isFile()) {  
+            if (s[i].isFile()) {
                 try {
                     FileInputStream fis = new FileInputStream(s[i]);
-                    FileOutputStream out = new FileOutputStream(new File(
-                            d.getPath() + File.separator + s[i].getName()));
+                    FileOutputStream out = new FileOutputStream(new File(d.getPath() + File.separator + s[i].getName()));
                     int count = fis.available();
                     byte[] data = new byte[count];
                     if ((fis.read(data)) != -1) {
-                        out.write(data);  
+                        out.write(data);
                     }
-                    out.close();  
-                    fis.close();  
+                    out.close();
+                    fis.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (s[i].isDirectory()) {  
-                File des = new File(d.getPath() + File.separator
-                        + s[i].getName());
-                des.mkdir();  
-                copy(s[i].listFiles(), des);  
+            if (s[i].isDirectory()) {
+                File des = new File(d.getPath() + File.separator + s[i].getName());
+                des.mkdir();
+                copy(s[i].listFiles(), des);
             }
         }
     }
-    
+
     /**
      * Get the export operation.
      * 
@@ -638,13 +619,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return exporterOperation;
     }
 
-    
-    protected ArchiveFileExportOperationFullPath getExporterOperationForOneJob(List<ExportFileResource> resourcesToExport,String descValue) {
+    protected ArchiveFileExportOperationFullPath getExporterOperationForOneJob(List<ExportFileResource> resourcesToExport,
+            String descValue) {
         ArchiveFileExportOperationFullPath exporterOperation = new ArchiveFileExportOperationFullPath(resourcesToExport,
                 descValue);
         return exporterOperation;
     }
-    
+
     /**
      * Returns the root folder name.
      * 
@@ -696,31 +677,29 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return manager.getExportResources(process, exportChoiceMap, contextCombo.getText(), "All", IProcessor.NO_STATISTICS, //$NON-NLS-1$
                 IProcessor.NO_TRACES);
     }
-    
+
     /**
      * set the destinationValue for each job
      */
-    
-    protected  void setDesValueForJob()  { 
 
-        for( ExportFileResource each: process ){ 
-      
-            for(JobDeploymentInfo jobInfo : jobInfoList){
-                Item item =each.getItem();
-                if(item instanceof ProcessItem){
-                   String name= ((ProcessItem)each.getItem()).getProperty().getLabel();
-                    if(jobInfo.getJobLabelName().equals(name)){
+    protected void setDesValueForJob() {
+
+        for (ExportFileResource each : process) {
+
+            for (JobDeploymentInfo jobInfo : jobInfoList) {
+                Item item = each.getItem();
+                if (item instanceof ProcessItem) {
+                    String name = ((ProcessItem) each.getItem()).getProperty().getLabel();
+                    if (jobInfo.getJobLabelName().equals(name)) {
                         setDestinationValueForJob(jobInfo);
                     }
-                    
+
                 }
-               
-                
+
             }
-            
-        } 
+
+        }
     }
-    
 
     private Map<ExportChoice, Object> getExportChoiceMap() {
         Map<ExportChoice, Object> exportChoiceMap = new EnumMap<ExportChoice, Object>(ExportChoice.class);
