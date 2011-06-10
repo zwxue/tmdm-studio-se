@@ -1658,21 +1658,6 @@ public class Util {
             }
 
             mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-            
-           
-            
-            String ss = null;
-            try {
-             ss = Util.nodeToString(partCnt.getElement());
-        } catch (Exception e) { 
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-          
-
-//            partCnt.getElement().setAttribute("maxOccurs", "unbounded");
-//            partCnt.setMinOccurs(0);
-            
             compx.updateElement();
         }
 
