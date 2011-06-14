@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.talend.core.root"
+            class="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
+            icon="icons/server.png"
+            id="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
+            name="Server Explorer">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.talend.mdm.workbench.serverexplorer.viewContribution"
+            targetID="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer">
+         <action
+               class="org.talend.mdm.workbench.serverexplorer.ui.actions.RefreshServerDefAction"
+               icon="icons/refresh.gif"
+               id="org.talend.mdm.workbench.serverexplorer.ui.actions.RefreshServerDefAction"
+               label="Refresh"
+               style="push"
+               toolbarPath="ServerExplorerToolBar">
+         </action>
+      </viewContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.talend.mdm.perspective">
+         <view
+               id="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
+               minimized="false"
+               ratio="0.3"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss"
+               showTitle="true"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
+</plugin>
