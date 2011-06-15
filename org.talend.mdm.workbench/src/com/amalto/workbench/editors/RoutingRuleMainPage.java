@@ -465,6 +465,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionsColumns[2].setColumnWidth(250);
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer = new TisTableViewer(Arrays.asList(conditionsColumns), toolkit, routingExpressionsGroup);
+            TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
+            conditionViewer.setTreeParent(treeParent);
+            conditionViewer.setDatamodelName("UpdateReport"); //$NON-NLS-1$
             conditionViewer.setXpath(true);
             conditionViewer.setMainPage(this);
             conditionViewer.setAddMulti(true);
@@ -761,7 +764,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     // });
     //
     // }
-
+    @Override
+    public Object getAdapter(Class adapter) {
+        if(adapter==TreeParent.class){
+            return Util.getServerTreeParent( getXObject());
+        }
+        return super.getAdapter(adapter);
+    }
     @Override
     public boolean beforeDoSave() {
         if (serviceNameCombo.getText() == null || serviceNameCombo.getText().length() == 0) {
