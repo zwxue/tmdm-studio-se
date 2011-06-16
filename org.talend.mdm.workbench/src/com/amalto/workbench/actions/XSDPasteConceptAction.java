@@ -99,7 +99,7 @@ public class XSDPasteConceptAction extends UndoAction {
                         XSDElementDeclaration copy_concept = (XSDElementDeclaration) concept;
 
                         XSDElementDeclaration new_copy_concept = factory.createXSDElementDeclaration();
-                        ;
+                       
 
                         new_copy_concept = (XSDElementDeclaration) copy_concept.cloneConcreteComponent(true, false);
                         InputDialog id = new InputDialog(page.getSite().getShell(), "Copy Element",
@@ -130,16 +130,25 @@ public class XSDPasteConceptAction extends UndoAction {
                                     .replaceAll(copy_concept.getName(), new_copy_concept.getName());
                             new_copy_concept.getIdentityConstraintDefinitions().get(i).setName(name);
                         }
+                        
+                        ///modified by xie to fix the bug 22077
+                        
+                        if(new_copy_concept.getAnonymousTypeDefinition() == null) {
+                        
+                           XSDComplexTypeDefinition copyType =(XSDComplexTypeDefinition) copy_concept.getTypeDefinition().cloneConcreteComponent(true, false);
+                           String originalName =  copyType.getName();
+                           String typeName = "Copy_of_" + originalName;    //$NON-NLS-1$
+                           copyType.setName(typeName);
+                           schema.getContents().add(copyType);
+                           new_copy_concept.setTypeDefinition(copyType);
+
+                        }
+                        
                         new_copy_concept.updateElement();
                         schema.getContents().add(new_copy_concept);
                         addAnnotationForXSDElementDeclaration(copy_concept, new_copy_concept);
 
-                        // System.out.println("@@@  copy_concept:"+Util.
-                        // nodeToString(copy_concept.getElement()));
-
-                        // System.out.println("@@@:"+Util.nodeToString(schema
-                        // .getDocument()));
-                        // }
+                      
                     }
                 }
                 HashMap<String, XSDTypeDefinition> typeDef = Util.getTypeDefinition(schema);

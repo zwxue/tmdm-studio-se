@@ -141,9 +141,9 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
     }
 
     public void modifyText(ModifyEvent e) {
-        if (e != null && e.widget == typeNameText) {
-            conceptPanel.setText(typeNameText.getText() + "Type");
-        }
+//        if (e != null && e.widget == typeNameText) {
+//            conceptPanel.setText(typeNameText.getText() + "Type");
+//        }
 
         if (typeNameText.getText().trim().equals("")) {//$NON-NLS-1$
             infoLabel.setText("The Element Name cannot be empty or blank");
