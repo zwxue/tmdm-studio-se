@@ -87,4 +87,20 @@
                serviceId="com.amalto.workbench.service.branding.IBrandingService">
          </Service>
       </extension>
+         <extension
+               point="org.eclipse.ui.perspectives">
+            <perspective
+                  class="org.talend.rcp.perspective.Perspective"
+                  icon="icons/di_perspective_16x16.png"
+                  id="org.talend.rcp.perspective"
+                  name="Data Integration">
+            </perspective>
+         </extension>
+         <extension
+               point="org.talend.core.talendperspectives">
+            <TalendPerspective
+                  refPerspectiveId="org.talend.rcp.perspective"
+                  talendPerspectiveId="org.talend.rcp.DesignPerspective">
+            </TalendPerspective>
+         </extension>
 </plugin>
