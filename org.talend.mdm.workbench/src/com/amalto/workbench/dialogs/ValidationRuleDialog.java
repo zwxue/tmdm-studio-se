@@ -67,6 +67,8 @@ public class ValidationRuleDialog extends Dialog {
 
     String name = "";//$NON-NLS-1$
 
+    String ckName = ""; //$NON-NLS-1$ 
+    
     private Text text;
 
     public ValidationRuleDialog(Shell parentShell, String title, String pattern, DataModelMainPage page, String conceptName) {
@@ -176,6 +178,8 @@ public class ValidationRuleDialog extends Dialog {
         if (e.getAttributes().getNamedItem("name") != null)//$NON-NLS-1$
             name = e.getAttributes().getNamedItem("name").getTextContent();//$NON-NLS-1$
         text.setText("Product Type".equals(name) ? "" : name);//$NON-NLS-1$//$NON-NLS-2$
+        
+        ckName = name;
         NodeList rulelist = e.getElementsByTagName("rule");//$NON-NLS-1$
         for (int i = 0; i < rulelist.getLength(); i++) {
             Node r = rulelist.item(i);
@@ -288,7 +292,7 @@ public class ValidationRuleDialog extends Dialog {
     private boolean checkNameIsDuplicated(XSDAnnotationsStructure struc, String inputName){
         for (String eachValidationRule : struc.getSchematrons().values()){
             String name = getValidationRuleName(eachValidationRule);
-            if( name.equals(inputName) ) {
+            if( name.equals(inputName) && !name.equals(ckName) ) {
                 // duplicated name
                 return true;
             }
