@@ -1694,10 +1694,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // typedef.getTargetNamespace())) {
             manager.add(changeBaseTypeAction);
             manager.add(new Separator());
+            if(typedef.getBaseTypeDefinition() != null){ 
             EList list = typedef.getBaseTypeDefinition().getValidFacets();
             for (Iterator iter = list.iterator(); iter.hasNext();) {
                 String element = (String) iter.next();
                 manager.add(new XSDEditFacetAction(this, element));
+            }
             }
 
             // }

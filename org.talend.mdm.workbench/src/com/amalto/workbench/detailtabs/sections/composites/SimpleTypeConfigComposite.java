@@ -168,7 +168,9 @@ public class SimpleTypeConfigComposite extends Composite {
     private void initUIContentForComboBuildInTypes() {
     	comboBuildInTypes.removeSelectionChangedListener(buildInChangedListener);
         comboBuildInTypes.setInput(Util.getAllBuildInTypes(xsdSimpleType.getSchema()));
-        comboBuildInTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType()));
+        if(xsdSimpleType.getBaseType() != null) {
+            comboBuildInTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType()));
+        }
 
         radBuildInTypes.setSelection(!comboBuildInTypes.getSelection().isEmpty());
         comboBuildInTypes.addSelectionChangedListener(buildInChangedListener);
@@ -176,11 +178,21 @@ public class SimpleTypeConfigComposite extends Composite {
 
     private void initUIContentsForComboCustomTypes() {
     	comboCustomTypes.removeSelectionChangedListener(customChangedListener);
-        List<String> allCustomTypeNames = Util.getAllCustomTypeNames(xsdSimpleType.getSchema());
-        allCustomTypeNames.remove(xsdSimpleType.getName());
+    	
+    	 List<String> allCustomTypeNames = null;
+    	if(xsdSimpleType.getSchema() !=null){
+    	     allCustomTypeNames = Util.getAllCustomTypeNames(xsdSimpleType.getSchema());
+    	}
+        
+        if(xsdSimpleType.getName() != null){
+            allCustomTypeNames.remove(xsdSimpleType.getName());
+        }
+       
         comboCustomTypes.setInput(allCustomTypeNames);
+        if(xsdSimpleType.getBaseType() != null ){
         comboCustomTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType().getName()));
 
+        }
         radCustomTypes.setSelection(!comboCustomTypes.getSelection().isEmpty());
         comboCustomTypes.addSelectionChangedListener(customChangedListener);
     }
