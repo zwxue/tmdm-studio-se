@@ -440,8 +440,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
         if (obj instanceof TreeObject) {
             TreeObject o = (TreeObject) obj;
-
-            if (o.getParent() == null)
+            if (o.getParent() == null || getParent() == null)
                 return o.getName().equals(getName()) && getType() == o.getType();
             else {
 
