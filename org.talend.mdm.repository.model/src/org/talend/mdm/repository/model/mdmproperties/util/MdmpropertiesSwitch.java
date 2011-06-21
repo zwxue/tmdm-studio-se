@@ -105,6 +105,32 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.MDM_SERVER_OBJECT_ITEM: {
+                MDMServerObjectItem mdmServerObjectItem = (MDMServerObjectItem)theEObject;
+                T result = caseMDMServerObjectItem(mdmServerObjectItem);
+                if (result == null) result = caseMDMItem(mdmServerObjectItem);
+                if (result == null) result = caseItem(mdmServerObjectItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmpropertiesPackage.WS_MENU_ITEM: {
+                WSMenuItem wsMenuItem = (WSMenuItem)theEObject;
+                T result = caseWSMenuItem(wsMenuItem);
+                if (result == null) result = caseMDMServerObjectItem(wsMenuItem);
+                if (result == null) result = caseMDMItem(wsMenuItem);
+                if (result == null) result = caseItem(wsMenuItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmpropertiesPackage.WS_ROLE_ITEM: {
+                WSRoleItem wsRoleItem = (WSRoleItem)theEObject;
+                T result = caseWSRoleItem(wsRoleItem);
+                if (result == null) result = caseMDMServerObjectItem(wsRoleItem);
+                if (result == null) result = caseMDMItem(wsRoleItem);
+                if (result == null) result = caseItem(wsRoleItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -140,6 +166,51 @@ public class MdmpropertiesSwitch<T> {
     }
 
 	/**
+     * Returns the result of interpreting the object as an instance of '<em>MDM Server Object Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>MDM Server Object Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseMDMServerObjectItem(MDMServerObjectItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Menu Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Menu Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSMenuItem(WSMenuItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Role Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Role Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSRoleItem(WSRoleItem object) {
+        return null;
+    }
+
+    /**
      * Returns the result of interpreting the object as an instance of '<em>Item</em>'.
      * <!-- begin-user-doc -->
 	 * This implementation returns null;

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mdmserverobject"
+    nsURI="http://www.talend.org/mdmserverobject" nsPrefix="mdmserverobject">
+  <eClassifiers xsi:type="ecore:EClass" name="MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EWSMenu" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="menuEntries" upperBound="-1"
+        eType="#//EWSMenuEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EWSMenuEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="application" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="#//WSMenuMenuEntriesDescriptionsE"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subMenus" upperBound="-1"
+        eType="#//EWSMenuEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSMenuMenuEntriesDescriptionsE">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSRoleE" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specification" upperBound="-1"
+        eType="#//WSRoleSpecificationE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSRoleSpecificationE">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="admin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" upperBound="-1"
+        eType="#//WSRoleSpecificationInstanceE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSRoleSpecificationInstanceE">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="writable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameter" eType="#//StringArray"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="StringArray" instanceClassName="java.lang.String[]"/>
+</ecore:EPackage>

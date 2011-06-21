@@ -63,6 +63,9 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
         switch (eClass.getClassifierID()) {
             case MdmpropertiesPackage.MDM_ITEM: return createMDMItem();
             case MdmpropertiesPackage.MDM_SERVER_DEF_ITEM: return createMDMServerDefItem();
+            case MdmpropertiesPackage.MDM_SERVER_OBJECT_ITEM: return createMDMServerObjectItem();
+            case MdmpropertiesPackage.WS_MENU_ITEM: return createWSMenuItem();
+            case MdmpropertiesPackage.WS_ROLE_ITEM: return createWSRoleItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -89,6 +92,36 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public MDMServerObjectItem createMDMServerObjectItem() {
+        MDMServerObjectItemImpl mdmServerObjectItem = new MDMServerObjectItemImpl();
+        return mdmServerObjectItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSMenuItem createWSMenuItem() {
+        WSMenuItemImpl wsMenuItem = new WSMenuItemImpl();
+        return wsMenuItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSRoleItem createWSRoleItem() {
+        WSRoleItemImpl wsRoleItem = new WSRoleItemImpl();
+        return wsRoleItem;
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated

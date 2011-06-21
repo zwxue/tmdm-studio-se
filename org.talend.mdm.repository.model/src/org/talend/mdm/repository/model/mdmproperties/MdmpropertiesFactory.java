@@ -44,6 +44,33 @@ public interface MdmpropertiesFactory extends EFactory {
 	MDMServerDefItem createMDMServerDefItem();
 
 	/**
+     * Returns a new object of class '<em>MDM Server Object Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>MDM Server Object Item</em>'.
+     * @generated
+     */
+    MDMServerObjectItem createMDMServerObjectItem();
+
+    /**
+     * Returns a new object of class '<em>WS Menu Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Menu Item</em>'.
+     * @generated
+     */
+    WSMenuItem createWSMenuItem();
+
+    /**
+     * Returns a new object of class '<em>WS Role Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Role Item</em>'.
+     * @generated
+     */
+    WSRoleItem createWSRoleItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

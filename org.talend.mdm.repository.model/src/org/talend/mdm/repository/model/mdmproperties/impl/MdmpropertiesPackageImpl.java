@@ -14,8 +14,12 @@ import org.talend.core.model.properties.PropertiesPackage;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
+import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
+import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
+import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,6 +43,27 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 	private EClass mdmServerDefItemEClass = null;
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass mdmServerObjectItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsMenuItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsRoleItemEClass = null;
+
+    /**
      * Creates an instance of the model <b>Package</b>, registered with
      * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
      * package URI value.
@@ -86,6 +111,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         // Initialize simple dependencies
         MdmmetadataPackage.eINSTANCE.eClass();
+        MdmserverobjectPackage.eINSTANCE.eClass();
         PropertiesPackage.eINSTANCE.eClass();
 
         // Create package meta-data objects
@@ -132,6 +158,51 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
 	/**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getMDMServerObjectItem() {
+        return mdmServerObjectItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSMenuItem() {
+        return wsMenuItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSMenuItem_WsMenu() {
+        return (EReference)wsMenuItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSRoleItem() {
+        return wsRoleItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSRoleItem_WsRole() {
+        return (EReference)wsRoleItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -162,6 +233,14 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         mdmServerDefItemEClass = createEClass(MDM_SERVER_DEF_ITEM);
         createEReference(mdmServerDefItemEClass, MDM_SERVER_DEF_ITEM__SERVER_DEF);
+
+        mdmServerObjectItemEClass = createEClass(MDM_SERVER_OBJECT_ITEM);
+
+        wsMenuItemEClass = createEClass(WS_MENU_ITEM);
+        createEReference(wsMenuItemEClass, WS_MENU_ITEM__WS_MENU);
+
+        wsRoleItemEClass = createEClass(WS_ROLE_ITEM);
+        createEReference(wsRoleItemEClass, WS_ROLE_ITEM__WS_ROLE);
     }
 
 	/**
@@ -190,6 +269,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         // Obtain other dependent packages
         PropertiesPackage thePropertiesPackage = (PropertiesPackage)EPackage.Registry.INSTANCE.getEPackage(PropertiesPackage.eNS_URI);
         MdmmetadataPackage theMdmmetadataPackage = (MdmmetadataPackage)EPackage.Registry.INSTANCE.getEPackage(MdmmetadataPackage.eNS_URI);
+        MdmserverobjectPackage theMdmserverobjectPackage = (MdmserverobjectPackage)EPackage.Registry.INSTANCE.getEPackage(MdmserverobjectPackage.eNS_URI);
 
         // Create type parameters
 
@@ -198,12 +278,23 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         // Add supertypes to classes
         mdmItemEClass.getESuperTypes().add(thePropertiesPackage.getItem());
         mdmServerDefItemEClass.getESuperTypes().add(this.getMDMItem());
+        mdmServerObjectItemEClass.getESuperTypes().add(this.getMDMItem());
+        wsMenuItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsRoleItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(mdmServerDefItemEClass, MDMServerDefItem.class, "MDMServerDefItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getMDMServerDefItem_ServerDef(), theMdmmetadataPackage.getMDMServerDef(), null, "serverDef", null, 0, 1, MDMServerDefItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(mdmServerObjectItemEClass, MDMServerObjectItem.class, "MDMServerObjectItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+        initEClass(wsMenuItemEClass, WSMenuItem.class, "WSMenuItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSMenuItem_WsMenu(), theMdmserverobjectPackage.getEWSMenu(), null, "wsMenu", null, 0, 1, WSMenuItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsRoleItemEClass, WSRoleItem.class, "WSRoleItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSRoleItem_WsRole(), theMdmserverobjectPackage.getWSRoleE(), null, "wsRole", null, 0, 1, WSRoleItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

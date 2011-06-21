@@ -24,6 +24,14 @@
             uri="http://www.talend.org/mdmproperties">
       </package>
    </extension>
+   <extension
+         point="org.eclipse.emf.ecore.generated_package">
+      <package
+            class="org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage"
+            genModel="model/MDMServerObject.genmodel"
+            uri="http://www.talend.org/mdmserverobject">
+      </package>
+   </extension>
 
 
 

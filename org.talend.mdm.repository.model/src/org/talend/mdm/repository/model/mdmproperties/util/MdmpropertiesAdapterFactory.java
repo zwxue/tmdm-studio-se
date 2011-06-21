@@ -81,6 +81,18 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
                 return createMDMServerDefItemAdapter();
             }
             @Override
+            public Adapter caseMDMServerObjectItem(MDMServerObjectItem object) {
+                return createMDMServerObjectItemAdapter();
+            }
+            @Override
+            public Adapter caseWSMenuItem(WSMenuItem object) {
+                return createWSMenuItemAdapter();
+            }
+            @Override
+            public Adapter caseWSRoleItem(WSRoleItem object) {
+                return createWSRoleItemAdapter();
+            }
+            @Override
             public Adapter caseItem(Item object) {
                 return createItemAdapter();
             }
@@ -133,6 +145,48 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
     }
 
 	/**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem <em>MDM Server Object Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem
+     * @generated
+     */
+    public Adapter createMDMServerObjectItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSMenuItem <em>WS Menu Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSMenuItem
+     * @generated
+     */
+    public Adapter createWSMenuItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSRoleItem <em>WS Role Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSRoleItem
+     * @generated
+     */
+    public Adapter createWSRoleItemAdapter() {
+        return null;
+    }
+
+    /**
      * Creates a new adapter for an object of class '{@link org.talend.core.model.properties.Item <em>Item</em>}'.
      * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;

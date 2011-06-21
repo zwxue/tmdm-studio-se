@@ -16,4 +16,6 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.talend.mdm.repository.model.mdmmetadata,
  org.talend.mdm.repository.model.mdmmetadata.util,
  org.talend.mdm.repository.model.mdmproperties,
- org.talend.mdm.repository.model.mdmproperties.util
+ org.talend.mdm.repository.model.mdmproperties.util,
+ org.talend.mdm.repository.model.mdmserverobject,
+ org.talend.mdm.repository.model.mdmserverobject.util
