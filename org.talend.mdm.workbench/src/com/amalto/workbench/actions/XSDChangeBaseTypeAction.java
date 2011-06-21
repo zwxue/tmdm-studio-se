@@ -83,7 +83,10 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
                 if (type instanceof XSDSimpleTypeDefinition)
                     builtInTypes.add(type.getName());
             }
-
+            //can't change builtin's base type
+            if(builtInTypes.contains(typedef.getName())){
+            	return Status.CANCEL_STATUS;
+            }
             dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, "Change Base Type", customTypes,
                     builtInTypes);
 
