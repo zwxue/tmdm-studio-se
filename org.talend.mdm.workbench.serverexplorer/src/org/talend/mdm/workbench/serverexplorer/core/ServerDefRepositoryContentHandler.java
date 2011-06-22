@@ -5,6 +5,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
+import org.talend.core.model.properties.ByteArray;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryContentHandler;
@@ -42,7 +43,11 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
     @Override
     public Resource save(Item item) throws PersistenceException {
         if (item instanceof MDMServerDefItem) {
-            return xmiResourceManager.getItemResource(item);
+            Resource resource = xmiResourceManager.getItemResource(item);
+
+            resource.getContents().clear();
+            resource.getContents().add(((MDMServerDefItem) item).getServerDef());
+            return resource;
         }
         return null;
     }
@@ -81,6 +86,5 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
     public ERepositoryObjectType getCodeType() {
         return null;
     }
-
 
 }

@@ -153,7 +153,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
         new Label(grpAuthentication, SWT.NONE).setText("Password");
 
-        passwordText = new Text(grpAuthentication, SWT.BORDER);
+        passwordText = new Text(grpAuthentication, SWT.BORDER|SWT.PASSWORD);
 
         passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         // check Enterprise

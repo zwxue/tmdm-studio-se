@@ -15,7 +15,7 @@ package org.talend.mdm.workbench.serverexplorer.core;
 import org.talend.commons.ui.runtime.image.IImage;
 
 public enum ServerDefImage implements IImage {
-    BEAN_ICON("/icons/client_network.png");//$NON-NLS-1$
+    BEAN_ICON("/icons/server.png");//$NON-NLS-1$
 
     private String path;
 
