@@ -41,4 +41,21 @@
          </view>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.talend.core.repository.repository_node_provider">
+      <repositoryNode
+            class="org.talend.mdm.workbench.serverexplorer.core.ServerDefRepositoryNode"
+            folder="metadata/MDMServerDef"
+            isResouce="true"
+            label="Server Definition  "
+            products="MDM"
+            type="MDM.ServerDef">
+      </repositoryNode>
+   </extension>
+   <extension
+         point="org.talend.core.repository.repository_content">
+      <RepositoryContent
+            class="org.talend.mdm.workbench.serverexplorer.core.ServerDefRepositoryContentHandler">
+      </RepositoryContent>
+   </extension>
 </plugin>

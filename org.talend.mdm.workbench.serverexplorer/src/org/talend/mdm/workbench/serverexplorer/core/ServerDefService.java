@@ -60,10 +60,13 @@ public class ServerDefService {
 
     private static Logger log = Logger.getLogger(ServerDefService.class);
 
+    public static ERepositoryObjectType REPOSITORY_TYPE_SERVER_DEF = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.ServerDef"); //$NON-NLS-1$
+
     public static List<IRepositoryViewObject> getAllServerDefViewObjects() {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
-            return factory.getAll(ERepositoryObjectType.METADATA_MDM_SERVER_DEF);
+            return factory.getAll(REPOSITORY_TYPE_SERVER_DEF);
 
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -98,11 +101,12 @@ public class ServerDefService {
         if (viewObject != null) {
             try {
                 // because TIS Repository's hard code
-                // factory.deleteObjectPhysical(viewObject);
+                factory.deleteObjectPhysical(viewObject);
                 // so use the following to replace above
-                Project project = ProjectManager.getInstance().getCurrentProject();
-                IRepositoryViewObject object = new RepositoryObject(viewObject.getProperty());
-                ((ProxyRepositoryFactory) factory).getRepositoryFactoryFromProvider().deleteObjectPhysical(project, object);
+                // Project project = ProjectManager.getInstance().getCurrentProject();
+                // IRepositoryViewObject object = new RepositoryObject(viewObject.getProperty());
+                // ((ProxyRepositoryFactory) factory).getRepositoryFactoryFromProvider().deleteObjectPhysical(project,
+                // object);
                 return true;
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
