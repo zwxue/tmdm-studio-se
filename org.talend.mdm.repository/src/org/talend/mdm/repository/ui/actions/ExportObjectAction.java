@@ -19,33 +19,36 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.navigator;
+package org.talend.mdm.repository.ui.actions;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.navigator.CommonNavigator;
-import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.core.AbstractRepositoryAction;
+
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MDMRepositoryView extends CommonNavigator {
-
-    @Override
-    public void createPartControl(Composite aParent) {
-        super.createPartControl(aParent);
-        initInput();
-    }
+public class ExportObjectAction extends AbstractRepositoryAction {
 
     /**
-     * DOC hbhong Comment method "initInput".
+     * DOC hbhong AddMenu constructor comment.
+     * 
+     * @param text
      */
-    private void initInput() {
-        IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
+    public ExportObjectAction() {
+        super("Export"); //$NON-NLS-1$
+        setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
+    }
 
-        getCommonViewer().setInput(categoryViewObjects);
-        // getCommonViewer().addFilter(filter);
+    @Override
+    public void run() {
+        System.out.println("Test Add");
+    }
+
+    public String getGroupName() {
+        return GROUP_EXPORT;
     }
 
 }

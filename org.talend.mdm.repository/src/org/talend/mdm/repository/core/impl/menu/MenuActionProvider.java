@@ -19,33 +19,42 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.navigator;
+package org.talend.mdm.repository.core.impl.menu;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.navigator.CommonNavigator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.ui.actions.BaseSelectionListenerAction;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.ui.actions.ExportObjectAction;
+import org.talend.mdm.repository.ui.actions.menu.NewMenuAction;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MDMRepositoryView extends CommonNavigator {
+public class MenuActionProvider extends RepositoryNodeActionProviderAdapter {
+
+    AbstractRepositoryAction addAction;
 
     @Override
-    public void createPartControl(Composite aParent) {
-        super.createPartControl(aParent);
-        initInput();
+    public void initCommonViewer(CommonViewer commonViewer) {
+        super.initCommonViewer(commonViewer);
+        addAction = new NewMenuAction();
+
+        //
+        addAction.initCommonViewer(commonViewer);
+
     }
 
-    /**
-     * DOC hbhong Comment method "initInput".
-     */
-    private void initInput() {
-        IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
-
-        getCommonViewer().setInput(categoryViewObjects);
-        // getCommonViewer().addFilter(filter);
+    @Override
+    public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
+        List<AbstractRepositoryAction> actions = super.getActions(viewObj);
+        actions.add(addAction);
+        return actions;
     }
 
 }

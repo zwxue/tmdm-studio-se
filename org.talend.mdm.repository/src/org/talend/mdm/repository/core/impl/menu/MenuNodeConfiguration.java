@@ -32,5 +32,7 @@ public class MenuNodeConfiguration extends RepositoryNodeConfigurationAdapter {
     public MenuNodeConfiguration() {
         setResourceProvider(new MenuNodeResourceProvider());
         setLabelProvider(new MenuLabelProvider());
+        setContentProvider(new MenuContentProvider());
+        setActionProvider(new MenuActionProvider());
     }
 }

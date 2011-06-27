@@ -10,23 +10,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-/**
- * Utility class for managing OS resources associated with SWT/JFace controls such as
- * colors, fonts, images, etc.
- * 
- * !!! IMPORTANT !!! Application code must explicitly invoke the <code>dispose()</code>
- * method to release the operating system resources managed by cached objects
- * when those objects and OS resources are no longer needed (e.g. on
- * application shutdown)
- * 
- * This class may be freely distributed as part of any application or plugin.
- * <p>
- * Copyright (c) 2003 - 2005, Instantiations, Inc. <br>All Rights Reserved
- * 
- * @author scheglov_ke
- * @author Dan Rubel
- */
-public class ResourceManager extends SWTResourceManager {
+ 
+public class EclipseResourceManager extends SWTResourceManager {
 
     /**
      * Dispose of cached objects and their underlying OS resources. This should

@@ -12,6 +12,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryContentHandler;
 import org.talend.core.repository.utils.XmiResourceManager;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
@@ -28,14 +29,9 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
 
     @Override
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-//        if(item instanceof CategoryItem){
-//            return TYPE_CATEGORY;
-//        }
-        if (item instanceof WSMenuItem) {
-            return TYPE_MENU;
-        }
-        if (item instanceof WSRoleItem) {
-            return TYPE_ROLE;
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+        if (configuration != null) {
+            return configuration.getResourceProvider().getRepositoryObjectType(item);
         }
         return null;
     }
@@ -43,18 +39,24 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
     @Override
     public Resource create(IProject project, Item item, int classifierID, IPath path) throws PersistenceException {
 
-        if (item instanceof MDMServerObjectItem) {
-            ERepositoryObjectType repositoryType = getRepositoryObjectType(item);
-            if (repositoryType != null) {
-                Resource itemResource = xmiResourceManager.createItemResource(project, item, path, repositoryType, false);
-
-                EList<EObject> contents = itemResource.getContents();
-                if (item instanceof WSMenuItem) {
-                    contents.add(((WSMenuItem) item).getWsMenu());
-                }
-
-                return itemResource;
-            }
+        // if (item instanceof MDMServerObjectItem) {
+        // ERepositoryObjectType repositoryType = getRepositoryObjectType(item);
+        // if (repositoryType != null) {
+        // Resource itemResource = xmiResourceManager.createItemResource(project, item, path, repositoryType, false);
+        //
+        // EList<EObject> contents = itemResource.getContents();
+        // if (item instanceof WSMenuItem) {
+        // contents.add(((WSMenuItem) item).getWsMenu());
+        // }
+        //
+        // return itemResource;
+        // }
+        // }
+        //
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+        if (configuration != null) {
+            Resource resource = configuration.getResourceProvider().create(project, item, classifierID, path);
+            return resource;
         }
         return null;
     }
@@ -78,11 +80,15 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
 
     @Override
     public Item createNewItem(ERepositoryObjectType type) {
-        if (type == TYPE_MENU) {
-            return MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
-        }
-        if (type == TYPE_ROLE) {
-            return MdmpropertiesFactory.eINSTANCE.createWSRoleItem();
+        // if (type == TYPE_MENU) {
+        // return MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
+        // }
+        // if (type == TYPE_ROLE) {
+        // return MdmpropertiesFactory.eINSTANCE.createWSRoleItem();
+        // }
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
+        if (configuration != null) {
+            return configuration.getResourceProvider().createNewItem(type);
         }
         return null;
     }
@@ -94,7 +100,9 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
 
     @Override
     public boolean isRepObjType(ERepositoryObjectType type) {
-        return type == TYPE_MENU || type == TYPE_ROLE;
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
+        return configuration != null;
+
     }
 
     @Override

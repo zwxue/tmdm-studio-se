@@ -24,7 +24,9 @@ public class MDMRepositoryContentProvider implements ITreeContentProvider {
         IRepositoryNodeContentProvider contentProvider = getContentProvider(element);
         if (contentProvider != null) {
             Object[] children = contentProvider.getChildren(element);
-            System.out.println(children);
+           if(children!=null){
+               return children;
+           }
         }
         return new Object[0];
     }

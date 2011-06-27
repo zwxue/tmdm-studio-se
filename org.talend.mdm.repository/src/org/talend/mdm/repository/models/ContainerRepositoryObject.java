@@ -19,33 +19,33 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.navigator;
+package org.talend.mdm.repository.models;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.navigator.CommonNavigator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.core.model.repository.RepositoryObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MDMRepositoryView extends CommonNavigator {
+public class ContainerRepositoryObject extends RepositoryObject {
 
-    @Override
-    public void createPartControl(Composite aParent) {
-        super.createPartControl(aParent);
-        initInput();
+    public ContainerRepositoryObject(Property prop) {
+        super(prop);
     }
 
-    /**
-     * DOC hbhong Comment method "initInput".
-     */
-    private void initInput() {
-        IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
+    private List<IRepositoryViewObject> children;
 
-        getCommonViewer().setInput(categoryViewObjects);
-        // getCommonViewer().addFilter(filter);
+    @Override
+    public List<IRepositoryViewObject> getChildren() {
+        if (children == null) {
+            children = new LinkedList<IRepositoryViewObject>();
+        }
+        return children;
     }
 
 }

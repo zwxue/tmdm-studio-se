@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.action.IMenuManager;
@@ -28,9 +29,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -38,25 +41,20 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
  */
 public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActionProvider {
 
-    protected CommonViewer commonViewer;
-
-    public void fillContextMenu(IMenuManager menu, IStructuredSelection selection) {
-
-    }
-
-    protected void fillToMenu(IStructuredSelection selection, IMenuManager menu, BaseSelectionListenerAction action,
-            String groupName) {
-        action.selectionChanged(selection);
-        menu.appendToGroup(groupName, action);
-    }
+    AbstractRepositoryAction exportAction;
+ 
 
     public void initCommonViewer(CommonViewer commonViewer) {
-        this.commonViewer = commonViewer;
+        exportAction=new ExportObjectAction();
+        //
+        exportAction.initCommonViewer(commonViewer);
     }
 
     @Override
-    public List<BaseSelectionListenerAction> getActions(IRepositoryViewObject viewObj) {
-        return null;
+    public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
+        List<AbstractRepositoryAction> actions = new LinkedList<AbstractRepositoryAction>();
+        actions.add(exportAction);
+        return actions;
     }
 
 }

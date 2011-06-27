@@ -103,15 +103,29 @@
                </instanceof>
             </or>
          </enablement>
+         <actionProvider
+               class="org.talend.mdm.repository.ui.navigator.MDMRepositoryActionProvider"
+               id="org.talend.mdm.repository.ui.navigator.MDMRepositoryActionProvider">
+         </actionProvider>
+         <commonSorter
+               class="org.talend.mdm.repository.ui.navigator.MDMRepositoryViewerSorter">
+         </commonSorter>
       </navigatorContent>
-      <actionProvider
-            class="org.talend.mdm.repository.ui.navigator.MDMRepositoryActionProvider">
-      </actionProvider>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewer
             viewerId="org.talend.mdm.repository.ui.navigator.MDMRepositoryView">
+         <popupMenu>
+            <insertionPoint
+                  name="group.export"
+                  separator="true">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.edit"
+                  separator="true">
+            </insertionPoint>
+         </popupMenu>
       </viewer>
       <viewerContentBinding
             viewerId="org.talend.mdm.repository.ui.navigator.MDMRepositoryView">
@@ -122,8 +136,5 @@
             </contentExtension>
          </includes>
       </viewerContentBinding>
-      <viewerActionBinding
-            viewerId="org.talend.mdm.repository.viewerActionBinding1">
-      </viewerActionBinding>
    </extension>
 </plugin>
