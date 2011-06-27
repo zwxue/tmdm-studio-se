@@ -19,14 +19,17 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
 
     public ServerDefRepositoryContentHandler() {
     }
-
+    /* (non-Javadoc)
+     * @see org.talend.core.model.repository.IRepositoryContentHandler#getRepositoryObjectType(org.talend.core.model.properties.Item)
+     */
     @Override
-    public ERepositoryObjectType createResource(Item item) {
+    public ERepositoryObjectType getRepositoryObjectType(Item item) {
         if (item instanceof MDMServerDefItem) {
             return ServerDefService.REPOSITORY_TYPE_SERVER_DEF;
         }
         return null;
     }
+ 
 
     @Override
     public Resource create(IProject project, Item item, int classifierID, IPath path) throws PersistenceException {
@@ -86,5 +89,7 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
     public ERepositoryObjectType getCodeType() {
         return null;
     }
+
+
 
 }
