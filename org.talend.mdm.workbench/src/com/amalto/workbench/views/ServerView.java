@@ -852,6 +852,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             public void doubleClick(DoubleClickEvent event) {
                 ISelection selection = ServerView.this.getViewer().getSelection();
                 TreeObject xo = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
+                // add by jsxie to fix the bug 22575
+                if( xo == null )
+                    return;
+                
                 if (xo.getType() == TreeObject._ACTION_) {
                     Class<?> actionClass = (Class<?>) xo.getWsKey();
                     try {
