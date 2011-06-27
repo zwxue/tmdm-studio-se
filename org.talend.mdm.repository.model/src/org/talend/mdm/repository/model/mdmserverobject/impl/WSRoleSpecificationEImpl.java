@@ -10,13 +10,17 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
@@ -80,7 +84,7 @@ public class WSRoleSpecificationEImpl extends EObjectImpl implements WSRoleSpeci
     protected String objectType = OBJECT_TYPE_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getInstance() <em>Instance</em>}' reference list.
+     * The cached value of the '{@link #getInstance() <em>Instance</em>}' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getInstance()
@@ -157,9 +161,23 @@ public class WSRoleSpecificationEImpl extends EObjectImpl implements WSRoleSpeci
      */
     public EList<WSRoleSpecificationInstanceE> getInstance() {
         if (instance == null) {
-            instance = new EObjectResolvingEList<WSRoleSpecificationInstanceE>(WSRoleSpecificationInstanceE.class, this, MdmserverobjectPackage.WS_ROLE_SPECIFICATION_E__INSTANCE);
+            instance = new EObjectContainmentEList<WSRoleSpecificationInstanceE>(WSRoleSpecificationInstanceE.class, this, MdmserverobjectPackage.WS_ROLE_SPECIFICATION_E__INSTANCE);
         }
         return instance;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_E__INSTANCE:
+                return ((InternalEList<?>)getInstance()).basicRemove(otherEnd, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
     }
 
     /**

@@ -6,6 +6,7 @@
  */
 package org.talend.mdm.repository.model.mdmproperties;
 
+import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.EWSMenu;
 
 /**
@@ -34,12 +35,12 @@ public interface WSMenuItem extends MDMServerObjectItem {
      * </p>
      * <!-- end-user-doc -->
      * @return the value of the '<em>Ws Menu</em>' reference.
-     * @see #setWsMenu(EWSMenu)
+     * @see #setWsMenu(WSMenuE)
      * @see org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage#getWSMenuItem_WsMenu()
      * @model
      * @generated
      */
-    EWSMenu getWsMenu();
+    WSMenuE getWsMenu();
 
     /**
      * Sets the value of the '{@link org.talend.mdm.repository.model.mdmproperties.WSMenuItem#getWsMenu <em>Ws Menu</em>}' reference.
@@ -49,6 +50,6 @@ public interface WSMenuItem extends MDMServerObjectItem {
      * @see #getWsMenu()
      * @generated
      */
-    void setWsMenu(EWSMenu value);
+    void setWsMenu(WSMenuE value);
 
 } // WSMenuItem

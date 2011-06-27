@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 
+import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.EWSMenu;
 
 /**
@@ -40,7 +41,7 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
      * @generated
      * @ordered
      */
-    protected EWSMenu wsMenu;
+    protected WSMenuE wsMenu;
 
     /**
      * <!-- begin-user-doc -->
@@ -66,10 +67,10 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
      * <!-- end-user-doc -->
      * @generated
      */
-    public EWSMenu getWsMenu() {
+    public WSMenuE getWsMenu() {
         if (wsMenu != null && wsMenu.eIsProxy()) {
             InternalEObject oldWsMenu = (InternalEObject)wsMenu;
-            wsMenu = (EWSMenu)eResolveProxy(oldWsMenu);
+            wsMenu = (WSMenuE)eResolveProxy(oldWsMenu);
             if (wsMenu != oldWsMenu) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU, oldWsMenu, wsMenu));
@@ -83,7 +84,7 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
      * <!-- end-user-doc -->
      * @generated
      */
-    public EWSMenu basicGetWsMenu() {
+    public WSMenuE basicGetWsMenu() {
         return wsMenu;
     }
 
@@ -92,8 +93,8 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setWsMenu(EWSMenu newWsMenu) {
-        EWSMenu oldWsMenu = wsMenu;
+    public void setWsMenu(WSMenuE newWsMenu) {
+        WSMenuE oldWsMenu = wsMenu;
         wsMenu = newWsMenu;
         if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU, oldWsMenu, wsMenu));
@@ -123,7 +124,7 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
             case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
-                setWsMenu((EWSMenu)newValue);
+                setWsMenu((WSMenuE)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -138,7 +139,7 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
     public void eUnset(int featureID) {
         switch (featureID) {
             case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
-                setWsMenu((EWSMenu)null);
+                setWsMenu((WSMenuE)null);
                 return;
         }
         super.eUnset(featureID);

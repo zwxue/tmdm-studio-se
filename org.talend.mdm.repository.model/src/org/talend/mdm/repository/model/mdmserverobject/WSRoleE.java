@@ -26,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface WSRoleE extends MDMServerObject {
     /**
-     * Returns the value of the '<em><b>Specification</b></em>' reference list.
+     * Returns the value of the '<em><b>Specification</b></em>' containment reference list.
      * The list contents are of type {@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE}.
      * <!-- begin-user-doc -->
      * <p>
@@ -34,9 +34,9 @@ public interface WSRoleE extends MDMServerObject {
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Specification</em>' reference list.
+     * @return the value of the '<em>Specification</em>' containment reference list.
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSRoleE_Specification()
-     * @model
+     * @model containment="true"
      * @generated
      */
     EList<WSRoleSpecificationE> getSpecification();

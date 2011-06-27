@@ -76,12 +76,12 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
                 return createMDMServerObjectAdapter();
             }
             @Override
-            public Adapter caseEWSMenu(EWSMenu object) {
-                return createEWSMenuAdapter();
+            public Adapter caseWSMenuE(WSMenuE object) {
+                return createWSMenuEAdapter();
             }
             @Override
-            public Adapter caseEWSMenuEntry(EWSMenuEntry object) {
-                return createEWSMenuEntryAdapter();
+            public Adapter caseWSMenuEntryE(WSMenuEntryE object) {
+                return createWSMenuEntryEAdapter();
             }
             @Override
             public Adapter caseWSMenuMenuEntriesDescriptionsE(WSMenuMenuEntriesDescriptionsE object) {
@@ -98,6 +98,10 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
             @Override
             public Adapter caseWSRoleSpecificationInstanceE(WSRoleSpecificationInstanceE object) {
                 return createWSRoleSpecificationInstanceEAdapter();
+            }
+            @Override
+            public Adapter caseMdmserverobject_MDMServerObject(MDMServerObject object) {
+                return createMdmserverobject_MDMServerObjectAdapter();
             }
             @Override
             public Adapter defaultCase(EObject object) {
@@ -134,30 +138,30 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenu <em>EWS Menu</em>}'.
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE <em>WS Menu E</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
      * @return the new adapter.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenu
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuE
      * @generated
      */
-    public Adapter createEWSMenuAdapter() {
+    public Adapter createWSMenuEAdapter() {
         return null;
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry <em>EWS Menu Entry</em>}'.
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE <em>WS Menu Entry E</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
      * @return the new adapter.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE
      * @generated
      */
-    public Adapter createEWSMenuEntryAdapter() {
+    public Adapter createWSMenuEntryEAdapter() {
         return null;
     }
 
@@ -214,6 +218,20 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSRoleSpecificationInstanceEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.MDMServerObject
+     * @generated
+     */
+    public Adapter createMdmserverobject_MDMServerObjectAdapter() {
         return null;
     }
 

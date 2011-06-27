@@ -7,19 +7,19 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EWSMenu" eSuperTypes="#//MDMServerObject">
+  <eClassifiers xsi:type="ecore:EClass" name="WSMenuE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="menuEntries" upperBound="-1"
-        eType="#//EWSMenuEntry"/>
+        eType="#//WSMenuEntryE" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EWSMenuEntry">
+  <eClassifiers xsi:type="ecore:EClass" name="WSMenuEntryE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="application" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
-        eType="#//WSMenuMenuEntriesDescriptionsE"/>
+        eType="#//WSMenuMenuEntriesDescriptionsE" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subMenus" upperBound="-1"
-        eType="#//EWSMenuEntry"/>
+        eType="#//WSMenuEntryE" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSMenuMenuEntriesDescriptionsE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -27,13 +27,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSRoleE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="specification" upperBound="-1"
-        eType="#//WSRoleSpecificationE"/>
+        eType="#//WSRoleSpecificationE" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSRoleSpecificationE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="admin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instance" upperBound="-1"
-        eType="#//WSRoleSpecificationInstanceE"/>
+        eType="#//WSRoleSpecificationInstanceE" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSRoleSpecificationInstanceE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

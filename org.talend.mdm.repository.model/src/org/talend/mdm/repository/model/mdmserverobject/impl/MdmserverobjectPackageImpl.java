@@ -19,6 +19,8 @@ import org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
+import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
+import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
@@ -43,14 +45,14 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    private EClass ewsMenuEClass = null;
+    private EClass wsMenuEEClass = null;
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    private EClass ewsMenuEntryEClass = null;
+    private EClass wsMenuEntryEEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -133,11 +135,16 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         isInited = true;
 
+        // Obtain or create and register interdependencies
+        MdmserverobjectPackageImpl theMdmserverobjectPackage_1 = (MdmserverobjectPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MdmserverobjectPackage.eNS_URI) instanceof MdmserverobjectPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MdmserverobjectPackage.eNS_URI) : MdmserverobjectPackage.eINSTANCE);
+
         // Create package meta-data objects
         theMdmserverobjectPackage.createPackageContents();
+        theMdmserverobjectPackage_1.createPackageContents();
 
         // Initialize created meta-data
         theMdmserverobjectPackage.initializePackageContents();
+        theMdmserverobjectPackage_1.initializePackageContents();
 
         // Mark meta-data to indicate it can't be changed
         theMdmserverobjectPackage.freeze();
@@ -180,8 +187,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getEWSMenu() {
-        return ewsMenuEClass;
+    public EClass getWSMenuE() {
+        return wsMenuEEClass;
     }
 
     /**
@@ -189,8 +196,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getEWSMenu_MenuEntries() {
-        return (EReference)ewsMenuEClass.getEStructuralFeatures().get(0);
+    public EReference getWSMenuE_MenuEntries() {
+        return (EReference)wsMenuEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -198,8 +205,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getEWSMenuEntry() {
-        return ewsMenuEntryEClass;
+    public EClass getWSMenuEntryE() {
+        return wsMenuEntryEEClass;
     }
 
     /**
@@ -207,8 +214,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getEWSMenuEntry_Id() {
-        return (EAttribute)ewsMenuEntryEClass.getEStructuralFeatures().get(0);
+    public EAttribute getWSMenuEntryE_Id() {
+        return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -216,8 +223,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getEWSMenuEntry_Application() {
-        return (EAttribute)ewsMenuEntryEClass.getEStructuralFeatures().get(1);
+    public EAttribute getWSMenuEntryE_Application() {
+        return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -225,8 +232,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getEWSMenuEntry_Context() {
-        return (EAttribute)ewsMenuEntryEClass.getEStructuralFeatures().get(2);
+    public EAttribute getWSMenuEntryE_Context() {
+        return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
@@ -234,8 +241,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getEWSMenuEntry_Icon() {
-        return (EAttribute)ewsMenuEntryEClass.getEStructuralFeatures().get(3);
+    public EAttribute getWSMenuEntryE_Icon() {
+        return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
@@ -243,8 +250,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getEWSMenuEntry_Descriptions() {
-        return (EReference)ewsMenuEntryEClass.getEStructuralFeatures().get(4);
+    public EReference getWSMenuEntryE_Descriptions() {
+        return (EReference)wsMenuEntryEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
@@ -252,8 +259,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getEWSMenuEntry_SubMenus() {
-        return (EReference)ewsMenuEntryEClass.getEStructuralFeatures().get(5);
+    public EReference getWSMenuEntryE_SubMenus() {
+        return (EReference)wsMenuEntryEEClass.getEStructuralFeatures().get(5);
     }
 
     /**
@@ -414,16 +421,16 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__NAME);
         createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__DESCRIPTION);
 
-        ewsMenuEClass = createEClass(EWS_MENU);
-        createEReference(ewsMenuEClass, EWS_MENU__MENU_ENTRIES);
+        wsMenuEEClass = createEClass(WS_MENU_E);
+        createEReference(wsMenuEEClass, WS_MENU_E__MENU_ENTRIES);
 
-        ewsMenuEntryEClass = createEClass(EWS_MENU_ENTRY);
-        createEAttribute(ewsMenuEntryEClass, EWS_MENU_ENTRY__ID);
-        createEAttribute(ewsMenuEntryEClass, EWS_MENU_ENTRY__APPLICATION);
-        createEAttribute(ewsMenuEntryEClass, EWS_MENU_ENTRY__CONTEXT);
-        createEAttribute(ewsMenuEntryEClass, EWS_MENU_ENTRY__ICON);
-        createEReference(ewsMenuEntryEClass, EWS_MENU_ENTRY__DESCRIPTIONS);
-        createEReference(ewsMenuEntryEClass, EWS_MENU_ENTRY__SUB_MENUS);
+        wsMenuEntryEEClass = createEClass(WS_MENU_ENTRY_E);
+        createEAttribute(wsMenuEntryEEClass, WS_MENU_ENTRY_E__ID);
+        createEAttribute(wsMenuEntryEEClass, WS_MENU_ENTRY_E__APPLICATION);
+        createEAttribute(wsMenuEntryEEClass, WS_MENU_ENTRY_E__CONTEXT);
+        createEAttribute(wsMenuEntryEEClass, WS_MENU_ENTRY_E__ICON);
+        createEReference(wsMenuEntryEEClass, WS_MENU_ENTRY_E__DESCRIPTIONS);
+        createEReference(wsMenuEntryEEClass, WS_MENU_ENTRY_E__SUB_MENUS);
 
         wsMenuMenuEntriesDescriptionsEEClass = createEClass(WS_MENU_MENU_ENTRIES_DESCRIPTIONS_E);
         createEAttribute(wsMenuMenuEntriesDescriptionsEEClass, WS_MENU_MENU_ENTRIES_DESCRIPTIONS_E__LANGUAGE);
@@ -469,52 +476,52 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         setNsPrefix(eNS_PREFIX);
         setNsURI(eNS_URI);
 
+        // Obtain other dependent packages
+        MdmserverobjectPackage theMdmserverobjectPackage_1 = (MdmserverobjectPackage)EPackage.Registry.INSTANCE.getEPackage(MdmserverobjectPackage.eNS_URI);
+
         // Create type parameters
 
         // Set bounds for type parameters
 
         // Add supertypes to classes
-        ewsMenuEClass.getESuperTypes().add(this.getMDMServerObject());
-        wsRoleEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsMenuEEClass.getESuperTypes().add(theMdmserverobjectPackage_1.getMDMServerObject());
+        wsRoleEEClass.getESuperTypes().add(theMdmserverobjectPackage_1.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getMDMServerObject_Name(), ecorePackage.getEString(), "name", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerObject_Description(), ecorePackage.getEString(), "description", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(ewsMenuEClass, EWSMenu.class, "EWSMenu", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getEWSMenu_MenuEntries(), this.getEWSMenuEntry(), null, "menuEntries", null, 0, -1, EWSMenu.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(wsMenuEEClass, WSMenuE.class, "WSMenuE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSMenuE_MenuEntries(), theMdmserverobjectPackage_1.getWSMenuEntryE(), null, "menuEntries", null, 0, -1, WSMenuE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(ewsMenuEntryEClass, EWSMenuEntry.class, "EWSMenuEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getEWSMenuEntry_Id(), ecorePackage.getEString(), "id", null, 0, 1, EWSMenuEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getEWSMenuEntry_Application(), ecorePackage.getEString(), "application", null, 0, 1, EWSMenuEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getEWSMenuEntry_Context(), ecorePackage.getEString(), "context", null, 0, 1, EWSMenuEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getEWSMenuEntry_Icon(), ecorePackage.getEString(), "icon", null, 0, 1, EWSMenuEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getEWSMenuEntry_Descriptions(), this.getWSMenuMenuEntriesDescriptionsE(), null, "descriptions", null, 0, -1, EWSMenuEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getEWSMenuEntry_SubMenus(), this.getEWSMenuEntry(), null, "subMenus", null, 0, -1, EWSMenuEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(wsMenuEntryEEClass, WSMenuEntryE.class, "WSMenuEntryE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSMenuEntryE_Id(), ecorePackage.getEString(), "id", null, 0, 1, WSMenuEntryE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSMenuEntryE_Application(), ecorePackage.getEString(), "application", null, 0, 1, WSMenuEntryE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSMenuEntryE_Context(), ecorePackage.getEString(), "context", null, 0, 1, WSMenuEntryE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSMenuEntryE_Icon(), ecorePackage.getEString(), "icon", null, 0, 1, WSMenuEntryE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSMenuEntryE_Descriptions(), theMdmserverobjectPackage_1.getWSMenuMenuEntriesDescriptionsE(), null, "descriptions", null, 0, -1, WSMenuEntryE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSMenuEntryE_SubMenus(), theMdmserverobjectPackage_1.getWSMenuEntryE(), null, "subMenus", null, 0, -1, WSMenuEntryE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsMenuMenuEntriesDescriptionsEEClass, WSMenuMenuEntriesDescriptionsE.class, "WSMenuMenuEntriesDescriptionsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSMenuMenuEntriesDescriptionsE_Language(), ecorePackage.getEString(), "language", null, 0, 1, WSMenuMenuEntriesDescriptionsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSMenuMenuEntriesDescriptionsE_Label(), ecorePackage.getEString(), "label", null, 0, 1, WSMenuMenuEntriesDescriptionsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsRoleEEClass, WSRoleE.class, "WSRoleE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getWSRoleE_Specification(), this.getWSRoleSpecificationE(), null, "specification", null, 0, -1, WSRoleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSRoleE_Specification(), theMdmserverobjectPackage_1.getWSRoleSpecificationE(), null, "specification", null, 0, -1, WSRoleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsRoleSpecificationEEClass, WSRoleSpecificationE.class, "WSRoleSpecificationE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSRoleSpecificationE_Admin(), ecorePackage.getEBoolean(), "admin", null, 0, 1, WSRoleSpecificationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSRoleSpecificationE_ObjectType(), ecorePackage.getEString(), "objectType", null, 0, 1, WSRoleSpecificationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWSRoleSpecificationE_Instance(), this.getWSRoleSpecificationInstanceE(), null, "instance", null, 0, -1, WSRoleSpecificationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSRoleSpecificationE_Instance(), theMdmserverobjectPackage_1.getWSRoleSpecificationInstanceE(), null, "instance", null, 0, -1, WSRoleSpecificationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsRoleSpecificationInstanceEEClass, WSRoleSpecificationInstanceE.class, "WSRoleSpecificationInstanceE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSRoleSpecificationInstanceE_InstanceName(), ecorePackage.getEString(), "instanceName", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSRoleSpecificationInstanceE_Writable(), ecorePackage.getEBoolean(), "writable", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSRoleSpecificationInstanceE_Parameter(), this.getStringArray(), "parameter", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoleSpecificationInstanceE_Parameter(), theMdmserverobjectPackage_1.getStringArray(), "parameter", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(stringArrayEDataType, String[].class, "StringArray", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-
-        // Create resource
-        createResource(eNS_URI);
     }
 
 } //MdmserverobjectPackageImpl

@@ -98,14 +98,14 @@ public interface MdmserverobjectPackage extends EPackage {
     int MDM_SERVER_OBJECT_FEATURE_COUNT = 2;
 
     /**
-     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuImpl <em>EWS Menu</em>}' class.
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuImpl
-     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getEWSMenu()
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMenuE()
      * @generated
      */
-    int EWS_MENU = 1;
+    int WS_MENU_E = 1;
 
     /**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -114,7 +114,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int EWS_MENU__NAME = MDM_SERVER_OBJECT__NAME;
+    int WS_MENU_E__NAME = MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME;
 
     /**
      * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -123,35 +123,35 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int EWS_MENU__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+    int WS_MENU_E__DESCRIPTION = MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION;
 
     /**
-     * The feature id for the '<em><b>Menu Entries</b></em>' reference list.
+     * The feature id for the '<em><b>Menu Entries</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int EWS_MENU__MENU_ENTRIES = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+    int WS_MENU_E__MENU_ENTRIES = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
-     * The number of structural features of the '<em>EWS Menu</em>' class.
+     * The number of structural features of the '<em>WS Menu E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int EWS_MENU_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+    int WS_MENU_E_FEATURE_COUNT = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
-     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl <em>EWS Menu Entry</em>}' class.
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl <em>WS Menu Entry E</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl
-     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getEWSMenuEntry()
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMenuEntryE()
      * @generated
      */
-    int EWS_MENU_ENTRY = 2;
+    int WS_MENU_ENTRY_E = 2;
 
     /**
      * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -160,7 +160,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int EWS_MENU_ENTRY__ID = 0;
+    int WS_MENU_ENTRY_E__ID = 0;
 
     /**
      * The feature id for the '<em><b>Application</b></em>' attribute.
@@ -169,7 +169,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int EWS_MENU_ENTRY__APPLICATION = 1;
+    int WS_MENU_ENTRY_E__APPLICATION = 1;
 
     /**
      * The feature id for the '<em><b>Context</b></em>' attribute.
@@ -178,7 +178,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int EWS_MENU_ENTRY__CONTEXT = 2;
+    int WS_MENU_ENTRY_E__CONTEXT = 2;
 
     /**
      * The feature id for the '<em><b>Icon</b></em>' attribute.
@@ -187,34 +187,34 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int EWS_MENU_ENTRY__ICON = 3;
+    int WS_MENU_ENTRY_E__ICON = 3;
 
     /**
-     * The feature id for the '<em><b>Descriptions</b></em>' reference list.
+     * The feature id for the '<em><b>Descriptions</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int EWS_MENU_ENTRY__DESCRIPTIONS = 4;
+    int WS_MENU_ENTRY_E__DESCRIPTIONS = 4;
 
     /**
-     * The feature id for the '<em><b>Sub Menus</b></em>' reference list.
+     * The feature id for the '<em><b>Sub Menus</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int EWS_MENU_ENTRY__SUB_MENUS = 5;
+    int WS_MENU_ENTRY_E__SUB_MENUS = 5;
 
     /**
-     * The number of structural features of the '<em>EWS Menu Entry</em>' class.
+     * The number of structural features of the '<em>WS Menu Entry E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int EWS_MENU_ENTRY_FEATURE_COUNT = 6;
+    int WS_MENU_ENTRY_E_FEATURE_COUNT = 6;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuMenuEntriesDescriptionsEImpl <em>WS Menu Menu Entries Descriptions E</em>}' class.
@@ -270,7 +270,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E__NAME = MDM_SERVER_OBJECT__NAME;
+    int WS_ROLE_E__NAME = MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME;
 
     /**
      * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -279,16 +279,16 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+    int WS_ROLE_E__DESCRIPTION = MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION;
 
     /**
-     * The feature id for the '<em><b>Specification</b></em>' reference list.
+     * The feature id for the '<em><b>Specification</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_ROLE_E__SPECIFICATION = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+    int WS_ROLE_E__SPECIFICATION = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
      * The number of structural features of the '<em>WS Role E</em>' class.
@@ -297,7 +297,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+    int WS_ROLE_E_FEATURE_COUNT = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoleSpecificationEImpl <em>WS Role Specification E</em>}' class.
@@ -328,7 +328,7 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROLE_SPECIFICATION_E__OBJECT_TYPE = 1;
 
     /**
-     * The feature id for the '<em><b>Instance</b></em>' reference list.
+     * The feature id for the '<em><b>Instance</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -434,101 +434,101 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getMDMServerObject_Description();
 
     /**
-     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenu <em>EWS Menu</em>}'.
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE <em>WS Menu E</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for class '<em>EWS Menu</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenu
+     * @return the meta object for class '<em>WS Menu E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuE
      * @generated
      */
-    EClass getEWSMenu();
+    EClass getWSMenuE();
 
     /**
-     * Returns the meta object for the reference list '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenu#getMenuEntries <em>Menu Entries</em>}'.
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE#getMenuEntries <em>Menu Entries</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the reference list '<em>Menu Entries</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenu#getMenuEntries()
-     * @see #getEWSMenu()
+     * @return the meta object for the containment reference list '<em>Menu Entries</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuE#getMenuEntries()
+     * @see #getWSMenuE()
      * @generated
      */
-    EReference getEWSMenu_MenuEntries();
+    EReference getWSMenuE_MenuEntries();
 
     /**
-     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry <em>EWS Menu Entry</em>}'.
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE <em>WS Menu Entry E</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for class '<em>EWS Menu Entry</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry
+     * @return the meta object for class '<em>WS Menu Entry E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE
      * @generated
      */
-    EClass getEWSMenuEntry();
+    EClass getWSMenuEntryE();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getId <em>Id</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getId <em>Id</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Id</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getId()
-     * @see #getEWSMenuEntry()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getId()
+     * @see #getWSMenuEntryE()
      * @generated
      */
-    EAttribute getEWSMenuEntry_Id();
+    EAttribute getWSMenuEntryE_Id();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getApplication <em>Application</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getApplication <em>Application</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Application</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getApplication()
-     * @see #getEWSMenuEntry()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getApplication()
+     * @see #getWSMenuEntryE()
      * @generated
      */
-    EAttribute getEWSMenuEntry_Application();
+    EAttribute getWSMenuEntryE_Application();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getContext <em>Context</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getContext <em>Context</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Context</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getContext()
-     * @see #getEWSMenuEntry()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getContext()
+     * @see #getWSMenuEntryE()
      * @generated
      */
-    EAttribute getEWSMenuEntry_Context();
+    EAttribute getWSMenuEntryE_Context();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getIcon <em>Icon</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getIcon <em>Icon</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Icon</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getIcon()
-     * @see #getEWSMenuEntry()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getIcon()
+     * @see #getWSMenuEntryE()
      * @generated
      */
-    EAttribute getEWSMenuEntry_Icon();
+    EAttribute getWSMenuEntryE_Icon();
 
     /**
-     * Returns the meta object for the reference list '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getDescriptions <em>Descriptions</em>}'.
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getDescriptions <em>Descriptions</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the reference list '<em>Descriptions</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getDescriptions()
-     * @see #getEWSMenuEntry()
+     * @return the meta object for the containment reference list '<em>Descriptions</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getDescriptions()
+     * @see #getWSMenuEntryE()
      * @generated
      */
-    EReference getEWSMenuEntry_Descriptions();
+    EReference getWSMenuEntryE_Descriptions();
 
     /**
-     * Returns the meta object for the reference list '{@link org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getSubMenus <em>Sub Menus</em>}'.
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getSubMenus <em>Sub Menus</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the reference list '<em>Sub Menus</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry#getSubMenus()
-     * @see #getEWSMenuEntry()
+     * @return the meta object for the containment reference list '<em>Sub Menus</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE#getSubMenus()
+     * @see #getWSMenuEntryE()
      * @generated
      */
-    EReference getEWSMenuEntry_SubMenus();
+    EReference getWSMenuEntryE_SubMenus();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE <em>WS Menu Menu Entries Descriptions E</em>}'.
@@ -573,10 +573,10 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSRoleE();
 
     /**
-     * Returns the meta object for the reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleE#getSpecification <em>Specification</em>}'.
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleE#getSpecification <em>Specification</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the reference list '<em>Specification</em>'.
+     * @return the meta object for the containment reference list '<em>Specification</em>'.
      * @see org.talend.mdm.repository.model.mdmserverobject.WSRoleE#getSpecification()
      * @see #getWSRoleE()
      * @generated
@@ -616,10 +616,10 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSRoleSpecificationE_ObjectType();
 
     /**
-     * Returns the meta object for the reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE#getInstance <em>Instance</em>}'.
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE#getInstance <em>Instance</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the reference list '<em>Instance</em>'.
+     * @return the meta object for the containment reference list '<em>Instance</em>'.
      * @see org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE#getInstance()
      * @see #getWSRoleSpecificationE()
      * @generated
@@ -728,32 +728,32 @@ public interface MdmserverobjectPackage extends EPackage {
         EAttribute MDM_SERVER_OBJECT__DESCRIPTION = eINSTANCE.getMDMServerObject_Description();
 
         /**
-         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuImpl <em>EWS Menu</em>}' class.
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuImpl
-         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getEWSMenu()
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMenuE()
          * @generated
          */
-        EClass EWS_MENU = eINSTANCE.getEWSMenu();
+        EClass WS_MENU_E = eINSTANCE.getWSMenuE();
 
         /**
-         * The meta object literal for the '<em><b>Menu Entries</b></em>' reference list feature.
+         * The meta object literal for the '<em><b>Menu Entries</b></em>' containment reference list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EReference EWS_MENU__MENU_ENTRIES = eINSTANCE.getEWSMenu_MenuEntries();
+        EReference WS_MENU_E__MENU_ENTRIES = eINSTANCE.getWSMenuE_MenuEntries();
 
         /**
-         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl <em>EWS Menu Entry</em>}' class.
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl <em>WS Menu Entry E</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl
-         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getEWSMenuEntry()
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMenuEntryE()
          * @generated
          */
-        EClass EWS_MENU_ENTRY = eINSTANCE.getEWSMenuEntry();
+        EClass WS_MENU_ENTRY_E = eINSTANCE.getWSMenuEntryE();
 
         /**
          * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
@@ -761,7 +761,7 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute EWS_MENU_ENTRY__ID = eINSTANCE.getEWSMenuEntry_Id();
+        EAttribute WS_MENU_ENTRY_E__ID = eINSTANCE.getWSMenuEntryE_Id();
 
         /**
          * The meta object literal for the '<em><b>Application</b></em>' attribute feature.
@@ -769,7 +769,7 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute EWS_MENU_ENTRY__APPLICATION = eINSTANCE.getEWSMenuEntry_Application();
+        EAttribute WS_MENU_ENTRY_E__APPLICATION = eINSTANCE.getWSMenuEntryE_Application();
 
         /**
          * The meta object literal for the '<em><b>Context</b></em>' attribute feature.
@@ -777,7 +777,7 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute EWS_MENU_ENTRY__CONTEXT = eINSTANCE.getEWSMenuEntry_Context();
+        EAttribute WS_MENU_ENTRY_E__CONTEXT = eINSTANCE.getWSMenuEntryE_Context();
 
         /**
          * The meta object literal for the '<em><b>Icon</b></em>' attribute feature.
@@ -785,23 +785,23 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute EWS_MENU_ENTRY__ICON = eINSTANCE.getEWSMenuEntry_Icon();
+        EAttribute WS_MENU_ENTRY_E__ICON = eINSTANCE.getWSMenuEntryE_Icon();
 
         /**
-         * The meta object literal for the '<em><b>Descriptions</b></em>' reference list feature.
+         * The meta object literal for the '<em><b>Descriptions</b></em>' containment reference list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EReference EWS_MENU_ENTRY__DESCRIPTIONS = eINSTANCE.getEWSMenuEntry_Descriptions();
+        EReference WS_MENU_ENTRY_E__DESCRIPTIONS = eINSTANCE.getWSMenuEntryE_Descriptions();
 
         /**
-         * The meta object literal for the '<em><b>Sub Menus</b></em>' reference list feature.
+         * The meta object literal for the '<em><b>Sub Menus</b></em>' containment reference list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EReference EWS_MENU_ENTRY__SUB_MENUS = eINSTANCE.getEWSMenuEntry_SubMenus();
+        EReference WS_MENU_ENTRY_E__SUB_MENUS = eINSTANCE.getWSMenuEntryE_SubMenus();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuMenuEntriesDescriptionsEImpl <em>WS Menu Menu Entries Descriptions E</em>}' class.
@@ -840,7 +840,7 @@ public interface MdmserverobjectPackage extends EPackage {
         EClass WS_ROLE_E = eINSTANCE.getWSRoleE();
 
         /**
-         * The meta object literal for the '<em><b>Specification</b></em>' reference list feature.
+         * The meta object literal for the '<em><b>Specification</b></em>' containment reference list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
@@ -874,7 +874,7 @@ public interface MdmserverobjectPackage extends EPackage {
         EAttribute WS_ROLE_SPECIFICATION_E__OBJECT_TYPE = eINSTANCE.getWSRoleSpecificationE_ObjectType();
 
         /**
-         * The meta object literal for the '<em><b>Instance</b></em>' reference list feature.
+         * The meta object literal for the '<em><b>Instance</b></em>' containment reference list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated

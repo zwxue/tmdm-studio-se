@@ -8,10 +8,14 @@ package org.talend.mdm.repository.model.mdmserverobject.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
@@ -33,7 +37,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
  */
 public class WSRoleEImpl extends MDMServerObjectImpl implements WSRoleE {
     /**
-     * The cached value of the '{@link #getSpecification() <em>Specification</em>}' reference list.
+     * The cached value of the '{@link #getSpecification() <em>Specification</em>}' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getSpecification()
@@ -68,9 +72,23 @@ public class WSRoleEImpl extends MDMServerObjectImpl implements WSRoleE {
      */
     public EList<WSRoleSpecificationE> getSpecification() {
         if (specification == null) {
-            specification = new EObjectResolvingEList<WSRoleSpecificationE>(WSRoleSpecificationE.class, this, MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION);
+            specification = new EObjectContainmentEList<WSRoleSpecificationE>(WSRoleSpecificationE.class, this, MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION);
         }
         return specification;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
+                return ((InternalEList<?>)getSpecification()).basicRemove(otherEnd, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
     }
 
     /**

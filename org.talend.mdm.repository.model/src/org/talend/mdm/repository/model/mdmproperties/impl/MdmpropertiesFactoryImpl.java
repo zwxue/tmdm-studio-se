@@ -7,10 +7,12 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.model.mdmproperties.*;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -66,12 +68,47 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
             case MdmpropertiesPackage.MDM_SERVER_OBJECT_ITEM: return createMDMServerObjectItem();
             case MdmpropertiesPackage.WS_MENU_ITEM: return createWSMenuItem();
             case MdmpropertiesPackage.WS_ROLE_ITEM: return createWSRoleItem();
+            case MdmpropertiesPackage.CONTAINER_ITEM: return createContainerItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Object createFromString(EDataType eDataType, String initialValue) {
+        switch (eDataType.getClassifierID()) {
+            case MdmpropertiesPackage.CONTAINER_TYPE:
+                return createContainerTypeFromString(eDataType, initialValue);
+            case MdmpropertiesPackage.EREPOSITORY_OBJECT_TYPE:
+                return createERepositoryObjectTypeFromString(eDataType, initialValue);
+            default:
+                throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        }
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public String convertToString(EDataType eDataType, Object instanceValue) {
+        switch (eDataType.getClassifierID()) {
+            case MdmpropertiesPackage.CONTAINER_TYPE:
+                return convertContainerTypeToString(eDataType, instanceValue);
+            case MdmpropertiesPackage.EREPOSITORY_OBJECT_TYPE:
+                return convertERepositoryObjectTypeToString(eDataType, instanceValue);
+            default:
+                throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        }
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
@@ -119,6 +156,54 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public WSRoleItem createWSRoleItem() {
         WSRoleItemImpl wsRoleItem = new WSRoleItemImpl();
         return wsRoleItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public ContainerItem createContainerItem() {
+        ContainerItemImpl containerItem = new ContainerItemImpl();
+        return containerItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public ContainerType createContainerTypeFromString(EDataType eDataType, String initialValue) {
+        ContainerType result = ContainerType.get(initialValue);
+        if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+        return result;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String convertContainerTypeToString(EDataType eDataType, Object instanceValue) {
+        return instanceValue == null ? null : instanceValue.toString();
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public ERepositoryObjectType createERepositoryObjectTypeFromString(EDataType eDataType, String initialValue) {
+        return (ERepositoryObjectType)super.createFromString(eDataType, initialValue);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String convertERepositoryObjectTypeToString(EDataType eDataType, Object instanceValue) {
+        return super.convertToString(eDataType, instanceValue);
     }
 
     /**

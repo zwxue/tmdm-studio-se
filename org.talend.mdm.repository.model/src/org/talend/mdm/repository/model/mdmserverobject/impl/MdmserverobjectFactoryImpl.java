@@ -62,8 +62,8 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public EObject create(EClass eClass) {
         switch (eClass.getClassifierID()) {
             case MdmserverobjectPackage.MDM_SERVER_OBJECT: return createMDMServerObject();
-            case MdmserverobjectPackage.EWS_MENU: return createEWSMenu();
-            case MdmserverobjectPackage.EWS_MENU_ENTRY: return createEWSMenuEntry();
+            case MdmserverobjectPackage.WS_MENU_E: return createWSMenuE();
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E: return createWSMenuEntryE();
             case MdmserverobjectPackage.WS_MENU_MENU_ENTRIES_DESCRIPTIONS_E: return createWSMenuMenuEntriesDescriptionsE();
             case MdmserverobjectPackage.WS_ROLE_E: return createWSRoleE();
             case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_E: return createWSRoleSpecificationE();
@@ -118,9 +118,9 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EWSMenu createEWSMenu() {
-        EWSMenuImpl ewsMenu = new EWSMenuImpl();
-        return ewsMenu;
+    public WSMenuE createWSMenuE() {
+        WSMenuEImpl wsMenuE = new WSMenuEImpl();
+        return wsMenuE;
     }
 
     /**
@@ -128,9 +128,9 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EWSMenuEntry createEWSMenuEntry() {
-        EWSMenuEntryImpl ewsMenuEntry = new EWSMenuEntryImpl();
-        return ewsMenuEntry;
+    public WSMenuEntryE createWSMenuEntryE() {
+        WSMenuEntryEImpl wsMenuEntryE = new WSMenuEntryEImpl();
+        return wsMenuEntryE;
     }
 
     /**

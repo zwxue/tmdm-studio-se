@@ -9,9 +9,20 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MDMServerObjectItem" eSuperTypes="#//MDMItem"/>
   <eClassifiers xsi:type="ecore:EClass" name="WSMenuItem" eSuperTypes="#//MDMServerObjectItem">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="wsMenu" eType="ecore:EClass MDMServerObject.ecore#//EWSMenu"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsMenu" eType="ecore:EClass MDMServerObject.ecore#//WSMenuE"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSRoleItem" eSuperTypes="#//MDMServerObjectItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsRole" eType="ecore:EClass MDMServerObject.ecore#//WSRoleE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerItem" eSuperTypes="#//MDMItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repObjType" eType="#//ERepositoryObjectType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ContainerType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ERepositoryObjectType" instanceClassName="org.talend.core.model.repository.ERepositoryObjectType"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ContainerType">
+    <eLiterals name="CATEGORY"/>
+    <eLiterals name="SYSTEM_FOLDER" value="2"/>
+    <eLiterals name="FOLDER" value="1"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -10,38 +10,42 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
-import org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
+import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EWS Menu Entry</b></em>'.
+ * An implementation of the model object '<em><b>WS Menu Entry E</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl#getId <em>Id</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl#getApplication <em>Application</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl#getContext <em>Context</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl#getIcon <em>Icon</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl#getDescriptions <em>Descriptions</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.EWSMenuEntryImpl#getSubMenus <em>Sub Menus</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl#getApplication <em>Application</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl#getContext <em>Context</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl#getIcon <em>Icon</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl#getDescriptions <em>Descriptions</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl#getSubMenus <em>Sub Menus</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
+public class WSMenuEntryEImpl extends EObjectImpl implements WSMenuEntryE {
     /**
      * The default value of the '{@link #getId() <em>Id</em>}' attribute.
      * <!-- begin-user-doc -->
@@ -123,7 +127,7 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
     protected String icon = ICON_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getDescriptions() <em>Descriptions</em>}' reference list.
+     * The cached value of the '{@link #getDescriptions() <em>Descriptions</em>}' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getDescriptions()
@@ -133,21 +137,21 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
     protected EList<WSMenuMenuEntriesDescriptionsE> descriptions;
 
     /**
-     * The cached value of the '{@link #getSubMenus() <em>Sub Menus</em>}' reference list.
+     * The cached value of the '{@link #getSubMenus() <em>Sub Menus</em>}' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getSubMenus()
      * @generated
      * @ordered
      */
-    protected EList<EWSMenuEntry> subMenus;
+    protected EList<WSMenuEntryE> subMenus;
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    protected EWSMenuEntryImpl() {
+    protected WSMenuEntryEImpl() {
         super();
     }
 
@@ -158,7 +162,7 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
      */
     @Override
     protected EClass eStaticClass() {
-        return MdmserverobjectPackage.Literals.EWS_MENU_ENTRY;
+        return MdmserverobjectPackage.Literals.WS_MENU_ENTRY_E;
     }
 
     /**
@@ -179,7 +183,7 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
         String oldId = id;
         id = newId;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.EWS_MENU_ENTRY__ID, oldId, id));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_MENU_ENTRY_E__ID, oldId, id));
     }
 
     /**
@@ -200,7 +204,7 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
         String oldApplication = application;
         application = newApplication;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.EWS_MENU_ENTRY__APPLICATION, oldApplication, application));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_MENU_ENTRY_E__APPLICATION, oldApplication, application));
     }
 
     /**
@@ -221,7 +225,7 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
         String oldContext = context;
         context = newContext;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.EWS_MENU_ENTRY__CONTEXT, oldContext, context));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_MENU_ENTRY_E__CONTEXT, oldContext, context));
     }
 
     /**
@@ -242,7 +246,7 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
         String oldIcon = icon;
         icon = newIcon;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.EWS_MENU_ENTRY__ICON, oldIcon, icon));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_MENU_ENTRY_E__ICON, oldIcon, icon));
     }
 
     /**
@@ -252,7 +256,7 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
      */
     public EList<WSMenuMenuEntriesDescriptionsE> getDescriptions() {
         if (descriptions == null) {
-            descriptions = new EObjectResolvingEList<WSMenuMenuEntriesDescriptionsE>(WSMenuMenuEntriesDescriptionsE.class, this, MdmserverobjectPackage.EWS_MENU_ENTRY__DESCRIPTIONS);
+            descriptions = new EObjectContainmentEList<WSMenuMenuEntriesDescriptionsE>(WSMenuMenuEntriesDescriptionsE.class, this, MdmserverobjectPackage.WS_MENU_ENTRY_E__DESCRIPTIONS);
         }
         return descriptions;
     }
@@ -262,9 +266,9 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
      * <!-- end-user-doc -->
      * @generated
      */
-    public EList<EWSMenuEntry> getSubMenus() {
+    public EList<WSMenuEntryE> getSubMenus() {
         if (subMenus == null) {
-            subMenus = new EObjectResolvingEList<EWSMenuEntry>(EWSMenuEntry.class, this, MdmserverobjectPackage.EWS_MENU_ENTRY__SUB_MENUS);
+            subMenus = new EObjectContainmentEList<WSMenuEntryE>(WSMenuEntryE.class, this, MdmserverobjectPackage.WS_MENU_ENTRY_E__SUB_MENUS);
         }
         return subMenus;
     }
@@ -275,19 +279,35 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
      * @generated
      */
     @Override
+    public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__DESCRIPTIONS:
+                return ((InternalEList<?>)getDescriptions()).basicRemove(otherEnd, msgs);
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__SUB_MENUS:
+                return ((InternalEList<?>)getSubMenus()).basicRemove(otherEnd, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ID:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ID:
                 return getId();
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__APPLICATION:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__APPLICATION:
                 return getApplication();
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__CONTEXT:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__CONTEXT:
                 return getContext();
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ICON:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ICON:
                 return getIcon();
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__DESCRIPTIONS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__DESCRIPTIONS:
                 return getDescriptions();
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__SUB_MENUS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__SUB_MENUS:
                 return getSubMenus();
         }
         return super.eGet(featureID, resolve, coreType);
@@ -302,25 +322,25 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ID:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ID:
                 setId((String)newValue);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__APPLICATION:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__APPLICATION:
                 setApplication((String)newValue);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__CONTEXT:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__CONTEXT:
                 setContext((String)newValue);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ICON:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ICON:
                 setIcon((String)newValue);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__DESCRIPTIONS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__DESCRIPTIONS:
                 getDescriptions().clear();
                 getDescriptions().addAll((Collection<? extends WSMenuMenuEntriesDescriptionsE>)newValue);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__SUB_MENUS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__SUB_MENUS:
                 getSubMenus().clear();
-                getSubMenus().addAll((Collection<? extends EWSMenuEntry>)newValue);
+                getSubMenus().addAll((Collection<? extends WSMenuEntryE>)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -334,22 +354,22 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ID:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ID:
                 setId(ID_EDEFAULT);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__APPLICATION:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__APPLICATION:
                 setApplication(APPLICATION_EDEFAULT);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__CONTEXT:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__CONTEXT:
                 setContext(CONTEXT_EDEFAULT);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ICON:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ICON:
                 setIcon(ICON_EDEFAULT);
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__DESCRIPTIONS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__DESCRIPTIONS:
                 getDescriptions().clear();
                 return;
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__SUB_MENUS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__SUB_MENUS:
                 getSubMenus().clear();
                 return;
         }
@@ -364,17 +384,17 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ID:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ID:
                 return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__APPLICATION:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__APPLICATION:
                 return APPLICATION_EDEFAULT == null ? application != null : !APPLICATION_EDEFAULT.equals(application);
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__CONTEXT:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__CONTEXT:
                 return CONTEXT_EDEFAULT == null ? context != null : !CONTEXT_EDEFAULT.equals(context);
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__ICON:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__ICON:
                 return ICON_EDEFAULT == null ? icon != null : !ICON_EDEFAULT.equals(icon);
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__DESCRIPTIONS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__DESCRIPTIONS:
                 return descriptions != null && !descriptions.isEmpty();
-            case MdmserverobjectPackage.EWS_MENU_ENTRY__SUB_MENUS:
+            case MdmserverobjectPackage.WS_MENU_ENTRY_E__SUB_MENUS:
                 return subMenus != null && !subMenus.isEmpty();
         }
         return super.eIsSet(featureID);
@@ -402,4 +422,4 @@ public class EWSMenuEntryImpl extends EObjectImpl implements EWSMenuEntry {
         return result.toString();
     }
 
-} //EWSMenuEntryImpl
+} //WSMenuEntryEImpl

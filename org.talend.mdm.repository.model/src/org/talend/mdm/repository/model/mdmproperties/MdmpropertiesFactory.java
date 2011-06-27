@@ -71,6 +71,15 @@ public interface MdmpropertiesFactory extends EFactory {
     WSRoleItem createWSRoleItem();
 
     /**
+     * Returns a new object of class '<em>Container Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Container Item</em>'.
+     * @generated
+     */
+    ContainerItem createContainerItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

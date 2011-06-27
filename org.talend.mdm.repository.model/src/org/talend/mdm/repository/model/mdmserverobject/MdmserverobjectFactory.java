@@ -35,22 +35,22 @@ public interface MdmserverobjectFactory extends EFactory {
     MDMServerObject createMDMServerObject();
 
     /**
-     * Returns a new object of class '<em>EWS Menu</em>'.
+     * Returns a new object of class '<em>WS Menu E</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>EWS Menu</em>'.
+     * @return a new object of class '<em>WS Menu E</em>'.
      * @generated
      */
-    EWSMenu createEWSMenu();
+    WSMenuE createWSMenuE();
 
     /**
-     * Returns a new object of class '<em>EWS Menu Entry</em>'.
+     * Returns a new object of class '<em>WS Menu Entry E</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>EWS Menu Entry</em>'.
+     * @return a new object of class '<em>WS Menu Entry E</em>'.
      * @generated
      */
-    EWSMenuEntry createEWSMenuEntry();
+    WSMenuEntryE createWSMenuEntryE();
 
     /**
      * Returns a new object of class '<em>WS Menu Menu Entries Descriptions E</em>'.

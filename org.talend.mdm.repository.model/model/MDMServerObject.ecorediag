@@ -37,26 +37,26 @@
       <styles xmi:type="notation:FilteringStyle" xmi:id="_7EvJ25sAEeCKWZ_HwFgILA"/>
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_7EvJ0ZsAEeCKWZ_HwFgILA" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EClass" href="MDMServerObject.ecore#//EWSMenu"/>
+    <element xmi:type="ecore:EClass" href="MDMServerObject.ecore#//WSMenuE"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_7EvJ0psAEeCKWZ_HwFgILA" x="105" y="207"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_KZYYkJsBEeCKWZ_HwFgILA" type="1001">
     <children xmi:type="notation:Node" xmi:id="_KZYYk5sBEeCKWZ_HwFgILA" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_KZYYlJsBEeCKWZ_HwFgILA" type="5001">
       <children xmi:type="notation:Node" xmi:id="_HjBaAJsCEeCKWZ_HwFgILA" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//EWSMenuEntry/icon"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSMenuEntryE/icon"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_HjBaAZsCEeCKWZ_HwFgILA"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_77v04JsBEeCKWZ_HwFgILA" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//EWSMenuEntry/id"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSMenuEntryE/id"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_77v04ZsBEeCKWZ_HwFgILA"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_CBayoJsCEeCKWZ_HwFgILA" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//EWSMenuEntry/application"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSMenuEntryE/application"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_CBayoZsCEeCKWZ_HwFgILA"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_EcGFUJsCEeCKWZ_HwFgILA" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//EWSMenuEntry/context"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSMenuEntryE/context"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_EcGFUZsCEeCKWZ_HwFgILA"/>
       </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_KZYYlZsBEeCKWZ_HwFgILA"/>
@@ -69,7 +69,7 @@
       <styles xmi:type="notation:FilteringStyle" xmi:id="_KZYYm5sBEeCKWZ_HwFgILA"/>
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_KZYYkZsBEeCKWZ_HwFgILA" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EClass" href="MDMServerObject.ecore#//EWSMenuEntry"/>
+    <element xmi:type="ecore:EClass" href="MDMServerObject.ecore#//WSMenuEntryE"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_KZYYkpsBEeCKWZ_HwFgILA" x="110" y="290"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_9CtngJsCEeCKWZ_HwFgILA" type="1001">
@@ -189,7 +189,7 @@
     </children>
     <styles xmi:type="notation:ConnectorStyle" xmi:id="_P9hWkZsBEeCKWZ_HwFgILA" lineColor="4210752"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_P9hWkpsBEeCKWZ_HwFgILA" fontColor="4210752" fontName="宋体" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//EWSMenu/menuEntries"/>
+    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//WSMenuE/menuEntries"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_P9hWk5sBEeCKWZ_HwFgILA" points="[19, 34, -57, -86]$[30, 100, -46, -20]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_P9hWmJsBEeCKWZ_HwFgILA" id="(0.6372549019607843,0.16666666666666666)"/>
   </edges>
@@ -202,7 +202,7 @@
     </children>
     <styles xmi:type="notation:ConnectorStyle" xmi:id="_H3KokZsDEeCKWZ_HwFgILA" lineColor="4210752"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_H3KokpsDEeCKWZ_HwFgILA" fontColor="4210752" fontName="宋体" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//EWSMenuEntry/descriptions"/>
+    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//WSMenuEntryE/descriptions"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_H3Kok5sDEeCKWZ_HwFgILA" points="[-10, 23, 52, -81]$[-114, 136, -52, 32]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_H3KomJsDEeCKWZ_HwFgILA" id="(0.3651685393258427,0.9690721649484536)"/>
   </edges>
@@ -215,7 +215,7 @@
     </children>
     <styles xmi:type="notation:ConnectorStyle" xmi:id="_RgONgZsDEeCKWZ_HwFgILA" lineColor="4210752"/>
     <styles xmi:type="notation:FontStyle" xmi:id="_RgONgpsDEeCKWZ_HwFgILA" fontColor="4210752" fontName="宋体" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//EWSMenuEntry/subMenus"/>
+    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//WSMenuEntryE/subMenus"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_RgONg5sDEeCKWZ_HwFgILA" points="[4, 0, 14, 62]$[75, 0, 85, 62]$[75, -62, 85, 0]$[4, -62, 14, 0]"/>
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_RgONiJsDEeCKWZ_HwFgILA" id="(0.9814814814814815,0.6907216494845361)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_RgONiZsDEeCKWZ_HwFgILA" id="(0.9259259259259259,0.13402061855670103)"/>
