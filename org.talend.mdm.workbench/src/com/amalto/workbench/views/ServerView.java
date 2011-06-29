@@ -894,6 +894,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 ISelection selection = ServerView.this.getViewer().getSelection();
                 TreeObject xo = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
 
+                // add by jsxie to fix the bug 22814
+                if (xo == null)
+                    return;
+
                 // delete
                 if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
 
@@ -923,6 +927,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 } else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
                     // modifier:fiu see bug 0008905
                     TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+
+                    // add by jsxie to fix the bug 22814
+                    if (xobject == null)
+                        return;
+
                     ((PasteXObjectAction) pasteAction).setXtentisPort(xobject);
                     ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
                             .getParent());
