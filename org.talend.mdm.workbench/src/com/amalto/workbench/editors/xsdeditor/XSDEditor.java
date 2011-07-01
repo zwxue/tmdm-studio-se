@@ -64,7 +64,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
 
     @Override
     public String getPartName() {
-        // TODO Auto-generated method stub
+        
         String part = super.getPartName();
         if (part.endsWith(".xsd")) {//$NON-NLS-1$
             return part.substring(0, part.length() - 4);
@@ -74,7 +74,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-        // TODO Auto-generated method stub
+        
         super.doSave(monitor);
         try {
             if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
@@ -105,7 +105,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
 
     @Override
     protected void createPages() {
-        // TODO Auto-generated method stub
+        
         super.createPages();
         addPageChangedListener(new IPageChangedListener() {
 

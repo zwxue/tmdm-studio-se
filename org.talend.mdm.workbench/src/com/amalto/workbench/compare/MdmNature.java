@@ -23,17 +23,17 @@ public class MdmNature implements IProjectNature {
     public static final String ID = MDMWorbenchPlugin.ID + ".mdmnature";//$NON-NLS-1$
 
     public void configure() throws CoreException {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void deconfigure() throws CoreException {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public IProject getProject() {
-        // TODO Auto-generated method stub
+        
         return null;
     }
 

@@ -428,7 +428,7 @@ public class TransformerMainPage extends AMainPageV2 {
             stepText.addKeyListener(new KeyListener() {
 
                 public void keyPressed(KeyEvent e) {
-                    // TODO Auto-generated method stub
+                    
 
                 }
 

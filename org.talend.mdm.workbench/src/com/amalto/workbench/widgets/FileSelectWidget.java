@@ -96,7 +96,7 @@ public class FileSelectWidget {
         button.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                // TODO Auto-generated method stub
+                
 
             }
 

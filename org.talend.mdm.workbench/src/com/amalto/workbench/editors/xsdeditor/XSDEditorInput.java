@@ -30,7 +30,7 @@ public class XSDEditorInput extends FileEditorInput {
 
     @Override
     public boolean equals(Object obj) {
-        // TODO Auto-generated method stub
+        
         if (!(obj instanceof XSDEditorInput))
             return false;
         XSDEditorInput input = (XSDEditorInput) obj;

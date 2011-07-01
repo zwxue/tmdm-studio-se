@@ -169,12 +169,12 @@ public class XpathWidget implements SelectionListener {
     XpathSelectDialog dlg;
 
     public void widgetDefaultSelected(SelectionEvent e) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void widgetSelected(SelectionEvent e) {
-        // TODO Auto-generated method stub
+        
         if (accommodation != null) {
             if (dlg == null) {
                 dlg = new XpathSelectDialog(accommodation.getSite().getShell(), treeParent, dlgTitle, accommodation.getSite(),

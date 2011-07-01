@@ -138,12 +138,12 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         combo.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                // TODO Auto-generated method stub
+                
 
             }
 
             public void widgetSelected(SelectionEvent e) {
-                // TODO Auto-generated method stub
+                
                 if (combo.getText().equals(EInputTemplate.APPLICATION_ITEMPK.getName())) {
                     Text t = (Text) objectViewer.getColumns().get(2).getControl();
                     t.setText(EInputTemplate.APPLICATION_ITEMPK.getContent());

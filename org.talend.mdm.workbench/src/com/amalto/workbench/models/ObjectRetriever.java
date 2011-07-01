@@ -90,7 +90,7 @@ public class ObjectRetriever implements IRunnableWithProgress {
             // user.setUniverse(universe);
             // user.setWsUuniverse(wUuniverse);
             // parentObject.setUser(user);
-            parentObject.getServerRoot().removeChildFromUI(parentObject);
+//            parentObject.getServerRoot().removeChildFromUI(parentObject);
             List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
             for (IAvailableModel model : availablemodels) {
                 if (model.toString().indexOf(objectName) > 0) {

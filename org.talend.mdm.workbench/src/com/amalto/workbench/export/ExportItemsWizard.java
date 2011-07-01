@@ -524,7 +524,7 @@ public class ExportItemsWizard extends Wizard {
 
     @Override
     public void addPages() {
-        // TODO Auto-generated method stub
+        
         addPage(new SelectItemsPage());
     }
 

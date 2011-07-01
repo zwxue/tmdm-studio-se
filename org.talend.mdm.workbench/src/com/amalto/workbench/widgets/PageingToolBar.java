@@ -108,7 +108,7 @@ public class PageingToolBar {
     KeyListener keylistener = new KeyListener() {
 
         public void keyReleased(KeyEvent e) {
-            // TODO Auto-generated method stub
+            
             if (e.keyCode == SWT.CR) {
                 page = Integer.valueOf(pageText.getText());
                 pagesize = Integer.valueOf(pageSizeText.getText());
@@ -138,7 +138,7 @@ public class PageingToolBar {
         }
 
         public void widgetDefaultSelected(SelectionEvent e) {
-            // TODO Auto-generated method stub
+            
 
         }
     };
@@ -244,7 +244,7 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                // TODO Auto-generated method stub
+                
 
             }
         });
@@ -259,7 +259,7 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                // TODO Auto-generated method stub
+                
 
             }
         });
@@ -274,7 +274,7 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                // TODO Auto-generated method stub
+                
 
             }
         });
@@ -289,7 +289,7 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                // TODO Auto-generated method stub
+                
 
             }
         });

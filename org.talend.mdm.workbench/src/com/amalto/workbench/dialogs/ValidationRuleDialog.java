@@ -139,7 +139,7 @@ public class ValidationRuleDialog extends Dialog {
 
     
     private boolean doCheck() {
-        // TODO Auto-generated method stub
+        
         
         if(checkNameIsDuplicated(struc,name)){
             MessageDialog.openWarning(page.getSite().getShell(),"Warning","You can not input a duplicated name"); 

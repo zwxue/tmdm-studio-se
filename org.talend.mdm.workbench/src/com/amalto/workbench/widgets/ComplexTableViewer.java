@@ -687,7 +687,7 @@ public class ComplexTableViewer {
         viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
-                // TODO Auto-generated method stub
+                
                 Line line = (Line) ((IStructuredSelection) event.getSelection()).getFirstElement();
 
                 for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
@@ -804,7 +804,7 @@ public class ComplexTableViewer {
                     }
 
                     public void keyReleased(KeyEvent e) {
-                        // TODO Auto-generated method stub
+                        
                         if (e.character == SWT.CR) {
                             validationRule.setText(validationRule.getText().trim());
                             deactive();
@@ -889,7 +889,7 @@ public class ComplexTableViewer {
                     }
 
                     public void keyReleased(KeyEvent e) {
-                        // TODO Auto-generated method stub
+                        
                         if (e.character == SWT.CR) {
                             multiMsg.setText(multiMsg.getText().trim());
                             deactive();
@@ -911,13 +911,13 @@ public class ComplexTableViewer {
 
         @Override
         protected Object doGetValue() {
-            // TODO Auto-generated method stub
+            
             return multiMsg.getText();
         }
 
         @Override
         protected void doSetFocus() {
-            // TODO Auto-generated method stub
+            
             multiMsg.getTextWidget().setFocus();
         }
 
@@ -929,7 +929,7 @@ public class ComplexTableViewer {
 
         @Override
         protected void doSetValue(Object value) {
-            // TODO Auto-generated method stub
+            
             multiMsg.setText(value.toString().trim());
         }
 
@@ -967,12 +967,12 @@ public class ComplexTableViewer {
                 ((Table) parent).addMouseListener(new MouseListener() {
 
                     public void mouseDoubleClick(MouseEvent e) {
-                        // TODO Auto-generated method stub
+                        
 
                     }
 
                     public void mouseDown(MouseEvent e) {
-                        // TODO Auto-generated method stub
+                        
 
                     }
 
@@ -987,12 +987,12 @@ public class ComplexTableViewer {
                 xpath.getTextWidget().addKeyListener(new KeyListener() {
 
                     public void keyPressed(KeyEvent e) {
-                        // TODO Auto-generated method stub
+                        
 
                     }
 
                     public void keyReleased(KeyEvent e) {
-                        // TODO Auto-generated method stub
+                        
                         if (e.character == SWT.CR) {
                             xpath.setText(xpath.getText().trim());
                             deactive();
@@ -1016,7 +1016,7 @@ public class ComplexTableViewer {
 
         @Override
         protected Object doGetValue() {
-            // TODO Auto-generated method stub
+            
             if (context)
                 XpathSelectDialog.setContext(null);
             return xpath.getText();
@@ -1024,7 +1024,7 @@ public class ComplexTableViewer {
 
         @Override
         protected void doSetFocus() {
-            // TODO Auto-generated method stub
+            
             xpath.getTextWidget().setFocus();
         }
 
@@ -1036,7 +1036,7 @@ public class ComplexTableViewer {
 
         @Override
         protected void doSetValue(Object value) {
-            // // TODO Auto-generated method stub
+            // 
             // if(context && viewer.getTable().getSelection().length>0){
             // Line line=(Line)viewer.getTable().getSelection()[0].getData();
             // String context=line.keyValues.get(1).value;

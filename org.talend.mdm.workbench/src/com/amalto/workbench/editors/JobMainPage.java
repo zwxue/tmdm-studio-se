@@ -50,7 +50,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
 
     @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charSection) {
-        // TODO Auto-generated method stub
+        
 
     }
 
@@ -80,12 +80,12 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
             checkButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(SelectionEvent e) {
-                    // TODO Auto-generated method stub
+                    
 
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                    // TODO Auto-generated method stub
+                    
                     checkServiceStatus();
                 }
 
@@ -131,13 +131,13 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
 
     @Override
     protected void commit() {
-        // TODO Auto-generated method stub
+        
 
     }
 
     @Override
     protected void createActions() {
-        // TODO Auto-generated method stub
+        
 
     }
 
@@ -147,7 +147,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
     }
 
     public void handleEvent(int type, TreeObject parent, TreeObject child) {
-        // TODO Auto-generated method stub
+        
         refreshData();
     }
 

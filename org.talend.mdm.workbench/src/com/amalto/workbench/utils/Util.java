@@ -2977,6 +2977,10 @@ public class Util {
 
     public static List<XSDSimpleTypeDefinition> getAllBuildInTypes(XSDSchema schema) {
 
+        if(schema == null)
+            return new ArrayList <XSDSimpleTypeDefinition> ();
+        
+        
         List<XSDSimpleTypeDefinition> builtInTypes = new ArrayList<XSDSimpleTypeDefinition>();
         for (XSDTypeDefinition eachBuildInTypeDef : schema.getSchemaForSchema().getTypeDefinitions()) {
 

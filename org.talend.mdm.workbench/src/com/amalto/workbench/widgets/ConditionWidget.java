@@ -76,12 +76,12 @@ public class ConditionWidget {
     class ButtonListenr implements SelectionListener {
 
         public void widgetDefaultSelected(SelectionEvent e) {
-            // TODO Auto-generated method stub
+            
 
         }
 
         public void widgetSelected(SelectionEvent e) {
-            // TODO Auto-generated method stub
+            
             if (e.widget instanceof Button) {
                 Button btn = (Button) e.widget;
                 String condition = conditionText.getText() + " " + btn.getText();//$NON-NLS-1$

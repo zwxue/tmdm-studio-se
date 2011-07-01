@@ -30,37 +30,37 @@ public class AbstractAvailableModel implements IAvailableModel {
     }
 
     public void fillContextMenu(TreeObject xobject, IMenuManager manager) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void addPage(TreeObject xobject, XObjectBrowser editor) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void addPage(TreeObject xobject, XObjectEditor editor) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void menuAboutToShow(IMenuManager manager, DataClusterBrowserMainPage page) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void fillContextMenu(Object obj, IMenuManager manager, DataModelMainPage page, String dataModelName) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void doubleClickOnElement(int type, DataModelMainPage page, String dataModelName) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void deleteTreeObject(XtentisPort port, TreeObject xobject) {
-        // TODO Auto-generated method stub
+        
 
     }
 

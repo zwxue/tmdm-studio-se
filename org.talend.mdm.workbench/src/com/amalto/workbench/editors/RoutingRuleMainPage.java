@@ -253,12 +253,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             xpathButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(SelectionEvent e) {
-                    // TODO Auto-generated method stub
+                    
 
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                    // TODO Auto-generated method stub
+                    
                     XpathSelectDialog xpathDialog;
                     xpathDialog = new XpathSelectDialog(getSite().getShell(), treeParent, "Select Entity", getSite(), false,
                             dataModelName);
@@ -480,7 +480,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionText.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    // TODO Auto-generated method stub
+                    
                     if (!refreshing)
                         markDirtyWithoutCommit();
                 }
@@ -782,7 +782,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     @Override
     protected void createActions() {
-        // TODO Auto-generated method stub
+        
 
     }
 

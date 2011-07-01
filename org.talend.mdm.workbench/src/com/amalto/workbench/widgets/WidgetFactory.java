@@ -301,13 +301,13 @@ public class WidgetFactory extends FormToolkit {
     }
 
     public Text createText(Composite parent, String value) {
-        // TODO Auto-generated method stub
+        
         Text t = super.createText(parent, value);
         return t;
     }
 
     public Text createText(Composite parent, String value, int style) {
-        // TODO Auto-generated method stub
+        
         Text t = super.createText(parent, value, style);
         Util.createCompDropTarget(t);
         return t;

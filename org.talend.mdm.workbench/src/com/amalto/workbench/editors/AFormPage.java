@@ -47,7 +47,7 @@ public abstract class AFormPage extends FormPage {
 
     @Override
     public void createPartControl(Composite parent) {
-        // TODO Auto-generated method stub
+        
         super.createPartControl(parent);
         // contributeToActionBars();
     }

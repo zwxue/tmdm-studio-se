@@ -98,13 +98,13 @@ public class XMLEditor extends TextEditor {
 
     @Override
     public boolean isEditorInputModifiable() {
-        // TODO Auto-generated method stub
+        
         return true;
     }
 
     @Override
     public boolean isSaveOnCloseNeeded() {
-        // TODO Auto-generated method stub
+        
         return true;
     }
 

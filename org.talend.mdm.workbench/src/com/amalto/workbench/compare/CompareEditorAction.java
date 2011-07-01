@@ -141,17 +141,17 @@ public class CompareEditorAction implements IWorkbenchWindowActionDelegate {
     }
 
     public void dispose() {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void init(IWorkbenchWindow window) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     public void selectionChanged(IAction action, ISelection selection) {
-        // TODO Auto-generated method stub
+        
 
     }
 
@@ -179,13 +179,13 @@ public class CompareEditorAction implements IWorkbenchWindowActionDelegate {
 
         @Override
         public void saveChanges(IProgressMonitor monitor) throws CoreException {
-            // TODO Auto-generated method stub
+            
             super.saveChanges(monitor);
         }
 
         @Override
         public boolean isDirty() {
-            // TODO Auto-generated method stub
+            
             return super.isDirty();
         }
 
