@@ -9,7 +9,6 @@ package org.talend.mdm.repository.model.mdmproperties.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -18,7 +17,6 @@ import org.talend.core.model.properties.PropertiesPackage;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.ContainerType;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -76,13 +74,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass containerItemEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EEnum containerTypeEEnum = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -261,24 +252,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getContainerItem_Type() {
-        return (EAttribute)containerItemEClass.getEStructuralFeatures().get(2);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EEnum getContainerType() {
-        return containerTypeEEnum;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -327,10 +300,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         containerItemEClass = createEClass(CONTAINER_ITEM);
         createEAttribute(containerItemEClass, CONTAINER_ITEM__LABEL);
         createEAttribute(containerItemEClass, CONTAINER_ITEM__REP_OBJ_TYPE);
-        createEAttribute(containerItemEClass, CONTAINER_ITEM__TYPE);
-
-        // Create enums
-        containerTypeEEnum = createEEnum(CONTAINER_TYPE);
 
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
@@ -376,6 +345,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsMenuItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsRoleItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         containerItemEClass.getESuperTypes().add(this.getMDMItem());
+        containerItemEClass.getESuperTypes().add(thePropertiesPackage.getFolderItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -396,13 +366,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         initEClass(containerItemEClass, ContainerItem.class, "ContainerItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getContainerItem_Label(), theEcorePackage.getEString(), "label", null, 0, 1, ContainerItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getContainerItem_RepObjType(), this.getERepositoryObjectType(), "repObjType", null, 0, 1, ContainerItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getContainerItem_Type(), this.getContainerType(), "type", null, 0, 1, ContainerItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-        // Initialize enums and add enum literals
-        initEEnum(containerTypeEEnum, ContainerType.class, "ContainerType");
-        addEEnumLiteral(containerTypeEEnum, ContainerType.CATEGORY);
-        addEEnumLiteral(containerTypeEEnum, ContainerType.SYSTEM_FOLDER);
-        addEEnumLiteral(containerTypeEEnum, ContainerType.FOLDER);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -7,7 +7,6 @@ import java.util.List;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
@@ -27,8 +26,8 @@ public class MDMRepositoryActionProvider extends CommonActionProvider {
     @Override
     public void init(ICommonActionExtensionSite aSite) {
         commonViewer = (CommonViewer) aSite.getStructuredViewer();
-        for(IRepositoryNodeConfiguration conf:RepositoryNodeConfigurationManager.getConfigurations()){
-            if(conf.getActionProvider()!=null){
+        for (IRepositoryNodeConfiguration conf : RepositoryNodeConfigurationManager.getConfigurations()) {
+            if (conf.getActionProvider() != null) {
                 conf.getActionProvider().initCommonViewer(commonViewer);
             }
         }
@@ -61,6 +60,7 @@ public class MDMRepositoryActionProvider extends CommonActionProvider {
         for (IAction action : finalActions) {
             if (action instanceof AbstractRepositoryAction) {
                 AbstractRepositoryAction groupAction = (AbstractRepositoryAction) action;
+                groupAction.selectionChanged(selection);
                 if (groupAction.getGroupName() != null) {
                     menu.appendToGroup(groupAction.getGroupName(), action);
                 } else {

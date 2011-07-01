@@ -82,8 +82,6 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     @Override
     public Object createFromString(EDataType eDataType, String initialValue) {
         switch (eDataType.getClassifierID()) {
-            case MdmpropertiesPackage.CONTAINER_TYPE:
-                return createContainerTypeFromString(eDataType, initialValue);
             case MdmpropertiesPackage.EREPOSITORY_OBJECT_TYPE:
                 return createERepositoryObjectTypeFromString(eDataType, initialValue);
             default:
@@ -99,8 +97,6 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     @Override
     public String convertToString(EDataType eDataType, Object instanceValue) {
         switch (eDataType.getClassifierID()) {
-            case MdmpropertiesPackage.CONTAINER_TYPE:
-                return convertContainerTypeToString(eDataType, instanceValue);
             case MdmpropertiesPackage.EREPOSITORY_OBJECT_TYPE:
                 return convertERepositoryObjectTypeToString(eDataType, instanceValue);
             default:
@@ -166,26 +162,6 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public ContainerItem createContainerItem() {
         ContainerItemImpl containerItem = new ContainerItemImpl();
         return containerItem;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public ContainerType createContainerTypeFromString(EDataType eDataType, String initialValue) {
-        ContainerType result = ContainerType.get(initialValue);
-        if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-        return result;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public String convertContainerTypeToString(EDataType eDataType, Object instanceValue) {
-        return instanceValue == null ? null : instanceValue.toString();
     }
 
     /**

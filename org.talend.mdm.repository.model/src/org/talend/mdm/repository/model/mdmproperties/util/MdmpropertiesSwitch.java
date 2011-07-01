@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.Item;
 import org.talend.mdm.repository.model.mdmproperties.*;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
@@ -135,6 +136,7 @@ public class MdmpropertiesSwitch<T> {
                 ContainerItem containerItem = (ContainerItem)theEObject;
                 T result = caseContainerItem(containerItem);
                 if (result == null) result = caseMDMItem(containerItem);
+                if (result == null) result = caseFolderItem(containerItem);
                 if (result == null) result = caseItem(containerItem);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
@@ -249,6 +251,21 @@ public class MdmpropertiesSwitch<T> {
     }
 
 	/**
+     * Returns the result of interpreting the object as an instance of '<em>Folder Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Folder Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseFolderItem(FolderItem object) {
+        return null;
+    }
+
+    /**
      * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
      * <!-- begin-user-doc -->
 	 * This implementation returns null;

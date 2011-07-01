@@ -359,22 +359,13 @@ public interface MdmpropertiesPackage extends EPackage {
     int CONTAINER_ITEM__PARENT = MDM_ITEM__PARENT;
 
     /**
-     * The feature id for the '<em><b>Label</b></em>' attribute.
+     * The feature id for the '<em><b>Children</b></em>' reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CONTAINER_ITEM__LABEL = MDM_ITEM_FEATURE_COUNT + 0;
-
-    /**
-     * The feature id for the '<em><b>Rep Obj Type</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int CONTAINER_ITEM__REP_OBJ_TYPE = MDM_ITEM_FEATURE_COUNT + 1;
+    int CONTAINER_ITEM__CHILDREN = MDM_ITEM_FEATURE_COUNT + 0;
 
     /**
      * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -383,7 +374,25 @@ public interface MdmpropertiesPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int CONTAINER_ITEM__TYPE = MDM_ITEM_FEATURE_COUNT + 2;
+    int CONTAINER_ITEM__TYPE = MDM_ITEM_FEATURE_COUNT + 1;
+
+    /**
+     * The feature id for the '<em><b>Label</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONTAINER_ITEM__LABEL = MDM_ITEM_FEATURE_COUNT + 2;
+
+    /**
+     * The feature id for the '<em><b>Rep Obj Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONTAINER_ITEM__REP_OBJ_TYPE = MDM_ITEM_FEATURE_COUNT + 3;
 
     /**
      * The number of structural features of the '<em>Container Item</em>' class.
@@ -392,17 +401,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int CONTAINER_ITEM_FEATURE_COUNT = MDM_ITEM_FEATURE_COUNT + 3;
-
-    /**
-     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.ContainerType <em>Container Type</em>}' enum.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmproperties.ContainerType
-     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getContainerType()
-     * @generated
-     */
-    int CONTAINER_TYPE = 6;
+    int CONTAINER_ITEM_FEATURE_COUNT = MDM_ITEM_FEATURE_COUNT + 4;
 
     /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
@@ -412,7 +411,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 7;
+    int EREPOSITORY_OBJECT_TYPE = 6;
 
 
     /**
@@ -529,27 +528,6 @@ public interface MdmpropertiesPackage extends EPackage {
      * @generated
      */
     EAttribute getContainerItem_RepObjType();
-
-    /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getType <em>Type</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Type</em>'.
-     * @see org.talend.mdm.repository.model.mdmproperties.ContainerItem#getType()
-     * @see #getContainerItem()
-     * @generated
-     */
-    EAttribute getContainerItem_Type();
-
-    /**
-     * Returns the meta object for enum '{@link org.talend.mdm.repository.model.mdmproperties.ContainerType <em>Container Type</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for enum '<em>Container Type</em>'.
-     * @see org.talend.mdm.repository.model.mdmproperties.ContainerType
-     * @generated
-     */
-    EEnum getContainerType();
 
     /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
@@ -683,24 +661,6 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EAttribute CONTAINER_ITEM__REP_OBJ_TYPE = eINSTANCE.getContainerItem_RepObjType();
-
-        /**
-         * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EAttribute CONTAINER_ITEM__TYPE = eINSTANCE.getContainerItem_Type();
-
-        /**
-         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.ContainerType <em>Container Type</em>}' enum.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmproperties.ContainerType
-         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getContainerType()
-         * @generated
-         */
-        EEnum CONTAINER_TYPE = eINSTANCE.getContainerType();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

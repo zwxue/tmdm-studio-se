@@ -24,15 +24,14 @@ package org.talend.mdm.repository.core.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.FolderItem;
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
-import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
-import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 
 /**
@@ -42,17 +41,27 @@ import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActionProvider {
 
     AbstractRepositoryAction exportAction;
- 
 
+    AbstractRepositoryAction createFolderAction;
     public void initCommonViewer(CommonViewer commonViewer) {
-        exportAction=new ExportObjectAction();
+        exportAction = new ExportObjectAction();
+        createFolderAction = new CreateFolderAction();
         //
         exportAction.initCommonViewer(commonViewer);
+        createFolderAction.initCommonViewer(commonViewer);
     }
 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = new LinkedList<AbstractRepositoryAction>();
+        //
+        if (viewObj instanceof ContainerRepositoryObject) {
+            FolderType type = ((FolderItem) viewObj.getProperty().getItem()).getType();
+            if (type.getValue() != FolderType.SYSTEM_FOLDER) {
+                actions.add(createFolderAction);
+            }
+        }
+        //
         actions.add(exportAction);
         return actions;
     }

@@ -6,6 +6,7 @@
  */
 package org.talend.mdm.repository.model.mdmproperties;
 
+import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 
 /**
@@ -18,7 +19,6 @@ import org.talend.core.model.repository.ERepositoryObjectType;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getLabel <em>Label</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getRepObjType <em>Rep Obj Type</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getType <em>Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -26,7 +26,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
  * @model
  * @generated
  */
-public interface ContainerItem extends MDMItem {
+public interface ContainerItem extends MDMItem, FolderItem {
     /**
      * Returns the value of the '<em><b>Label</b></em>' attribute.
      * <!-- begin-user-doc -->
@@ -78,34 +78,5 @@ public interface ContainerItem extends MDMItem {
      * @generated
      */
     void setRepObjType(ERepositoryObjectType value);
-
-    /**
-     * Returns the value of the '<em><b>Type</b></em>' attribute.
-     * The literals are from the enumeration {@link org.talend.mdm.repository.model.mdmproperties.ContainerType}.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Type</em>' attribute isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Type</em>' attribute.
-     * @see org.talend.mdm.repository.model.mdmproperties.ContainerType
-     * @see #setType(ContainerType)
-     * @see org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage#getContainerItem_Type()
-     * @model
-     * @generated
-     */
-    ContainerType getType();
-
-    /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getType <em>Type</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Type</em>' attribute.
-     * @see org.talend.mdm.repository.model.mdmproperties.ContainerType
-     * @see #getType()
-     * @generated
-     */
-    void setType(ContainerType value);
 
 } // ContainerItem

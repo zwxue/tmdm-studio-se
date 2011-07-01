@@ -27,11 +27,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.ContainerType;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -77,11 +77,11 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         if (item != null) {
 
             if (item instanceof ContainerItem) {
-                switch (((ContainerItem) item).getType()) {
-                case CATEGORY:
+                switch (((ContainerItem) item).getType().getValue()) {
+                case FolderType.STABLE_SYSTEM_FOLDER:
                     return getCategoryImage();
-                case FOLDER:
-                case SYSTEM_FOLDER:
+                case FolderType.FOLDER:
+                case FolderType.SYSTEM_FOLDER:
                     return FOLDER_IMG;
                 }
             }
@@ -127,7 +127,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     protected boolean isSystemServerObjectItem(Object element) {
         Item item = getItem(element);
         if (item != null) {
-            if (item instanceof ContainerItem && ((ContainerItem) item).getType() == ContainerType.SYSTEM_FOLDER) {
+            if (item instanceof ContainerItem && ((ContainerItem) item).getType() == FolderType.SYSTEM_FOLDER_LITERAL) {
                 return true;
             }
             if (item instanceof MDMServerObjectItem) {

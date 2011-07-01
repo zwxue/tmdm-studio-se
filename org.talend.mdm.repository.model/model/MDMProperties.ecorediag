@@ -95,10 +95,6 @@
         <element xmi:type="ecore:EAttribute" href="MDMProperties.ecore#//ContainerItem/repObjType"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_32VwYZ4PEeCFRPvlzUtZAA"/>
       </children>
-      <children xmi:type="notation:Node" xmi:id="_uXZtwJ4wEeCFRPvlzUtZAA" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMProperties.ecore#//ContainerItem/type"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_uXZtwZ4wEeCFRPvlzUtZAA"/>
-      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_hOtKgZ1yEeCayaFOjH-gSQ"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_hOtKgp1yEeCayaFOjH-gSQ"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_hOtKg51yEeCayaFOjH-gSQ"/>
@@ -118,29 +114,6 @@
     <styles xmi:type="notation:ShapeStyle" xmi:id="_vJLzAp4PEeCFRPvlzUtZAA" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EDataType" href="MDMProperties.ecore#//ERepositoryObjectType"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vJLzA54PEeCFRPvlzUtZAA" x="660" y="50"/>
-  </children>
-  <children xmi:type="notation:Node" xmi:id="_mcnBcJ4wEeCFRPvlzUtZAA" type="1005">
-    <children xmi:type="notation:Node" xmi:id="_mcnBc54wEeCFRPvlzUtZAA" type="4010"/>
-    <children xmi:type="notation:Node" xmi:id="_mcnBdJ4wEeCFRPvlzUtZAA" type="5008">
-      <children xmi:type="notation:Node" xmi:id="_oqeAIJ4wEeCFRPvlzUtZAA" type="2006">
-        <element xmi:type="ecore:EEnumLiteral" href="MDMProperties.ecore#//ContainerType/CATEGORY"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_oqeAIZ4wEeCFRPvlzUtZAA"/>
-      </children>
-      <children xmi:type="notation:Node" xmi:id="_sJ_bAJ4wEeCFRPvlzUtZAA" type="2006">
-        <element xmi:type="ecore:EEnumLiteral" href="MDMProperties.ecore#//ContainerType/SYSTEM_FOLDER"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_sJ_bAZ4wEeCFRPvlzUtZAA"/>
-      </children>
-      <children xmi:type="notation:Node" xmi:id="_rSQhwJ4wEeCFRPvlzUtZAA" type="2006">
-        <element xmi:type="ecore:EEnumLiteral" href="MDMProperties.ecore#//ContainerType/FOLDER"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_rSQhwZ4wEeCFRPvlzUtZAA"/>
-      </children>
-      <styles xmi:type="notation:DrawerStyle" xmi:id="_mcnBdZ4wEeCFRPvlzUtZAA"/>
-      <styles xmi:type="notation:SortingStyle" xmi:id="_mcnBdp4wEeCFRPvlzUtZAA"/>
-      <styles xmi:type="notation:FilteringStyle" xmi:id="_mcnBd54wEeCFRPvlzUtZAA"/>
-    </children>
-    <styles xmi:type="notation:ShapeStyle" xmi:id="_mcnBcZ4wEeCFRPvlzUtZAA" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EEnum" href="MDMProperties.ecore#//ContainerType"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mcnBcp4wEeCFRPvlzUtZAA" x="663" y="136"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_OE5ZkZMVEeCcksxzfvS-Pw"/>
   <element xmi:type="ecore:EPackage" href="MDMProperties.ecore#/"/>

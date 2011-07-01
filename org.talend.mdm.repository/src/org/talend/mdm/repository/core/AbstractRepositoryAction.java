@@ -21,6 +21,12 @@
 // ============================================================================
 package org.talend.mdm.repository.core;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
 
@@ -50,5 +56,17 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     public void initCommonViewer(CommonViewer commonViewer) {
         this.commonViewer = commonViewer;
 
+    }
+
+    protected List<Object> getSelectedObject() {
+
+        IStructuredSelection structuredSelection = getStructuredSelection();
+        if (structuredSelection.isEmpty())
+            return Collections.EMPTY_LIST;
+        List<Object> result = new LinkedList<Object>();
+        for (Iterator<Object> il = structuredSelection.iterator(); il.hasNext();) {
+            result.add(il.next());
+        }
+        return result;
     }
 }

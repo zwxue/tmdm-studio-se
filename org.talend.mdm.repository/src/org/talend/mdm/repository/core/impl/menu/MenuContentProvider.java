@@ -23,12 +23,13 @@ package org.talend.mdm.repository.core.impl.menu;
 
 import java.util.List;
 
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeContentProvider;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.ContainerType;
+import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
@@ -49,21 +50,30 @@ public class MenuContentProvider implements IRepositoryNodeContentProvider {
         Item item = getItem(element);
         if (item != null && item instanceof ContainerItem) {
             ContainerItem containerItem = (ContainerItem) item;
-            if (containerItem.getType() == ContainerType.CATEGORY) {
-                List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(
-                        IServerObjectRepositoryType.TYPE_MENU, TreeObject.MENU);
+            if (containerItem.getType() == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
+                List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findViewObjectsByType(
+                        IServerObjectRepositoryType.TYPE_MENU, item, TreeObject.MENU);
                 if (viewObjects != null) {
+                    ((ContainerRepositoryObject) element).getChildren().addAll(viewObjects);
                     return viewObjects.toArray();
                 }
             }
-            if (containerItem.getType() != ContainerType.CATEGORY) {
-                List<IRepositoryViewObject> children = ((IRepositoryViewObject) element).getChildren();
+            if (containerItem.getType() == FolderType.FOLDER_LITERAL) {
+                List<IRepositoryViewObject> children = RepositoryResourceUtil.findViewObjects(containerItem.getRepObjType(),
+                        containerItem);
+                if (children != null) {
+                    ((ContainerRepositoryObject) element).getChildren().addAll(children);
+                    return children.toArray();
+                }
+            }
+            if (containerItem.getType() == FolderType.SYSTEM_FOLDER_LITERAL) {
+                List<IRepositoryViewObject> children = ((ContainerRepositoryObject) element).getChildren();
                 if (children != null) {
                     return children.toArray();
                 }
             }
         }
-        return null;
+        return new Object[0];
     }
 
     protected Item getItem(Object element) {

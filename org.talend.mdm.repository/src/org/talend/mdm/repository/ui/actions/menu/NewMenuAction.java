@@ -60,7 +60,7 @@ public class NewMenuAction extends AbstractRepositoryAction {
                 "Enter a Name for the New Instance", null, new IInputValidator() {
 
                     public String isValid(String newText) {
-                        if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                        if (newText == null || newText.trim().length() == 0)
                             return "The Name cannot be empty";
                         if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
                             return "The name cannot contain invalid character!";
@@ -100,8 +100,8 @@ public class NewMenuAction extends AbstractRepositoryAction {
         WSMenuItem item = MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
         WSMenuE menu = newBlankMenu(key);
         item.setWsMenu(menu);
-        
-        return RepositoryResourceUtil.createItem(item,key);
+
+        return RepositoryResourceUtil.createItem(item, key);
     }
 
     public String getGroupName() {
