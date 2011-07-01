@@ -89,13 +89,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int MDM_SERVER_OBJECT__DESCRIPTION = 1;
 
     /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_OBJECT__SYSTEM = 2;
+
+    /**
      * The number of structural features of the '<em>MDM Server Object</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int MDM_SERVER_OBJECT_FEATURE_COUNT = 2;
+    int MDM_SERVER_OBJECT_FEATURE_COUNT = 3;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
@@ -124,6 +133,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_MENU_E__DESCRIPTION = MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MENU_E__SYSTEM = MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM;
 
     /**
      * The feature id for the '<em><b>Menu Entries</b></em>' containment reference list.
@@ -282,6 +300,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROLE_E__DESCRIPTION = MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION;
 
     /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROLE_E__SYSTEM = MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
      * The feature id for the '<em><b>Specification</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -432,6 +459,17 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      */
     EAttribute getMDMServerObject_Description();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isSystem <em>System</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>System</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isSystem()
+     * @see #getMDMServerObject()
+     * @generated
+     */
+    EAttribute getMDMServerObject_System();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE <em>WS Menu E</em>}'.
@@ -726,6 +764,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute MDM_SERVER_OBJECT__DESCRIPTION = eINSTANCE.getMDMServerObject_Description();
+
+        /**
+         * The meta object literal for the '<em><b>System</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MDM_SERVER_OBJECT__SYSTEM = eINSTANCE.getMDMServerObject_System();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.

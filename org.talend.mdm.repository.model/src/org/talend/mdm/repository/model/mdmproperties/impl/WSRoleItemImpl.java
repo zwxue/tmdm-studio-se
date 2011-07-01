@@ -7,15 +7,12 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
-
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 
 /**
@@ -156,6 +153,11 @@ public class WSRoleItemImpl extends MDMServerObjectItemImpl implements WSRoleIte
                 return wsRole != null;
         }
         return super.eIsSet(featureID);
+    }
+
+    @Override
+    public MDMServerObject getMDMServerObject() {
+        return getWsRole();
     }
 
 } //WSRoleItemImpl

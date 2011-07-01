@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getName <em>Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isSystem <em>System</em>}</li>
  * </ul>
  * </p>
  *
@@ -77,5 +78,31 @@ public interface MDMServerObject extends EObject {
      * @generated
      */
     void setDescription(String value);
+
+    /**
+     * Returns the value of the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>System</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>System</em>' attribute.
+     * @see #setSystem(boolean)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getMDMServerObject_System()
+     * @model
+     * @generated
+     */
+    boolean isSystem();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isSystem <em>System</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>System</em>' attribute.
+     * @see #isSystem()
+     * @generated
+     */
+    void setSystem(boolean value);
 
 } // MDMServerObject

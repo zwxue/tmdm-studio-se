@@ -22,7 +22,6 @@
 package org.talend.mdm.repository.utils;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -43,6 +42,7 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.ContainerType;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -140,13 +140,13 @@ public class RepositoryResourceUtil {
 
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type, int systemType) {
         List<IRepositoryViewObject> viewObjects = findAllViewObjects(type);
-        List<IRepositoryViewObject> systemChildren = new LinkedList<IRepositoryViewObject>();
         IRepositoryViewObject folderViewOj = createFolderViewObject(type, "system", true); //$NON-NLS-1$
         for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {
             IRepositoryViewObject viewObject = il.next();
             String key = viewObject.getProperty().getLabel();
             if (XSystemObjects.isXSystemObject(systemType, key)) {
                 folderViewOj.getChildren().add(viewObject);
+                ((MDMServerObjectItem) viewObject.getProperty().getItem()).getMDMServerObject().setSystem(true);
                 il.remove();
             }
         }

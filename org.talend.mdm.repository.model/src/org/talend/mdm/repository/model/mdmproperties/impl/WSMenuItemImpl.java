@@ -7,17 +7,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
-
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
-import org.talend.mdm.repository.model.mdmserverobject.EWSMenu;
 
 /**
  * <!-- begin-user-doc -->
@@ -157,6 +153,11 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
                 return wsMenu != null;
         }
         return super.eIsSet(featureID);
+    }
+
+    @Override
+    public MDMServerObject getMDMServerObject() {
+        return getWsMenu();
     }
 
 } //WSMenuItemImpl

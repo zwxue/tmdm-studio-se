@@ -11,6 +11,10 @@
         <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//MDMServerObject/description"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_L-XMoZrxEeCKWZ_HwFgILA"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_Qz8TEaClEeCnerCvzJHxJg" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//MDMServerObject/system"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_Qz8TEqClEeCnerCvzJHxJg"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_7FublZrwEeCKWZ_HwFgILA"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_7FublprwEeCKWZ_HwFgILA"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_7Fubl5rwEeCKWZ_HwFgILA"/>

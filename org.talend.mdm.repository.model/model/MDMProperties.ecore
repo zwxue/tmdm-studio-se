@@ -7,7 +7,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="MDMServerDefItem" eSuperTypes="#//MDMItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="serverDef" eType="ecore:EClass MDMMetadata.ecore#//MDMServerDef"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MDMServerObjectItem" eSuperTypes="#//MDMItem"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MDMServerObjectItem" eSuperTypes="#//MDMItem">
+    <eOperations name="getMDMServerObject" eType="ecore:EClass MDMServerObject.ecore#//MDMServerObject"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSMenuItem" eSuperTypes="#//MDMServerObjectItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsMenu" eType="ecore:EClass MDMServerObject.ecore#//WSMenuE"/>
   </eClassifiers>

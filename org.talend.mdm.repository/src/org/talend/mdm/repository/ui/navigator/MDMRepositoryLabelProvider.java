@@ -21,8 +21,12 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.navigator;
 
+import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 import org.talend.core.model.properties.Item;
@@ -35,7 +39,7 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionProvider {
+public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionProvider, IColorProvider, IFontProvider {
 
     @Override
     public void addListener(ILabelProviderListener listener) {
@@ -92,4 +96,28 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         }
         return null;
     }
+
+    @Override
+    public Color getForeground(Object element) {
+        IRepositoryNodeLabelProvider provider = getLabelProvider(element);
+        if (provider != null) {
+            return provider.getForeground(element);
+        }
+        return null;
+    }
+
+    @Override
+    public Font getFont(Object element) {
+        IRepositoryNodeLabelProvider provider = getLabelProvider(element);
+        if (provider != null) {
+            return provider.getFont(element);
+        }
+        return null;
+    }
+
+    @Override
+    public Color getBackground(Object element) {
+        return null;
+    }
+
 }

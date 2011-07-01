@@ -6,6 +6,8 @@
  */
 package org.talend.mdm.repository.model.mdmproperties;
 
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -18,4 +20,12 @@ package org.talend.mdm.repository.model.mdmproperties;
  * @generated
  */
 public interface MDMServerObjectItem extends MDMItem {
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model kind="operation"
+     * @generated
+     */
+    MDMServerObject getMDMServerObject();
 } // MDMServerObjectItem

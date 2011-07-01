@@ -40,6 +40,10 @@
       <styles xmi:type="notation:FilteringStyle" xmi:id="_XTVl-JujEeChOtNeWEXMkQ"/>
     </children>
     <children xmi:type="notation:Node" xmi:id="_XTVl-ZujEeChOtNeWEXMkQ" type="5002">
+      <children xmi:type="notation:Node" xmi:id="_FvetYKEkEeCDwM2t62zu5g" type="2002">
+        <element xmi:type="ecore:EOperation" href="MDMProperties.ecore#//MDMServerObjectItem/getMDMServerObject"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_FvetYaEkEeCDwM2t62zu5g"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_XTVl-pujEeChOtNeWEXMkQ"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_XTVl-5ujEeChOtNeWEXMkQ"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_XTVl_JujEeChOtNeWEXMkQ"/>

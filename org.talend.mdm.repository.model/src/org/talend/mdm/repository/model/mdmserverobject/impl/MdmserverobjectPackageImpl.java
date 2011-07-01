@@ -187,6 +187,15 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getMDMServerObject_System() {
+        return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getWSMenuE() {
         return wsMenuEEClass;
     }
@@ -420,6 +429,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         mdmServerObjectEClass = createEClass(MDM_SERVER_OBJECT);
         createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__NAME);
         createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__DESCRIPTION);
+        createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__SYSTEM);
 
         wsMenuEEClass = createEClass(WS_MENU_E);
         createEReference(wsMenuEEClass, WS_MENU_E__MENU_ENTRIES);
@@ -491,6 +501,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getMDMServerObject_Name(), ecorePackage.getEString(), "name", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerObject_Description(), ecorePackage.getEString(), "description", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getMDMServerObject_System(), ecorePackage.getEBoolean(), "system", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsMenuEEClass, WSMenuE.class, "WSMenuE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSMenuE_MenuEntries(), theMdmserverobjectPackage_1.getWSMenuEntryE(), null, "menuEntries", null, 0, -1, WSMenuE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
