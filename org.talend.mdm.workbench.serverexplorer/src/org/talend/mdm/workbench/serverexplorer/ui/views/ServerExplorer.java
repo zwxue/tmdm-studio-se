@@ -21,7 +21,6 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.ui.views;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -31,16 +30,11 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -54,6 +48,9 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.ServerDefDialog;
+import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
+import org.talend.mdm.workbench.serverexplorer.ui.providers.TreeContentProvider;
+import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -67,69 +64,12 @@ public class ServerExplorer extends ViewPart {
     static final ImageDescriptor IMG_CHECK_CONNECT = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
             MDMServerExplorerPlugin.PLUGIN_ID, "icons/client_network.png"); //$NON-NLS-1$
 
-    static final Image IMG_SERVER_DEF = MDMServerExplorerPlugin.imageDescriptorFromPlugin(MDMServerExplorerPlugin.PLUGIN_ID,
-            "icons/server.png").createImage(); //$NON-NLS-1$
 
-    private class ServerSorter extends ViewerSorter {
 
-        public int compare(Viewer viewer, Object e1, Object e2) {
-            MDMServerDefItem mdmItem1 = getMDMItem((IRepositoryViewObject) e1);
-            MDMServerDefItem mdmItem2 = getMDMItem((IRepositoryViewObject) e2);
-            if (mdmItem1 != null && mdmItem2 != null) {
-                MDMServerDef serverDef1 = mdmItem1.getServerDef();
-                MDMServerDef serverDef2 = mdmItem2.getServerDef();
-                return serverDef1.getName().toLowerCase().compareTo(serverDef2.getName().toLowerCase());
-            }
-            return 0;
-        }
-    }
 
-    private class TreeContentProvider implements ITreeContentProvider {
 
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        }
 
-        public void dispose() {
-        }
 
-        public Object[] getElements(Object inputElement) {
-            return getChildren(inputElement);
-        }
-
-        public Object[] getChildren(Object parentElement) {
-            if (parentElement instanceof Collection) {
-                return ((Collection) parentElement).toArray();
-            }
-            return new Object[0];
-        }
-
-        public Object getParent(Object element) {
-            return null;
-        }
-
-        public boolean hasChildren(Object element) {
-            return getChildren(element).length > 0;
-        }
-    }
-
-    private class ViewerLabelProvider extends LabelProvider {
-
-        public Image getImage(Object element) {
-
-            return IMG_SERVER_DEF;
-        }
-
-        public String getText(Object element) {
-            if (element instanceof IRepositoryViewObject) {
-                MDMServerDefItem mdmItem = getMDMItem((IRepositoryViewObject) element);
-                if (mdmItem != null) {
-                    MDMServerDef serverDef = mdmItem.getServerDef();
-                    return serverDef.getName();
-                }
-            }
-            return ""; //$NON-NLS-1$
-        }
-    }
 
     public static final String ID = "org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"; //$NON-NLS-1$
 

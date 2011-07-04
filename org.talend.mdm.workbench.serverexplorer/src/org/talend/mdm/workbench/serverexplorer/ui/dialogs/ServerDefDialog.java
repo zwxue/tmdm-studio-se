@@ -282,7 +282,9 @@ public class ServerDefDialog extends TitleAreaDialog {
         if (buttonId == IDialogConstants.OK_ID) {
             if (!validateInput())
                 return;
+            serverDef.parse(serverDef.getUrl());
             serverDef.setName(newName);
+
         }
         if (buttonId == CHECK_CONNECTION_ID) {
             if (!validateInput())
