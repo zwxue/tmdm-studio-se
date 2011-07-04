@@ -156,6 +156,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         public void keyReleased(KeyEvent e) {
             if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                 DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+                pageToolBar.getComposite().setVisible(true);
             }
         }// keyReleased
     };
@@ -203,6 +204,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                         DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+                        pageToolBar.getComposite().setVisible(true);
                         readjustViewerHeight();
                     }
                 }// keyReleased
