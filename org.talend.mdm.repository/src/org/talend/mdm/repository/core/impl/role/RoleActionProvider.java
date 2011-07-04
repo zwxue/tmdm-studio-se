@@ -19,27 +19,42 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core.impl.menu;
+package org.talend.mdm.repository.core.impl.role;
 
 import java.util.List;
 
-import org.talend.core.model.properties.Item;
+import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.core.impl.AbstractContentProvider;
+import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-
-import com.amalto.workbench.models.TreeObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MenuContentProvider extends AbstractContentProvider {
+public class RoleActionProvider extends RepositoryNodeActionProviderAdapter {
+
+    AbstractRepositoryAction addAction;
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_MENU, parentItem, TreeObject.MENU);
+    public void initCommonViewer(CommonViewer commonViewer) {
+        super.initCommonViewer(commonViewer);
+        // addAction = new NewMenuAction();
+
+        //
+        // addAction.initCommonViewer(commonViewer);
+
+    }
+
+    @Override
+    public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
+        List<AbstractRepositoryAction> actions = super.getActions(viewObj);
+        if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.STABLE_SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
+            // actions.add(addAction);
+        }
+        return actions;
     }
 
 }

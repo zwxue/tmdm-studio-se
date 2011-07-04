@@ -12,24 +12,38 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.Path;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.general.Project;
+import org.talend.core.model.properties.FolderType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.ProjectManager;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
-
 /**
- * DOC hbhong  class global comment. Detailled comment
+ * DOC hbhong class global comment. Detailled comment
  */
 public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
+    static Logger log = Logger.getLogger(RemoveFromRepositoryAction.class);
+
+    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
      * 
      * @param text
      */
-    protected RemoveFromRepositoryAction() {
+    public RemoveFromRepositoryAction() {
         super("Remove from Repository");
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
     }
@@ -41,8 +55,40 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
-        super.run();
+        for (Object obj : getSelectedObject()) {
+            if (obj instanceof IRepositoryViewObject) {
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+                // TODO a message confirm to delete
+                if (isServerObject(viewObj)) {
+                    removeServerObject(viewObj);
+                } else if (RepositoryResourceUtil.hasContainerItem(obj, FolderType.FOLDER_LITERAL)) {
+                    removeFolderObject(viewObj);
+                }
+
+            }
+        }
+        commonViewer.refresh();
     }
 
+    private boolean isServerObject(IRepositoryViewObject viewObj) {
+        return viewObj.getProperty().getItem() instanceof MDMServerObjectItem;
+    }
+
+    private void removeServerObject(IRepositoryViewObject viewObj) {
+        try {
+            factory.deleteObjectPhysical(viewObj);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private void removeFolderObject(IRepositoryViewObject viewObj) {
+        try {
+            ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
+            Project project = ProjectManager.getInstance().getCurrentProject();
+            factory.deleteFolder(project, containerItem.getRepObjType(), new Path(containerItem.getState().getPath()), true);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 }

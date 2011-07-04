@@ -19,7 +19,7 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core.impl.menu;
+package org.talend.mdm.repository.core.impl.role;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
@@ -33,17 +33,17 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
+import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MenuNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
+public class RoleNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSMenuItem || item instanceof ContainerItem) {
-            return IServerObjectRepositoryType.TYPE_MENU;
+        if (item instanceof WSRoleItem || item instanceof ContainerItem) {
+            return IServerObjectRepositoryType.TYPE_ROLE;
         }
         return null;
     }
@@ -53,17 +53,17 @@ public class MenuNodeResourceProvider extends AbstractRepositoryNodeResourceProv
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSMenuItem) item).getWsMenu());
+            contents.add(((WSRoleItem) item).getWsRole());
             return itemResource;
         }
         return null;
     }
 
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSMenuItem) {
+        if (item instanceof WSRoleItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSMenuItem) item).getWsMenu());
+            resource.getContents().add(((WSRoleItem) item).getWsRole());
 
             return resource;
         }
@@ -71,11 +71,11 @@ public class MenuNodeResourceProvider extends AbstractRepositoryNodeResourceProv
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
+        return MdmpropertiesFactory.eINSTANCE.createWSRoleItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {
-        return type == IServerObjectRepositoryType.TYPE_MENU;
+        return type == IServerObjectRepositoryType.TYPE_ROLE;
     }
 
 }

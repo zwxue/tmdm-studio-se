@@ -42,4 +42,6 @@ public interface IRepositoryNodeLabelProvider {
     public Color getForeground(Object element);
 
     public Font getFont(Object element);
+    //
+
 }

@@ -19,7 +19,6 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.talend.core.model.properties.Item;
-import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -53,7 +52,7 @@ public class CreateFolderAction extends AbstractRepositoryAction {
         Object object = getSelectedObject().get(0);
         if (object != null && object instanceof ContainerRepositoryObject) {
             final ContainerRepositoryObject containerViewObject = (ContainerRepositoryObject) object;
-            InputDialog dlg = new InputDialog(commonViewer.getControl().getShell(), "New Category",
+            InputDialog dlg = new InputDialog(getShell(), "New Category",
                     "Enter a name for the New Category", null, new IInputValidator() {
 
                         public String isValid(String newText) {
@@ -72,13 +71,6 @@ public class CreateFolderAction extends AbstractRepositoryAction {
                                         return "The name is being used !";
                                 }
                             }
-                            // TreeObject[] childList = xfolder.getChildren();
-                            // for (TreeObject theObj : childList) {
-                            // if (theObj.getType() == TreeObject.CATEGORY_FOLDER) {
-                            // if (theObj.getDisplayName().equals(newText))
-                            // return "The name is being used !";
-                            // }
-                            // }
                             return null;
                         };
                     });
@@ -88,8 +80,6 @@ public class CreateFolderAction extends AbstractRepositoryAction {
             String categoryName = dlg.getValue();
             //
 
-            ItemState state = containerViewObject.getProperty().getItem().getState();
-            String path = state.getPath();
             IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(
                     containerViewObject.getRepositoryObjectType(), categoryName, containerViewObject.getProperty().getItem(),
                     false);

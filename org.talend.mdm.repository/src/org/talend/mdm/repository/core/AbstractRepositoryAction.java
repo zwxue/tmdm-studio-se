@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
 
@@ -39,6 +40,8 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     public static final String GROUP_EDIT = "group.edit";
 
     public static final String GROUP_EXPORT = "group.export";
+
+    public static final String GROUP_SERVER = "group.server";
 
     protected CommonViewer commonViewer;
 
@@ -68,5 +71,9 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
             result.add(il.next());
         }
         return result;
+    }
+
+    protected Shell getShell() {
+        return commonViewer.getControl().getShell();
     }
 }

@@ -19,7 +19,7 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core.impl.menu;
+package org.talend.mdm.repository.core.impl.role;
 
 import java.util.List;
 
@@ -35,11 +35,11 @@ import com.amalto.workbench.models.TreeObject;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MenuContentProvider extends AbstractContentProvider {
+public class RoleContentProvider extends AbstractContentProvider {
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_MENU, parentItem, TreeObject.MENU);
+        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_ROLE, parentItem, TreeObject.ROLE);
     }
 
 }

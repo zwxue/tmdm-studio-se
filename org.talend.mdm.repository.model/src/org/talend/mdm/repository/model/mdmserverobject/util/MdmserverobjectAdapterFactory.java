@@ -100,10 +100,6 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
                 return createWSRoleSpecificationInstanceEAdapter();
             }
             @Override
-            public Adapter caseMdmserverobject_MDMServerObject(MDMServerObject object) {
-                return createMdmserverobject_MDMServerObjectAdapter();
-            }
-            @Override
             public Adapter defaultCase(EObject object) {
                 return createEObjectAdapter();
             }
@@ -218,20 +214,6 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSRoleSpecificationInstanceEAdapter() {
-        return null;
-    }
-
-    /**
-     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see org.talend.mdm.repository.model.mdmserverobject.MDMServerObject
-     * @generated
-     */
-    public Adapter createMdmserverobject_MDMServerObjectAdapter() {
         return null;
     }
 

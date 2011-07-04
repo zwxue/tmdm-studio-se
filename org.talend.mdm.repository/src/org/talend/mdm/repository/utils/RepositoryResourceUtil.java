@@ -40,6 +40,7 @@ import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
+import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -85,7 +86,7 @@ public class RepositoryResourceUtil {
             property.setAuthor(context.getUser());
             property.setLabel(propLabel);
             //
-            factory.create(item, new Path("")); //$NON-NLS-1$
+            factory.create(item, new Path(item.getState().getPath()));
             return true;
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -160,7 +161,7 @@ public class RepositoryResourceUtil {
         item.setRepObjType(conf.getResourceProvider().getRepositoryObjectType(item));
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         itemState.setDeleted(false);
-        itemState.setPath("");
+        itemState.setPath(""); //$NON-NLS-1$
         item.setState(itemState);
         //
         prop.setItem(item);
@@ -239,5 +240,27 @@ public class RepositoryResourceUtil {
         } catch (PersistenceException e) {
             return Collections.EMPTY_LIST;
         }
+    }
+
+    public static Item getItemFromRepViewObj(Object element) {
+        if (element instanceof IRepositoryViewObject) {
+            Item item = ((IRepositoryViewObject) element).getProperty().getItem();
+            return item;
+        }
+        return null;
+    }
+
+    public static boolean hasContainerItem(Object obj, FolderType... fTypes) {
+
+        if (obj instanceof ContainerRepositoryObject) {
+            if (fTypes == null)
+                return true;
+            FolderType type = ((FolderItem) ((ContainerRepositoryObject) obj).getProperty().getItem()).getType();
+            for (FolderType fType : fTypes) {
+                if (type == fType)
+                    return true;
+            }
+        }
+        return false;
     }
 }

@@ -96,7 +96,7 @@ public class MdmserverobjectSwitch<T> {
             case MdmserverobjectPackage.WS_MENU_E: {
                 WSMenuE wsMenuE = (WSMenuE)theEObject;
                 T result = caseWSMenuE(wsMenuE);
-                if (result == null) result = caseMdmserverobject_MDMServerObject(wsMenuE);
+                if (result == null) result = caseMDMServerObject(wsMenuE);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -115,7 +115,7 @@ public class MdmserverobjectSwitch<T> {
             case MdmserverobjectPackage.WS_ROLE_E: {
                 WSRoleE wsRoleE = (WSRoleE)theEObject;
                 T result = caseWSRoleE(wsRoleE);
-                if (result == null) result = caseMdmserverobject_MDMServerObject(wsRoleE);
+                if (result == null) result = caseMDMServerObject(wsRoleE);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -237,21 +237,6 @@ public class MdmserverobjectSwitch<T> {
      * @generated
      */
     public T caseWSRoleSpecificationInstanceE(WSRoleSpecificationInstanceE object) {
-        return null;
-    }
-
-    /**
-     * Returns the result of interpreting the object as an instance of '<em>MDM Server Object</em>'.
-     * <!-- begin-user-doc -->
-     * This implementation returns null;
-     * returning a non-null result will terminate the switch.
-     * <!-- end-user-doc -->
-     * @param object the target of the switch.
-     * @return the result of interpreting the object as an instance of '<em>MDM Server Object</em>'.
-     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-     * @generated
-     */
-    public T caseMdmserverobject_MDMServerObject(MDMServerObject object) {
         return null;
     }
 

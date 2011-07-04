@@ -3,8 +3,6 @@ package org.talend.mdm.repository.core;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
@@ -14,9 +12,6 @@ import org.talend.core.model.repository.IRepositoryContentHandler;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
-import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 
 public class ServerObjectRepositoryContentHandler implements IRepositoryContentHandler, IServerObjectRepositoryType {
 
@@ -63,7 +58,10 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
 
     @Override
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof MDMServerObjectItem) {
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+        if (configuration != null) {
+            return configuration.getResourceProvider().save(item);
+        } else if (item instanceof MDMServerObjectItem) {
             return xmiResourceManager.getItemResource(item);
         }
         return null;

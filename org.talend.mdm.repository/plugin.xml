@@ -78,14 +78,13 @@
                showTitle="true"
                visible="true">
          </view>
+         <view
+               id="org.talend.repository.views.repository"
+               minimized="false"
+               relationship="stack"
+               relative="org.talend.mdm.repository.ui.navigator.MDMRepositoryView">
+         </view>
       </perspectiveExtension>
-   </extension>
-   <extension
-         point="org.talend.mdm.repository.repositoryConfiguration">
-      <configuration
-            class="org.talend.mdm.repository.core.impl.menu.MenuNodeConfiguration"
-            label="Menu">
-      </configuration>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
@@ -125,6 +124,10 @@
                   name="group.edit"
                   separator="true">
             </insertionPoint>
+            <insertionPoint
+                  name="group.server"
+                  separator="true">
+            </insertionPoint>
          </popupMenu>
       </viewer>
       <viewerContentBinding
@@ -136,5 +139,26 @@
             </contentExtension>
          </includes>
       </viewerContentBinding>
+   </extension>
+   <extension
+         point="org.talend.mdm.repository.repositoryConfiguration">
+      <configuration
+            class="org.talend.mdm.repository.core.impl.menu.MenuNodeConfiguration"
+            label="Menu">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.role.RoleNodeConfiguration"
+            label="Role">
+      </configuration>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.talend.mdm.repository.ui.navigator.MDMServerDecorator"
+            id="org.talend.mdm.repository.decorator1"
+            label="MDMServerDecorator"
+            lightweight="true"
+            state="true">
+      </decorator>
    </extension>
 </plugin>

@@ -35,6 +35,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -48,6 +49,8 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     private static final Image FOLDER_IMG = ImageCache.getCreatedImage(EImage.FORDER.getPath());
 
     private static final Color COLOR_GREY = EclipseResourceManager.getColor(SWT.COLOR_DARK_GRAY);
+
+    private static final Color COLOR_BLACK = EclipseResourceManager.getColor(SWT.COLOR_BLACK);
 
     private static FontData defaultFontData = JFaceResources.getDefaultFont().getFontData()[0];
 
@@ -65,7 +68,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     protected Item getItem(Object element) {
         if (element instanceof IRepositoryViewObject) {
-            Item item = ((IRepositoryViewObject) element).getProperty().getItem();
+            Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
             return item;
         }
         return null;
@@ -113,7 +116,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         if (isSystemServerObjectItem(element)) {
             return COLOR_GREY;
         }
-        return null;
+        return COLOR_BLACK;
     }
 
     @Override

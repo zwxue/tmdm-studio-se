@@ -98,13 +98,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int MDM_SERVER_OBJECT__SYSTEM = 2;
 
     /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_OBJECT__LAST_SERVER_DEF = 3;
+
+    /**
      * The number of structural features of the '<em>MDM Server Object</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int MDM_SERVER_OBJECT_FEATURE_COUNT = 3;
+    int MDM_SERVER_OBJECT_FEATURE_COUNT = 4;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
@@ -123,7 +132,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_MENU_E__NAME = MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME;
+    int WS_MENU_E__NAME = MDM_SERVER_OBJECT__NAME;
 
     /**
      * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -132,7 +141,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_MENU_E__DESCRIPTION = MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION;
+    int WS_MENU_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
 
     /**
      * The feature id for the '<em><b>System</b></em>' attribute.
@@ -141,7 +150,16 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_MENU_E__SYSTEM = MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM;
+    int WS_MENU_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MENU_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
 
     /**
      * The feature id for the '<em><b>Menu Entries</b></em>' containment reference list.
@@ -150,7 +168,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_MENU_E__MENU_ENTRIES = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+    int WS_MENU_E__MENU_ENTRIES = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
      * The number of structural features of the '<em>WS Menu E</em>' class.
@@ -159,7 +177,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_MENU_E_FEATURE_COUNT = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+    int WS_MENU_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEntryEImpl <em>WS Menu Entry E</em>}' class.
@@ -288,7 +306,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E__NAME = MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME;
+    int WS_ROLE_E__NAME = MDM_SERVER_OBJECT__NAME;
 
     /**
      * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -297,7 +315,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E__DESCRIPTION = MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION;
+    int WS_ROLE_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
 
     /**
      * The feature id for the '<em><b>System</b></em>' attribute.
@@ -306,7 +324,16 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E__SYSTEM = MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM;
+    int WS_ROLE_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROLE_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
 
     /**
      * The feature id for the '<em><b>Specification</b></em>' containment reference list.
@@ -315,7 +342,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E__SPECIFICATION = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+    int WS_ROLE_E__SPECIFICATION = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
      * The number of structural features of the '<em>WS Role E</em>' class.
@@ -324,7 +351,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROLE_E_FEATURE_COUNT = MdmserverobjectPackage.MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+    int WS_ROLE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoleSpecificationEImpl <em>WS Role Specification E</em>}' class.
@@ -470,6 +497,17 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      */
     EAttribute getMDMServerObject_System();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerDef <em>Last Server Def</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Last Server Def</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerDef()
+     * @see #getMDMServerObject()
+     * @generated
+     */
+    EReference getMDMServerObject_LastServerDef();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE <em>WS Menu E</em>}'.
@@ -772,6 +810,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute MDM_SERVER_OBJECT__SYSTEM = eINSTANCE.getMDMServerObject_System();
+
+        /**
+         * The meta object literal for the '<em><b>Last Server Def</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference MDM_SERVER_OBJECT__LAST_SERVER_DEF = eINSTANCE.getMDMServerObject_LastServerDef();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.

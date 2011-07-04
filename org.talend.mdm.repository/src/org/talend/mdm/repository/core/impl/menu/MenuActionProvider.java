@@ -21,16 +21,15 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.menu;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
-import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.menu.NewMenuAction;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -53,7 +52,9 @@ public class MenuActionProvider extends RepositoryNodeActionProviderAdapter {
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
-        actions.add(addAction);
+        if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.STABLE_SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
+            actions.add(addAction);
+        }
         return actions;
     }
 

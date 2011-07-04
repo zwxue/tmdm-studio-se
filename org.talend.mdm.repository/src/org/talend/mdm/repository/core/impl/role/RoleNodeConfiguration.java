@@ -19,27 +19,20 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core.impl.menu;
+package org.talend.mdm.repository.core.impl.role;
 
-import java.util.List;
-
-import org.talend.core.model.properties.Item;
-import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.core.impl.AbstractContentProvider;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-
-import com.amalto.workbench.models.TreeObject;
+import org.talend.mdm.repository.core.impl.RepositoryNodeConfigurationAdapter;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MenuContentProvider extends AbstractContentProvider {
+public class RoleNodeConfiguration extends RepositoryNodeConfigurationAdapter {
 
-    @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_MENU, parentItem, TreeObject.MENU);
+    public RoleNodeConfiguration() {
+        setResourceProvider(new RoleNodeResourceProvider());
+        setLabelProvider(new RoleLabelProvider());
+        setContentProvider(new RoleContentProvider());
+        setActionProvider(new RoleActionProvider());
     }
-
 }

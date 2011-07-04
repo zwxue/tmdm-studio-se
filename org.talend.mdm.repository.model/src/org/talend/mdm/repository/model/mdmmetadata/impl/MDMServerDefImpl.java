@@ -378,9 +378,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         if (!m.find())
             return null;
 
-        host = m.group(1);
-        port = m.group(2);
-        path = m.group(3);
+        setHost(m.group(1));
+        setPort(m.group(2));
+        setPath(m.group(3));
         return this;
     }
 

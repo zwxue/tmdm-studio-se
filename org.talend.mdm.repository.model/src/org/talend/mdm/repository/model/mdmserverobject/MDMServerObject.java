@@ -7,6 +7,7 @@
 package org.talend.mdm.repository.model.mdmserverobject;
 
 import org.eclipse.emf.ecore.EObject;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getName <em>Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getDescription <em>Description</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isSystem <em>System</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerDef <em>Last Server Def</em>}</li>
  * </ul>
  * </p>
  *
@@ -104,5 +106,31 @@ public interface MDMServerObject extends EObject {
      * @generated
      */
     void setSystem(boolean value);
+
+    /**
+     * Returns the value of the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Last Server Def</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Last Server Def</em>' containment reference.
+     * @see #setLastServerDef(MDMServerDef)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getMDMServerObject_LastServerDef()
+     * @model containment="true"
+     * @generated
+     */
+    MDMServerDef getLastServerDef();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerDef <em>Last Server Def</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Last Server Def</em>' containment reference.
+     * @see #getLastServerDef()
+     * @generated
+     */
+    void setLastServerDef(MDMServerDef value);
 
 } // MDMServerObject

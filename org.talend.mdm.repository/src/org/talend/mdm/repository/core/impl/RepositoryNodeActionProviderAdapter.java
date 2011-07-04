@@ -27,12 +27,17 @@ import java.util.List;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.model.mdmproperties.MDMItem;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
+import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
+import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -40,29 +45,60 @@ import org.talend.mdm.repository.ui.actions.ExportObjectAction;
  */
 public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActionProvider {
 
-    AbstractRepositoryAction exportAction;
+    static AbstractRepositoryAction exportAction;
 
-    AbstractRepositoryAction createFolderAction;
+    static AbstractRepositoryAction createFolderAction;
+
+    static AbstractRepositoryAction removeFromRepositoryAction;
+
+    // TODO just a demo,remove it in future
+    static AbstractRepositoryAction updateServerDefAction;
+
     public void initCommonViewer(CommonViewer commonViewer) {
         exportAction = new ExportObjectAction();
         createFolderAction = new CreateFolderAction();
+        removeFromRepositoryAction = new RemoveFromRepositoryAction();
+        updateServerDefAction = new UpdateServerDefAction();
         //
         exportAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
+        removeFromRepositoryAction.initCommonViewer(commonViewer);
+        updateServerDefAction.initCommonViewer(commonViewer);
     }
 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = new LinkedList<AbstractRepositoryAction>();
         //
-        if (viewObj instanceof ContainerRepositoryObject) {
-            FolderType type = ((FolderItem) viewObj.getProperty().getItem()).getType();
-            if (type.getValue() != FolderType.SYSTEM_FOLDER) {
-                actions.add(createFolderAction);
+        Item item = viewObj.getProperty().getItem();
+        if (item instanceof MDMItem) {
+            if (item instanceof ContainerItem) {
+                FolderType type = ((FolderItem) item).getType();
+                switch (type.getValue()) {
+                case FolderType.STABLE_SYSTEM_FOLDER:
+                    actions.add(createFolderAction);
+                    actions.add(removeFromRepositoryAction);
+                    break;
+                case FolderType.SYSTEM_FOLDER:
+
+                    break;
+
+                case FolderType.FOLDER:
+                    actions.add(createFolderAction);
+                    actions.add(removeFromRepositoryAction);
+                    break;
+                }
+
+            } else if (item instanceof MDMServerObjectItem) {
+                actions.add(removeFromRepositoryAction);
+                // TODO just a demo,remove it in future
+                actions.add(updateServerDefAction);
             }
         }
+
         //
         actions.add(exportAction);
+
         return actions;
     }
 

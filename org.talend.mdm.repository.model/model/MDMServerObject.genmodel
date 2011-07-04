@@ -3,7 +3,7 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src"
     modelPluginID="org.talend.mdm.repository.model" modelName="MDMServerObject" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false">
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg MDMMetadata.genmodel#//mdmmetadata ../../org.talend.model/model/metadata.genmodel#//connection">
   <foreignModel>MDMServerObject.ecore</foreignModel>
   <genPackages prefix="Mdmserverobject" basePackage="org.talend.mdm.repository.model"
       disposableProviderFactory="true" ecorePackage="MDMServerObject.ecore#/">
@@ -11,17 +11,19 @@
     <genClasses ecoreClass="MDMServerObject.ecore#//MDMServerObject">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/system"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference MDMServerObject.ecore#//MDMServerObject/lastServerDef"/>
     </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//EWSMenu">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//EWSMenu/menuEntries"/>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuE">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSMenuE/menuEntries"/>
     </genClasses>
-    <genClasses ecoreClass="MDMServerObject.ecore#//EWSMenuEntry">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/id"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/application"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/context"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/icon"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//EWSMenuEntry/descriptions"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//EWSMenuEntry/subMenus"/>
+    <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuEntryE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/application"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/context"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuEntryE/icon"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSMenuEntryE/descriptions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSMenuEntryE/subMenus"/>
     </genClasses>
     <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE/language"/>
@@ -40,46 +42,5 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/writable"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/parameter"/>
     </genClasses>
-    <nestedGenPackages prefix="Mdmserverobject" basePackage="org.talend.mdm.repository.model"
-        disposableProviderFactory="true" ecorePackage="MDMServerObject.ecore#/">
-      <genDataTypes ecoreDataType="MDMServerObject.ecore#//StringArray"/>
-      <genClasses ecoreClass="MDMServerObject.ecore#//MDMServerObject">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/name"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/description"/>
-      </genClasses>
-      <genClasses ecoreClass="MDMServerObject.ecore#//EWSMenu">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference MDMServerObject.ecore#//EWSMenu/menuEntries"/>
-      </genClasses>
-      <genClasses ecoreClass="MDMServerObject.ecore#//EWSMenuEntry">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/id"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/application"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/context"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//EWSMenuEntry/icon"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference MDMServerObject.ecore#//EWSMenuEntry/descriptions"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference MDMServerObject.ecore#//EWSMenuEntry/subMenus"/>
-      </genClasses>
-      <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE/language"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSMenuMenuEntriesDescriptionsE/label"/>
-      </genClasses>
-      <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleE">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSRoleE/specification"/>
-      </genClasses>
-      <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleSpecificationE">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationE/admin"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationE/objectType"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSRoleSpecificationE/instance"/>
-      </genClasses>
-      <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleSpecificationInstanceE">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/instanceName"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/writable"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationInstanceE/parameter"/>
-      </genClasses>
-    </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>

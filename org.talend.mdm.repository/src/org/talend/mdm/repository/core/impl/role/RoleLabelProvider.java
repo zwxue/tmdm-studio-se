@@ -19,9 +19,12 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.actions;
+package org.talend.mdm.repository.core.impl.role;
 
-import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.eclipse.swt.graphics.Image;
+import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -30,28 +33,37 @@ import com.amalto.workbench.image.ImageCache;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class ExportObjectAction extends AbstractRepositoryAction {
+public class RoleLabelProvider extends AbstractLabelProvider {
 
-    /**
-     * DOC hbhong AddMenu constructor comment.
-     * 
-     * @param text
-     */
-    public ExportObjectAction() {
-        super("Export"); //$NON-NLS-1$
-        setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
+    private static final Image IMG = ImageCache.getCreatedImage(EImage.ROLE.getPath());
+
+    public String getCategoryLabel() {
+        return "Role"; //$NON-NLS-1$
     }
 
     @Override
-    public void run() {
-        System.out.println("JUST TEST");
-        for (Object obj : getSelectedObject()) {
-            System.out.println(obj);
-        }
+    protected Image getCategoryImage() {
+        return IMG;
     }
 
-    public String getGroupName() {
-        return GROUP_EXPORT;
+    @Override
+    public Image getImage(Object element) {
+        Image img = super.getImage(element);
+        if (img == null) {
+            Item item = getItem(element);
+            if (item != null) {
+                if (item instanceof WSRoleItem) {
+                    img = IMG;
+                }
+            }
+        }
+        return img;
+    }
+
+    @Override
+    protected String getServerObjectItemText(Item item) {
+        WSRoleItem menuItem = (WSRoleItem) item;
+        return menuItem.getWsRole().getName();
     }
 
 }

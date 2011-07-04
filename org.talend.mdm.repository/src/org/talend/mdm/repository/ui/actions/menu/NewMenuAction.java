@@ -26,7 +26,12 @@ import java.util.regex.Pattern;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.ItemState;
+import org.talend.core.model.properties.PropertiesFactory;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -56,7 +61,7 @@ public class NewMenuAction extends AbstractRepositoryAction {
 
     @Override
     public void run() {
-        InputDialog dlg = new InputDialog(commonViewer.getControl().getShell(), "New Menu",// "New "+IConstants.TALEND+" Object Instance",
+        InputDialog dlg = new InputDialog(getShell(), "New Menu",// "New "+IConstants.TALEND+" Object Instance",
                 "Enter a Name for the New Instance", null, new IInputValidator() {
 
                     public String isValid(String newText) {
@@ -98,9 +103,20 @@ public class NewMenuAction extends AbstractRepositoryAction {
 
     private boolean createMenu(String key) {
         WSMenuItem item = MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
+        ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
+        item.setState(itemState);
+        //
         WSMenuE menu = newBlankMenu(key);
         item.setWsMenu(menu);
-
+        for (Object obj : getSelectedObject()) {
+            if (obj instanceof IRepositoryViewObject) {
+                Item parentItem = ((IRepositoryViewObject) obj).getProperty().getItem();
+                if (parentItem instanceof ContainerItem) {
+                    item.getState().setPath(parentItem.getState().getPath());
+                    break;
+                }
+            }
+        }
         return RepositoryResourceUtil.createItem(item, key);
     }
 
