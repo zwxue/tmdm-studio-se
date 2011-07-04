@@ -1810,9 +1810,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
             manager.add(setAnnotationNoAction);
+
             if (obj instanceof XSDParticle) {
                 manager.add(visibleRuleAction);
-                manager.add(defaultValueRuleAction);
+                XSDParticle xsdParticle = (XSDParticle) obj;
+
+                XSDTerm xsdTerm = xsdParticle.getTerm();
+                if (xsdTerm instanceof XSDElementDeclaration) {
+                    if (Util.getKeyInfo(xsdTerm) == null || Util.getKeyInfo(xsdTerm).size() == 0) {
+                        manager.add(defaultValueRuleAction);
+                    }
+                }
+
             }
         }
         // available models
