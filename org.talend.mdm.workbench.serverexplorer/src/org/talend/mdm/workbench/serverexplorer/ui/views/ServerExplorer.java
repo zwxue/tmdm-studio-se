@@ -64,13 +64,6 @@ public class ServerExplorer extends ViewPart {
     static final ImageDescriptor IMG_CHECK_CONNECT = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
             MDMServerExplorerPlugin.PLUGIN_ID, "icons/client_network.png"); //$NON-NLS-1$
 
-
-
-
-
-
-
-
     public static final String ID = "org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"; //$NON-NLS-1$
 
     private final FormToolkit toolkit = new FormToolkit(Display.getCurrent());

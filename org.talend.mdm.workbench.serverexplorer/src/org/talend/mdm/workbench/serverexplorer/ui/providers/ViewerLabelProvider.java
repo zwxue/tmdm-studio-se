@@ -26,6 +26,7 @@ public class ViewerLabelProvider extends LabelProvider {
 
     static final Image IMG_SERVER_DEF = MDMServerExplorerPlugin.imageDescriptorFromPlugin(MDMServerExplorerPlugin.PLUGIN_ID,
             "icons/server.png").createImage(); //$NON-NLS-1$
+
     public Image getImage(Object element) {
 
         return IMG_SERVER_DEF;
@@ -36,7 +37,7 @@ public class ViewerLabelProvider extends LabelProvider {
             MDMServerDefItem mdmItem = getMDMItem((IRepositoryViewObject) element);
             if (mdmItem != null) {
                 MDMServerDef serverDef = mdmItem.getServerDef();
-                return serverDef.getName();
+                return serverDef.getName() + " (" + serverDef.getHost() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
         return ""; //$NON-NLS-1$
@@ -48,4 +49,5 @@ public class ViewerLabelProvider extends LabelProvider {
         }
         return null;
     }
+
 }
