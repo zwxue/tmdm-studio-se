@@ -17,8 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -102,10 +100,14 @@ public class DeployJobAction extends Action {
         new RefreshXObjectAction(ServerView.show(),selectedObj).run();
         }
         
+        // because of the changes in RefreshXObjectAction and the TreeObject
+        // there seems no need to make changes here, comment it.
+
         // modified by jsxie to fix bug 21371
-        TreeObject obj =(TreeObject) selection.getFirstElement();
-        ((AbstractTreeViewer) view.getViewer()).expandToLevel(obj, 2) ;
+        // TreeObject obj =(TreeObject) selection.getFirstElement();
+        // ((AbstractTreeViewer) view.getViewer()).expandToLevel(obj, 2) ;
         
+
 
     }
 
