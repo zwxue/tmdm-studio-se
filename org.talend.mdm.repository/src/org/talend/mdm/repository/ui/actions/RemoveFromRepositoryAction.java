@@ -17,9 +17,11 @@ import org.eclipse.core.runtime.Path;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.FolderType;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -86,7 +88,10 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         try {
             ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
             Project project = ProjectManager.getInstance().getCurrentProject();
-            factory.deleteFolder(project, containerItem.getRepObjType(), new Path(containerItem.getState().getPath()), true);
+            String path = containerItem.getState().getPath();
+            ERepositoryObjectType repObjType = containerItem.getRepObjType();
+            factory.deleteFolder(project, repObjType, new Path(path), true);
+            ContainerCacheService.remove(repObjType, path);
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }

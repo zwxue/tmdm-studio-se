@@ -44,4 +44,23 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameter" eType="#//StringArray"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="StringArray" instanceClassName="java.lang.String[]"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WSViewE" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="searchableBusinessElements"
+        eType="#//StringArray"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewableBusinessElements"
+        eType="#//StringArray"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transformerActive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereConditions" upperBound="-1"
+        eType="#//WSWhereConditionE" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSWhereConditionE">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leftPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rightValueOrPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stringPredicate" eType="#//WSStringPredicateE"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operator" eType="#//WSWhereOperatorE"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSWhereOperatorE"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WSStringPredicateE"/>
 </ecore:EPackage>

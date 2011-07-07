@@ -131,6 +131,31 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmserverobjectPackage.WS_VIEW_E: {
+                WSViewE wsViewE = (WSViewE)theEObject;
+                T result = caseWSViewE(wsViewE);
+                if (result == null) result = caseMDMServerObject(wsViewE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E: {
+                WSWhereConditionE wsWhereConditionE = (WSWhereConditionE)theEObject;
+                T result = caseWSWhereConditionE(wsWhereConditionE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_WHERE_OPERATOR_E: {
+                WSWhereOperatorE wsWhereOperatorE = (WSWhereOperatorE)theEObject;
+                T result = caseWSWhereOperatorE(wsWhereOperatorE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_STRING_PREDICATE_E: {
+                WSStringPredicateE wsStringPredicateE = (WSStringPredicateE)theEObject;
+                T result = caseWSStringPredicateE(wsStringPredicateE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -237,6 +262,66 @@ public class MdmserverobjectSwitch<T> {
      * @generated
      */
     public T caseWSRoleSpecificationInstanceE(WSRoleSpecificationInstanceE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS View E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS View E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSViewE(WSViewE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Where Condition E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Where Condition E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSWhereConditionE(WSWhereConditionE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Where Operator E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Where Operator E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSWhereOperatorE(WSWhereOperatorE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS String Predicate E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS String Predicate E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSStringPredicateE(WSStringPredicateE object) {
         return null;
     }
 

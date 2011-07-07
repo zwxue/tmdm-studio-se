@@ -15,20 +15,19 @@ package org.talend.mdm.repository.core;
 import org.talend.commons.ui.runtime.image.IImage;
 
 /**
- * DOC hbhong  it works for the common repository view.
- * <br/>
- *
+ * DOC hbhong it works for the common repository view. <br/>
+ * 
  */
 public enum ServerObjectImage implements IImage {
     MENU_ICON("/icons/menu.gif"), //$NON-NLS-1$
-    ROLE_ICON("/icons/role.gif");//$NON-NLS-1$
+    ROLE_ICON("/icons/role.gif"), //$NON-NLS-1$
+    VIEW_ICON("/icons/view.png");//$NON-NLS-1$
 
     private String path;
 
     ServerObjectImage(String path) {
         this.path = path;
     }
-    
 
     /**
      * Getter for path.

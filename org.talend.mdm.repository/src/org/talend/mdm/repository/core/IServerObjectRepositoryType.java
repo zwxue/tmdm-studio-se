@@ -29,11 +29,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
  */
 public interface IServerObjectRepositoryType {
 
-    public static ERepositoryObjectType TYPE_CATEGORY = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
-            ERepositoryObjectType.class, "MDM.Category"); //$NON-NLS-1$
-
-//    public static ERepositoryObjectType TYPE_FOLDER = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
-//            ERepositoryObjectType.class, "MDM.Folder"); //$NON-NLS-1$
+    // public static ERepositoryObjectType TYPE_CATEGORY = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+    //            ERepositoryObjectType.class, "MDM.Category"); //$NON-NLS-1$
+    //
+    // public static ERepositoryObjectType TYPE_FOLDER = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+    //            ERepositoryObjectType.class, "MDM.Folder"); //$NON-NLS-1$
 
     // /
 
@@ -42,4 +42,7 @@ public interface IServerObjectRepositoryType {
 
     public static ERepositoryObjectType TYPE_MENU = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.Menu"); //$NON-NLS-1$
+
+    // public static ERepositoryObjectType TYPE_VIEW = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+    //            ERepositoryObjectType.class, "MDM.View"); //$NON-NLS-1$
 }

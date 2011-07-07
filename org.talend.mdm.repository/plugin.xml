@@ -78,12 +78,14 @@
                showTitle="true"
                visible="true">
          </view>
+         <!--
          <view
                id="org.talend.repository.views.repository"
                minimized="false"
                relationship="stack"
                relative="org.talend.mdm.repository.ui.navigator.MDMRepositoryView">
          </view>
+         -->
       </perspectiveExtension>
    </extension>
    <extension
@@ -155,9 +157,10 @@
          point="org.eclipse.ui.decorators">
       <decorator
             class="org.talend.mdm.repository.ui.navigator.MDMServerDecorator"
-            id="org.talend.mdm.repository.decorator1"
+            id="org.talend.mdm.repository.ui.navigator.MDMServerDecorator"
             label="MDMServerDecorator"
             lightweight="true"
+            objectClass="org.talend.core.model.repository.IRepositoryViewObject"
             state="true">
       </decorator>
    </extension>

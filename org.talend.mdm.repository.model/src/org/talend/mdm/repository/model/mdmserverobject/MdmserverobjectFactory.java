@@ -89,6 +89,42 @@ public interface MdmserverobjectFactory extends EFactory {
     WSRoleSpecificationInstanceE createWSRoleSpecificationInstanceE();
 
     /**
+     * Returns a new object of class '<em>WS View E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS View E</em>'.
+     * @generated
+     */
+    WSViewE createWSViewE();
+
+    /**
+     * Returns a new object of class '<em>WS Where Condition E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Where Condition E</em>'.
+     * @generated
+     */
+    WSWhereConditionE createWSWhereConditionE();
+
+    /**
+     * Returns a new object of class '<em>WS Where Operator E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Where Operator E</em>'.
+     * @generated
+     */
+    WSWhereOperatorE createWSWhereOperatorE();
+
+    /**
+     * Returns a new object of class '<em>WS String Predicate E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS String Predicate E</em>'.
+     * @generated
+     */
+    WSStringPredicateE createWSStringPredicateE();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

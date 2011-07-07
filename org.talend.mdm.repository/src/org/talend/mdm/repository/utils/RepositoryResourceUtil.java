@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -48,12 +47,12 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.model.repository.RepositoryObject;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -112,30 +111,36 @@ public class RepositoryResourceUtil {
 
         //
         prop.setItem(item);
-        //
-        if (!isSystem) {
-            try {
-                Project project = ProjectManager.getInstance().getCurrentProject();
-                IProject fsProject = ResourceModelUtils.getProject(project);
+        try {
+            //
+            Project project = ProjectManager.getInstance().getCurrentProject();
+            IProject fsProject = ResourceModelUtils.getProject(project);
+
+            if (!isSystem) {
                 ItemState state = pItem.getState();
                 itemState.setPath(state.getPath() + IPath.SEPARATOR + folderName);
                 String path = ERepositoryObjectType.getFolderName(type);
                 if (!path.isEmpty()) {
                     path += itemState.getPath();
                 }
-
                 IFolder folder = fsProject.getFolder(path);
                 if (!folder.exists()) {
 
                     ResourceUtils.createFolder(folder);
 
                 }
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            }
 
+            } else {
+                itemState.setPath(folderName);
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
         }
-        return new ContainerRepositoryObject(prop);
+        ContainerRepositoryObject containerRepositoryObject = new ContainerRepositoryObject(prop);
+        //
+        ContainerCacheService.put(containerRepositoryObject);
+        //
+        return containerRepositoryObject;
     }
 
     public static IRepositoryViewObject[] getCategoryViewObjects() {
@@ -166,7 +171,9 @@ public class RepositoryResourceUtil {
         //
         prop.setItem(item);
         //
-        return new ContainerRepositoryObject(prop);
+        ContainerRepositoryObject containerObject = new ContainerRepositoryObject(prop);
+        ContainerCacheService.put(containerObject);
+        return containerObject;
     }
 
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type) {
@@ -205,18 +212,54 @@ public class RepositoryResourceUtil {
                 if (res instanceof IFolder) {
                     IRepositoryViewObject folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
                     viewObjects.add(folderObject);
-                } else if (res instanceof IFile) {
-                    if (resourceManager.isPropertyFile((IFile) res)) {
-                        Property property = resourceManager.loadProperty(res);
-                        viewObjects.add(new RepositoryObject(property));
-                    }
                 }
+                // else if (res instanceof IFile) {
+                // if (resourceManager.isPropertyFile((IFile) res)) {
+                // Property property = resourceManager.loadProperty(res);
+                // viewObjects.add(new RepositoryObject(property));
+                // }
+                // }
             }
+            List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem);
+            viewObjects.addAll(children);
+
         } catch (CoreException e) {
             log.error(e.getMessage(), e);
         }
         // ((ContainerRepositoryObject) parentItem.getParent()).getChildren().addAll(viewObjects);
         return viewObjects;
+    }
+
+    public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem) {
+        // because the IProxyRepositoryFactory doesn't expose the getSerializableFromFolder method ,so only through the
+        // following to get object
+        List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
+        String parentPath = parentItem.getState().getPath();
+        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+        try {
+            List<IRepositoryViewObject> allObjs = factory.getAll(type);
+            for (IRepositoryViewObject viewObj : allObjs) {
+                ItemState state = viewObj.getProperty().getItem().getState();
+                if (state.getPath().equals(parentPath)) {
+                    viewObjects.add(viewObj);
+                }
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+        return viewObjects;
+
+    }
+
+    public static IRepositoryViewObject findViewObjectByName(ContainerItem parentItem, String objName, boolean caseSensitive) {
+        List<IRepositoryViewObject> viewObjects = findViewObjectsInFolder(parentItem.getRepObjType(), parentItem);
+        for (IRepositoryViewObject viewObj : viewObjects) {
+            boolean result = caseSensitive ? viewObj.getLabel().equalsIgnoreCase(objName) : viewObj.getLabel().equals(objName);
+            if (result) {
+                return viewObj;
+            }
+        }
+        return null;
     }
 
     public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType) {

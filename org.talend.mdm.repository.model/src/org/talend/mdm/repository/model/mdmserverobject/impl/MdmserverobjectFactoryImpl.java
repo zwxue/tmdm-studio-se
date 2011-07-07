@@ -69,6 +69,10 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_ROLE_E: return createWSRoleE();
             case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_E: return createWSRoleSpecificationE();
             case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_INSTANCE_E: return createWSRoleSpecificationInstanceE();
+            case MdmserverobjectPackage.WS_VIEW_E: return createWSViewE();
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E: return createWSWhereConditionE();
+            case MdmserverobjectPackage.WS_WHERE_OPERATOR_E: return createWSWhereOperatorE();
+            case MdmserverobjectPackage.WS_STRING_PREDICATE_E: return createWSStringPredicateE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -172,6 +176,46 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSRoleSpecificationInstanceE createWSRoleSpecificationInstanceE() {
         WSRoleSpecificationInstanceEImpl wsRoleSpecificationInstanceE = new WSRoleSpecificationInstanceEImpl();
         return wsRoleSpecificationInstanceE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSViewE createWSViewE() {
+        WSViewEImpl wsViewE = new WSViewEImpl();
+        return wsViewE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSWhereConditionE createWSWhereConditionE() {
+        WSWhereConditionEImpl wsWhereConditionE = new WSWhereConditionEImpl();
+        return wsWhereConditionE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSWhereOperatorE createWSWhereOperatorE() {
+        WSWhereOperatorEImpl wsWhereOperatorE = new WSWhereOperatorEImpl();
+        return wsWhereOperatorE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSStringPredicateE createWSStringPredicateE() {
+        WSStringPredicateEImpl wsStringPredicateE = new WSStringPredicateEImpl();
+        return wsStringPredicateE;
     }
 
     /**

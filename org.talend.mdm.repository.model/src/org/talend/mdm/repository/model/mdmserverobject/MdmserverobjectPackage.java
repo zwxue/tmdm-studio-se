@@ -446,13 +446,197 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROLE_SPECIFICATION_INSTANCE_E_FEATURE_COUNT = 3;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl <em>WS View E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSViewE()
+     * @generated
+     */
+    int WS_VIEW_E = 7;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Searchable Business Elements</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Viewable Business Elements</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The feature id for the '<em><b>Transformer Active</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__TRANSFORMER_ACTIVE = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
+
+    /**
+     * The feature id for the '<em><b>Where Conditions</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__WHERE_CONDITIONS = MDM_SERVER_OBJECT_FEATURE_COUNT + 3;
+
+    /**
+     * The number of structural features of the '<em>WS View E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 4;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl <em>WS Where Condition E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSWhereConditionE()
+     * @generated
+     */
+    int WS_WHERE_CONDITION_E = 8;
+
+    /**
+     * The feature id for the '<em><b>Left Path</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WHERE_CONDITION_E__LEFT_PATH = 0;
+
+    /**
+     * The feature id for the '<em><b>Right Value Or Path</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH = 1;
+
+    /**
+     * The feature id for the '<em><b>String Predicate</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WHERE_CONDITION_E__STRING_PREDICATE = 2;
+
+    /**
+     * The feature id for the '<em><b>Operator</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WHERE_CONDITION_E__OPERATOR = 3;
+
+    /**
+     * The number of structural features of the '<em>WS Where Condition E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WHERE_CONDITION_E_FEATURE_COUNT = 4;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereOperatorEImpl <em>WS Where Operator E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereOperatorEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSWhereOperatorE()
+     * @generated
+     */
+    int WS_WHERE_OPERATOR_E = 9;
+
+    /**
+     * The number of structural features of the '<em>WS Where Operator E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WHERE_OPERATOR_E_FEATURE_COUNT = 0;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSStringPredicateEImpl <em>WS String Predicate E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSStringPredicateEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSStringPredicateE()
+     * @generated
+     */
+    int WS_STRING_PREDICATE_E = 10;
+
+    /**
+     * The number of structural features of the '<em>WS String Predicate E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STRING_PREDICATE_E_FEATURE_COUNT = 0;
+
+    /**
      * The meta object id for the '<em>String Array</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getStringArray()
      * @generated
      */
-    int STRING_ARRAY = 7;
+    int STRING_ARRAY = 11;
 
 
     /**
@@ -746,6 +930,134 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSRoleSpecificationInstanceE_Parameter();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE <em>WS View E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS View E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE
+     * @generated
+     */
+    EClass getWSViewE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getSearchableBusinessElements <em>Searchable Business Elements</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Searchable Business Elements</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE#getSearchableBusinessElements()
+     * @see #getWSViewE()
+     * @generated
+     */
+    EAttribute getWSViewE_SearchableBusinessElements();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getViewableBusinessElements <em>Viewable Business Elements</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Viewable Business Elements</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE#getViewableBusinessElements()
+     * @see #getWSViewE()
+     * @generated
+     */
+    EAttribute getWSViewE_ViewableBusinessElements();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#isTransformerActive <em>Transformer Active</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Transformer Active</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE#isTransformerActive()
+     * @see #getWSViewE()
+     * @generated
+     */
+    EAttribute getWSViewE_TransformerActive();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getWhereConditions <em>Where Conditions</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Where Conditions</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE#getWhereConditions()
+     * @see #getWSViewE()
+     * @generated
+     */
+    EReference getWSViewE_WhereConditions();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE <em>WS Where Condition E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Where Condition E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE
+     * @generated
+     */
+    EClass getWSWhereConditionE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getLeftPath <em>Left Path</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Left Path</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getLeftPath()
+     * @see #getWSWhereConditionE()
+     * @generated
+     */
+    EAttribute getWSWhereConditionE_LeftPath();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getRightValueOrPath <em>Right Value Or Path</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Right Value Or Path</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getRightValueOrPath()
+     * @see #getWSWhereConditionE()
+     * @generated
+     */
+    EAttribute getWSWhereConditionE_RightValueOrPath();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getStringPredicate <em>String Predicate</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>String Predicate</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getStringPredicate()
+     * @see #getWSWhereConditionE()
+     * @generated
+     */
+    EReference getWSWhereConditionE_StringPredicate();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getOperator <em>Operator</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Operator</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getOperator()
+     * @see #getWSWhereConditionE()
+     * @generated
+     */
+    EReference getWSWhereConditionE_Operator();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereOperatorE <em>WS Where Operator E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Where Operator E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWhereOperatorE
+     * @generated
+     */
+    EClass getWSWhereOperatorE();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE <em>WS String Predicate E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS String Predicate E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE
+     * @generated
+     */
+    EClass getWSStringPredicateE();
+
+    /**
      * Returns the meta object for data type '<em>String Array</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1006,6 +1318,110 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_ROLE_SPECIFICATION_INSTANCE_E__PARAMETER = eINSTANCE.getWSRoleSpecificationInstanceE_Parameter();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl <em>WS View E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSViewE()
+         * @generated
+         */
+        EClass WS_VIEW_E = eINSTANCE.getWSViewE();
+
+        /**
+         * The meta object literal for the '<em><b>Searchable Business Elements</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS = eINSTANCE.getWSViewE_SearchableBusinessElements();
+
+        /**
+         * The meta object literal for the '<em><b>Viewable Business Elements</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS = eINSTANCE.getWSViewE_ViewableBusinessElements();
+
+        /**
+         * The meta object literal for the '<em><b>Transformer Active</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_VIEW_E__TRANSFORMER_ACTIVE = eINSTANCE.getWSViewE_TransformerActive();
+
+        /**
+         * The meta object literal for the '<em><b>Where Conditions</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_VIEW_E__WHERE_CONDITIONS = eINSTANCE.getWSViewE_WhereConditions();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl <em>WS Where Condition E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSWhereConditionE()
+         * @generated
+         */
+        EClass WS_WHERE_CONDITION_E = eINSTANCE.getWSWhereConditionE();
+
+        /**
+         * The meta object literal for the '<em><b>Left Path</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_WHERE_CONDITION_E__LEFT_PATH = eINSTANCE.getWSWhereConditionE_LeftPath();
+
+        /**
+         * The meta object literal for the '<em><b>Right Value Or Path</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH = eINSTANCE.getWSWhereConditionE_RightValueOrPath();
+
+        /**
+         * The meta object literal for the '<em><b>String Predicate</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_WHERE_CONDITION_E__STRING_PREDICATE = eINSTANCE.getWSWhereConditionE_StringPredicate();
+
+        /**
+         * The meta object literal for the '<em><b>Operator</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_WHERE_CONDITION_E__OPERATOR = eINSTANCE.getWSWhereConditionE_Operator();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereOperatorEImpl <em>WS Where Operator E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereOperatorEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSWhereOperatorE()
+         * @generated
+         */
+        EClass WS_WHERE_OPERATOR_E = eINSTANCE.getWSWhereOperatorE();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSStringPredicateEImpl <em>WS String Predicate E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSStringPredicateEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSStringPredicateE()
+         * @generated
+         */
+        EClass WS_STRING_PREDICATE_E = eINSTANCE.getWSStringPredicateE();
 
         /**
          * The meta object literal for the '<em>String Array</em>' data type.

@@ -25,9 +25,8 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
-
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -35,7 +34,7 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class RoleLabelProvider extends AbstractLabelProvider {
 
-    private static final Image IMG = ImageCache.getCreatedImage(EImage.ROLE.getPath());
+    private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/role.gif"); //$NON-NLS-1$;
 
     public String getCategoryLabel() {
         return "Role"; //$NON-NLS-1$

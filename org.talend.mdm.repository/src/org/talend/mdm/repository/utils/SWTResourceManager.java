@@ -70,6 +70,7 @@ public class SWTResourceManager {
      */
     public static Color getColor(int systemColorID) {
         Display display = Display.getCurrent();
+
         return display.getSystemColor(systemColorID);
     }
 

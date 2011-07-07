@@ -84,7 +84,8 @@ public class CreateFolderAction extends AbstractRepositoryAction {
                     containerViewObject.getRepositoryObjectType(), categoryName, containerViewObject.getProperty().getItem(),
                     false);
             containerViewObject.getChildren().add(folderViewObject);
-            commonViewer.refresh();
+            commonViewer.expandToLevel(containerViewObject, 1);
+            // commonViewer.refresh(folderViewObject);
         }
     }
 }

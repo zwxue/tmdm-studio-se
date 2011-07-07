@@ -1,0 +1,369 @@
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
+package org.talend.mdm.repository.model.mdmserverobject.impl;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
+import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
+import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
+import org.talend.mdm.repository.model.mdmserverobject.WSWhereOperatorE;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>WS Where Condition E</b></em>'.
+ * <!-- end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * <ul>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#getLeftPath <em>Left Path</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#getRightValueOrPath <em>Right Value Or Path</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#getStringPredicate <em>String Predicate</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#getOperator <em>Operator</em>}</li>
+ * </ul>
+ * </p>
+ *
+ * @generated
+ */
+public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditionE {
+    /**
+     * The default value of the '{@link #getLeftPath() <em>Left Path</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getLeftPath()
+     * @generated
+     * @ordered
+     */
+    protected static final String LEFT_PATH_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getLeftPath() <em>Left Path</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getLeftPath()
+     * @generated
+     * @ordered
+     */
+    protected String leftPath = LEFT_PATH_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRightValueOrPath() <em>Right Value Or Path</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRightValueOrPath()
+     * @generated
+     * @ordered
+     */
+    protected static final String RIGHT_VALUE_OR_PATH_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRightValueOrPath() <em>Right Value Or Path</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRightValueOrPath()
+     * @generated
+     * @ordered
+     */
+    protected String rightValueOrPath = RIGHT_VALUE_OR_PATH_EDEFAULT;
+
+    /**
+     * The cached value of the '{@link #getStringPredicate() <em>String Predicate</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getStringPredicate()
+     * @generated
+     * @ordered
+     */
+    protected WSStringPredicateE stringPredicate;
+
+    /**
+     * The cached value of the '{@link #getOperator() <em>Operator</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getOperator()
+     * @generated
+     * @ordered
+     */
+    protected WSWhereOperatorE operator;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected WSWhereConditionEImpl() {
+        super();
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    protected EClass eStaticClass() {
+        return MdmserverobjectPackage.Literals.WS_WHERE_CONDITION_E;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getLeftPath() {
+        return leftPath;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setLeftPath(String newLeftPath) {
+        String oldLeftPath = leftPath;
+        leftPath = newLeftPath;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WHERE_CONDITION_E__LEFT_PATH, oldLeftPath, leftPath));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getRightValueOrPath() {
+        return rightValueOrPath;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setRightValueOrPath(String newRightValueOrPath) {
+        String oldRightValueOrPath = rightValueOrPath;
+        rightValueOrPath = newRightValueOrPath;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH, oldRightValueOrPath, rightValueOrPath));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSStringPredicateE getStringPredicate() {
+        return stringPredicate;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public NotificationChain basicSetStringPredicate(WSStringPredicateE newStringPredicate, NotificationChain msgs) {
+        WSStringPredicateE oldStringPredicate = stringPredicate;
+        stringPredicate = newStringPredicate;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE, oldStringPredicate, newStringPredicate);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setStringPredicate(WSStringPredicateE newStringPredicate) {
+        if (newStringPredicate != stringPredicate) {
+            NotificationChain msgs = null;
+            if (stringPredicate != null)
+                msgs = ((InternalEObject)stringPredicate).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE, null, msgs);
+            if (newStringPredicate != null)
+                msgs = ((InternalEObject)newStringPredicate).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE, null, msgs);
+            msgs = basicSetStringPredicate(newStringPredicate, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE, newStringPredicate, newStringPredicate));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSWhereOperatorE getOperator() {
+        return operator;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public NotificationChain basicSetOperator(WSWhereOperatorE newOperator, NotificationChain msgs) {
+        WSWhereOperatorE oldOperator = operator;
+        operator = newOperator;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR, oldOperator, newOperator);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setOperator(WSWhereOperatorE newOperator) {
+        if (newOperator != operator) {
+            NotificationChain msgs = null;
+            if (operator != null)
+                msgs = ((InternalEObject)operator).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR, null, msgs);
+            if (newOperator != null)
+                msgs = ((InternalEObject)newOperator).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR, null, msgs);
+            msgs = basicSetOperator(newOperator, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR, newOperator, newOperator));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE:
+                return basicSetStringPredicate(null, msgs);
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
+                return basicSetOperator(null, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Object eGet(int featureID, boolean resolve, boolean coreType) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__LEFT_PATH:
+                return getLeftPath();
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH:
+                return getRightValueOrPath();
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE:
+                return getStringPredicate();
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
+                return getOperator();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public void eSet(int featureID, Object newValue) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__LEFT_PATH:
+                setLeftPath((String)newValue);
+                return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH:
+                setRightValueOrPath((String)newValue);
+                return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE:
+                setStringPredicate((WSStringPredicateE)newValue);
+                return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
+                setOperator((WSWhereOperatorE)newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public void eUnset(int featureID) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__LEFT_PATH:
+                setLeftPath(LEFT_PATH_EDEFAULT);
+                return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH:
+                setRightValueOrPath(RIGHT_VALUE_OR_PATH_EDEFAULT);
+                return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE:
+                setStringPredicate((WSStringPredicateE)null);
+                return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
+                setOperator((WSWhereOperatorE)null);
+                return;
+        }
+        super.eUnset(featureID);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public boolean eIsSet(int featureID) {
+        switch (featureID) {
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__LEFT_PATH:
+                return LEFT_PATH_EDEFAULT == null ? leftPath != null : !LEFT_PATH_EDEFAULT.equals(leftPath);
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH:
+                return RIGHT_VALUE_OR_PATH_EDEFAULT == null ? rightValueOrPath != null : !RIGHT_VALUE_OR_PATH_EDEFAULT.equals(rightValueOrPath);
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__STRING_PREDICATE:
+                return stringPredicate != null;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
+                return operator != null;
+        }
+        return super.eIsSet(featureID);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public String toString() {
+        if (eIsProxy()) return super.toString();
+
+        StringBuffer result = new StringBuffer(super.toString());
+        result.append(" (leftPath: ");
+        result.append(leftPath);
+        result.append(", rightValueOrPath: ");
+        result.append(rightValueOrPath);
+        result.append(')');
+        return result.toString();
+    }
+
+} //WSWhereConditionEImpl

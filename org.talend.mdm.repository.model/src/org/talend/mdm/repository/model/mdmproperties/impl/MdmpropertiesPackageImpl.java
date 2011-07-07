@@ -129,7 +129,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         isInited = true;
 
         // Initialize simple dependencies
-        MdmmetadataPackage.eINSTANCE.eClass();
         MdmserverobjectPackage.eINSTANCE.eClass();
         PropertiesPackage.eINSTANCE.eClass();
 

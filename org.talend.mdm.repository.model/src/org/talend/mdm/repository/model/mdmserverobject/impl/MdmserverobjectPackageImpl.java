@@ -27,6 +27,10 @@ import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescript
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
+import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
+import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
+import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
+import org.talend.mdm.repository.model.mdmserverobject.WSWhereOperatorE;
 
 /**
  * <!-- begin-user-doc -->
@@ -83,6 +87,34 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsRoleSpecificationInstanceEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsViewEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsWhereConditionEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsWhereOperatorEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsStringPredicateEEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -403,6 +435,114 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSViewE() {
+        return wsViewEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSViewE_SearchableBusinessElements() {
+        return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSViewE_ViewableBusinessElements() {
+        return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSViewE_TransformerActive() {
+        return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSViewE_WhereConditions() {
+        return (EReference)wsViewEEClass.getEStructuralFeatures().get(3);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSWhereConditionE() {
+        return wsWhereConditionEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSWhereConditionE_LeftPath() {
+        return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSWhereConditionE_RightValueOrPath() {
+        return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSWhereConditionE_StringPredicate() {
+        return (EReference)wsWhereConditionEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSWhereConditionE_Operator() {
+        return (EReference)wsWhereConditionEEClass.getEStructuralFeatures().get(3);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSWhereOperatorE() {
+        return wsWhereOperatorEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSStringPredicateE() {
+        return wsStringPredicateEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getStringArray() {
         return stringArrayEDataType;
     }
@@ -469,6 +609,22 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsRoleSpecificationInstanceEEClass, WS_ROLE_SPECIFICATION_INSTANCE_E__WRITABLE);
         createEAttribute(wsRoleSpecificationInstanceEEClass, WS_ROLE_SPECIFICATION_INSTANCE_E__PARAMETER);
 
+        wsViewEEClass = createEClass(WS_VIEW_E);
+        createEAttribute(wsViewEEClass, WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS);
+        createEAttribute(wsViewEEClass, WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS);
+        createEAttribute(wsViewEEClass, WS_VIEW_E__TRANSFORMER_ACTIVE);
+        createEReference(wsViewEEClass, WS_VIEW_E__WHERE_CONDITIONS);
+
+        wsWhereConditionEEClass = createEClass(WS_WHERE_CONDITION_E);
+        createEAttribute(wsWhereConditionEEClass, WS_WHERE_CONDITION_E__LEFT_PATH);
+        createEAttribute(wsWhereConditionEEClass, WS_WHERE_CONDITION_E__RIGHT_VALUE_OR_PATH);
+        createEReference(wsWhereConditionEEClass, WS_WHERE_CONDITION_E__STRING_PREDICATE);
+        createEReference(wsWhereConditionEEClass, WS_WHERE_CONDITION_E__OPERATOR);
+
+        wsWhereOperatorEEClass = createEClass(WS_WHERE_OPERATOR_E);
+
+        wsStringPredicateEEClass = createEClass(WS_STRING_PREDICATE_E);
+
         // Create data types
         stringArrayEDataType = createEDataType(STRING_ARRAY);
     }
@@ -506,6 +662,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         // Add supertypes to classes
         wsMenuEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsRoleEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsViewEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -541,6 +698,22 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSRoleSpecificationInstanceE_InstanceName(), ecorePackage.getEString(), "instanceName", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSRoleSpecificationInstanceE_Writable(), ecorePackage.getEBoolean(), "writable", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSRoleSpecificationInstanceE_Parameter(), this.getStringArray(), "parameter", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsViewEEClass, WSViewE.class, "WSViewE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSViewE_SearchableBusinessElements(), this.getStringArray(), "searchableBusinessElements", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSViewE_ViewableBusinessElements(), this.getStringArray(), "viewableBusinessElements", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSViewE_TransformerActive(), ecorePackage.getEBoolean(), "transformerActive", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSViewE_WhereConditions(), this.getWSWhereConditionE(), null, "whereConditions", null, 0, -1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsWhereConditionEEClass, WSWhereConditionE.class, "WSWhereConditionE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSWhereConditionE_LeftPath(), ecorePackage.getEString(), "leftPath", null, 0, 1, WSWhereConditionE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSWhereConditionE_RightValueOrPath(), ecorePackage.getEString(), "rightValueOrPath", null, 0, 1, WSWhereConditionE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSWhereConditionE_StringPredicate(), this.getWSStringPredicateE(), null, "stringPredicate", null, 0, 1, WSWhereConditionE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSWhereConditionE_Operator(), this.getWSWhereOperatorE(), null, "operator", null, 0, 1, WSWhereConditionE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsWhereOperatorEEClass, WSWhereOperatorE.class, "WSWhereOperatorE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+        initEClass(wsStringPredicateEEClass, WSStringPredicateE.class, "WSStringPredicateE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         // Initialize data types
         initEDataType(stringArrayEDataType, String[].class, "StringArray", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -64,7 +64,7 @@ public class MenuNodeResourceProvider extends AbstractRepositoryNodeResourceProv
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
             resource.getContents().add(((WSMenuItem) item).getWsMenu());
-
+            Resource eResource = ((WSMenuItem) item).getWsMenu().eResource();
             return resource;
         }
         return null;

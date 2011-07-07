@@ -34,11 +34,9 @@ import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -46,7 +44,7 @@ import com.amalto.workbench.image.ImageCache;
  */
 public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvider {
 
-    private static final Image FOLDER_IMG = ImageCache.getCreatedImage(EImage.FORDER.getPath());
+    private static final Image FOLDER_IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/folder.gif"); //$NON-NLS-1$
 
     private static final Color COLOR_GREY = EclipseResourceManager.getColor(SWT.COLOR_DARK_GRAY);
 

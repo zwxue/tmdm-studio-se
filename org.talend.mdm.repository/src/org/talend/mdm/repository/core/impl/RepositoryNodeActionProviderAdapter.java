@@ -37,6 +37,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
+import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
 
 /**
@@ -51,6 +52,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     static AbstractRepositoryAction removeFromRepositoryAction;
 
+    protected static AbstractRepositoryAction renameAction;
     // TODO just a demo,remove it in future
     static AbstractRepositoryAction updateServerDefAction;
 
@@ -59,11 +61,13 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         createFolderAction = new CreateFolderAction();
         removeFromRepositoryAction = new RemoveFromRepositoryAction();
         updateServerDefAction = new UpdateServerDefAction();
+        renameAction = new RenameObjectAction();
         //
         exportAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
         removeFromRepositoryAction.initCommonViewer(commonViewer);
         updateServerDefAction.initCommonViewer(commonViewer);
+        renameAction.initCommonViewer(commonViewer);
     }
 
     @Override

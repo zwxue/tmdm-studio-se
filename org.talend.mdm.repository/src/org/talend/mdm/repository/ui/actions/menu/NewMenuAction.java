@@ -59,8 +59,21 @@ public class NewMenuAction extends AbstractRepositoryAction {
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
     }
 
+    ContainerItem parentItem;
+
+    private Object selectObj;
+
     @Override
     public void run() {
+        parentItem = null;
+        selectObj = getSelectedObject().get(0);
+        if (selectObj instanceof IRepositoryViewObject) {
+            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
+            if (pItem instanceof ContainerItem) {
+                parentItem = (ContainerItem) pItem;
+            }
+        }
+
         InputDialog dlg = new InputDialog(getShell(), "New Menu",// "New "+IConstants.TALEND+" Object Instance",
                 "Enter a Name for the New Instance", null, new IInputValidator() {
 
@@ -70,6 +83,11 @@ public class NewMenuAction extends AbstractRepositoryAction {
                         if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
                             return "The name cannot contain invalid character!";
                         }
+                        IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(parentItem,
+                                newText.trim(), true);
+                        if (viewObject != null) {
+                            return "Already has a instance with same name";
+                        }
                         return null;
                     };
                 });
@@ -78,7 +96,7 @@ public class NewMenuAction extends AbstractRepositoryAction {
             return;
         String key = dlg.getValue();
         createMenu(key);
-        commonViewer.refresh();
+        commonViewer.expandToLevel(selectObj, 1);
         // TODO open editor
 
     }
@@ -108,16 +126,12 @@ public class NewMenuAction extends AbstractRepositoryAction {
         //
         WSMenuE menu = newBlankMenu(key);
         item.setWsMenu(menu);
-        for (Object obj : getSelectedObject()) {
-            if (obj instanceof IRepositoryViewObject) {
-                Item parentItem = ((IRepositoryViewObject) obj).getProperty().getItem();
-                if (parentItem instanceof ContainerItem) {
-                    item.getState().setPath(parentItem.getState().getPath());
-                    break;
-                }
-            }
+
+        if (parentItem != null) {
+            item.getState().setPath(parentItem.getState().getPath());
+            return RepositoryResourceUtil.createItem(item, key);
         }
-        return RepositoryResourceUtil.createItem(item, key);
+        return false;
     }
 
     public String getGroupName() {
