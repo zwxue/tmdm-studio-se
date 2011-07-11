@@ -20,6 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.talend.mdm.commmon;bundle-version="3.2.0",
  org.talend.mdm.workbench;bundle-version="3.2.0",
  org.talend.mdm.repository.model;bundle-version="1.0.0",
- org.talend.mdm.workbench.serverexplorer;bundle-version="1.0.0"
+ org.talend.mdm.workbench.serverexplorer;bundle-version="1.0.0",
+ org.junit
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
