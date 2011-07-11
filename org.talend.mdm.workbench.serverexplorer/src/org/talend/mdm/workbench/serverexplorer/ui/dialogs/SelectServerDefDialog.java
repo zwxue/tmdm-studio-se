@@ -33,6 +33,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
+import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.TreeContentProvider;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
@@ -68,7 +69,7 @@ public class SelectServerDefDialog extends TitleAreaDialog {
      */
     @Override
     protected Control createDialogArea(Composite parent) {
-        setTitle("Select a server location definition");
+        setTitle(Messages.SelectServerDefDialog_selectServerLocation);
         Composite area = (Composite) super.createDialogArea(parent);
         Composite container = new Composite(area, SWT.NONE);
         container.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -89,7 +90,6 @@ public class SelectServerDefDialog extends TitleAreaDialog {
                 IRepositoryViewObject viewObject = getCurSelectedViewObject();
                 MDMServerDefItem item = (MDMServerDefItem) viewObject.getProperty().getItem();
                 serverDef = item.getServerDef();
-                System.out.println(serverDef);
                 okBun.setEnabled(serverDef != null);
             }
         });

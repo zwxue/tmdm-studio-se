@@ -46,6 +46,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
+import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.ServerDefDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
@@ -190,7 +191,7 @@ public class ServerExplorer extends ViewPart {
 
         public AddServerDefAction() {
             setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-            setText("Add Server Location");
+            setText(Messages.ServerExplorer_AddServer);
         }
 
         public void run() {
@@ -209,7 +210,7 @@ public class ServerExplorer extends ViewPart {
         public CheckConnectionAction() {
 
             setImageDescriptor(IMG_CHECK_CONNECT);
-            setText("Check Connection");
+            setText(Messages.ServerExplorer_CheckConnection);
         }
 
         public void run() {
@@ -218,9 +219,9 @@ public class ServerExplorer extends ViewPart {
                 MDMServerDefItem mdmItem = getMDMItem(viewObject);
                 if (mdmItem != null) {
                     MDMServerDef serverDef = mdmItem.getServerDef();
-                    String msg = ServerDefService.checkMDMConnection(serverDef) ? "MDM Server Connected Sucessful!"
-                            : "Connction Failed,Please check connection settings.";
-                    MessageDialog.openInformation(getSite().getShell(), "Check Connection", msg);
+                    String msg = ServerDefService.checkMDMConnection(serverDef) ? Messages.ServerExplorer_ConnectSuccessful
+                            : Messages.ServerExplorer_ConnectFailed;
+                    MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
                 }
             }
         }
@@ -230,7 +231,7 @@ public class ServerExplorer extends ViewPart {
 
         public EditServerDefAction() {
             setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-            setText("Edit Server Location");
+            setText(Messages.ServerExplorer_EditServer);
         }
 
         public void run() {
@@ -260,15 +261,15 @@ public class ServerExplorer extends ViewPart {
 
         public DeleteServerDefAction() {
             setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-            setText("Remove Server Location");
+            setText(Messages.ServerExplorer_RemoveServer);
         }
 
         public void run() {
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
             if (viewObject != null) {
                 MDMServerDefItem serverDefItem = getMDMItem(viewObject);
-                if (MessageDialog.openQuestion(getViewSite().getShell(), "Delete Server",
-                        "Are you sure you want to delete the server location '" + serverDefItem.getServerDef().getName() + "'?")) {
+                if (MessageDialog.openQuestion(getViewSite().getShell(), Messages.ServerExplorer_RemoveServer,
+                        Messages.bind(Messages.ServerExplorer_RemoveConfirm, serverDefItem.getServerDef().getName()))) {
                     boolean result = ServerDefService.deleteServerDef(viewObject);
                     if (result) {
                         refreshServerDefs();
@@ -276,6 +277,5 @@ public class ServerExplorer extends ViewPart {
                 }
             }
         }
-
     }
 }

@@ -8,7 +8,7 @@
             class="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
             icon="icons/server.png"
             id="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
-            name="Server Explorer">
+            name="%View.ServerName">
       </view>
    </extension>
    <extension
@@ -20,7 +20,7 @@
                class="org.talend.mdm.workbench.serverexplorer.ui.actions.RefreshServerDefAction"
                icon="icons/refresh.gif"
                id="org.talend.mdm.workbench.serverexplorer.ui.actions.RefreshServerDefAction"
-               label="Refresh"
+               label="%Action.Refresh"
                style="push"
                toolbarPath="ServerExplorerToolBar">
          </action>

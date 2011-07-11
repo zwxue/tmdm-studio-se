@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Text;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
+import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
@@ -114,9 +115,9 @@ public class ServerDefDialog extends TitleAreaDialog {
     @Override
     protected Control createDialogArea(Composite parent) {
         if (isUpdateServerDef){
-            setTitle("Update Server Location");
+            setTitle(Messages.ServerDefDialog_UpdateServer);
         }else{
-            setTitle("Add Server Location");
+            setTitle(Messages.ServerDefDialog_AddServer);
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
         }
         //
@@ -125,33 +126,33 @@ public class ServerDefDialog extends TitleAreaDialog {
         container.setLayout(new GridLayout(2, false));
         container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        new Label(container, SWT.NONE).setText("Name");
+        new Label(container, SWT.NONE).setText(Messages.ServerDefDialog_Name);
 
         nameText = new Text(container, SWT.BORDER);
 
         nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         nameText.setFocus();
 
-        new Label(container, SWT.NONE).setText("Server");
+        new Label(container, SWT.NONE).setText(Messages.ServerDefDialog_Server);
 
         urlText = new Text(container, SWT.BORDER);
 
         urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         Group grpAuthentication = new Group(container, SWT.NONE);
-        grpAuthentication.setText("Authentication");
+        grpAuthentication.setText(Messages.ServerDefDialog_Authentication);
         grpAuthentication.setLayout(new GridLayout(2, false));
         GridData gd_grpAuthentication = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
         gd_grpAuthentication.widthHint = 439;
         grpAuthentication.setLayoutData(gd_grpAuthentication);
 
-        new Label(grpAuthentication, SWT.NONE).setText("Username");
+        new Label(grpAuthentication, SWT.NONE).setText(Messages.ServerDefDialog_UserName);
 
         userNameText = new Text(grpAuthentication, SWT.BORDER);
 
         userNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-        new Label(grpAuthentication, SWT.NONE).setText("Password");
+        new Label(grpAuthentication, SWT.NONE).setText(Messages.ServerDefDialog_Password);
 
         passwordText = new Text(grpAuthentication, SWT.BORDER|SWT.PASSWORD);
 
@@ -159,7 +160,7 @@ public class ServerDefDialog extends TitleAreaDialog {
         // check Enterprise
 
         if (isEnterprise) {
-            new Label(container, SWT.NONE).setText("Version");
+            new Label(container, SWT.NONE).setText(Messages.ServerDefDialog_Version);
 
             universeCombo = new Combo(container, SWT.NONE);
             universeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -241,35 +242,35 @@ public class ServerDefDialog extends TitleAreaDialog {
     private boolean validateInput() {
 
         if (newName.length() == 0) {
-            setErrorMessage("Name can't be empty!");
+            setErrorMessage(Messages.ServerDefDialog_NameCanNotBeEmpty);
             nameText.setFocus();
             return false;
         }
 
         if (ServerDefService.isExistServerDefName(newName)) {
             if ((!isUpdateServerDef) || (isUpdateServerDef() && (!serverDef.getName().equalsIgnoreCase(newName)))) {
-                setErrorMessage("A server with same name already exists!");
+                setErrorMessage(Messages.ServerDefDialog_SameName);
                 nameText.setFocus();
                 return false;
             }
         }
         if (urlText.getText().trim().length() == 0) {
-            setErrorMessage("Server can't be empty!");
+            setErrorMessage(Messages.ServerDefDialog_ServerCanNotBeEmpty);
             urlText.setFocus();
             return false;
         }
         if (!serverDef.validate(serverDef.getUrl())) {
-            setErrorMessage("Server is invalid!");
+            setErrorMessage(Messages.ServerDefDialog_ServerInvalid);
             urlText.setFocus();
             return false;
         }
         if (serverDef.getUser().length() == 0) {
-            setErrorMessage("Username can't be empty!");
+            setErrorMessage(Messages.ServerDefDialog_UsernameCanNotBeEmpty);
             userNameText.setFocus();
             return false;
         }
         if (serverDef.getPasswd().length() == 0) {
-            setErrorMessage("Password can't be empty!");
+            setErrorMessage(Messages.ServerDefDialog_PasswordCanNotBeEmpty);
             passwordText.setFocus();
             return false;
         }
@@ -290,7 +291,7 @@ public class ServerDefDialog extends TitleAreaDialog {
             if (!validateInput())
                 return;
             boolean check = ServerDefService.checkMDMConnection(serverDef);
-            String msg = check ? "MDM Server Connected Sucessful!" : "Connction Failed,Please check connection settings.";
+            String msg = check ? Messages.ServerDefDialog_ConnectSuccessful : Messages.ServerDefDialog_ConnectFailed;
             if (check) {
                 setMessage(msg);
             } else {
@@ -317,7 +318,7 @@ public class ServerDefDialog extends TitleAreaDialog {
      */
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, CHECK_CONNECTION_ID, "Check Connection", false);
+        createButton(parent, CHECK_CONNECTION_ID, Messages.ServerDefDialog_CheckConnection, false);
         createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
         createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
     }

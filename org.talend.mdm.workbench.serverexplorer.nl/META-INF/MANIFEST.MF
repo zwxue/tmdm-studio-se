@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ServerExplorerPlugin NL
+Bundle-SymbolicName: org.talend.mdm.workbench.serverexplorer.nl
+Bundle-Version: 1.0.0
+Bundle-Vendor: Talend
+Fragment-Host: org.talend.mdm.workbench.serverexplorer
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
