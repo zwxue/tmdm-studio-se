@@ -674,7 +674,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     protected List<ExportFileResource> getExportResources() throws ProcessorException {
         Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap();
-        return manager.getExportResources(process, exportChoiceMap, contextCombo.getText(), "All", IProcessor.NO_STATISTICS, //$NON-NLS-1$
+        return manager.getExportResources(process, exportChoiceMap, contextCombo.getText(), JobScriptsManager.ALL_ENVIRONMENTS,
+                IProcessor.NO_STATISTICS,
                 IProcessor.NO_TRACES);
     }
 
