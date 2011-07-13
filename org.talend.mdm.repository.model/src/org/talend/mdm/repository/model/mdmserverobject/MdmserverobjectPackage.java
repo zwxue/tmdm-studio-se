@@ -107,13 +107,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int MDM_SERVER_OBJECT__LAST_SERVER_DEF = 3;
 
     /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_OBJECT__TYPE = 4;
+
+    /**
      * The number of structural features of the '<em>MDM Server Object</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int MDM_SERVER_OBJECT_FEATURE_COUNT = 4;
+    int MDM_SERVER_OBJECT_FEATURE_COUNT = 5;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
@@ -160,6 +169,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_MENU_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MENU_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
      * The feature id for the '<em><b>Menu Entries</b></em>' containment reference list.
@@ -336,6 +354,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROLE_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
 
     /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROLE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
      * The feature id for the '<em><b>Specification</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -490,6 +517,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_VIEW_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
      * The feature id for the '<em><b>Searchable Business Elements</b></em>' attribute.
@@ -692,6 +728,17 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      */
     EReference getMDMServerObject_LastServerDef();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getType <em>Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Type</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getType()
+     * @see #getMDMServerObject()
+     * @generated
+     */
+    EAttribute getMDMServerObject_Type();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE <em>WS Menu E</em>}'.
@@ -1130,6 +1177,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EReference MDM_SERVER_OBJECT__LAST_SERVER_DEF = eINSTANCE.getMDMServerObject_LastServerDef();
+
+        /**
+         * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MDM_SERVER_OBJECT__TYPE = eINSTANCE.getMDMServerObject_Type();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.

@@ -30,6 +30,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.MDMServerObjectImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.MDMServerObjectImpl#isSystem <em>System</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.MDMServerObjectImpl#getLastServerDef <em>Last Server Def</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.MDMServerObjectImpl#getType <em>Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -105,6 +106,26 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
      * @ordered
      */
     protected MDMServerDef lastServerDef;
+
+    /**
+     * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getType()
+     * @generated
+     * @ordered
+     */
+    protected static final int TYPE_EDEFAULT = 0;
+
+    /**
+     * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getType()
+     * @generated
+     * @ordered
+     */
+    protected int type = TYPE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -236,6 +257,27 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
      * <!-- end-user-doc -->
      * @generated
      */
+    public int getType() {
+        return type;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setType(int newType) {
+        int oldType = type;
+        type = newType;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE, oldType, type));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
@@ -261,6 +303,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return isSystem();
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
                 return getLastServerDef();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                return getType();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -284,6 +328,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
                 setLastServerDef((MDMServerDef)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                setType((Integer)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -309,6 +356,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
                 setLastServerDef((MDMServerDef)null);
                 return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                setType(TYPE_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -329,6 +379,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return system != SYSTEM_EDEFAULT;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
                 return lastServerDef != null;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                return type != TYPE_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
@@ -349,6 +401,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         result.append(description);
         result.append(", system: ");
         result.append(system);
+        result.append(", type: ");
+        result.append(type);
         result.append(')');
         return result.toString();
     }
