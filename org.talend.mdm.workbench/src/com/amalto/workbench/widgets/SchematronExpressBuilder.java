@@ -79,20 +79,24 @@ public class SchematronExpressBuilder {
     private boolean isAbsoluteXPath = false;
     // Modified by hbhong,to fix bug 21784, add a treeParent field to receive TreeParent object
     protected TreeParent treeParent;
-    
+
+    // schematron using XPathFunc.xml, others using StandardXPathFunc.xml
+    protected boolean isSchematron;
     public void setTreeParent(TreeParent treeParent) {
         this.treeParent = treeParent;
     }
     // The ending| bug:21784
     public SchematronExpressBuilder(Composite parent ,String value, String conceptName) {
-        this(parent, value, conceptName, false);
+        this(parent, value, conceptName, false, true);
     }
 
-    public SchematronExpressBuilder(Composite parent,  String value, String conceptName, boolean isAbsoluteXPath) {
+    public SchematronExpressBuilder(Composite parent, String value, String conceptName, boolean isAbsoluteXPath,
+            boolean isSchematron) {
         this.parent = parent;
         this.value = value;
         this.conceptName = conceptName;
         this.isAbsoluteXPath = isAbsoluteXPath;
+        this.isSchematron = isSchematron;
         try {
             parseFunxml();
         } catch (Exception e) {
@@ -127,7 +131,10 @@ public class SchematronExpressBuilder {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document document;
-            in = SchematronExpressBuilder.class.getResourceAsStream("XPathFunc.xml");//$NON-NLS-1$
+            if (isSchematron)
+                in = SchematronExpressBuilder.class.getResourceAsStream("XPathFunc.xml");//$NON-NLS-1$
+            else
+                in = SchematronExpressBuilder.class.getResourceAsStream("StandardXPathFunc.xml");//$NON-NLS-1$
             document = builder.parse(in);
             NodeList list = document.getElementsByTagName("category");//$NON-NLS-1$
             categories = new ArrayList<XPathFunc>();

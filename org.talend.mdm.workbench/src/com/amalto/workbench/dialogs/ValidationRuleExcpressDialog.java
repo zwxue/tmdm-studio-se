@@ -35,15 +35,20 @@ public class ValidationRuleExcpressDialog extends Dialog {
     private boolean isAbsoluteXPath = false;
     // Modified by hbhong,to fix bug 21784, add a treeParent field to receive TreeParent object
     protected TreeParent treeParent;
+
+    // schematron using XPathFunc.xml, others using StandardXPathFunc.xml
+    protected boolean isSchematron;
     public ValidationRuleExcpressDialog(Shell parentShell, TreeParent treeParent,String title, String value, String conceptName) {
-        this(parentShell,treeParent, title, value, conceptName, false);
+        this(parentShell, treeParent, title, value, conceptName, false, true);
     }
 
-    public ValidationRuleExcpressDialog(Shell parentShell,TreeParent treeParent, String title, String value, String conceptName, boolean isAbsoluteXPath) {
+    public ValidationRuleExcpressDialog(Shell parentShell, TreeParent treeParent, String title, String value, String conceptName,
+            boolean isAbsoluteXPath, boolean isSchematron) {
         super(parentShell);
         this.treeParent=treeParent;
         this.title = title;
         this.value = value;
+        this.isSchematron = isSchematron;
         this.conceptName = conceptName;
         this.isAbsoluteXPath = isAbsoluteXPath;
     }
@@ -52,7 +57,7 @@ public class ValidationRuleExcpressDialog extends Dialog {
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
         Composite composite = (Composite) super.createDialogArea(parent);
-        builder = new SchematronExpressBuilder(composite, value, conceptName, isAbsoluteXPath);
+        builder = new SchematronExpressBuilder(composite, value, conceptName, isAbsoluteXPath, isSchematron);
         builder.setTreeParent(treeParent);
         return composite;
     }

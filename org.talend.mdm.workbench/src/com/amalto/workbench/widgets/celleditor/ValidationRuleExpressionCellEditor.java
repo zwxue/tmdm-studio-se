@@ -40,7 +40,7 @@ public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor
     protected Object openDialogBox(Control cellEditorWindow) {
         
         ValidationRuleExcpressDialog dialog = new ValidationRuleExcpressDialog(cellEditorWindow.getShell(),treeParent,
-                "Build Validation Rule Expression ", getValue() == null ? "" : getValue().toString(), conceptName);
+                "Build Validation Rule Expression ", getValue() == null ? "" : getValue().toString(), conceptName, false, true);
 
         if (dialog.open() != Window.OK)
             return null;

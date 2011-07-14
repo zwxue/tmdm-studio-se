@@ -82,7 +82,8 @@ public class ValidationRuleWidget {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 Shell shell = new Shell(composite.getDisplay(), SWT.BORDER);
-                dlg = new ValidationRuleExcpressDialog(shell,treeParent, "Build Validation Rule Expression ", text.getText(), conceptName);
+                dlg = new ValidationRuleExcpressDialog(shell, treeParent, "Build Validation Rule Expression ", text.getText(),
+                        conceptName, false, true);
                 dlg.create();
                 dlg.getShell().setMaximized(false);
                 // dlg.getShell().setSize(new Point(640,560));

@@ -82,7 +82,7 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             }
             // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
             ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),getTreeParent(),
-                    "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName);
+                    "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, false, false);
             // The ending| bug:21784
             dlg.create();
             dlg.getShell().setMaximized(false);
