@@ -156,6 +156,27 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmserverobjectPackage.WS_DATA_MODEL_E: {
+                WSDataModelE wsDataModelE = (WSDataModelE)theEObject;
+                T result = caseWSDataModelE(wsDataModelE);
+                if (result == null) result = caseMDMServerObject(wsDataModelE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_DATA_CLUSTER_E: {
+                WSDataClusterE wsDataClusterE = (WSDataClusterE)theEObject;
+                T result = caseWSDataClusterE(wsDataClusterE);
+                if (result == null) result = caseMDMServerObject(wsDataClusterE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_STORED_PROCEDURE_E: {
+                WSStoredProcedureE wsStoredProcedureE = (WSStoredProcedureE)theEObject;
+                T result = caseWSStoredProcedureE(wsStoredProcedureE);
+                if (result == null) result = caseMDMServerObject(wsStoredProcedureE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -322,6 +343,51 @@ public class MdmserverobjectSwitch<T> {
      * @generated
      */
     public T caseWSStringPredicateE(WSStringPredicateE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Data Model E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Data Model E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSDataModelE(WSDataModelE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Data Cluster E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Data Cluster E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSDataClusterE(WSDataClusterE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Stored Procedure E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Stored Procedure E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSStoredProcedureE(WSStoredProcedureE object) {
         return null;
     }
 

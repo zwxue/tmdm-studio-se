@@ -22,10 +22,10 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoleEImpl#getSpecification <em>Specification</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoleEImpl#getSpecification <em>Specification</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class WSRoleEImpl extends MDMServerObjectImpl implements WSRoleE {
@@ -42,7 +42,6 @@ public class WSRoleEImpl extends MDMServerObjectImpl implements WSRoleE {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     protected WSRoleEImpl() {
@@ -51,7 +50,6 @@ public class WSRoleEImpl extends MDMServerObjectImpl implements WSRoleE {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -61,87 +59,80 @@ public class WSRoleEImpl extends MDMServerObjectImpl implements WSRoleE {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public EList<WSRoleSpecificationE> getSpecification() {
         if (specification == null) {
-            specification = new EObjectContainmentEList<WSRoleSpecificationE>(WSRoleSpecificationE.class, this,
-                    MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION);
+            specification = new EObjectContainmentEList<WSRoleSpecificationE>(WSRoleSpecificationE.class, this, MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION);
         }
         return specification;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
-        case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
-            return ((InternalEList<?>) getSpecification()).basicRemove(otherEnd, msgs);
+            case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
+                return ((InternalEList<?>)getSpecification()).basicRemove(otherEnd, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
-            return getSpecification();
+            case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
+                return getSpecification();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
-            getSpecification().clear();
-            getSpecification().addAll((Collection<? extends WSRoleSpecificationE>) newValue);
-            return;
+            case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
+                getSpecification().clear();
+                getSpecification().addAll((Collection<? extends WSRoleSpecificationE>)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
-            getSpecification().clear();
-            return;
+            case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
+                getSpecification().clear();
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
-            return specification != null && !specification.isEmpty();
+            case MdmserverobjectPackage.WS_ROLE_E__SPECIFICATION:
+                return specification != null && !specification.isEmpty();
         }
         return super.eIsSet(featureID);
     }

@@ -46,6 +46,22 @@
             products="MDM"
             type="MDM.Category">
       </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.DataModelRepositoryNode"
+            folder="MDM/datamodel"
+            isResouce="true"
+            label="Data Model"
+            products="MDM"
+            type="MDM.DataModel">
+      </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.DataClusterRepositoryNode"
+            folder="MDM/datacontainer"
+            isResouce="true"
+            label="Data Container"
+            products="MDM"
+            type="MDM.DataCluster">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.core.repository.repository_content">
@@ -144,6 +160,14 @@
    </extension>
    <extension
          point="org.talend.mdm.repository.repositoryConfiguration">
+      <configuration
+            class="org.talend.mdm.repository.core.impl.datacontainer.DataClusterNodeConfiguration"
+            label="Data Container">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.datamodel.DataModelNodeConfiguration"
+            label="Data Model">
+      </configuration>
       <configuration
             class="org.talend.mdm.repository.core.impl.menu.MenuNodeConfiguration"
             label="Menu">

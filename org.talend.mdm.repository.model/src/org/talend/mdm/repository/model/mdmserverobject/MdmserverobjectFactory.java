@@ -125,6 +125,33 @@ public interface MdmserverobjectFactory extends EFactory {
     WSStringPredicateE createWSStringPredicateE();
 
     /**
+     * Returns a new object of class '<em>WS Data Model E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Data Model E</em>'.
+     * @generated
+     */
+    WSDataModelE createWSDataModelE();
+
+    /**
+     * Returns a new object of class '<em>WS Data Cluster E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Data Cluster E</em>'.
+     * @generated
+     */
+    WSDataClusterE createWSDataClusterE();
+
+    /**
+     * Returns a new object of class '<em>WS Stored Procedure E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Stored Procedure E</em>'.
+     * @generated
+     */
+    WSStoredProcedureE createWSStoredProcedureE();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

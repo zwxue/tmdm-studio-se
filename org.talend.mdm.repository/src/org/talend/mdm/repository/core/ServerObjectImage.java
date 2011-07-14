@@ -21,7 +21,9 @@ import org.talend.commons.ui.runtime.image.IImage;
 public enum ServerObjectImage implements IImage {
     MENU_ICON("/icons/menu.gif"), //$NON-NLS-1$
     ROLE_ICON("/icons/role.gif"), //$NON-NLS-1$
-    VIEW_ICON("/icons/view.png");//$NON-NLS-1$
+    VIEW_ICON("/icons/view.png"), //$NON-NLS-1$
+    DATAMODEL_ICON("/icons/datamodel.png"), //$NON-NLS-1$
+    DATACLUSTER_ICON("/icons/datacluster.png");//$NON-NLS-1$
 
     private String path;
 

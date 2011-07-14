@@ -73,6 +73,9 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_WHERE_CONDITION_E: return createWSWhereConditionE();
             case MdmserverobjectPackage.WS_WHERE_OPERATOR_E: return createWSWhereOperatorE();
             case MdmserverobjectPackage.WS_STRING_PREDICATE_E: return createWSStringPredicateE();
+            case MdmserverobjectPackage.WS_DATA_MODEL_E: return createWSDataModelE();
+            case MdmserverobjectPackage.WS_DATA_CLUSTER_E: return createWSDataClusterE();
+            case MdmserverobjectPackage.WS_STORED_PROCEDURE_E: return createWSStoredProcedureE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -216,6 +219,36 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSStringPredicateE createWSStringPredicateE() {
         WSStringPredicateEImpl wsStringPredicateE = new WSStringPredicateEImpl();
         return wsStringPredicateE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSDataModelE createWSDataModelE() {
+        WSDataModelEImpl wsDataModelE = new WSDataModelEImpl();
+        return wsDataModelE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSDataClusterE createWSDataClusterE() {
+        WSDataClusterEImpl wsDataClusterE = new WSDataClusterEImpl();
+        return wsDataClusterE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSStoredProcedureE createWSStoredProcedureE() {
+        WSStoredProcedureEImpl wsStoredProcedureE = new WSStoredProcedureEImpl();
+        return wsStoredProcedureE;
     }
 
     /**

@@ -116,6 +116,18 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
                 return createWSStringPredicateEAdapter();
             }
             @Override
+            public Adapter caseWSDataModelE(WSDataModelE object) {
+                return createWSDataModelEAdapter();
+            }
+            @Override
+            public Adapter caseWSDataClusterE(WSDataClusterE object) {
+                return createWSDataClusterEAdapter();
+            }
+            @Override
+            public Adapter caseWSStoredProcedureE(WSStoredProcedureE object) {
+                return createWSStoredProcedureEAdapter();
+            }
+            @Override
             public Adapter defaultCase(EObject object) {
                 return createEObjectAdapter();
             }
@@ -286,6 +298,48 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSStringPredicateEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSDataModelE <em>WS Data Model E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSDataModelE
+     * @generated
+     */
+    public Adapter createWSDataModelEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE <em>WS Data Cluster E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE
+     * @generated
+     */
+    public Adapter createWSDataClusterEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE <em>WS Stored Procedure E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE
+     * @generated
+     */
+    public Adapter createWSStoredProcedureEAdapter() {
         return null;
     }
 

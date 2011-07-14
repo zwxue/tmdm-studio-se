@@ -19,21 +19,18 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core;
+package org.talend.mdm.repository.core.nodes;
+
+import org.talend.mdm.repository.core.IServerObjectOrdinal;
+import org.talend.mdm.repository.core.ServerObjectImage;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public interface IServerObjectOrdinal {
+public class DataClusterRepositoryNode extends RepositoryNodeAdapter {
 
-    public static final int DATA_CLUSTER = 7;
-
-    public static final int DATA_MODEL = 8;
-
-    public static final int MENU = 10;
-
-    public static final int ROLE = 11;
-
-    public static final int VIEW = 12;
+    public DataClusterRepositoryNode() {
+        super(ServerObjectImage.DATACLUSTER_ICON, IServerObjectOrdinal.DATA_CLUSTER);
+    }
 }

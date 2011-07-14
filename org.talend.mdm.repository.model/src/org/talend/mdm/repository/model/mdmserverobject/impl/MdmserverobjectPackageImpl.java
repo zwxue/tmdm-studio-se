@@ -21,12 +21,15 @@ import org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
+import org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE;
 import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
@@ -115,6 +118,27 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsStringPredicateEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsDataModelEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsDataClusterEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsStoredProcedureEEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -552,6 +576,69 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSDataModelE() {
+        return wsDataModelEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSDataModelE_XsdSchema() {
+        return (EAttribute)wsDataModelEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSDataClusterE() {
+        return wsDataClusterEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSDataClusterE_Vocabulary() {
+        return (EAttribute)wsDataClusterEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSStoredProcedureE() {
+        return wsStoredProcedureEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSStoredProcedureE_Procedure() {
+        return (EAttribute)wsStoredProcedureEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSStoredProcedureE_RefreshCache() {
+        return (EAttribute)wsStoredProcedureEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getStringArray() {
         return stringArrayEDataType;
     }
@@ -635,6 +722,16 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         wsStringPredicateEEClass = createEClass(WS_STRING_PREDICATE_E);
 
+        wsDataModelEEClass = createEClass(WS_DATA_MODEL_E);
+        createEAttribute(wsDataModelEEClass, WS_DATA_MODEL_E__XSD_SCHEMA);
+
+        wsDataClusterEEClass = createEClass(WS_DATA_CLUSTER_E);
+        createEAttribute(wsDataClusterEEClass, WS_DATA_CLUSTER_E__VOCABULARY);
+
+        wsStoredProcedureEEClass = createEClass(WS_STORED_PROCEDURE_E);
+        createEAttribute(wsStoredProcedureEEClass, WS_STORED_PROCEDURE_E__PROCEDURE);
+        createEAttribute(wsStoredProcedureEEClass, WS_STORED_PROCEDURE_E__REFRESH_CACHE);
+
         // Create data types
         stringArrayEDataType = createEDataType(STRING_ARRAY);
     }
@@ -673,6 +770,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsMenuEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsRoleEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsViewEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsDataModelEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsDataClusterEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsStoredProcedureEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -725,6 +825,16 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(wsWhereOperatorEEClass, WSWhereOperatorE.class, "WSWhereOperatorE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(wsStringPredicateEEClass, WSStringPredicateE.class, "WSStringPredicateE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+        initEClass(wsDataModelEEClass, WSDataModelE.class, "WSDataModelE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSDataModelE_XsdSchema(), ecorePackage.getEString(), "xsdSchema", null, 0, 1, WSDataModelE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsDataClusterEEClass, WSDataClusterE.class, "WSDataClusterE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSDataClusterE_Vocabulary(), ecorePackage.getEString(), "vocabulary", null, 0, 1, WSDataClusterE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsStoredProcedureEEClass, WSStoredProcedureE.class, "WSStoredProcedureE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSStoredProcedureE_Procedure(), ecorePackage.getEString(), "procedure", null, 0, 1, WSStoredProcedureE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSStoredProcedureE_RefreshCache(), ecorePackage.getEBoolean(), "refreshCache", null, 0, 1, WSStoredProcedureE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(stringArrayEDataType, String[].class, "StringArray", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -19,21 +19,34 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core;
+package org.talend.mdm.repository.core.impl.datacontainer;
+
+import java.util.List;
+
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.impl.AbstractContentProvider;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSDataCluster;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public interface IServerObjectOrdinal {
+public class DataClusterContentProvider extends AbstractContentProvider {
 
-    public static final int DATA_CLUSTER = 7;
+    @Override
+    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_DATACLUSTER, parentItem,
+                TreeObject.DATA_CLUSTER, true);
+    }
 
-    public static final int DATA_MODEL = 8;
+    @Override
+    public Class getWSObjectClass() {
+        return WSDataCluster.class;
+    }
 
-    public static final int MENU = 10;
-
-    public static final int ROLE = 11;
-
-    public static final int VIEW = 12;
 }

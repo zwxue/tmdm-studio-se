@@ -69,6 +69,8 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
             case MdmpropertiesPackage.WS_MENU_ITEM: return createWSMenuItem();
             case MdmpropertiesPackage.WS_ROLE_ITEM: return createWSRoleItem();
             case MdmpropertiesPackage.CONTAINER_ITEM: return createContainerItem();
+            case MdmpropertiesPackage.WS_DATA_MODEL_ITEM: return createWSDataModelItem();
+            case MdmpropertiesPackage.WS_DATA_CLUSTER_ITEM: return createWSDataClusterItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -162,6 +164,26 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public ContainerItem createContainerItem() {
         ContainerItemImpl containerItem = new ContainerItemImpl();
         return containerItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSDataModelItem createWSDataModelItem() {
+        WSDataModelItemImpl wsDataModelItem = new WSDataModelItemImpl();
+        return wsDataModelItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSDataClusterItem createWSDataClusterItem() {
+        WSDataClusterItemImpl wsDataClusterItem = new WSDataClusterItemImpl();
+        return wsDataClusterItem;
     }
 
     /**

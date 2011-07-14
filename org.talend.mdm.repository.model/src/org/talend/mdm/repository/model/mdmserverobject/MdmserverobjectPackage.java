@@ -666,13 +666,241 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_STRING_PREDICATE_E_FEATURE_COUNT = 0;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSDataModelEImpl <em>WS Data Model E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSDataModelEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSDataModelE()
+     * @generated
+     */
+    int WS_DATA_MODEL_E = 11;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Xsd Schema</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__XSD_SCHEMA = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Data Model E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSDataClusterEImpl <em>WS Data Cluster E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSDataClusterEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSDataClusterE()
+     * @generated
+     */
+    int WS_DATA_CLUSTER_E = 12;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Vocabulary</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__VOCABULARY = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Data Cluster E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSStoredProcedureEImpl <em>WS Stored Procedure E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSStoredProcedureEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSStoredProcedureE()
+     * @generated
+     */
+    int WS_STORED_PROCEDURE_E = 13;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Procedure</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__PROCEDURE = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Refresh Cache</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__REFRESH_CACHE = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The number of structural features of the '<em>WS Stored Procedure E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
+
+    /**
      * The meta object id for the '<em>String Array</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getStringArray()
      * @generated
      */
-    int STRING_ARRAY = 11;
+    int STRING_ARRAY = 14;
 
 
     /**
@@ -1105,6 +1333,80 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSStringPredicateE();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSDataModelE <em>WS Data Model E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Data Model E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSDataModelE
+     * @generated
+     */
+    EClass getWSDataModelE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSDataModelE#getXsdSchema <em>Xsd Schema</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Xsd Schema</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSDataModelE#getXsdSchema()
+     * @see #getWSDataModelE()
+     * @generated
+     */
+    EAttribute getWSDataModelE_XsdSchema();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE <em>WS Data Cluster E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Data Cluster E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE
+     * @generated
+     */
+    EClass getWSDataClusterE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE#getVocabulary <em>Vocabulary</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Vocabulary</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE#getVocabulary()
+     * @see #getWSDataClusterE()
+     * @generated
+     */
+    EAttribute getWSDataClusterE_Vocabulary();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE <em>WS Stored Procedure E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Stored Procedure E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE
+     * @generated
+     */
+    EClass getWSStoredProcedureE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE#getProcedure <em>Procedure</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Procedure</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE#getProcedure()
+     * @see #getWSStoredProcedureE()
+     * @generated
+     */
+    EAttribute getWSStoredProcedureE_Procedure();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE#isRefreshCache <em>Refresh Cache</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Refresh Cache</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE#isRefreshCache()
+     * @see #getWSStoredProcedureE()
+     * @generated
+     */
+    EAttribute getWSStoredProcedureE_RefreshCache();
+
+    /**
      * Returns the meta object for data type '<em>String Array</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1477,6 +1779,68 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EClass WS_STRING_PREDICATE_E = eINSTANCE.getWSStringPredicateE();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSDataModelEImpl <em>WS Data Model E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSDataModelEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSDataModelE()
+         * @generated
+         */
+        EClass WS_DATA_MODEL_E = eINSTANCE.getWSDataModelE();
+
+        /**
+         * The meta object literal for the '<em><b>Xsd Schema</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_DATA_MODEL_E__XSD_SCHEMA = eINSTANCE.getWSDataModelE_XsdSchema();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSDataClusterEImpl <em>WS Data Cluster E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSDataClusterEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSDataClusterE()
+         * @generated
+         */
+        EClass WS_DATA_CLUSTER_E = eINSTANCE.getWSDataClusterE();
+
+        /**
+         * The meta object literal for the '<em><b>Vocabulary</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_DATA_CLUSTER_E__VOCABULARY = eINSTANCE.getWSDataClusterE_Vocabulary();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSStoredProcedureEImpl <em>WS Stored Procedure E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSStoredProcedureEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSStoredProcedureE()
+         * @generated
+         */
+        EClass WS_STORED_PROCEDURE_E = eINSTANCE.getWSStoredProcedureE();
+
+        /**
+         * The meta object literal for the '<em><b>Procedure</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_STORED_PROCEDURE_E__PROCEDURE = eINSTANCE.getWSStoredProcedureE_Procedure();
+
+        /**
+         * The meta object literal for the '<em><b>Refresh Cache</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_STORED_PROCEDURE_E__REFRESH_CACHE = eINSTANCE.getWSStoredProcedureE_RefreshCache();
 
         /**
          * The meta object literal for the '<em>String Array</em>' data type.

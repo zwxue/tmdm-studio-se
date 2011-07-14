@@ -64,4 +64,14 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSWhereOperatorE"/>
   <eClassifiers xsi:type="ecore:EClass" name="WSStringPredicateE"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WSDataModelE" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xsdSchema" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSDataClusterE" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vocabulary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSStoredProcedureE" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="procedure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refreshCache" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
 </ecore:EPackage>

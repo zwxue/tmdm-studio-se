@@ -141,6 +141,24 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.WS_DATA_MODEL_ITEM: {
+                WSDataModelItem wsDataModelItem = (WSDataModelItem)theEObject;
+                T result = caseWSDataModelItem(wsDataModelItem);
+                if (result == null) result = caseMDMServerObjectItem(wsDataModelItem);
+                if (result == null) result = caseMDMItem(wsDataModelItem);
+                if (result == null) result = caseItem(wsDataModelItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmpropertiesPackage.WS_DATA_CLUSTER_ITEM: {
+                WSDataClusterItem wsDataClusterItem = (WSDataClusterItem)theEObject;
+                T result = caseWSDataClusterItem(wsDataClusterItem);
+                if (result == null) result = caseMDMServerObjectItem(wsDataClusterItem);
+                if (result == null) result = caseMDMItem(wsDataClusterItem);
+                if (result == null) result = caseItem(wsDataClusterItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -232,6 +250,36 @@ public class MdmpropertiesSwitch<T> {
      * @generated
      */
     public T caseContainerItem(ContainerItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Data Model Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Data Model Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSDataModelItem(WSDataModelItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Data Cluster Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Data Cluster Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSDataClusterItem(WSDataClusterItem object) {
         return null;
     }
 

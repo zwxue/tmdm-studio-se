@@ -43,6 +43,12 @@ public interface IServerObjectRepositoryType {
     public static ERepositoryObjectType TYPE_MENU = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.Menu"); //$NON-NLS-1$
 
+    public static ERepositoryObjectType TYPE_DATAMODEL = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.DataModel"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_DATACLUSTER = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.DataCluster"); //$NON-NLS-1$
+
     // public static ERepositoryObjectType TYPE_VIEW = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
     //            ERepositoryObjectType.class, "MDM.View"); //$NON-NLS-1$
 }

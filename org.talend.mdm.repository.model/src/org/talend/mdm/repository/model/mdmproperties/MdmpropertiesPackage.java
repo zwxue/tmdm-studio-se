@@ -404,6 +404,116 @@ public interface MdmpropertiesPackage extends EPackage {
     int CONTAINER_ITEM_FEATURE_COUNT = MDM_ITEM_FEATURE_COUNT + 4;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSDataModelItemImpl <em>WS Data Model Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSDataModelItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSDataModelItem()
+     * @generated
+     */
+    int WS_DATA_MODEL_ITEM = 6;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Ws Data Model</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_ITEM__WS_DATA_MODEL = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Data Model Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSDataClusterItemImpl <em>WS Data Cluster Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSDataClusterItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSDataClusterItem()
+     * @generated
+     */
+    int WS_DATA_CLUSTER_ITEM = 7;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Ws Data Cluster</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_ITEM__WS_DATA_CLUSTER = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Data Cluster Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -411,7 +521,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 6;
+    int EREPOSITORY_OBJECT_TYPE = 8;
 
 
     /**
@@ -528,6 +638,48 @@ public interface MdmpropertiesPackage extends EPackage {
      * @generated
      */
     EAttribute getContainerItem_RepObjType();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSDataModelItem <em>WS Data Model Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Data Model Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSDataModelItem
+     * @generated
+     */
+    EClass getWSDataModelItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSDataModelItem#getWsDataModel <em>Ws Data Model</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Data Model</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSDataModelItem#getWsDataModel()
+     * @see #getWSDataModelItem()
+     * @generated
+     */
+    EReference getWSDataModelItem_WsDataModel();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem <em>WS Data Cluster Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Data Cluster Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem
+     * @generated
+     */
+    EClass getWSDataClusterItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem#getWsDataCluster <em>Ws Data Cluster</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Data Cluster</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem#getWsDataCluster()
+     * @see #getWSDataClusterItem()
+     * @generated
+     */
+    EReference getWSDataClusterItem_WsDataCluster();
 
     /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
@@ -661,6 +813,42 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EAttribute CONTAINER_ITEM__REP_OBJ_TYPE = eINSTANCE.getContainerItem_RepObjType();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSDataModelItemImpl <em>WS Data Model Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSDataModelItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSDataModelItem()
+         * @generated
+         */
+        EClass WS_DATA_MODEL_ITEM = eINSTANCE.getWSDataModelItem();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Data Model</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_DATA_MODEL_ITEM__WS_DATA_MODEL = eINSTANCE.getWSDataModelItem_WsDataModel();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSDataClusterItemImpl <em>WS Data Cluster Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSDataClusterItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSDataClusterItem()
+         * @generated
+         */
+        EClass WS_DATA_CLUSTER_ITEM = eINSTANCE.getWSDataClusterItem();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Data Cluster</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_DATA_CLUSTER_ITEM__WS_DATA_CLUSTER = eINSTANCE.getWSDataClusterItem_WsDataCluster();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

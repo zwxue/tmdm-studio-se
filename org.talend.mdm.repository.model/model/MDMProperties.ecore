@@ -21,4 +21,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repObjType" eType="#//ERepositoryObjectType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="ERepositoryObjectType" instanceClassName="org.talend.core.model.repository.ERepositoryObjectType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WSDataModelItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsDataModel" eType="ecore:EClass MDMServerObject.ecore#//WSDataModelE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSDataClusterItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsDataCluster" eType="ecore:EClass MDMServerObject.ecore#//WSDataClusterE"/>
+  </eClassifiers>
 </ecore:EPackage>

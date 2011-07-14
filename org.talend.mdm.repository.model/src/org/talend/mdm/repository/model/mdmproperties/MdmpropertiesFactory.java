@@ -80,6 +80,24 @@ public interface MdmpropertiesFactory extends EFactory {
     ContainerItem createContainerItem();
 
     /**
+     * Returns a new object of class '<em>WS Data Model Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Data Model Item</em>'.
+     * @generated
+     */
+    WSDataModelItem createWSDataModelItem();
+
+    /**
+     * Returns a new object of class '<em>WS Data Cluster Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Data Cluster Item</em>'.
+     * @generated
+     */
+    WSDataClusterItem createWSDataClusterItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -22,6 +22,8 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
+import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
+import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
@@ -74,6 +76,20 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass containerItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsDataModelItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsDataClusterItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -251,6 +267,42 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSDataModelItem() {
+        return wsDataModelItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSDataModelItem_WsDataModel() {
+        return (EReference)wsDataModelItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSDataClusterItem() {
+        return wsDataClusterItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSDataClusterItem_WsDataCluster() {
+        return (EReference)wsDataClusterItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -300,6 +352,12 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         createEAttribute(containerItemEClass, CONTAINER_ITEM__LABEL);
         createEAttribute(containerItemEClass, CONTAINER_ITEM__REP_OBJ_TYPE);
 
+        wsDataModelItemEClass = createEClass(WS_DATA_MODEL_ITEM);
+        createEReference(wsDataModelItemEClass, WS_DATA_MODEL_ITEM__WS_DATA_MODEL);
+
+        wsDataClusterItemEClass = createEClass(WS_DATA_CLUSTER_ITEM);
+        createEReference(wsDataClusterItemEClass, WS_DATA_CLUSTER_ITEM__WS_DATA_CLUSTER);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -345,6 +403,8 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsRoleItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         containerItemEClass.getESuperTypes().add(this.getMDMItem());
         containerItemEClass.getESuperTypes().add(thePropertiesPackage.getFolderItem());
+        wsDataModelItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsDataClusterItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -365,6 +425,12 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         initEClass(containerItemEClass, ContainerItem.class, "ContainerItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getContainerItem_Label(), theEcorePackage.getEString(), "label", null, 0, 1, ContainerItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getContainerItem_RepObjType(), this.getERepositoryObjectType(), "repObjType", null, 0, 1, ContainerItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsDataModelItemEClass, WSDataModelItem.class, "WSDataModelItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSDataModelItem_WsDataModel(), theMdmserverobjectPackage.getWSDataModelE(), null, "wsDataModel", null, 0, 1, WSDataModelItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsDataClusterItemEClass, WSDataClusterItem.class, "WSDataClusterItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSDataClusterItem_WsDataCluster(), theMdmserverobjectPackage.getWSDataClusterE(), null, "wsDataCluster", null, 0, 1, WSDataClusterItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
