@@ -66,7 +66,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
     protected boolean isCompositeView = true;
 
-    protected XtentisPort port;
+    private XtentisPort port;
 
     public void setCompositeView(boolean isCompositeView) {
         this.isCompositeView = isCompositeView;
@@ -106,7 +106,6 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
     protected void createFormContent(IManagedForm managedForm) {
         super.createFormContent(managedForm);
-        port = getPort();
         try {
             /*
              * FormToolkit toolkit = managedForm.getToolkit();
@@ -337,14 +336,14 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
     }
 
     protected XtentisPort getPort() {
-        XtentisPort port;
-        try {
-            port = Util.getPort(getXObject());
-            return port;
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
+        if (port == null) {
+            try {
+                port = Util.getPort(getXObject());
+            } catch (XtentisException e) {
+                log.error(e.getMessage(), e);
+            }
         }
-        return null;
+        return port;
     }
 
 }
