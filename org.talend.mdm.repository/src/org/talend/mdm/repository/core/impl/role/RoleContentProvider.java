@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSRole;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -39,7 +40,12 @@ public class RoleContentProvider extends AbstractContentProvider {
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_ROLE, parentItem, TreeObject.ROLE);
+        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_ROLE, parentItem, TreeObject.ROLE, true);
+    }
+
+    @Override
+    public Class getWSObjectClass() {
+        return WSRole.class;
     }
 
 }

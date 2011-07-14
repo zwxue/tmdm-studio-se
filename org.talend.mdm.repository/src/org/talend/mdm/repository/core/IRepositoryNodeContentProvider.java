@@ -29,4 +29,6 @@ package org.talend.mdm.repository.core;
  */
 public interface IRepositoryNodeContentProvider {
     public Object[] getChildren(Object element) ;
+
+    public Class getWSObjectClass();
 }

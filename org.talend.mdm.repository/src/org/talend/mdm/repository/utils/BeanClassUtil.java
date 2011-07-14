@@ -45,8 +45,10 @@ class BeanClassUtil {
 
     private String calGetMethodName(Field field) {
         String name = field.getName();
+        Class type = field.getType();
         // in normal the var name's length>1 ,there is a pontential bug
-        return "get" + name.substring(0, 1).toUpperCase() + name.substring(1); //$NON-NLS-1$
+
+        return ((type.isPrimitive() && type.getName().equals("boolean")) ? "is" : "get") + name.substring(0, 1).toUpperCase() + name.substring(1); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     private String calSetMethodName(Field field) {

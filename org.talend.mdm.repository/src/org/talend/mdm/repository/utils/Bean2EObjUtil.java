@@ -16,6 +16,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections.BidiMap;
@@ -25,7 +26,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
+
+import com.amalto.workbench.models.TreeObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -36,11 +40,25 @@ public class Bean2EObjUtil {
 
     BidiMap classMap = new DualHashBidiMap();
 
-    BidiMap fieldMap = new DualHashBidiMap();
+    Map<Field, EStructuralFeature> fieldMap = new HashMap<Field, EStructuralFeature>();
 
     BeanClassUtil beanClassUtil = new BeanClassUtil(this);
 
     EMFClassUtil emfClassUtil = new EMFClassUtil();
+
+
+
+    static Bean2EObjUtil instance = new Bean2EObjUtil();
+
+    /**
+     * DOC hbhong Bean2EObjUtil constructor comment.
+     */
+    private Bean2EObjUtil() {
+    }
+
+    public static Bean2EObjUtil getInstance() {
+        return instance;
+    }
 
     public void registerClassMap(Class cls) {
         EClass eCls;
@@ -50,7 +68,6 @@ public class Bean2EObjUtil {
             beanClassUtil.refactorClassStructure(cls);
             guessField(cls, eCls);
         }
-
     }
 
     private void guessField(Class cls, EClass eCls) {
@@ -66,7 +83,7 @@ public class Bean2EObjUtil {
                     if (fieldName.equals(featureName)) {
                         fieldMap.put(field, feature);
                         found = true;
-                        //                        System.out.println("\t Found Field Map:" + fieldName); //$NON-NLS-1$
+                        //                        System.out.println("\t Found Field Map:" + fieldName + "\n\tfield=" + field + "\n\tfeature=" + feature); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                         break;
                     }
                 }
@@ -89,10 +106,12 @@ public class Bean2EObjUtil {
         return null;
     }
 
-    public EObject convertFromBean2EObj(Object bean) {
+    public EObject convertFromBean2EObj(Object bean, EObject eObj) {
         Class beanCls = bean.getClass();
         EClass eCls = (EClass) classMap.get(beanCls);
-        EObject eObj = MdmserverobjectFactory.eINSTANCE.create(eCls);
+        if (eObj == null) {
+            eObj = MdmserverobjectFactory.eINSTANCE.create(eCls);
+        }
         if (eCls != null) {
             Map<Field, Method[]> beanFieldMap = beanClassUtil.findFieldMap(beanCls);
             if (beanFieldMap == null)
@@ -100,13 +119,18 @@ public class Bean2EObjUtil {
             for (Field field : beanFieldMap.keySet()) {
                 try {
                     EStructuralFeature feature = (EStructuralFeature) fieldMap.get(field);
+                    // System.out.println("Field>>\t" + field + "\n\tfeature>>" + feature);
+                    if (feature == null) {
+                        dumpMap();
+                    }
                     if (feature != null) {
                         Method getMethod = beanFieldMap.get(field)[0];
                         Object value = getMethod.invoke(bean);
                         if (beanClassUtil.isColletionField(field)) {
                             if (value != null) {
+                                ((EList) eObj.eGet(feature)).clear();
                                 for (Object childObj : (Object[]) value) {
-                                    EObject eChildObj = convertFromBean2EObj(childObj);
+                                    EObject eChildObj = convertFromBean2EObj(childObj, null);
                                     ((EList) eObj.eGet(feature)).add(eChildObj);
                                 }
                             }
@@ -116,7 +140,7 @@ public class Bean2EObjUtil {
                                 eValue = value;
                             } else {
                                 // a object reference
-                                eValue = convertFromBean2EObj(value);
+                                eValue = convertFromBean2EObj(value, null);
                             }
                             eObj.eSet(feature, eValue);
                         }
@@ -194,14 +218,25 @@ public class Bean2EObjUtil {
     }
 
     public void dumpMap() {
-        System.out.println("ClassMap : "); //$NON-NLS-1$
+        System.out.println("ClassMap : " + classMap.size()); //$NON-NLS-1$
         for (Object obj : classMap.keySet()) {
             System.out.println(obj + "\n\t=> " + classMap.get(obj)); //$NON-NLS-1$
         }
-        System.out.println("FieldMap : "); //$NON-NLS-1$
+        System.out.println("FieldMap : " + fieldMap.size()); //$NON-NLS-1$
         for (Object obj : fieldMap.keySet()) {
             System.out.println(obj + "\n\t=> " + fieldMap.get(obj)); //$NON-NLS-1$
         }
+    }
+
+    public TreeObject wrapWithTreeObject(EObject eobj) {
+        if (eobj instanceof MDMServerObject) {
+            MDMServerObject serverObject = (MDMServerObject) eobj;
+            Object wsObj = convertFromEObj2Bean(eobj);
+            TreeObject treeObj = new TreeObject(serverObject.getName(), null, serverObject.getType(), serverObject.getName(),
+                    wsObj);
+            return treeObj;
+        }
+        return null;
     }
 
 }

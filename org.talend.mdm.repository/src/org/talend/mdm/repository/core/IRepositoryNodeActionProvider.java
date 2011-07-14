@@ -23,10 +23,10 @@ package org.talend.mdm.repository.core;
 
 import java.util.List;
 
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -37,4 +37,6 @@ public interface IRepositoryNodeActionProvider {
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj);
 
     public void initCommonViewer(CommonViewer commonViewer);
+
+    public IRepositoryViewEditorInput getOpenEditorInput(Item item);
 }

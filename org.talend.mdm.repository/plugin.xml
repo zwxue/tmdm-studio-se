@@ -164,4 +164,14 @@
             state="true">
       </decorator>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.talend.mdm.repository.ui.editors.XObjectEditor2"
+            default="false"
+            icon="icons/default.gif"
+            id="org.talend.mdm.repository.ui.editors.XObjectEditor2"
+            name="org.talend.mdm.repository.ui.editors.XObjectEditor2">
+      </editor>
+   </extension>
 </plugin>

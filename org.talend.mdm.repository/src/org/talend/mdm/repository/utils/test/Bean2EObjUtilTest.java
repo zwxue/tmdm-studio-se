@@ -44,7 +44,7 @@ public class Bean2EObjUtilTest {
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        util = new Bean2EObjUtil();
+        util = Bean2EObjUtil.getInstance();
 
     }
 
@@ -118,7 +118,7 @@ public class Bean2EObjUtilTest {
         WSMenu menu;
         menu = new WSMenu();
         initBean(menu);
-        EObject eObject = util.convertFromBean2EObj(menu);
+        EObject eObject = util.convertFromBean2EObj(menu, null);
         assertNotNull(eObject);
         WSMenuE menuE = (WSMenuE) eObject;
         //

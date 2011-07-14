@@ -7,21 +7,26 @@ import java.util.List;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.eclipse.ui.navigator.ICommonActionConstants;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.ui.actions.OpenObjectAction;
 
 public class MDMRepositoryActionProvider extends CommonActionProvider {
 
     private CommonViewer commonViewer;
 
     public MDMRepositoryActionProvider() {
-
+        openObjectAction = new OpenObjectAction();
     }
+
+    OpenObjectAction openObjectAction;
 
     @Override
     public void init(ICommonActionExtensionSite aSite) {
@@ -31,6 +36,13 @@ public class MDMRepositoryActionProvider extends CommonActionProvider {
                 conf.getActionProvider().initCommonViewer(commonViewer);
             }
         }
+        openObjectAction.initCommonViewer(commonViewer);
+    }
+
+    @Override
+    public void fillActionBars(IActionBars actionBars) {
+
+        actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, openObjectAction);
     }
 
     @Override
@@ -68,6 +80,13 @@ public class MDMRepositoryActionProvider extends CommonActionProvider {
                 }
             }
         }
+
+    }
+
+    @Override
+    public void updateActionBars() {
+        IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
+        openObjectAction.selectionChanged(selection);
     }
 
     private List<AbstractRepositoryAction> combineActions(List<AbstractRepositoryAction> actionsA,

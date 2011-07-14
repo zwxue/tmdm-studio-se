@@ -41,6 +41,7 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.Bean2EObjUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -106,6 +107,7 @@ public class RepositoryNodeConfigurationManager {
             if (resourceProvider != null) {
                 if (resourceProvider.canHandleRepObjType(type)) {
                     typeConfMap.put(type, conf);
+
                     return conf;
                 }
             }
@@ -129,12 +131,16 @@ public class RepositoryNodeConfigurationManager {
                                 IRepositoryNodeConfiguration configuration = (IRepositoryNodeConfiguration) element
                                         .createExecutableExtension(PROP_CLASS);
                                 configurations.add(configuration);
+                                // init class structure
+                                Class wsObjectClass = configuration.getContentProvider().getWSObjectClass();
+                                Bean2EObjUtil.getInstance().registerClassMap(wsObjectClass);
                             } catch (CoreException e) {
                                 log.error(e.getMessage(), e);
                             }
                         }
                     }
                 }
+                // Bean2EObjUtil.getInstance().dumpMap();
             }
             inited = true;
         }

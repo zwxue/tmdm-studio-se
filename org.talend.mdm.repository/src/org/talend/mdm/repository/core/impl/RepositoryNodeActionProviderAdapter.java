@@ -39,6 +39,8 @@ import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -53,6 +55,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     static AbstractRepositoryAction removeFromRepositoryAction;
 
     protected static AbstractRepositoryAction renameAction;
+
     // TODO just a demo,remove it in future
     static AbstractRepositoryAction updateServerDefAction;
 
@@ -104,6 +107,13 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         actions.add(exportAction);
 
         return actions;
+    }
+
+    /**
+     * The child class can override this method, current implement is adapt to most of MDMServerobject
+     */
+    public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
+        return new XObjectEditorInput2(item);
     }
 
 }

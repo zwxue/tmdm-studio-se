@@ -262,23 +262,26 @@ public class RepositoryResourceUtil {
         return null;
     }
 
-    public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType) {
+    public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType,
+            boolean hasSystemFolder) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
             IProject fsProject = ResourceModelUtils.getProject(project);
             IFolder stableFolder = fsProject.getFolder(((ContainerItem) parentItem).getRepObjType().getFolder());
             List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder);
-            IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "system", null, true); //$NON-NLS-1$
-            for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {
-                IRepositoryViewObject viewObject = il.next();
-                String key = viewObject.getProperty().getLabel();
-                if (XSystemObjects.isXSystemObject(systemType, key)) {
-                    sysFolderViewOj.getChildren().add(viewObject);
-                    ((MDMServerObjectItem) viewObject.getProperty().getItem()).getMDMServerObject().setSystem(true);
-                    il.remove();
+            if (hasSystemFolder) {
+                IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "system", null, true); //$NON-NLS-1$
+                for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {
+                    IRepositoryViewObject viewObject = il.next();
+                    String key = viewObject.getProperty().getLabel();
+                    if (XSystemObjects.isXSystemObject(systemType, key)) {
+                        sysFolderViewOj.getChildren().add(viewObject);
+                        ((MDMServerObjectItem) viewObject.getProperty().getItem()).getMDMServerObject().setSystem(true);
+                        il.remove();
+                    }
                 }
+                viewObjects.add(0, sysFolderViewOj);
             }
-            viewObjects.add(0, sysFolderViewOj);
             return viewObjects;
         } catch (PersistenceException e) {
             return Collections.EMPTY_LIST;
