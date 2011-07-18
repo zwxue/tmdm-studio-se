@@ -82,6 +82,8 @@ public class SchematronExpressBuilder {
 
     // schematron using XPathFunc.xml, others using StandardXPathFunc.xml
     protected boolean isSchematron;
+
+    private Composite com;
     public void setTreeParent(TreeParent treeParent) {
         this.treeParent = treeParent;
     }
@@ -178,8 +180,13 @@ public class SchematronExpressBuilder {
         }
     }
 
+    public void setEnable(boolean enable) {
+        com.setEnabled(enable);
+        com.setVisible(enable);
+    }
+
     private void create() {
-        Composite com = new Composite(parent, SWT.NONE);
+        com = new Composite(parent, SWT.NONE);
         com.setLayout(getLayout(3));
         // expression
         Group expressG = new Group(com, SWT.NONE);
