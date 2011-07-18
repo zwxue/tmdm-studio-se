@@ -236,9 +236,9 @@ public class MDM {
 		
 		return nodeToString(node, true);
 	}
-	
+
     /**
-     * Generate an <error code="X">msg</error> fragment
+     * @deprecated Generate an <error code="X">msg</error> fragment
      * 
      * 
      * {talendTypes} String
@@ -249,12 +249,29 @@ public class MDM {
      * 
      * {param} int(0) code: error code, (1:ERROR, 0:NORMAL)
      * 
-     * {example} genErrMsg("test message",0) #  return <error code="0">test message</error>
+     * {example} genErrMsg("test message",0) # return <error code="0">test message</error>
      */
     public static String createReturnMessage(String msg, int code){
-    	return "<error code=\""+code+"\">" + msg +"</error>";
+        return "<error code=\"" + code + "\">" + msg + "</error>"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
     }
     
+    /**
+     * Generate an <report><message type="X">msg</message><report> fragment
+     * 
+     * 
+     * {talendTypes} String
+     * 
+     * {Category} MDM
+     * 
+     * {param} string msg: error message.
+     * 
+     * {param} String(0) type: error code, (info|error)
+     * 
+     * {example} genErrMsg("test message",0) # return <error code="0">test message</error>
+     */
+    public static String createReturnMessage(String msg, String type) {
+        return "<report><message type=\"" + type + "\">" + msg + "</message></report>"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+    }
     
     //Utility methods
     /**
