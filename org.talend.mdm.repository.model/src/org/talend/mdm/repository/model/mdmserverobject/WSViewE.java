@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getViewableBusinessElements <em>Viewable Business Elements</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#isTransformerActive <em>Transformer Active</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getWhereConditions <em>Where Conditions</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getIsTransformerActive <em>Is Transformer Active</em>}</li>
  * </ul>
  * </p>
  *
@@ -121,5 +122,31 @@ public interface WSViewE extends MDMServerObject {
      * @generated
      */
     EList<WSWhereConditionE> getWhereConditions();
+
+    /**
+     * Returns the value of the '<em><b>Is Transformer Active</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Is Transformer Active</em>' containment reference isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Is Transformer Active</em>' containment reference.
+     * @see #setIsTransformerActive(WSBooleanE)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSViewE_IsTransformerActive()
+     * @model containment="true"
+     * @generated
+     */
+    WSBooleanE getIsTransformerActive();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getIsTransformerActive <em>Is Transformer Active</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Is Transformer Active</em>' containment reference.
+     * @see #getIsTransformerActive()
+     * @generated
+     */
+    void setIsTransformerActive(WSBooleanE value);
 
 } // WSViewE

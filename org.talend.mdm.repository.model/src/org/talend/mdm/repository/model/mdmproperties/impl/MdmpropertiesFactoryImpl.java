@@ -71,6 +71,11 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
             case MdmpropertiesPackage.CONTAINER_ITEM: return createContainerItem();
             case MdmpropertiesPackage.WS_DATA_MODEL_ITEM: return createWSDataModelItem();
             case MdmpropertiesPackage.WS_DATA_CLUSTER_ITEM: return createWSDataClusterItem();
+            case MdmpropertiesPackage.WS_STORED_PROCEDURE_ITEM: return createWSStoredProcedureItem();
+            case MdmpropertiesPackage.WS_UNIVERSE_ITEM: return createWSUniverseItem();
+            case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM: return createWSSynchronizationPlanItem();
+            case MdmpropertiesPackage.WS_VIEW_ITEM: return createWSViewItem();
+            case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM: return createWSWorkflowDeployItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -184,6 +189,56 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public WSDataClusterItem createWSDataClusterItem() {
         WSDataClusterItemImpl wsDataClusterItem = new WSDataClusterItemImpl();
         return wsDataClusterItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSStoredProcedureItem createWSStoredProcedureItem() {
+        WSStoredProcedureItemImpl wsStoredProcedureItem = new WSStoredProcedureItemImpl();
+        return wsStoredProcedureItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSUniverseItem createWSUniverseItem() {
+        WSUniverseItemImpl wsUniverseItem = new WSUniverseItemImpl();
+        return wsUniverseItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSSynchronizationPlanItem createWSSynchronizationPlanItem() {
+        WSSynchronizationPlanItemImpl wsSynchronizationPlanItem = new WSSynchronizationPlanItemImpl();
+        return wsSynchronizationPlanItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSViewItem createWSViewItem() {
+        WSViewItemImpl wsViewItem = new WSViewItemImpl();
+        return wsViewItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSWorkflowDeployItem createWSWorkflowDeployItem() {
+        WSWorkflowDeployItemImpl wsWorkflowDeployItem = new WSWorkflowDeployItemImpl();
+        return wsWorkflowDeployItem;
     }
 
     /**

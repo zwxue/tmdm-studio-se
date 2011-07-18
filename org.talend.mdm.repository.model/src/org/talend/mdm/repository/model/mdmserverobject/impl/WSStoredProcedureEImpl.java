@@ -7,11 +7,8 @@
 package org.talend.mdm.repository.model.mdmserverobject.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 import org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE;
 
@@ -215,6 +212,11 @@ public class WSStoredProcedureEImpl extends MDMServerObjectImpl implements WSSto
         result.append(refreshCache);
         result.append(')');
         return result.toString();
+    }
+
+    @Override
+    public int getType() {
+        return 12;
     }
 
 } //WSStoredProcedureEImpl

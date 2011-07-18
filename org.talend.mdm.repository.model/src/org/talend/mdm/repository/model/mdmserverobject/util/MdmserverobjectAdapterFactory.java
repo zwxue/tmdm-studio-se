@@ -128,6 +128,42 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
                 return createWSStoredProcedureEAdapter();
             }
             @Override
+            public Adapter caseWSUniverseE(WSUniverseE object) {
+                return createWSUniverseEAdapter();
+            }
+            @Override
+            public Adapter caseWSUniverseXtentisObjectsRevisionIDsE(WSUniverseXtentisObjectsRevisionIDsE object) {
+                return createWSUniverseXtentisObjectsRevisionIDsEAdapter();
+            }
+            @Override
+            public Adapter caseWSUniverseItemsRevisionIDsE(WSUniverseItemsRevisionIDsE object) {
+                return createWSUniverseItemsRevisionIDsEAdapter();
+            }
+            @Override
+            public Adapter caseWSSynchronizationPlanE(WSSynchronizationPlanE object) {
+                return createWSSynchronizationPlanEAdapter();
+            }
+            @Override
+            public Adapter caseWSSynchronizationPlanItemsSynchronizationsE(WSSynchronizationPlanItemsSynchronizationsE object) {
+                return createWSSynchronizationPlanItemsSynchronizationsEAdapter();
+            }
+            @Override
+            public Adapter caseWSSynchronizationPlanXtentisObjectsSynchronizationsE(WSSynchronizationPlanXtentisObjectsSynchronizationsE object) {
+                return createWSSynchronizationPlanXtentisObjectsSynchronizationsEAdapter();
+            }
+            @Override
+            public Adapter caseWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE(WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE object) {
+                return createWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEAdapter();
+            }
+            @Override
+            public Adapter caseWSBooleanE(WSBooleanE object) {
+                return createWSBooleanEAdapter();
+            }
+            @Override
+            public Adapter caseWSWorkflowDeployE(WSWorkflowDeployE object) {
+                return createWSWorkflowDeployEAdapter();
+            }
+            @Override
             public Adapter defaultCase(EObject object) {
                 return createEObjectAdapter();
             }
@@ -340,6 +376,132 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSStoredProcedureEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseE <em>WS Universe E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSUniverseE
+     * @generated
+     */
+    public Adapter createWSUniverseEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseXtentisObjectsRevisionIDsE <em>WS Universe Xtentis Objects Revision IDs E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSUniverseXtentisObjectsRevisionIDsE
+     * @generated
+     */
+    public Adapter createWSUniverseXtentisObjectsRevisionIDsEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE <em>WS Universe Items Revision IDs E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE
+     * @generated
+     */
+    public Adapter createWSUniverseItemsRevisionIDsEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE <em>WS Synchronization Plan E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE
+     * @generated
+     */
+    public Adapter createWSSynchronizationPlanEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanItemsSynchronizationsE <em>WS Synchronization Plan Items Synchronizations E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanItemsSynchronizationsE
+     * @generated
+     */
+    public Adapter createWSSynchronizationPlanItemsSynchronizationsEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsE <em>WS Synchronization Plan Xtentis Objects Synchronizations E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsE
+     * @generated
+     */
+    public Adapter createWSSynchronizationPlanXtentisObjectsSynchronizationsEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE <em>WS Synchronization Plan Xtentis Objects Synchronizations Synchronizations E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE
+     * @generated
+     */
+    public Adapter createWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSBooleanE <em>WS Boolean E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSBooleanE
+     * @generated
+     */
+    public Adapter createWSBooleanEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSWorkflowDeployE <em>WS Workflow Deploy E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWorkflowDeployE
+     * @generated
+     */
+    public Adapter createWSWorkflowDeployEAdapter() {
         return null;
     }
 

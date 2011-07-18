@@ -31,6 +31,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSWhereOperatorE;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#getRightValueOrPath <em>Right Value Or Path</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#getStringPredicate <em>String Predicate</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#getOperator <em>Operator</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl#isSpellCheck <em>Spell Check</em>}</li>
  * </ul>
  * </p>
  *
@@ -96,6 +97,26 @@ public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditi
      * @ordered
      */
     protected WSWhereOperatorE operator;
+
+    /**
+     * The default value of the '{@link #isSpellCheck() <em>Spell Check</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isSpellCheck()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean SPELL_CHECK_EDEFAULT = false;
+
+    /**
+     * The cached value of the '{@link #isSpellCheck() <em>Spell Check</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isSpellCheck()
+     * @generated
+     * @ordered
+     */
+    protected boolean spellCheck = SPELL_CHECK_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -249,6 +270,27 @@ public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditi
      * <!-- end-user-doc -->
      * @generated
      */
+    public boolean isSpellCheck() {
+        return spellCheck;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setSpellCheck(boolean newSpellCheck) {
+        boolean oldSpellCheck = spellCheck;
+        spellCheck = newSpellCheck;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WHERE_CONDITION_E__SPELL_CHECK, oldSpellCheck, spellCheck));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
@@ -276,6 +318,8 @@ public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditi
                 return getStringPredicate();
             case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
                 return getOperator();
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__SPELL_CHECK:
+                return isSpellCheck();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -299,6 +343,9 @@ public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditi
                 return;
             case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
                 setOperator((WSWhereOperatorE)newValue);
+                return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__SPELL_CHECK:
+                setSpellCheck((Boolean)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -324,6 +371,9 @@ public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditi
             case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
                 setOperator((WSWhereOperatorE)null);
                 return;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__SPELL_CHECK:
+                setSpellCheck(SPELL_CHECK_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -344,6 +394,8 @@ public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditi
                 return stringPredicate != null;
             case MdmserverobjectPackage.WS_WHERE_CONDITION_E__OPERATOR:
                 return operator != null;
+            case MdmserverobjectPackage.WS_WHERE_CONDITION_E__SPELL_CHECK:
+                return spellCheck != SPELL_CHECK_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
@@ -362,6 +414,8 @@ public class WSWhereConditionEImpl extends EObjectImpl implements WSWhereConditi
         result.append(leftPath);
         result.append(", rightValueOrPath: ");
         result.append(rightValueOrPath);
+        result.append(", spellCheck: ");
+        result.append(spellCheck);
         result.append(')');
         return result.toString();
     }

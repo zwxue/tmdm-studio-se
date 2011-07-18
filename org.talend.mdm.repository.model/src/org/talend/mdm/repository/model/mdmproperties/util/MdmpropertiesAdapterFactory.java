@@ -106,6 +106,26 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
                 return createWSDataClusterItemAdapter();
             }
             @Override
+            public Adapter caseWSStoredProcedureItem(WSStoredProcedureItem object) {
+                return createWSStoredProcedureItemAdapter();
+            }
+            @Override
+            public Adapter caseWSUniverseItem(WSUniverseItem object) {
+                return createWSUniverseItemAdapter();
+            }
+            @Override
+            public Adapter caseWSSynchronizationPlanItem(WSSynchronizationPlanItem object) {
+                return createWSSynchronizationPlanItemAdapter();
+            }
+            @Override
+            public Adapter caseWSViewItem(WSViewItem object) {
+                return createWSViewItemAdapter();
+            }
+            @Override
+            public Adapter caseWSWorkflowDeployItem(WSWorkflowDeployItem object) {
+                return createWSWorkflowDeployItemAdapter();
+            }
+            @Override
             public Adapter caseItem(Item object) {
                 return createItemAdapter();
             }
@@ -242,6 +262,76 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSDataClusterItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem <em>WS Stored Procedure Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem
+     * @generated
+     */
+    public Adapter createWSStoredProcedureItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSUniverseItem <em>WS Universe Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSUniverseItem
+     * @generated
+     */
+    public Adapter createWSUniverseItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem <em>WS Synchronization Plan Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem
+     * @generated
+     */
+    public Adapter createWSSynchronizationPlanItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSViewItem <em>WS View Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSViewItem
+     * @generated
+     */
+    public Adapter createWSViewItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem <em>WS Workflow Deploy Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem
+     * @generated
+     */
+    public Adapter createWSWorkflowDeployItemAdapter() {
         return null;
     }
 

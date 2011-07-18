@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getRightValueOrPath <em>Right Value Or Path</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getStringPredicate <em>String Predicate</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#getOperator <em>Operator</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#isSpellCheck <em>Spell Check</em>}</li>
  * </ul>
  * </p>
  *
@@ -131,5 +132,31 @@ public interface WSWhereConditionE extends EObject {
      * @generated
      */
     void setOperator(WSWhereOperatorE value);
+
+    /**
+     * Returns the value of the '<em><b>Spell Check</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Spell Check</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Spell Check</em>' attribute.
+     * @see #setSpellCheck(boolean)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSWhereConditionE_SpellCheck()
+     * @model
+     * @generated
+     */
+    boolean isSpellCheck();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE#isSpellCheck <em>Spell Check</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Spell Check</em>' attribute.
+     * @see #isSpellCheck()
+     * @generated
+     */
+    void setSpellCheck(boolean value);
 
 } // WSWhereConditionE

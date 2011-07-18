@@ -98,6 +98,51 @@ public interface MdmpropertiesFactory extends EFactory {
     WSDataClusterItem createWSDataClusterItem();
 
     /**
+     * Returns a new object of class '<em>WS Stored Procedure Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Stored Procedure Item</em>'.
+     * @generated
+     */
+    WSStoredProcedureItem createWSStoredProcedureItem();
+
+    /**
+     * Returns a new object of class '<em>WS Universe Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Universe Item</em>'.
+     * @generated
+     */
+    WSUniverseItem createWSUniverseItem();
+
+    /**
+     * Returns a new object of class '<em>WS Synchronization Plan Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Synchronization Plan Item</em>'.
+     * @generated
+     */
+    WSSynchronizationPlanItem createWSSynchronizationPlanItem();
+
+    /**
+     * Returns a new object of class '<em>WS View Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS View Item</em>'.
+     * @generated
+     */
+    WSViewItem createWSViewItem();
+
+    /**
+     * Returns a new object of class '<em>WS Workflow Deploy Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Workflow Deploy Item</em>'.
+     * @generated
+     */
+    WSWorkflowDeployItem createWSWorkflowDeployItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -27,4 +27,20 @@
   <eClassifiers xsi:type="ecore:EClass" name="WSDataClusterItem" eSuperTypes="#//MDMServerObjectItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsDataCluster" eType="ecore:EClass MDMServerObject.ecore#//WSDataClusterE"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSStoredProcedureItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsStoredProcedure" eType="ecore:EClass MDMServerObject.ecore#//WSStoredProcedureE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSUniverseItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsUniverse" eType="ecore:EClass MDMServerObject.ecore#//WSUniverseE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSSynchronizationPlanItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsSynchronizationPlan"
+        eType="ecore:EClass MDMServerObject.ecore#//WSSynchronizationPlanE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSViewItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsView" eType="ecore:EClass MDMServerObject.ecore#//WSViewE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSWorkflowDeployItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsWorkflowDeploy" eType="ecore:EClass MDMServerObject.ecore#//WSWorkflowDeployE"/>
+  </eClassifiers>
 </ecore:EPackage>

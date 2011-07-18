@@ -177,6 +177,63 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmserverobjectPackage.WS_UNIVERSE_E: {
+                WSUniverseE wsUniverseE = (WSUniverseE)theEObject;
+                T result = caseWSUniverseE(wsUniverseE);
+                if (result == null) result = caseMDMServerObject(wsUniverseE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_UNIVERSE_XTENTIS_OBJECTS_REVISION_IDS_E: {
+                WSUniverseXtentisObjectsRevisionIDsE wsUniverseXtentisObjectsRevisionIDsE = (WSUniverseXtentisObjectsRevisionIDsE)theEObject;
+                T result = caseWSUniverseXtentisObjectsRevisionIDsE(wsUniverseXtentisObjectsRevisionIDsE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E: {
+                WSUniverseItemsRevisionIDsE wsUniverseItemsRevisionIDsE = (WSUniverseItemsRevisionIDsE)theEObject;
+                T result = caseWSUniverseItemsRevisionIDsE(wsUniverseItemsRevisionIDsE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E: {
+                WSSynchronizationPlanE wsSynchronizationPlanE = (WSSynchronizationPlanE)theEObject;
+                T result = caseWSSynchronizationPlanE(wsSynchronizationPlanE);
+                if (result == null) result = caseMDMServerObject(wsSynchronizationPlanE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E: {
+                WSSynchronizationPlanItemsSynchronizationsE wsSynchronizationPlanItemsSynchronizationsE = (WSSynchronizationPlanItemsSynchronizationsE)theEObject;
+                T result = caseWSSynchronizationPlanItemsSynchronizationsE(wsSynchronizationPlanItemsSynchronizationsE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_E: {
+                WSSynchronizationPlanXtentisObjectsSynchronizationsE wsSynchronizationPlanXtentisObjectsSynchronizationsE = (WSSynchronizationPlanXtentisObjectsSynchronizationsE)theEObject;
+                T result = caseWSSynchronizationPlanXtentisObjectsSynchronizationsE(wsSynchronizationPlanXtentisObjectsSynchronizationsE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E: {
+                WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE = (WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE)theEObject;
+                T result = caseWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE(wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_BOOLEAN_E: {
+                WSBooleanE wsBooleanE = (WSBooleanE)theEObject;
+                T result = caseWSBooleanE(wsBooleanE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E: {
+                WSWorkflowDeployE wsWorkflowDeployE = (WSWorkflowDeployE)theEObject;
+                T result = caseWSWorkflowDeployE(wsWorkflowDeployE);
+                if (result == null) result = caseMDMServerObject(wsWorkflowDeployE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -388,6 +445,141 @@ public class MdmserverobjectSwitch<T> {
      * @generated
      */
     public T caseWSStoredProcedureE(WSStoredProcedureE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Universe E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Universe E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSUniverseE(WSUniverseE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Universe Xtentis Objects Revision IDs E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Universe Xtentis Objects Revision IDs E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSUniverseXtentisObjectsRevisionIDsE(WSUniverseXtentisObjectsRevisionIDsE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Universe Items Revision IDs E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Universe Items Revision IDs E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSUniverseItemsRevisionIDsE(WSUniverseItemsRevisionIDsE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Synchronization Plan E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Synchronization Plan E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSSynchronizationPlanE(WSSynchronizationPlanE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Synchronization Plan Items Synchronizations E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Synchronization Plan Items Synchronizations E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSSynchronizationPlanItemsSynchronizationsE(WSSynchronizationPlanItemsSynchronizationsE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Synchronization Plan Xtentis Objects Synchronizations E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Synchronization Plan Xtentis Objects Synchronizations E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSSynchronizationPlanXtentisObjectsSynchronizationsE(WSSynchronizationPlanXtentisObjectsSynchronizationsE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Synchronization Plan Xtentis Objects Synchronizations Synchronizations E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Synchronization Plan Xtentis Objects Synchronizations Synchronizations E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE(WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Boolean E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Boolean E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSBooleanE(WSBooleanE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Workflow Deploy E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Workflow Deploy E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSWorkflowDeployE(WSWorkflowDeployE object) {
         return null;
     }
 

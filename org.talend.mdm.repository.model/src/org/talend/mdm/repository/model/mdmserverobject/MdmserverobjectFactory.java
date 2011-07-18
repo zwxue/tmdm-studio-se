@@ -152,6 +152,87 @@ public interface MdmserverobjectFactory extends EFactory {
     WSStoredProcedureE createWSStoredProcedureE();
 
     /**
+     * Returns a new object of class '<em>WS Universe E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Universe E</em>'.
+     * @generated
+     */
+    WSUniverseE createWSUniverseE();
+
+    /**
+     * Returns a new object of class '<em>WS Universe Xtentis Objects Revision IDs E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Universe Xtentis Objects Revision IDs E</em>'.
+     * @generated
+     */
+    WSUniverseXtentisObjectsRevisionIDsE createWSUniverseXtentisObjectsRevisionIDsE();
+
+    /**
+     * Returns a new object of class '<em>WS Universe Items Revision IDs E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Universe Items Revision IDs E</em>'.
+     * @generated
+     */
+    WSUniverseItemsRevisionIDsE createWSUniverseItemsRevisionIDsE();
+
+    /**
+     * Returns a new object of class '<em>WS Synchronization Plan E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Synchronization Plan E</em>'.
+     * @generated
+     */
+    WSSynchronizationPlanE createWSSynchronizationPlanE();
+
+    /**
+     * Returns a new object of class '<em>WS Synchronization Plan Items Synchronizations E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Synchronization Plan Items Synchronizations E</em>'.
+     * @generated
+     */
+    WSSynchronizationPlanItemsSynchronizationsE createWSSynchronizationPlanItemsSynchronizationsE();
+
+    /**
+     * Returns a new object of class '<em>WS Synchronization Plan Xtentis Objects Synchronizations E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Synchronization Plan Xtentis Objects Synchronizations E</em>'.
+     * @generated
+     */
+    WSSynchronizationPlanXtentisObjectsSynchronizationsE createWSSynchronizationPlanXtentisObjectsSynchronizationsE();
+
+    /**
+     * Returns a new object of class '<em>WS Synchronization Plan Xtentis Objects Synchronizations Synchronizations E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Synchronization Plan Xtentis Objects Synchronizations Synchronizations E</em>'.
+     * @generated
+     */
+    WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE createWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE();
+
+    /**
+     * Returns a new object of class '<em>WS Boolean E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Boolean E</em>'.
+     * @generated
+     */
+    WSBooleanE createWSBooleanE();
+
+    /**
+     * Returns a new object of class '<em>WS Workflow Deploy E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Workflow Deploy E</em>'.
+     * @generated
+     */
+    WSWorkflowDeployE createWSWorkflowDeployE();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

@@ -8,52 +8,50 @@ package org.talend.mdm.repository.model.mdmserverobject.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
-import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
+import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowDeployE;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>WS String Predicate E</b></em>'.
+ * An implementation of the model object '<em><b>WS Workflow Deploy E</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSStringPredicateEImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWorkflowDeployEImpl#getFilename <em>Filename</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredicateE {
+public class WSWorkflowDeployEImpl extends MDMServerObjectImpl implements WSWorkflowDeployE {
     /**
-     * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+     * The default value of the '{@link #getFilename() <em>Filename</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getValue()
+     * @see #getFilename()
      * @generated
      * @ordered
      */
-    protected static final String VALUE_EDEFAULT = null;
+    protected static final String FILENAME_EDEFAULT = null;
+
     /**
-     * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+     * The cached value of the '{@link #getFilename() <em>Filename</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getValue()
+     * @see #getFilename()
      * @generated
      * @ordered
      */
-    protected String value = VALUE_EDEFAULT;
+    protected String filename = FILENAME_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    protected WSStringPredicateEImpl() {
+    protected WSWorkflowDeployEImpl() {
         super();
     }
 
@@ -64,7 +62,7 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
      */
     @Override
     protected EClass eStaticClass() {
-        return MdmserverobjectPackage.Literals.WS_STRING_PREDICATE_E;
+        return MdmserverobjectPackage.Literals.WS_WORKFLOW_DEPLOY_E;
     }
 
     /**
@@ -72,8 +70,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
      * <!-- end-user-doc -->
      * @generated
      */
-    public String getValue() {
-        return value;
+    public String getFilename() {
+        return filename;
     }
 
     /**
@@ -81,11 +79,11 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setValue(String newValue) {
-        String oldValue = value;
-        value = newValue;
+    public void setFilename(String newFilename) {
+        String oldFilename = filename;
+        filename = newFilename;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE, oldValue, value));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E__FILENAME, oldFilename, filename));
     }
 
     /**
@@ -96,8 +94,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                return getValue();
+            case MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E__FILENAME:
+                return getFilename();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -110,8 +108,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                setValue((String)newValue);
+            case MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E__FILENAME:
+                setFilename((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -125,8 +123,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                setValue(VALUE_EDEFAULT);
+            case MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E__FILENAME:
+                setFilename(FILENAME_EDEFAULT);
                 return;
         }
         super.eUnset(featureID);
@@ -140,8 +138,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+            case MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E__FILENAME:
+                return FILENAME_EDEFAULT == null ? filename != null : !FILENAME_EDEFAULT.equals(filename);
         }
         return super.eIsSet(featureID);
     }
@@ -156,10 +154,15 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
         if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (value: ");
-        result.append(value);
+        result.append(" (filename: ");
+        result.append(filename);
         result.append(')');
         return result.toString();
     }
 
-} //WSStringPredicateEImpl
+    @Override
+    public int getType() {
+        return 29;
+    }
+
+} //WSWorkflowDeployEImpl

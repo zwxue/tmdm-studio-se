@@ -7,53 +7,55 @@
 package org.talend.mdm.repository.model.mdmserverobject.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
-import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
+import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>WS String Predicate E</b></em>'.
+ * An implementation of the model object '<em><b>WS Boolean E</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSStringPredicateEImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSBooleanEImpl#is_true <em>true</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredicateE {
+public class WSBooleanEImpl extends EObjectImpl implements WSBooleanE {
     /**
-     * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+     * The default value of the '{@link #is_true() <em>true</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getValue()
+     * @see #is_true()
      * @generated
      * @ordered
      */
-    protected static final String VALUE_EDEFAULT = null;
+    protected static final boolean _TRUE_EDEFAULT = false;
+
     /**
-     * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+     * The cached value of the '{@link #is_true() <em>true</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getValue()
+     * @see #is_true()
      * @generated
      * @ordered
      */
-    protected String value = VALUE_EDEFAULT;
+    protected boolean _true = _TRUE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    protected WSStringPredicateEImpl() {
+    protected WSBooleanEImpl() {
         super();
     }
 
@@ -64,7 +66,7 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
      */
     @Override
     protected EClass eStaticClass() {
-        return MdmserverobjectPackage.Literals.WS_STRING_PREDICATE_E;
+        return MdmserverobjectPackage.Literals.WS_BOOLEAN_E;
     }
 
     /**
@@ -72,8 +74,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
      * <!-- end-user-doc -->
      * @generated
      */
-    public String getValue() {
-        return value;
+    public boolean is_true() {
+        return _true;
     }
 
     /**
@@ -81,11 +83,11 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setValue(String newValue) {
-        String oldValue = value;
-        value = newValue;
+    public void set_true(boolean new_true) {
+        boolean old_true = _true;
+        _true = new_true;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE, oldValue, value));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_BOOLEAN_E__TRUE, old_true, _true));
     }
 
     /**
@@ -96,8 +98,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                return getValue();
+            case MdmserverobjectPackage.WS_BOOLEAN_E__TRUE:
+                return is_true();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -110,8 +112,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                setValue((String)newValue);
+            case MdmserverobjectPackage.WS_BOOLEAN_E__TRUE:
+                set_true((Boolean)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -125,8 +127,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                setValue(VALUE_EDEFAULT);
+            case MdmserverobjectPackage.WS_BOOLEAN_E__TRUE:
+                set_true(_TRUE_EDEFAULT);
                 return;
         }
         super.eUnset(featureID);
@@ -140,8 +142,8 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case MdmserverobjectPackage.WS_STRING_PREDICATE_E__VALUE:
-                return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+            case MdmserverobjectPackage.WS_BOOLEAN_E__TRUE:
+                return _true != _TRUE_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
@@ -156,10 +158,10 @@ public class WSStringPredicateEImpl extends EObjectImpl implements WSStringPredi
         if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (value: ");
-        result.append(value);
+        result.append(" (_true: ");
+        result.append(_true);
         result.append(')');
         return result.toString();
     }
 
-} //WSStringPredicateEImpl
+} //WSBooleanEImpl

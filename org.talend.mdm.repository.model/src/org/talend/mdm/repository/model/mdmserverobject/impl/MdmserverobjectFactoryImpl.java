@@ -76,6 +76,15 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_DATA_MODEL_E: return createWSDataModelE();
             case MdmserverobjectPackage.WS_DATA_CLUSTER_E: return createWSDataClusterE();
             case MdmserverobjectPackage.WS_STORED_PROCEDURE_E: return createWSStoredProcedureE();
+            case MdmserverobjectPackage.WS_UNIVERSE_E: return createWSUniverseE();
+            case MdmserverobjectPackage.WS_UNIVERSE_XTENTIS_OBJECTS_REVISION_IDS_E: return createWSUniverseXtentisObjectsRevisionIDsE();
+            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E: return createWSUniverseItemsRevisionIDsE();
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E: return createWSSynchronizationPlanE();
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_ITEMS_SYNCHRONIZATIONS_E: return createWSSynchronizationPlanItemsSynchronizationsE();
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_E: return createWSSynchronizationPlanXtentisObjectsSynchronizationsE();
+            case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E: return createWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE();
+            case MdmserverobjectPackage.WS_BOOLEAN_E: return createWSBooleanE();
+            case MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E: return createWSWorkflowDeployE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -249,6 +258,96 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSStoredProcedureE createWSStoredProcedureE() {
         WSStoredProcedureEImpl wsStoredProcedureE = new WSStoredProcedureEImpl();
         return wsStoredProcedureE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSUniverseE createWSUniverseE() {
+        WSUniverseEImpl wsUniverseE = new WSUniverseEImpl();
+        return wsUniverseE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSUniverseXtentisObjectsRevisionIDsE createWSUniverseXtentisObjectsRevisionIDsE() {
+        WSUniverseXtentisObjectsRevisionIDsEImpl wsUniverseXtentisObjectsRevisionIDsE = new WSUniverseXtentisObjectsRevisionIDsEImpl();
+        return wsUniverseXtentisObjectsRevisionIDsE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSUniverseItemsRevisionIDsE createWSUniverseItemsRevisionIDsE() {
+        WSUniverseItemsRevisionIDsEImpl wsUniverseItemsRevisionIDsE = new WSUniverseItemsRevisionIDsEImpl();
+        return wsUniverseItemsRevisionIDsE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSSynchronizationPlanE createWSSynchronizationPlanE() {
+        WSSynchronizationPlanEImpl wsSynchronizationPlanE = new WSSynchronizationPlanEImpl();
+        return wsSynchronizationPlanE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSSynchronizationPlanItemsSynchronizationsE createWSSynchronizationPlanItemsSynchronizationsE() {
+        WSSynchronizationPlanItemsSynchronizationsEImpl wsSynchronizationPlanItemsSynchronizationsE = new WSSynchronizationPlanItemsSynchronizationsEImpl();
+        return wsSynchronizationPlanItemsSynchronizationsE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSSynchronizationPlanXtentisObjectsSynchronizationsE createWSSynchronizationPlanXtentisObjectsSynchronizationsE() {
+        WSSynchronizationPlanXtentisObjectsSynchronizationsEImpl wsSynchronizationPlanXtentisObjectsSynchronizationsE = new WSSynchronizationPlanXtentisObjectsSynchronizationsEImpl();
+        return wsSynchronizationPlanXtentisObjectsSynchronizationsE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE createWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE() {
+        WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEImpl wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE = new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEImpl();
+        return wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSBooleanE createWSBooleanE() {
+        WSBooleanEImpl wsBooleanE = new WSBooleanEImpl();
+        return wsBooleanE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSWorkflowDeployE createWSWorkflowDeployE() {
+        WSWorkflowDeployEImpl wsWorkflowDeployE = new WSWorkflowDeployEImpl();
+        return wsWorkflowDeployE;
     }
 
     /**

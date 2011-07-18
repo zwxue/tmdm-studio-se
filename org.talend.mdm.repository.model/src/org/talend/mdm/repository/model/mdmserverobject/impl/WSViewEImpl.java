@@ -10,18 +10,14 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
+import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
 
@@ -36,6 +32,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#getViewableBusinessElements <em>Viewable Business Elements</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#isTransformerActive <em>Transformer Active</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#getWhereConditions <em>Where Conditions</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#getIsTransformerActive <em>Is Transformer Active</em>}</li>
  * </ul>
  * </p>
  *
@@ -111,6 +108,16 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
      * @ordered
      */
     protected EList<WSWhereConditionE> whereConditions;
+
+    /**
+     * The cached value of the '{@link #getIsTransformerActive() <em>Is Transformer Active</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getIsTransformerActive()
+     * @generated
+     * @ordered
+     */
+    protected WSBooleanE isTransformerActive;
 
     /**
      * <!-- begin-user-doc -->
@@ -211,11 +218,56 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
      * <!-- end-user-doc -->
      * @generated
      */
+    public WSBooleanE getIsTransformerActive() {
+        return isTransformerActive;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public NotificationChain basicSetIsTransformerActive(WSBooleanE newIsTransformerActive, NotificationChain msgs) {
+        WSBooleanE oldIsTransformerActive = isTransformerActive;
+        isTransformerActive = newIsTransformerActive;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE, oldIsTransformerActive, newIsTransformerActive);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setIsTransformerActive(WSBooleanE newIsTransformerActive) {
+        if (newIsTransformerActive != isTransformerActive) {
+            NotificationChain msgs = null;
+            if (isTransformerActive != null)
+                msgs = ((InternalEObject)isTransformerActive).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE, null, msgs);
+            if (newIsTransformerActive != null)
+                msgs = ((InternalEObject)newIsTransformerActive).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE, null, msgs);
+            msgs = basicSetIsTransformerActive(newIsTransformerActive, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE, newIsTransformerActive, newIsTransformerActive));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
             case MdmserverobjectPackage.WS_VIEW_E__WHERE_CONDITIONS:
                 return ((InternalEList<?>)getWhereConditions()).basicRemove(otherEnd, msgs);
+            case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
+                return basicSetIsTransformerActive(null, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
@@ -236,6 +288,8 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
                 return isTransformerActive();
             case MdmserverobjectPackage.WS_VIEW_E__WHERE_CONDITIONS:
                 return getWhereConditions();
+            case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
+                return getIsTransformerActive();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -262,6 +316,9 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
                 getWhereConditions().clear();
                 getWhereConditions().addAll((Collection<? extends WSWhereConditionE>)newValue);
                 return;
+            case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
+                setIsTransformerActive((WSBooleanE)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -286,6 +343,9 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
             case MdmserverobjectPackage.WS_VIEW_E__WHERE_CONDITIONS:
                 getWhereConditions().clear();
                 return;
+            case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
+                setIsTransformerActive((WSBooleanE)null);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -306,6 +366,8 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
                 return transformerActive != TRANSFORMER_ACTIVE_EDEFAULT;
             case MdmserverobjectPackage.WS_VIEW_E__WHERE_CONDITIONS:
                 return whereConditions != null && !whereConditions.isEmpty();
+            case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
+                return isTransformerActive != null;
         }
         return super.eIsSet(featureID);
     }
@@ -328,6 +390,11 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
         result.append(transformerActive);
         result.append(')');
         return result.toString();
+    }
+
+    @Override
+    public int getType() {
+        return 8;
     }
 
 } //WSViewEImpl

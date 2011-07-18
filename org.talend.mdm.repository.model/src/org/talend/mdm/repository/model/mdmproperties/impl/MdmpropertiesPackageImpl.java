@@ -26,6 +26,11 @@ import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
+import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
+import org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem;
+import org.talend.mdm.repository.model.mdmproperties.WSUniverseItem;
+import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
+import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 
 /**
@@ -90,6 +95,41 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass wsDataClusterItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsStoredProcedureItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsUniverseItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsSynchronizationPlanItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsViewItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsWorkflowDeployItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -303,6 +343,96 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSStoredProcedureItem() {
+        return wsStoredProcedureItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSStoredProcedureItem_WsStoredProcedure() {
+        return (EReference)wsStoredProcedureItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSUniverseItem() {
+        return wsUniverseItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSUniverseItem_WsUniverse() {
+        return (EReference)wsUniverseItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSSynchronizationPlanItem() {
+        return wsSynchronizationPlanItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSSynchronizationPlanItem_WsSynchronizationPlan() {
+        return (EReference)wsSynchronizationPlanItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSViewItem() {
+        return wsViewItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSViewItem_WsView() {
+        return (EReference)wsViewItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSWorkflowDeployItem() {
+        return wsWorkflowDeployItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSWorkflowDeployItem_WsWorkflowDeploy() {
+        return (EReference)wsWorkflowDeployItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -358,6 +488,21 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsDataClusterItemEClass = createEClass(WS_DATA_CLUSTER_ITEM);
         createEReference(wsDataClusterItemEClass, WS_DATA_CLUSTER_ITEM__WS_DATA_CLUSTER);
 
+        wsStoredProcedureItemEClass = createEClass(WS_STORED_PROCEDURE_ITEM);
+        createEReference(wsStoredProcedureItemEClass, WS_STORED_PROCEDURE_ITEM__WS_STORED_PROCEDURE);
+
+        wsUniverseItemEClass = createEClass(WS_UNIVERSE_ITEM);
+        createEReference(wsUniverseItemEClass, WS_UNIVERSE_ITEM__WS_UNIVERSE);
+
+        wsSynchronizationPlanItemEClass = createEClass(WS_SYNCHRONIZATION_PLAN_ITEM);
+        createEReference(wsSynchronizationPlanItemEClass, WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN);
+
+        wsViewItemEClass = createEClass(WS_VIEW_ITEM);
+        createEReference(wsViewItemEClass, WS_VIEW_ITEM__WS_VIEW);
+
+        wsWorkflowDeployItemEClass = createEClass(WS_WORKFLOW_DEPLOY_ITEM);
+        createEReference(wsWorkflowDeployItemEClass, WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -405,6 +550,11 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         containerItemEClass.getESuperTypes().add(thePropertiesPackage.getFolderItem());
         wsDataModelItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsDataClusterItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsStoredProcedureItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsUniverseItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsSynchronizationPlanItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsViewItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsWorkflowDeployItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -431,6 +581,21 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         initEClass(wsDataClusterItemEClass, WSDataClusterItem.class, "WSDataClusterItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSDataClusterItem_WsDataCluster(), theMdmserverobjectPackage.getWSDataClusterE(), null, "wsDataCluster", null, 0, 1, WSDataClusterItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsStoredProcedureItemEClass, WSStoredProcedureItem.class, "WSStoredProcedureItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSStoredProcedureItem_WsStoredProcedure(), theMdmserverobjectPackage.getWSStoredProcedureE(), null, "wsStoredProcedure", null, 0, 1, WSStoredProcedureItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsUniverseItemEClass, WSUniverseItem.class, "WSUniverseItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSUniverseItem_WsUniverse(), theMdmserverobjectPackage.getWSUniverseE(), null, "wsUniverse", null, 0, 1, WSUniverseItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsSynchronizationPlanItemEClass, WSSynchronizationPlanItem.class, "WSSynchronizationPlanItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSSynchronizationPlanItem_WsSynchronizationPlan(), theMdmserverobjectPackage.getWSSynchronizationPlanE(), null, "wsSynchronizationPlan", null, 0, 1, WSSynchronizationPlanItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsViewItemEClass, WSViewItem.class, "WSViewItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSViewItem_WsView(), theMdmserverobjectPackage.getWSViewE(), null, "wsView", null, 0, 1, WSViewItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsWorkflowDeployItemEClass, WSWorkflowDeployItem.class, "WSWorkflowDeployItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSWorkflowDeployItem_WsWorkflowDeploy(), theMdmserverobjectPackage.getWSWorkflowDeployE(), null, "wsWorkflowDeploy", null, 0, 1, WSWorkflowDeployItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
