@@ -256,5 +256,41 @@
             id="org.talend.mdm.repository.ui.editors.XObjectEditor2"
             name="org.talend.mdm.repository.ui.editors.XObjectEditor2">
       </editor>
+      <editor
+            class="org.talend.mdm.repository.ui.editors.XSDEditor2"
+            default="false"
+            icon="icons/datamodel.png"
+            id="org.talend.mdm.repository.ui.editors.XSDEditor2"
+            name="org.talend.mdm.repository.ui.editors.XSDEditor2">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.talend.mdm.repository.viewContribution"
+            targetID="org.talend.mdm.repository.ui.navigator.MDMRepositoryView">
+         <action
+               class="org.talend.mdm.repository.ui.actions.FilterRepositoryViewNodeAction"
+               icon="icons/filter.gif"
+               id="org.talend.mdm.repository.ui.actions.FilterRepositoryViewNodeAction"
+               label="filter"
+               style="toggle"
+               toolbarPath="repositoryView"
+               tooltip="filter object">
+         </action>
+         <!--
+         <menu
+               id="org.talend.mdm.repository.menu.filter"
+               label="Config Filter..."
+               path="filter">
+         </menu>-->
+         <action
+               class="org.talend.mdm.repository.ui.actions.ConfigRepositoryFilterAction"
+               icon="icons/filter.gif"
+               id="org.talend.mdm.repository.action2"
+               label="Config Filter..."
+               menubarPath="filter">
+         </action>
+      </viewContribution>
    </extension>
 </plugin>

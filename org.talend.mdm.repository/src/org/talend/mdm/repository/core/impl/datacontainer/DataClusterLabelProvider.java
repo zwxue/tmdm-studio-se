@@ -41,7 +41,7 @@ public class DataClusterLabelProvider extends AbstractLabelProvider {
     }
 
     @Override
-    protected Image getCategoryImage() {
+    public Image getCategoryImage() {
         return IMG;
     }
 

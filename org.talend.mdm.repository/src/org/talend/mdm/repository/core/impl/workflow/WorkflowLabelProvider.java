@@ -41,7 +41,7 @@ public class WorkflowLabelProvider extends AbstractLabelProvider {
     }
 
     @Override
-    protected Image getCategoryImage() {
+    public Image getCategoryImage() {
         return IMG;
     }
 

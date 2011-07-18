@@ -84,7 +84,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 switch (type.getValue()) {
                 case FolderType.STABLE_SYSTEM_FOLDER:
                     actions.add(createFolderAction);
-                    actions.add(removeFromRepositoryAction);
                     break;
                 case FolderType.SYSTEM_FOLDER:
 

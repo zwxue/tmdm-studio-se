@@ -141,6 +141,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     protected abstract String getServerObjectItemText(Item item);
 
-    protected abstract Image getCategoryImage();
+    public abstract Image getCategoryImage();
 
 }
