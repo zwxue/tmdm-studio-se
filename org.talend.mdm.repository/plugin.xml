@@ -62,6 +62,45 @@
             products="MDM"
             type="MDM.DataCluster">
       </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.StoredProcedureRepositoryNode"
+            folder="MDM/storedprocedure"
+            isResouce="true"
+            label="Stored Procedure"
+            products="MDM"
+            type="MDM.StoredProcedure">
+      </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.UniverseRepositoryNode"
+            folder="MDM/version"
+            isResouce="true"
+            label="Version"
+            products="MDM"
+            type="MDM.Universe">
+      </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.SynchronizationPlanRepositoryNode"
+            folder="MDM/synchronizationplan"
+            isResouce="true"
+            label="Synchronization Plan"
+            products="MDM"
+            type="MDM.SynchronizationPlan">
+      </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.ViewRepositoryNode"
+            folder="MDM/view"
+            isResouce="true"
+            label="View"
+            products="MDM"
+            type="MDM.View">
+      </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.WorkflowDeployRepositoryNode"
+            folder="MDM/workflow"
+            label="Workflow"
+            products="MDM"
+            type="MDM.Workflow">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.core.repository.repository_content">
@@ -175,6 +214,26 @@
       <configuration
             class="org.talend.mdm.repository.core.impl.role.RoleNodeConfiguration"
             label="Role">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.storedprocedure.StoredProcedureNodeConfiguration"
+            label="Stored Procedure">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.universe.UniverseNodeConfiguration"
+            label="Version">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.synchronizationplan.SynchronizationPlanNodeConfiguration"
+            label="Synchronization Plan">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.view.ViewNodeConfiguration"
+            label="View">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.workflow.WorkflowNodeConfiguration"
+            label="Workflow">
       </configuration>
    </extension>
    <extension

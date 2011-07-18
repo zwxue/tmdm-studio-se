@@ -49,6 +49,21 @@ public interface IServerObjectRepositoryType {
     public static ERepositoryObjectType TYPE_DATACLUSTER = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.DataCluster"); //$NON-NLS-1$
 
+    public static ERepositoryObjectType TYPE_STOREPROCEDURE = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.StoredProcedure"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_UNIVERSE = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.Universe"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_SYNCHRONIZATIONPLAN = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.SynchronizationPlan"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_VIEW = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.View"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_WORKFLOW = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.Workflow"); //$NON-NLS-1$
+
     // public static ERepositoryObjectType TYPE_VIEW = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
     //            ERepositoryObjectType.class, "MDM.View"); //$NON-NLS-1$
 }
