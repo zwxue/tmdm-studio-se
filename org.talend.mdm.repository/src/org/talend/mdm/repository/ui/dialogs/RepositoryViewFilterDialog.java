@@ -34,13 +34,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewFilter;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.ui.navigator.filter.NamePatternViewFilter;
 import org.talend.mdm.repository.ui.navigator.filter.ServerObjectViewFilter;
 import org.talend.mdm.repository.utils.PreferenceUtil;
 
@@ -79,6 +80,10 @@ public class RepositoryViewFilterDialog extends Dialog {
 
     private Button enableAllBun;
 
+    private Button enableNameFilterBun;
+
+    private Text namePatternTxt;
+
     /**
      * Create the dialog.
      * 
@@ -99,13 +104,22 @@ public class RepositoryViewFilterDialog extends Dialog {
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite) super.createDialogArea(parent);
         container.setLayout(new GridLayout(1, false));
-        new Label(container, SWT.NONE);
-        new Label(container, SWT.NONE);
+
+        enableNameFilterBun = new Button(container, SWT.CHECK);
+        enableNameFilterBun.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                namePatternTxt.setEnabled(enableNameFilterBun.getSelection());
+            }
+        });
+        enableNameFilterBun.setText("Enable Name Pattern Filter");
+
+        namePatternTxt = new Text(container, SWT.BORDER);
+        namePatternTxt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         enableServerObjFilterBun = new Button(container, SWT.CHECK);
         enableServerObjFilterBun.addSelectionListener(new SelectionAdapter() {
 
-            @Override
             public void widgetSelected(SelectionEvent e) {
                 enableServeObjFilterComposite(enableServerObjFilterBun.getSelection());
             }
@@ -118,7 +132,6 @@ public class RepositoryViewFilterDialog extends Dialog {
         //
         serverObjViewer.addCheckStateListener(new ICheckStateListener() {
 
-            @Override
             public void checkStateChanged(CheckStateChangedEvent event) {
                 IRepositoryNodeConfiguration config = (IRepositoryNodeConfiguration) event.getElement();
                 if (event.getChecked()) {
@@ -133,7 +146,6 @@ public class RepositoryViewFilterDialog extends Dialog {
         enableAllBun = new Button(container, SWT.CHECK);
         enableAllBun.addSelectionListener(new SelectionAdapter() {
 
-            @Override
             public void widgetSelected(SelectionEvent e) {
                 boolean selected = enableAllBun.getSelection();
                 enableAllBun.setSelection(selected);
@@ -159,8 +171,19 @@ public class RepositoryViewFilterDialog extends Dialog {
      * DOC hbhong Comment method "initServerObjectTable".
      */
     private void initServerObjectFilter() {
-        boolean enableFilter = PreferenceUtil.getBoolean(ServerObjectViewFilter.PROP_ENABLE);
-        enableServerObjFilterBun.setSelection(enableFilter);
+        // name pattern filter
+        boolean enableNamePatternFilter = PreferenceUtil.getBoolean(NamePatternViewFilter.PROP_ENABLE);
+        enableNameFilterBun.setSelection(enableNamePatternFilter);
+        String namePattern = PreferenceUtil.getString(NamePatternViewFilter.PROP_NAME_PATTERN);
+        if (namePattern == null || namePattern.trim().length() == 0) {
+            namePattern = "*"; //$NON-NLS-1$
+        }
+        namePatternTxt.setText(namePattern);
+        namePatternTxt.setEnabled(enableNamePatternFilter);
+
+        // sever object filter
+        boolean enableServerObjFilter = PreferenceUtil.getBoolean(ServerObjectViewFilter.PROP_ENABLE);
+        enableServerObjFilterBun.setSelection(enableServerObjFilter);
         //
         allConfigs = RepositoryNodeConfigurationManager.getConfigurations();
         serverObjViewer.setInput(allConfigs);
@@ -174,7 +197,7 @@ public class RepositoryViewFilterDialog extends Dialog {
             }
         }
         //
-        enableServeObjFilterComposite(enableFilter);
+        enableServeObjFilterComposite(enableServerObjFilter);
         enableAllBun.setSelection(enabledConfigs.size() == allConfigs.size());
 
     }
@@ -189,7 +212,6 @@ public class RepositoryViewFilterDialog extends Dialog {
      * 
      * @param parent
      */
-    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
         createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
@@ -198,14 +220,16 @@ public class RepositoryViewFilterDialog extends Dialog {
     /**
      * Return the initial size of the dialog.
      */
-    @Override
     protected Point getInitialSize() {
         return new Point(451, 362);
     }
 
-    @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
+            // name pattern pref
+            PreferenceUtil.setBoolean(NamePatternViewFilter.PROP_ENABLE, enableNameFilterBun.getSelection());
+            PreferenceUtil.setString(NamePatternViewFilter.PROP_NAME_PATTERN, namePatternTxt.getText().trim());
+            // server object pref
             PreferenceUtil.setBoolean(ServerObjectViewFilter.PROP_ENABLE, enableServerObjFilterBun.getSelection());
             Set<String> names = getNewServerObjectPref();
             PreferenceUtil.setStringSet(ServerObjectViewFilter.PROP_ENABLE_LIST, names);
