@@ -28,6 +28,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -53,7 +54,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
      * @param text
      */
     public RenameObjectAction() {
-        super("Rename");
+        super(Messages.RenameObjectAction_rename);
         setImageDescriptor(ImageCache.getImage(EImage.RENAME.getPath()));
     }
 
@@ -93,22 +94,24 @@ public class RenameObjectAction extends AbstractRepositoryAction {
     }
 
     private String showRenameDlg(final ERepositoryObjectType type, final ContainerItem parentItem) {
-        InputDialog dlg = new InputDialog(getShell(), "Rename", "Enter a New Name for the Instance", null, new IInputValidator() {
+        InputDialog dlg = new InputDialog(getShell(), Messages.RenameObjectAction_rename,
+                Messages.Common_inputName, null, new IInputValidator() {
 
-            public String isValid(String newText) {
-                if (newText == null || newText.trim().length() == 0)
-                    return "The Name cannot be empty";
-                if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
-                    return "The name cannot contain invalid character!";
-                }
-                //
-                IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(parentItem, newText.trim(), true);
-                if (viewObject != null) {
-                    return "Already has a instance with same name";
-                }
-                return null;
-            };
-        });
+                    public String isValid(String newText) {
+                        if (newText == null || newText.trim().length() == 0)
+                            return Messages.Common_nameCanNotBeEmpty;
+                        if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                            return Messages.Common_nameInvalid;
+                        }
+                        //
+                        IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(parentItem,
+                                newText.trim(), true);
+                        if (viewObject != null) {
+                            return Messages.Common_nameIsUsed;
+                        }
+                        return null;
+                    };
+                });
         dlg.setBlockOnOpen(true);
         if (dlg.open() == Window.CANCEL)
             return null;

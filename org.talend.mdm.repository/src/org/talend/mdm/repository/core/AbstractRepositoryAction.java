@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -37,11 +38,11 @@ import org.eclipse.ui.navigator.CommonViewer;
  */
 public abstract class AbstractRepositoryAction extends BaseSelectionListenerAction {
 
-    public static final String GROUP_EDIT = "group.edit";
+    public static final String GROUP_EDIT = "group.edit"; //$NON-NLS-1$
 
-    public static final String GROUP_EXPORT = "group.export";
+    public static final String GROUP_EXPORT = "group.export"; //$NON-NLS-1$
 
-    public static final String GROUP_SERVER = "group.server";
+    public static final String GROUP_SERVER = "group.server"; //$NON-NLS-1$
 
     protected CommonViewer commonViewer;
 

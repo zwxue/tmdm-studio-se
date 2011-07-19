@@ -41,7 +41,7 @@ public class MDMRepositoryActionProvider extends CommonActionProvider {
 
     @Override
     public void fillActionBars(IActionBars actionBars) {
-
+        // open
         actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, openObjectAction);
     }
 

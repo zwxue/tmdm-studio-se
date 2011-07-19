@@ -22,6 +22,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -46,7 +47,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
      * @param text
      */
     public RemoveFromRepositoryAction() {
-        super("Remove from Repository");
+        super(Messages.RemoveFromRepositoryAction_removeFromRepository);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
     }
 

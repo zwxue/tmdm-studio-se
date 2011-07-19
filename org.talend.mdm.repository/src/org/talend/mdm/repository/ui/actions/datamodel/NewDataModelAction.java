@@ -19,17 +19,15 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.actions.menu;
+package org.talend.mdm.repository.ui.actions.datamodel;
 
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
+import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -37,49 +35,43 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class NewMenuAction extends AbstractSimpleAddAction {
+public class NewDataModelAction extends AbstractSimpleAddAction {
 
     /**
-     * DOC hbhong AddMenu constructor comment.
+     * DOC hbhong NewDataModelAction constructor comment.
      * 
      * @param text
      */
-    public NewMenuAction() {
+    public NewDataModelAction() {
         super();
     }
 
-
     @Override
     protected String getDialogTitle() {
-        return Messages.NewMenuAction_newMenu;
+        return Messages.NewDataModelAction_newDataModel;
     }
 
-    private WSMenuE newBlankMenu(String key) {
+    private WSDataModelE newBlankDataModel(String key) {
 
-        WSMenuMenuEntriesDescriptionsE descriptions = MdmserverobjectFactory.eINSTANCE.createWSMenuMenuEntriesDescriptionsE();
-        descriptions.setLabel(key);
-        descriptions.setLanguage("en"); //$NON-NLS-1$
+        WSDataModelE dataModel = MdmserverobjectFactory.eINSTANCE.createWSDataModelE();
+        dataModel.setName(key);
         //
+        String defaultXSD = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"//$NON-NLS-1$//$NON-NLS-2$
+                + "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"/>"; //$NON-NLS-1$
 
-        WSMenuEntryE entry = MdmserverobjectFactory.eINSTANCE.createWSMenuEntryE();
-        entry.getDescriptions().add(descriptions);
-        entry.setId(key);
+        dataModel.setXsdSchema(defaultXSD);
         //
-        WSMenuE menu = MdmserverobjectFactory.eINSTANCE.createWSMenuE();
-        menu.setName(key);
-        menu.getMenuEntries().add(entry);
-        //
-        return menu;
+        return dataModel;
     }
 
     protected boolean createServerObject(String key) {
 
-        WSMenuItem item = MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
+        WSDataModelItem item = MdmpropertiesFactory.eINSTANCE.createWSDataModelItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WSMenuE menu = newBlankMenu(key);
-        item.setWsMenu(menu);
+        WSDataModelE dataModel = newBlankDataModel(key);
+        item.setWsDataModel(dataModel);
 
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
@@ -87,6 +79,5 @@ public class NewMenuAction extends AbstractSimpleAddAction {
         }
         return false;
     }
-
 
 }

@@ -44,6 +44,7 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.ui.navigator.filter.NamePatternViewFilter;
 import org.talend.mdm.repository.ui.navigator.filter.ServerObjectViewFilter;
 import org.talend.mdm.repository.utils.PreferenceUtil;
+import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -112,7 +113,7 @@ public class RepositoryViewFilterDialog extends Dialog {
                 namePatternTxt.setEnabled(enableNameFilterBun.getSelection());
             }
         });
-        enableNameFilterBun.setText("Enable Name Pattern Filter");
+        enableNameFilterBun.setText(Messages.RepositoryViewFilterDialog_enableNameFilter);
 
         namePatternTxt = new Text(container, SWT.BORDER);
         namePatternTxt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -124,7 +125,7 @@ public class RepositoryViewFilterDialog extends Dialog {
                 enableServeObjFilterComposite(enableServerObjFilterBun.getSelection());
             }
         });
-        enableServerObjFilterBun.setText("Enable Server Object Filter");
+        enableServerObjFilterBun.setText(Messages.RepositoryViewFilterDialog_enableServerObjFilter);
 
         serverObjViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
         table = serverObjViewer.getTable();
@@ -157,11 +158,11 @@ public class RepositoryViewFilterDialog extends Dialog {
                 }
             }
         });
-        enableAllBun.setText("Enable All Server Objects");
+        enableAllBun.setText(Messages.RepositoryViewFilterDialog_enableAllServerObject);
         serverObjViewer.setLabelProvider(new ServerObjectLabelProvider());
         serverObjViewer.setContentProvider(new ArrayContentProvider());
         //
-        getShell().setText("Repository View Filter");
+        getShell().setText(Messages.RepositoryViewFilterDialog_title);
         //
         initServerObjectFilter();
         return container;

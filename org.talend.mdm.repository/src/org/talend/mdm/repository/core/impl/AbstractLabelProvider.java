@@ -119,7 +119,8 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     @Override
     public Font getFont(Object element) {
-        if (isSystemServerObjectItem(element)) {
+        if (isSystemServerObjectItem(element)
+                || RepositoryResourceUtil.hasContainerItem(element, FolderType.STABLE_SYSTEM_FOLDER_LITERAL)) {
             return FONT_BOLD;
         }
         return null;

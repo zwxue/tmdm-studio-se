@@ -21,6 +21,7 @@ import org.eclipse.jface.window.Window;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -39,7 +40,7 @@ public class CreateFolderAction extends AbstractRepositoryAction {
      * @param text
      */
     public CreateFolderAction() {
-        super("Create Cagegory");
+        super(Messages.CreateFolderAction_createCategory);
         setImageDescriptor(ImageCache.getImage(EImage.COMPRESSED_FOLDER_OBJ.getPath()));
     }
 
@@ -52,23 +53,23 @@ public class CreateFolderAction extends AbstractRepositoryAction {
         Object object = getSelectedObject().get(0);
         if (object != null && object instanceof ContainerRepositoryObject) {
             final ContainerRepositoryObject containerViewObject = (ContainerRepositoryObject) object;
-            InputDialog dlg = new InputDialog(getShell(), "New Category",
-                    "Enter a name for the New Category", null, new IInputValidator() {
+            InputDialog dlg = new InputDialog(getShell(), Messages.CreateFolderAction_newCategory,
+                    Messages.CreateFolderAction_inputCategoryName, null, new IInputValidator() {
 
                         public String isValid(String newText) {
                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                return "The Name cannot be empty";
+                                return Messages.Common_nameCanNotBeEmpty;
                             Pattern p = Pattern.compile("([\\s*|\\W*]+)");//$NON-NLS-1$ 
                             Matcher m = p.matcher(newText);
                             if (m.find()) {
                                 m.group(1);
-                                return "The name cannot contains invalid character!";
+                                return Messages.Common_nameInvalid;
                             }
                             for (IRepositoryViewObject viewObj : containerViewObject.getChildren()) {
                                 Item item = viewObj.getProperty().getItem();
                                 if (item instanceof ContainerItem) {
                                     if (((ContainerItem) item).getLabel().equals(newText))
-                                        return "The name is being used !";
+                                        return Messages.CreateFolderAction_nameIsUsed;
                                 }
                             }
                             return null;

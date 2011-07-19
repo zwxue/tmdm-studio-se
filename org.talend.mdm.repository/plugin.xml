@@ -111,10 +111,11 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="org.talend.core.root"
             class="org.talend.mdm.repository.ui.navigator.MDMRepositoryView"
             icon="icons/default.gif"
             id="org.talend.mdm.repository.ui.navigator.MDMRepositoryView"
-            name="MDM Repository"
+            name="%view.MDMRepositoryView.name"
             restorable="true">
       </view>
    </extension>
@@ -273,10 +274,10 @@
                class="org.talend.mdm.repository.ui.actions.FilterRepositoryViewNodeAction"
                icon="icons/filter.gif"
                id="org.talend.mdm.repository.ui.actions.FilterRepositoryViewNodeAction"
-               label="filter"
+               label="%viewAction.filter.label"
                style="toggle"
                toolbarPath="repositoryView"
-               tooltip="filter object">
+               tooltip="%viewAction.filter.tooltip">
          </action>
          <!--
          <menu
@@ -288,7 +289,7 @@
                class="org.talend.mdm.repository.ui.actions.ConfigRepositoryFilterAction"
                icon="icons/filter.gif"
                id="org.talend.mdm.repository.action2"
-               label="Config Filter..."
+               label="%viewAction.configFilter.label"
                menubarPath="filter">
          </action>
       </viewContribution>
