@@ -75,12 +75,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
@@ -231,9 +228,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected Text descriptionText;
 
-    private Label langeuageLabel;
+    // private Label langeuageLabel;
 
-    private Combo languageCombo;
+    // private Combo languageCombo;
 
     protected TreeViewer viewer;
 
@@ -364,7 +361,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private boolean isChange = false;
 
-    private Group addLanGroup;
+    // private Group addLanGroup;
 
     protected String uriPre;
 
@@ -409,16 +406,16 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
 
         try {
-            mainComposite.getParent().setLayout(new GridLayout());
+            GridLayout layout = new GridLayout();
+            layout.verticalSpacing = 0;
+            mainComposite.getParent().setLayout(layout);
             GridData gdMainComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
             gdMainComposite.widthHint = 1;
             gdMainComposite.heightHint = 1;
             mainComposite.setLayoutData(gdMainComposite);
 
             WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
-            // Button importXSDBtn, exportBtn, sortUPBtn, sortDownBtn, expandBtn, collapseBtn, expandSelBtn,
-            // sortNaturalBtn, addLanBtn, deleteLanbtn, importSchemaNsBtn;
-            Button importXSDBtn, exportBtn, addLanBtn, deleteLanbtn, importSchemaNsBtn;
+
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -434,180 +431,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             GridLayout gLayout = new GridLayout();
             gLayout.numColumns = 4;
             gLayout.horizontalSpacing = 20;
+            gLayout.verticalSpacing = 0;
             btnCmp.setLayout(gLayout);
 
-            importXSDBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);//$NON-NLS-1$
-            importXSDBtn.setImage(ImageCache.getCreatedImage(EImage.IMPORT.getPath()));
-            importXSDBtn.setToolTipText("Import...");
 
-            exportBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);//$NON-NLS-1$
-            exportBtn.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
-            exportBtn.setToolTipText("Export...");
-
-            importSchemaNsBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);//$NON-NLS-1$
-            importSchemaNsBtn.setImage(ImageCache.getCreatedImage(EImage.CHECKIN_ACTION.getPath()));
-            importSchemaNsBtn.setToolTipText("import/include specific Schema Namespace ...");
-
-            addLanGroup = new Group(btnCmp, SWT.NONE);
-            addLanGroup.setText("Label Operation");
-            addLanGroup.setToolTipText("Add or remove languages in all Entities and elements for the current data model");
-            addLanGroup.setBackground(btnCmp.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-            addLanGroup.setLayout(new GridLayout(4, false));
-
-            addLanGroup.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true, false));
-
-            langeuageLabel = toolkit.createLabel(addLanGroup, "Language:");
-            languageCombo = new Combo(addLanGroup, SWT.READ_ONLY);
-            addLanBtn = toolkit.createButton(addLanGroup, "", SWT.NONE);//$NON-NLS-1$
-            addLanBtn.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-            addLanBtn.setToolTipText("Add...");
-            deleteLanbtn = toolkit.createButton(addLanGroup, "", SWT.NONE);//$NON-NLS-1$
-            deleteLanbtn.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-            deleteLanbtn.setToolTipText("Remove...");
-            Set<String> languages = Util.lang2iso.keySet();
-            for (Iterator iter = languages.iterator(); iter.hasNext();) {
-                String language = (String) iter.next();
-                languageCombo.add(language);
-            }
-            languageCombo.select(0);
-            addLanBtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    addOrDelLanguage(true);
-                }
-            });
-            deleteLanbtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    addOrDelLanguage(false);
-                }
-            });
-
-            langeuageLabel.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false, false, 1, 1));
-            languageCombo.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false, false, 1, 1));
-            addLanBtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false, false, 1, 1));
-            deleteLanbtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false, false, 1, 1));
-            importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-            exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-
-            importSchemaNsBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-
-            importXSDBtn.addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(SelectionEvent e) {
-                    FileDialog fd = new FileDialog(getSite().getShell(), SWT.OPEN);
-                    fd.setFilterExtensions(new String[] { "*.xsd", "*.dtd", "*.xml" });//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                    // set the default path to the workspace.
-                    fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
-                    // System.out.println(Platform.getInstanceLocation().getURL().getPath());
-                    fd.setText("Select the XML definition for XML Schema");
-                    String filename = fd.open();
-                    if (filename == null)
-                        return;
-                    xsdSchema = null;
-                    inferXsdFromXml(filename);
-                }
-
-                private void inferXsdFromXml(String xmlFile) {
-                    int infer = 0;
-                    String xsd = "";//$NON-NLS-1$
-                    try {
-                        String inputType = xmlFile.substring(xmlFile.lastIndexOf("."));//$NON-NLS-1$
-                        if (inputType.equals(".xsd")) {//$NON-NLS-1$
-                            xsd = Util.getXML(xmlFile);
-                            xsdSchema = Util.createXsdSchema(xsd, xobject);
-                            // xsdSchema.setTargetNamespace(null);
-                            xsd = Util.nodeToString(xsdSchema.getDocument());
-                        } else {
-                            XSDDriver d = new XSDDriver();
-                            infer = d.doMain(new String[] { xmlFile, "out.xsd" });//$NON-NLS-1$
-                            if (infer == 0) {
-                                xsd = d.outputXSD();
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        log.error(e.getMessage(), e);
-                        infer = 2;
-                    } finally {
-                        if (infer == 0 && !xsd.equals("")) {//$NON-NLS-1$
-                            WSDataModel wsObj = (WSDataModel) (xobject.getWsObject());
-                            wsObj.setXsdSchema(xsd);
-                            validateSchema(xsd);
-                            refreshData();
-                            markDirtyWithoutCommit();
-                        } else if (infer != 0) {
-                            MessageDialog.openError(getSite().getShell(), "Error",
-                                    "XSD schema can not be inferred from the given xml");
-                        }
-                    }
-                }
-
-                void validateSchema(String xsd) {
-                    try {
-                        boolean elem = false;
-                        XSDSchema schema = getXSDSchema(xsd);
-                        NodeList nodeList = schema.getDocument().getDocumentElement().getChildNodes();
-                        for (int idx = 0; idx < nodeList.getLength(); idx++) {
-                            Node node = nodeList.item(idx);
-                            if (node instanceof Element && node.getLocalName().indexOf("element") >= 0) {//$NON-NLS-1$
-                                elem = true;
-                                break;
-                            }
-                        }
-                        if (!elem) {
-                            MessageDialog.openWarning(getSite().getShell(), "Warnning",
-                                    "There is no element node in the imported xsd schema");
-                        }
-                    } catch (Exception e) {
-
-                        log.error(e.getMessage(), e);
-                    }
-                }
-            });
-
-            exportBtn.addSelectionListener(new SelectionAdapter() {
-
-                @Override
-                public void widgetSelected(SelectionEvent e) {
-                    FileDialog fd = new FileDialog(getSite().getShell(), SWT.SAVE);
-                    fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
-                    fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
-                    fd.setText("Save the Data Module as XSD Schema");
-                    String filename = fd.open();
-                    if (filename == null)
-                        return;
-                    inferXsdFromDataModule(filename);
-                }
-
-                private void inferXsdFromDataModule(String xmlFile) {
-                    WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
-                    XSDDriver d = new XSDDriver();
-                    // if (d.outputXSD(wsObject.getXsdSchema(), xmlFile) != null) {
-                    if (d.outputXSD_UTF_8(wsObject.getXsdSchema(), xmlFile) != null) {
-                        MessageDialog.openInformation(getSite().getShell(), "Export XSD",
-                                "The operation for Exporting XSD completed successfully!");
-                    } else {
-                        MessageDialog.openError(getSite().getShell(), "Error", "failed to export XSD file!");
-                    }
-                }
-            });
-
-            importSchemaNsBtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    SelectImportedModulesDialog dlg = new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject,
-                            "Import xsd schema modules");
-                    dlg.create();
-                    dlg.setBlockOnOpen(true);
-                    dlg.open();
-                    if (dlg.getReturnCode() == Window.OK) {
-                        doImportSchema(dlg.getImportedXSDList(), dlg.getToDelXSDList());
-                    }
-                }
-
-            });
 
             // Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
             // SWT.NULL);
@@ -822,27 +649,31 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private void setLabel(XSDAnnotationsStructure struc, String labelValue, boolean isAdd) {
 
-        String labelKey = Util.lang2iso.get(languageCombo.getText());
-        if (isAdd) {
-            if (!struc.getLabels().containsKey(labelKey))
-                struc.setLabel(labelKey, labelValue);
-        } else {
-            if (struc.getLabels().containsKey(labelKey))
-                struc.removeLabel(labelKey);
-        }
-        if (struc.hasChanged())
-            isChange = true;
+        // String labelKey = Util.lang2iso.get(languageCombo.getText());
+        // if (isAdd) {
+        // if (!struc.getLabels().containsKey(labelKey))
+        // struc.setLabel(labelKey, labelValue);
+        // } else {
+        // if (struc.getLabels().containsKey(labelKey))
+        // struc.removeLabel(labelKey);
+        // }
+        // if (struc.hasChanged())
+        // isChange = true;
     }
 
     private void createSchemaTreeComp(Composite parent) {
 
         Composite schemaSash = new Composite(parent, SWT.NONE);
-        schemaSash.setLayout(new GridLayout());
+        GridLayout layout = new GridLayout();
+        layout.verticalSpacing = 0;
+        schemaSash.setLayout(layout);
         schemaSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         Composite compInfo = new Composite(schemaSash, SWT.NONE);
-        compInfo.setLayout(new GridLayout());
+        layout = new GridLayout();
+        layout.verticalSpacing = 0;
+        compInfo.setLayout(layout);
         compInfo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
         compInfo.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
@@ -857,15 +688,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         compSchemaTree.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         Label title = new Label(compInfo, SWT.VERTICAL);
-        title.setText("Data-model: " + modelName);
+        title.setText("Data Model Entities");
         title.setFont(FontUtils.getBoldFont(title.getFont()));
         Color blue = new Color(compInfo.getDisplay(), 0, 0, 255);
         title.setForeground(blue);
         title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        Label des = new Label(compInfo, SWT.VERTICAL);
-        des.setText("Define the " + modelName + " data-model");
-        des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         ToolBar toolBarSchemaTree = createToolbarOnComposite(compSchemaTree);
 
@@ -896,47 +724,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         });
         viewer.setLabelProvider(new XSDTreeLabelProvider());
         viewer.setSorter(schemaTreeSorter);
-        // viewer.setSorter(new ViewerSorter() {
-        //
-        // public int category(Object element) {
-        // // we want facets before Base TypeDefinitions in
-        // // SimpleTypeDefinition
-        // if (element instanceof XSDFacet)
-        // return 100;
-        // // unique keys after element declarations and before other
-        // // keys
-        // if (element instanceof XSDIdentityConstraintDefinition) {
-        // XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-        //
-        // if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-        // return 300;
-        // else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
-        // return 301;
-        // else
-        // return 302;
-        // }
-        // return 200;
-        // }
-        //
-        // public int compare(Viewer theViewer, Object e1, Object e2) {
-        // int cat1 = category(e1);
-        // int cat2 = category(e2);
-        // // if(cat1==cat2&&cat1==200){
-        // // if(e1 instanceof XSDParticle&&e2 instanceof XSDParticle){
-        // // XSDParticle xp1= (XSDParticle)e1;
-        // // XSDParticle xp2= (XSDParticle)e2;
-        // // String name1 = ((XSDElementDeclaration)xp1.getTerm()).getName();
-        // // String name2 = ((XSDElementDeclaration)xp2.getTerm()).getName();
-        // // if(isDESC)
-        // // return name1.compareToIgnoreCase(name2);
-        // // else
-        // // return -name1.compareToIgnoreCase(name2);
-        // // }
-        // // }
-        // //
-        // return cat1 - cat2;
-        // }
-        // });
         viewer.setInput(this.getSite());// getViewSite());
         viewer.getTree().addKeyListener(new KeyListener() {
 
@@ -1055,12 +842,16 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     private void createTypeTreeComp(Composite parent) {
 
         Composite TypeSash = new Composite(parent, SWT.NONE);
-        TypeSash.setLayout(new GridLayout());
+        GridLayout layout = new GridLayout();
+        layout.verticalSpacing = 0;
+        TypeSash.setLayout(layout);
         TypeSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         TypeSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         Composite compInfo = new Composite(TypeSash, SWT.NONE);
-        compInfo.setLayout(new GridLayout());
+        layout = new GridLayout();
+        layout.verticalSpacing = 0;
+        compInfo.setLayout(layout);
         compInfo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
         compInfo.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
@@ -1075,15 +866,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         compTypeTree.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         Label title = new Label(compInfo, SWT.VERTICAL);
-        title.setText("Reusable types");
+        title.setText("Data Model Types");
         title.setFont(FontUtils.getBoldFont(title.getFont()));
         Color blue = new Color(compInfo.getDisplay(), 0, 0, 255);
         title.setForeground(blue);
         title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-
-        Label des = new Label(compInfo, SWT.VERTICAL);
-        des.setText("Define the types reusable in " + modelName);
-        des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         ToolBar toolBarTypeTree = createToolbarOnComposite(compTypeTree);
 
@@ -2872,11 +2659,160 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         mainControl = parent;
         parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        parent.setLayout(new GridLayout(2, false));
+        GridLayout layout = new GridLayout();
+        layout.verticalSpacing = 2;
+        layout.numColumns = 2;
+        parent.setLayout(layout);
+        // create toolbar
+        createToolBar(parent);
         createCharacteristicsContent(WidgetFactory.getWidgetFactory(), parent);
         createActions();
     }
 
+    private void createToolBar(Composite parent) {
+        Composite toolBarComp = new Composite(parent, SWT.BORDER);
+        GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
+        gd.heightHint = 25;
+        toolBarComp.setLayoutData(gd);
+        final GridLayout glToolBarBackground = new GridLayout();
+        glToolBarBackground.verticalSpacing = 0;
+        glToolBarBackground.marginWidth = 0;
+        glToolBarBackground.marginHeight = 0;
+        glToolBarBackground.horizontalSpacing = 0;
+        toolBarComp.setLayout(glToolBarBackground);
+        ToolBar resultToolBar = new ToolBar(toolBarComp, SWT.FLAT | SWT.HORIZONTAL);
+        gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        resultToolBar.setLayoutData(gd);
+        ToolItem importToolItem = new ToolItem(resultToolBar, SWT.PUSH);
+        importToolItem.setImage(ImageCache.getCreatedImage(EImage.IMPORT.getPath()));
+        importToolItem.setToolTipText("Import...");
+
+        ToolItem exportToolItem = new ToolItem(resultToolBar, SWT.PUSH);
+        exportToolItem.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
+        exportToolItem.setToolTipText("Export...");
+
+        ToolItem importSchemalItem = new ToolItem(resultToolBar, SWT.PUSH);
+        importSchemalItem.setImage(ImageCache.getCreatedImage(EImage.CHECKIN_ACTION.getPath()));
+        importSchemalItem.setToolTipText("import/include specific Schema Namespace ...");
+
+        importToolItem.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                FileDialog fd = new FileDialog(getSite().getShell(), SWT.OPEN);
+                fd.setFilterExtensions(new String[] { "*.xsd", "*.dtd", "*.xml" });//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                // set the default path to the workspace.
+                fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
+                // System.out.println(Platform.getInstanceLocation().getURL().getPath());
+                fd.setText("Select the XML definition for XML Schema");
+                String filename = fd.open();
+                if (filename == null)
+                    return;
+                xsdSchema = null;
+                inferXsdFromXml(filename);
+            }
+
+            private void inferXsdFromXml(String xmlFile) {
+                int infer = 0;
+                String xsd = "";//$NON-NLS-1$
+                try {
+                    String inputType = xmlFile.substring(xmlFile.lastIndexOf("."));//$NON-NLS-1$
+                    if (inputType.equals(".xsd")) {//$NON-NLS-1$
+                        xsd = Util.getXML(xmlFile);
+                        xsdSchema = Util.createXsdSchema(xsd, xobject);
+                        // xsdSchema.setTargetNamespace(null);
+                        xsd = Util.nodeToString(xsdSchema.getDocument());
+                    } else {
+                        XSDDriver d = new XSDDriver();
+                        infer = d.doMain(new String[] { xmlFile, "out.xsd" });//$NON-NLS-1$
+                        if (infer == 0) {
+                            xsd = d.outputXSD();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                    infer = 2;
+                } finally {
+                    if (infer == 0 && !xsd.equals("")) {//$NON-NLS-1$
+                        WSDataModel wsObj = (WSDataModel) (xobject.getWsObject());
+                        wsObj.setXsdSchema(xsd);
+                        validateSchema(xsd);
+                        refreshData();
+                        markDirtyWithoutCommit();
+                    } else if (infer != 0) {
+                        MessageDialog.openError(getSite().getShell(), "Error",
+                                "XSD schema can not be inferred from the given xml");
+                    }
+                }
+            }
+
+            void validateSchema(String xsd) {
+                try {
+                    boolean elem = false;
+                    XSDSchema schema = getXSDSchema(xsd);
+                    NodeList nodeList = schema.getDocument().getDocumentElement().getChildNodes();
+                    for (int idx = 0; idx < nodeList.getLength(); idx++) {
+                        Node node = nodeList.item(idx);
+                        if (node instanceof Element && node.getLocalName().indexOf("element") >= 0) {//$NON-NLS-1$
+                            elem = true;
+                            break;
+                        }
+                    }
+                    if (!elem) {
+                        MessageDialog.openWarning(getSite().getShell(), "Warnning",
+                                "There is no element node in the imported xsd schema");
+                    }
+                } catch (Exception e) {
+
+                    log.error(e.getMessage(), e);
+                }
+            }
+        });
+
+        exportToolItem.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                FileDialog fd = new FileDialog(getSite().getShell(), SWT.SAVE);
+                fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
+                fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
+                fd.setText("Save the Data Module as XSD Schema");
+                String filename = fd.open();
+                if (filename == null)
+                    return;
+                inferXsdFromDataModule(filename);
+            }
+
+            private void inferXsdFromDataModule(String xmlFile) {
+                WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+                XSDDriver d = new XSDDriver();
+                // if (d.outputXSD(wsObject.getXsdSchema(), xmlFile) != null) {
+                if (d.outputXSD_UTF_8(wsObject.getXsdSchema(), xmlFile) != null) {
+                    MessageDialog.openInformation(getSite().getShell(), "Export XSD",
+                            "The operation for Exporting XSD completed successfully!");
+                } else {
+                    MessageDialog.openError(getSite().getShell(), "Error", "failed to export XSD file!");
+                }
+            }
+        });
+
+        importSchemalItem.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                SelectImportedModulesDialog dlg = new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject,
+                        "Import xsd schema modules");
+                dlg.create();
+                dlg.setBlockOnOpen(true);
+                dlg.open();
+                if (dlg.getReturnCode() == Window.OK) {
+                    doImportSchema(dlg.getImportedXSDList(), dlg.getToDelXSDList());
+                }
+            }
+
+        });
+
+    }
     @Override
     public void setFocus() {
 
