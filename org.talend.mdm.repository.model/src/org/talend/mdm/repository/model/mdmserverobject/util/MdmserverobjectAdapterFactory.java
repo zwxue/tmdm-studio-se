@@ -164,6 +164,42 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
                 return createWSWorkflowDeployEAdapter();
             }
             @Override
+            public Adapter caseWSTransformerV2E(WSTransformerV2E object) {
+                return createWSTransformerV2EAdapter();
+            }
+            @Override
+            public Adapter caseWSTransformerProcessStepE(WSTransformerProcessStepE object) {
+                return createWSTransformerProcessStepEAdapter();
+            }
+            @Override
+            public Adapter caseWSTransformerVariablesMappingE(WSTransformerVariablesMappingE object) {
+                return createWSTransformerVariablesMappingEAdapter();
+            }
+            @Override
+            public Adapter caseWSTypedContentE(WSTypedContentE object) {
+                return createWSTypedContentEAdapter();
+            }
+            @Override
+            public Adapter caseWSByteArrayE(WSByteArrayE object) {
+                return createWSByteArrayEAdapter();
+            }
+            @Override
+            public Adapter caseWSRoutingRuleE(WSRoutingRuleE object) {
+                return createWSRoutingRuleEAdapter();
+            }
+            @Override
+            public Adapter caseWSRoutingRuleExpression(WSRoutingRuleExpression object) {
+                return createWSRoutingRuleExpressionAdapter();
+            }
+            @Override
+            public Adapter caseWSRoutingRuleOperatorE(WSRoutingRuleOperatorE object) {
+                return createWSRoutingRuleOperatorEAdapter();
+            }
+            @Override
+            public Adapter caseWSJobModelE(WSJobModelE object) {
+                return createWSJobModelEAdapter();
+            }
+            @Override
             public Adapter defaultCase(EObject object) {
                 return createEObjectAdapter();
             }
@@ -502,6 +538,132 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSWorkflowDeployEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E <em>WS Transformer V2E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E
+     * @generated
+     */
+    public Adapter createWSTransformerV2EAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE <em>WS Transformer Process Step E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
+     * @generated
+     */
+    public Adapter createWSTransformerProcessStepEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE <em>WS Transformer Variables Mapping E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE
+     * @generated
+     */
+    public Adapter createWSTransformerVariablesMappingEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE <em>WS Typed Content E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE
+     * @generated
+     */
+    public Adapter createWSTypedContentEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE <em>WS Byte Array E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE
+     * @generated
+     */
+    public Adapter createWSByteArrayEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE <em>WS Routing Rule E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE
+     * @generated
+     */
+    public Adapter createWSRoutingRuleEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression <em>WS Routing Rule Expression</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression
+     * @generated
+     */
+    public Adapter createWSRoutingRuleExpressionAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE <em>WS Routing Rule Operator E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE
+     * @generated
+     */
+    public Adapter createWSRoutingRuleOperatorEAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSJobModelE <em>WS Job Model E</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSJobModelE
+     * @generated
+     */
+    public Adapter createWSJobModelEAdapter() {
         return null;
     }
 

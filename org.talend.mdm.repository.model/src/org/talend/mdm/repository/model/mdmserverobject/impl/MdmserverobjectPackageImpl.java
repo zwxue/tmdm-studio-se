@@ -22,20 +22,29 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
+import org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSJobModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE;
 import org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE;
 import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
 import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE;
 import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanItemsSynchronizationsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE;
 import org.talend.mdm.repository.model.mdmserverobject.WSUniverseE;
 import org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSUniverseXtentisObjectsRevisionIDsE;
@@ -211,6 +220,69 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsWorkflowDeployEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsTransformerV2EEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsTransformerProcessStepEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsTransformerVariablesMappingEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsTypedContentEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsByteArrayEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsRoutingRuleEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsRoutingRuleExpressionEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsRoutingRuleOperatorEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsJobModelEEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -1116,6 +1188,321 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSTransformerV2E() {
+        return wsTransformerV2EEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSTransformerV2E_ProcessSteps() {
+        return (EReference)wsTransformerV2EEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSTransformerProcessStepE() {
+        return wsTransformerProcessStepEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTransformerProcessStepE_PluginJNDI() {
+        return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTransformerProcessStepE_Description() {
+        return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTransformerProcessStepE_Parameters() {
+        return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTransformerProcessStepE_Disabled() {
+        return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(3);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSTransformerProcessStepE_InputMappings() {
+        return (EReference)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(4);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSTransformerProcessStepE_OutputMappings() {
+        return (EReference)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(5);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSTransformerVariablesMappingE() {
+        return wsTransformerVariablesMappingEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTransformerVariablesMappingE_PipelineVariable() {
+        return (EAttribute)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTransformerVariablesMappingE_PluginVariable() {
+        return (EAttribute)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSTransformerVariablesMappingE_HardCoding() {
+        return (EReference)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSTypedContentE() {
+        return wsTypedContentEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTypedContentE_Url() {
+        return (EAttribute)wsTypedContentEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSTypedContentE_ContentType() {
+        return (EAttribute)wsTypedContentEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSTypedContentE_WsBytes() {
+        return (EReference)wsTypedContentEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSByteArrayE() {
+        return wsByteArrayEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSByteArrayE_Bytes() {
+        return (EAttribute)wsByteArrayEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSRoutingRuleE() {
+        return wsRoutingRuleEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleE_Synchronous() {
+        return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleE_Concept() {
+        return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleE_ServiceJNDI() {
+        return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleE_Parameters() {
+        return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(3);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleE_Condition() {
+        return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(4);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleE_Deactive() {
+        return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(5);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSRoutingRuleE_WsRoutingRuleExpressions() {
+        return (EReference)wsRoutingRuleEEClass.getEStructuralFeatures().get(6);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSRoutingRuleExpression() {
+        return wsRoutingRuleExpressionEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleExpression_Name() {
+        return (EAttribute)wsRoutingRuleExpressionEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleExpression_Xpath() {
+        return (EAttribute)wsRoutingRuleExpressionEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleExpression_Value() {
+        return (EAttribute)wsRoutingRuleExpressionEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSRoutingRuleExpression_WsOperator() {
+        return (EReference)wsRoutingRuleExpressionEClass.getEStructuralFeatures().get(3);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSRoutingRuleOperatorE() {
+        return wsRoutingRuleOperatorEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSRoutingRuleOperatorE_Value() {
+        return (EAttribute)wsRoutingRuleOperatorEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSJobModelE() {
+        return wsJobModelEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getStringArray() {
         return stringArrayEDataType;
     }
@@ -1263,6 +1650,50 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsWorkflowDeployEEClass = createEClass(WS_WORKFLOW_DEPLOY_E);
         createEAttribute(wsWorkflowDeployEEClass, WS_WORKFLOW_DEPLOY_E__FILENAME);
 
+        wsTransformerV2EEClass = createEClass(WS_TRANSFORMER_V2E);
+        createEReference(wsTransformerV2EEClass, WS_TRANSFORMER_V2E__PROCESS_STEPS);
+
+        wsTransformerProcessStepEEClass = createEClass(WS_TRANSFORMER_PROCESS_STEP_E);
+        createEAttribute(wsTransformerProcessStepEEClass, WS_TRANSFORMER_PROCESS_STEP_E__PLUGIN_JNDI);
+        createEAttribute(wsTransformerProcessStepEEClass, WS_TRANSFORMER_PROCESS_STEP_E__DESCRIPTION);
+        createEAttribute(wsTransformerProcessStepEEClass, WS_TRANSFORMER_PROCESS_STEP_E__PARAMETERS);
+        createEAttribute(wsTransformerProcessStepEEClass, WS_TRANSFORMER_PROCESS_STEP_E__DISABLED);
+        createEReference(wsTransformerProcessStepEEClass, WS_TRANSFORMER_PROCESS_STEP_E__INPUT_MAPPINGS);
+        createEReference(wsTransformerProcessStepEEClass, WS_TRANSFORMER_PROCESS_STEP_E__OUTPUT_MAPPINGS);
+
+        wsTransformerVariablesMappingEEClass = createEClass(WS_TRANSFORMER_VARIABLES_MAPPING_E);
+        createEAttribute(wsTransformerVariablesMappingEEClass, WS_TRANSFORMER_VARIABLES_MAPPING_E__PIPELINE_VARIABLE);
+        createEAttribute(wsTransformerVariablesMappingEEClass, WS_TRANSFORMER_VARIABLES_MAPPING_E__PLUGIN_VARIABLE);
+        createEReference(wsTransformerVariablesMappingEEClass, WS_TRANSFORMER_VARIABLES_MAPPING_E__HARD_CODING);
+
+        wsTypedContentEEClass = createEClass(WS_TYPED_CONTENT_E);
+        createEAttribute(wsTypedContentEEClass, WS_TYPED_CONTENT_E__URL);
+        createEAttribute(wsTypedContentEEClass, WS_TYPED_CONTENT_E__CONTENT_TYPE);
+        createEReference(wsTypedContentEEClass, WS_TYPED_CONTENT_E__WS_BYTES);
+
+        wsByteArrayEEClass = createEClass(WS_BYTE_ARRAY_E);
+        createEAttribute(wsByteArrayEEClass, WS_BYTE_ARRAY_E__BYTES);
+
+        wsRoutingRuleEEClass = createEClass(WS_ROUTING_RULE_E);
+        createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__SYNCHRONOUS);
+        createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__CONCEPT);
+        createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__SERVICE_JNDI);
+        createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__PARAMETERS);
+        createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__CONDITION);
+        createEAttribute(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__DEACTIVE);
+        createEReference(wsRoutingRuleEEClass, WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS);
+
+        wsRoutingRuleExpressionEClass = createEClass(WS_ROUTING_RULE_EXPRESSION);
+        createEAttribute(wsRoutingRuleExpressionEClass, WS_ROUTING_RULE_EXPRESSION__NAME);
+        createEAttribute(wsRoutingRuleExpressionEClass, WS_ROUTING_RULE_EXPRESSION__XPATH);
+        createEAttribute(wsRoutingRuleExpressionEClass, WS_ROUTING_RULE_EXPRESSION__VALUE);
+        createEReference(wsRoutingRuleExpressionEClass, WS_ROUTING_RULE_EXPRESSION__WS_OPERATOR);
+
+        wsRoutingRuleOperatorEEClass = createEClass(WS_ROUTING_RULE_OPERATOR_E);
+        createEAttribute(wsRoutingRuleOperatorEEClass, WS_ROUTING_RULE_OPERATOR_E__VALUE);
+
+        wsJobModelEEClass = createEClass(WS_JOB_MODEL_E);
+
         // Create data types
         stringArrayEDataType = createEDataType(STRING_ARRAY);
     }
@@ -1307,6 +1738,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsUniverseEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsSynchronizationPlanEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsWorkflowDeployEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsTransformerV2EEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsRoutingRuleEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsJobModelEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1423,6 +1857,50 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         initEClass(wsWorkflowDeployEEClass, WSWorkflowDeployE.class, "WSWorkflowDeployE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSWorkflowDeployE_Filename(), ecorePackage.getEString(), "filename", null, 0, 1, WSWorkflowDeployE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsTransformerV2EEClass, WSTransformerV2E.class, "WSTransformerV2E", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSTransformerV2E_ProcessSteps(), this.getWSTransformerProcessStepE(), null, "processSteps", null, 0, -1, WSTransformerV2E.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsTransformerProcessStepEEClass, WSTransformerProcessStepE.class, "WSTransformerProcessStepE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSTransformerProcessStepE_PluginJNDI(), ecorePackage.getEString(), "pluginJNDI", null, 0, 1, WSTransformerProcessStepE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSTransformerProcessStepE_Description(), ecorePackage.getEString(), "description", null, 0, 1, WSTransformerProcessStepE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSTransformerProcessStepE_Parameters(), ecorePackage.getEString(), "parameters", null, 0, 1, WSTransformerProcessStepE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSTransformerProcessStepE_Disabled(), ecorePackage.getEBoolean(), "disabled", null, 0, 1, WSTransformerProcessStepE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSTransformerProcessStepE_InputMappings(), this.getWSTransformerVariablesMappingE(), null, "inputMappings", null, 0, -1, WSTransformerProcessStepE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSTransformerProcessStepE_OutputMappings(), this.getWSTransformerVariablesMappingE(), null, "outputMappings", null, 0, -1, WSTransformerProcessStepE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsTransformerVariablesMappingEEClass, WSTransformerVariablesMappingE.class, "WSTransformerVariablesMappingE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSTransformerVariablesMappingE_PipelineVariable(), ecorePackage.getEString(), "pipelineVariable", null, 0, 1, WSTransformerVariablesMappingE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSTransformerVariablesMappingE_PluginVariable(), ecorePackage.getEString(), "pluginVariable", null, 0, 1, WSTransformerVariablesMappingE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSTransformerVariablesMappingE_HardCoding(), this.getWSTypedContentE(), null, "hardCoding", null, 0, 1, WSTransformerVariablesMappingE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsTypedContentEEClass, WSTypedContentE.class, "WSTypedContentE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSTypedContentE_Url(), ecorePackage.getEString(), "url", null, 0, 1, WSTypedContentE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSTypedContentE_ContentType(), ecorePackage.getEString(), "contentType", null, 0, 1, WSTypedContentE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSTypedContentE_WsBytes(), this.getWSByteArrayE(), null, "wsBytes", null, 0, 1, WSTypedContentE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsByteArrayEEClass, WSByteArrayE.class, "WSByteArrayE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSByteArrayE_Bytes(), ecorePackage.getEByteArray(), "bytes", null, 0, 1, WSByteArrayE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsRoutingRuleEEClass, WSRoutingRuleE.class, "WSRoutingRuleE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSRoutingRuleE_Synchronous(), ecorePackage.getEBoolean(), "synchronous", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleE_Concept(), ecorePackage.getEString(), "concept", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleE_ServiceJNDI(), ecorePackage.getEString(), "serviceJNDI", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleE_Parameters(), ecorePackage.getEString(), "parameters", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleE_Condition(), ecorePackage.getEString(), "condition", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleE_Deactive(), ecorePackage.getEBoolean(), "deactive", null, 0, 1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSRoutingRuleE_WsRoutingRuleExpressions(), this.getWSRoutingRuleExpression(), null, "wsRoutingRuleExpressions", null, 0, -1, WSRoutingRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsRoutingRuleExpressionEClass, WSRoutingRuleExpression.class, "WSRoutingRuleExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSRoutingRuleExpression_Name(), ecorePackage.getEString(), "name", null, 0, 1, WSRoutingRuleExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleExpression_Xpath(), ecorePackage.getEString(), "xpath", null, 0, 1, WSRoutingRuleExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoutingRuleExpression_Value(), ecorePackage.getEString(), "value", null, 0, 1, WSRoutingRuleExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSRoutingRuleExpression_WsOperator(), this.getWSRoutingRuleOperatorE(), null, "wsOperator", null, 0, 1, WSRoutingRuleExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsRoutingRuleOperatorEEClass, WSRoutingRuleOperatorE.class, "WSRoutingRuleOperatorE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSRoutingRuleOperatorE_Value(), ecorePackage.getEString(), "value", null, 0, 1, WSRoutingRuleOperatorE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsJobModelEEClass, WSJobModelE.class, "WSJobModelE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         // Initialize data types
         initEDataType(stringArrayEDataType, String[].class, "StringArray", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

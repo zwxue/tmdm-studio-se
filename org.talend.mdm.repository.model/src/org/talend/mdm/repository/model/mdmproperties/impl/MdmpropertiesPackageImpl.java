@@ -24,10 +24,13 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WSJobModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
+import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
 import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
 import org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem;
+import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmproperties.WSUniverseItem;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
@@ -130,6 +133,27 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass wsWorkflowDeployItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsTransformerV2ItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsRoutingRuleItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsJobModelItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -433,6 +457,60 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSTransformerV2Item() {
+        return wsTransformerV2ItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSTransformerV2Item_WsTransformerV2() {
+        return (EReference)wsTransformerV2ItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSRoutingRuleItem() {
+        return wsRoutingRuleItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSRoutingRuleItem_WsRoutingRule() {
+        return (EReference)wsRoutingRuleItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSJobModelItem() {
+        return wsJobModelItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSJobModelItem_WsJobModelItem() {
+        return (EReference)wsJobModelItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -503,6 +581,15 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsWorkflowDeployItemEClass = createEClass(WS_WORKFLOW_DEPLOY_ITEM);
         createEReference(wsWorkflowDeployItemEClass, WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY);
 
+        wsTransformerV2ItemEClass = createEClass(WS_TRANSFORMER_V2_ITEM);
+        createEReference(wsTransformerV2ItemEClass, WS_TRANSFORMER_V2_ITEM__WS_TRANSFORMER_V2);
+
+        wsRoutingRuleItemEClass = createEClass(WS_ROUTING_RULE_ITEM);
+        createEReference(wsRoutingRuleItemEClass, WS_ROUTING_RULE_ITEM__WS_ROUTING_RULE);
+
+        wsJobModelItemEClass = createEClass(WS_JOB_MODEL_ITEM);
+        createEReference(wsJobModelItemEClass, WS_JOB_MODEL_ITEM__WS_JOB_MODEL_ITEM);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -555,6 +642,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsSynchronizationPlanItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsViewItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsWorkflowDeployItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsTransformerV2ItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsRoutingRuleItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsJobModelItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -596,6 +686,15 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         initEClass(wsWorkflowDeployItemEClass, WSWorkflowDeployItem.class, "WSWorkflowDeployItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSWorkflowDeployItem_WsWorkflowDeploy(), theMdmserverobjectPackage.getWSWorkflowDeployE(), null, "wsWorkflowDeploy", null, 0, 1, WSWorkflowDeployItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsTransformerV2ItemEClass, WSTransformerV2Item.class, "WSTransformerV2Item", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSTransformerV2Item_WsTransformerV2(), theMdmserverobjectPackage.getWSTransformerV2E(), null, "wsTransformerV2", null, 0, 1, WSTransformerV2Item.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsRoutingRuleItemEClass, WSRoutingRuleItem.class, "WSRoutingRuleItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSRoutingRuleItem_WsRoutingRule(), theMdmserverobjectPackage.getWSRoutingRuleE(), null, "wsRoutingRule", null, 0, 1, WSRoutingRuleItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsJobModelItemEClass, WSJobModelItem.class, "WSJobModelItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSJobModelItem_WsJobModelItem(), theMdmserverobjectPackage.getWSJobModelE(), null, "wsJobModelItem", null, 0, 1, WSJobModelItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

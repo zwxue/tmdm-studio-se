@@ -1524,13 +1524,553 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_WORKFLOW_DEPLOY_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerV2EImpl <em>WS Transformer V2E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerV2EImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTransformerV2E()
+     * @generated
+     */
+    int WS_TRANSFORMER_V2E = 23;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Process Steps</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__PROCESS_STEPS = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Transformer V2E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerProcessStepEImpl <em>WS Transformer Process Step E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerProcessStepEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTransformerProcessStepE()
+     * @generated
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E = 24;
+
+    /**
+     * The feature id for the '<em><b>Plugin JNDI</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E__PLUGIN_JNDI = 0;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E__DESCRIPTION = 1;
+
+    /**
+     * The feature id for the '<em><b>Parameters</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E__PARAMETERS = 2;
+
+    /**
+     * The feature id for the '<em><b>Disabled</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E__DISABLED = 3;
+
+    /**
+     * The feature id for the '<em><b>Input Mappings</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E__INPUT_MAPPINGS = 4;
+
+    /**
+     * The feature id for the '<em><b>Output Mappings</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E__OUTPUT_MAPPINGS = 5;
+
+    /**
+     * The number of structural features of the '<em>WS Transformer Process Step E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_PROCESS_STEP_E_FEATURE_COUNT = 6;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerVariablesMappingEImpl <em>WS Transformer Variables Mapping E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerVariablesMappingEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTransformerVariablesMappingE()
+     * @generated
+     */
+    int WS_TRANSFORMER_VARIABLES_MAPPING_E = 25;
+
+    /**
+     * The feature id for the '<em><b>Pipeline Variable</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_VARIABLES_MAPPING_E__PIPELINE_VARIABLE = 0;
+
+    /**
+     * The feature id for the '<em><b>Plugin Variable</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_VARIABLES_MAPPING_E__PLUGIN_VARIABLE = 1;
+
+    /**
+     * The feature id for the '<em><b>Hard Coding</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_VARIABLES_MAPPING_E__HARD_CODING = 2;
+
+    /**
+     * The number of structural features of the '<em>WS Transformer Variables Mapping E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_VARIABLES_MAPPING_E_FEATURE_COUNT = 3;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTypedContentEImpl <em>WS Typed Content E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTypedContentEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTypedContentE()
+     * @generated
+     */
+    int WS_TYPED_CONTENT_E = 26;
+
+    /**
+     * The feature id for the '<em><b>Url</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TYPED_CONTENT_E__URL = 0;
+
+    /**
+     * The feature id for the '<em><b>Content Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TYPED_CONTENT_E__CONTENT_TYPE = 1;
+
+    /**
+     * The feature id for the '<em><b>Ws Bytes</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TYPED_CONTENT_E__WS_BYTES = 2;
+
+    /**
+     * The number of structural features of the '<em>WS Typed Content E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TYPED_CONTENT_E_FEATURE_COUNT = 3;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSByteArrayEImpl <em>WS Byte Array E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSByteArrayEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSByteArrayE()
+     * @generated
+     */
+    int WS_BYTE_ARRAY_E = 27;
+
+    /**
+     * The feature id for the '<em><b>Bytes</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_BYTE_ARRAY_E__BYTES = 0;
+
+    /**
+     * The number of structural features of the '<em>WS Byte Array E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_BYTE_ARRAY_E_FEATURE_COUNT = 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl <em>WS Routing Rule E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleE()
+     * @generated
+     */
+    int WS_ROUTING_RULE_E = 28;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Synchronous</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__SYNCHRONOUS = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Concept</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__CONCEPT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The feature id for the '<em><b>Service JNDI</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__SERVICE_JNDI = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
+
+    /**
+     * The feature id for the '<em><b>Parameters</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__PARAMETERS = MDM_SERVER_OBJECT_FEATURE_COUNT + 3;
+
+    /**
+     * The feature id for the '<em><b>Condition</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__CONDITION = MDM_SERVER_OBJECT_FEATURE_COUNT + 4;
+
+    /**
+     * The feature id for the '<em><b>Deactive</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__DEACTIVE = MDM_SERVER_OBJECT_FEATURE_COUNT + 5;
+
+    /**
+     * The feature id for the '<em><b>Ws Routing Rule Expressions</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS = MDM_SERVER_OBJECT_FEATURE_COUNT + 6;
+
+    /**
+     * The number of structural features of the '<em>WS Routing Rule E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 7;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl <em>WS Routing Rule Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleExpression()
+     * @generated
+     */
+    int WS_ROUTING_RULE_EXPRESSION = 29;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_EXPRESSION__NAME = 0;
+
+    /**
+     * The feature id for the '<em><b>Xpath</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_EXPRESSION__XPATH = 1;
+
+    /**
+     * The feature id for the '<em><b>Value</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_EXPRESSION__VALUE = 2;
+
+    /**
+     * The feature id for the '<em><b>Ws Operator</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_EXPRESSION__WS_OPERATOR = 3;
+
+    /**
+     * The number of structural features of the '<em>WS Routing Rule Expression</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_EXPRESSION_FEATURE_COUNT = 4;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleOperatorEImpl <em>WS Routing Rule Operator E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleOperatorEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleOperatorE()
+     * @generated
+     */
+    int WS_ROUTING_RULE_OPERATOR_E = 30;
+
+    /**
+     * The feature id for the '<em><b>Value</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_OPERATOR_E__VALUE = 0;
+
+    /**
+     * The number of structural features of the '<em>WS Routing Rule Operator E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_OPERATOR_E_FEATURE_COUNT = 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSJobModelEImpl <em>WS Job Model E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSJobModelEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSJobModelE()
+     * @generated
+     */
+    int WS_JOB_MODEL_E = 31;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The number of structural features of the '<em>WS Job Model E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
      * The meta object id for the '<em>String Array</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getStringArray()
      * @generated
      */
-    int STRING_ARRAY = 23;
+    int STRING_ARRAY = 32;
 
 
     /**
@@ -2523,6 +3063,382 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSWorkflowDeployE_Filename();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E <em>WS Transformer V2E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Transformer V2E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E
+     * @generated
+     */
+    EClass getWSTransformerV2E();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E#getProcessSteps <em>Process Steps</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Process Steps</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E#getProcessSteps()
+     * @see #getWSTransformerV2E()
+     * @generated
+     */
+    EReference getWSTransformerV2E_ProcessSteps();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE <em>WS Transformer Process Step E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Transformer Process Step E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
+     * @generated
+     */
+    EClass getWSTransformerProcessStepE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getPluginJNDI <em>Plugin JNDI</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Plugin JNDI</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getPluginJNDI()
+     * @see #getWSTransformerProcessStepE()
+     * @generated
+     */
+    EAttribute getWSTransformerProcessStepE_PluginJNDI();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getDescription <em>Description</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Description</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getDescription()
+     * @see #getWSTransformerProcessStepE()
+     * @generated
+     */
+    EAttribute getWSTransformerProcessStepE_Description();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getParameters <em>Parameters</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Parameters</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getParameters()
+     * @see #getWSTransformerProcessStepE()
+     * @generated
+     */
+    EAttribute getWSTransformerProcessStepE_Parameters();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#isDisabled <em>Disabled</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Disabled</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#isDisabled()
+     * @see #getWSTransformerProcessStepE()
+     * @generated
+     */
+    EAttribute getWSTransformerProcessStepE_Disabled();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getInputMappings <em>Input Mappings</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Input Mappings</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getInputMappings()
+     * @see #getWSTransformerProcessStepE()
+     * @generated
+     */
+    EReference getWSTransformerProcessStepE_InputMappings();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getOutputMappings <em>Output Mappings</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Output Mappings</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE#getOutputMappings()
+     * @see #getWSTransformerProcessStepE()
+     * @generated
+     */
+    EReference getWSTransformerProcessStepE_OutputMappings();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE <em>WS Transformer Variables Mapping E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Transformer Variables Mapping E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE
+     * @generated
+     */
+    EClass getWSTransformerVariablesMappingE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE#getPipelineVariable <em>Pipeline Variable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Pipeline Variable</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE#getPipelineVariable()
+     * @see #getWSTransformerVariablesMappingE()
+     * @generated
+     */
+    EAttribute getWSTransformerVariablesMappingE_PipelineVariable();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE#getPluginVariable <em>Plugin Variable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Plugin Variable</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE#getPluginVariable()
+     * @see #getWSTransformerVariablesMappingE()
+     * @generated
+     */
+    EAttribute getWSTransformerVariablesMappingE_PluginVariable();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE#getHardCoding <em>Hard Coding</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Hard Coding</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE#getHardCoding()
+     * @see #getWSTransformerVariablesMappingE()
+     * @generated
+     */
+    EReference getWSTransformerVariablesMappingE_HardCoding();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE <em>WS Typed Content E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Typed Content E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE
+     * @generated
+     */
+    EClass getWSTypedContentE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE#getUrl <em>Url</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Url</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE#getUrl()
+     * @see #getWSTypedContentE()
+     * @generated
+     */
+    EAttribute getWSTypedContentE_Url();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE#getContentType <em>Content Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Content Type</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE#getContentType()
+     * @see #getWSTypedContentE()
+     * @generated
+     */
+    EAttribute getWSTypedContentE_ContentType();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE#getWsBytes <em>Ws Bytes</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Ws Bytes</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSTypedContentE#getWsBytes()
+     * @see #getWSTypedContentE()
+     * @generated
+     */
+    EReference getWSTypedContentE_WsBytes();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE <em>WS Byte Array E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Byte Array E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE
+     * @generated
+     */
+    EClass getWSByteArrayE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE#getBytes <em>Bytes</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Bytes</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE#getBytes()
+     * @see #getWSByteArrayE()
+     * @generated
+     */
+    EAttribute getWSByteArrayE_Bytes();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE <em>WS Routing Rule E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Routing Rule E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE
+     * @generated
+     */
+    EClass getWSRoutingRuleE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#isSynchronous <em>Synchronous</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Synchronous</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#isSynchronous()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleE_Synchronous();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getConcept <em>Concept</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Concept</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getConcept()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleE_Concept();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getServiceJNDI <em>Service JNDI</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Service JNDI</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getServiceJNDI()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleE_ServiceJNDI();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getParameters <em>Parameters</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Parameters</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getParameters()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleE_Parameters();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getCondition <em>Condition</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Condition</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getCondition()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleE_Condition();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#isDeactive <em>Deactive</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Deactive</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#isDeactive()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleE_Deactive();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getWsRoutingRuleExpressions <em>Ws Routing Rule Expressions</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Ws Routing Rule Expressions</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE#getWsRoutingRuleExpressions()
+     * @see #getWSRoutingRuleE()
+     * @generated
+     */
+    EReference getWSRoutingRuleE_WsRoutingRuleExpressions();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression <em>WS Routing Rule Expression</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Routing Rule Expression</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression
+     * @generated
+     */
+    EClass getWSRoutingRuleExpression();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getName <em>Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getName()
+     * @see #getWSRoutingRuleExpression()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleExpression_Name();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getXpath <em>Xpath</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Xpath</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getXpath()
+     * @see #getWSRoutingRuleExpression()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleExpression_Xpath();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getValue <em>Value</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Value</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getValue()
+     * @see #getWSRoutingRuleExpression()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleExpression_Value();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getWsOperator <em>Ws Operator</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Ws Operator</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getWsOperator()
+     * @see #getWSRoutingRuleExpression()
+     * @generated
+     */
+    EReference getWSRoutingRuleExpression_WsOperator();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE <em>WS Routing Rule Operator E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Routing Rule Operator E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE
+     * @generated
+     */
+    EClass getWSRoutingRuleOperatorE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE#getValue <em>Value</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Value</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE#getValue()
+     * @see #getWSRoutingRuleOperatorE()
+     * @generated
+     */
+    EAttribute getWSRoutingRuleOperatorE_Value();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSJobModelE <em>WS Job Model E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Job Model E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSJobModelE
+     * @generated
+     */
+    EClass getWSJobModelE();
+
+    /**
      * Returns the meta object for data type '<em>String Array</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3335,6 +4251,304 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_WORKFLOW_DEPLOY_E__FILENAME = eINSTANCE.getWSWorkflowDeployE_Filename();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerV2EImpl <em>WS Transformer V2E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerV2EImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTransformerV2E()
+         * @generated
+         */
+        EClass WS_TRANSFORMER_V2E = eINSTANCE.getWSTransformerV2E();
+
+        /**
+         * The meta object literal for the '<em><b>Process Steps</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_TRANSFORMER_V2E__PROCESS_STEPS = eINSTANCE.getWSTransformerV2E_ProcessSteps();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerProcessStepEImpl <em>WS Transformer Process Step E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerProcessStepEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTransformerProcessStepE()
+         * @generated
+         */
+        EClass WS_TRANSFORMER_PROCESS_STEP_E = eINSTANCE.getWSTransformerProcessStepE();
+
+        /**
+         * The meta object literal for the '<em><b>Plugin JNDI</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TRANSFORMER_PROCESS_STEP_E__PLUGIN_JNDI = eINSTANCE.getWSTransformerProcessStepE_PluginJNDI();
+
+        /**
+         * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TRANSFORMER_PROCESS_STEP_E__DESCRIPTION = eINSTANCE.getWSTransformerProcessStepE_Description();
+
+        /**
+         * The meta object literal for the '<em><b>Parameters</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TRANSFORMER_PROCESS_STEP_E__PARAMETERS = eINSTANCE.getWSTransformerProcessStepE_Parameters();
+
+        /**
+         * The meta object literal for the '<em><b>Disabled</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TRANSFORMER_PROCESS_STEP_E__DISABLED = eINSTANCE.getWSTransformerProcessStepE_Disabled();
+
+        /**
+         * The meta object literal for the '<em><b>Input Mappings</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_TRANSFORMER_PROCESS_STEP_E__INPUT_MAPPINGS = eINSTANCE.getWSTransformerProcessStepE_InputMappings();
+
+        /**
+         * The meta object literal for the '<em><b>Output Mappings</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_TRANSFORMER_PROCESS_STEP_E__OUTPUT_MAPPINGS = eINSTANCE.getWSTransformerProcessStepE_OutputMappings();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerVariablesMappingEImpl <em>WS Transformer Variables Mapping E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTransformerVariablesMappingEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTransformerVariablesMappingE()
+         * @generated
+         */
+        EClass WS_TRANSFORMER_VARIABLES_MAPPING_E = eINSTANCE.getWSTransformerVariablesMappingE();
+
+        /**
+         * The meta object literal for the '<em><b>Pipeline Variable</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TRANSFORMER_VARIABLES_MAPPING_E__PIPELINE_VARIABLE = eINSTANCE.getWSTransformerVariablesMappingE_PipelineVariable();
+
+        /**
+         * The meta object literal for the '<em><b>Plugin Variable</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TRANSFORMER_VARIABLES_MAPPING_E__PLUGIN_VARIABLE = eINSTANCE.getWSTransformerVariablesMappingE_PluginVariable();
+
+        /**
+         * The meta object literal for the '<em><b>Hard Coding</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_TRANSFORMER_VARIABLES_MAPPING_E__HARD_CODING = eINSTANCE.getWSTransformerVariablesMappingE_HardCoding();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSTypedContentEImpl <em>WS Typed Content E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSTypedContentEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSTypedContentE()
+         * @generated
+         */
+        EClass WS_TYPED_CONTENT_E = eINSTANCE.getWSTypedContentE();
+
+        /**
+         * The meta object literal for the '<em><b>Url</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TYPED_CONTENT_E__URL = eINSTANCE.getWSTypedContentE_Url();
+
+        /**
+         * The meta object literal for the '<em><b>Content Type</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_TYPED_CONTENT_E__CONTENT_TYPE = eINSTANCE.getWSTypedContentE_ContentType();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Bytes</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_TYPED_CONTENT_E__WS_BYTES = eINSTANCE.getWSTypedContentE_WsBytes();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSByteArrayEImpl <em>WS Byte Array E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSByteArrayEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSByteArrayE()
+         * @generated
+         */
+        EClass WS_BYTE_ARRAY_E = eINSTANCE.getWSByteArrayE();
+
+        /**
+         * The meta object literal for the '<em><b>Bytes</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_BYTE_ARRAY_E__BYTES = eINSTANCE.getWSByteArrayE_Bytes();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl <em>WS Routing Rule E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleE()
+         * @generated
+         */
+        EClass WS_ROUTING_RULE_E = eINSTANCE.getWSRoutingRuleE();
+
+        /**
+         * The meta object literal for the '<em><b>Synchronous</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_E__SYNCHRONOUS = eINSTANCE.getWSRoutingRuleE_Synchronous();
+
+        /**
+         * The meta object literal for the '<em><b>Concept</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_E__CONCEPT = eINSTANCE.getWSRoutingRuleE_Concept();
+
+        /**
+         * The meta object literal for the '<em><b>Service JNDI</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_E__SERVICE_JNDI = eINSTANCE.getWSRoutingRuleE_ServiceJNDI();
+
+        /**
+         * The meta object literal for the '<em><b>Parameters</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_E__PARAMETERS = eINSTANCE.getWSRoutingRuleE_Parameters();
+
+        /**
+         * The meta object literal for the '<em><b>Condition</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_E__CONDITION = eINSTANCE.getWSRoutingRuleE_Condition();
+
+        /**
+         * The meta object literal for the '<em><b>Deactive</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_E__DEACTIVE = eINSTANCE.getWSRoutingRuleE_Deactive();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Routing Rule Expressions</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS = eINSTANCE.getWSRoutingRuleE_WsRoutingRuleExpressions();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl <em>WS Routing Rule Expression</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleExpression()
+         * @generated
+         */
+        EClass WS_ROUTING_RULE_EXPRESSION = eINSTANCE.getWSRoutingRuleExpression();
+
+        /**
+         * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_EXPRESSION__NAME = eINSTANCE.getWSRoutingRuleExpression_Name();
+
+        /**
+         * The meta object literal for the '<em><b>Xpath</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_EXPRESSION__XPATH = eINSTANCE.getWSRoutingRuleExpression_Xpath();
+
+        /**
+         * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_EXPRESSION__VALUE = eINSTANCE.getWSRoutingRuleExpression_Value();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Operator</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_ROUTING_RULE_EXPRESSION__WS_OPERATOR = eINSTANCE.getWSRoutingRuleExpression_WsOperator();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleOperatorEImpl <em>WS Routing Rule Operator E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleOperatorEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleOperatorE()
+         * @generated
+         */
+        EClass WS_ROUTING_RULE_OPERATOR_E = eINSTANCE.getWSRoutingRuleOperatorE();
+
+        /**
+         * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_ROUTING_RULE_OPERATOR_E__VALUE = eINSTANCE.getWSRoutingRuleOperatorE_Value();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSJobModelEImpl <em>WS Job Model E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSJobModelEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSJobModelE()
+         * @generated
+         */
+        EClass WS_JOB_MODEL_E = eINSTANCE.getWSJobModelE();
 
         /**
          * The meta object literal for the '<em>String Array</em>' data type.

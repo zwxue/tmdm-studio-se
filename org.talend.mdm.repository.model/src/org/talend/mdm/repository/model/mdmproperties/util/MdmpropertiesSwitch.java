@@ -204,6 +204,33 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.WS_TRANSFORMER_V2_ITEM: {
+                WSTransformerV2Item wsTransformerV2Item = (WSTransformerV2Item)theEObject;
+                T result = caseWSTransformerV2Item(wsTransformerV2Item);
+                if (result == null) result = caseMDMServerObjectItem(wsTransformerV2Item);
+                if (result == null) result = caseMDMItem(wsTransformerV2Item);
+                if (result == null) result = caseItem(wsTransformerV2Item);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmpropertiesPackage.WS_ROUTING_RULE_ITEM: {
+                WSRoutingRuleItem wsRoutingRuleItem = (WSRoutingRuleItem)theEObject;
+                T result = caseWSRoutingRuleItem(wsRoutingRuleItem);
+                if (result == null) result = caseMDMServerObjectItem(wsRoutingRuleItem);
+                if (result == null) result = caseMDMItem(wsRoutingRuleItem);
+                if (result == null) result = caseItem(wsRoutingRuleItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmpropertiesPackage.WS_JOB_MODEL_ITEM: {
+                WSJobModelItem wsJobModelItem = (WSJobModelItem)theEObject;
+                T result = caseWSJobModelItem(wsJobModelItem);
+                if (result == null) result = caseMDMServerObjectItem(wsJobModelItem);
+                if (result == null) result = caseMDMItem(wsJobModelItem);
+                if (result == null) result = caseItem(wsJobModelItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -400,6 +427,51 @@ public class MdmpropertiesSwitch<T> {
      * @generated
      */
     public T caseWSWorkflowDeployItem(WSWorkflowDeployItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Transformer V2 Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Transformer V2 Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSTransformerV2Item(WSTransformerV2Item object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Routing Rule Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Routing Rule Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSRoutingRuleItem(WSRoutingRuleItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Job Model Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Job Model Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSJobModelItem(WSJobModelItem object) {
         return null;
     }
 

@@ -234,6 +234,63 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmserverobjectPackage.WS_TRANSFORMER_V2E: {
+                WSTransformerV2E wsTransformerV2E = (WSTransformerV2E)theEObject;
+                T result = caseWSTransformerV2E(wsTransformerV2E);
+                if (result == null) result = caseMDMServerObject(wsTransformerV2E);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_TRANSFORMER_PROCESS_STEP_E: {
+                WSTransformerProcessStepE wsTransformerProcessStepE = (WSTransformerProcessStepE)theEObject;
+                T result = caseWSTransformerProcessStepE(wsTransformerProcessStepE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_TRANSFORMER_VARIABLES_MAPPING_E: {
+                WSTransformerVariablesMappingE wsTransformerVariablesMappingE = (WSTransformerVariablesMappingE)theEObject;
+                T result = caseWSTransformerVariablesMappingE(wsTransformerVariablesMappingE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_TYPED_CONTENT_E: {
+                WSTypedContentE wsTypedContentE = (WSTypedContentE)theEObject;
+                T result = caseWSTypedContentE(wsTypedContentE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_BYTE_ARRAY_E: {
+                WSByteArrayE wsByteArrayE = (WSByteArrayE)theEObject;
+                T result = caseWSByteArrayE(wsByteArrayE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_ROUTING_RULE_E: {
+                WSRoutingRuleE wsRoutingRuleE = (WSRoutingRuleE)theEObject;
+                T result = caseWSRoutingRuleE(wsRoutingRuleE);
+                if (result == null) result = caseMDMServerObject(wsRoutingRuleE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_ROUTING_RULE_EXPRESSION: {
+                WSRoutingRuleExpression wsRoutingRuleExpression = (WSRoutingRuleExpression)theEObject;
+                T result = caseWSRoutingRuleExpression(wsRoutingRuleExpression);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_ROUTING_RULE_OPERATOR_E: {
+                WSRoutingRuleOperatorE wsRoutingRuleOperatorE = (WSRoutingRuleOperatorE)theEObject;
+                T result = caseWSRoutingRuleOperatorE(wsRoutingRuleOperatorE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_JOB_MODEL_E: {
+                WSJobModelE wsJobModelE = (WSJobModelE)theEObject;
+                T result = caseWSJobModelE(wsJobModelE);
+                if (result == null) result = caseMDMServerObject(wsJobModelE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -580,6 +637,141 @@ public class MdmserverobjectSwitch<T> {
      * @generated
      */
     public T caseWSWorkflowDeployE(WSWorkflowDeployE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Transformer V2E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Transformer V2E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSTransformerV2E(WSTransformerV2E object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Transformer Process Step E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Transformer Process Step E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSTransformerProcessStepE(WSTransformerProcessStepE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Transformer Variables Mapping E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Transformer Variables Mapping E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSTransformerVariablesMappingE(WSTransformerVariablesMappingE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Typed Content E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Typed Content E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSTypedContentE(WSTypedContentE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Byte Array E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Byte Array E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSByteArrayE(WSByteArrayE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Routing Rule E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Routing Rule E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSRoutingRuleE(WSRoutingRuleE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Routing Rule Expression</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Routing Rule Expression</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSRoutingRuleExpression(WSRoutingRuleExpression object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Routing Rule Operator E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Routing Rule Operator E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSRoutingRuleOperatorE(WSRoutingRuleOperatorE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Job Model E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Job Model E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSJobModelE(WSJobModelE object) {
         return null;
     }
 

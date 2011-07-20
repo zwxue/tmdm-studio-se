@@ -126,6 +126,18 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
                 return createWSWorkflowDeployItemAdapter();
             }
             @Override
+            public Adapter caseWSTransformerV2Item(WSTransformerV2Item object) {
+                return createWSTransformerV2ItemAdapter();
+            }
+            @Override
+            public Adapter caseWSRoutingRuleItem(WSRoutingRuleItem object) {
+                return createWSRoutingRuleItemAdapter();
+            }
+            @Override
+            public Adapter caseWSJobModelItem(WSJobModelItem object) {
+                return createWSJobModelItemAdapter();
+            }
+            @Override
             public Adapter caseItem(Item object) {
                 return createItemAdapter();
             }
@@ -332,6 +344,48 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSWorkflowDeployItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item <em>WS Transformer V2 Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item
+     * @generated
+     */
+    public Adapter createWSTransformerV2ItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem <em>WS Routing Rule Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem
+     * @generated
+     */
+    public Adapter createWSRoutingRuleItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSJobModelItem <em>WS Job Model Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSJobModelItem
+     * @generated
+     */
+    public Adapter createWSJobModelItemAdapter() {
         return null;
     }
 

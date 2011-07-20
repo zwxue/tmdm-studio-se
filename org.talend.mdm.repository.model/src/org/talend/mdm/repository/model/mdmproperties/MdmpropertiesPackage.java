@@ -789,6 +789,171 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_WORKFLOW_DEPLOY_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSTransformerV2ItemImpl <em>WS Transformer V2 Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSTransformerV2ItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSTransformerV2Item()
+     * @generated
+     */
+    int WS_TRANSFORMER_V2_ITEM = 13;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Ws Transformer V2</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2_ITEM__WS_TRANSFORMER_V2 = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Transformer V2 Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSRoutingRuleItemImpl <em>WS Routing Rule Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSRoutingRuleItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSRoutingRuleItem()
+     * @generated
+     */
+    int WS_ROUTING_RULE_ITEM = 14;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Ws Routing Rule</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_ITEM__WS_ROUTING_RULE = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Routing Rule Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSJobModelItemImpl <em>WS Job Model Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSJobModelItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSJobModelItem()
+     * @generated
+     */
+    int WS_JOB_MODEL_ITEM = 15;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Ws Job Model Item</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_ITEM__WS_JOB_MODEL_ITEM = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Job Model Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -796,7 +961,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 13;
+    int EREPOSITORY_OBJECT_TYPE = 16;
 
 
     /**
@@ -1062,6 +1227,69 @@ public interface MdmpropertiesPackage extends EPackage {
     EReference getWSWorkflowDeployItem_WsWorkflowDeploy();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item <em>WS Transformer V2 Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Transformer V2 Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item
+     * @generated
+     */
+    EClass getWSTransformerV2Item();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item#getWsTransformerV2 <em>Ws Transformer V2</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Transformer V2</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item#getWsTransformerV2()
+     * @see #getWSTransformerV2Item()
+     * @generated
+     */
+    EReference getWSTransformerV2Item_WsTransformerV2();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem <em>WS Routing Rule Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Routing Rule Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem
+     * @generated
+     */
+    EClass getWSRoutingRuleItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem#getWsRoutingRule <em>Ws Routing Rule</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Routing Rule</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem#getWsRoutingRule()
+     * @see #getWSRoutingRuleItem()
+     * @generated
+     */
+    EReference getWSRoutingRuleItem_WsRoutingRule();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSJobModelItem <em>WS Job Model Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Job Model Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSJobModelItem
+     * @generated
+     */
+    EClass getWSJobModelItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSJobModelItem#getWsJobModelItem <em>Ws Job Model Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Job Model Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSJobModelItem#getWsJobModelItem()
+     * @see #getWSJobModelItem()
+     * @generated
+     */
+    EReference getWSJobModelItem_WsJobModelItem();
+
+    /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1319,6 +1547,60 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY = eINSTANCE.getWSWorkflowDeployItem_WsWorkflowDeploy();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSTransformerV2ItemImpl <em>WS Transformer V2 Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSTransformerV2ItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSTransformerV2Item()
+         * @generated
+         */
+        EClass WS_TRANSFORMER_V2_ITEM = eINSTANCE.getWSTransformerV2Item();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Transformer V2</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_TRANSFORMER_V2_ITEM__WS_TRANSFORMER_V2 = eINSTANCE.getWSTransformerV2Item_WsTransformerV2();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSRoutingRuleItemImpl <em>WS Routing Rule Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSRoutingRuleItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSRoutingRuleItem()
+         * @generated
+         */
+        EClass WS_ROUTING_RULE_ITEM = eINSTANCE.getWSRoutingRuleItem();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Routing Rule</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_ROUTING_RULE_ITEM__WS_ROUTING_RULE = eINSTANCE.getWSRoutingRuleItem_WsRoutingRule();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSJobModelItemImpl <em>WS Job Model Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSJobModelItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSJobModelItem()
+         * @generated
+         */
+        EClass WS_JOB_MODEL_ITEM = eINSTANCE.getWSJobModelItem();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Job Model Item</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_JOB_MODEL_ITEM__WS_JOB_MODEL_ITEM = eINSTANCE.getWSJobModelItem_WsJobModelItem();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

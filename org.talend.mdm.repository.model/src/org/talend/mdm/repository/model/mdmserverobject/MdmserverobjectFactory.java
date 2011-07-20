@@ -233,6 +233,87 @@ public interface MdmserverobjectFactory extends EFactory {
     WSWorkflowDeployE createWSWorkflowDeployE();
 
     /**
+     * Returns a new object of class '<em>WS Transformer V2E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Transformer V2E</em>'.
+     * @generated
+     */
+    WSTransformerV2E createWSTransformerV2E();
+
+    /**
+     * Returns a new object of class '<em>WS Transformer Process Step E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Transformer Process Step E</em>'.
+     * @generated
+     */
+    WSTransformerProcessStepE createWSTransformerProcessStepE();
+
+    /**
+     * Returns a new object of class '<em>WS Transformer Variables Mapping E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Transformer Variables Mapping E</em>'.
+     * @generated
+     */
+    WSTransformerVariablesMappingE createWSTransformerVariablesMappingE();
+
+    /**
+     * Returns a new object of class '<em>WS Typed Content E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Typed Content E</em>'.
+     * @generated
+     */
+    WSTypedContentE createWSTypedContentE();
+
+    /**
+     * Returns a new object of class '<em>WS Byte Array E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Byte Array E</em>'.
+     * @generated
+     */
+    WSByteArrayE createWSByteArrayE();
+
+    /**
+     * Returns a new object of class '<em>WS Routing Rule E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Routing Rule E</em>'.
+     * @generated
+     */
+    WSRoutingRuleE createWSRoutingRuleE();
+
+    /**
+     * Returns a new object of class '<em>WS Routing Rule Expression</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Routing Rule Expression</em>'.
+     * @generated
+     */
+    WSRoutingRuleExpression createWSRoutingRuleExpression();
+
+    /**
+     * Returns a new object of class '<em>WS Routing Rule Operator E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Routing Rule Operator E</em>'.
+     * @generated
+     */
+    WSRoutingRuleOperatorE createWSRoutingRuleOperatorE();
+
+    /**
+     * Returns a new object of class '<em>WS Job Model E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Job Model E</em>'.
+     * @generated
+     */
+    WSJobModelE createWSJobModelE();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

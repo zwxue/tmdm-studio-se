@@ -143,6 +143,33 @@ public interface MdmpropertiesFactory extends EFactory {
     WSWorkflowDeployItem createWSWorkflowDeployItem();
 
     /**
+     * Returns a new object of class '<em>WS Transformer V2 Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Transformer V2 Item</em>'.
+     * @generated
+     */
+    WSTransformerV2Item createWSTransformerV2Item();
+
+    /**
+     * Returns a new object of class '<em>WS Routing Rule Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Routing Rule Item</em>'.
+     * @generated
+     */
+    WSRoutingRuleItem createWSRoutingRuleItem();
+
+    /**
+     * Returns a new object of class '<em>WS Job Model Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Job Model Item</em>'.
+     * @generated
+     */
+    WSJobModelItem createWSJobModelItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -85,6 +85,15 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_XTENTIS_OBJECTS_SYNCHRONIZATIONS_SYNCHRONIZATIONS_E: return createWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE();
             case MdmserverobjectPackage.WS_BOOLEAN_E: return createWSBooleanE();
             case MdmserverobjectPackage.WS_WORKFLOW_DEPLOY_E: return createWSWorkflowDeployE();
+            case MdmserverobjectPackage.WS_TRANSFORMER_V2E: return createWSTransformerV2E();
+            case MdmserverobjectPackage.WS_TRANSFORMER_PROCESS_STEP_E: return createWSTransformerProcessStepE();
+            case MdmserverobjectPackage.WS_TRANSFORMER_VARIABLES_MAPPING_E: return createWSTransformerVariablesMappingE();
+            case MdmserverobjectPackage.WS_TYPED_CONTENT_E: return createWSTypedContentE();
+            case MdmserverobjectPackage.WS_BYTE_ARRAY_E: return createWSByteArrayE();
+            case MdmserverobjectPackage.WS_ROUTING_RULE_E: return createWSRoutingRuleE();
+            case MdmserverobjectPackage.WS_ROUTING_RULE_EXPRESSION: return createWSRoutingRuleExpression();
+            case MdmserverobjectPackage.WS_ROUTING_RULE_OPERATOR_E: return createWSRoutingRuleOperatorE();
+            case MdmserverobjectPackage.WS_JOB_MODEL_E: return createWSJobModelE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -348,6 +357,96 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSWorkflowDeployE createWSWorkflowDeployE() {
         WSWorkflowDeployEImpl wsWorkflowDeployE = new WSWorkflowDeployEImpl();
         return wsWorkflowDeployE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSTransformerV2E createWSTransformerV2E() {
+        WSTransformerV2EImpl wsTransformerV2E = new WSTransformerV2EImpl();
+        return wsTransformerV2E;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSTransformerProcessStepE createWSTransformerProcessStepE() {
+        WSTransformerProcessStepEImpl wsTransformerProcessStepE = new WSTransformerProcessStepEImpl();
+        return wsTransformerProcessStepE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSTransformerVariablesMappingE createWSTransformerVariablesMappingE() {
+        WSTransformerVariablesMappingEImpl wsTransformerVariablesMappingE = new WSTransformerVariablesMappingEImpl();
+        return wsTransformerVariablesMappingE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSTypedContentE createWSTypedContentE() {
+        WSTypedContentEImpl wsTypedContentE = new WSTypedContentEImpl();
+        return wsTypedContentE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSByteArrayE createWSByteArrayE() {
+        WSByteArrayEImpl wsByteArrayE = new WSByteArrayEImpl();
+        return wsByteArrayE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSRoutingRuleE createWSRoutingRuleE() {
+        WSRoutingRuleEImpl wsRoutingRuleE = new WSRoutingRuleEImpl();
+        return wsRoutingRuleE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSRoutingRuleExpression createWSRoutingRuleExpression() {
+        WSRoutingRuleExpressionImpl wsRoutingRuleExpression = new WSRoutingRuleExpressionImpl();
+        return wsRoutingRuleExpression;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSRoutingRuleOperatorE createWSRoutingRuleOperatorE() {
+        WSRoutingRuleOperatorEImpl wsRoutingRuleOperatorE = new WSRoutingRuleOperatorEImpl();
+        return wsRoutingRuleOperatorE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSJobModelE createWSJobModelE() {
+        WSJobModelEImpl wsJobModelE = new WSJobModelEImpl();
+        return wsJobModelE;
     }
 
     /**

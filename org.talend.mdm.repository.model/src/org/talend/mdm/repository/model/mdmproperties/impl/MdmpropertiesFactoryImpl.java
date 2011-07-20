@@ -76,6 +76,9 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
             case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM: return createWSSynchronizationPlanItem();
             case MdmpropertiesPackage.WS_VIEW_ITEM: return createWSViewItem();
             case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM: return createWSWorkflowDeployItem();
+            case MdmpropertiesPackage.WS_TRANSFORMER_V2_ITEM: return createWSTransformerV2Item();
+            case MdmpropertiesPackage.WS_ROUTING_RULE_ITEM: return createWSRoutingRuleItem();
+            case MdmpropertiesPackage.WS_JOB_MODEL_ITEM: return createWSJobModelItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -239,6 +242,36 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public WSWorkflowDeployItem createWSWorkflowDeployItem() {
         WSWorkflowDeployItemImpl wsWorkflowDeployItem = new WSWorkflowDeployItemImpl();
         return wsWorkflowDeployItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSTransformerV2Item createWSTransformerV2Item() {
+        WSTransformerV2ItemImpl wsTransformerV2Item = new WSTransformerV2ItemImpl();
+        return wsTransformerV2Item;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSRoutingRuleItem createWSRoutingRuleItem() {
+        WSRoutingRuleItemImpl wsRoutingRuleItem = new WSRoutingRuleItemImpl();
+        return wsRoutingRuleItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSJobModelItem createWSJobModelItem() {
+        WSJobModelItemImpl wsJobModelItem = new WSJobModelItemImpl();
+        return wsJobModelItem;
     }
 
     /**

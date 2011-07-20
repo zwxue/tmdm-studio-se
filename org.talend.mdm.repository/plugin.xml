@@ -101,6 +101,27 @@
             products="MDM"
             type="MDM.Workflow">
       </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.TransformerV2RepositoryNode"
+            folder="MDM/transformerV2"
+            label="Process"
+            products="MDM"
+            type="MDM.TransformerV2">
+      </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.RoutingRuleRepositoryNode"
+            folder="MDM/routingrule"
+            label="Trigger"
+            products="MDM"
+            type="MDM.RoutingRule">
+      </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.JobModelRepositoryNode"
+            folder="MDM/jobmodel"
+            label="Job"
+            products="MDM"
+            type="MDM.JobModel">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.core.repository.repository_content">
@@ -235,6 +256,18 @@
       <configuration
             class="org.talend.mdm.repository.core.impl.workflow.WorkflowNodeConfiguration"
             label="Workflow">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.transformerV2.TransformerV2NodeConfiguration"
+            label="Process">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.routingrule.RoutingRuleNodeConfiguration"
+            label="Trigger">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.jobmodel.JobModelNodeConfiguration"
+            label="Job">
       </configuration>
    </extension>
    <extension
