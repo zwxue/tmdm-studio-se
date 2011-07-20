@@ -52,7 +52,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
 
     IEditorInput xsdInput;
 
-    TreeObject xobject;
+    protected TreeObject xobject;
 
     public void setXSDInput(IEditorInput input) {
         this.xsdInput = input;
@@ -72,6 +72,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
         return part;
     }
 
+    protected void superDoSave(IProgressMonitor monitor) {
+        super.doSave(monitor);
+    }
     @Override
     public void doSave(IProgressMonitor monitor) {
         
@@ -82,7 +85,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                 String xsd = mainPage.getXSDSchemaString();
                 WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                 wsDataModel.setXsdSchema(xsd);
-                IFile file = XSDEditorUtil.createFile(xobject);
+                IFile file = getXSDFile(xobject);
                 file.setCharset("utf-8", null);//$NON-NLS-1$
                 file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
             } // save the file's contents to DataModelMainPage
@@ -103,6 +106,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
         }
     }
 
+    protected IFile getXSDFile(TreeObject xobject) throws Exception {
+        return XSDEditorUtil.createFile(xobject);
+    }
     @Override
     protected void createPages() {
         
@@ -146,7 +152,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                                     xsd = Util.formatXsdSource(xsd);
                                     WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                                     wsDataModel.setXsdSchema(xsd);
-                                    IFile file = XSDEditorUtil.createFile(xobject);
+                                    IFile file = getXSDFile(xobject);
                                     file.setCharset("utf-8", null);//$NON-NLS-1$
                                     file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
                                 }

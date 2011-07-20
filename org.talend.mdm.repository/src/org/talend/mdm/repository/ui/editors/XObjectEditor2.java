@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -49,7 +50,7 @@ public class XObjectEditor2 extends XObjectEditor {
             return;
         }
         int numPages = formPages.size();
-        monitor.beginTask("Saving " + this.getEditorInput().getName(), numPages + 1);
+        monitor.beginTask(Messages.bind(Messages.XObjectEditor2_saving, this.getEditorInput().getName()), numPages + 1);
         for (int i = 0; i < numPages; i++) {
             if ((formPages.get(i)) instanceof AFormPage) {
                 if (!((AFormPage) (formPages.get(i))).beforeDoSave())

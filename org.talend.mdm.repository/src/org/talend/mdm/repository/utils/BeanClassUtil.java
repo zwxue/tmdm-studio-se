@@ -99,7 +99,7 @@ class BeanClassUtil {
             } catch (SecurityException e) {
                 log.error(e.getMessage(), e);
             } catch (NoSuchMethodException e) {
-                log.error(e.getMessage(), e);
+                log.debug(e.getMessage() + "=>Skip it"); //$NON-NLS-1$
             }
         }
     }

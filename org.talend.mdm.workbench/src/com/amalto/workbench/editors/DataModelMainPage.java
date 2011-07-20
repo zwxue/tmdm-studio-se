@@ -236,7 +236,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected DrillDownAdapter drillDownAdapter;
 
-     private XSDNewConceptAction newConceptAction = null;
+    private XSDNewConceptAction newConceptAction = null;
+
     private XSDDeleteConceptAction deleteConceptAction = null;
 
     private XSDDeleteConceptWrapAction deleteConceptWrapAction = null;
@@ -516,12 +517,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 "XSD: The type may not have duplicate name and target namespace",
                 "XSD: The attribute group may not have duplicate name and target namespace",
                 "The complex type may not have duplicate name" };
-        
-        final String msg_shouldRefresh[] = {
-                "XSD: The attribute 'null' is not permitted",
-                 };
- 
-        // do not force to refresh every time  just when an error throws.
+
+        final String msg_shouldRefresh[] = { "XSD: The attribute 'null' is not permitted", };
+
+        // do not force to refresh every time just when an error throws.
         String error = validateDiagnoses(msg_omit);
         for (String msg : msg_shouldRefresh) {
             if (error.indexOf(msg) != -1) {
@@ -530,8 +529,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         // refreshModelPageSchema and validate again
         error = validateDiagnoses(msg_omit);
-        
-        
+
         if (!error.equals("")) {//$NON-NLS-1$
             throw new IllegalAccessException(error);
         }
@@ -539,10 +537,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         validateType();
         validateElementation();
     }
-    
-   
-    private String validateDiagnoses(String msg_omit[]) { 
-        
+
+    private String validateDiagnoses(String msg_omit[]) {
+
         xsdSchema.clearDiagnostics();
         xsdSchema.validate();
         EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
@@ -565,34 +562,33 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
             }
         }
-        
+
         return error;
-        
+
     }
 
-   
     private void refreshModelPageSchema() {
-      
-        String content = null;  
-        
+
+        String content = null;
+
         try {
-         content = Util.nodeToString(xsdSchema.getDocument());
-          } catch (Exception e) {  
-              log.error(e.getMessage(), e);
-       }
-        
+            content = Util.nodeToString(xsdSchema.getDocument());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
         XSDSchema schema = null;
         try {
             schema = Util.createXsdSchema(content, xobject);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        
+
         setXsdSchema(schema);
         getTypeContentProvider().setXsdSchema(schema);
         getSchemaContentProvider().setXsdSchema(schema);
         refresh();
-        
+
     }
 
     protected void addOrDelLanguage(boolean isAdd) {
@@ -1001,8 +997,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
 
             }
-            if (xsdSchema == null || (xsd!=null && !xsd.equals(wsObject.getXsdSchema())))
-            	xsdSchema = Util.createXsdSchema(schema, xobject);
+            if (xsdSchema == null || (xsd != null && !xsd.equals(wsObject.getXsdSchema())))
+                xsdSchema = Util.createXsdSchema(schema, xobject);
             wsObject.setXsdSchema(schema);
 
             EList<XSDSchemaContent> elist = xsdSchema.getContents();
@@ -1022,10 +1018,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             validateSchema();
 
             // save to db
-            XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
-                    xobject.getPassword());
-            port.putDataModel(new WSPutDataModel((WSDataModel) wsObject));
-            RoleAssignmentDialog.doSave(port, ((WSDataModel) wsObject).getName(), "Data Model");
+            doSave(wsObject);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(this.getSite().getShell(), "Error committing the page",
@@ -1037,12 +1030,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         return 0;
     }
 
+    protected void doSave(WSDataModel wsObject) throws Exception {
+        XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
+                xobject.getPassword());
+        port.putDataModel(new WSPutDataModel((WSDataModel) wsObject));
+        RoleAssignmentDialog.doSave(port, ((WSDataModel) wsObject).getName(), "Data Model");
+    }
+
     protected void commit() {
         save(null);
     }
 
     protected void createActions() {
-         this.newConceptAction = new XSDNewConceptAction(this);
+        this.newConceptAction = new XSDNewConceptAction(this);
         this.deleteConceptAction = new XSDDeleteConceptAction(this);
         this.newBrowseItemAction = new XSDNewBrowseItemViewAction(this);
         this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
@@ -1292,9 +1292,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     manager.add(newBrowseItemAction);
             }
             if (Util.IsEnterPrise() && obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
-            		manager.add(new Separator());
-	                manager.add(setAnnotationWriteAction);	
-	                manager.add(setAnnotationNoAction);
+                manager.add(new Separator());
+                manager.add(setAnnotationWriteAction);
+                manager.add(setAnnotationNoAction);
             }
         }
         manager.add(new Separator());
@@ -1481,12 +1481,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // typedef.getTargetNamespace())) {
             manager.add(changeBaseTypeAction);
             manager.add(new Separator());
-            if(typedef.getBaseTypeDefinition() != null){ 
-            EList list = typedef.getBaseTypeDefinition().getValidFacets();
-            for (Iterator iter = list.iterator(); iter.hasNext();) {
-                String element = (String) iter.next();
-                manager.add(new XSDEditFacetAction(this, element));
-            }
+            if (typedef.getBaseTypeDefinition() != null) {
+                EList list = typedef.getBaseTypeDefinition().getValidFacets();
+                for (Iterator iter = list.iterator(); iter.hasNext();) {
+                    String element = (String) iter.next();
+                    manager.add(new XSDEditFacetAction(this, element));
+                }
             }
 
             // }
@@ -2830,14 +2830,14 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         return datamodel;
     }
 
-    //Modified by hhb,to fix bug 21784
+    // Modified by hhb,to fix bug 21784
     @Override
     public Object getAdapter(Class adapter) {
-        if(adapter==TreeParent.class){
-            return Util.getServerTreeParent( getXObject());
+        if (adapter == TreeParent.class) {
+            return Util.getServerTreeParent(getXObject());
         }
         return super.getAdapter(adapter);
     }
-    //The ending| bug:21784
+    // The ending| bug:21784
 
 }

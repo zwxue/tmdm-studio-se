@@ -22,7 +22,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 
 public class XObjectEditorInput2 extends XObjectEditorInput implements IRepositoryViewEditorInput {
 
-    private final Item item;
+    private Item item;
 
     public XObjectEditorInput2(Item item) {
         super(new TreeObject(), null);
@@ -32,6 +32,11 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
         setModel(treeObject);
         setName(serverObject.getName());
+    }
+
+    public XObjectEditorInput2(Item item, Object model, String name) {
+        super(model, name);
+        this.item = item;
     }
 
     public String getToolTipText() {
