@@ -49,4 +49,9 @@ public class RoutingRuleContentProvider extends AbstractContentProvider {
         return WSRoutingRule.class;
     }
 
+    @Override
+    public boolean isShownInRoot() {
+        return false;
+    }
+
 }

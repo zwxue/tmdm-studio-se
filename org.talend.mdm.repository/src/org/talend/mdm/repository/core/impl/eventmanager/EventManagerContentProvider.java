@@ -21,33 +21,45 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.eventmanager;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractContentProvider;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WSWorkflowDeploy;
-
-/**
- * DOC hbhong class global comment. Detailled comment <br/>
- * 
- */
 public class EventManagerContentProvider extends AbstractContentProvider {
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_EVENTMANAGER, parentItem,
-                TreeObject.EVENT_MANAGEMENT,
-                false);
+        List<IRepositoryViewObject> result = new LinkedList<IRepositoryViewObject>();
+        IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
+                .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+        IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
+                .getConfiguration(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+
+        //
+        addCategoryViewObject(result, processConf);
+        addCategoryViewObject(result, triggerConf);
+        return result;
+    }
+
+    private void addCategoryViewObject(List<IRepositoryViewObject> result, IRepositoryNodeConfiguration conf) {
+        if (conf != null) {
+            IRepositoryViewObject categoryViewObject = RepositoryResourceUtil.getCategoryViewObject(conf);
+            if (categoryViewObject != null) {
+                result.add(categoryViewObject);
+            }
+        }
     }
 
     @Override
     public Class getWSObjectClass() {
-        return WSWorkflowDeploy.class;
+        return null;
     }
 
 }

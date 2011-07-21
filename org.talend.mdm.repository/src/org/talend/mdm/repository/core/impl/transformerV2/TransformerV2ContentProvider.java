@@ -50,4 +50,9 @@ public class TransformerV2ContentProvider extends AbstractContentProvider {
         return WSTransformerV2.class;
     }
 
+    @Override
+    public boolean isShownInRoot() {
+        return false;
+    }
+
 }

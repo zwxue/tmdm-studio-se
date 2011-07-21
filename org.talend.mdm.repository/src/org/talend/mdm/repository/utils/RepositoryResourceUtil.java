@@ -145,18 +145,17 @@ public class RepositoryResourceUtil {
 
     public static IRepositoryViewObject[] getCategoryViewObjects() {
         List<IRepositoryNodeConfiguration> configurations = RepositoryNodeConfigurationManager.getConfigurations();
-        IRepositoryViewObject[] results = new IRepositoryViewObject[configurations.size()];
-        int i = 0;
+        List<IRepositoryViewObject> results = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryNodeConfiguration conf : configurations) {
-
-            IRepositoryViewObject categoryViewObject = getCategoryViewObject(conf);
-            results[i] = categoryViewObject;
-            i++;
+            if (conf.getContentProvider().isShownInRoot()) {
+                IRepositoryViewObject categoryViewObject = getCategoryViewObject(conf);
+                results.add(categoryViewObject);
+            }
         }
-        return results;
+        return results.toArray(new IRepositoryViewObject[0]);
     }
 
-    private static IRepositoryViewObject getCategoryViewObject(IRepositoryNodeConfiguration conf) {
+    public static IRepositoryViewObject getCategoryViewObject(IRepositoryNodeConfiguration conf) {
         Property prop = PropertiesFactory.eINSTANCE.createProperty();
         prop.setId(EcoreUtil.generateUUID());
         //
