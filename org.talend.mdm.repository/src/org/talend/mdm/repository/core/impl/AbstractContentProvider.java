@@ -74,4 +74,9 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
 
     protected abstract List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem);
 
+    @Override
+    public boolean isShownInRoot() {
+        return true;
+    }
+
 }
