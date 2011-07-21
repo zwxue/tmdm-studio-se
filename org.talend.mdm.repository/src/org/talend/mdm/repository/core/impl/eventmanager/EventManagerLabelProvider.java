@@ -23,6 +23,7 @@ package org.talend.mdm.repository.core.impl.eventmanager;
 
 import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -36,12 +37,12 @@ public class EventManagerLabelProvider extends AbstractLabelProvider {
 
     private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/sub_engine.png"); //$NON-NLS-1$;
 
-    public String getCategoryLabel() {
+    public String getCategoryLabel(ERepositoryObjectType type) {
         return "Event Manager"; //$NON-NLS-1$
     }
 
     @Override
-    public Image getCategoryImage() {
+    public Image getCategoryImage(Item item) {
         return IMG;
     }
 

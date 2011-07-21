@@ -80,7 +80,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
             if (item instanceof ContainerItem) {
                 switch (((ContainerItem) item).getType().getValue()) {
                 case FolderType.STABLE_SYSTEM_FOLDER:
-                    return getCategoryImage();
+                    return getCategoryImage(item);
                 case FolderType.FOLDER:
                 case FolderType.SYSTEM_FOLDER:
                     return FOLDER_IMG;
@@ -101,6 +101,11 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         }
         if (item instanceof MDMServerObjectItem) {
             return getServerObjectItemText(item);
+        }
+        // default
+        String label = item.getProperty().getLabel();
+        if (label != null) {
+            return label;
         }
         return ""; //$NON-NLS-1$
     }
@@ -142,6 +147,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     protected abstract String getServerObjectItemText(Item item);
 
-    public abstract Image getCategoryImage();
+    public abstract Image getCategoryImage(Item item);
 
 }

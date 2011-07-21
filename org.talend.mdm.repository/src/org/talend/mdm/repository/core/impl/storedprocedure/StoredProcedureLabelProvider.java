@@ -23,6 +23,7 @@ package org.talend.mdm.repository.core.impl.storedprocedure;
 
 import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -36,12 +37,12 @@ public class StoredProcedureLabelProvider extends AbstractLabelProvider {
 
     private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/stored_procedure.gif"); //$NON-NLS-1$;
 
-    public String getCategoryLabel() {
+    public String getCategoryLabel(ERepositoryObjectType type) {
         return "Stored Procedure"; //$NON-NLS-1$
     }
 
     @Override
-    public Image getCategoryImage() {
+    public Image getCategoryImage(Item item) {
         return IMG;
     }
 

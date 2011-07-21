@@ -161,12 +161,13 @@ public class RepositoryResourceUtil {
         //
         ContainerItem item = MdmpropertiesFactory.eINSTANCE.createContainerItem();
         item.setType(FolderType.STABLE_SYSTEM_FOLDER_LITERAL);
-        item.setLabel(conf.getLabelProvider().getCategoryLabel());
+
         item.setRepObjType(conf.getResourceProvider().getRepositoryObjectType(item));
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         itemState.setDeleted(false);
         itemState.setPath(""); //$NON-NLS-1$
         item.setState(itemState);
+        item.setLabel(conf.getLabelProvider().getCategoryLabel(item.getRepObjType()));
         //
         prop.setItem(item);
         //

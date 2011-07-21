@@ -23,6 +23,7 @@ package org.talend.mdm.repository.core.impl.view;
 
 import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -36,12 +37,12 @@ public class ViewLabelProvider extends AbstractLabelProvider {
 
     private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/view.png"); //$NON-NLS-1$;
 
-    public String getCategoryLabel() {
+    public String getCategoryLabel(ERepositoryObjectType type) {
         return "View"; //$NON-NLS-1$
     }
 
     @Override
-    public Image getCategoryImage() {
+    public Image getCategoryImage(Item item) {
         return IMG;
     }
 

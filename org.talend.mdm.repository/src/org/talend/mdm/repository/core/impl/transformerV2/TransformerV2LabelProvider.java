@@ -23,6 +23,7 @@ package org.talend.mdm.repository.core.impl.transformerV2;
 
 import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -36,12 +37,12 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
     private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/transformer.png"); //$NON-NLS-1$;
 
-    public String getCategoryLabel() {
+    public String getCategoryLabel(ERepositoryObjectType type) {
         return "Process"; //$NON-NLS-1$
     }
 
     @Override
-    public Image getCategoryImage() {
+    public Image getCategoryImage(Item item) {
         return IMG;
     }
 

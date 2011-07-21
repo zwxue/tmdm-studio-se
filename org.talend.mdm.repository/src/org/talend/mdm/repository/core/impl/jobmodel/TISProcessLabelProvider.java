@@ -19,30 +19,15 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core;
+package org.talend.mdm.repository.core.impl.jobmodel;
 
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
-import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.mdm.repository.core.bridge.AbstractBridgeLabelProvider;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public interface IRepositoryNodeLabelProvider {
+public class TISProcessLabelProvider extends AbstractBridgeLabelProvider {
 
-    public String getCategoryLabel(ERepositoryObjectType type);
-
-    public String getText(Object element);
-
-    public Image getImage(Object element);
-
-    public String getDescription(Object anElement);
-
-    public Color getForeground(Object element);
-
-    public Font getFont(Object element);
-    //
 
 }

@@ -273,7 +273,7 @@
             label="Trigger">
       </configuration>
       <configuration
-            class="org.talend.mdm.repository.core.impl.jobmodel.JobModelNodeConfiguration"
+            class="org.talend.mdm.repository.core.impl.jobmodel.TISProcessNodeConfiguration"
             label="Job">
       </configuration>
       <configuration

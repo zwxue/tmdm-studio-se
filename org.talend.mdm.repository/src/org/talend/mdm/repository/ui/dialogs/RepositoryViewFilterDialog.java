@@ -54,7 +54,7 @@ public class RepositoryViewFilterDialog extends Dialog {
     private class ServerObjectLabelProvider extends LabelProvider implements ITableLabelProvider {
 
         public Image getColumnImage(Object element, int columnIndex) {
-            return ((AbstractLabelProvider) ((IRepositoryNodeConfiguration) element).getLabelProvider()).getCategoryImage();
+            return ((AbstractLabelProvider) ((IRepositoryNodeConfiguration) element).getLabelProvider()).getCategoryImage(null);
         }
 
         public String getColumnText(Object element, int columnIndex) {
@@ -64,7 +64,7 @@ public class RepositoryViewFilterDialog extends Dialog {
 
     private String getLabel(Object element) {
         if (element instanceof IRepositoryNodeConfiguration) {
-            return ((IRepositoryNodeConfiguration) element).getLabelProvider().getCategoryLabel();
+            return ((IRepositoryNodeConfiguration) element).getLabelProvider().getCategoryLabel(null);
         }
         return ""; //$NON-NLS-1$
     }

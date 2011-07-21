@@ -61,6 +61,8 @@ public class Bean2EObjUtil {
     }
 
     public void registerClassMap(Class cls) {
+        if (cls == null)
+            return;
         EClass eCls;
         eCls = guessEClassByClassName(cls);
         if (eCls != null) {

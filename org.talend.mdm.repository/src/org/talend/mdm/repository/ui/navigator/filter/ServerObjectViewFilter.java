@@ -43,7 +43,7 @@ public class ServerObjectViewFilter extends ViewerFilter implements IRepositoryV
             IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager
                     .getConfiguration((IRepositoryViewObject) element);
             if (conf != null) {
-                String label = conf.getLabelProvider().getCategoryLabel();
+                String label = conf.getLabelProvider().getCategoryLabel(null);
                 return isEnableServerObject(label);
             }
         }
