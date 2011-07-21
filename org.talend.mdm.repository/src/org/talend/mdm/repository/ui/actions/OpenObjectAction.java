@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 /**
@@ -56,18 +57,22 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 Item item = ((IRepositoryViewObject) obj).getProperty().getItem();
-                IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
-                if (configuration != null) {
-                    IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
-                    if (actionProvider != null) {
-                        IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(item);
-                        if (editorInput != null) {
-                            if (page == null)
-                                this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
-                            try {
-                                this.page.openEditor(editorInput, editorInput.getEditorId());
-                            } catch (PartInitException e) {
-                                log.error(e.getMessage(), e);
+                if (item instanceof ContainerItem) {
+                    commonViewer.expandToLevel(obj, 1);
+                } else {
+                    IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+                    if (configuration != null) {
+                        IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
+                        if (actionProvider != null) {
+                            IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(item);
+                            if (editorInput != null) {
+                                if (page == null)
+                                    this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                                try {
+                                    this.page.openEditor(editorInput, editorInput.getEditorId());
+                                } catch (PartInitException e) {
+                                    log.error(e.getMessage(), e);
+                                }
                             }
                         }
                     }
