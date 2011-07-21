@@ -52,4 +52,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="WSJobModelItem" eSuperTypes="#//MDMServerObjectItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsJobModelItem" eType="ecore:EClass MDMServerObject.ecore#//WSJobModelE"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSEventManagerItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsEventManager" eType="ecore:EClass MDMServerObject.ecore#//WSEventManagerE"/>
+  </eClassifiers>
 </ecore:EPackage>

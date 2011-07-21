@@ -2064,13 +2064,77 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_JOB_MODEL_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSEventManagerEImpl <em>WS Event Manager E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSEventManagerEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSEventManagerE()
+     * @generated
+     */
+    int WS_EVENT_MANAGER_E = 32;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The number of structural features of the '<em>WS Event Manager E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
      * The meta object id for the '<em>String Array</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getStringArray()
      * @generated
      */
-    int STRING_ARRAY = 32;
+    int STRING_ARRAY = 33;
 
 
     /**
@@ -3439,6 +3503,16 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSJobModelE();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSEventManagerE <em>WS Event Manager E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Event Manager E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSEventManagerE
+     * @generated
+     */
+    EClass getWSEventManagerE();
+
+    /**
      * Returns the meta object for data type '<em>String Array</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4549,6 +4623,16 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EClass WS_JOB_MODEL_E = eINSTANCE.getWSJobModelE();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSEventManagerEImpl <em>WS Event Manager E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSEventManagerEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSEventManagerE()
+         * @generated
+         */
+        EClass WS_EVENT_MANAGER_E = eINSTANCE.getWSEventManagerE();
 
         /**
          * The meta object literal for the '<em>String Array</em>' data type.

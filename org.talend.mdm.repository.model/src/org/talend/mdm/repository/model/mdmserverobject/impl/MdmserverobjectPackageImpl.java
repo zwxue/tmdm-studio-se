@@ -25,6 +25,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
 import org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSEventManagerE;
 import org.talend.mdm.repository.model.mdmserverobject.WSJobModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
@@ -283,6 +284,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsJobModelEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsEventManagerEEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -1503,6 +1511,15 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSEventManagerE() {
+        return wsEventManagerEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getStringArray() {
         return stringArrayEDataType;
     }
@@ -1694,6 +1711,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         wsJobModelEEClass = createEClass(WS_JOB_MODEL_E);
 
+        wsEventManagerEEClass = createEClass(WS_EVENT_MANAGER_E);
+
         // Create data types
         stringArrayEDataType = createEDataType(STRING_ARRAY);
     }
@@ -1741,6 +1760,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsTransformerV2EEClass.getESuperTypes().add(this.getMDMServerObject());
         wsRoutingRuleEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsJobModelEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsEventManagerEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1901,6 +1921,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSRoutingRuleOperatorE_Value(), ecorePackage.getEString(), "value", null, 0, 1, WSRoutingRuleOperatorE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsJobModelEEClass, WSJobModelE.class, "WSJobModelE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+        initEClass(wsEventManagerEEClass, WSEventManagerE.class, "WSEventManagerE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         // Initialize data types
         initEDataType(stringArrayEDataType, String[].class, "StringArray", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -954,6 +954,61 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_JOB_MODEL_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSEventManagerItemImpl <em>WS Event Manager Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSEventManagerItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSEventManagerItem()
+     * @generated
+     */
+    int WS_EVENT_MANAGER_ITEM = 16;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Ws Event Manager</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_ITEM__WS_EVENT_MANAGER = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Event Manager Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -961,7 +1016,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 16;
+    int EREPOSITORY_OBJECT_TYPE = 17;
 
 
     /**
@@ -1290,6 +1345,27 @@ public interface MdmpropertiesPackage extends EPackage {
     EReference getWSJobModelItem_WsJobModelItem();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem <em>WS Event Manager Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Event Manager Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem
+     * @generated
+     */
+    EClass getWSEventManagerItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem#getWsEventManager <em>Ws Event Manager</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Event Manager</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem#getWsEventManager()
+     * @see #getWSEventManagerItem()
+     * @generated
+     */
+    EReference getWSEventManagerItem_WsEventManager();
+
+    /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1601,6 +1677,24 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_JOB_MODEL_ITEM__WS_JOB_MODEL_ITEM = eINSTANCE.getWSJobModelItem_WsJobModelItem();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSEventManagerItemImpl <em>WS Event Manager Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSEventManagerItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSEventManagerItem()
+         * @generated
+         */
+        EClass WS_EVENT_MANAGER_ITEM = eINSTANCE.getWSEventManagerItem();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Event Manager</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_EVENT_MANAGER_ITEM__WS_EVENT_MANAGER = eINSTANCE.getWSEventManagerItem_WsEventManager();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

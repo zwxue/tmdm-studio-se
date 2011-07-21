@@ -72,4 +72,8 @@ public interface IServerObjectRepositoryType {
 
     public static ERepositoryObjectType TYPE_JOBMODEL = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.JobModel"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_EVENTMANAGER = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.EventManager"); //$NON-NLS-1$
+
 }

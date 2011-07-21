@@ -170,6 +170,15 @@ public interface MdmpropertiesFactory extends EFactory {
     WSJobModelItem createWSJobModelItem();
 
     /**
+     * Returns a new object of class '<em>WS Event Manager Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Event Manager Item</em>'.
+     * @generated
+     */
+    WSEventManagerItem createWSEventManagerItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

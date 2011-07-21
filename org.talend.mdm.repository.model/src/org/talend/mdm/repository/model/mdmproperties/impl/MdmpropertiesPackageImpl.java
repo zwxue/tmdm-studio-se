@@ -24,6 +24,7 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem;
 import org.talend.mdm.repository.model.mdmproperties.WSJobModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
@@ -154,6 +155,13 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass wsJobModelItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsEventManagerItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -511,6 +519,24 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSEventManagerItem() {
+        return wsEventManagerItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSEventManagerItem_WsEventManager() {
+        return (EReference)wsEventManagerItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -590,6 +616,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsJobModelItemEClass = createEClass(WS_JOB_MODEL_ITEM);
         createEReference(wsJobModelItemEClass, WS_JOB_MODEL_ITEM__WS_JOB_MODEL_ITEM);
 
+        wsEventManagerItemEClass = createEClass(WS_EVENT_MANAGER_ITEM);
+        createEReference(wsEventManagerItemEClass, WS_EVENT_MANAGER_ITEM__WS_EVENT_MANAGER);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -645,6 +674,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsTransformerV2ItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsRoutingRuleItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsJobModelItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsEventManagerItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -695,6 +725,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         initEClass(wsJobModelItemEClass, WSJobModelItem.class, "WSJobModelItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSJobModelItem_WsJobModelItem(), theMdmserverobjectPackage.getWSJobModelE(), null, "wsJobModelItem", null, 0, 1, WSJobModelItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsEventManagerItemEClass, WSEventManagerItem.class, "WSEventManagerItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSEventManagerItem_WsEventManager(), theMdmserverobjectPackage.getWSEventManagerE(), null, "wsEventManager", null, 0, 1, WSEventManagerItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

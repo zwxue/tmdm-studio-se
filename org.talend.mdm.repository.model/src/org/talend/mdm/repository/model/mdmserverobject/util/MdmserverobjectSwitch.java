@@ -291,6 +291,13 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmserverobjectPackage.WS_EVENT_MANAGER_E: {
+                WSEventManagerE wsEventManagerE = (WSEventManagerE)theEObject;
+                T result = caseWSEventManagerE(wsEventManagerE);
+                if (result == null) result = caseMDMServerObject(wsEventManagerE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -772,6 +779,21 @@ public class MdmserverobjectSwitch<T> {
      * @generated
      */
     public T caseWSJobModelE(WSJobModelE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Event Manager E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Event Manager E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSEventManagerE(WSEventManagerE object) {
         return null;
     }
 

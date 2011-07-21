@@ -94,6 +94,7 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_ROUTING_RULE_EXPRESSION: return createWSRoutingRuleExpression();
             case MdmserverobjectPackage.WS_ROUTING_RULE_OPERATOR_E: return createWSRoutingRuleOperatorE();
             case MdmserverobjectPackage.WS_JOB_MODEL_E: return createWSJobModelE();
+            case MdmserverobjectPackage.WS_EVENT_MANAGER_E: return createWSEventManagerE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -447,6 +448,16 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSJobModelE createWSJobModelE() {
         WSJobModelEImpl wsJobModelE = new WSJobModelEImpl();
         return wsJobModelE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSEventManagerE createWSEventManagerE() {
+        WSEventManagerEImpl wsEventManagerE = new WSEventManagerEImpl();
+        return wsEventManagerE;
     }
 
     /**
