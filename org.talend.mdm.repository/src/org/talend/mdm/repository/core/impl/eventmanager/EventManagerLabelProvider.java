@@ -38,7 +38,7 @@ public class EventManagerLabelProvider extends AbstractLabelProvider {
     private static final Image IMG = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "icons/sub_engine.png"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
-        return "Event Manager"; //$NON-NLS-1$
+        return "Event Management"; //$NON-NLS-1$
     }
 
     @Override

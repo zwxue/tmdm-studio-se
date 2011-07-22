@@ -31,7 +31,7 @@ public enum ServerObjectImage implements IImage {
     TRANSFORMERV2_ICON("/icons/transformer.png"), //$NON-NLS-1$
     ROUTINGRULE_ICON("/icons/routing_rule.png"), //$NON-NLS-1$
     JOBMODEL_ICON("/icons/joblet_icon.png"), //$NON-NLS-1$
-    EVENTMANAGER_ICON("/icons/sub_engine.png");//$NON-NLS-1$
+    EVENTMANAGER_ICON("/icons/events_management.png");//$NON-NLS-1$
 
     private String path;
 

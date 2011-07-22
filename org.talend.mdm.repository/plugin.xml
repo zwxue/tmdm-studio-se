@@ -125,7 +125,7 @@
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.EventManagerRepositoryNode"
             folder="MDM/eventmanager"
-            label="Event Manager"
+            label="Event Management"
             products="MDM"
             type="MDM.EventManager">
       </repositoryNode>
