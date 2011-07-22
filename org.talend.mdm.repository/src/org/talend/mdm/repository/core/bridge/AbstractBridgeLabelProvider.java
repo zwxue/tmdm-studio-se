@@ -28,34 +28,15 @@ import org.talend.repository.model.ERepositoryStatus;
  */
 public class AbstractBridgeLabelProvider extends AbstractLabelProvider {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.IRepositoryNodeLabelProvider#getCategoryLabel()
-     */
-    @Override
     public String getCategoryLabel(ERepositoryObjectType type) {
         return type.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.talend.mdm.repository.core.impl.AbstractLabelProvider#getServerObjectItemText(org.talend.core.model.properties
-     * .Item)
-     */
-    @Override
+
     protected String getServerObjectItemText(Item item) {
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.impl.AbstractLabelProvider#getCategoryImage()
-     */
-    @Override
     public Image getCategoryImage(Item item) {
         if (item instanceof ContainerItem) {
             ERepositoryObjectType repObjType = ((ContainerItem) item).getRepObjType();
@@ -64,7 +45,6 @@ public class AbstractBridgeLabelProvider extends AbstractLabelProvider {
         return null;
     }
 
-    @Override
     public Image getImage(Object element) {
         Image img = super.getImage(element);
         if (img == null && element instanceof IRepositoryViewObject) {

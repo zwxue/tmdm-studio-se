@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -42,7 +42,7 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
      * 
      * @see org.talend.mdm.repository.core.IRepositoryNodeContentProvider#getChildren(java.lang.Object)
      */
-    @Override
+
     public Object[] getChildren(Object element) {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null && item instanceof ContainerItem) {
@@ -74,7 +74,6 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
 
     protected abstract List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem);
 
-    @Override
     public boolean isShownInRoot() {
         return true;
     }

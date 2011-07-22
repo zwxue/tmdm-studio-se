@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -47,7 +47,7 @@ public class RepositoryNodeAdapter implements IExtendRepositoryNode {
      * 
      * @see org.talend.core.repository.IExtendRepositoryNode#getNodeImage()
      */
-    @Override
+
     public IImage getNodeImage() {
         return image;
     }
@@ -57,7 +57,7 @@ public class RepositoryNodeAdapter implements IExtendRepositoryNode {
      * 
      * @see org.talend.core.repository.IExtendRepositoryNode#getOrdinal()
      */
-    @Override
+
     public int getOrdinal() {
         return ordinal;
     }
@@ -67,7 +67,7 @@ public class RepositoryNodeAdapter implements IExtendRepositoryNode {
      * 
      * @see org.talend.core.repository.IExtendRepositoryNode#getChildren()
      */
-    @Override
+
     public Object[] getChildren() {
         return EMPTY_NODE_ARRAY;
     }

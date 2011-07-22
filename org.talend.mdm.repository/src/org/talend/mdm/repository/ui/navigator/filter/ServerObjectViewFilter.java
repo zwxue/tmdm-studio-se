@@ -38,6 +38,7 @@ public class ServerObjectViewFilter extends ViewerFilter implements IRepositoryV
         return PreferenceUtil.getBoolean(PROP_ENABLE);
     }
 
+    @Override
     public boolean select(Viewer viewer, Object parentElement, Object element) {
         if (element instanceof ContainerRepositoryObject) {
             IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager
@@ -61,7 +62,6 @@ public class ServerObjectViewFilter extends ViewerFilter implements IRepositoryV
         enabledServerObjects = PreferenceUtil.getStringSet(PROP_ENABLE_LIST);
     }
 
-    @Override
     public void updatePreference() {
         updateEnableServerObjects();
     }

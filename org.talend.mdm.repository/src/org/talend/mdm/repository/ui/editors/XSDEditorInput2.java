@@ -43,12 +43,10 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
 
     }
 
-    @Override
     public String getEditorId() {
         return XSDEditor2.EDITOR_ID;
     }
 
-    @Override
     public Item getInputItem() {
         return item;
     }

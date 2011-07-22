@@ -22,7 +22,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
     public ServerObjectRepositoryContentHandler() {
     }
 
-    @Override
+
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
@@ -31,7 +31,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-    @Override
+
     public Resource create(IProject project, Item item, int classifierID, IPath path) throws PersistenceException {
 
         // if (item instanceof MDMServerObjectItem) {
@@ -56,7 +56,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-    @Override
+
     public Resource save(Item item) throws PersistenceException {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
@@ -67,7 +67,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-    @Override
+
     public IImage getIcon(ERepositoryObjectType type) {
         if (type == TYPE_MENU)
             return ServerObjectImage.MENU_ICON;
@@ -76,7 +76,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-    @Override
+
     public Item createNewItem(ERepositoryObjectType type) {
         // if (type == TYPE_MENU) {
         // return MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
@@ -91,24 +91,24 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-    @Override
+
     public boolean isProcess(Item item) {
         return false;
     }
 
-    @Override
+
     public boolean isRepObjType(ERepositoryObjectType type) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
         return configuration != null;
 
     }
 
-    @Override
+
     public ERepositoryObjectType getProcessType() {
         return null;
     }
 
-    @Override
+
     public ERepositoryObjectType getCodeType() {
         return null;
     }

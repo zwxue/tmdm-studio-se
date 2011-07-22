@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.workbench.serverexplorer.core;
 
 import org.eclipse.core.resources.IProject;
@@ -5,7 +17,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
-import org.talend.core.model.properties.ByteArray;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryContentHandler;
@@ -19,19 +30,14 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
 
     public ServerDefRepositoryContentHandler() {
     }
-    /* (non-Javadoc)
-     * @see org.talend.core.model.repository.IRepositoryContentHandler#getRepositoryObjectType(org.talend.core.model.properties.Item)
-     */
-    @Override
+
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
         if (item instanceof MDMServerDefItem) {
             return ServerDefService.REPOSITORY_TYPE_SERVER_DEF;
         }
         return null;
     }
- 
 
-    @Override
     public Resource create(IProject project, Item item, int classifierID, IPath path) throws PersistenceException {
 
         if (item instanceof MDMServerDefItem) {
@@ -43,7 +49,6 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
         return null;
     }
 
-    @Override
     public Resource save(Item item) throws PersistenceException {
         if (item instanceof MDMServerDefItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
@@ -55,14 +60,12 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
         return null;
     }
 
-    @Override
     public IImage getIcon(ERepositoryObjectType type) {
         if (type == ServerDefService.REPOSITORY_TYPE_SERVER_DEF)
             return ServerDefImage.BEAN_ICON;
         return null;
     }
 
-    @Override
     public Item createNewItem(ERepositoryObjectType type) {
         if (type == ServerDefService.REPOSITORY_TYPE_SERVER_DEF) {
             return MdmpropertiesFactory.eINSTANCE.createMDMServerDefItem();
@@ -70,26 +73,19 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
         return null;
     }
 
-    @Override
     public boolean isProcess(Item item) {
         return false;
     }
 
-    @Override
     public boolean isRepObjType(ERepositoryObjectType type) {
         return type == ServerDefService.REPOSITORY_TYPE_SERVER_DEF;
     }
 
-    @Override
     public ERepositoryObjectType getProcessType() {
         return null;
     }
 
-    @Override
     public ERepositoryObjectType getCodeType() {
         return null;
     }
-
-
-
 }

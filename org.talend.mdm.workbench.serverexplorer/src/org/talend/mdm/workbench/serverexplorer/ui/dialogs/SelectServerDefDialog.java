@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2010 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Tree;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -76,16 +75,13 @@ public class SelectServerDefDialog extends TitleAreaDialog {
         container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
         treeViewer = new TreeViewer(container, SWT.BORDER);
-        Tree tree = treeViewer.getTree();
         treeViewer.setSorter(new ServerSorter());
-        tree = treeViewer.getTree();
 
         treeViewer.setContentProvider(new TreeContentProvider());
         treeViewer.setLabelProvider(new ViewerLabelProvider());
         //
         treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
-            @Override
             public void selectionChanged(SelectionChangedEvent event) {
                 IRepositoryViewObject viewObject = getCurSelectedViewObject();
                 MDMServerDefItem item = (MDMServerDefItem) viewObject.getProperty().getItem();

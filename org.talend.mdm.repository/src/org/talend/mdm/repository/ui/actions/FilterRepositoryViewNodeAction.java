@@ -16,7 +16,7 @@ public class FilterRepositoryViewNodeAction implements IViewActionDelegate {
 
     IPropertyChangeListener pListener = new IPropertyChangeListener() {
 
-        @Override
+    
         public void propertyChange(PropertyChangeEvent event) {
             if (event.getProperty().equals(IRepositoryViewFilter.PROP_REFRESH)) {
                 viewFilter.updatePreferences();
@@ -40,7 +40,7 @@ public class FilterRepositoryViewNodeAction implements IViewActionDelegate {
 
     private IAction action;
 
-    @Override
+
     public void run(IAction action) {
         if (commonViewer != null) {
             commonViewer.removeFilter(viewFilter);
@@ -50,12 +50,12 @@ public class FilterRepositoryViewNodeAction implements IViewActionDelegate {
         }
     }
 
-    @Override
+
     public void selectionChanged(IAction action, ISelection selection) {
         this.action = action;
     }
 
-    @Override
+
     public void init(IViewPart view) {
         if (view instanceof CommonNavigator) {
             this.commonViewer = ((CommonNavigator) view).getCommonViewer();

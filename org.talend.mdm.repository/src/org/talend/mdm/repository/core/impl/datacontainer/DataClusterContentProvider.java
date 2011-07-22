@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -43,8 +43,6 @@ public class DataClusterContentProvider extends AbstractContentProvider {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_DATACLUSTER, parentItem,
                 TreeObject.DATA_CLUSTER, true);
     }
-
-    @Override
     public Class getWSObjectClass() {
         return WSDataCluster.class;
     }

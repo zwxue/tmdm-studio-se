@@ -14,6 +14,7 @@ package org.talend.mdm.workbench.serverexplorer.ui.providers;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -24,14 +25,15 @@ import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
  */
 public class ViewerLabelProvider extends LabelProvider {
 
-    static final Image IMG_SERVER_DEF = MDMServerExplorerPlugin.imageDescriptorFromPlugin(MDMServerExplorerPlugin.PLUGIN_ID,
+    static final Image IMG_SERVER_DEF = AbstractUIPlugin.imageDescriptorFromPlugin(MDMServerExplorerPlugin.PLUGIN_ID,
             "icons/server.png").createImage(); //$NON-NLS-1$
 
+    @Override
     public Image getImage(Object element) {
-
         return IMG_SERVER_DEF;
     }
 
+    @Override
     public String getText(Object element) {
         if (element instanceof IRepositoryViewObject) {
             MDMServerDefItem mdmItem = getMDMItem((IRepositoryViewObject) element);

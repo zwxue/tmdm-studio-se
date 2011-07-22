@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -40,15 +40,13 @@ public class RepositoryNodeConfigurationAdapter implements IRepositoryNodeConfig
     IRepositoryNodeLabelProvider labelProvider;
 
     IRepositoryNodeContentProvider contentProvider;
-    
+
     IRepositoryNodeActionProvider actionProvider;
 
-    
     public IRepositoryNodeActionProvider getActionProvider() {
         return this.actionProvider;
     }
 
-    
     public void setActionProvider(IRepositoryNodeActionProvider actionProvider) {
         this.actionProvider = actionProvider;
     }
@@ -61,13 +59,11 @@ public class RepositoryNodeConfigurationAdapter implements IRepositoryNodeConfig
         this.contentProvider = contentProvider;
     }
 
-    @Override
     public boolean canHandleRepObjType(ERepositoryObjectType type) {
 
         return resourceProvider.canHandleRepObjType(type);
     }
 
-    @Override
     public boolean canHandleItem(Item item) {
         return resourceProvider.canHandleItem(item);
     }

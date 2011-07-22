@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2010 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -23,6 +23,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
  */
 public class ServerSorter extends ViewerSorter {
 
+    @Override
     public int compare(Viewer viewer, Object e1, Object e2) {
         MDMServerDefItem mdmItem1 = getMDMItem((IRepositoryViewObject) e1);
         MDMServerDefItem mdmItem2 = getMDMItem((IRepositoryViewObject) e2);

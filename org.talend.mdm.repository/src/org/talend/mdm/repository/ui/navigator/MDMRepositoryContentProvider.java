@@ -13,10 +13,9 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 
 public class MDMRepositoryContentProvider implements ITreeContentProvider {
 
-    @Override
     public Object[] getChildren(Object element) {
         if (element instanceof Collection) {
-            return ((Collection) element).toArray();
+            return ((Collection<?>) element).toArray();
         }
         if (element instanceof Object[]) {
             return (Object[]) element;
@@ -31,29 +30,21 @@ public class MDMRepositoryContentProvider implements ITreeContentProvider {
         return new Object[0];
     }
 
-    @Override
     public Object[] getElements(Object element) {
         return getChildren(element);
     }
 
-    @Override
     public void dispose() {
-        // TODO Auto-generated method stub
 
     }
 
-    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        // TODO Auto-generated method stub
-
     }
 
-    @Override
     public Object getParent(Object element) {
         return null;
     }
 
-    @Override
     public boolean hasChildren(Object element) {
         return getChildren(element).length > 0;
     }

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2010 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -37,7 +37,7 @@ public enum ServerDefImage implements IImage {
      * 
      * @return the clazz
      */
-    public Class getLocation() {
+    public Class<ServerDefImage> getLocation() {
         return ServerDefImage.class;
     }
 }

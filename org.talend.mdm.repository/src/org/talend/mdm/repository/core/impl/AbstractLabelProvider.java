@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -55,7 +55,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     private static final Font FONT_BOLD = EclipseResourceManager.getFont(defaultFontData.getName(), defaultFontData.getHeight(),
             SWT.BOLD);
 
-    @Override
     public String getText(Object element) {
         Item item = getItem(element);
         if (item != null) {
@@ -72,7 +71,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         return null;
     }
 
-    @Override
     public Image getImage(Object element) {
         Item item = getItem(element);
         if (item != null) {
@@ -90,7 +88,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         return null;
     }
 
-    @Override
     public String getDescription(Object anElement) {
         return null;
     }
@@ -114,7 +111,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         return ((ContainerItem) item).getLabel();
     }
 
-    @Override
     public Color getForeground(Object element) {
         if (isSystemServerObjectItem(element)) {
             return COLOR_GREY;
@@ -122,7 +118,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         return COLOR_BLACK;
     }
 
-    @Override
     public Font getFont(Object element) {
         if (isSystemServerObjectItem(element)
                 || RepositoryResourceUtil.hasContainerItem(element, FolderType.STABLE_SYSTEM_FOLDER_LITERAL)) {

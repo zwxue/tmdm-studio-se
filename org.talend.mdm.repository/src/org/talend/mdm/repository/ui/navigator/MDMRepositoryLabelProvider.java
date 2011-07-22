@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -41,25 +41,20 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
  */
 public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionProvider, IColorProvider, IFontProvider {
 
-    @Override
     public void addListener(ILabelProviderListener listener) {
     }
 
-    @Override
     public void dispose() {
 
     }
 
-    @Override
     public boolean isLabelProperty(Object element, String property) {
         return false;
     }
 
-    @Override
     public void removeListener(ILabelProviderListener listener) {
     }
 
-    @Override
     public String getDescription(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if(provider!=null){
@@ -68,7 +63,6 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
-    @Override
     public Image getImage(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if(provider!=null){
@@ -77,7 +71,6 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
-    @Override
     public String getText(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if(provider!=null){
@@ -97,7 +90,6 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
-    @Override
     public Color getForeground(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if (provider != null) {
@@ -106,7 +98,6 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
-    @Override
     public Font getFont(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if (provider != null) {
@@ -115,7 +106,6 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
-    @Override
     public Color getBackground(Object element) {
         return null;
     }
