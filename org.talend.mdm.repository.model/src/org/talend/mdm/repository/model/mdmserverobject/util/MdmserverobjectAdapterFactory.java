@@ -188,8 +188,8 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
                 return createWSRoutingRuleEAdapter();
             }
             @Override
-            public Adapter caseWSRoutingRuleExpression(WSRoutingRuleExpression object) {
-                return createWSRoutingRuleExpressionAdapter();
+            public Adapter caseWSRoutingRuleExpressionE(WSRoutingRuleExpressionE object) {
+                return createWSRoutingRuleExpressionEAdapter();
             }
             @Override
             public Adapter caseWSRoutingRuleOperatorE(WSRoutingRuleOperatorE object) {
@@ -630,16 +630,16 @@ public class MdmserverobjectAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression <em>WS Routing Rule Expression</em>}'.
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE <em>WS Routing Rule Expression E</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
      * @return the new adapter.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE
      * @generated
      */
-    public Adapter createWSRoutingRuleExpressionAdapter() {
+    public Adapter createWSRoutingRuleExpressionEAdapter() {
         return null;
     }
 

@@ -91,7 +91,7 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_TYPED_CONTENT_E: return createWSTypedContentE();
             case MdmserverobjectPackage.WS_BYTE_ARRAY_E: return createWSByteArrayE();
             case MdmserverobjectPackage.WS_ROUTING_RULE_E: return createWSRoutingRuleE();
-            case MdmserverobjectPackage.WS_ROUTING_RULE_EXPRESSION: return createWSRoutingRuleExpression();
+            case MdmserverobjectPackage.WS_ROUTING_RULE_EXPRESSION_E: return createWSRoutingRuleExpressionE();
             case MdmserverobjectPackage.WS_ROUTING_RULE_OPERATOR_E: return createWSRoutingRuleOperatorE();
             case MdmserverobjectPackage.WS_JOB_MODEL_E: return createWSJobModelE();
             case MdmserverobjectPackage.WS_EVENT_MANAGER_E: return createWSEventManagerE();
@@ -425,9 +425,9 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public WSRoutingRuleExpression createWSRoutingRuleExpression() {
-        WSRoutingRuleExpressionImpl wsRoutingRuleExpression = new WSRoutingRuleExpressionImpl();
-        return wsRoutingRuleExpression;
+    public WSRoutingRuleExpressionE createWSRoutingRuleExpressionE() {
+        WSRoutingRuleExpressionEImpl wsRoutingRuleExpressionE = new WSRoutingRuleExpressionEImpl();
+        return wsRoutingRuleExpressionE;
     }
 
     /**

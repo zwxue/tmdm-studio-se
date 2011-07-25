@@ -1917,14 +1917,14 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROUTING_RULE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 7;
 
     /**
-     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl <em>WS Routing Rule Expression</em>}' class.
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionEImpl <em>WS Routing Rule Expression E</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl
-     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleExpression()
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleExpressionE()
      * @generated
      */
-    int WS_ROUTING_RULE_EXPRESSION = 29;
+    int WS_ROUTING_RULE_EXPRESSION_E = 29;
 
     /**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1933,7 +1933,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROUTING_RULE_EXPRESSION__NAME = 0;
+    int WS_ROUTING_RULE_EXPRESSION_E__NAME = 0;
 
     /**
      * The feature id for the '<em><b>Xpath</b></em>' attribute.
@@ -1942,7 +1942,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROUTING_RULE_EXPRESSION__XPATH = 1;
+    int WS_ROUTING_RULE_EXPRESSION_E__XPATH = 1;
 
     /**
      * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1951,7 +1951,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROUTING_RULE_EXPRESSION__VALUE = 2;
+    int WS_ROUTING_RULE_EXPRESSION_E__VALUE = 2;
 
     /**
      * The feature id for the '<em><b>Ws Operator</b></em>' containment reference.
@@ -1960,16 +1960,16 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_ROUTING_RULE_EXPRESSION__WS_OPERATOR = 3;
+    int WS_ROUTING_RULE_EXPRESSION_E__WS_OPERATOR = 3;
 
     /**
-     * The number of structural features of the '<em>WS Routing Rule Expression</em>' class.
+     * The number of structural features of the '<em>WS Routing Rule Expression E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_ROUTING_RULE_EXPRESSION_FEATURE_COUNT = 4;
+    int WS_ROUTING_RULE_EXPRESSION_E_FEATURE_COUNT = 4;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleOperatorEImpl <em>WS Routing Rule Operator E</em>}' class.
@@ -3418,58 +3418,58 @@ public interface MdmserverobjectPackage extends EPackage {
     EReference getWSRoutingRuleE_WsRoutingRuleExpressions();
 
     /**
-     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression <em>WS Routing Rule Expression</em>}'.
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE <em>WS Routing Rule Expression E</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for class '<em>WS Routing Rule Expression</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression
+     * @return the meta object for class '<em>WS Routing Rule Expression E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE
      * @generated
      */
-    EClass getWSRoutingRuleExpression();
+    EClass getWSRoutingRuleExpressionE();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getName <em>Name</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getName <em>Name</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Name</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getName()
-     * @see #getWSRoutingRuleExpression()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getName()
+     * @see #getWSRoutingRuleExpressionE()
      * @generated
      */
-    EAttribute getWSRoutingRuleExpression_Name();
+    EAttribute getWSRoutingRuleExpressionE_Name();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getXpath <em>Xpath</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getXpath <em>Xpath</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Xpath</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getXpath()
-     * @see #getWSRoutingRuleExpression()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getXpath()
+     * @see #getWSRoutingRuleExpressionE()
      * @generated
      */
-    EAttribute getWSRoutingRuleExpression_Xpath();
+    EAttribute getWSRoutingRuleExpressionE_Xpath();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getValue <em>Value</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getValue <em>Value</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Value</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getValue()
-     * @see #getWSRoutingRuleExpression()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getValue()
+     * @see #getWSRoutingRuleExpressionE()
      * @generated
      */
-    EAttribute getWSRoutingRuleExpression_Value();
+    EAttribute getWSRoutingRuleExpressionE_Value();
 
     /**
-     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getWsOperator <em>Ws Operator</em>}'.
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getWsOperator <em>Ws Operator</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @return the meta object for the containment reference '<em>Ws Operator</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression#getWsOperator()
-     * @see #getWSRoutingRuleExpression()
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE#getWsOperator()
+     * @see #getWSRoutingRuleExpressionE()
      * @generated
      */
-    EReference getWSRoutingRuleExpression_WsOperator();
+    EReference getWSRoutingRuleExpressionE_WsOperator();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE <em>WS Routing Rule Operator E</em>}'.
@@ -4555,14 +4555,14 @@ public interface MdmserverobjectPackage extends EPackage {
         EReference WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS = eINSTANCE.getWSRoutingRuleE_WsRoutingRuleExpressions();
 
         /**
-         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl <em>WS Routing Rule Expression</em>}' class.
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionEImpl <em>WS Routing Rule Expression E</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionImpl
-         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleExpression()
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleExpressionEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSRoutingRuleExpressionE()
          * @generated
          */
-        EClass WS_ROUTING_RULE_EXPRESSION = eINSTANCE.getWSRoutingRuleExpression();
+        EClass WS_ROUTING_RULE_EXPRESSION_E = eINSTANCE.getWSRoutingRuleExpressionE();
 
         /**
          * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -4570,7 +4570,7 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute WS_ROUTING_RULE_EXPRESSION__NAME = eINSTANCE.getWSRoutingRuleExpression_Name();
+        EAttribute WS_ROUTING_RULE_EXPRESSION_E__NAME = eINSTANCE.getWSRoutingRuleExpressionE_Name();
 
         /**
          * The meta object literal for the '<em><b>Xpath</b></em>' attribute feature.
@@ -4578,7 +4578,7 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute WS_ROUTING_RULE_EXPRESSION__XPATH = eINSTANCE.getWSRoutingRuleExpression_Xpath();
+        EAttribute WS_ROUTING_RULE_EXPRESSION_E__XPATH = eINSTANCE.getWSRoutingRuleExpressionE_Xpath();
 
         /**
          * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
@@ -4586,7 +4586,7 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute WS_ROUTING_RULE_EXPRESSION__VALUE = eINSTANCE.getWSRoutingRuleExpression_Value();
+        EAttribute WS_ROUTING_RULE_EXPRESSION_E__VALUE = eINSTANCE.getWSRoutingRuleExpressionE_Value();
 
         /**
          * The meta object literal for the '<em><b>Ws Operator</b></em>' containment reference feature.
@@ -4594,7 +4594,7 @@ public interface MdmserverobjectPackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EReference WS_ROUTING_RULE_EXPRESSION__WS_OPERATOR = eINSTANCE.getWSRoutingRuleExpression_WsOperator();
+        EReference WS_ROUTING_RULE_EXPRESSION_E__WS_OPERATOR = eINSTANCE.getWSRoutingRuleExpressionE_WsOperator();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSRoutingRuleOperatorEImpl <em>WS Routing Rule Operator E</em>}' class.

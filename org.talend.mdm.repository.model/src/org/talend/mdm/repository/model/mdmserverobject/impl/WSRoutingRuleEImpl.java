@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression;
 
 /**
@@ -168,7 +169,7 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
      * @generated
      * @ordered
      */
-    protected EList<WSRoutingRuleExpression> wsRoutingRuleExpressions;
+    protected EList<WSRoutingRuleExpressionE> wsRoutingRuleExpressions;
 
     /**
      * <!-- begin-user-doc -->
@@ -320,9 +321,9 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
      * <!-- end-user-doc -->
      * @generated
      */
-    public EList<WSRoutingRuleExpression> getWsRoutingRuleExpressions() {
+    public EList<WSRoutingRuleExpressionE> getWsRoutingRuleExpressions() {
         if (wsRoutingRuleExpressions == null) {
-            wsRoutingRuleExpressions = new EObjectContainmentEList<WSRoutingRuleExpression>(WSRoutingRuleExpression.class, this, MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS);
+            wsRoutingRuleExpressions = new EObjectContainmentEList<WSRoutingRuleExpressionE>(WSRoutingRuleExpressionE.class, this, MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS);
         }
         return wsRoutingRuleExpressions;
     }
@@ -396,7 +397,7 @@ public class WSRoutingRuleEImpl extends MDMServerObjectImpl implements WSRouting
                 return;
             case MdmserverobjectPackage.WS_ROUTING_RULE_E__WS_ROUTING_RULE_EXPRESSIONS:
                 getWsRoutingRuleExpressions().clear();
-                getWsRoutingRuleExpressions().addAll((Collection<? extends WSRoutingRuleExpression>)newValue);
+                getWsRoutingRuleExpressions().addAll((Collection<? extends WSRoutingRuleExpressionE>)newValue);
                 return;
         }
         super.eSet(featureID, newValue);

@@ -26,6 +26,8 @@ public class Messages extends NLS {
 
     public static String NewMenuAction_newMenu;
 
+    public static String NewTriggerAction_newTrigger;
+
     public static String RemoveFromRepositoryAction_removeFromRepository;
 
     public static String RenameObjectAction_rename;

@@ -272,9 +272,9 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
-            case MdmserverobjectPackage.WS_ROUTING_RULE_EXPRESSION: {
-                WSRoutingRuleExpression wsRoutingRuleExpression = (WSRoutingRuleExpression)theEObject;
-                T result = caseWSRoutingRuleExpression(wsRoutingRuleExpression);
+            case MdmserverobjectPackage.WS_ROUTING_RULE_EXPRESSION_E: {
+                WSRoutingRuleExpressionE wsRoutingRuleExpressionE = (WSRoutingRuleExpressionE)theEObject;
+                T result = caseWSRoutingRuleExpressionE(wsRoutingRuleExpressionE);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -738,17 +738,17 @@ public class MdmserverobjectSwitch<T> {
     }
 
     /**
-     * Returns the result of interpreting the object as an instance of '<em>WS Routing Rule Expression</em>'.
+     * Returns the result of interpreting the object as an instance of '<em>WS Routing Rule Expression E</em>'.
      * <!-- begin-user-doc -->
      * This implementation returns null;
      * returning a non-null result will terminate the switch.
      * <!-- end-user-doc -->
      * @param object the target of the switch.
-     * @return the result of interpreting the object as an instance of '<em>WS Routing Rule Expression</em>'.
+     * @return the result of interpreting the object as an instance of '<em>WS Routing Rule Expression E</em>'.
      * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
      * @generated
      */
-    public T caseWSRoutingRuleExpression(WSRoutingRuleExpression object) {
+    public T caseWSRoutingRuleExpressionE(WSRoutingRuleExpressionE object) {
         return null;
     }
 

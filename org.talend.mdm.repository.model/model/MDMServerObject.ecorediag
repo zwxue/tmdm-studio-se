@@ -757,15 +757,15 @@
     <children xmi:type="notation:Node" xmi:id="_tSvMA7EZEeCfg_ADjEsa_g" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_tSvMBLEZEeCfg_ADjEsa_g" type="5001">
       <children xmi:type="notation:Node" xmi:id="_vbiEgLEZEeCfg_ADjEsa_g" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSRoutingRuleExpression/name"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSRoutingRuleExpressionE/name"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_vbiEgbEZEeCfg_ADjEsa_g"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_wODGkLEZEeCfg_ADjEsa_g" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSRoutingRuleExpression/xpath"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSRoutingRuleExpressionE/xpath"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_wODGkbEZEeCfg_ADjEsa_g"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_xkLMALEZEeCfg_ADjEsa_g" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSRoutingRuleExpression/value"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSRoutingRuleExpressionE/value"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_xkLMAbEZEeCfg_ADjEsa_g"/>
       </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_tSvMBbEZEeCfg_ADjEsa_g"/>
@@ -778,7 +778,7 @@
       <styles xmi:type="notation:FilteringStyle" xmi:id="_tSvMC7EZEeCfg_ADjEsa_g"/>
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_tSvMAbEZEeCfg_ADjEsa_g" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EClass" href="MDMServerObject.ecore#//WSRoutingRuleExpression"/>
+    <element xmi:type="ecore:EClass" href="MDMServerObject.ecore#//WSRoutingRuleExpressionE"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tSvMArEZEeCfg_ADjEsa_g" x="360" y="1275"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_-ieOcLEZEeCfg_ADjEsa_g" type="1001">
@@ -1173,7 +1173,7 @@
     </children>
     <styles xmi:type="notation:ConnectorStyle" xmi:id="__16zUbEZEeCfg_ADjEsa_g" lineColor="4210752"/>
     <styles xmi:type="notation:FontStyle" xmi:id="__16zUrEZEeCfg_ADjEsa_g" fontColor="4210752" fontName="宋体" fontHeight="10"/>
-    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//WSRoutingRuleExpression/wsOperator"/>
+    <element xmi:type="ecore:EReference" href="MDMServerObject.ecore#//WSRoutingRuleExpressionE/wsOperator"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="__16zU7EZEeCfg_ADjEsa_g" points="[21, 40, -52, -117]$[39, 137, -34, -20]"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_aUO-wLHWEeCM29kH3RdotQ" type="3003" source="_XZ9mAbHWEeCM29kH3RdotQ" target="_7FubkJrwEeCKWZ_HwFgILA">

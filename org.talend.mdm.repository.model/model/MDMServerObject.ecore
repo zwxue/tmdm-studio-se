@@ -176,9 +176,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="deactive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsRoutingRuleExpressions"
-        upperBound="-1" eType="#//WSRoutingRuleExpression" containment="true"/>
+        upperBound="-1" eType="#//WSRoutingRuleExpressionE" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WSRoutingRuleExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="WSRoutingRuleExpressionE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="xpath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

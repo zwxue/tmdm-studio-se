@@ -287,13 +287,13 @@ public interface MdmserverobjectFactory extends EFactory {
     WSRoutingRuleE createWSRoutingRuleE();
 
     /**
-     * Returns a new object of class '<em>WS Routing Rule Expression</em>'.
+     * Returns a new object of class '<em>WS Routing Rule Expression E</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>WS Routing Rule Expression</em>'.
+     * @return a new object of class '<em>WS Routing Rule Expression E</em>'.
      * @generated
      */
-    WSRoutingRuleExpression createWSRoutingRuleExpression();
+    WSRoutingRuleExpressionE createWSRoutingRuleExpressionE();
 
     /**
      * Returns a new object of class '<em>WS Routing Rule Operator E</em>'.

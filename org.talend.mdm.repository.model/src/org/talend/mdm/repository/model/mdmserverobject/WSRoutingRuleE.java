@@ -189,7 +189,7 @@ public interface WSRoutingRuleE extends MDMServerObject {
 
     /**
      * Returns the value of the '<em><b>Ws Routing Rule Expressions</b></em>' containment reference list.
-     * The list contents are of type {@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression}.
+     * The list contents are of type {@link org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE}.
      * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Ws Routing Rule Expressions</em>' containment reference list isn't clear,
@@ -201,6 +201,6 @@ public interface WSRoutingRuleE extends MDMServerObject {
      * @model containment="true"
      * @generated
      */
-    EList<WSRoutingRuleExpression> getWsRoutingRuleExpressions();
+    EList<WSRoutingRuleExpressionE> getWsRoutingRuleExpressions();
 
 } // WSRoutingRuleE
