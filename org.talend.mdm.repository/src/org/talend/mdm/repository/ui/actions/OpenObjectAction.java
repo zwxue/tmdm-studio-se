@@ -56,7 +56,8 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     public void run() {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
-                Item item = ((IRepositoryViewObject) obj).getProperty().getItem();
+                IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+                Item item = viewObject.getProperty().getItem();
                 if (item instanceof ContainerItem) {
                     commonViewer.expandToLevel(obj, 1);
                 } else {
@@ -72,6 +73,12 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                                     this.page.openEditor(editorInput, editorInput.getEditorId());
                                 } catch (PartInitException e) {
                                     log.error(e.getMessage(), e);
+                                }
+                            } else {
+                                AbstractRepositoryAction openAction = actionProvider.getOpenAction(viewObject);
+                                if (openAction != null) {
+                                    openAction.selectionChanged(getStructuredSelection());
+                                    openAction.run();
                                 }
                             }
                         }

@@ -30,7 +30,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -62,7 +61,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     }
 
-    protected List<Object> getSelectedObject() {
+    public List<Object> getSelectedObject() {
 
         IStructuredSelection structuredSelection = getStructuredSelection();
         if (structuredSelection.isEmpty())

@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
+// Copyright (C) 2006-2011 Talend ¨C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -55,6 +55,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     private static final Font FONT_BOLD = EclipseResourceManager.getFont(defaultFontData.getName(), defaultFontData.getHeight(),
             SWT.BOLD);
 
+
     public String getText(Object element) {
         Item item = getItem(element);
         if (item != null) {
@@ -77,10 +78,10 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
             if (item instanceof ContainerItem) {
                 switch (((ContainerItem) item).getType().getValue()) {
-                case FolderType.STABLE_SYSTEM_FOLDER:
+                case FolderType.SYSTEM_FOLDER:
                     return getCategoryImage(item);
                 case FolderType.FOLDER:
-                case FolderType.SYSTEM_FOLDER:
+                case FolderType.STABLE_SYSTEM_FOLDER:
                     return FOLDER_IMG;
                 }
             }
@@ -120,7 +121,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     public Font getFont(Object element) {
         if (isSystemServerObjectItem(element)
-                || RepositoryResourceUtil.hasContainerItem(element, FolderType.STABLE_SYSTEM_FOLDER_LITERAL)) {
+                || RepositoryResourceUtil.hasContainerItem(element, FolderType.SYSTEM_FOLDER_LITERAL)) {
             return FONT_BOLD;
         }
         return null;
@@ -129,7 +130,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     protected boolean isSystemServerObjectItem(Object element) {
         Item item = getItem(element);
         if (item != null) {
-            if (item instanceof ContainerItem && ((ContainerItem) item).getType() == FolderType.SYSTEM_FOLDER_LITERAL) {
+            if (item instanceof ContainerItem && ((ContainerItem) item).getType() == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
                 return true;
             }
             if (item instanceof MDMServerObjectItem) {

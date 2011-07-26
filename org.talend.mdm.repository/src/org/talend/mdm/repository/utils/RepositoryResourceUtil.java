@@ -60,6 +60,9 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
+import org.talend.repository.model.IRepositoryNode.ENodeType;
+import org.talend.repository.model.IRepositoryNode.EProperties;
+import org.talend.repository.model.RepositoryNode;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -70,6 +73,8 @@ public class RepositoryResourceUtil {
     static Logger log = Logger.getLogger(RepositoryResourceUtil.class);
 
     static XmiResourceManager resourceManager = new XmiResourceManager();
+
+    private static final String DIVIDE = "/"; //$NON-NLS-1$
 
     public static boolean createItem(Item item, String propLabel) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
@@ -100,7 +105,7 @@ public class RepositoryResourceUtil {
         //
 
         ContainerItem item = MdmpropertiesFactory.eINSTANCE.createContainerItem();
-        item.setType(isSystem ? FolderType.SYSTEM_FOLDER_LITERAL : FolderType.FOLDER_LITERAL);
+        item.setType(isSystem ? FolderType.STABLE_SYSTEM_FOLDER_LITERAL : FolderType.FOLDER_LITERAL);
 
         item.setLabel(folderName);
         item.setRepObjType(type);
@@ -111,6 +116,7 @@ public class RepositoryResourceUtil {
 
         //
         prop.setItem(item);
+        prop.setLabel(folderName);
         try {
             //
             Project project = ProjectManager.getInstance().getCurrentProject();
@@ -160,7 +166,7 @@ public class RepositoryResourceUtil {
         prop.setId(EcoreUtil.generateUUID());
         //
         ContainerItem item = MdmpropertiesFactory.eINSTANCE.createContainerItem();
-        item.setType(FolderType.STABLE_SYSTEM_FOLDER_LITERAL);
+        item.setType(FolderType.SYSTEM_FOLDER_LITERAL);
 
         item.setRepObjType(conf.getResourceProvider().getRepositoryObjectType(item));
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
@@ -235,12 +241,20 @@ public class RepositoryResourceUtil {
         // following to get object
         List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
         String parentPath = parentItem.getState().getPath();
+        String parentPath2 = parentPath;
+        if (parentPath.length() > 1) {
+            if (parentPath.startsWith(DIVIDE)) {
+                parentPath2 = parentPath.substring(1);
+            } else {
+                parentPath2 = DIVIDE + parentPath;
+            }
+        }
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
             List<IRepositoryViewObject> allObjs = factory.getAll(type);
             for (IRepositoryViewObject viewObj : allObjs) {
                 ItemState state = viewObj.getProperty().getItem().getState();
-                if (state.getPath().equals(parentPath)) {
+                if (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2)) {
                     viewObjects.add(viewObj);
                 }
             }
@@ -308,5 +322,34 @@ public class RepositoryResourceUtil {
             }
         }
         return false;
+    }
+
+    public static RepositoryNode convertToNode(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
+        ENodeType type = ENodeType.REPOSITORY_ELEMENT;
+
+        if (item instanceof ContainerItem) {
+            FolderType folderType = ((ContainerItem) item).getType();
+            switch (folderType.getValue()) {
+            case FolderType.SYSTEM_FOLDER:
+                type = ENodeType.SYSTEM_FOLDER;
+                break;
+            case FolderType.STABLE_SYSTEM_FOLDER:
+                type = ENodeType.STABLE_SYSTEM_FOLDER;
+                break;
+            case FolderType.FOLDER:
+                type = ENodeType.SIMPLE_FOLDER;
+                break;
+            default:
+                break;
+            }
+
+        }
+        ERepositoryObjectType repObjType = viewObj.getRepositoryObjectType();
+        RepositoryNode node = new RepositoryNode(viewObj, null, type);
+
+        node.setProperties(EProperties.LABEL, repObjType);
+        node.setProperties(EProperties.CONTENT_TYPE, repObjType);
+        return node;
     }
 }

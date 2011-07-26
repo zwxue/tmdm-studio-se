@@ -39,4 +39,6 @@ public interface IRepositoryNodeActionProvider {
     public void initCommonViewer(CommonViewer commonViewer);
 
     public IRepositoryViewEditorInput getOpenEditorInput(Item item);
+
+    public AbstractRepositoryAction getOpenAction(IRepositoryViewObject viewObj);
 }

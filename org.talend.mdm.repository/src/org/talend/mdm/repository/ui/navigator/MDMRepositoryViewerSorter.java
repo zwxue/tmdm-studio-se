@@ -29,7 +29,7 @@ public class MDMRepositoryViewerSorter extends ViewerSorter {
                 }
                 if (item instanceof ContainerItem) {
                     int typeValue = ((FolderItem) item).getType().getValue();
-                    return (typeValue == FolderType.SYSTEM_FOLDER) ? -2 : -1;
+                    return (typeValue == FolderType.STABLE_SYSTEM_FOLDER) ? -2 : -1;
                 }
             }
         }

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2010 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -28,13 +28,13 @@ import org.talend.repository.model.ERepositoryStatus;
  */
 public class AbstractBridgeLabelProvider extends AbstractLabelProvider {
 
+
     public String getCategoryLabel(ERepositoryObjectType type) {
         return type.toString();
     }
 
-
     protected String getServerObjectItemText(Item item) {
-        return ""; //$NON-NLS-1$
+        return "";
     }
 
     public Image getCategoryImage(Item item) {

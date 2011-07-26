@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
+// Copyright (C) 2006-2011 Talend ¨C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -81,10 +81,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
             if (item instanceof ContainerItem) {
                 FolderType type = ((FolderItem) item).getType();
                 switch (type.getValue()) {
-                case FolderType.STABLE_SYSTEM_FOLDER:
+                case FolderType.SYSTEM_FOLDER:
                     actions.add(createFolderAction);
                     break;
-                case FolderType.SYSTEM_FOLDER:
+                case FolderType.STABLE_SYSTEM_FOLDER:
 
                     break;
 
@@ -112,6 +112,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
      */
     public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
         return new XObjectEditorInput2(item);
+    }
+
+    public AbstractRepositoryAction getOpenAction(IRepositoryViewObject viewObj) {
+        return null;
     }
 
 }

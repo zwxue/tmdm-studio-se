@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
+// Copyright (C) 2006-2011 Talend ¨C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -37,17 +37,12 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public abstract class AbstractContentProvider implements IRepositoryNodeContentProvider {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.IRepositoryNodeContentProvider#getChildren(java.lang.Object)
-     */
 
     public Object[] getChildren(Object element) {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null && item instanceof ContainerItem) {
             ContainerItem containerItem = (ContainerItem) item;
-            if (containerItem.getType() == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
+            if (containerItem.getType() == FolderType.SYSTEM_FOLDER_LITERAL) {
                 List<IRepositoryViewObject> viewObjects = getViewObjFromStableSystemFolder(containerItem);
                 if (viewObjects != null) {
                     ((ContainerRepositoryObject) element).getChildren().addAll(viewObjects);
@@ -62,7 +57,7 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
                     return children.toArray();
                 }
             }
-            if (containerItem.getType() == FolderType.SYSTEM_FOLDER_LITERAL) {
+            if (containerItem.getType() == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
                 List<IRepositoryViewObject> children = ((ContainerRepositoryObject) element).getChildren();
                 if (children != null) {
                     return children.toArray();

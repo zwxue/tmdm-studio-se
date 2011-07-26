@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2010 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -59,5 +59,24 @@ public class ContainerCacheService {
             return map.get(path);
         }
         return null;
+    }
+
+    public static IRepositoryViewObject getParent(IRepositoryViewObject obj) {
+        ERepositoryObjectType type = obj.getRepositoryObjectType();
+
+        Item item = obj.getProperty().getItem();
+        String path = item.getState().getPath();
+        if (item instanceof ContainerItem) {
+            if (path.length() > 1) {
+                int pos = path.lastIndexOf("/"); //$NON-NLS-1$
+                if (pos >= 0) {
+                    path = path.substring(0, pos);
+                }
+            } else {
+                return null;
+            }
+        }
+        return get(type, path);
+
     }
 }
