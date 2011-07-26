@@ -45,7 +45,6 @@ public class MenuActionProvider extends RepositoryNodeActionProviderAdapter {
         super.initCommonViewer(commonViewer);
         addAction = new NewMenuAction();
 
-        //
         addAction.initCommonViewer(commonViewer);
 
     }

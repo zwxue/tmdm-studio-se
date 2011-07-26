@@ -24,9 +24,13 @@ package org.talend.mdm.repository.core.impl.universe;
 import java.util.List;
 
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.ui.actions.universe.NewUniverseAction;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -39,13 +43,22 @@ public class UniverseActionProvider extends RepositoryNodeActionProviderAdapter 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
+        addAction = new NewUniverseAction();
 
+        //
+        addAction.initCommonViewer(commonViewer);
     }
 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
+        if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.STABLE_SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
+            actions.add(addAction);
 
+        }
+        if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            actions.add(renameAction);
+        }
         return actions;
     }
 

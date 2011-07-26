@@ -28,6 +28,14 @@ public class Messages extends NLS {
 
     public static String NewTriggerAction_newTrigger;
 
+    public static String NewDataContainerAction_newDataContainer;
+
+    public static String NewStoredProcedureAction_newStoredProcedure;
+
+    public static String NewSynchronizationPlanAction_newSynchronizationPlan;
+
+    public static String NewVersionAction_newVersion;
+
     public static String RemoveFromRepositoryAction_removeFromRepository;
 
     public static String RenameObjectAction_rename;
