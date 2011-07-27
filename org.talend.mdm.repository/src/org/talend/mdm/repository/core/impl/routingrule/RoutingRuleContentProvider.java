@@ -39,7 +39,7 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 public class RoutingRuleContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_ROUTINGRULE, parentItem,
                 TreeObject.ROUTING_RULE, false);
     }

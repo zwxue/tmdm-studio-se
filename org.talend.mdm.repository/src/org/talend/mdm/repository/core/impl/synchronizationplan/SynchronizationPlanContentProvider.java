@@ -39,7 +39,7 @@ import com.amalto.workbench.webservices.WSSynchronizationPlan;
 public class SynchronizationPlanContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN, parentItem,
                 TreeObject.SYNCHRONIZATIONPLAN, false);
     }

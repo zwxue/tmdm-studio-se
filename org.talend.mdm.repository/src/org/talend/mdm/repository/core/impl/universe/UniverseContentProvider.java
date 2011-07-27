@@ -39,7 +39,7 @@ import com.amalto.workbench.webservices.WSUniverse;
 public class UniverseContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_UNIVERSE, parentItem,
                 TreeObject.UNIVERSE, false);
     }

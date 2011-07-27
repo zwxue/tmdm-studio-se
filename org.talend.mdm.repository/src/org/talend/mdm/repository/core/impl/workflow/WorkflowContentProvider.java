@@ -39,7 +39,7 @@ import com.amalto.workbench.webservices.WSWorkflowDeploy;
 public class WorkflowContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_WORKFLOW, parentItem,
                 TreeObject.WORKFLOW,
                 false);

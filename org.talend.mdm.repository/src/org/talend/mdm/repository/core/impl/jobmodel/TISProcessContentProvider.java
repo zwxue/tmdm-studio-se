@@ -27,6 +27,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.impl.AbstractContentProvider;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -36,11 +37,13 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 public class TISProcessContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(ERepositoryObjectType.PROCESS, parentItem, -1,
-                false);
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
+        return RepositoryResourceUtil.findViewObjectsByType(ERepositoryObjectType.PROCESS, parentItem, -1, false, true);
     }
 
+    protected List<IRepositoryViewObject> getViewObjFromFolder(ContainerItem containerItem) {
+        return RepositoryResourceUtil.findViewObjects(containerItem.getRepObjType(), containerItem, true);
+    }
     public Class<?> getWSObjectClass() {
         return null;
     }

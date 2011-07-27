@@ -70,7 +70,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             switch (type.getValue()) {
             case FolderType.SYSTEM_FOLDER:
                 actions.add(createFolderAction);
-                actions.add(renameFolderAction);
+
                 break;
             case FolderType.STABLE_SYSTEM_FOLDER:
 

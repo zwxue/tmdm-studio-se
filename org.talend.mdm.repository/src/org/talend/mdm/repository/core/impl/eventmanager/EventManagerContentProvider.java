@@ -35,7 +35,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 public class EventManagerContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         List<IRepositoryViewObject> result = new LinkedList<IRepositoryViewObject>();
         IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
                 .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);

@@ -28,7 +28,6 @@ public class EditProcessAction extends AbstractBridgeRepositoryAction {
 
         @Override
         public void refresh(Object obj) {
-
         }
 
     }

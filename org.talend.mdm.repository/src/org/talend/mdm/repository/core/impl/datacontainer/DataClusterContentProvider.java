@@ -39,7 +39,7 @@ import com.amalto.workbench.webservices.WSDataCluster;
 public class DataClusterContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_DATACLUSTER, parentItem,
                 TreeObject.DATA_CLUSTER, true);
     }

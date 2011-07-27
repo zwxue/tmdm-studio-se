@@ -47,6 +47,7 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -194,6 +195,11 @@ public class RepositoryResourceUtil {
     }
 
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem) {
+        return findViewObjects(type, parentItem, false);
+    }
+
+    public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem,
+            boolean useRepositoryViewObject) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
             IProject fsProject = ResourceModelUtils.getProject(project);
@@ -202,7 +208,7 @@ public class RepositoryResourceUtil {
             if (!path.isEmpty()) {
                 path += parentItem.getState().getPath();
                 IFolder folder = fsProject.getFolder(new Path(path));
-                return findViewObjects(type, parentItem, folder);
+                return findViewObjects(type, parentItem, folder, useRepositoryViewObject);
             }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -211,7 +217,8 @@ public class RepositoryResourceUtil {
 
     }
 
-    public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem, IFolder folder) {
+    public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem, IFolder folder,
+            boolean useRepositoryViewObject) {
         List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
         try {
             for (IResource res : folder.members()) {
@@ -226,7 +233,7 @@ public class RepositoryResourceUtil {
                 // }
                 // }
             }
-            List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem);
+            List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem, useRepositoryViewObject);
             viewObjects.addAll(children);
 
         } catch (CoreException e) {
@@ -236,7 +243,8 @@ public class RepositoryResourceUtil {
         return viewObjects;
     }
 
-    public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem) {
+    public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
+            boolean useRepositoryViewObject) {
         // because the IProxyRepositoryFactory doesn't expose the getSerializableFromFolder method ,so only through the
         // following to get object
         List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
@@ -255,7 +263,11 @@ public class RepositoryResourceUtil {
             for (IRepositoryViewObject viewObj : allObjs) {
                 ItemState state = viewObj.getProperty().getItem().getState();
                 if (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2)) {
-                    viewObjects.add(viewObj);
+                    if (useRepositoryViewObject) {
+                        viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
+                    } else {
+                        viewObjects.add(viewObj);
+                    }
                 }
             }
         } catch (PersistenceException e) {
@@ -266,7 +278,7 @@ public class RepositoryResourceUtil {
     }
 
     public static IRepositoryViewObject findViewObjectByName(ContainerItem parentItem, String objName, boolean caseSensitive) {
-        List<IRepositoryViewObject> viewObjects = findViewObjectsInFolder(parentItem.getRepObjType(), parentItem);
+        List<IRepositoryViewObject> viewObjects = findViewObjectsInFolder(parentItem.getRepObjType(), parentItem, false);
         for (IRepositoryViewObject viewObj : viewObjects) {
             boolean result = caseSensitive ? viewObj.getLabel().equalsIgnoreCase(objName) : viewObj.getLabel().equals(objName);
             if (result) {
@@ -278,11 +290,16 @@ public class RepositoryResourceUtil {
 
     public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType,
             boolean hasSystemFolder) {
+        return findViewObjectsByType(type, parentItem, systemType, hasSystemFolder, false);
+    }
+
+    public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType,
+            boolean hasSystemFolder, boolean useRepositoryViewObject) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
             IProject fsProject = ResourceModelUtils.getProject(project);
             IFolder stableFolder = fsProject.getFolder(((ContainerItem) parentItem).getRepObjType().getFolder());
-            List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder);
+            List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder, useRepositoryViewObject);
             if (hasSystemFolder) {
                 IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "system", null, true); //$NON-NLS-1$
                 for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {

@@ -37,21 +37,19 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public abstract class AbstractContentProvider implements IRepositoryNodeContentProvider {
 
-
     public Object[] getChildren(Object element) {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null && item instanceof ContainerItem) {
             ContainerItem containerItem = (ContainerItem) item;
             if (containerItem.getType() == FolderType.SYSTEM_FOLDER_LITERAL) {
-                List<IRepositoryViewObject> viewObjects = getViewObjFromStableSystemFolder(containerItem);
+                List<IRepositoryViewObject> viewObjects = getViewObjFromSystemFolder(containerItem);
                 if (viewObjects != null) {
                     ((ContainerRepositoryObject) element).getChildren().addAll(viewObjects);
                     return viewObjects.toArray();
                 }
             }
             if (containerItem.getType() == FolderType.FOLDER_LITERAL) {
-                List<IRepositoryViewObject> children = RepositoryResourceUtil.findViewObjects(containerItem.getRepObjType(),
-                        containerItem);
+                List<IRepositoryViewObject> children = getViewObjFromFolder(containerItem);
                 if (children != null) {
                     ((ContainerRepositoryObject) element).getChildren().addAll(children);
                     return children.toArray();
@@ -67,7 +65,11 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
         return new Object[0];
     }
 
-    protected abstract List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem);
+    protected abstract List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem);
+
+    protected List<IRepositoryViewObject> getViewObjFromFolder(ContainerItem containerItem) {
+        return RepositoryResourceUtil.findViewObjects(containerItem.getRepObjType(), containerItem);
+    }
 
     public boolean isShownInRoot() {
         return true;

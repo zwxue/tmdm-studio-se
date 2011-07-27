@@ -39,7 +39,7 @@ import com.amalto.workbench.webservices.WSStoredProcedure;
 public class StoredProcedureContentProvider extends AbstractContentProvider {
 
     @Override
-    protected List<IRepositoryViewObject> getViewObjFromStableSystemFolder(Item parentItem) {
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_STOREPROCEDURE, parentItem,
                 TreeObject.STORED_PROCEDURE, false);
     }
