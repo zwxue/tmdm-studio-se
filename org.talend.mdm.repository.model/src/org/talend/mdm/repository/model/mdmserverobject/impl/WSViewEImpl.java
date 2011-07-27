@@ -33,6 +33,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#isTransformerActive <em>Transformer Active</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#getWhereConditions <em>Where Conditions</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#getIsTransformerActive <em>Is Transformer Active</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSViewEImpl#getTransformerPK <em>Transformer PK</em>}</li>
  * </ul>
  * </p>
  *
@@ -118,6 +119,26 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
      * @ordered
      */
     protected WSBooleanE isTransformerActive;
+
+    /**
+     * The default value of the '{@link #getTransformerPK() <em>Transformer PK</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTransformerPK()
+     * @generated
+     * @ordered
+     */
+    protected static final String TRANSFORMER_PK_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getTransformerPK() <em>Transformer PK</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTransformerPK()
+     * @generated
+     * @ordered
+     */
+    protected String transformerPK = TRANSFORMER_PK_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -261,6 +282,27 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
      * <!-- end-user-doc -->
      * @generated
      */
+    public String getTransformerPK() {
+        return transformerPK;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setTransformerPK(String newTransformerPK) {
+        String oldTransformerPK = transformerPK;
+        transformerPK = newTransformerPK;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_PK, oldTransformerPK, transformerPK));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
@@ -290,6 +332,8 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
                 return getWhereConditions();
             case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
                 return getIsTransformerActive();
+            case MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_PK:
+                return getTransformerPK();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -319,6 +363,9 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
             case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
                 setIsTransformerActive((WSBooleanE)newValue);
                 return;
+            case MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_PK:
+                setTransformerPK((String)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -346,6 +393,9 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
             case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
                 setIsTransformerActive((WSBooleanE)null);
                 return;
+            case MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_PK:
+                setTransformerPK(TRANSFORMER_PK_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -368,6 +418,8 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
                 return whereConditions != null && !whereConditions.isEmpty();
             case MdmserverobjectPackage.WS_VIEW_E__IS_TRANSFORMER_ACTIVE:
                 return isTransformerActive != null;
+            case MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_PK:
+                return TRANSFORMER_PK_EDEFAULT == null ? transformerPK != null : !TRANSFORMER_PK_EDEFAULT.equals(transformerPK);
         }
         return super.eIsSet(featureID);
     }
@@ -388,6 +440,8 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
         result.append(viewableBusinessElements);
         result.append(", transformerActive: ");
         result.append(transformerActive);
+        result.append(", transformerPK: ");
+        result.append(transformerPK);
         result.append(')');
         return result.toString();
     }

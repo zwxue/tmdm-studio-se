@@ -55,6 +55,7 @@
         eType="#//WSWhereConditionE" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="isTransformerActive" eType="#//WSBooleanE"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transformerPK" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSWhereConditionE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="leftPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -110,7 +111,7 @@
         upperBound="-1" eType="#//WSSynchronizationPlanXtentisObjectsSynchronizationsE"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="itemsSynchronizations"
-        eType="#//WSSynchronizationPlanItemsSynchronizationsE" containment="true"/>
+        upperBound="-1" eType="#//WSSynchronizationPlanItemsSynchronizationsE" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSSynchronizationPlanItemsSynchronizationsE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="conceptName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

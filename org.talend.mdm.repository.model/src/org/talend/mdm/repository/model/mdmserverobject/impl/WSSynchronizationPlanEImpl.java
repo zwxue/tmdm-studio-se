@@ -215,14 +215,14 @@ public class WSSynchronizationPlanEImpl extends MDMServerObjectImpl implements W
     protected EList<WSSynchronizationPlanXtentisObjectsSynchronizationsE> xtentisObjectsSynchronizations;
 
     /**
-     * The cached value of the '{@link #getItemsSynchronizations() <em>Items Synchronizations</em>}' containment reference.
+     * The cached value of the '{@link #getItemsSynchronizations() <em>Items Synchronizations</em>}' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getItemsSynchronizations()
      * @generated
      * @ordered
      */
-    protected WSSynchronizationPlanItemsSynchronizationsE itemsSynchronizations;
+    protected EList<WSSynchronizationPlanItemsSynchronizationsE> itemsSynchronizations;
 
     /**
      * <!-- begin-user-doc -->
@@ -428,42 +428,11 @@ public class WSSynchronizationPlanEImpl extends MDMServerObjectImpl implements W
      * <!-- end-user-doc -->
      * @generated
      */
-    public WSSynchronizationPlanItemsSynchronizationsE getItemsSynchronizations() {
+    public EList<WSSynchronizationPlanItemsSynchronizationsE> getItemsSynchronizations() {
+        if (itemsSynchronizations == null) {
+            itemsSynchronizations = new EObjectContainmentEList<WSSynchronizationPlanItemsSynchronizationsE>(WSSynchronizationPlanItemsSynchronizationsE.class, this, MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS);
+        }
         return itemsSynchronizations;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public NotificationChain basicSetItemsSynchronizations(WSSynchronizationPlanItemsSynchronizationsE newItemsSynchronizations, NotificationChain msgs) {
-        WSSynchronizationPlanItemsSynchronizationsE oldItemsSynchronizations = itemsSynchronizations;
-        itemsSynchronizations = newItemsSynchronizations;
-        if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS, oldItemsSynchronizations, newItemsSynchronizations);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setItemsSynchronizations(WSSynchronizationPlanItemsSynchronizationsE newItemsSynchronizations) {
-        if (newItemsSynchronizations != itemsSynchronizations) {
-            NotificationChain msgs = null;
-            if (itemsSynchronizations != null)
-                msgs = ((InternalEObject)itemsSynchronizations).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS, null, msgs);
-            if (newItemsSynchronizations != null)
-                msgs = ((InternalEObject)newItemsSynchronizations).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS, null, msgs);
-            msgs = basicSetItemsSynchronizations(newItemsSynchronizations, msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS, newItemsSynchronizations, newItemsSynchronizations));
     }
 
     /**
@@ -477,7 +446,7 @@ public class WSSynchronizationPlanEImpl extends MDMServerObjectImpl implements W
             case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__XTENTIS_OBJECTS_SYNCHRONIZATIONS:
                 return ((InternalEList<?>)getXtentisObjectsSynchronizations()).basicRemove(otherEnd, msgs);
             case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS:
-                return basicSetItemsSynchronizations(null, msgs);
+                return ((InternalEList<?>)getItemsSynchronizations()).basicRemove(otherEnd, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
@@ -552,7 +521,8 @@ public class WSSynchronizationPlanEImpl extends MDMServerObjectImpl implements W
                 getXtentisObjectsSynchronizations().addAll((Collection<? extends WSSynchronizationPlanXtentisObjectsSynchronizationsE>)newValue);
                 return;
             case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS:
-                setItemsSynchronizations((WSSynchronizationPlanItemsSynchronizationsE)newValue);
+                getItemsSynchronizations().clear();
+                getItemsSynchronizations().addAll((Collection<? extends WSSynchronizationPlanItemsSynchronizationsE>)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -594,7 +564,7 @@ public class WSSynchronizationPlanEImpl extends MDMServerObjectImpl implements W
                 getXtentisObjectsSynchronizations().clear();
                 return;
             case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS:
-                setItemsSynchronizations((WSSynchronizationPlanItemsSynchronizationsE)null);
+                getItemsSynchronizations().clear();
                 return;
         }
         super.eUnset(featureID);
@@ -627,7 +597,7 @@ public class WSSynchronizationPlanEImpl extends MDMServerObjectImpl implements W
             case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__XTENTIS_OBJECTS_SYNCHRONIZATIONS:
                 return xtentisObjectsSynchronizations != null && !xtentisObjectsSynchronizations.isEmpty();
             case MdmserverobjectPackage.WS_SYNCHRONIZATION_PLAN_E__ITEMS_SYNCHRONIZATIONS:
-                return itemsSynchronizations != null;
+                return itemsSynchronizations != null && !itemsSynchronizations.isEmpty();
         }
         return super.eIsSet(featureID);
     }

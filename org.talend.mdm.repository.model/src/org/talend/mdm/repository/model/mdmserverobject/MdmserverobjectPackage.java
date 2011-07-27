@@ -573,13 +573,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_VIEW_E__IS_TRANSFORMER_ACTIVE = MDM_SERVER_OBJECT_FEATURE_COUNT + 4;
 
     /**
+     * The feature id for the '<em><b>Transformer PK</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__TRANSFORMER_PK = MDM_SERVER_OBJECT_FEATURE_COUNT + 5;
+
+    /**
      * The number of structural features of the '<em>WS View E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_VIEW_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 5;
+    int WS_VIEW_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 6;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl <em>WS Where Condition E</em>}' class.
@@ -1231,7 +1240,7 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_SYNCHRONIZATION_PLAN_E__XTENTIS_OBJECTS_SYNCHRONIZATIONS = MDM_SERVER_OBJECT_FEATURE_COUNT + 8;
 
     /**
-     * The feature id for the '<em><b>Items Synchronizations</b></em>' containment reference.
+     * The feature id for the '<em><b>Items Synchronizations</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2504,6 +2513,17 @@ public interface MdmserverobjectPackage extends EPackage {
     EReference getWSViewE_IsTransformerActive();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getTransformerPK <em>Transformer PK</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Transformer PK</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE#getTransformerPK()
+     * @see #getWSViewE()
+     * @generated
+     */
+    EAttribute getWSViewE_TransformerPK();
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE <em>WS Where Condition E</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2901,10 +2921,10 @@ public interface MdmserverobjectPackage extends EPackage {
     EReference getWSSynchronizationPlanE_XtentisObjectsSynchronizations();
 
     /**
-     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE#getItemsSynchronizations <em>Items Synchronizations</em>}'.
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE#getItemsSynchronizations <em>Items Synchronizations</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the containment reference '<em>Items Synchronizations</em>'.
+     * @return the meta object for the containment reference list '<em>Items Synchronizations</em>'.
      * @see org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE#getItemsSynchronizations()
      * @see #getWSSynchronizationPlanE()
      * @generated
@@ -3833,6 +3853,14 @@ public interface MdmserverobjectPackage extends EPackage {
         EReference WS_VIEW_E__IS_TRANSFORMER_ACTIVE = eINSTANCE.getWSViewE_IsTransformerActive();
 
         /**
+         * The meta object literal for the '<em><b>Transformer PK</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_VIEW_E__TRANSFORMER_PK = eINSTANCE.getWSViewE_TransformerPK();
+
+        /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSWhereConditionEImpl <em>WS Where Condition E</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -4149,7 +4177,7 @@ public interface MdmserverobjectPackage extends EPackage {
         EReference WS_SYNCHRONIZATION_PLAN_E__XTENTIS_OBJECTS_SYNCHRONIZATIONS = eINSTANCE.getWSSynchronizationPlanE_XtentisObjectsSynchronizations();
 
         /**
-         * The meta object literal for the '<em><b>Items Synchronizations</b></em>' containment reference feature.
+         * The meta object literal for the '<em><b>Items Synchronizations</b></em>' containment reference list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated

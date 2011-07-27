@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#isTransformerActive <em>Transformer Active</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getWhereConditions <em>Where Conditions</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getIsTransformerActive <em>Is Transformer Active</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getTransformerPK <em>Transformer PK</em>}</li>
  * </ul>
  * </p>
  *
@@ -148,5 +149,31 @@ public interface WSViewE extends MDMServerObject {
      * @generated
      */
     void setIsTransformerActive(WSBooleanE value);
+
+    /**
+     * Returns the value of the '<em><b>Transformer PK</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Transformer PK</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Transformer PK</em>' attribute.
+     * @see #setTransformerPK(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSViewE_TransformerPK()
+     * @model
+     * @generated
+     */
+    String getTransformerPK();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getTransformerPK <em>Transformer PK</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Transformer PK</em>' attribute.
+     * @see #getTransformerPK()
+     * @generated
+     */
+    void setTransformerPK(String value);
 
 } // WSViewE

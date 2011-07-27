@@ -259,29 +259,19 @@ public interface WSSynchronizationPlanE extends MDMServerObject {
     EList<WSSynchronizationPlanXtentisObjectsSynchronizationsE> getXtentisObjectsSynchronizations();
 
     /**
-     * Returns the value of the '<em><b>Items Synchronizations</b></em>' containment reference.
+     * Returns the value of the '<em><b>Items Synchronizations</b></em>' containment reference list.
+     * The list contents are of type {@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanItemsSynchronizationsE}.
      * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Items Synchronizations</em>' containment reference isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Items Synchronizations</em>' containment reference.
-     * @see #setItemsSynchronizations(WSSynchronizationPlanItemsSynchronizationsE)
+     * @return the value of the '<em>Items Synchronizations</em>' containment reference list.
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSSynchronizationPlanE_ItemsSynchronizations()
      * @model containment="true"
      * @generated
      */
-    WSSynchronizationPlanItemsSynchronizationsE getItemsSynchronizations();
-
-    /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE#getItemsSynchronizations <em>Items Synchronizations</em>}' containment reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Items Synchronizations</em>' containment reference.
-     * @see #getItemsSynchronizations()
-     * @generated
-     */
-    void setItemsSynchronizations(WSSynchronizationPlanItemsSynchronizationsE value);
+    EList<WSSynchronizationPlanItemsSynchronizationsE> getItemsSynchronizations();
 
 } // WSSynchronizationPlanE

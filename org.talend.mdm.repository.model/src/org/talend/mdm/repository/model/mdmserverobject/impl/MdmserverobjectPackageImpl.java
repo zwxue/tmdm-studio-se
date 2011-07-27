@@ -675,6 +675,15 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getWSViewE_TransformerPK() {
+        return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(5);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getWSWhereConditionE() {
         return wsWhereConditionEEClass;
     }
@@ -1594,6 +1603,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsViewEEClass, WS_VIEW_E__TRANSFORMER_ACTIVE);
         createEReference(wsViewEEClass, WS_VIEW_E__WHERE_CONDITIONS);
         createEReference(wsViewEEClass, WS_VIEW_E__IS_TRANSFORMER_ACTIVE);
+        createEAttribute(wsViewEEClass, WS_VIEW_E__TRANSFORMER_PK);
 
         wsWhereConditionEEClass = createEClass(WS_WHERE_CONDITION_E);
         createEAttribute(wsWhereConditionEEClass, WS_WHERE_CONDITION_E__LEFT_PATH);
@@ -1805,6 +1815,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSViewE_TransformerActive(), ecorePackage.getEBoolean(), "transformerActive", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getWSViewE_WhereConditions(), this.getWSWhereConditionE(), null, "whereConditions", null, 0, -1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getWSViewE_IsTransformerActive(), this.getWSBooleanE(), null, "isTransformerActive", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSViewE_TransformerPK(), ecorePackage.getEString(), "transformerPK", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsWhereConditionEEClass, WSWhereConditionE.class, "WSWhereConditionE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSWhereConditionE_LeftPath(), ecorePackage.getEString(), "leftPath", null, 0, 1, WSWhereConditionE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1852,7 +1863,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSSynchronizationPlanE_TisPassword(), ecorePackage.getEString(), "tisPassword", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSSynchronizationPlanE_TisParameters(), ecorePackage.getEString(), "tisParameters", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getWSSynchronizationPlanE_XtentisObjectsSynchronizations(), this.getWSSynchronizationPlanXtentisObjectsSynchronizationsE(), null, "xtentisObjectsSynchronizations", null, 0, -1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWSSynchronizationPlanE_ItemsSynchronizations(), this.getWSSynchronizationPlanItemsSynchronizationsE(), null, "itemsSynchronizations", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSSynchronizationPlanE_ItemsSynchronizations(), this.getWSSynchronizationPlanItemsSynchronizationsE(), null, "itemsSynchronizations", null, 0, -1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsSynchronizationPlanItemsSynchronizationsEEClass, WSSynchronizationPlanItemsSynchronizationsE.class, "WSSynchronizationPlanItemsSynchronizationsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSSynchronizationPlanItemsSynchronizationsE_ConceptName(), ecorePackage.getEString(), "conceptName", null, 0, 1, WSSynchronizationPlanItemsSynchronizationsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

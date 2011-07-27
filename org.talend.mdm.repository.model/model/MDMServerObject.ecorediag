@@ -194,6 +194,10 @@
         <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSViewE/transformerActive"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_UcsI4aYrEeCGweGAmBtakw"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_o04TgLgSEeC_ebfjcFRU6A" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSViewE/transformerPK"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_o1CEgLgSEeC_ebfjcFRU6A"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="__MED5qYqEeCGweGAmBtakw"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="__MED56YqEeCGweGAmBtakw"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="__MED6KYqEeCGweGAmBtakw"/>
