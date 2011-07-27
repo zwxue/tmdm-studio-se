@@ -416,7 +416,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             try {
                 ProcessorUtilities.generateCode(processItem, processItem.getProcess().getDefaultContext(), false, false);
             } catch (ProcessorException e) {
-                ExceptionHandler.process(e);
+                MessageBoxExceptionHandler.process(e);
+                return false;
             }
 
         }
