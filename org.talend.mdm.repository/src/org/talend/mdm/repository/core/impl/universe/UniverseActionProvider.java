@@ -52,7 +52,7 @@ public class UniverseActionProvider extends RepositoryNodeActionProviderAdapter 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
-        if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.STABLE_SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
+        if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
             actions.add(addAction);
 
         }
