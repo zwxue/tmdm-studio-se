@@ -28,13 +28,19 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.ui.actions.bridge.CreateFolderAction;
+import org.talend.mdm.repository.ui.actions.bridge.DeleteAction;
 import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
+import org.talend.mdm.repository.ui.actions.job.CreateProcessAction;
 import org.talend.mdm.repository.ui.actions.job.EditProcessAction;
+import org.talend.mdm.repository.ui.actions.job.OpenExistVersionProcessAction;
+import org.talend.mdm.repository.ui.actions.job.ReadProcessAction;
+import org.talend.mdm.repository.ui.actions.job.RunProcessAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 /**
@@ -45,20 +51,44 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction createFolderAction;
 
+    AbstractRepositoryAction createProcessAction;
+
     AbstractRepositoryAction renameFolderAction;
 
     AbstractRepositoryAction editProcessAction;
+
+    AbstractRepositoryAction readProcessAction;
+
+    AbstractRepositoryAction runProcessAction;
+
+    AbstractRepositoryAction openExistVersionProcessAction;
+
+    AbstractRepositoryAction deleteAction;
+
+    // AbstractRepositoryAction exportJobScriptAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
         createFolderAction = new CreateFolderAction();
         renameFolderAction = new RenameFolderAction();
+        createProcessAction = new CreateProcessAction();
         editProcessAction = new EditProcessAction();
+        readProcessAction = new ReadProcessAction();
+        runProcessAction = new RunProcessAction();
+        openExistVersionProcessAction = new OpenExistVersionProcessAction();
+        deleteAction = new DeleteAction();
+        // exportJobScriptAction = new ExportJobScriptAction();
         //
         createFolderAction.initCommonViewer(commonViewer);
         renameFolderAction.initCommonViewer(commonViewer);
+        createProcessAction.initCommonViewer(commonViewer);
         editProcessAction.initCommonViewer(commonViewer);
+        readProcessAction.initCommonViewer(commonViewer);
+        runProcessAction.initCommonViewer(commonViewer);
+        openExistVersionProcessAction.initCommonViewer(commonViewer);
+        deleteAction.initCommonViewer(commonViewer);
+        // exportJobScriptAction.initCommonViewer(commonViewer);
     }
 
     @Override
@@ -70,18 +100,27 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             switch (type.getValue()) {
             case FolderType.SYSTEM_FOLDER:
                 actions.add(createFolderAction);
-
+                actions.add(createProcessAction);
                 break;
             case FolderType.STABLE_SYSTEM_FOLDER:
-
+                actions.add(createFolderAction);
                 break;
 
             case FolderType.FOLDER:
+                actions.add(createProcessAction);
                 actions.add(createFolderAction);
                 actions.add(renameFolderAction);
+                actions.add(deleteAction);
                 break;
             }
 
+        } else if (item instanceof ProcessItem) {
+            actions.add(editProcessAction);
+            actions.add(readProcessAction);
+            actions.add(runProcessAction);
+            actions.add(openExistVersionProcessAction);
+            // actions.add(exportJobScriptAction);
+            actions.add(deleteAction);
         }
         return actions;
     }
