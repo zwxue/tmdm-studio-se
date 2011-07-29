@@ -28,6 +28,8 @@ import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.ui.actions.role.NewRoleAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -41,10 +43,9 @@ public class RoleActionProvider extends RepositoryNodeActionProviderAdapter {
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
-        // addAction = new NewMenuAction();
+        addAction = new NewRoleAction();
 
-        //
-        // addAction.initCommonViewer(commonViewer);
+         addAction.initCommonViewer(commonViewer);
 
     }
 
@@ -52,7 +53,11 @@ public class RoleActionProvider extends RepositoryNodeActionProviderAdapter {
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
-            // actions.add(addAction);
+            actions.add(addAction);
+
+        }
+        if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            actions.add(renameAction);
         }
         return actions;
     }

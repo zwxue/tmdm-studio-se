@@ -24,9 +24,13 @@ package org.talend.mdm.repository.core.impl.transformerV2;
 import java.util.List;
 
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.ui.actions.process.NewProcessAction;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -40,12 +44,23 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
 
+        addAction = new NewProcessAction();
+
+        //
+        addAction.initCommonViewer(commonViewer);
     }
 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
 
+        if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
+            actions.add(addAction);
+
+        }
+        if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            actions.add(renameAction);
+        }
         return actions;
     }
 

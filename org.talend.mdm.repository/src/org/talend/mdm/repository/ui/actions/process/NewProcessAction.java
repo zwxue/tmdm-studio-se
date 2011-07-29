@@ -21,15 +21,23 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.process;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.window.Window;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
-import org.talend.mdm.repository.i18n.Messages;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
+import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
-import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
+import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -40,7 +48,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 public class NewProcessAction extends AbstractSimpleAddAction {
 
     /**
-     * DOC hbhong AddMenu constructor comment.
+     * DOC AddProcess constructor comment.
      * 
      * @param text
      */
@@ -51,35 +59,108 @@ public class NewProcessAction extends AbstractSimpleAddAction {
 
     @Override
     protected String getDialogTitle() {
-        return Messages.NewMenuAction_newMenu;
+        // return Messages.NewMenuAction_newMenu;
+        return ""; //$NON-NLS-1$
     }
 
-    private WSMenuE newBlankMenu(String key) {
+    @Override
+    public void run() {
+        parentItem = null;
+        selectObj = getSelectedObject().get(0);
+        if (selectObj instanceof IRepositoryViewObject) {
+            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
+            if (pItem instanceof ContainerItem) {
+                parentItem = (ContainerItem) pItem;
+            }
+        }
 
-        WSMenuMenuEntriesDescriptionsE descriptions = MdmserverobjectFactory.eINSTANCE.createWSMenuMenuEntriesDescriptionsE();
-        descriptions.setLabel(key);
-        descriptions.setLanguage("en"); //$NON-NLS-1$
-        //
+        ProcessViewInputDialog vid = new ProcessViewInputDialog(
+                null,
+                null,
+                getShell(),
+                "New Process",// "New "+IConstants.TALEND+" Object Instance",
+                "Enter a Name for the New Instance                                                                                  ",
+                "Smart_view_", new IInputValidator() {//$NON-NLS-1$
 
-        WSMenuEntryE entry = MdmserverobjectFactory.eINSTANCE.createWSMenuEntryE();
-        entry.getDescriptions().add(descriptions);
-        entry.setId(key);
-        //
-        WSMenuE menu = MdmserverobjectFactory.eINSTANCE.createWSMenuE();
-        menu.setName(key);
-        menu.getMenuEntries().add(entry);
-        //
-        return menu;
+                    public String isValid(String newText) {
+                        if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                            return "The Name cannot be empty";
+                        // yyun: bug 16141: the empty charactors inside the string isn't permitted
+                        // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)) {
+                        if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
+                            return "The name cannot contains invalid character!";
+                        }
+                        return null;
+                    };
+                }, true);
+        vid.setBtnShow(false);
+        vid.create();
+        // vid.getShell().setSize(new Point(500,270));
+        vid.setBlockOnOpen(true);
+        if (vid.open() == Window.CANCEL)
+            return;
+        String key = vid.getValue();
+
+        createServerObject(key);
+        commonViewer.refresh(selectObj);
+        commonViewer.expandToLevel(selectObj, 1);
+
+    }
+
+    private WSTransformerV2E newProcess(String key) {
+
+        WSTransformerV2E transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
+        transformer.setName(key);
+        transformer.setDescription("");
+
+        if (key.toString().startsWith("Smart_view_")) {//$NON-NLS-1$
+            final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"//$NON-NLS-1$
+                    + "   <xsl:output method='html' indent='yes' omit-xml-declaration='yes'/>\n"//$NON-NLS-1$
+                    + "   <xsl:template match='/'>\n" + "       <html>\n"//$NON-NLS-1$//$NON-NLS-2$
+                    + "          <head><title>Smart View</title></head>\n" + "          <body>\n"//$NON-NLS-1$//$NON-NLS-2$ 
+                    + "            <h1>This is the default Smart View for: <xsl:value-of select='./text()'/></h1>\n"//$NON-NLS-1$
+                    + "            <xsl:copy-of select='.'/>\n" + "            <!-- Customize the stylesheet -->\n"//$NON-NLS-1$//$NON-NLS-2$
+                    + "          </body>\n" + "       </html>\n" + "    </xsl:template>" + "</xsl:stylesheet>";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+
+            final String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/xslt";//$NON-NLS-1$
+
+            List<WSTransformerVariablesMappingE> inItems = new ArrayList<WSTransformerVariablesMappingE>();
+            WSTransformerVariablesMappingE inputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
+            inputLine.setPipelineVariable("_DEFAULT_");//$NON-NLS-1$
+            inputLine.setPluginVariable("xml");//$NON-NLS-1$
+            inItems.add(inputLine);
+
+            List<WSTransformerVariablesMappingE> outItems = new ArrayList<WSTransformerVariablesMappingE>();
+            WSTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
+            outputLine.setPipelineVariable("html");//$NON-NLS-1$
+            outputLine.setPluginVariable("text");//$NON-NLS-1$
+            outItems.add(outputLine);
+
+            ArrayList<WSTransformerProcessStepE> list = new ArrayList<WSTransformerProcessStepE>();
+            WSTransformerProcessStepE step = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
+            step.setPluginJNDI(TRANSFORMER_PLUGIN);
+            step.setDescription("Stylesheet");
+            step.setParameters(parameters);
+            step.getInputMappings().addAll(inItems);
+            step.getOutputMappings().addAll(outItems);
+            step.setDisabled(false);
+
+            list.add(step);
+            transformer.getProcessSteps().addAll(list);
+
+        }
+
+        return transformer;
     }
 
     protected boolean createServerObject(String key) {
 
-        WSMenuItem item = MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
+        WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WSMenuE menu = newBlankMenu(key);
-        item.setWsMenu(menu);
+        WSTransformerV2E process = newProcess(key);
+        item.setWsTransformerV2(process);
 
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
