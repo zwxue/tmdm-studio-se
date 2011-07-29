@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.jobmodel;
 
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeLabelProvider;
 
 /**
@@ -29,5 +30,10 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeLabelProvider;
  */
 public class TISProcessLabelProvider extends AbstractBridgeLabelProvider {
 
+    @Override
+    public String getCategoryLabel(ERepositoryObjectType type) {
+
+        return ERepositoryObjectType.PROCESS.toString();
+    }
 
 }
