@@ -31,6 +31,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
+import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -56,8 +57,12 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected static AbstractRepositoryAction renameAction;
 
+    protected AbstractRepositoryAction refreshAction;
+
     // TODO just a demo,remove it in future
     static AbstractRepositoryAction updateServerDefAction;
+
+    protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
     public void initCommonViewer(CommonViewer commonViewer) {
         exportAction = new ExportObjectAction();
@@ -65,12 +70,14 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         removeFromRepositoryAction = new RemoveFromRepositoryAction();
         updateServerDefAction = new UpdateServerDefAction();
         renameAction = new RenameObjectAction();
+
         //
         exportAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
         removeFromRepositoryAction.initCommonViewer(commonViewer);
         updateServerDefAction.initCommonViewer(commonViewer);
         renameAction.initCommonViewer(commonViewer);
+        refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -103,7 +110,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
         //
         actions.add(exportAction);
-
+        actions.add(refreshAction);
         return actions;
     }
 
@@ -116,6 +123,11 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     public AbstractRepositoryAction getOpenAction(IRepositoryViewObject viewObj) {
         return null;
+    }
+
+    public void setRepositoryViewGlobalActionHandler(IRepositoryViewGlobalActionHandler handler) {
+        this.globalActionHandler = handler;
+
     }
 
 }

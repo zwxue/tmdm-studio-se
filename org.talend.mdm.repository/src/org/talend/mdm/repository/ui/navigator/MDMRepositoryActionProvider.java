@@ -14,35 +14,50 @@ import org.eclipse.ui.navigator.ICommonActionConstants;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.ui.actions.OpenObjectAction;
+import org.talend.mdm.repository.ui.actions.RefreshAction;
 
-public class MDMRepositoryActionProvider extends CommonActionProvider {
+public class MDMRepositoryActionProvider extends CommonActionProvider implements IRepositoryViewGlobalActionHandler {
 
     private CommonViewer commonViewer;
 
     public MDMRepositoryActionProvider() {
+        initActions();
+    }
+
+    private void initActions() {
         openObjectAction = new OpenObjectAction();
+        refreshAction = new RefreshAction();
     }
 
     OpenObjectAction openObjectAction;
+
+    AbstractRepositoryAction refreshAction;
 
     @Override
     public void init(ICommonActionExtensionSite aSite) {
         commonViewer = (CommonViewer) aSite.getStructuredViewer();
         for (IRepositoryNodeConfiguration conf : RepositoryNodeConfigurationManager.getConfigurations()) {
-            if (conf.getActionProvider() != null) {
-                conf.getActionProvider().initCommonViewer(commonViewer);
+            IRepositoryNodeActionProvider actionProvider = conf.getActionProvider();
+            if (actionProvider != null) {
+                actionProvider.setRepositoryViewGlobalActionHandler(this);
+                actionProvider.initCommonViewer(commonViewer);
             }
         }
+        //
         openObjectAction.initCommonViewer(commonViewer);
+        refreshAction.initCommonViewer(commonViewer);
     }
 
     @Override
     public void fillActionBars(IActionBars actionBars) {
         // open
         actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, openObjectAction);
+        actionBars.setGlobalActionHandler(REFRESH, refreshAction);
     }
 
     @Override
@@ -87,6 +102,7 @@ public class MDMRepositoryActionProvider extends CommonActionProvider {
     public void updateActionBars() {
         IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
         openObjectAction.selectionChanged(selection);
+        refreshAction.selectionChanged(selection);
     }
 
     private List<AbstractRepositoryAction> combineActions(List<AbstractRepositoryAction> actionsA,
@@ -99,6 +115,13 @@ public class MDMRepositoryActionProvider extends CommonActionProvider {
             }
         }
         return result;
+    }
+
+    public AbstractRepositoryAction getGlobalAction(String actionId) {
+        if (actionId.equals(REFRESH)) {
+            return refreshAction;
+        }
+        return null;
     }
 
 }

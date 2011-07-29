@@ -4,6 +4,15 @@
 >
    <extension-point id="repositoryConfiguration" name="repositoryConfiguration" schema="schema/repositoryConfiguration.exsd"/>
    <extension
+         point="org.eclipse.ui.contexts">
+      <context
+            id="org.talend.mdm.repository.context"
+            name="MDM Repository View"
+            parentId="org.eclipse.ui.contexts.window">
+      </context>
+   </extension>
+  
+   <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="org.talend.mdm.perspective">
@@ -203,15 +212,19 @@
             viewerId="org.talend.mdm.repository.ui.navigator.MDMRepositoryView">
          <popupMenu>
             <insertionPoint
-                  name="group.export"
-                  separator="true">
-            </insertionPoint>
-            <insertionPoint
                   name="group.edit"
                   separator="true">
             </insertionPoint>
             <insertionPoint
+                  name="group.common"
+                  separator="true">
+            </insertionPoint>
+            <insertionPoint
                   name="group.server"
+                  separator="true">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.export"
                   separator="true">
             </insertionPoint>
          </popupMenu>
@@ -288,8 +301,12 @@
             id="org.talend.mdm.repository.ui.navigator.MDMServerDecorator"
             label="MDMServerDecorator"
             lightweight="true"
-            objectClass="org.talend.core.model.repository.IRepositoryViewObject"
             state="true">
+         <enablement>
+            <objectClass
+                  name="org.talend.core.model.repository.IRepositoryViewObject">
+            </objectClass>
+         </enablement>
       </decorator>
    </extension>
    <extension

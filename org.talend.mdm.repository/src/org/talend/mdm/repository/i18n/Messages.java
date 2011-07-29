@@ -38,6 +38,8 @@ public class Messages extends NLS {
 
     public static String NewVersionAction_newVersion;
 
+    public static String RefreshAction_Refresh;
+
     public static String RemoveFromRepositoryAction_removeFromRepository;
 
     public static String RenameObjectAction_rename;

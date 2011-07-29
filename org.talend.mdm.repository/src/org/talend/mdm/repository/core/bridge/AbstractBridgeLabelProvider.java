@@ -34,7 +34,7 @@ public class AbstractBridgeLabelProvider extends AbstractLabelProvider {
     }
 
     protected String getServerObjectItemText(Item item) {
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     public Image getCategoryImage(Item item) {

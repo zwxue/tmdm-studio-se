@@ -41,4 +41,6 @@ public interface IRepositoryNodeActionProvider {
     public IRepositoryViewEditorInput getOpenEditorInput(Item item);
 
     public AbstractRepositoryAction getOpenAction(IRepositoryViewObject viewObj);
+
+    public void setRepositoryViewGlobalActionHandler(IRepositoryViewGlobalActionHandler handler);
 }
