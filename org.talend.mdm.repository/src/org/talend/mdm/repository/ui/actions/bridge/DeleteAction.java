@@ -17,11 +17,11 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class CreateFolderAction extends AbstractBridgeRepositoryAction {
+public class DeleteAction extends AbstractBridgeRepositoryAction {
 
-    public CreateFolderAction() {
-        super(new org.talend.repository.ui.actions.folder.CreateFolderAction());
-
+    public DeleteAction() {
+        super(new org.talend.repository.ui.actions.DeleteAction());
+        setText("Delete Logically");
     }
 
     public String getGroupName() {
@@ -31,7 +31,7 @@ public class CreateFolderAction extends AbstractBridgeRepositoryAction {
     @Override
     public void run() {
         super.run();
-        refreshCurrentContainer();
+        refreshParentContainer();
     }
 
 }

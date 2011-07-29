@@ -53,6 +53,7 @@ import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.bridge.MDMRepositoryNode;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -99,6 +100,25 @@ public class RepositoryResourceUtil {
         return false;
     }
 
+    public static IFolder getFolder(IRepositoryViewObject viewObj) {
+        try {
+            Item pItem = viewObj.getProperty().getItem();
+            Project project = ProjectManager.getInstance().getCurrentProject();
+            IProject fsProject = ResourceModelUtils.getProject(project);
+            ItemState state = pItem.getState();
+
+            String path = ERepositoryObjectType.getFolderName(viewObj.getRepositoryObjectType());
+            if (!path.isEmpty()) {
+                path += state.getPath();
+            }
+
+            return fsProject.getFolder(path);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
     public static IRepositoryViewObject createFolderViewObject(ERepositoryObjectType type, String folderName, Item pItem,
             boolean isSystem) {
         Property prop = PropertiesFactory.eINSTANCE.createProperty();
@@ -120,16 +140,17 @@ public class RepositoryResourceUtil {
         prop.setLabel(folderName);
         try {
             //
-            Project project = ProjectManager.getInstance().getCurrentProject();
-            IProject fsProject = ResourceModelUtils.getProject(project);
 
             if (!isSystem) {
+                Project project = ProjectManager.getInstance().getCurrentProject();
+                IProject fsProject = ResourceModelUtils.getProject(project);
                 ItemState state = pItem.getState();
                 itemState.setPath(state.getPath() + IPath.SEPARATOR + folderName);
                 String path = ERepositoryObjectType.getFolderName(type);
                 if (!path.isEmpty()) {
                     path += itemState.getPath();
                 }
+
                 IFolder folder = fsProject.getFolder(path);
                 if (!folder.exists()) {
 
@@ -224,7 +245,9 @@ public class RepositoryResourceUtil {
             for (IResource res : folder.members()) {
                 if (res instanceof IFolder) {
                     IRepositoryViewObject folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
-                    viewObjects.add(folderObject);
+                    if (!isDeletedFolder((IFolder) res)) {
+                        viewObjects.add(folderObject);
+                    }
                 }
                 // else if (res instanceof IFile) {
                 // if (resourceManager.isPropertyFile((IFile) res)) {
@@ -241,6 +264,18 @@ public class RepositoryResourceUtil {
         }
         // ((ContainerRepositoryObject) parentItem.getParent()).getChildren().addAll(viewObjects);
         return viewObjects;
+    }
+
+    private static boolean isDeletedFolder(IFolder folder) {
+        String path = folder.getProjectRelativePath().toString();
+        return isDeletedFolder(path);
+    }
+
+    private static boolean isDeletedFolder(String folderPath) {
+        if (folderPath == null)
+            throw new IllegalArgumentException();
+        List deletedFolders = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
+        return deletedFolders.contains(folderPath);
     }
 
     public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
@@ -262,7 +297,8 @@ public class RepositoryResourceUtil {
             List<IRepositoryViewObject> allObjs = factory.getAll(type);
             for (IRepositoryViewObject viewObj : allObjs) {
                 ItemState state = viewObj.getProperty().getItem().getState();
-                if (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2)) {
+                if ((!state.isDeleted())
+                        && (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2))) {
                     if (useRepositoryViewObject) {
                         viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
                     } else {
@@ -363,7 +399,7 @@ public class RepositoryResourceUtil {
 
         }
         ERepositoryObjectType repObjType = viewObj.getRepositoryObjectType();
-        RepositoryNode node = new RepositoryNode(viewObj, null, type);
+        RepositoryNode node = new MDMRepositoryNode(viewObj, null, type);
 
         node.setProperties(EProperties.LABEL, repObjType);
         node.setProperties(EProperties.CONTENT_TYPE, repObjType);

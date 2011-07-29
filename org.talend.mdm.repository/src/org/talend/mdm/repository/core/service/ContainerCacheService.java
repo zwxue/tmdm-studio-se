@@ -26,6 +26,11 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
  */
 public class ContainerCacheService {
 
+    /**
+     * 
+     */
+    private static final String DIVIDE = "/"; //$NON-NLS-1$
+
     private static Map<ERepositoryObjectType, Map<String, IRepositoryViewObject>> containerMap = new HashMap<ERepositoryObjectType, Map<String, IRepositoryViewObject>>();
 
     public static void put(IRepositoryViewObject viewObj) {
@@ -38,7 +43,8 @@ public class ContainerCacheService {
                 containerMap.put(repObjType, map);
             }
             //
-            map.put(item.getState().getPath(), viewObj);
+            String path = correctPath(item.getState().getPath());
+            map.put(path, viewObj);
         }
     }
 
@@ -53,9 +59,19 @@ public class ContainerCacheService {
         }
     }
 
+    private static String correctPath(String path) {
+        if (path != null && path.length() > 0) {
+            if (!path.startsWith(DIVIDE)) {
+                return DIVIDE + path;
+            }
+        }
+        return path;
+    }
+
     public static IRepositoryViewObject get(ERepositoryObjectType repObjType, String path) {
         Map<String, IRepositoryViewObject> map = containerMap.get(repObjType);
         if (map != null) {
+            path = correctPath(path);
             return map.get(path);
         }
         return null;
@@ -68,7 +84,7 @@ public class ContainerCacheService {
         String path = item.getState().getPath();
         if (item instanceof ContainerItem) {
             if (path.length() > 1) {
-                int pos = path.lastIndexOf("/"); //$NON-NLS-1$
+                int pos = path.lastIndexOf(DIVIDE);
                 if (pos >= 0) {
                     path = path.substring(0, pos);
                 }

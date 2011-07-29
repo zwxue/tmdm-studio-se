@@ -24,7 +24,7 @@ public class RenameFolderAction extends AbstractBridgeRepositoryAction {
     }
 
     public String getGroupName() {
-        return null;
+        return GROUP_EDIT;
     }
 
     @Override

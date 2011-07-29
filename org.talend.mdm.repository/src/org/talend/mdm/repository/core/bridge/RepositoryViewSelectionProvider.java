@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.RepositoryNode;
 
@@ -48,11 +47,11 @@ public class RepositoryViewSelectionProvider implements ISelectionProvider {
             if (object instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
                 RepositoryNode node = RepositoryResourceUtil.convertToNode(viewObj);
-                IRepositoryViewObject parentViewObj = ContainerCacheService.getParent(viewObj);
-                if (parentViewObj != null) {
-                    RepositoryNode parentNode = RepositoryResourceUtil.convertToNode(parentViewObj);
-                    node.setParent(parentNode);
-                }
+                // IRepositoryViewObject parentViewObj = ContainerCacheService.getParent(viewObj);
+                // if (parentViewObj != null) {
+                // RepositoryNode parentNode = RepositoryResourceUtil.convertToNode(parentViewObj);
+                // node.setParent(parentNode);
+                // }
                 return new StructuredSelection(node);
             }
         }

@@ -39,6 +39,8 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     public static final String GROUP_EDIT = "group.edit"; //$NON-NLS-1$
 
+    public static final String GROUP_COMMON = "group.common"; //$NON-NLS-1$
+
     public static final String GROUP_EXPORT = "group.export"; //$NON-NLS-1$
 
     public static final String GROUP_SERVER = "group.server"; //$NON-NLS-1$

@@ -24,16 +24,29 @@ import org.talend.repository.ui.actions.AContextualAction;
  */
 public abstract class AbstractBridgeRepositoryAction extends AbstractRepositoryAction {
 
-    private final AContextualAction contextAction;
+    private AContextualAction contextAction;
+
+    public void setContextAction(AContextualAction contextAction) {
+        this.contextAction = contextAction;
+        contextAction.setSpecialSelection(selectionProvider);
+        setText(contextAction.getText());
+        setImageDescriptor(contextAction.getImageDescriptor());
+    }
 
     private ISelectionProvider selectionProvider;
 
+    public AbstractBridgeRepositoryAction(String name) {
+        super(name);
+        selectionProvider = new RepositoryViewSelectionProvider(this);
+    }
+
     public AbstractBridgeRepositoryAction(AContextualAction cAction) {
         super(cAction.getText());
+        setImageDescriptor(cAction.getImageDescriptor());
         selectionProvider = new RepositoryViewSelectionProvider(this);
         this.contextAction = cAction;
         this.contextAction.setSpecialSelection(selectionProvider);
-        setImageDescriptor(cAction.getImageDescriptor());
+
     }
 
     @Override

@@ -18,11 +18,11 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class EditProcessAction extends AbstractBridgeRepositoryAction {
+public class OpenExistVersionProcessAction extends AbstractBridgeRepositoryAction {
 
-    private static class EditProcessAdapter extends EditProcess {
+    private static class OpenExistVersionProcessActionAdapter extends org.talend.designer.core.ui.action.OpenExistVersionProcessAction {
 
-        public EditProcessAdapter() {
+        public OpenExistVersionProcessActionAdapter() {
             super();
         }
 
@@ -37,8 +37,8 @@ public class EditProcessAction extends AbstractBridgeRepositoryAction {
      * 
      * @param cAction
      */
-    public EditProcessAction() {
-        super(new EditProcessAdapter());
+    public OpenExistVersionProcessAction() {
+        super(new OpenExistVersionProcessActionAdapter());
     }
 
     @Override

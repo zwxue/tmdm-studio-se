@@ -10,28 +10,30 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.actions.bridge;
+package org.talend.mdm.repository.ui.actions.job;
 
+import org.talend.designer.core.ui.action.ReadProcess;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class CreateFolderAction extends AbstractBridgeRepositoryAction {
+public class ReadProcessAction extends AbstractBridgeRepositoryAction {
 
-    public CreateFolderAction() {
-        super(new org.talend.repository.ui.actions.folder.CreateFolderAction());
 
-    }
 
-    public String getGroupName() {
-        return GROUP_EDIT;
+    /**
+     * DOC hbhong EditProcessAction constructor comment.
+     * 
+     * @param cAction
+     */
+    public ReadProcessAction() {
+        super(new ReadProcess());
     }
 
     @Override
-    public void run() {
-        super.run();
-        refreshCurrentContainer();
+    public String getGroupName() {
+        return GROUP_EDIT;
     }
 
 }
