@@ -23,7 +23,7 @@ public class MDMServerDef {
 
     private String host = "localhost";//$NON-NLS-1$
 
-    private String port = "8080";//$NON-NLS-1$
+    private String port = "8180";//$NON-NLS-1$
 
     private String user = "";//$NON-NLS-1$
 
