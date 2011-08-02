@@ -30,6 +30,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -77,5 +79,19 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     protected Shell getShell() {
         return commonViewer.getControl().getShell();
+    }
+
+    public boolean isVisible() {
+        return true;
+    }
+
+    protected void refreshParent() {
+        Object object = getSelectedObject().get(0);
+        if (object instanceof IRepositoryViewObject) {
+            IRepositoryViewObject parent = ContainerCacheService.getParent((IRepositoryViewObject) object);
+            if (parent != null) {
+                commonViewer.refresh(parent);
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.dialogs;
+package org.talend.mdm.repository.ui.dialogs.filter;
 
 import java.util.HashSet;
 import java.util.List;

@@ -6,6 +6,7 @@ public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
+
     public static String Common_inputName;
 
     public static String Common_nameCanNotBeEmpty;
@@ -14,6 +15,8 @@ public class Messages extends NLS {
 
     public static String Common_nameIsUsed;
 
+    public static String CopyAction_copy;
+
     public static String CreateFolderAction_createCategory;
 
     public static String CreateFolderAction_inputCategoryName;
@@ -21,6 +24,9 @@ public class Messages extends NLS {
     public static String CreateFolderAction_nameIsUsed;
 
     public static String CreateFolderAction_newCategory;
+
+
+    public static String DuplicateAction_duplicate;
 
     public static String NewDataModelAction_newDataModel;
 
@@ -38,11 +44,18 @@ public class Messages extends NLS {
 
     public static String NewVersionAction_newVersion;
 
+    public static String OpenObjectAction_open;
+
+    public static String PasteAction_paste;
+
     public static String RefreshAction_Refresh;
 
     public static String RemoveFromRepositoryAction_removeFromRepository;
 
     public static String RenameObjectAction_rename;
+
+    public static String RepositoryDropAssistant_pasteObject;
+
 
     public static String RepositoryViewFilterDialog_enableAllServerObject;
 

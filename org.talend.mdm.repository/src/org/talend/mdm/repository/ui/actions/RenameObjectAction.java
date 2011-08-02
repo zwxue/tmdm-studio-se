@@ -80,9 +80,11 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                     if (serverObject != null) {
 
                         String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem());
-                        serverObject.setName(newName);
-                        viewObj.getProperty().setLabel(newName);
-                        factory.save(viewObj.getProperty().getItem(), false);
+                        if (newName != null) {
+                            serverObject.setName(newName);
+                            viewObj.getProperty().setLabel(newName);
+                            factory.save(viewObj.getProperty().getItem(), false);
+                        }
                     }
                     commonViewer.refresh(obj);
                 } catch (PersistenceException e) {
@@ -94,8 +96,8 @@ public class RenameObjectAction extends AbstractRepositoryAction {
     }
 
     private String showRenameDlg(final ERepositoryObjectType type, final ContainerItem parentItem) {
-        InputDialog dlg = new InputDialog(getShell(), Messages.RenameObjectAction_rename,
-                Messages.Common_inputName, null, new IInputValidator() {
+        InputDialog dlg = new InputDialog(getShell(), Messages.RenameObjectAction_rename, Messages.Common_inputName, null,
+                new IInputValidator() {
 
                     public String isValid(String newText) {
                         if (newText == null || newText.trim().length() == 0)
@@ -104,9 +106,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                             return Messages.Common_nameInvalid;
                         }
                         //
-                        IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(parentItem,
-                                newText.trim(), true);
-                        if (viewObject != null) {
+                        if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
                             return Messages.Common_nameIsUsed;
                         }
                         return null;

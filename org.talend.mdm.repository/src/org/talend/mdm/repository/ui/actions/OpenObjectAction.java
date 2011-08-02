@@ -29,7 +29,9 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
@@ -47,12 +49,13 @@ public class OpenObjectAction extends AbstractRepositoryAction {
      * @param text
      */
     public OpenObjectAction() {
-        super("Open"); //$NON-NLS-1$
+        super(Messages.OpenObjectAction_open);
+        setId(IRepositoryViewGlobalActionHandler.OPEN);
+        setActionDefinitionId(IRepositoryViewGlobalActionHandler.OPEN);
     }
 
     private IWorkbenchPage page = null;
 
-    @Override
     public void run() {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {

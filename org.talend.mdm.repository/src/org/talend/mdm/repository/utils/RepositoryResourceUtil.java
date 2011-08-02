@@ -215,6 +215,18 @@ public class RepositoryResourceUtil {
         return null;
     }
 
+    public static boolean isExistByName(ERepositoryObjectType type, String name) {
+        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type);
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                if (viewObj.getProperty().getLabel().equalsIgnoreCase(name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem) {
         return findViewObjects(type, parentItem, false);
     }

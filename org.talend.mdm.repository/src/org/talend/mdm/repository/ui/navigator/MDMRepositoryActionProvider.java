@@ -1,8 +1,10 @@
 package org.talend.mdm.repository.ui.navigator;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -10,7 +12,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.eclipse.ui.navigator.ICommonActionConstants;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
@@ -18,29 +19,59 @@ import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.ui.actions.CopyAction;
 import org.talend.mdm.repository.ui.actions.OpenObjectAction;
+import org.talend.mdm.repository.ui.actions.PasteAction;
 import org.talend.mdm.repository.ui.actions.RefreshAction;
 
 public class MDMRepositoryActionProvider extends CommonActionProvider implements IRepositoryViewGlobalActionHandler {
-
-    private CommonViewer commonViewer;
 
     public MDMRepositoryActionProvider() {
         initActions();
     }
 
-    private void initActions() {
-        openObjectAction = new OpenObjectAction();
-        refreshAction = new RefreshAction();
+    private Map<String, AbstractRepositoryAction> commonActionMap = new LinkedHashMap<String, AbstractRepositoryAction>();
+
+    private void registerCommonAction(AbstractRepositoryAction action) {
+        if (action != null) {
+            String id = action.getActionDefinitionId();
+            if (id == null) {
+                id = action.getId();
+            }
+            commonActionMap.put(id, action);
+        }
     }
 
-    OpenObjectAction openObjectAction;
+    private void initActions() {
+        registerCommonAction(new OpenObjectAction());
+        registerCommonAction(new RefreshAction());
+        registerCommonAction(new CopyAction());
+        registerCommonAction(new PasteAction());
+    }
 
-    AbstractRepositoryAction refreshAction;
+    private void initCommonViewerForActions(CommonViewer commonViewer) {
+        for (AbstractRepositoryAction action : commonActionMap.values()) {
+            action.initCommonViewer(commonViewer);
+        }
+    }
+
+    private void fillActionBarsForActions(IActionBars actionBars) {
+        for (AbstractRepositoryAction action : commonActionMap.values()) {
+            String definitionId = action.getActionDefinitionId();
+            if (definitionId != null)
+                actionBars.setGlobalActionHandler(definitionId, action);
+        }
+    }
+
+    private void updateActionBarsForActions(IStructuredSelection selection) {
+        for (AbstractRepositoryAction action : commonActionMap.values()) {
+            action.selectionChanged(selection);
+        }
+    }
 
     @Override
     public void init(ICommonActionExtensionSite aSite) {
-        commonViewer = (CommonViewer) aSite.getStructuredViewer();
+        CommonViewer commonViewer = (CommonViewer) aSite.getStructuredViewer();
         for (IRepositoryNodeConfiguration conf : RepositoryNodeConfigurationManager.getConfigurations()) {
             IRepositoryNodeActionProvider actionProvider = conf.getActionProvider();
             if (actionProvider != null) {
@@ -48,16 +79,12 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
                 actionProvider.initCommonViewer(commonViewer);
             }
         }
-        //
-        openObjectAction.initCommonViewer(commonViewer);
-        refreshAction.initCommonViewer(commonViewer);
+        initCommonViewerForActions(commonViewer);
     }
 
     @Override
     public void fillActionBars(IActionBars actionBars) {
-        // open
-        actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, openObjectAction);
-        actionBars.setGlobalActionHandler(REFRESH, refreshAction);
+        fillActionBarsForActions(actionBars);
     }
 
     @Override
@@ -101,8 +128,7 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
     @Override
     public void updateActionBars() {
         IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
-        openObjectAction.selectionChanged(selection);
-        refreshAction.selectionChanged(selection);
+        updateActionBarsForActions(selection);
     }
 
     private List<AbstractRepositoryAction> combineActions(List<AbstractRepositoryAction> actionsA,
@@ -118,10 +144,7 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
     }
 
     public AbstractRepositoryAction getGlobalAction(String actionId) {
-        if (actionId.equals(REFRESH)) {
-            return refreshAction;
-        }
-        return null;
+        return commonActionMap.get(actionId);
     }
 
 }

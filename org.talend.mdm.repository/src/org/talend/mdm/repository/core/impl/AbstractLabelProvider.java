@@ -29,6 +29,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -54,7 +55,6 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     private static final Font FONT_BOLD = EclipseResourceManager.getFont(defaultFontData.getName(), defaultFontData.getHeight(),
             SWT.BOLD);
-
 
     public String getText(Object element) {
         Item item = getItem(element);
@@ -90,6 +90,17 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     }
 
     public String getDescription(Object anElement) {
+        if (anElement instanceof IRepositoryViewObject) {
+
+            Property property = ((IRepositoryViewObject) anElement).getProperty();
+            Item item = property.getItem();
+            if (item instanceof MDMServerObjectItem) {
+                return getServerObjectItemText(item);
+            } else {
+                String label = property.getLabel();
+                return label;
+            }
+        }
         return null;
     }
 
@@ -98,7 +109,8 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
             return getConainerItemText(item);
         }
         if (item instanceof MDMServerObjectItem) {
-            return getServerObjectItemText(item);
+            // return getServerObjectItemText(item);
+            return item.getProperty().getLabel();
         }
         // default
         String label = item.getProperty().getLabel();

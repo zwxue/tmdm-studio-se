@@ -59,31 +59,30 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
             }
         }
 
-        InputDialog dlg = new InputDialog(getShell(), getDialogTitle(), Messages.Common_inputName, null,
-                new IInputValidator() {
+        InputDialog dlg = new InputDialog(getShell(), getDialogTitle(), Messages.Common_inputName, null, new IInputValidator() {
 
-                    public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0)
-                            return Messages.Common_nameCanNotBeEmpty;
-                        if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
-                            return Messages.Common_nameInvalid;
-                        }
-                        IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(parentItem,
-                                newText.trim(), true);
-                        if (viewObject != null) {
-                            return Messages.Common_nameIsUsed;
-                        }
-                        return null;
-                    };
-                });
+            public String isValid(String newText) {
+                if (newText == null || newText.trim().length() == 0)
+                    return Messages.Common_nameCanNotBeEmpty;
+                if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                    return Messages.Common_nameInvalid;
+                }
+                if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
+                    return Messages.Common_nameIsUsed;
+                }
+                return null;
+            };
+        });
         dlg.setBlockOnOpen(true);
         if (dlg.open() == Window.CANCEL)
             return;
         String key = dlg.getValue();
-        createServerObject(key);
-        commonViewer.refresh(selectObj);
-        commonViewer.expandToLevel(selectObj, 1);
-        // TODO open editor
+        if (key != null) {
+            createServerObject(key);
+            commonViewer.refresh(selectObj);
+            commonViewer.expandToLevel(selectObj, 1);
+            // TODO open editor
+        }
 
     }
 

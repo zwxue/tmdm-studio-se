@@ -80,13 +80,14 @@ public class CreateFolderAction extends AbstractRepositoryAction {
                 return;
             String categoryName = dlg.getValue();
             //
-
-            IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(
-                    containerViewObject.getRepositoryObjectType(), categoryName, containerViewObject.getProperty().getItem(),
-                    false);
-            containerViewObject.getChildren().add(folderViewObject);
-            commonViewer.expandToLevel(containerViewObject, 1);
-            // commonViewer.refresh(folderViewObject);
+            if (categoryName != null) {
+                IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(
+                        containerViewObject.getRepositoryObjectType(), categoryName, containerViewObject.getProperty().getItem(),
+                        false);
+                containerViewObject.getChildren().add(folderViewObject);
+                commonViewer.refresh(containerViewObject);
+                commonViewer.expandToLevel(containerViewObject, 1);
+            }
         }
     }
 }

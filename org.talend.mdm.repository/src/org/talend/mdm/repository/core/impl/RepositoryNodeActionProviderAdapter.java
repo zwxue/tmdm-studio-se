@@ -36,10 +36,10 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
+import org.talend.mdm.repository.ui.actions.DuplicateAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
-import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
 
@@ -55,12 +55,15 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     static AbstractRepositoryAction removeFromRepositoryAction;
 
+    static AbstractRepositoryAction duplicateAction;
+
     protected static AbstractRepositoryAction renameAction;
 
     protected AbstractRepositoryAction refreshAction;
 
-    // TODO just a demo,remove it in future
-    static AbstractRepositoryAction updateServerDefAction;
+    protected AbstractRepositoryAction copyAction;
+
+    protected AbstractRepositoryAction pasteAction;
 
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
@@ -68,16 +71,17 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         exportAction = new ExportObjectAction();
         createFolderAction = new CreateFolderAction();
         removeFromRepositoryAction = new RemoveFromRepositoryAction();
-        updateServerDefAction = new UpdateServerDefAction();
         renameAction = new RenameObjectAction();
-
+        duplicateAction = new DuplicateAction();
         //
         exportAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
         removeFromRepositoryAction.initCommonViewer(commonViewer);
-        updateServerDefAction.initCommonViewer(commonViewer);
         renameAction.initCommonViewer(commonViewer);
+        duplicateAction.initCommonViewer(commonViewer);
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
+        copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
+        pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -90,6 +94,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 switch (type.getValue()) {
                 case FolderType.SYSTEM_FOLDER:
                     actions.add(createFolderAction);
+                    addAction(actions, pasteAction);
                     break;
                 case FolderType.STABLE_SYSTEM_FOLDER:
 
@@ -98,20 +103,30 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 case FolderType.FOLDER:
                     actions.add(createFolderAction);
                     actions.add(removeFromRepositoryAction);
+                    addAction(actions, pasteAction);
                     break;
                 }
 
             } else if (item instanceof MDMServerObjectItem) {
                 actions.add(removeFromRepositoryAction);
-                // TODO just a demo,remove it in future
-                actions.add(updateServerDefAction);
+
+                addAction(actions, copyAction);
+                addAction(actions, pasteAction);
+                actions.add(duplicateAction);
             }
         }
 
         //
         actions.add(exportAction);
         actions.add(refreshAction);
+
         return actions;
+    }
+
+    private void addAction(List<AbstractRepositoryAction> actions, AbstractRepositoryAction action) {
+        if (action.isVisible()) {
+            actions.add(action);
+        }
     }
 
     /**
@@ -127,7 +142,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     public void setRepositoryViewGlobalActionHandler(IRepositoryViewGlobalActionHandler handler) {
         this.globalActionHandler = handler;
-
     }
 
 }

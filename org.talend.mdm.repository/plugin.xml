@@ -204,6 +204,11 @@
          <commonSorter
                class="org.talend.mdm.repository.ui.navigator.MDMRepositoryViewerSorter">
          </commonSorter>
+         <dropAssistant
+               class="org.talend.mdm.repository.core.dnd.RepositoryDropAssistant"
+               id="org.talend.mdm.repository.core.dnd.RepositoryDropAssistant">
+            <possibleDropTargets></possibleDropTargets>
+         </dropAssistant>
       </navigatorContent>
    </extension>
    <extension
@@ -238,6 +243,10 @@
             </contentExtension>
          </includes>
       </viewerContentBinding>
+      <dragAssistant
+            class="org.talend.mdm.repository.core.dnd.RepositoryDragAssistant"
+            viewerId="org.talend.mdm.repository.ui.navigator.MDMRepositoryView">
+      </dragAssistant>
    </extension>
    <extension
          point="org.talend.mdm.repository.repositoryConfiguration">
@@ -354,5 +363,31 @@
                menubarPath="filter">
          </action>
       </viewContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="com.talend.mdm.repository.copy"
+            name="Copy">
+      </command>
+      <command
+            id="com.talend.mdm.repository.paste"
+            name="Paste">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.talend.mdm.repository.copy"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="Ctrl+C">
+      </key>
+      <key
+            commandId="com.talend.mdm.repository.paste"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="Ctrl+V">
+      </key>
    </extension>
 </plugin>
