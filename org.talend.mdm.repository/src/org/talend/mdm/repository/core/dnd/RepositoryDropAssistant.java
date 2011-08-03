@@ -43,6 +43,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -127,6 +128,9 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                 try {
                     Item copy = factory.copy(dragProp.getItem(), path, true);
                     copy.getProperty().setLabel(newName);
+                    if (copy instanceof MDMServerObjectItem) {
+                        ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
+                    }
                     factory.save(copy);
                     return true;
                 } catch (PersistenceException e) {

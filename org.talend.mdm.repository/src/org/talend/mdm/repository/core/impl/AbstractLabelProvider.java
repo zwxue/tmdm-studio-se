@@ -109,8 +109,8 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
             return getConainerItemText(item);
         }
         if (item instanceof MDMServerObjectItem) {
-            // return getServerObjectItemText(item);
-            return item.getProperty().getLabel();
+            return getServerObjectItemText(item);
+            // return item.getProperty().getLabel();
         }
         // default
         String label = item.getProperty().getLabel();
