@@ -24,6 +24,15 @@
                style="push"
                toolbarPath="ServerExplorerToolBar">
          </action>
+         <action
+               class="org.talend.mdm.workbench.serverexplorer.ui.actions.AddServerDefAction"
+               icon="icons/add_obj.gif"
+               id="org.talend.mdm.workbench.serverexplorer.ui.actions.AddServerDefAction"
+               label="Add Server Location"
+               style="push"
+               toolbarPath="ServerExplorerToolBar"
+               tooltip="Add Server Location">
+         </action>
       </viewContribution>
    </extension>
    <extension
