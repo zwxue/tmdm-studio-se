@@ -38,6 +38,9 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
 
+/**
+ * @deprecated replace by ViewInputDialog2, can be deleted.
+ */
 public class ProcessViewInputDialog extends Dialog implements SelectionListener {
 
     /**

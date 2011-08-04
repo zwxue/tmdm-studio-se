@@ -36,6 +36,9 @@ public class Messages extends NLS {
 
     public static String NewDataContainerAction_newDataContainer;
 
+
+    public static String NewProcessAction_newProcess;
+
     public static String NewViewAction_newView;
 
     public static String NewStoredProcedureAction_newStoredProcedure;

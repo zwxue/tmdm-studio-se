@@ -27,10 +27,12 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
@@ -39,6 +41,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
+import org.talend.mdm.repository.ui.dialogs.ViewInputDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -56,14 +59,10 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         super();
     }
 
-
-    @Override
     protected String getDialogTitle() {
-        // return Messages.NewMenuAction_newMenu;
-        return ""; //$NON-NLS-1$
+        return Messages.NewProcessAction_newProcess;
     }
 
-    @Override
     public void run() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);
@@ -73,29 +72,25 @@ public class NewProcessAction extends AbstractSimpleAddAction {
                 parentItem = (ContainerItem) pItem;
             }
         }
+        IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
+        ViewInputDialog2 vid = new ViewInputDialog2(site, getShell(), getDialogTitle(),
 
-        ProcessViewInputDialog vid = new ProcessViewInputDialog(
-                null,
-                null,
-                getShell(),
-                "New Process",// "New "+IConstants.TALEND+" Object Instance",
-                "Enter a Name for the New Instance                                                                                  ",
-                "Smart_view_", new IInputValidator() {//$NON-NLS-1$
+        Messages.Common_inputName, "Smart_view_", new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
-                        if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                            return "The Name cannot be empty";
-                        // yyun: bug 16141: the empty charactors inside the string isn't permitted
-                        // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)) {
-                        if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
-                            return "The name cannot contains invalid character!";
+                        if (newText == null || newText.trim().length() == 0)
+                            return Messages.Common_nameCanNotBeEmpty;
+                        if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                            return Messages.Common_nameInvalid;
+                        }
+                        if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
+                            return Messages.Common_nameIsUsed;
                         }
                         return null;
                     };
                 }, true);
         vid.setBtnShow(false);
         vid.create();
-        // vid.getShell().setSize(new Point(500,270));
         vid.setBlockOnOpen(true);
         if (vid.open() == Window.CANCEL)
             return;
@@ -111,7 +106,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
 
         WSTransformerV2E transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
         transformer.setName(key);
-        transformer.setDescription("");
+        transformer.setDescription(""); //$NON-NLS-1$
 
         if (key.toString().startsWith("Smart_view_")) {//$NON-NLS-1$
             final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"//$NON-NLS-1$
@@ -139,7 +134,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
             ArrayList<WSTransformerProcessStepE> list = new ArrayList<WSTransformerProcessStepE>();
             WSTransformerProcessStepE step = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
             step.setPluginJNDI(TRANSFORMER_PLUGIN);
-            step.setDescription("Stylesheet");
+            step.setDescription("Stylesheet"); //$NON-NLS-1$
             step.setParameters(parameters);
             step.getInputMappings().addAll(inItems);
             step.getOutputMappings().addAll(outItems);
@@ -168,6 +163,5 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         }
         return false;
     }
-
 
 }

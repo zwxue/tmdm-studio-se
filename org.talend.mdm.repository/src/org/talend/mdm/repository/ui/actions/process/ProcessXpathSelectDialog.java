@@ -60,6 +60,9 @@ import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 
+/**
+ * @deprecated replace by XpathSelectDialog2, can be deleted.
+ */
 public class ProcessXpathSelectDialog extends Dialog {
 
     // private static Log log = LogFactory.getLog(XpathSelectDialog.class);
