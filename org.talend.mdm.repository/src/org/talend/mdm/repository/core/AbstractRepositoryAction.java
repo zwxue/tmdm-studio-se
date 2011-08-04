@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 
@@ -91,6 +92,18 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
             IRepositoryViewObject parent = ContainerCacheService.getParent((IRepositoryViewObject) object);
             if (parent != null) {
                 commonViewer.refresh(parent);
+            }
+        }
+    }
+
+    protected void refreshRepositoryRoot(ERepositoryObjectType type) {
+        Object input = commonViewer.getInput();
+        if (input != null && input instanceof IRepositoryViewObject[]) {
+            for (IRepositoryViewObject viewObject : (IRepositoryViewObject[]) input) {
+                if (viewObject.getRepositoryObjectType().equals(type)) {
+                    commonViewer.refresh(viewObject);
+                    break;
+                }
             }
         }
     }

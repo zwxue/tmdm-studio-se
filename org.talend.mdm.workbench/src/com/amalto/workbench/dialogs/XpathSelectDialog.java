@@ -193,6 +193,10 @@ public class XpathSelectDialog extends Dialog {
         return totalXpath;
     }
 
+    protected List<String> getAvailableDataModel() {
+        return Util.getDataModel(this.parent, dataModelName, conceptName);
+    }
+
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
         Composite composite = (Composite) super.createDialogArea(parent);
@@ -212,10 +216,11 @@ public class XpathSelectDialog extends Dialog {
         // this.parent = (TreeParent) ServerView.show().getRoot().getChildren()[0];
         // }
         // The ending| bug:21784
-        final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
+
+        final TreeParent tree = this.parent == null ? null : this.parent.findServerFolder(TreeObject.DATA_MODEL);
 
         // filter the datamodel according to conceptName
-        avaiList = Util.getDataModel(this.parent, dataModelName, conceptName);
+        avaiList = getAvailableDataModel();
 
         dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
         dataModelCombo.addSelectionListener(new SelectionListener() {
@@ -272,7 +277,7 @@ public class XpathSelectDialog extends Dialog {
         return composite;
     }
 
-    private void changeDomTree(final TreeParent pObject, String filter) {
+    protected void changeDomTree(final TreeParent pObject, String filter) {
         String modelDisplay = dataModelCombo.getText();
         if (modelDisplay.length() == 0)
             return;

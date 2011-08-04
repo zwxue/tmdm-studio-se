@@ -126,4 +126,12 @@ public abstract class AFormPage extends FormPage {
         return true;
 
     }
+
+    public boolean isLocalInput() {
+        FormEditor editor = getEditor();
+        if (editor instanceof IServerObjectEditorState) {
+            return ((IServerObjectEditorState) editor).isLocalInput();
+        }
+        return false;
+    }
 }

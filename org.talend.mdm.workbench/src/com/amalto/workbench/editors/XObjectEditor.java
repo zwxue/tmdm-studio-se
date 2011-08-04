@@ -49,7 +49,7 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 
-public class XObjectEditor extends FormEditor implements IXObjectModelListener {
+public class XObjectEditor extends FormEditor implements IXObjectModelListener, IServerObjectEditorState {
 
     private static Log log = LogFactory.getLog(XObjectEditor.class);
 
@@ -495,4 +495,15 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
     public IFormPage getPage(int index) {
         return formPages.get(index);
     }
+
+    //
+
+    public boolean isReadOnly() {
+        return false;
+    }
+
+    public boolean isLocalInput() {
+        return false;
+    }
+
 }

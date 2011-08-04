@@ -93,4 +93,10 @@ public class XObjectEditor2 extends XObjectEditor {
         }
         return false;
     }
+
+    @Override
+    public boolean isLocalInput() {
+        return super.isLocalInput();
+    }
+    
 }

@@ -56,9 +56,12 @@ public class UpdateServerDefAction extends AbstractRepositoryAction {
                         log.error(e.getMessage(), e);
                     }
                 }
+                commonViewer.refresh(obj);
+                // refreshParent();
             }
-            commonViewer.refresh();
+
         }
+        commonViewer.refresh();
     }
 
 }

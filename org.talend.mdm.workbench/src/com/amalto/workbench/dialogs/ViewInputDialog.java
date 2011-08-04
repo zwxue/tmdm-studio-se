@@ -52,7 +52,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     /**
      * The input value; the empty string by default.
      */
-    private String value = "";//$NON-NLS-1$
+    protected String value = "";//$NON-NLS-1$
 
     /**
      * The input validator, or <code>null</code> if none.
@@ -69,7 +69,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     /**
      * Input text widget.
      */
-    private Text text;
+    protected Text text;
 
     /**
      * Error message label widget.
@@ -97,9 +97,9 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
     private TreeParent treeParent;
 
-    private IWorkbenchPartSite site;
+    protected IWorkbenchPartSite site;
 
-    private XpathSelectDialog dlg;
+    protected XpathSelectDialog dlg;
 
     private Composite composite;
 
@@ -123,7 +123,6 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         this.site = site;
         this.title = dialogTitle;
         message = dialogMessage;
-        this.site = site;
         this.treeParent = treeParent;
         this.isTransfor = isTransfor;
         if (initialValue == null) {

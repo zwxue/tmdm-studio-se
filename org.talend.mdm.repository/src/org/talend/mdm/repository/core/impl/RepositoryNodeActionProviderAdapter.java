@@ -40,6 +40,7 @@ import org.talend.mdm.repository.ui.actions.DuplicateAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
+import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
 
@@ -57,6 +58,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     static AbstractRepositoryAction duplicateAction;
 
+    static AbstractRepositoryAction updateServerAction;
+
     protected static AbstractRepositoryAction renameAction;
 
     protected AbstractRepositoryAction refreshAction;
@@ -73,6 +76,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         removeFromRepositoryAction = new RemoveFromRepositoryAction();
         renameAction = new RenameObjectAction();
         duplicateAction = new DuplicateAction();
+        updateServerAction = new UpdateServerDefAction();
         //
         exportAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
@@ -82,6 +86,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
+        updateServerAction.initCommonViewer(commonViewer);
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -109,6 +114,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
             } else if (item instanceof MDMServerObjectItem) {
                 actions.add(removeFromRepositoryAction);
+                actions.add(updateServerAction);
 
                 addAction(actions, copyAction);
                 addAction(actions, pasteAction);
@@ -117,7 +123,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         }
 
         //
-        actions.add(exportAction);
+        // actions.add(exportAction);
         actions.add(refreshAction);
 
         return actions;
