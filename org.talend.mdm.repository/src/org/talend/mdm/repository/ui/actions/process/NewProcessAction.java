@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -91,6 +92,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
                 }, true);
         vid.setBtnShow(false);
         vid.create();
+        vid.getShell().setSize(new Point(500, 300));
         vid.setBlockOnOpen(true);
         if (vid.open() == Window.CANCEL)
             return;

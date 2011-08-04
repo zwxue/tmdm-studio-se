@@ -21,9 +21,18 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.view;
 
+import java.util.regex.Pattern;
+
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -31,6 +40,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
+import org.talend.mdm.repository.ui.dialogs.ViewInputDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -69,6 +79,45 @@ public class NewViewAction extends AbstractSimpleAddAction {
         return view;
     }
 
+    public void run() {
+        parentItem = null;
+        selectObj = getSelectedObject().get(0);
+        if (selectObj instanceof IRepositoryViewObject) {
+            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
+            if (pItem instanceof ContainerItem) {
+                parentItem = (ContainerItem) pItem;
+            }
+        }
+        IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
+        ViewInputDialog2 vid = new ViewInputDialog2(site, getShell(), getDialogTitle(),
+
+        Messages.Common_inputName, "Browse_items_", new IInputValidator() {//$NON-NLS-1$
+
+                    public String isValid(String newText) {
+                        if (newText == null || newText.trim().length() == 0)
+                            return Messages.Common_nameCanNotBeEmpty;
+                        if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                            return Messages.Common_nameInvalid;
+                        }
+                        if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
+                            return Messages.Common_nameIsUsed;
+                        }
+                        return null;
+                    };
+                }, false);
+        vid.setBtnShow(true);
+        vid.create();
+        vid.getShell().setSize(new Point(500, 180));
+        vid.setBlockOnOpen(true);
+        if (vid.open() == Window.CANCEL)
+            return;
+        String key = vid.getValue();
+
+        createServerObject(key);
+        commonViewer.refresh(selectObj);
+        commonViewer.expandToLevel(selectObj, 1);
+
+    }
     protected boolean createServerObject(String key) {
 
         WSViewItem item = MdmpropertiesFactory.eINSTANCE.createWSViewItem();
