@@ -38,6 +38,7 @@ import org.talend.mdm.repository.ui.actions.bridge.DeleteAction;
 import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
 import org.talend.mdm.repository.ui.actions.job.CreateProcessAction;
 import org.talend.mdm.repository.ui.actions.job.EditProcessAction;
+import org.talend.mdm.repository.ui.actions.job.GenerateJobTransformerAction;
 import org.talend.mdm.repository.ui.actions.job.OpenExistVersionProcessAction;
 import org.talend.mdm.repository.ui.actions.job.ReadProcessAction;
 import org.talend.mdm.repository.ui.actions.job.RunProcessAction;
@@ -63,6 +64,8 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction openExistVersionProcessAction;
 
+    AbstractRepositoryAction generateTransformerAction;
+
     AbstractRepositoryAction deleteAction;
 
     // AbstractRepositoryAction exportJobScriptAction;
@@ -78,6 +81,8 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         runProcessAction = new RunProcessAction();
         openExistVersionProcessAction = new OpenExistVersionProcessAction();
         deleteAction = new DeleteAction();
+        generateTransformerAction = new GenerateJobTransformerAction();
+
         // exportJobScriptAction = new ExportJobScriptAction();
         //
         createFolderAction.initCommonViewer(commonViewer);
@@ -88,7 +93,9 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         runProcessAction.initCommonViewer(commonViewer);
         openExistVersionProcessAction.initCommonViewer(commonViewer);
         deleteAction.initCommonViewer(commonViewer);
+        generateTransformerAction.initCommonViewer(commonViewer);
         // exportJobScriptAction.initCommonViewer(commonViewer);
+
     }
 
     @Override
@@ -121,6 +128,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             actions.add(openExistVersionProcessAction);
             // actions.add(exportJobScriptAction);
             actions.add(deleteAction);
+            actions.add(generateTransformerAction);
         }
         return actions;
     }
