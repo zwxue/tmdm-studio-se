@@ -47,8 +47,8 @@ public class Synchronization2Panel extends ContentPanel {
         this.setBodyBorder(false);
         this.setHeaderVisible(false);
         this.setLayout(new FitLayout());
-        this.setWidth(800);
-        this.setHeight(500);
+        this.setWidth("100%"); //$NON-NLS-1$
+
         this.initComponent();
     }
     
