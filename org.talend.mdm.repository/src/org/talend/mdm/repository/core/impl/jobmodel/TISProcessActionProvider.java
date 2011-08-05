@@ -39,6 +39,7 @@ import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
 import org.talend.mdm.repository.ui.actions.job.CreateProcessAction;
 import org.talend.mdm.repository.ui.actions.job.EditProcessAction;
 import org.talend.mdm.repository.ui.actions.job.GenerateJobTransformerAction;
+import org.talend.mdm.repository.ui.actions.job.GenerateJobTriggerAction;
 import org.talend.mdm.repository.ui.actions.job.OpenExistVersionProcessAction;
 import org.talend.mdm.repository.ui.actions.job.ReadProcessAction;
 import org.talend.mdm.repository.ui.actions.job.RunProcessAction;
@@ -66,6 +67,8 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction generateTransformerAction;
 
+    AbstractRepositoryAction generateTriggerAction;
+
     AbstractRepositoryAction deleteAction;
 
     // AbstractRepositoryAction exportJobScriptAction;
@@ -82,6 +85,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         openExistVersionProcessAction = new OpenExistVersionProcessAction();
         deleteAction = new DeleteAction();
         generateTransformerAction = new GenerateJobTransformerAction();
+        generateTriggerAction = new GenerateJobTriggerAction();
 
         // exportJobScriptAction = new ExportJobScriptAction();
         //
@@ -94,6 +98,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         openExistVersionProcessAction.initCommonViewer(commonViewer);
         deleteAction.initCommonViewer(commonViewer);
         generateTransformerAction.initCommonViewer(commonViewer);
+        generateTriggerAction.initCommonViewer(commonViewer);
         // exportJobScriptAction.initCommonViewer(commonViewer);
 
     }
@@ -129,6 +134,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             // actions.add(exportJobScriptAction);
             actions.add(deleteAction);
             actions.add(generateTransformerAction);
+            actions.add(generateTriggerAction);
         }
         return actions;
     }
