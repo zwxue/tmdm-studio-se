@@ -205,10 +205,25 @@ public class RepositoryResourceUtil {
     }
 
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type) {
+        return findAllViewObjects(type, true);
+    }
+
+    public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type, boolean useRepositoryViewObject) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
-            return factory.getAll(type);
-
+            List<IRepositoryViewObject> allObjs = factory.getAll(type);
+            List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
+            for (IRepositoryViewObject viewObj : allObjs) {
+                ItemState state = viewObj.getProperty().getItem().getState();
+                if (!state.isDeleted()) {
+                    if (useRepositoryViewObject) {
+                        viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
+                    } else {
+                        viewObjects.add(viewObj);
+                    }
+                }
+            }
+            return viewObjects;
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
@@ -338,7 +353,7 @@ public class RepositoryResourceUtil {
 
     public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType,
             boolean hasSystemFolder) {
-        return findViewObjectsByType(type, parentItem, systemType, hasSystemFolder, false);
+        return findViewObjectsByType(type, parentItem, systemType, hasSystemFolder, true);
     }
 
     public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType,

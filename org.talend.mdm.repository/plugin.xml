@@ -106,6 +106,7 @@
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.WorkflowDeployRepositoryNode"
             folder="MDM/workflow"
+            isResouce="true"
             label="Workflow"
             products="MDM"
             type="MDM.Workflow">
@@ -113,6 +114,7 @@
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.TransformerV2RepositoryNode"
             folder="MDM/transformerV2"
+            isResouce="true"
             label="Process"
             products="MDM"
             type="MDM.TransformerV2">
@@ -120,6 +122,7 @@
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.RoutingRuleRepositoryNode"
             folder="MDM/routingrule"
+            isResouce="true"
             label="Trigger"
             products="MDM"
             type="MDM.RoutingRule">
@@ -127,6 +130,7 @@
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.JobModelRepositoryNode"
             folder="MDM/jobmodel"
+            isResouce="true"
             label="Job"
             products="MDM"
             type="MDM.JobModel">
@@ -134,6 +138,7 @@
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.EventManagerRepositoryNode"
             folder="MDM/eventmanager"
+            isResouce="true"
             label="Event Management"
             products="MDM"
             type="MDM.EventManager">

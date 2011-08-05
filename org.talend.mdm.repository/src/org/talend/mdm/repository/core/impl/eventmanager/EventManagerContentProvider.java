@@ -34,9 +34,13 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 public class EventManagerContentProvider extends AbstractContentProvider {
 
-    @Override
-    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
-        List<IRepositoryViewObject> result = new LinkedList<IRepositoryViewObject>();
+    private List<IRepositoryViewObject> result;
+
+    /**
+     * DOC hbhong EventManagerContentProvider constructor comment.
+     */
+    public EventManagerContentProvider() {
+        result = new LinkedList<IRepositoryViewObject>();
         IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
                 .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
         IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
@@ -45,6 +49,10 @@ public class EventManagerContentProvider extends AbstractContentProvider {
         //
         addCategoryViewObject(result, processConf);
         addCategoryViewObject(result, triggerConf);
+    }
+
+    @Override
+    protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return result;
     }
 

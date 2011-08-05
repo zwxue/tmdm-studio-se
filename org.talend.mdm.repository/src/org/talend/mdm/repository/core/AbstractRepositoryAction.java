@@ -33,6 +33,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.models.ContainerRepositoryObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -100,11 +101,30 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
         Object input = commonViewer.getInput();
         if (input != null && input instanceof IRepositoryViewObject[]) {
             for (IRepositoryViewObject viewObject : (IRepositoryViewObject[]) input) {
-                if (viewObject.getRepositoryObjectType().equals(type)) {
-                    commonViewer.refresh(viewObject);
-                    break;
+                if (refreshRepositoryContainer(viewObject, type)) {
+                    return;
                 }
+                List<IRepositoryViewObject> children = viewObject.getChildren();
+                if (children != null) {
+                    for (IRepositoryViewObject child : children) {
+                        if (refreshRepositoryContainer(child, type)) {
+                            return;
+                        }
+                    }
+                }
+
             }
         }
+    }
+
+    private boolean refreshRepositoryContainer(IRepositoryViewObject viewObj, ERepositoryObjectType type) {
+        if (viewObj instanceof ContainerRepositoryObject) {
+            ContainerRepositoryObject containerRepositoryObject = (ContainerRepositoryObject) viewObj;
+            if (containerRepositoryObject.getRepositoryObjectType().equals(type)) {
+                commonViewer.refresh(containerRepositoryObject);
+                return true;
+            }
+        }
+        return false;
     }
 }
