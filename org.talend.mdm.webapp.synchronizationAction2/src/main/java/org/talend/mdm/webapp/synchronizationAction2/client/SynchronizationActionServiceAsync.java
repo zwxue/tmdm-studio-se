@@ -27,5 +27,7 @@ public interface SynchronizationActionServiceAsync {
     void getSavedURLs(AsyncCallback<ListRange> callback)throws Exception;
     
     void saveURLs(String url,AsyncCallback<Void> callback)throws Exception;
+    
+    void getInfo(SyncInfo info,AsyncCallback<List<ItemBaseModel>> callback)throws IllegalArgumentException;
 
 }

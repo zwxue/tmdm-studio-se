@@ -30,15 +30,19 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
     public static final String SERVER_URL_DEFAULT="http://localhost:8080/talend/TalendPort";
     private Logger logger=org.apache.log4j.Logger.getLogger(this.getClass());
 
-    public List<ItemBaseModel> getSyncNames(SyncInfo info) throws Exception{     
+    public List<ItemBaseModel> getSyncNames(SyncInfo info) throws Exception{
+           
             WSSynchronizationPlanPKArray array
                 = Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
             WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();
-            List<ItemBaseModel> syncNames = new ArrayList<ItemBaseModel>();
+            //List<ItemBaseModel> syncNames = new ArrayList<ItemBaseModel>();
+        
+            List syncNames = new ArrayList();
             if(pks!=null && pks.length>0){
                 logger.debug("pks:"+pks.length);
                 //String[] syncNames=new String[pks.length];                
                 for(int i=0; i<pks.length; i++){
+                    //syncNames.add(pks[i].getPk());
                     ItemBaseModel model = new ItemBaseModel();
                     model.set("name", pks[i].getPk());
                     model.set("value", pks[i].getPk());
@@ -47,10 +51,11 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
                 }
                 logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
                 //return syncNames;
-                return syncNames;
-            }else
+            }
+            //else
                 //return new String[0];
-                return syncNames;        
+   
+            return syncNames;        
     }
     
     public void startFull(SyncInfo info)throws Exception {
@@ -182,6 +187,15 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
             throw new Exception(e.getClass().getName() + ": "
                     + e.getLocalizedMessage());
         }
+    }
+    
+    public List<ItemBaseModel> getInfo(SyncInfo info)throws IllegalArgumentException{
+        List l = new ArrayList();
+        l.add(new ItemBaseModel());
+        l.add(new ItemBaseModel());
+        l.add(new ItemBaseModel());
+        l.add(new ItemBaseModel());
+        return l; 
     }
 
 }

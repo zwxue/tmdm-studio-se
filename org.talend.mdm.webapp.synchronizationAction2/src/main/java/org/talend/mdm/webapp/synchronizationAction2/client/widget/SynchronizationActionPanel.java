@@ -2,18 +2,17 @@ package org.talend.mdm.webapp.synchronizationAction2.client.widget;
 
 import java.util.List;
 
-import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationAction2;
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionService;
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionServiceAsync;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ItemBaseModel;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
 
-import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -21,6 +20,7 @@ import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.FieldSet;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
@@ -33,7 +33,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class SynchronizationActionPanel extends ContentPanel {
     
     //private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync) Registry.get(SynchronizationAction2.SYNCHRONIZTIONACTION_SERVICE);
-    private final SynchronizationActionServiceAsync service = GWT.create(SynchronizationActionService.class);
+    private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync)GWT.create(SynchronizationActionService.class);
     private FormData formData = new FormData("-20"); 
     private VerticalPanel verticalPanel = new VerticalPanel();
     private TextField<String> serverUrl_TF = null;   
@@ -106,28 +106,44 @@ public class SynchronizationActionPanel extends ContentPanel {
         FormPanel synchronizationForm_FP = new FormPanel();  
         synchronizationForm_FP.setFrame(true);  
         synchronizationForm_FP.setHeading("Simple Form with FieldSets");  
-        synchronizationForm_FP.setWidth(350);  
+        //synchronizationForm_FP.setWidth(350);  
         synchronizationForm_FP.setLayout(new FlowLayout());  
+        synchronizationForm_FP.setBorders(false);
+        synchronizationForm_FP.setBodyStyle("padding: 8px; background-color: transparent;");
+        synchronizationForm_FP.setLabelAlign(LabelAlign.LEFT);
+        synchronizationForm_FP.setLabelWidth(150);
+       
+        
       
         FieldSet fieldSet = new FieldSet();  
-        fieldSet.setHeading("Remote system information");  
-        fieldSet.setCheckboxToggle(false);        
+        fieldSet.setHeading("Remote system information");   
+        fieldSet.setAutoHeight(true);
+        
       
         FormLayout layout = new FormLayout();  
         layout.setLabelWidth(75);  
         fieldSet.setLayout(layout);  
-      
+        
+        synchronizationName_CB = new ComboBox<ItemBaseModel>(); 
+        synchronizationName_CB.setEmptyText("Select a Synchronization Name");  
+        synchronizationName_CB.setDisplayField("name");  
+        synchronizationName_CB.setWidth(400);    
+        synchronizationName_CB.setStore(new ListStore());
+        
         serverUrl_TF = new TextField<String>();  
         serverUrl_TF.setFieldLabel("Server URL");  
         serverUrl_TF.setAllowBlank(false);  
+        serverUrl_TF.setWidth(400);
         fieldSet.add(serverUrl_TF, formData);  
-      
+        
         userName_TF = new TextField<String>();  
         userName_TF.setFieldLabel("UserName");  
+        userName_TF.setWidth(400);
         fieldSet.add(userName_TF, formData);  
       
         password_TF = new TextField<String>();  
         password_TF.setFieldLabel("Password");  
+        password_TF.setWidth(400);
         password_TF.addListener(Events.Blur,  new Listener<FieldEvent>(){
 
             public void handleEvent(FieldEvent be) {
@@ -139,38 +155,38 @@ public class SynchronizationActionPanel extends ContentPanel {
                         service.getSyncNames(syncInfo,new AsyncCallback<List<ItemBaseModel>>() {
 
                             public void onFailure(Throwable caught) {
-                                System.out.println(caught.getStackTrace());
-                                System.out.println(caught.getMessage());
-                                System.out.println(caught.getCause());
+                                caught.printStackTrace();  
                                 System.out.println("aaaaaaaaaaaa");
                             }
 
                             public void onSuccess(List<ItemBaseModel> result) {
-                                
-                                synchronizationName_CB = new ComboBox<ItemBaseModel>();  
-                                synchronizationName_CB.setEmptyText("");  
-                                synchronizationName_CB.setDisplayField("name");  
-                                synchronizationName_CB.setWidth(150);  
-                                System.out.println(result.size());
-                                synchronizationName_CB.getStore().removeAll();  
-                                synchronizationName_CB.getStore().add(result);
+                                ListStore<ItemBaseModel> store = new ListStore<ItemBaseModel>();
+                                store.add(result);
+                            
+                                //synchronizationName_CB.getStore().removeAll();                      
+                                synchronizationName_CB.setStore(store);
                                 synchronizationName_CB.setTypeAhead(true);  
-                                synchronizationName_CB.setTriggerAction(TriggerAction.ALL);  
-                                
+                                synchronizationName_CB.setTriggerAction(TriggerAction.ALL);                                  
                             }
+//                        service.getInfo(syncInfo,new AsyncCallback<List<ItemBaseModel>>() {
+//                            public void onFailure(Throwable caught) {
+//                                caught.printStackTrace();
+//                                System.out.println("error error error");
+//                            }
+//                            
+//                            public void onSuccess(List<ItemBaseModel> result) {
+//                                System.out.println(result.size());
+//                            }
+                        
                         });
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                    }
-  
+                    }  
                 }
-            }
-     
+            }     
         });
-        fieldSet.add(password_TF, formData);  
-        
-
+        fieldSet.add(password_TF, formData);
         
         Button startFull_BT = new Button("startFull");
         Button startDifferent_BT = new Button("startDifferent");
@@ -213,6 +229,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         });
         
         synchronizationForm_FP.add(fieldSet);
+        synchronizationForm_FP.add(synchronizationName_CB);
 //        synchronizationForm_FP.add(synchronizationName_CB);
         synchronizationForm_FP.addButton(startFull_BT);
         synchronizationForm_FP.addButton(startDifferent_BT);

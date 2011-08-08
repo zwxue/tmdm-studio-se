@@ -3,6 +3,7 @@ package org.talend.mdm.webapp.synchronizationAction2.client;
 import java.util.List;
 
 import org.talend.mdm.webapp.synchronizationAction2.shared.ItemBaseModel;
+import org.talend.mdm.webapp.synchronizationAction2.shared.ItemModelStore;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ListRange;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncStatus;
@@ -28,4 +29,6 @@ public interface SynchronizationActionService extends RemoteService{
     public ListRange getSavedURLs()throws Exception;
     
     public void saveURLs(String url)throws Exception;
+    
+    public List<ItemBaseModel> getInfo(SyncInfo info)throws IllegalArgumentException;
 }
