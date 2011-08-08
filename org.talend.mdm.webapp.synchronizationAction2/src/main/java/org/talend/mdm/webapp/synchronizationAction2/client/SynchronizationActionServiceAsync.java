@@ -10,24 +10,24 @@ import org.talend.mdm.webapp.synchronizationAction2.shared.SyncStatus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
-public interface SynchronizationActionServiceAsync {   
-    
-    void getSyncNames(SyncInfo syncInfo,AsyncCallback<List<ItemBaseModel>> callback)throws Exception;
-    
-    void startFull(SyncInfo info,AsyncCallback<Void> callback)throws Exception;
-    
-    void startDifferent(SyncInfo info,AsyncCallback<Void> callback)throws Exception;
-    
-    void stop(SyncInfo info,AsyncCallback<Void> callback)throws Exception;
-    
-    void reset(SyncInfo info,AsyncCallback<Void> callback)throws Exception;
+public interface SynchronizationActionServiceAsync {
 
-    void getStatus(SyncInfo info,AsyncCallback<SyncStatus> callback)throws Exception;
-    
-    void getSavedURLs(AsyncCallback<ListRange> callback)throws Exception;
-    
-    void saveURLs(String url,AsyncCallback<Void> callback)throws Exception;
-    
-    void getInfo(SyncInfo info,AsyncCallback<List<ItemBaseModel>> callback)throws IllegalArgumentException;
+    void getSyncNames(SyncInfo info, AsyncCallback<List<ItemBaseModel>> callback);
 
+    void startFull(SyncInfo info, AsyncCallback<Void> callback);
+
+    void startDifferent(SyncInfo info, AsyncCallback<Void> callback);
+
+    void stop(SyncInfo info, AsyncCallback<Void> callback);
+
+    void reset(SyncInfo info, AsyncCallback<Void> callback);
+
+    void getStatus(SyncInfo info, AsyncCallback<SyncStatus> callback);
+
+    void getSavedURLs(AsyncCallback<ListRange> callback);
+
+    void saveURLs(String url, AsyncCallback<Void> callback);
+
+    void getInfo(SyncInfo info, AsyncCallback<List<ItemBaseModel>> callback);   
+    
 }
