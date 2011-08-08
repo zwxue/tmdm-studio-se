@@ -15,6 +15,7 @@ import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
@@ -201,7 +202,9 @@ public class SynchronizationActionPanel extends ContentPanel {
         Button startFull_BT = new Button("startFull");
         Button startDifferent_BT = new Button("startDifferent");
         Button stop_BT = new Button("stop_BT");
+        stop_BT.setEnabled(false);
         Button reset_BT = new Button("reset_BT");
+        reset_BT.setEnabled(false);
 
         startFull_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
@@ -224,8 +227,17 @@ public class SynchronizationActionPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ButtonEvent ce) {
-                // service.getSyncNames(info, callback)
-                System.out.println("aaaaaaa");
+                SyncInfo info = SynchronizationActionPanel.this.getSyncInfo();
+                service.stop(info, new AsyncCallback<Void>() {
+                    
+                    public void onSuccess(Void arg0) {
+                        MessageBox.alert("AAA", "BBB", null);
+                    }
+                    
+                    public void onFailure(Throwable arg0) {
+                        
+                    }
+                });
             }
         });
 
@@ -233,8 +245,17 @@ public class SynchronizationActionPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ButtonEvent ce) {
-                // service.getSyncNames(info, callback)
-                System.out.println("aaaaaaa");
+                SyncInfo info = SynchronizationActionPanel.this.getSyncInfo();
+                service.reset(info, new AsyncCallback<Void>() {
+                    
+                    public void onSuccess(Void arg0) {
+                        MessageBox.alert("AAA", "BBB", null);
+                    }
+                    
+                    public void onFailure(Throwable arg0) {
+                        
+                    }
+                });
             }
         });
 
