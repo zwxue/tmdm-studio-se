@@ -6,6 +6,7 @@ import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationAction
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionServiceAsync;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ItemBaseModel;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ListRange;
+import org.talend.mdm.webapp.synchronizationAction2.shared.ServerURL;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -127,7 +128,14 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
 
             public void onSuccess(ListRange result) {
-                System.out.println(result.getData());
+                System.out.println("aaaaaaaa"); 
+                ServerURL urls[] = result.getData();
+                for (int i=0;i<urls.length;i++)
+                {
+                    ServerURL url = urls[i];
+                    System.out.println(url.getName());
+                }
+               
             }
         });
 
