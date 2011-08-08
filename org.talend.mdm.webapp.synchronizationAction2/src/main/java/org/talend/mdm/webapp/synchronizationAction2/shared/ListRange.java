@@ -1,7 +1,5 @@
 package org.talend.mdm.webapp.synchronizationAction2.shared;
 
-import java.io.Serializable;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /*
@@ -16,6 +14,10 @@ public class ListRange implements IsSerializable{
 	private ServerURL[] data;
 
 	private int totalSize;
+	
+	public ListRange(){
+	    
+	}
 
 	public ServerURL[] getData() {
 		return data;

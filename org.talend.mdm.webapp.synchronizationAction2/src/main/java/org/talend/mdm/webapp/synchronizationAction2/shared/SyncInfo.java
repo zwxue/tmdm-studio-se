@@ -3,10 +3,17 @@ package org.talend.mdm.webapp.synchronizationAction2.shared;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SyncInfo implements IsSerializable{
+    
 	private String serverURL;
 	private String username;
 	private String password;
 	private String syncName;
+	
+	public SyncInfo()
+	{
+	    
+	}
+	
 	public String getServerURL() {
 		return serverURL;
 	}

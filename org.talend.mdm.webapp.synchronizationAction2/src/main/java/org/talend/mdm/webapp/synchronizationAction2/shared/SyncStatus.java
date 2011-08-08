@@ -1,12 +1,14 @@
 package org.talend.mdm.webapp.synchronizationAction2.shared;
 
-import java.io.Serializable;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SyncStatus implements IsSerializable{
 	private String value;
 	private String message;
+	
+	public SyncStatus(){
+	    
+	}
 	public String getValue() {
 		return value;
 	}

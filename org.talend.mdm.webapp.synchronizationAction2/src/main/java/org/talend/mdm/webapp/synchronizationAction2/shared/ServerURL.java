@@ -1,12 +1,14 @@
 package org.talend.mdm.webapp.synchronizationAction2.shared;
 
-import java.io.Serializable;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class ServerURL implements IsSerializable {
 	String id;
 	String name;
+	
+	public ServerURL() {
+	    
+	}
 	public String getId() {
 		return id;
 	}
