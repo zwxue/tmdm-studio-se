@@ -46,7 +46,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     protected void initExternalInfoHolder() {
 
         ExternalInfoHolder<?> allJobInfosHolder = RepositoryExternalInfoHolder.getAllJobInfosHolder(null);
-        ExternalInfoHolder<?> mdmServerInfoHolder = RepositoryExternalInfoHolder.getAllMDMServerInfoHolder(null);
+        ExternalInfoHolder<?> mdmServerInfoHolder = RepositoryExternalInfoHolder.getAllMDMServerInfoHolder2(null);
         ExternalInfoHolder<?> allVarCandidatesHolder = RepositoryExternalInfoHolder
                 .getProcessAllCallJobVarsCandidatesHolder((WSTransformerV2) getXObject().getWsObject());
         ExternalInfoHolder<?> workflowInfoHolder = RepositoryExternalInfoHolder.getAllWorkflowInfoHolder(null);
@@ -74,28 +74,14 @@ public class TransformerMainPage2 extends TransformerMainPage {
             for (int i = 0; i < items.length; i++) {
                 pluginDescriptions.put(items[i].getJndiName(), items[i].getDescription());
             }
-             // get the sorted list and feed the combo
-             Set<String> jndis = pluginDescriptions.keySet();
-             for (Iterator<String> iterator = jndis.iterator(); iterator.hasNext();) {
-             String jndi = iterator.next();
-             pluginsCombo.add(jndi);
-             // add input variables and output variables
-            // WSTransformerPluginV2Details details = port.getTransformerPluginV2Details(new
-            // WSGetTransformerPluginV2Details(
-            //                        jndi.contains("/") ? jndi//$NON-NLS-1$
-            //                                : TRANSFORMER_PLUGIN + jndi, "en"));//$NON-NLS-1$
-            // java.util.List<String> input = new ArrayList<String>();
-            // for (WSTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
-            // input.add(v.getVariableName());
-            //
-            // }
-            // inputVariablesMap.put(jndi, input);
-            //
-            // java.util.List<String> output = new ArrayList<String>();
-            // for (WSTransformerPluginV2VariableDescriptor v : details.getOutputVariableDescriptors()) {
-            // output.add(v.getVariableName());
-            // }
-            // outputVariablesMap.put(jndi, output);
+            // get the sorted list and feed the combo
+            Set<String> jndis = pluginDescriptions.keySet();
+            for (Iterator<String> iterator = jndis.iterator(); iterator.hasNext();) {
+                String jndi = iterator.next();
+                pluginsCombo.add(jndi);
+                // add input variables and output variables
+                inputVariablesMap.put(jndi, RepositoryQueryService.getInputVariables(jndi));
+                outputVariablesMap.put(jndi, RepositoryQueryService.getOutputVariables(jndi));
             }
         }
     }

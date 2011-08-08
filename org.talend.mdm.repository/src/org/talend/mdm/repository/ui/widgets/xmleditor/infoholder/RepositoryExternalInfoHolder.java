@@ -39,7 +39,7 @@ public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder
         return new RepositoryJobInfoHolder();
     }
 
-    public static ExternalInfoHolder<WSMDMConfig> getAllMDMServerInfoHolder(XtentisPort port) {
+    public static ExternalInfoHolder<WSMDMConfig[]> getAllMDMServerInfoHolder2(XtentisPort port) {
         return new RepositoryMDMServerInfoHolder(port);
     }
 

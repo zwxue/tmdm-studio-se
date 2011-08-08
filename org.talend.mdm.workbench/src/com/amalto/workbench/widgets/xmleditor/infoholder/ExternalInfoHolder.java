@@ -34,6 +34,8 @@ public abstract class ExternalInfoHolder<T> {
 
     public static final String INFOID_ALLCALLJOBVARIABLES = "all calljob vars";//$NON-NLS-1$
 
+    public static final String INFOID_ALLMDMSERVERINFO = "all mdm server infos";//$NON-NLS-1$
+
     public static ExternalInfoHolder<String[]> getAllProcessesNamesHolder(XtentisPort port) {
         return new AllProcessesNamesHolder(port);
     }

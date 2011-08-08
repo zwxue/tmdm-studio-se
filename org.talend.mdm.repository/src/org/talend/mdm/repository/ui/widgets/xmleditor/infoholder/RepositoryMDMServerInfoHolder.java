@@ -12,31 +12,42 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.widgets.xmleditor.infoholder;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 
 import com.amalto.workbench.webservices.WSMDMConfig;
 import com.amalto.workbench.webservices.XtentisPort;
 
-public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<WSMDMConfig> {
+/**
+ * DOC hbhong class global comment. Detailled comment
+ */
+public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<WSMDMConfig[]> {
 
     static Logger log = Logger.getLogger(RepositoryMDMServerInfoHolder.class);
 
     public RepositoryMDMServerInfoHolder(XtentisPort port) {
     }
 
-    @Override
-    public WSMDMConfig getExternalInfo() {
-        // try {
-        // return port.getMDMConfiguration();
-        // } catch (RemoteException e) {
-        // log.error(e.getMessage(), e);
-        return null;
-        // }
+    public WSMDMConfig[] getExternalInfo() {
+        List<MDMServerDef> allServerDefs = ServerDefService.getAllServerDefs();
+        WSMDMConfig[] configs = new WSMDMConfig[allServerDefs.size()];
+        int i = 0;
+        for (MDMServerDef def : allServerDefs) {
+            configs[i] = new WSMDMConfig();
+            configs[i].setServerName(def.getHost());
+            configs[i].setServerPort(def.getPort());
+            configs[i].setUserName(def.getUser());
+            configs[i].setPassword(def.getPasswd());
+            i++;
+        }
+        return configs;
     }
 
-    @Override
     public String getId() {
-        return INFOID_MDMSERVERINFO;
+        return INFOID_ALLMDMSERVERINFO;
     }
 
 }

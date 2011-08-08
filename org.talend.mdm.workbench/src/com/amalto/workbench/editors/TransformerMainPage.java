@@ -13,6 +13,7 @@
 package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -219,6 +220,39 @@ public class TransformerMainPage extends AMainPageV2 {
         this.cacheList = cacheList;
     }
 
+    protected void initPlugin() throws RemoteException {
+        WSTransformerPluginV2SList list = port.getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
+
+        WSTransformerPluginV2SListItem[] items = list.getItem();
+
+        if (items != null) {
+            for (int i = 0; i < items.length; i++) {
+                pluginDescriptions.put(items[i].getJndiName(), items[i].getDescription());
+            }
+            // get the sorted list and feed the combo
+            Set<String> jndis = pluginDescriptions.keySet();
+            for (Iterator<String> iterator = jndis.iterator(); iterator.hasNext();) {
+                String jndi = iterator.next();
+                pluginsCombo.add(jndi);
+                // add input variables and output variables
+                WSTransformerPluginV2Details details = port.getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(
+                        jndi.contains("/") ? jndi//$NON-NLS-1$
+                                : TRANSFORMER_PLUGIN + jndi, "en"));//$NON-NLS-1$
+                java.util.List<String> input = new ArrayList<String>();
+                for (WSTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
+                    input.add(v.getVariableName());
+
+                }
+                inputVariablesMap.put(jndi, input);
+
+                java.util.List<String> output = new ArrayList<String>();
+                for (WSTransformerPluginV2VariableDescriptor v : details.getOutputVariableDescriptors()) {
+                    output.add(v.getVariableName());
+                }
+                outputVariablesMap.put(jndi, output);
+            }
+        }
+    }
     public void execute() {
         try {
             WSTransformerContextPipelinePipelineItem[] items = new WSTransformerContextPipelinePipelineItem[cacheList.size()];
@@ -328,11 +362,15 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
+    protected void initTransformer() throws XtentisException {
+        port = Util.getPort(getXObject());
+        transformer = (WSTransformerV2) getXObject().getWsObject();
+    }
+
     @Override
     protected void createCharacteristicsContent(final FormToolkit toolkit, Composite topComposite) {
         try {
-            port = Util.getPort(getXObject());
-            transformer = (WSTransformerV2) getXObject().getWsObject();
+            initTransformer();
 
             // Description and File Process
             Composite descriptionComposite = toolkit.createComposite(topComposite, SWT.NONE);
@@ -428,7 +466,6 @@ public class TransformerMainPage extends AMainPageV2 {
             stepText.addKeyListener(new KeyListener() {
 
                 public void keyPressed(KeyEvent e) {
-                    
 
                 }
 
@@ -611,7 +648,7 @@ public class TransformerMainPage extends AMainPageV2 {
             btnAutoIndent.setText("Auto-indent");
             btnAutoIndent.setImage(ImageCache.getCreatedImage(EImage.INTENT.getPath()));
             btnAutoIndent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
-            //refreshAutoIndentTooltip();
+            // refreshAutoIndentTooltip();
             btnAutoIndent.addSelectionListener(new SelectionAdapter() {
 
                 @Override
@@ -1187,6 +1224,8 @@ public class TransformerMainPage extends AMainPageV2 {
             wrap.Wrap(TransformerMainPage.this, outputViewer);
         }
 
+
+
         private void createPlugin() throws Exception {
             Composite specsComposite = toolkit.createComposite(mainComposite, SWT.NONE);
             specsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -1222,37 +1261,7 @@ public class TransformerMainPage extends AMainPageV2 {
                 }
             });
             // feed the combo once
-            WSTransformerPluginV2SList list = port.getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
-
-            WSTransformerPluginV2SListItem[] items = list.getItem();
-
-            if (items != null) {
-                for (int i = 0; i < items.length; i++) {
-                    pluginDescriptions.put(items[i].getJndiName(), items[i].getDescription());
-                }
-                // get the sorted list and feed the combo
-                Set<String> jndis = pluginDescriptions.keySet();
-                for (Iterator<String> iterator = jndis.iterator(); iterator.hasNext();) {
-                    String jndi = iterator.next();
-                    pluginsCombo.add(jndi);
-                    // add input variables and output variables
-                    WSTransformerPluginV2Details details = port
-                            .getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi.contains("/") ? jndi//$NON-NLS-1$
-                                    : TRANSFORMER_PLUGIN + jndi, "en"));//$NON-NLS-1$
-                    java.util.List<String> input = new ArrayList<String>();
-                    for (WSTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
-                        input.add(v.getVariableName());
-
-                    }
-                    inputVariablesMap.put(jndi, input);
-
-                    java.util.List<String> output = new ArrayList<String>();
-                    for (WSTransformerPluginV2VariableDescriptor v : details.getOutputVariableDescriptors()) {
-                        output.add(v.getVariableName());
-                    }
-                    outputVariablesMap.put(jndi, output);
-                }
-            }
+            initPlugin();
             Button detailsButton = toolkit.createButton(specsComposite, "", SWT.PUSH | SWT.CENTER); //$NON-NLS-1$
             detailsButton.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
             detailsButton.setToolTipText("Help...");
@@ -1354,7 +1363,7 @@ public class TransformerMainPage extends AMainPageV2 {
         }
     }
 
-    private void initExternalInfoHolder() {
+    protected void initExternalInfoHolder() {
 
         try {
             ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getPort(getXObject()));
@@ -1374,7 +1383,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
-    private void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
+    protected void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
 
         ArrayList<ExternalInfoHolder<?>> externalInfoHolders = new ArrayList<ExternalInfoHolder<?>>();
         externalInfoHolders.addAll(Arrays.asList(infoHolders));

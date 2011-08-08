@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -139,6 +140,133 @@ public class RepositoryQueryService {
             items[17] = new WSTransformerPluginV2SListItem("regexp", "Executes a regexp on a text and returns the result");//$NON-NLS-1$//$NON-NLS-2$
         }
         return new WSTransformerPluginV2SList(items);
+    }
 
+    public static java.util.List<String> getInputVariables(String jndiName) {
+        List<String> variables = new ArrayList<String>();
+        if (jndiName.equals("batchproject")) {
+            variables.add("xml_instance");
+            variables.add("file_path");
+        }
+        if (jndiName.equals("callJob")) {
+            variables.add("text");
+        }
+        if (jndiName.equals("codec")) {
+            variables.add("law_text");
+        }
+        if (jndiName.equals("crossreferencing")) {
+            variables.add("xml");
+        }
+        if (jndiName.equals("csvparser")) {
+            variables.add("csv_line");
+        }
+        if (jndiName.equals("dumpandgo")) {
+            variables.add("in_text");
+        }
+        if (jndiName.equals("fixedlengthparser")) {
+            variables.add("line");
+        }
+        if (jndiName.equals("groovy")) {
+            variables.add("variable_input");
+        }
+        if (jndiName.equals("groupedlinesreader")) {
+            variables.add("text_content");
+        }
+        if (jndiName.equals("linereader")) {
+            variables.add("text_content");
+        }
+        if (jndiName.equals("partialupdate")) {
+            variables.add("xml_instance");
+            variables.add("item_primary_key");
+            variables.add("data_model");
+            variables.add("clear_cache");
+        }
+        if (jndiName.equals("project")) {
+            variables.add("xml_instance");
+            variables.add("item_primary_key");
+            variables.add("data_model");
+            variables.add("clear_cache");
+        }
+        if (jndiName.equals("regexp")) {
+            variables.add("text");
+        }
+        if (jndiName.equals("replace")) {
+            variables.add("text");
+        }
+        if (jndiName.equals("route")) {
+            variables.add("item_primary_key");
+        }
+        if (jndiName.equals("workflowtrigger")) {
+            variables.add("item_primary_key");
+            variables.add("update_report");
+            variables.add("data_model");
+        }
+        if (jndiName.equals("xpath")) {
+            variables.add("xml");
+        }
+        if (jndiName.equals("xslt")) {
+            variables.add("xml");
+            variables.add("parameters");
+        }
+        return variables;
+    }
+
+    public static java.util.List<String> getOutputVariables(String jndiName) {
+        List<String> variables = new ArrayList<String>();
+        if (jndiName.equals("batchproject")) {
+            variables.add("unavailable_content");
+        }
+        if (jndiName.equals("callJob")) {
+            variables.add("result");
+        }
+        if (jndiName.equals("codec")) {
+            variables.add("codec_text");
+        }
+        if (jndiName.equals("crossreferencing")) {
+            variables.add("text");
+        }
+        if (jndiName.equals("csvparser")) {
+            variables.add("xml");
+        }
+        if (jndiName.equals("dumpandgo")) {
+            variables.add("out_text");
+        }
+        if (jndiName.equals("fixedlengthparser")) {
+            variables.add("xml");
+        }
+        if (jndiName.equals("groovy")) {
+            variables.add("script_output");
+        }
+        if (jndiName.equals("groupedlinesreader")) {
+            variables.add("line");
+        }
+        if (jndiName.equals("linereader")) {
+            variables.add("line");
+        }
+        if (jndiName.equals("partialupdate")) {
+            variables.add("item_primary_key");
+        }
+        if (jndiName.equals("project")) {
+            variables.add("item_primary_key");
+        }
+        if (jndiName.equals("regexp")) {
+            variables.add("group");
+        }
+        if (jndiName.equals("replace")) {
+            variables.add("replaced");
+        }
+        if (jndiName.equals("route")) {
+            variables.add("item_primary_key");
+        }
+        if (jndiName.equals("workflowtrigger")) {
+            variables.add("execution_result");
+        }
+        if (jndiName.equals("xpath")) {
+            variables.add("text");
+        }
+        if (jndiName.equals("xslt")) {
+            variables.add("text");
+        }
+        return variables;
     }
 }

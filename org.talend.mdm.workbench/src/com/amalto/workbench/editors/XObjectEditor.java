@@ -69,25 +69,37 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
      * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
      */
     protected void addPages() {
+
+        updateTitle();
+
+        TreeObject xobject = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
+
+        // backup initial object
+        this.initialXObject = new TreeObject(xobject.getDisplayName(), xobject.getServerRoot(), xobject.getType(),
+                xobject.getWsKey(), xobject.getWsObject(), xobject.getAdditionalInfo());
+
+        if (!xobject.isXObject())
+            return;
+
+        // register model listener
+        xobject.addListener(this);
+        // available models
+        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+        for (IAvailableModel model : availablemodels) {
+            model.addPage(xobject, this);
+        }
+
+        addPageForXObject(xobject);
+
+    }
+
+    /**
+     * DOC hbhong Comment method "addPageForXObject".
+     * 
+     * @throws PartInitException
+     */
+    protected void addPageForXObject(TreeObject xobject) {
         try {
-            updateTitle();
-
-            TreeObject xobject = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
-
-            // backup initial object
-            this.initialXObject = new TreeObject(xobject.getDisplayName(), xobject.getServerRoot(), xobject.getType(),
-                    xobject.getWsKey(), xobject.getWsObject(), xobject.getAdditionalInfo());
-
-            if (!xobject.isXObject())
-                return;
-
-            // register model listener
-            xobject.addListener(this);
-            // available models
-            java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-            for (IAvailableModel model : availablemodels) {
-                model.addPage(xobject, this);
-            }
             switch (xobject.getType()) {
             case TreeObject.DATA_MODEL:
                 // addPage(new DataModelMainPage(this));
@@ -157,6 +169,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
                 // "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
                 return;
             }// switch
+
         } catch (PartInitException e) {
             MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :" + e.getLocalizedMessage());
         }
@@ -356,7 +369,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     }
 
     public int getCurrentPage() {
-        
+
         return super.getCurrentPage();
     }
 
