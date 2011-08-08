@@ -59,6 +59,7 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -206,6 +207,20 @@ public class RepositoryResourceUtil {
 
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type) {
         return findAllViewObjects(type, true);
+    }
+
+    public static List<MDMServerObject> findAllServerObjects(ERepositoryObjectType type) {
+        List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type);
+        List<MDMServerObject> serverObjects = new LinkedList<MDMServerObject>();
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                Item item = viewObj.getProperty().getItem();
+                if (item instanceof MDMServerObjectItem) {
+                    serverObjects.add(((MDMServerObjectItem) item).getMDMServerObject());
+                }
+            }
+        }
+        return serverObjects;
     }
 
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type, boolean useRepositoryViewObject) {

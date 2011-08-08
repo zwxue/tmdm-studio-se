@@ -46,8 +46,6 @@ public class Bean2EObjUtil {
 
     EMFClassUtil emfClassUtil = new EMFClassUtil();
 
-
-
     static Bean2EObjUtil instance = new Bean2EObjUtil();
 
     /**
@@ -177,8 +175,9 @@ public class Bean2EObjUtil {
                             Method setMethod = beanFieldMap.get(field)[1];
 
                             Object value = eObj.eGet(feature);
-                            if (feature.isMany()) {
-                                if (value != null) {
+                            if (value != null) {
+                                if (feature.isMany()) {
+
                                     EList list = (EList) value;
                                     Object newInstance = Array.newInstance(field.getType().getComponentType(), list.size());
                                     Object[] children = (Object[]) newInstance;
@@ -189,16 +188,17 @@ public class Bean2EObjUtil {
                                         i++;
                                     }
                                     setMethod.invoke(bean, newInstance);
-                                }
-                            } else {
-                                Object eValue = null;
-                                if (beanClassUtil.isJavaField(field)) {
-                                    eValue = value;
+
                                 } else {
-                                    // a object reference
-                                    eValue = convertFromEObj2Bean((EObject) value);
+                                    Object eValue = null;
+                                    if (beanClassUtil.isJavaField(field)) {
+                                        eValue = value;
+                                    } else {
+                                        // a object reference
+                                        eValue = convertFromEObj2Bean((EObject) value);
+                                    }
+                                    setMethod.invoke(bean, eValue);
                                 }
-                                setMethod.invoke(bean, eValue);
                             }
                         }
                     } catch (IllegalArgumentException e) {

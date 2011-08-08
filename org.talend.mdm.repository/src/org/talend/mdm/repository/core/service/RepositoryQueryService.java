@@ -26,6 +26,9 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WSTransformerPluginV2SListItem;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -108,5 +111,34 @@ public class RepositoryQueryService {
             }
         }
         return null;
+    }
+
+    public static WSTransformerPluginV2SList getTransformerPluginV2SList(String language) {
+
+        WSTransformerPluginV2SListItem[] items = new WSTransformerPluginV2SListItem[18];
+        if (language.equalsIgnoreCase("en")) {
+            items[0] = new WSTransformerPluginV2SListItem(
+                    "csvparser", "Parses a text line with fields separated with a separator"); //$NON-NLS-1$//$NON-NLS-2$
+            items[1] = new WSTransformerPluginV2SListItem("linereader", "Reads a text, line by line");//$NON-NLS-1$//$NON-NLS-2$
+            items[2] = new WSTransformerPluginV2SListItem("project", "Projects and item to the Data Manager");//$NON-NLS-1$//$NON-NLS-2$
+            items[3] = new WSTransformerPluginV2SListItem("codec", "This is a plugin used for encode or decode text");//$NON-NLS-1$//$NON-NLS-2$
+            items[4] = new WSTransformerPluginV2SListItem("batchproject", "Batch projecting items to the Data Manager");//$NON-NLS-1$//$NON-NLS-2$
+            items[5] = new WSTransformerPluginV2SListItem("callJob", "Executes a TIS Job on a text and returns the result");//$NON-NLS-1$//$NON-NLS-2$
+            items[6] = new WSTransformerPluginV2SListItem("fixedlengthparser", "Parses a text line with fixed length fields");//$NON-NLS-1$//$NON-NLS-2$
+            items[7] = new WSTransformerPluginV2SListItem("groovy", "This is a plugin which you can call the groovy script.");//$NON-NLS-1$//$NON-NLS-2$
+            items[8] = new WSTransformerPluginV2SListItem("workflowtrigger", "Pass an item to a workflow engine");//$NON-NLS-1$//$NON-NLS-2$
+            items[9] = new WSTransformerPluginV2SListItem("groupedlinesreader", "Reads a text, grouping several lines");//$NON-NLS-1$//$NON-NLS-2$
+            items[10] = new WSTransformerPluginV2SListItem("xpath", "Executes an XPath on an XML document and returns the result");//$NON-NLS-1$//$NON-NLS-2$
+            items[11] = new WSTransformerPluginV2SListItem("partialupdate", "Partial update of an existing item");//$NON-NLS-1$//$NON-NLS-2$
+            items[12] = new WSTransformerPluginV2SListItem("xslt", "Transform an XML using an XSLT");//$NON-NLS-1$//$NON-NLS-2$
+            items[13] = new WSTransformerPluginV2SListItem("crossreferencing", "Transform an XML using crossreferencing rules");//$NON-NLS-1$//$NON-NLS-2$
+            items[14] = new WSTransformerPluginV2SListItem(
+                    "replace", "Executes a regexp on a text, replaces with parameter value and returns the result");//$NON-NLS-1$//$NON-NLS-2$
+            items[15] = new WSTransformerPluginV2SListItem("route", "Submits an item to the subscription engine");//$NON-NLS-1$//$NON-NLS-2$
+            items[16] = new WSTransformerPluginV2SListItem("dumpandgo", "This is a plugin used for dump text and pass it. ");//$NON-NLS-1$//$NON-NLS-2$
+            items[17] = new WSTransformerPluginV2SListItem("regexp", "Executes a regexp on a text and returns the result");//$NON-NLS-1$//$NON-NLS-2$
+        }
+        return new WSTransformerPluginV2SList(items);
+
     }
 }

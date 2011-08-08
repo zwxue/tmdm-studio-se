@@ -15,6 +15,8 @@ package org.talend.mdm.repository.ui.editors;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.i18n.Messages;
@@ -24,6 +26,13 @@ import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.editors.AFormPage;
+import com.amalto.workbench.editors.DataClusterMainPage;
+import com.amalto.workbench.editors.JobMainPage;
+import com.amalto.workbench.editors.MenuMainPage;
+import com.amalto.workbench.editors.RoutingRuleMainPage;
+import com.amalto.workbench.editors.ServiceConfigrationMainPage;
+import com.amalto.workbench.editors.StoredProcedureMainPage;
+import com.amalto.workbench.editors.ViewMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 
@@ -94,9 +103,86 @@ public class XObjectEditor2 extends XObjectEditor {
         return false;
     }
 
+    protected void addPageForXObject(TreeObject xobject) {
+        try {
+            switch (xobject.getType()) {
+            case TreeObject.DATA_MODEL:
+                // addPage(new DataModelMainPage(this));
+                //
+                // // addPage(new DataModelEditorPage(this));
+                // WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+                // Document doc = new Document(Util.formatXsdSource(wsObject.getXsdSchema()));
+                // xmlEditor = new XMLEditor(this, xobject);
+                // addPage(xmlEditor, new XMLEditorInput(doc));
+                // this.setPageText(1, "Schema");
+
+                break;
+
+            case TreeObject.INBOUND_PLUGIN:
+                break;
+            case TreeObject.OUTBOUND_PLUGIN:
+                break;
+            case TreeObject.VIEW:
+                addPage(new ViewMainPage(this));
+                break;
+            case TreeObject.DATA_CLUSTER:
+                addPage(new DataClusterMainPage(this));
+                break;
+            case TreeObject.STORED_PROCEDURE:
+                addPage(new StoredProcedureMainPage(this));
+                break;
+
+            case TreeObject.MENU:
+                addPage(new MenuMainPage(this));
+                break;
+            case TreeObject.SERVICE_CONFIGURATION:
+                addPage(new ServiceConfigrationMainPage(this));
+                break;
+            /*
+             * case TreeObject.RESOURCES: case TreeObject.DATA_MODEL_RESOURCE: case
+             * TreeObject.DATA_MODEL_TYPES_RESOURCE: case TreeObject.CUSTOM_TYPES_RESOURCE: case
+             * TreeObject.PICTURES_RESOURCE: addPage(new ResourceMainPage(this)); break;
+             */
+            case TreeObject.CUSTOM_TYPE:
+                // addPage(new CustomTypeMainPage(this));
+                break;
+            case TreeObject.ROUTING_RULE:
+                try {
+                    addPage(new RoutingRuleMainPage(this));
+                } catch (PartInitException e) {
+                    // TODO Auto-generated catch block
+                    log.error(e.getMessage(), e);
+                }
+                break;
+            case TreeObject.TRANSFORMER:
+                try {
+                    addPage(new TransformerMainPage2(this));
+                } catch (PartInitException e) {
+                    // TODO Auto-generated catch block
+                    log.error(e.getMessage(), e);
+                }
+                break;
+            case TreeObject.JOB:
+                try {
+                    addPage(new JobMainPage(this));
+                } catch (PartInitException e) {
+                    log.error(e.getMessage(), e);
+                }
+                break;
+            default:
+                // MessageDialog.openError(this.getSite().getShell(), "Error",
+                // "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
+                return;
+            }// switch
+
+        } catch (PartInitException e) {
+            MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :" + e.getLocalizedMessage());
+        }
+    }
+
     @Override
     public boolean isLocalInput() {
         return super.isLocalInput();
     }
-    
+
 }
