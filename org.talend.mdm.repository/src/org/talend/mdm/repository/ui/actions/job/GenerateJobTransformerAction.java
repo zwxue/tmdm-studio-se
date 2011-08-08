@@ -19,14 +19,12 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.talend.commons.ui.runtime.image.ECoreImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -35,14 +33,13 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.dialogs.JobProcesssOptionsDialog;
 
 /**
  * DOC jsxie class global comment. Detailled comment
  */
 public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
-    protected ContainerItem parentItem;
+
 
     protected Object selectObj;
 
@@ -65,37 +62,35 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
     @Override
     public void run() {
-        parentItem = null;
-        selectObj = getSelectedObject().get(0);
-        if (selectObj instanceof IRepositoryViewObject) {
-            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
-            if (pItem instanceof ContainerItem) {
-                parentItem = (ContainerItem) pItem;
-            }
-        }
 
-        JobProcesssOptionsDialog dialog = new JobProcesssOptionsDialog(getShell(), Messages.JobProcesssOptionsDialogTitle_title);
+        selectObj = getSelectedObject().get(0);
+
+        JobOptionsDialog dialog = new JobOptionsDialog(getShell(), Messages.JobProcesssOptionsDialogTitle_title);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
         if (ret == Dialog.CANCEL)
             return;
 
-        String filename = ""; //$NON-NLS-1$
+        String jobName = ""; //$NON-NLS-1$
+        String jobVersion = ""; //$NON-NLS-1$
 
         if (selectObj instanceof IRepositoryViewObject) {
-            filename = ((IRepositoryViewObject) selectObj).getLabel();
+            jobName = ((IRepositoryViewObject) selectObj).getProperty().getLabel();
+            jobVersion = ((IRepositoryViewObject) selectObj).getProperty().getVersion();
 
         }
 
-        WSTransformerV2E transformer = createTransformer(filename, dialog);
-        AttachToProcessView(filename, transformer);
+        WSTransformerV2E transformer = createTransformer(jobName, jobVersion, dialog);
+        AttachToProcessView(jobName, transformer);
 
     }
 
     /**
      * DOC jsxie Comment method "createTransformer".
+     * 
+     * @param jobVersion
      */
-    private WSTransformerV2E createTransformer(String filename, JobProcesssOptionsDialog dialog) {
+    private WSTransformerV2E createTransformer(String jobName, String jobVersion, JobOptionsDialog dialog) {
 
         String itemstr = "";//$NON-NLS-1$
         if (dialog.isExchange()) {
@@ -177,22 +172,13 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
             String server = "http://localhost:8080"; //$NON-NLS-1$
 
-
-
-            String jobname = null;
-            String jobversion = null;
-            if (filename.lastIndexOf("_") > 0 && filename.lastIndexOf(".") > 0) {//$NON-NLS-1$ //$NON-NLS-2$ 
-                jobname = filename.substring(0, filename.lastIndexOf("_"));//$NON-NLS-1$ 
-                jobversion = filename.substring(0, filename.lastIndexOf("."));//$NON-NLS-1$ 
-            }
-
-            if (filename.endsWith(".zip")) {//$NON-NLS-1$
-                String version = jobversion.substring(jobname.length() + 1);
-                parameter = "<configuration>\n" + "<url>ltj://" + jobname + "/" + version + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            boolean isWar = dialog.isWar();
+            if (!isWar) {
+                parameter = "<configuration>\n" + "<url>ltj://" + jobName + "/" + jobVersion + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                         + "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</configuration>\n";//$NON-NLS-1$ 
             } else {
-                parameter = "<configuration>\n" + "<url>" + server + "/" + jobversion + "/services/" + jobname + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                parameter = "<configuration>\n" + "<url>" + server + "/" + jobVersion + "/services/" + jobName + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                         + "<contextParam>\n" + "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</contextParam>\n" + "</configuration>\n";//$NON-NLS-1$ //$NON-NLS-2$ 
             }
@@ -203,8 +189,8 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             steps3.setDisabled(false);
             // Generate the job call
 
-            transformer.setName("CallJob_" + filename);//$NON-NLS-1$
-            transformer.setDescription("Process that calls the Talend Job: " + filename);//$NON-NLS-1$ 
+            transformer.setName("CallJob_" + jobName);//$NON-NLS-1$
+            transformer.setDescription("Process that calls the Talend Job: " + jobName);//$NON-NLS-1$ 
 
             list.add(steps1);
             list.add(steps2);
