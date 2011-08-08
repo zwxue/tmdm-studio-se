@@ -13,15 +13,15 @@
 package org.talend.mdm.repository.ui.actions.job;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.Dialog;
 import org.talend.commons.ui.runtime.image.ECoreImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -35,7 +35,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public class GenerateJobTriggerAction extends AbstractRepositoryAction {
 
-    protected ContainerItem parentItem;
+
 
     protected Object selectObj;
 
@@ -58,53 +58,58 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
 
     @Override
     public void run() {
-        parentItem = null;
         selectObj = getSelectedObject().get(0);
+
+        JobOptionsDialog dialog = new JobOptionsDialog(getShell(), Messages.JobProcesssDialogTiggerTitle_title, true);
+        dialog.setBlockOnOpen(true);
+        int ret = dialog.open();
+        if (ret == Dialog.CANCEL)
+            return;
+
+        String jobName = ""; //$NON-NLS-1$
+        String jobVersion = ""; //$NON-NLS-1$
+
         if (selectObj instanceof IRepositoryViewObject) {
-            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
-            if (pItem instanceof ContainerItem) {
-                parentItem = (ContainerItem) pItem;
-            }
+            jobName = ((IRepositoryViewObject) selectObj).getProperty().getLabel();
+            jobVersion = ((IRepositoryViewObject) selectObj).getProperty().getVersion();
+
         }
 
-
-        String filename = ""; //$NON-NLS-1$
-
-        if (selectObj instanceof IRepositoryViewObject) {
-            filename = ((IRepositoryViewObject) selectObj).getLabel();
-
-        }
-
-        WSRoutingRuleE routingRule = createTrigger(filename);
-        AttachToTriggerView(filename, routingRule);
+        WSRoutingRuleE routingRule = createTrigger(jobName, jobVersion, dialog);
+        AttachToTriggerView(jobName, routingRule);
 
     }
 
     /**
      * DOC jsxie Comment method "createTrigger".
+     * 
+     * @param dialog
+     * @param jobVersion2
      */
-    private WSRoutingRuleE createTrigger(String filename) {
+    private WSRoutingRuleE createTrigger(String jobName, String jobVersion, JobOptionsDialog dialog) {
         WSRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleE();
 
         try {
             String parameter = "";//$NON-NLS-1$
             String server = "http://localhost:8080"; //$NON-NLS-1$
 
-            String jobname = null;
-            String jobversion = null;
-            if (filename.lastIndexOf("_") > 0 && filename.lastIndexOf(".") > 0) {//$NON-NLS-1$ //$NON-NLS-2$ 
-                jobname = filename.substring(0, filename.lastIndexOf("_"));//$NON-NLS-1$
-                jobversion = filename.substring(0, filename.lastIndexOf("."));//$NON-NLS-1$
-            }
+            // String jobname = null;
+            // String jobversion = null;
+            //            if (filename.lastIndexOf("_") > 0 && filename.lastIndexOf(".") > 0) {//$NON-NLS-1$ //$NON-NLS-2$ 
+            //                jobname = filename.substring(0, filename.lastIndexOf("_"));//$NON-NLS-1$
+            //                jobversion = filename.substring(0, filename.lastIndexOf("."));//$NON-NLS-1$
+            // }
 
             // .zip
-            if (filename.endsWith(".zip")) { //$NON-NLS-1$ 
-                String version = jobversion.substring(jobname.length() + 1);
-                parameter = "<configuration>\n" + "<url>ltj://" + jobname + "/" + version + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            //            if (filename.endsWith(".zip")) { //$NON-NLS-1$ 
+            boolean isWar = dialog.isWar();
+            if (!isWar) {
+
+                parameter = "<configuration>\n" + "<url>ltj://" + jobName + "/" + jobVersion + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                         + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</configuration>\n";//$NON-NLS-1$ 
             } else {
-                parameter = "<configuration>\n" + "<url>" + server + "/" + jobversion + "/services/" + jobname + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                parameter = "<configuration>\n" + "<url>" + server + "/" + jobVersion + "/services/" + jobName + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                         + "<contextParam>\n" + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</contextParam>\n" + "</configuration>\n";//$NON-NLS-1$ //$NON-NLS-2$ 
             }
@@ -132,8 +137,8 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
 
 
 
-            routingRule.setName("CallJob_" + filename);//$NON-NLS-1$
-            routingRule.setDescription("Trigger that calls the Talend Job: " + filename); //$NON-NLS-1$
+            routingRule.setName("CallJob_" + jobName);//$NON-NLS-1$
+            routingRule.setDescription("Trigger that calls the Talend Job: " + jobName); //$NON-NLS-1$
             routingRule.setSynchronous(false);
             routingRule.setConcept("Update"); //$NON-NLS-1$
             routingRule.setServiceJNDI("amalto/local/service/callJob"); //$NON-NLS-1$

@@ -34,6 +34,8 @@ public class Messages extends NLS {
 
     public static String JobProcesssOptionsDialogTitle_title;
 
+    public static String JobProcesssDialogTiggerTitle_title;
+
     public static String NewTriggerAction_newTrigger;
 
     public static String NewDataContainerAction_newDataContainer;
