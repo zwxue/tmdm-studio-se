@@ -32,28 +32,27 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
 
     public List<ItemBaseModel> getSyncNames(SyncInfo info) throws Exception{
            
-            WSSynchronizationPlanPKArray array
-                = Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
-            WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();
-            //List<ItemBaseModel> syncNames = new ArrayList<ItemBaseModel>();
+        WSSynchronizationPlanPKArray array
+            = Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
+        WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();        
+        List syncNames = new ArrayList();
         
-            List syncNames = new ArrayList();
-            if(pks!=null && pks.length>0){
-                logger.debug("pks:"+pks.length);
-                //String[] syncNames=new String[pks.length];                
-                for(int i=0; i<pks.length; i++){
-                    //syncNames.add(pks[i].getPk());
-                    ItemBaseModel model = new ItemBaseModel();
-                    model.set("name", pks[i].getPk());
-                    model.set("value", pks[i].getPk());
-                    //syncNames[i]=pks[i].getPk();
-                    syncNames.add(model);
-                }
-                logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
-                //return syncNames;
+        if(pks!=null && pks.length>0){               
+            logger.debug("pks:"+pks.length);
+            //String[] syncNames=new String[pks.length];                
+            for(int i=0; i<pks.length; i++){
+                //syncNames.add(pks[i].getPk());
+                ItemBaseModel model = new ItemBaseModel();
+                model.set("id", pks[i].getPk());
+                model.set("name", pks[i].getPk());
+                //syncNames[i]=pks[i].getPk();
+                syncNames.add(model);
             }
-            //else
-                //return new String[0];
+            logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
+            //return syncNames;
+        }
+        //else
+            //return new String[0];
    
             return syncNames;        
     }
@@ -146,15 +145,15 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
                 urls= url.split(";");
             }
             Arrays.sort(urls);
-            List<ServerURL> list=new ArrayList<ServerURL>();
+            List items = new ArrayList();
             for(String id: urls){
-                ServerURL item=new ServerURL();
-                item.setId(id);
-                item.setName(id);
-                list.add(item);
+                ItemBaseModel item = new ItemBaseModel();
+                item.set("id",id);
+                item.set("name",id);         
+                items.add(item);
             }
             ListRange listRange = new ListRange();
-            listRange.setData(list.toArray(new ServerURL[list.size()]));
+            listRange.setData(items);
             listRange.setTotalSize(urls.length);
             return listRange;
         } catch (Exception e) {
