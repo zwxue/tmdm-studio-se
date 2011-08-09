@@ -120,24 +120,8 @@ public class SynchronizationActionPanel extends ContentPanel {
         FormLayout layout = new FormLayout();
         layout.setLabelWidth(75);
         fieldSet.setLayout(layout);
-
-        service.getSavedURLs(new AsyncCallback<ListRange>() {
-
-            public void onFailure(Throwable caught) {
-                caught.printStackTrace();
-            }
-
-            public void onSuccess(ListRange result) {
-                System.out.println("aaaaaaaa"); 
-                ServerURL urls[] = result.getData();
-                for (int i=0;i<urls.length;i++)
-                {
-                    ServerURL url = urls[i];
-                    System.out.println(url.getName());
-                }
-               
-            }
-        });
+        
+        
 
         serverUrl_CB = new ComboBox<ItemBaseModel>();
         serverUrl_CB.setFieldLabel("Server URL");
@@ -146,6 +130,20 @@ public class SynchronizationActionPanel extends ContentPanel {
         serverUrl_CB.setStore(new ListStore());
         serverUrl_CB.setDisplayField("name");
         serverUrl_CB.setValueField("value");
+        
+        
+
+        service.getSavedURLs(new AsyncCallback<ListRange>() {
+
+            public void onFailure(Throwable caught) {
+                caught.printStackTrace();
+            }
+
+            public void onSuccess(ListRange result) {
+                serverUrl_CB.getStore().removeAll();
+                serverUrl_CB.getStore().add(result.getData());
+            }
+        });
 
         fieldSet.add(serverUrl_CB, formData);
 
@@ -172,11 +170,9 @@ public class SynchronizationActionPanel extends ContentPanel {
                             }
 
                             public void onSuccess(List<ItemBaseModel> result) {
-                                ListStore<ItemBaseModel> store = new ListStore<ItemBaseModel>();
-                                store.add(result);
 
-                                // synchronizationName_CB.getStore().removeAll();
-                                synchronizationName_CB.setStore(store);
+                                synchronizationName_CB.getStore().removeAll();
+                                synchronizationName_CB.getStore().add(result);
                                 synchronizationName_CB.setTypeAhead(true);
                                 synchronizationName_CB.setTriggerAction(TriggerAction.ALL);
                             }
