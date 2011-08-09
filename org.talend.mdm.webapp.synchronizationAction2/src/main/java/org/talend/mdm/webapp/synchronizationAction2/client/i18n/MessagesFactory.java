@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.webapp.synchronizationAction2.client.i18n;
 
+import com.google.gwt.core.client.GWT;
+
 public class MessagesFactory {
 
     private static SynchronizationActionMessages MESSAGES;                   
@@ -19,17 +21,13 @@ public class MessagesFactory {
     private MessagesFactory() {
     }
 
-    public static synchronized void setMessages(SynchronizationActionMessages messages) {
-        if (MESSAGES != null) {
-            throw new IllegalStateException();
+    public static SynchronizationActionMessages getMessages() {
+        if (GWT.isClient()) {
+            if (MESSAGES == null)
+                MESSAGES = GWT.create(SynchronizationActionMessages.class);
+            return MESSAGES;
         }
-        MESSAGES = messages;
-    }
-
-    public static synchronized SynchronizationActionMessages getMessages() {
-        if (MESSAGES == null) {
-            throw new IllegalStateException();
-        }
-        return MESSAGES;
+        // Can't be called from server-side
+        throw new IllegalStateException();
     }
 }

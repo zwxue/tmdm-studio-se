@@ -23,74 +23,48 @@ public final class SynchronizationActionMessagesImpl implements SynchronizationA
     private static final Messages MESSAGES = MessagesFactory.getMessages(
             "org.talend.mdm.webapp.synchronizationAction2.client.i18n.SynchronizationActionMessages",
             SynchronizationActionMessagesImpl.class.getClassLoader());
-
-    public String label_system_info_group()
-    {
+    
+    public String label_system_info_group() {
         return MESSAGES.getMessage("LABEL_SYSTEM_INFO_GROUP");
     }
-    
-    public String label_server_url()
-    {
+
+    public String label_server_url() {
         return MESSAGES.getMessage("LABEL_SERVER_URL");
     }
 
-    public String label_user_name()
-    {
+    public String label_user_name() {
         return MESSAGES.getMessage("LABEL_USER_NAME");
     }
 
-    public String label_password()
-    {
+    public String label_password() {
         return MESSAGES.getMessage("LABEL_PASSWORD");
     }
 
-    public String label_synchronization_name()
-    {
+    public String label_synchronization_name() {
         return MESSAGES.getMessage("LABEL_SYNCHRONIZATION_NAME");
     }
 
-    public String start_full_button()
-    {
-        return MESSAGES.getMessage("START_FULL_BUTTON");
+    public String label_remote_system() {
+        return MESSAGES.getMessage("label_remote_system");
     }
 
-    public String start_different_button()
-    {
-        return MESSAGES.getMessage("START_DIFFERENT_BUTTON");
+    public String button_start_full() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
-    public String stop_button()
-    {
-        return MESSAGES.getMessage("STOP_BUTTON");
+    public String button_start_different() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
-    public String reset_button()
-    {
-        return MESSAGES.getMessage("RESET_BUTTON");
+    public String button_stop() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
-    public String tooltip_start_synchronization()
-    {
-        return MESSAGES.getMessage("TOOLTIP_START_SYNCHRONIZATION");
+    public String button_reset() {
+        // TODO Auto-generated method stub
+        return null;
     }
-    
-    public String tooltip_start_difference_synchronization()
-    {
-        return MESSAGES.getMessage("TOOLTIP_START_DIFFERENCE_SYNCHRONIZATION");
-    }
-
-    public String tooltip_stop_synchronization()
-    {
-        return MESSAGES.getMessage("TOOLTIP_STOP_SYNCHRONIZATION");
-    }
-
-    public String tooltip_reset_synchronization()
-    {
-        return MESSAGES.getMessage("TOOLTIP_RESET_SYNCHRONIZATION");
-    }
-
-    public String main_panel_title()
-    {
-        return MESSAGES.getMessage("MAIN_PANEL_TITLE");
-    }    
 }

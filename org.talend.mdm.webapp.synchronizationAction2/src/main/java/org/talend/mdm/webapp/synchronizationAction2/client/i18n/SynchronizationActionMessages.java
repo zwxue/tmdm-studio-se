@@ -15,32 +15,22 @@ package org.talend.mdm.webapp.synchronizationAction2.client.i18n;
 import com.google.gwt.i18n.client.Messages;
 
 public interface SynchronizationActionMessages extends Messages { 
-
-    String label_system_info_group();
-
+    
+    String label_remote_system();
+    
     String label_server_url();
 
     String label_user_name();
-
-    String label_password();
-
-    String label_synchronization_name();
-
-    String start_full_button();
-
-    String start_different_button();
-
-    String stop_button();
-
-    String reset_button();
-
-    String tooltip_start_synchronization();
     
-    String tooltip_start_difference_synchronization();
-
-    String tooltip_stop_synchronization();
-
-    String tooltip_reset_synchronization();
-
-    String main_panel_title();   
+    String label_password();
+    
+    String label_synchronization_name();
+    
+    String button_start_full();
+    
+    String button_start_different();
+    
+    String button_stop();
+    
+    String button_reset();
 }
