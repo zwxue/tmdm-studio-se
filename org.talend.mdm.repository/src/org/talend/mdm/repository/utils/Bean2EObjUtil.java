@@ -140,7 +140,11 @@ public class Bean2EObjUtil {
                                 eValue = value;
                             } else {
                                 // a object reference
-                                eValue = convertFromBean2EObj(value, null);
+                                if (value != null) {
+                                    eValue = convertFromBean2EObj(value, null);
+                                } else {
+                                    eValue = null;
+                                }
                             }
                             eObj.eSet(feature, eValue);
                         }

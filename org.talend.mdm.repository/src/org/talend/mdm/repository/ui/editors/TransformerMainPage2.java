@@ -13,25 +13,32 @@
 package org.talend.mdm.repository.ui.editors;
 
 import java.rmi.RemoteException;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.LinkedList;
 
+import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
+import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExternalInfoHolder;
+import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
-import com.amalto.workbench.webservices.WSTransformerPluginV2SListItem;
+import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
 import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public class TransformerMainPage2 extends TransformerMainPage {
+
+    private static Logger log = Logger.getLogger(TransformerMainPage2.class);
 
     /**
      * DOC hbhong TransformerMainPage2 constructor comment.
@@ -66,24 +73,46 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     @Override
     protected void initPlugin() throws RemoteException {
-        WSTransformerPluginV2SList list = RepositoryQueryService.getTransformerPluginV2SList("EN");//$NON-NLS-1$
 
-        WSTransformerPluginV2SListItem[] items = list.getItem();
+        for (AbstractPluginDetail detail : RepositoryWebServiceAdapter.findAllTransformerPluginV2Details()) {
 
-        if (items != null) {
-            for (int i = 0; i < items.length; i++) {
-                pluginDescriptions.put(items[i].getJndiName(), items[i].getDescription());
+            String jndi = detail.getJNDIName();
+            pluginsCombo.add(jndi);
+            pluginDescriptions.put(jndi, detail.getDescription());
+            // add input variables and output variables
+            java.util.List<String> input = new LinkedList<String>();
+            for (WSTransformerPluginV2VariableDescriptor v : detail.getInputVariableDescriptors()) {
+                input.add(v.getVariableName());
             }
-            // get the sorted list and feed the combo
-            Set<String> jndis = pluginDescriptions.keySet();
-            for (Iterator<String> iterator = jndis.iterator(); iterator.hasNext();) {
-                String jndi = iterator.next();
-                pluginsCombo.add(jndi);
-                // add input variables and output variables
-                inputVariablesMap.put(jndi, RepositoryQueryService.getInputVariables(jndi));
-                outputVariablesMap.put(jndi, RepositoryQueryService.getOutputVariables(jndi));
+            inputVariablesMap.put(jndi, input);
+            //
+            java.util.List<String> output = new LinkedList<String>();
+            for (WSTransformerPluginV2VariableDescriptor v : detail.getOutputVariableDescriptors()) {
+                output.add(v.getVariableName());
             }
+            outputVariablesMap.put(jndi, output);
         }
+
+    }
+
+    @Override
+    protected XtentisPort getPort() {
+        SelectServerDefDialog dialog = new SelectServerDefDialog(getSite().getShell());
+        try {
+            if (dialog.open() == IDialogConstants.OK_ID) {
+                MDMServerDef serverDef = dialog.getSelectedServerDef();
+                return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+            }
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    @Override
+    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) throws RemoteException {
+
+        return RepositoryWebServiceAdapter.findTransformerPluginV2Detail(jndi);
     }
 
 }
