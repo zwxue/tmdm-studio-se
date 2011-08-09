@@ -253,8 +253,12 @@ public class TransformerMainPage extends AMainPageV2 {
             }
         }
     }
+
     public void execute() {
         try {
+            port = getPort();
+            if (port == null)
+                return;
             WSTransformerContextPipelinePipelineItem[] items = new WSTransformerContextPipelinePipelineItem[cacheList.size()];
             int i = 0;
             for (Line line : cacheList) {
@@ -1224,8 +1228,6 @@ public class TransformerMainPage extends AMainPageV2 {
             wrap.Wrap(TransformerMainPage.this, outputViewer);
         }
 
-
-
         private void createPlugin() throws Exception {
             Composite specsComposite = toolkit.createComposite(mainComposite, SWT.NONE);
             specsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -1279,9 +1281,7 @@ public class TransformerMainPage extends AMainPageV2 {
                         if (jndi.length() == 0)
                             return;
 
-                        WSTransformerPluginV2Details details = port
-                                .getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi.contains("/") ? jndi
-                                        : TRANSFORMER_PLUGIN + jndi, "en"));
+                        WSTransformerPluginV2Details details = getWsTransformerPluginV2Details(jndi);
                         final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(),
                                 details.getDescription(), details.getDocumentation(), details.getParametersSchema(),
                                 "Documentation");
@@ -1308,6 +1308,8 @@ public class TransformerMainPage extends AMainPageV2 {
             });
 
         }
+
+
 
         public void create() throws Exception {
             mainComposite = toolkit.createComposite(parent, SWT.BORDER);
@@ -1383,6 +1385,12 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
+    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) throws RemoteException {
+        WSTransformerPluginV2Details details = port.getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi
+                .contains("/") ? jndi //$NON-NLS-1$
+                : TRANSFORMER_PLUGIN + jndi, "en")); //$NON-NLS-1$
+        return details;
+    }
     protected void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
 
         ArrayList<ExternalInfoHolder<?>> externalInfoHolders = new ArrayList<ExternalInfoHolder<?>>();
