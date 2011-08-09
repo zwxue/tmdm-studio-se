@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionService;
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionServiceAsync;
+import org.talend.mdm.webapp.synchronizationAction2.client.i18n.MessagesFactory;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ItemBaseModel;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ListRange;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
@@ -191,7 +192,7 @@ public class SynchronizationActionPanel extends ContentPanel {
 
         FormPanel synchronizationForm_FP = new FormPanel();
         synchronizationForm_FP.setFrame(true);
-        synchronizationForm_FP.setHeading("Simple Form with FieldSets");
+        synchronizationForm_FP.setHeaderVisible(false);
         // synchronizationForm_FP.setWidth(350);
         synchronizationForm_FP.setLayout(new FlowLayout());
         synchronizationForm_FP.setBorders(false);
@@ -200,7 +201,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         synchronizationForm_FP.setLabelWidth(150);
 
         FieldSet fieldSet = new FieldSet();
-        fieldSet.setHeading("Remote system information");
+        fieldSet.setHeading(MessagesFactory.getMessages().label_remote_system());
         fieldSet.setAutoHeight(true);
 
         FormLayout layout = new FormLayout();
@@ -208,7 +209,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         fieldSet.setLayout(layout);
         
         synchronizationName_CB = new ComboBox<ItemBaseModel>();      
-        synchronizationName_CB.setFieldLabel("Synchronization Name");        
+        synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name());        
         synchronizationName_CB.setStore(new ListStore());
 //        synchronizationName_CB.setReadOnly(true);
         synchronizationName_CB.setDisplayField("name");
@@ -217,7 +218,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         synchronizationName_CB.setTriggerAction(TriggerAction.ALL);
 
         serverUrl_CB = new ComboBox<ItemBaseModel>();
-        serverUrl_CB.setFieldLabel("Server URL");
+        serverUrl_CB.setFieldLabel(MessagesFactory.getMessages().label_server_url());
         //serverUrl_CB.setAllowBlank(false);
         serverUrl_CB.setWidth(400);
         serverUrl_CB.setStore(new ListStore());
@@ -239,12 +240,12 @@ public class SynchronizationActionPanel extends ContentPanel {
         fieldSet.add(serverUrl_CB, formData);
 
         userName_TF = new TextField<String>();
-        userName_TF.setFieldLabel("UserName");
+        userName_TF.setFieldLabel(MessagesFactory.getMessages().label_user_name());
         userName_TF.setWidth(400);
         fieldSet.add(userName_TF, formData);
 
         password_TF = new TextField<String>();
-        password_TF.setFieldLabel("Password");
+        password_TF.setFieldLabel(MessagesFactory.getMessages().label_password());
         password_TF.setWidth(400);
         password_TF.addListener(Events.Blur, new Listener<FieldEvent>() {
 
@@ -275,11 +276,11 @@ public class SynchronizationActionPanel extends ContentPanel {
         
         message_LB = new Label();
         
-        startFull_BT = new Button("startFull");
-        startDifferent_BT = new Button("startDifferent");
-        stop_BT = new Button("stop_BT");
+        startFull_BT = new Button(MessagesFactory.getMessages().button_start_full());
+        startDifferent_BT = new Button(MessagesFactory.getMessages().button_start_different());
+        stop_BT = new Button(MessagesFactory.getMessages().button_stop());
         stop_BT.setEnabled(false);
-        reset_BT = new Button("reset_BT");
+        reset_BT = new Button(MessagesFactory.getMessages().button_reset());
         reset_BT.setEnabled(false);
 
         startFull_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
