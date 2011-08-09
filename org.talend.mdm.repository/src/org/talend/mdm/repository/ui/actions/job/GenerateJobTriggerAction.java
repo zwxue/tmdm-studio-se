@@ -94,15 +94,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             String parameter = "";//$NON-NLS-1$
             String server = "http://localhost:8080"; //$NON-NLS-1$
 
-            // String jobname = null;
-            // String jobversion = null;
-            //            if (filename.lastIndexOf("_") > 0 && filename.lastIndexOf(".") > 0) {//$NON-NLS-1$ //$NON-NLS-2$ 
-            //                jobname = filename.substring(0, filename.lastIndexOf("_"));//$NON-NLS-1$
-            //                jobversion = filename.substring(0, filename.lastIndexOf("."));//$NON-NLS-1$
-            // }
 
-            // .zip
-            //            if (filename.endsWith(".zip")) { //$NON-NLS-1$ 
             boolean isWar = dialog.isWar();
             if (!isWar) {
 
