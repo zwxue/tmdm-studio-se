@@ -2,8 +2,7 @@ package org.talend.mdm.webapp.synchronizationAction2.client;
 
 import java.util.List;
 
-import org.talend.mdm.webapp.synchronizationAction2.shared.ItemBaseModel;
-import org.talend.mdm.webapp.synchronizationAction2.shared.ListRange;
+import org.talend.mdm.webapp.synchronizationAction2.client.model.ItemBaseModel;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncStatus;
 
@@ -24,7 +23,7 @@ public interface SynchronizationActionServiceAsync {
 
     void getStatus(SyncInfo info, AsyncCallback<SyncStatus> callback);
 
-    void getSavedURLs(AsyncCallback<ListRange> callback);
+    void getSavedURLs(AsyncCallback<List<ItemBaseModel>> callback);
 
     void saveURLs(String url, AsyncCallback<Void> callback);
 
