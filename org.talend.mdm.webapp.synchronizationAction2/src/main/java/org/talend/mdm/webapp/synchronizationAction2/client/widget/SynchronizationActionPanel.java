@@ -5,8 +5,7 @@ import java.util.List;
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionService;
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionServiceAsync;
 import org.talend.mdm.webapp.synchronizationAction2.client.i18n.MessagesFactory;
-import org.talend.mdm.webapp.synchronizationAction2.shared.ItemBaseModel;
-import org.talend.mdm.webapp.synchronizationAction2.shared.ListRange;
+import org.talend.mdm.webapp.synchronizationAction2.client.model.ItemBaseModel;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncStatus;
 
@@ -42,7 +41,7 @@ public class SynchronizationActionPanel extends ContentPanel {
     private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync) GWT
             .create(SynchronizationActionService.class);
 
-    private FormData formData = new FormData("-20");
+    private FormData formData = new FormData("-20"); //$NON-NLS-1$
 
     private VerticalPanel verticalPanel = new VerticalPanel();
 
@@ -53,23 +52,22 @@ public class SynchronizationActionPanel extends ContentPanel {
     private TextField<String> password_TF = null;
 
     private ComboBox<ItemBaseModel> synchronizationName_CB = null;
-    
+
     private Label message_LB = null;
-    
+
     private Button startFull_BT = null;
-    
+
     private Button startDifferent_BT = null;
-    
+
     private Button stop_BT = null;
-    
+
     private Button reset_BT = null;
-    
+
     private SyncStatus syncStatus;
-    
-    private StringBuffer urlString = null;        
-    
-    private MessageBox messageBox = new MessageBox();
-    
+
+    private StringBuffer urlString = null;
+
+
     public SynchronizationActionPanel() {
         super();
         this.setBodyBorder(false);
@@ -83,21 +81,21 @@ public class SynchronizationActionPanel extends ContentPanel {
 
     public SyncInfo getSyncInfo() {
         if (serverUrl_CB != null) {
-            if ("".equals(serverUrl_CB.getValue())) {
+            if ("".equals(serverUrl_CB.getValue())) { //$NON-NLS-1$
                 serverUrl_CB.focus();
                 return null;
             }
         }
-        
+
         if (userName_TF != null) {
-            if ("".equals(userName_TF.getValue())) {
+            if ("".equals(userName_TF.getValue())) { //$NON-NLS-1$
                 userName_TF.focus();
                 return null;
             }
         }
-        
+
         if (password_TF != null) {
-            if ("".equals(password_TF.getValue())) {
+            if ("".equals(password_TF.getValue())) { //$NON-NLS-1$
                 password_TF.focus();
                 return null;
             }
@@ -110,77 +108,74 @@ public class SynchronizationActionPanel extends ContentPanel {
         syncInfo.setSyncName(synchronizationName_CB.getRawValue());
         return syncInfo;
     }
-    
-    public void saveURLs(){  
-        if (urlString.indexOf(serverUrl_CB.getRawValue()) == -1)
-        {
-            urlString.append(serverUrl_CB.getRawValue() + ";");
-        } 
-        service.saveURLs(urlString.substring(0, urlString.lastIndexOf(";")).toString(), new AsyncCallback<Void>() {
-            
+
+    public void saveURLs() {
+        if (urlString.indexOf(serverUrl_CB.getRawValue()) == -1) {
+            urlString.append(serverUrl_CB.getRawValue() + ";"); //$NON-NLS-1$
+        }
+        service.saveURLs(urlString.substring(0, urlString.lastIndexOf(";")).toString(), new AsyncCallback<Void>() { //$NON-NLS-1$
+
             public void onSuccess(Void arg0) {
 
             }
-            
+
             public void onFailure(Throwable caught) {
-                caught.printStackTrace();               
+                caught.printStackTrace();
             }
         });
     }
 
-    public void updateStatus(SyncStatus syncStatusAsync){        
+    public void updateStatus(SyncStatus syncStatusAsync) {
         syncStatus = syncStatusAsync;
         message_LB.setText(syncStatus.getMessage());
-        if("RUNNING".equals(syncStatus.getValue()) || "SCHEDULED".equals(syncStatus.getValue())){              //$NON-NLS-1$//$NON-NLS-2$
-            startFull_BT.disable();               
+        if ("RUNNING".equals(syncStatus.getValue()) || "SCHEDULED".equals(syncStatus.getValue())) { //$NON-NLS-1$//$NON-NLS-2$
+            startFull_BT.disable();
             startDifferent_BT.disable();
             stop_BT.enable();
-            reset_BT.disable();         
-        }
-        else if ("STOPPING".equals(syncStatus.getValue())) {
+            reset_BT.disable();
+        } else if ("STOPPING".equals(syncStatus.getValue())) { //$NON-NLS-1$
             startFull_BT.disable();
             startDifferent_BT.disable();
             stop_BT.disable();
-            reset_BT.enable();           
+            reset_BT.enable();
         } else {
             startFull_BT.enable();
             startDifferent_BT.enable();
             stop_BT.disable();
-            reset_BT.disable();         
+            reset_BT.disable();
         }
     }
-    
-    public void refreshStatus(final SyncInfo syncInfo){  
-        
-        Timer refreshTimer = new Timer(){
+
+    public void refreshStatus(final SyncInfo syncInfo) {
+
+        Timer refreshTimer = new Timer() {
+
             public void run() {
                 service.getStatus(syncInfo, new AsyncCallback<SyncStatus>() {
+
                     public void onFailure(Throwable caught) {
                         caught.printStackTrace();
                     }
 
-                    public void onSuccess(SyncStatus syncStatusAsync) {               
-                        updateStatus(syncStatusAsync);               
-                    }                   
-               });
-               if(syncStatus != null){
-                    if(!("RUNNING" == syncStatus.getValue() || "SCHEDULED" == syncStatus.getValue())){
+                    public void onSuccess(SyncStatus syncStatusAsync) {
+                        updateStatus(syncStatusAsync);
+                    }
+                });
+                if (syncStatus != null) {
+                    if (!("RUNNING" == syncStatus.getValue() || "SCHEDULED" == syncStatus.getValue())) {  //$NON-NLS-1$//$NON-NLS-2$
                         this.cancel();
                         updateStatus(syncStatus);
                     }
-                } 
-            }       
+                }
+            }
         };
         refreshTimer.scheduleRepeating(1000);
     }
-    
-
-   
 
     public void initComponent() {
 
         // SynchronizationActionMessages messages = GWT.create(SynchronizationActionMessages.class);
-        // MessagesFactory.setMessages(messages);     
+        // MessagesFactory.setMessages(messages);
 
         FormPanel synchronizationForm_FP = new FormPanel();
         synchronizationForm_FP.setFrame(true);
@@ -188,7 +183,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         // synchronizationForm_FP.setWidth(350);
         synchronizationForm_FP.setLayout(new FlowLayout());
         synchronizationForm_FP.setBorders(false);
-        synchronizationForm_FP.setBodyStyle("padding: 8px; background-color: transparent;");
+        synchronizationForm_FP.setBodyStyle("padding: 8px; background-color: transparent;"); //$NON-NLS-1$
         synchronizationForm_FP.setLabelAlign(LabelAlign.LEFT);
         synchronizationForm_FP.setLabelWidth(150);
 
@@ -199,39 +194,37 @@ public class SynchronizationActionPanel extends ContentPanel {
         FormLayout layout = new FormLayout();
         layout.setLabelWidth(75);
         fieldSet.setLayout(layout);
-        
-        synchronizationName_CB = new ComboBox<ItemBaseModel>();      
-        synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name());        
+
+        synchronizationName_CB = new ComboBox<ItemBaseModel>();
+        synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name());
         synchronizationName_CB.setStore(new ListStore());
-        synchronizationName_CB.setDisplayField("name");
-        synchronizationName_CB.setValueField("id");
+        synchronizationName_CB.setDisplayField("name"); //$NON-NLS-1$
+        synchronizationName_CB.setValueField("id"); //$NON-NLS-1$
         synchronizationName_CB.setTypeAhead(true);
         synchronizationName_CB.setTriggerAction(TriggerAction.ALL);
 
         serverUrl_CB = new ComboBox<ItemBaseModel>();
         serverUrl_CB.setFieldLabel(MessagesFactory.getMessages().label_server_url());
-        //serverUrl_CB.setAllowBlank(false);
+        // serverUrl_CB.setAllowBlank(false);
         serverUrl_CB.setWidth(400);
         serverUrl_CB.setStore(new ListStore());
         serverUrl_CB.setDisplayField("name"); //$NON-NLS-1$
         serverUrl_CB.setValueField("id"); //$NON-NLS-1$
 
-        service.getSavedURLs(new AsyncCallback<ListRange>() {
+        service.getSavedURLs(new AsyncCallback<List<ItemBaseModel>>() {
 
             public void onFailure(Throwable caught) {
                 caught.printStackTrace();
             }
 
-            public void onSuccess(ListRange result) {
+            public void onSuccess(List<ItemBaseModel> result) {
                 urlString = new StringBuffer();
-                List<ItemBaseModel> items = result.getData();
                 serverUrl_CB.getStore().removeAll();
-                serverUrl_CB.getStore().add(result.getData());
-                for (int i=0;i<items.size();i++)
-                {
-                    urlString.append(items.get(i).get("id") + ";");
-                } 
-            }            
+                serverUrl_CB.getStore().add(result);
+                for (int i = 0; i < result.size(); i++) {
+                    urlString.append(result.get(i).get("id") + ";");  //$NON-NLS-1$//$NON-NLS-2$
+                }
+            }
         });
 
         fieldSet.add(serverUrl_CB, formData);
@@ -250,28 +243,28 @@ public class SynchronizationActionPanel extends ContentPanel {
 
                 SyncInfo syncInfo = getSyncInfo();
                 if (syncInfo != null) {
-               
+
                     service.getSyncNames(syncInfo, new AsyncCallback<List<ItemBaseModel>>() {
 
-                        public void onFailure(Throwable caught) { 
-                            MessageBox.alert("Error", caught.getMessage(), null);       
+                        public void onFailure(Throwable caught) {
+                            MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
                         }
 
-                        public void onSuccess(List<ItemBaseModel> result) {            
+                        public void onSuccess(List<ItemBaseModel> result) {
                             synchronizationName_CB.setWidth(400);
-                            synchronizationName_CB.setEmptyText("Select a Synchronization Name");   //$NON-NLS-1$
+                            synchronizationName_CB.setEmptyText("Select a Synchronization Name"); //$NON-NLS-1$
                             synchronizationName_CB.getStore().removeAll();
-                            synchronizationName_CB.getStore().add(result);                           
+                            synchronizationName_CB.getStore().add(result);
                         }
-                    });                   
+                    });
                 }
             }
         });
-        
-        fieldSet.add(password_TF, formData);  
-        
+
+        fieldSet.add(password_TF, formData);
+
         message_LB = new Label();
-        
+
         startFull_BT = new Button(MessagesFactory.getMessages().button_start_full());
         startDifferent_BT = new Button(MessagesFactory.getMessages().button_start_different());
         stop_BT = new Button(MessagesFactory.getMessages().button_stop());
@@ -284,20 +277,19 @@ public class SynchronizationActionPanel extends ContentPanel {
             @Override
             public void componentSelected(ButtonEvent ce) {
                 final SyncInfo syncInfo = getSyncInfo();
-                if (syncInfo != null)
-                {
+                if (syncInfo != null) {
                     saveURLs();
                     service.startFull(syncInfo, new AsyncCallback<Void>() {
-                        
+
                         public void onSuccess(Void arg0) {
                             refreshStatus(syncInfo);
                         }
-                        
+
                         public void onFailure(Throwable caught) {
-                            caught.printStackTrace(); 
+                            caught.printStackTrace();
                         }
                     });
-                }                
+                }
             }
         });
 
@@ -306,21 +298,20 @@ public class SynchronizationActionPanel extends ContentPanel {
             @Override
             public void componentSelected(ButtonEvent ce) {
                 final SyncInfo syncInfo = getSyncInfo();
-                if (syncInfo != null)
-                {
+                if (syncInfo != null) {
                     saveURLs();
                     service.startDifferent(syncInfo, new AsyncCallback<Void>() {
-                        
+
                         public void onSuccess(Void arg0) {
                             refreshStatus(syncInfo);
                         }
-                        
+
                         public void onFailure(Throwable caught) {
-                            caught.printStackTrace(); 
+                            caught.printStackTrace();
                         }
                     });
                 }
-             }
+            }
         });
 
         stop_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -329,13 +320,13 @@ public class SynchronizationActionPanel extends ContentPanel {
             public void componentSelected(ButtonEvent ce) {
                 final SyncInfo syncInfo = getSyncInfo();
                 service.stop(syncInfo, new AsyncCallback<Void>() {
-                    
+
                     public void onSuccess(Void arg0) {
                         refreshStatus(syncInfo);
                     }
-                    
+
                     public void onFailure(Throwable caught) {
-                        caught.printStackTrace(); 
+                        caught.printStackTrace();
                     }
                 });
             }
@@ -348,13 +339,13 @@ public class SynchronizationActionPanel extends ContentPanel {
                 final SyncInfo syncInfo = getSyncInfo();
 
                 service.reset(syncInfo, new AsyncCallback<Void>() {
-                    
+
                     public void onSuccess(Void arg0) {
                         refreshStatus(syncInfo);
                     }
-                    
+
                     public void onFailure(Throwable caught) {
-                        caught.printStackTrace(); 
+                        caught.printStackTrace();
                     }
                 });
             }
