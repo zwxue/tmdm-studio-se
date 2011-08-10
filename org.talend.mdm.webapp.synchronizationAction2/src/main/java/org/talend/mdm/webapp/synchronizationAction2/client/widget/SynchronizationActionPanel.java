@@ -2,13 +2,14 @@ package org.talend.mdm.webapp.synchronizationAction2.client.widget;
 
 import java.util.List;
 
-import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionService;
+import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationAction2;
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionServiceAsync;
 import org.talend.mdm.webapp.synchronizationAction2.client.i18n.MessagesFactory;
 import org.talend.mdm.webapp.synchronizationAction2.client.model.ItemBaseModel;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncStatus;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
@@ -16,6 +17,7 @@ import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -30,43 +32,39 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class SynchronizationActionPanel extends ContentPanel {
 
-    // private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync)
-    // Registry.get(SynchronizationAction2.SYNCHRONIZTIONACTION_SERVICE);
-    private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync) GWT
-            .create(SynchronizationActionService.class);
+     private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync)
+     Registry.get(SynchronizationAction2.SYNCHRONIZTIONACTION_SERVICE);
 
     private FormData formData = new FormData("-20"); //$NON-NLS-1$
 
     private VerticalPanel verticalPanel = new VerticalPanel();
 
-    private ComboBox<ItemBaseModel> serverUrl_CB = null;
+    private ComboBox<ItemBaseModel> serverUrl_CB;
 
-    private TextField<String> userName_TF = null;
+    private TextField<String> userName_TF;
 
-    private TextField<String> password_TF = null;
+    private TextField<String> password_TF;
 
-    private ComboBox<ItemBaseModel> synchronizationName_CB = null;
+    private ComboBox<ItemBaseModel> synchronizationName_CB;
 
-    private Label message_LB = null;
+    private Label message_LB;
 
-    private Button startFull_BT = null;
+    private Button startFull_BT;
 
-    private Button startDifferent_BT = null;
+    private Button startDifferent_BT;
 
-    private Button stop_BT = null;
+    private Button stop_BT;
 
-    private Button reset_BT = null;
+    private Button reset_BT;
 
     private SyncStatus syncStatus;
 
-    private StringBuffer urlString = null;
-
+    private StringBuffer urlString;
 
     public SynchronizationActionPanel() {
         super();
@@ -80,22 +78,22 @@ public class SynchronizationActionPanel extends ContentPanel {
     }
 
     public SyncInfo getSyncInfo() {
-        if (serverUrl_CB != null) {
-            if ("".equals(serverUrl_CB.getValue())) { //$NON-NLS-1$
+        if (serverUrl_CB != null) {            
+            if ("".equals(serverUrl_CB.getRawValue()) || serverUrl_CB.getRawValue() == null) { //$NON-NLS-1$
                 serverUrl_CB.focus();
                 return null;
             }
         }
 
         if (userName_TF != null) {
-            if ("".equals(userName_TF.getValue())) { //$NON-NLS-1$
+            if ("".equals(userName_TF.getValue()) || userName_TF.getValue() == null) { //$NON-NLS-1$
                 userName_TF.focus();
                 return null;
             }
         }
 
         if (password_TF != null) {
-            if ("".equals(password_TF.getValue())) { //$NON-NLS-1$
+            if ("".equals(password_TF.getValue()) || password_TF.getValue() == null) { //$NON-NLS-1$
                 password_TF.focus();
                 return null;
             }
@@ -174,13 +172,9 @@ public class SynchronizationActionPanel extends ContentPanel {
 
     public void initComponent() {
 
-        // SynchronizationActionMessages messages = GWT.create(SynchronizationActionMessages.class);
-        // MessagesFactory.setMessages(messages);
-
         FormPanel synchronizationForm_FP = new FormPanel();
         synchronizationForm_FP.setFrame(true);
         synchronizationForm_FP.setHeaderVisible(false);
-        // synchronizationForm_FP.setWidth(350);
         synchronizationForm_FP.setLayout(new FlowLayout());
         synchronizationForm_FP.setBorders(false);
         synchronizationForm_FP.setBodyStyle("padding: 8px; background-color: transparent;"); //$NON-NLS-1$
@@ -193,11 +187,10 @@ public class SynchronizationActionPanel extends ContentPanel {
 
         FormLayout layout = new FormLayout();
         layout.setLabelWidth(75);
-        fieldSet.setLayout(layout);
-
-        synchronizationName_CB = new ComboBox<ItemBaseModel>();
-        synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name());
-        synchronizationName_CB.setStore(new ListStore());
+        fieldSet.setLayout(layout);        
+        
+        synchronizationName_CB = new ComboBox<ItemBaseModel>();       
+        synchronizationName_CB.setStore(new ListStore<ItemBaseModel>());
         synchronizationName_CB.setDisplayField("name"); //$NON-NLS-1$
         synchronizationName_CB.setValueField("id"); //$NON-NLS-1$
         synchronizationName_CB.setTypeAhead(true);
@@ -205,27 +198,27 @@ public class SynchronizationActionPanel extends ContentPanel {
 
         serverUrl_CB = new ComboBox<ItemBaseModel>();
         serverUrl_CB.setFieldLabel(MessagesFactory.getMessages().label_server_url());
-        // serverUrl_CB.setAllowBlank(false);
         serverUrl_CB.setWidth(400);
-        serverUrl_CB.setStore(new ListStore());
+        serverUrl_CB.setStore(new ListStore<ItemBaseModel>());
         serverUrl_CB.setDisplayField("name"); //$NON-NLS-1$
         serverUrl_CB.setValueField("id"); //$NON-NLS-1$
-
-        service.getSavedURLs(new AsyncCallback<List<ItemBaseModel>>() {
-
-            public void onFailure(Throwable caught) {
-                caught.printStackTrace();
-            }
-
-            public void onSuccess(List<ItemBaseModel> result) {
-                urlString = new StringBuffer();
-                serverUrl_CB.getStore().removeAll();
-                serverUrl_CB.getStore().add(result);
-                for (int i = 0; i < result.size(); i++) {
-                    urlString.append(result.get(i).get("id") + ";");  //$NON-NLS-1$//$NON-NLS-2$
-                }
-            }
-        });
+        serverUrl_CB.setTypeAhead(true);
+        serverUrl_CB.setTriggerAction(TriggerAction.ALL);
+        service.getSavedURLs(new AsyncCallback<List<ItemBaseModel>>() {                   
+          
+              public void onFailure(Throwable caught) {
+                  caught.printStackTrace();
+              }
+        
+              public void onSuccess(List<ItemBaseModel> result) {
+                  urlString = new StringBuffer();
+                  serverUrl_CB.getStore().removeAll();
+                  serverUrl_CB.getStore().add(result);
+                  for (int i = 0; i < result.size(); i++) {
+                      urlString.append(result.get(i).get("id") + ";");  //$NON-NLS-1$//$NON-NLS-2$
+                  }
+              }
+          });
 
         fieldSet.add(serverUrl_CB, formData);
 
@@ -239,9 +232,10 @@ public class SynchronizationActionPanel extends ContentPanel {
         password_TF.setWidth(400);
         password_TF.addListener(Events.Blur, new Listener<FieldEvent>() {
 
-            public void handleEvent(FieldEvent be) {
+            public void handleEvent(FieldEvent fieldEvent) {
 
                 SyncInfo syncInfo = getSyncInfo();
+                
                 if (syncInfo != null) {
 
                     service.getSyncNames(syncInfo, new AsyncCallback<List<ItemBaseModel>>() {
@@ -352,6 +346,10 @@ public class SynchronizationActionPanel extends ContentPanel {
         });
 
         synchronizationForm_FP.add(fieldSet);
+        HorizontalPanel synchronizationName_PL = new HorizontalPanel();
+        synchronizationName_PL.add(new Label(MessagesFactory.getMessages().label_synchronization_name()));    
+        synchronizationName_PL.add(synchronizationName_CB);        
+        synchronizationForm_FP.add(synchronizationName_PL);            
         synchronizationForm_FP.add(synchronizationName_CB);
         synchronizationForm_FP.add(message_LB);
         synchronizationForm_FP.addButton(startFull_BT);
@@ -360,7 +358,6 @@ public class SynchronizationActionPanel extends ContentPanel {
         synchronizationForm_FP.addButton(reset_BT);
 
         verticalPanel.add(synchronizationForm_FP);
-        // RootPanel.get().add(verticalPanel);
         this.add(verticalPanel);
     }
 
