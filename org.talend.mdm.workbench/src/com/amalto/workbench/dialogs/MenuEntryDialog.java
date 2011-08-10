@@ -90,15 +90,19 @@ public class MenuEntryDialog extends Dialog {
 
     private String uripre = "";//$NON-NLS-1$
 
+    private final boolean isLocal;
+
     /**
      * @param parentShell
      */
-    public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, String uripre) {
+    public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, String uripre,
+            boolean isLocal) {
         super(parentShell);
         this.wsMenuEntry = wsMenuEntry;
         this.caller = caller;
         this.title = title;
         this.uripre = uripre;
+        this.isLocal = isLocal;
         // feed the descritions hashmap used by the labels Table
         WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
@@ -109,13 +113,14 @@ public class MenuEntryDialog extends Dialog {
     }
 
     public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, boolean isChanged,
-            String uripre) {
+            String uripre, boolean isLocal) {
         super(parentShell);
         this.wsMenuEntry = wsMenuEntry;
         this.caller = caller;
         this.title = title;
         this.isChanged = isChanged;
         this.uripre = uripre;
+        this.isLocal = isLocal;
         // feed the descritions hashmap used by the labels Table
         WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
@@ -391,27 +396,28 @@ public class MenuEntryDialog extends Dialog {
     protected void okPressed() {
         setReturnCode(OK);
         getButton(IDialogConstants.OK_ID).setData("dialog", MenuEntryDialog.this);//$NON-NLS-1$
-        try {
-            String icon = "";//$NON-NLS-1$
-            // if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
-            if (wsMenuEntry.getIcon() != null) {
-                if (!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())) {
-                    Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",//$NON-NLS-1$//$NON-NLS-2$
+        if (!isLocal) {
+            try {
+                String icon = "";//$NON-NLS-1$
+                // if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
+                if (wsMenuEntry.getIcon() != null) {
+                    if (!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())) {
+                        Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",//$NON-NLS-1$//$NON-NLS-2$
+                                "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
+                        if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
+                            icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText()//$NON-NLS-1$
+                                    .getText(), "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
+                        getIconPathText().setText(icon);
+                    }
+                } else if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
+                    icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText().getText(),//$NON-NLS-1$
                             "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
-                    if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
-                        icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText()//$NON-NLS-1$
-                                .getText(), "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
-                    getIconPathText().setText(icon);
-                }
-            } else if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
-                icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText().getText(),//$NON-NLS-1$
-                        "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
-            getIconPathText().setText(icon);
-            // ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+                getIconPathText().setText(icon);
+                // ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
-
         // no close let Action Handler handle it
     }
 

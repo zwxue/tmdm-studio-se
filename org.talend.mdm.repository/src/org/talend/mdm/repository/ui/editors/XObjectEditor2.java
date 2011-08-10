@@ -182,7 +182,7 @@ public class XObjectEditor2 extends XObjectEditor {
 
     @Override
     public boolean isLocalInput() {
-        return super.isLocalInput();
+        return true;
     }
 
 }
