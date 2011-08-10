@@ -72,7 +72,19 @@ public class Messages extends NLS {
 
     public static String RepositoryViewFilterDialog_title;
 
+
+    public static String RepositoryWebServiceAdapter_InvalidEndpointAddress;
+
+
+    public static String Common_Error;
+
+
+    public static String StoredProcedureMainPage2_noDataContainer;
+
     public static String XObjectEditor2_saving;
+
+
+    public static String XObjectEditor2_unableOpenEditor;
 
     public static String XSDEditor2_schemaDesign;
 

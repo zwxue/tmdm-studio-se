@@ -18,6 +18,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.widgets.Shell;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.BatchProjectPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.CSVParserPluginDetail;
@@ -37,7 +40,9 @@ import org.talend.mdm.repository.core.service.wsimpl.transformplugin.TISCallJobP
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.WorkflowTriggerPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.XPathPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.XSLTPluginDetail;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -49,6 +54,8 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class RepositoryWebServiceAdapter {
 
+    private static Logger log = Logger.getLogger(RepositoryWebServiceAdapter.class);
+
     private static Map<String, AbstractPluginDetail> transformerPluginMap;
 
     public static XtentisPort getXtentisPort(MDMServerDef serverDef) throws XtentisException {
@@ -57,8 +64,22 @@ public class RepositoryWebServiceAdapter {
                 return null;
             return Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(), serverDef.getPasswd());
         } catch (MalformedURLException e) {
-            throw new XtentisException("Invalid endpoint address: " + serverDef.getUrl());
+            throw new XtentisException(Messages.bind(Messages.RepositoryWebServiceAdapter_InvalidEndpointAddress,
+                    serverDef.getUrl()));
         }
+    }
+
+    public static XtentisPort getXtentisPort(Shell shell) {
+        SelectServerDefDialog dialog = new SelectServerDefDialog(shell);
+        try {
+            if (dialog.open() == IDialogConstants.OK_ID) {
+                MDMServerDef serverDef = dialog.getSelectedServerDef();
+                return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+            }
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     public static WSTransformerPluginV2Details findTransformerPluginV2Detail(String jndiName) {

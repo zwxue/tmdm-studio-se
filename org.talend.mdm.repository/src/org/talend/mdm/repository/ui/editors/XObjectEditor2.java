@@ -31,7 +31,6 @@ import com.amalto.workbench.editors.JobMainPage;
 import com.amalto.workbench.editors.MenuMainPage;
 import com.amalto.workbench.editors.RoutingRuleMainPage;
 import com.amalto.workbench.editors.ServiceConfigrationMainPage;
-import com.amalto.workbench.editors.StoredProcedureMainPage;
 import com.amalto.workbench.editors.ViewMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -129,7 +128,7 @@ public class XObjectEditor2 extends XObjectEditor {
                 addPage(new DataClusterMainPage(this));
                 break;
             case TreeObject.STORED_PROCEDURE:
-                addPage(new StoredProcedureMainPage(this));
+                addPage(new StoredProcedureMainPage2(this));
                 break;
 
             case TreeObject.MENU:
@@ -176,7 +175,8 @@ public class XObjectEditor2 extends XObjectEditor {
             }// switch
 
         } catch (PartInitException e) {
-            MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :" + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.Common_Error,
+                    Messages.bind(Messages.XObjectEditor2_unableOpenEditor, e.getLocalizedMessage()));
         }
     }
 

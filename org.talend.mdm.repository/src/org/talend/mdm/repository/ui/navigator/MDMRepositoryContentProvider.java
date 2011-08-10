@@ -8,7 +8,6 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeContentProvider;
-import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 
 public class MDMRepositoryContentProvider implements ITreeContentProvider {

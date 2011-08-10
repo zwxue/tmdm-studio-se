@@ -15,14 +15,10 @@ package org.talend.mdm.repository.ui.editors;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
-import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExternalInfoHolder;
-import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.models.TreeObject;
@@ -37,8 +33,6 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
  * DOC hbhong class global comment. Detailled comment
  */
 public class TransformerMainPage2 extends TransformerMainPage {
-
-    private static Logger log = Logger.getLogger(TransformerMainPage2.class);
 
     /**
      * DOC hbhong TransformerMainPage2 constructor comment.
@@ -59,9 +53,9 @@ public class TransformerMainPage2 extends TransformerMainPage {
         ExternalInfoHolder<?> workflowInfoHolder = RepositoryExternalInfoHolder.getAllWorkflowInfoHolder(null);
         ExternalInfoHolder<?> allDataModelHolderProxy = RepositoryExternalInfoHolder.getAllDataModelInfoHolderProxy(getXObject());
 
-        initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder,
+        initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder, //$NON-NLS-1$
                 allVarCandidatesHolder });
-        initExternalInfoHolderForEachType("workflowtrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder,
+        initExternalInfoHolderForEachType("workflowtrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder, //$NON-NLS-1$
                 allDataModelHolderProxy });
 
     }
@@ -97,16 +91,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     @Override
     protected XtentisPort getPort() {
-        SelectServerDefDialog dialog = new SelectServerDefDialog(getSite().getShell());
-        try {
-            if (dialog.open() == IDialogConstants.OK_ID) {
-                MDMServerDef serverDef = dialog.getSelectedServerDef();
-                return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-            }
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
+        return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell());
     }
 
     @Override

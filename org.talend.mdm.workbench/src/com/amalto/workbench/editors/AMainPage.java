@@ -33,6 +33,9 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public abstract class AMainPage extends AFormPage implements ModifyListener {
@@ -184,5 +187,14 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
             topComposite.setLayout(new GridLayout(2, false));
             return topComposite;
         }
+    }
+
+    protected XtentisPort getPort() {
+        try {
+            return Util.getPort(getXObject());
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 }

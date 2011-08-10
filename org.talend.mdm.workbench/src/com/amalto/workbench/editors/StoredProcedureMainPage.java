@@ -101,7 +101,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
     protected LinkedList<String> currentParameters = new LinkedList<String>();
 
-    private boolean refreshing = false;
+    protected boolean refreshing = false;
 
     private boolean comitting = false;
 
@@ -174,11 +174,13 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                 }
 
                 public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
-                    TreeParent serverRoot = StoredProcedureMainPage.this.getXObject().getServerRoot();
-                    TreeObject iaObject = new TreeObject(StoredProcedureMainPage.this.dataClusterCombo.getText(), serverRoot,
-                            TreeObject.DATA_CLUSTER,
-                            new WSDataClusterPK(StoredProcedureMainPage.this.dataClusterCombo.getText()), null);
-                    (new EditXObjectAction(iaObject, StoredProcedureMainPage.this.getSite().getPage())).run();
+                    if (!isLocalInput()) {
+                        TreeParent serverRoot = StoredProcedureMainPage.this.getXObject().getServerRoot();
+                        TreeObject iaObject = new TreeObject(StoredProcedureMainPage.this.dataClusterCombo.getText(), serverRoot,
+                                TreeObject.DATA_CLUSTER, new WSDataClusterPK(StoredProcedureMainPage.this.dataClusterCombo
+                                        .getText()), null);
+                        (new EditXObjectAction(iaObject, StoredProcedureMainPage.this.getSite().getPage())).run();
+                    }
                 };
             });
             dataClusterCombo = new Combo(resultsGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
@@ -249,6 +251,12 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
         procedureViewer.setDocument(doc);
         refreshCacheBtn.setSelection(wsStoredProcedure.getRefreshCache() != null
                 && wsStoredProcedure.getRefreshCache().booleanValue() ? true : false);
+
+        initDataClusterCombo();
+        this.refreshing = false;
+    }
+
+    protected void initDataClusterCombo() {
         dataClusterCombo.removeAll();
         WSDataClusterPK[] dataClusterPKs;
         try {
@@ -271,8 +279,6 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             if (!"CACHE".equals(dataClusterPKs[i].getPk())) // FIXME: hardcoded CACHE//$NON-NLS-1$
                 dataClusterCombo.add(dataClusterPKs[i].getPk());
         }
-
-        this.refreshing = false;
     }
 
     protected void commit() {
@@ -376,15 +382,17 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                     // )
                     // ).getStrings();
 
-                    XtentisPort port = Util.getPort(getXObject());
-                    WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
-                    port.putStoredProcedure(new WSPutStoredProcedure(wsStoredProcedure));
-                    WSStringArray array = port.executeStoredProcedure(new WSExecuteStoredProcedure(new WSStoredProcedurePK(
-                            wsStoredProcedure.getName()), null, dcpk, currentParameters.toArray(new String[currentParameters
-                            .size()])));
-                    String[] results = array.getStrings();
-                    resultsLabel.setText("Procedure returned " + results.length + " Records.");
-                    resultsViewer.setInput(results);
+                    XtentisPort port = getPort();
+                    if (port != null) {
+                        WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+                        port.putStoredProcedure(new WSPutStoredProcedure(wsStoredProcedure));
+                        WSStringArray array = port.executeStoredProcedure(new WSExecuteStoredProcedure(new WSStoredProcedurePK(
+                                wsStoredProcedure.getName()), null, dcpk, currentParameters.toArray(new String[currentParameters
+                                .size()])));
+                        String[] results = array.getStrings();
+                        resultsLabel.setText("Procedure returned " + results.length + " Records.");
+                        resultsViewer.setInput(results);
+                    }
                 } catch (Exception ex) {
                     MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), "Error", ex.getMessage());
                 }
