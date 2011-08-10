@@ -8,9 +8,9 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.talend.mdm.commmon.util.core.MDMConfiguration;
 import org.talend.mdm.webapp.synchronizationAction2.client.SynchronizationActionService;
+import org.talend.mdm.webapp.synchronizationAction2.client.common.SynchronizationActionException;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ItemBaseModel;
 import org.talend.mdm.webapp.synchronizationAction2.shared.ListRange;
-import org.talend.mdm.webapp.synchronizationAction2.shared.ServerURL;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncInfo;
 import org.talend.mdm.webapp.synchronizationAction2.shared.SyncStatus;
 
@@ -27,34 +27,39 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class SynchronizationActionServiceImpl extends RemoteServiceServlet implements SynchronizationActionService{
     
     public static final String SAVED_SERVER_URL="save.server.url";
+    
     public static final String SERVER_URL_DEFAULT="http://localhost:8080/talend/TalendPort";
+    
     private Logger logger=org.apache.log4j.Logger.getLogger(this.getClass());
 
-    public List<ItemBaseModel> getSyncNames(SyncInfo info) throws Exception{
-           
-        WSSynchronizationPlanPKArray array
-            = Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
-        WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();        
-        List syncNames = new ArrayList();
+    public List<ItemBaseModel> getSyncNames(SyncInfo info) throws SynchronizationActionException{
         
-        if(pks!=null && pks.length>0){               
-            logger.debug("pks:"+pks.length);
-            //String[] syncNames=new String[pks.length];                
-            for(int i=0; i<pks.length; i++){
-                //syncNames.add(pks[i].getPk());
-                ItemBaseModel model = new ItemBaseModel();
-                model.set("id", pks[i].getPk());
-                model.set("name", pks[i].getPk());
-                //syncNames[i]=pks[i].getPk();
-                syncNames.add(model);
+        try
+        {
+            WSSynchronizationPlanPKArray array
+                = Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
+            WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();        
+            List<ItemBaseModel> syncNames = new ArrayList<ItemBaseModel>();
+            if(pks!=null && pks.length>0){               
+                logger.debug("pks:"+pks.length);
+                //String[] syncNames=new String[pks.length];                
+                for(int i=0; i<pks.length; i++){
+                    //syncNames.add(pks[i].getPk());
+                    ItemBaseModel model = new ItemBaseModel();
+                    model.set("id", pks[i].getPk());
+                    model.set("name", pks[i].getPk());
+                    //syncNames[i]=pks[i].getPk();
+                    syncNames.add(model);
+                }
+                logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
+                //return syncNames;
             }
-            logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
-            //return syncNames;
+            return syncNames; 
         }
-        //else
-            //return new String[0];
-   
-            return syncNames;        
+        catch (Exception exception)
+        {
+            throw new SynchronizationActionException(exception.getMessage());
+        }            
     }
     
     public void startFull(SyncInfo info)throws Exception {
