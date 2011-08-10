@@ -96,6 +96,11 @@ public class WSDataClusterItemImpl extends MDMServerObjectItemImpl implements WS
             eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_DATA_CLUSTER_ITEM__WS_DATA_CLUSTER, oldWsDataCluster, wsDataCluster));
     }
 
+    @Override
+    public void setMDMServerObject(MDMServerObject serverObj) {
+        setWsDataCluster((WSDataClusterE) serverObj);
+    }
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

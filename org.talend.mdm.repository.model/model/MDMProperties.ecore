@@ -9,6 +9,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MDMServerObjectItem" eSuperTypes="#//MDMItem">
     <eOperations name="getMDMServerObject" eType="ecore:EClass MDMServerObject.ecore#//MDMServerObject"/>
+    <eOperations name="setMDMServerObject">
+      <eParameters name="serverObj" eType="ecore:EClass MDMServerObject.ecore#//MDMServerObject"/>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSMenuItem" eSuperTypes="#//MDMServerObjectItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsMenu" eType="ecore:EClass MDMServerObject.ecore#//WSMenuE"/>

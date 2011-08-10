@@ -9,6 +9,7 @@ package org.talend.mdm.repository.model.mdmproperties.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -685,6 +686,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         initEClass(mdmServerObjectItemEClass, MDMServerObjectItem.class, "MDMServerObjectItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         addEOperation(mdmServerObjectItemEClass, theMdmserverobjectPackage.getMDMServerObject(), "getMDMServerObject", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+        EOperation op = addEOperation(mdmServerObjectItemEClass, null, "setMDMServerObject", 0, 1, IS_UNIQUE, IS_ORDERED);
+        addEParameter(op, theMdmserverobjectPackage.getMDMServerObject(), "serverObj", 0, 1, IS_UNIQUE, IS_ORDERED);
 
         initEClass(wsMenuItemEClass, WSMenuItem.class, "WSMenuItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSMenuItem_WsMenu(), theMdmserverobjectPackage.getWSMenuE(), null, "wsMenu", null, 0, 1, WSMenuItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

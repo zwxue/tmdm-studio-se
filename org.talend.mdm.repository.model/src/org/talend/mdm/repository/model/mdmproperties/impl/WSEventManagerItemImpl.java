@@ -96,6 +96,10 @@ public class WSEventManagerItemImpl extends MDMServerObjectItemImpl implements W
             eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_EVENT_MANAGER_ITEM__WS_EVENT_MANAGER, oldWsEventManager, wsEventManager));
     }
 
+    @Override
+    public void setMDMServerObject(MDMServerObject serverObj) {
+        setWsEventManager((WSEventManagerE) serverObj);
+    }
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

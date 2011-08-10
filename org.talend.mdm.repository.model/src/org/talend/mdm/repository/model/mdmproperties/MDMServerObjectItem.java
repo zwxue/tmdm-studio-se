@@ -28,4 +28,12 @@ public interface MDMServerObjectItem extends MDMItem {
      * @generated
      */
     MDMServerObject getMDMServerObject();
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model
+     * @generated
+     */
+    void setMDMServerObject(MDMServerObject serverObj);
 } // MDMServerObjectItem

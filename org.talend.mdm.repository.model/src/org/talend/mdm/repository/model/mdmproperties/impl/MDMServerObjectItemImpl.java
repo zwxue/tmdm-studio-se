@@ -52,4 +52,15 @@ public class MDMServerObjectItemImpl extends MDMItemImpl implements MDMServerObj
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setMDMServerObject(MDMServerObject serverObj) {
+        // TODO: implement this method
+        // Ensure that you remove @generated or mark it @generated NOT
+        throw new UnsupportedOperationException();
+    }
+
 } //MDMServerObjectItemImpl

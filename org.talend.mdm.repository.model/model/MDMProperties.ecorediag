@@ -44,6 +44,10 @@
         <element xmi:type="ecore:EOperation" href="MDMProperties.ecore#//MDMServerObjectItem/getMDMServerObject"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_FvetYaEkEeCDwM2t62zu5g"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_VdsxMcM7EeCPxvjhDOxwXA" type="2002">
+        <element xmi:type="ecore:EOperation" href="MDMProperties.ecore#//MDMServerObjectItem/setMDMServerObject"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_VdsxMsM7EeCPxvjhDOxwXA"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_XTVl-pujEeChOtNeWEXMkQ"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_XTVl-5ujEeChOtNeWEXMkQ"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_XTVl_JujEeChOtNeWEXMkQ"/>

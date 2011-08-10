@@ -1,7 +1,6 @@
 /**
- * <copyright>
- * </copyright>
- *
+ * <copyright> </copyright>
+ * 
  * $Id$
  */
 package org.talend.mdm.repository.model.mdmproperties.impl;
@@ -16,23 +15,23 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSUniverseE;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>WS Universe Item</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>WS Universe Item</b></em>'. <!-- end-user-doc
+ * -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSUniverseItemImpl#getWsUniverse <em>Ws Universe</em>}</li>
+ * <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSUniverseItemImpl#getWsUniverse <em>Ws Universe</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUniverseItem {
+
     /**
-     * The cached value of the '{@link #getWsUniverse() <em>Ws Universe</em>}' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getWsUniverse() <em>Ws Universe</em>}' reference. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
      * @see #getWsUniverse()
      * @generated
      * @ordered
@@ -40,8 +39,8 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
     protected WSUniverseE wsUniverse;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     protected WSUniverseItemImpl() {
@@ -49,8 +48,8 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -59,25 +58,26 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public WSUniverseE getWsUniverse() {
         if (wsUniverse != null && wsUniverse.eIsProxy()) {
-            InternalEObject oldWsUniverse = (InternalEObject)wsUniverse;
-            wsUniverse = (WSUniverseE)eResolveProxy(oldWsUniverse);
+            InternalEObject oldWsUniverse = (InternalEObject) wsUniverse;
+            wsUniverse = (WSUniverseE) eResolveProxy(oldWsUniverse);
             if (wsUniverse != oldWsUniverse) {
                 if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE, oldWsUniverse, wsUniverse));
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE,
+                            oldWsUniverse, wsUniverse));
             }
         }
         return wsUniverse;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public WSUniverseE basicGetWsUniverse() {
@@ -85,72 +85,74 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setWsUniverse(WSUniverseE newWsUniverse) {
         WSUniverseE oldWsUniverse = wsUniverse;
         wsUniverse = newWsUniverse;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE, oldWsUniverse, wsUniverse));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE,
+                    oldWsUniverse, wsUniverse));
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-                if (resolve) return getWsUniverse();
-                return basicGetWsUniverse();
+        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+            if (resolve)
+                return getWsUniverse();
+            return basicGetWsUniverse();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-                setWsUniverse((WSUniverseE)newValue);
-                return;
+        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+            setWsUniverse((WSUniverseE) newValue);
+            return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-                setWsUniverse((WSUniverseE)null);
-                return;
+        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+            setWsUniverse((WSUniverseE) null);
+            return;
         }
         super.eUnset(featureID);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-                return wsUniverse != null;
+        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+            return wsUniverse != null;
         }
         return super.eIsSet(featureID);
     }
@@ -160,4 +162,8 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
         return getWsUniverse();
     }
 
-} //WSUniverseItemImpl
+    @Override
+    public void setMDMServerObject(MDMServerObject serverObj) {
+        setWsUniverse((WSUniverseE) serverObj);
+    }
+} // WSUniverseItemImpl

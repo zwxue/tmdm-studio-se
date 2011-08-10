@@ -91,6 +91,11 @@ public class WSDataModelItemImpl extends MDMServerObjectItemImpl implements WSDa
             eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_DATA_MODEL_ITEM__WS_DATA_MODEL, oldWsDataModel, wsDataModel));
     }
 
+    @Override
+    public void setMDMServerObject(MDMServerObject serverObj) {
+        setWsDataModel((WSDataModelE) serverObj);
+    }
+
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated

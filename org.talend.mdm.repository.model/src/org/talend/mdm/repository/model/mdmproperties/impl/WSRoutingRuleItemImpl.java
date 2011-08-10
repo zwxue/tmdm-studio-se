@@ -160,4 +160,9 @@ public class WSRoutingRuleItemImpl extends MDMServerObjectItemImpl implements WS
         return getWsRoutingRule();
     }
 
+    @Override
+    public void setMDMServerObject(MDMServerObject serverObj) {
+        setWsRoutingRule((WSRoutingRuleE) serverObj);
+    }
+
 } //WSRoutingRuleItemImpl
