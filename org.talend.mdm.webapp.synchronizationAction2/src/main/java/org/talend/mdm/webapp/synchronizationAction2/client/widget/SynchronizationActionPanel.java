@@ -66,6 +66,10 @@ public class SynchronizationActionPanel extends ContentPanel {
     
     private SyncStatus syncStatus;
     
+    private StringBuffer urlString = null;        
+    
+    private MessageBox messageBox = new MessageBox();
+    
     public SynchronizationActionPanel() {
         super();
         this.setBodyBorder(false);
@@ -107,21 +111,12 @@ public class SynchronizationActionPanel extends ContentPanel {
         return syncInfo;
     }
     
-    public void saveURLs(){
-        StringBuffer urlString = new StringBuffer();
-        ListStore<ItemBaseModel> urlStore = serverUrl_CB.getStore();
-        for (int i=0;i<urlStore.getCount();i++)
-        {
-            ItemBaseModel itemBaseModel = urlStore.getAt(i);
-            urlString.append(itemBaseModel.get("id") + ";");            
-        }
-        
+    public void saveURLs(){  
         if (urlString.indexOf(serverUrl_CB.getRawValue()) == -1)
         {
             urlString.append(serverUrl_CB.getRawValue() + ";");
-        }
-        System.out.println("aa " + urlString.substring(0, urlString.lastIndexOf(";")-1).toString());
-        service.saveURLs(urlString.substring(0, urlString.lastIndexOf(";")-1).toString(), new AsyncCallback<Void>() {
+        } 
+        service.saveURLs(urlString.substring(0, urlString.lastIndexOf(";")).toString(), new AsyncCallback<Void>() {
             
             public void onSuccess(Void arg0) {
 
@@ -133,18 +128,16 @@ public class SynchronizationActionPanel extends ContentPanel {
         });
     }
 
-    public void updateStatus(SyncStatus syncStatusAsync){
-        
+    public void updateStatus(SyncStatus syncStatusAsync){        
         syncStatus = syncStatusAsync;
-        
         message_LB.setText(syncStatus.getMessage());
-        if("RUNNING" == syncStatus.getValue() || "SCHEDULED" == syncStatus.getValue()){            
-            startFull_BT.disable();
+        if("RUNNING".equals(syncStatus.getValue()) || "SCHEDULED".equals(syncStatus.getValue())){              //$NON-NLS-1$//$NON-NLS-2$
+            startFull_BT.disable();               
             startDifferent_BT.disable();
-            stop_BT.disable();
+            stop_BT.enable();
             reset_BT.disable();         
         }
-        else if ("STOPPING" == syncStatus.getValue()) {
+        else if ("STOPPING".equals(syncStatus.getValue())) {
             startFull_BT.disable();
             startDifferent_BT.disable();
             stop_BT.disable();
@@ -157,8 +150,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         }
     }
     
-    public void refreshStatus(final SyncInfo syncInfo){
-        SyncStatus syncStatus2 = new SyncStatus();
+    public void refreshStatus(final SyncInfo syncInfo){  
         
         Timer refreshTimer = new Timer(){
             public void run() {
@@ -179,7 +171,7 @@ public class SynchronizationActionPanel extends ContentPanel {
                 } 
             }       
         };
-        refreshTimer.schedule(1000);
+        refreshTimer.scheduleRepeating(1000);
     }
     
 
@@ -188,7 +180,7 @@ public class SynchronizationActionPanel extends ContentPanel {
     public void initComponent() {
 
         // SynchronizationActionMessages messages = GWT.create(SynchronizationActionMessages.class);
-        // MessagesFactory.setMessages(messages);
+        // MessagesFactory.setMessages(messages);     
 
         FormPanel synchronizationForm_FP = new FormPanel();
         synchronizationForm_FP.setFrame(true);
@@ -211,7 +203,6 @@ public class SynchronizationActionPanel extends ContentPanel {
         synchronizationName_CB = new ComboBox<ItemBaseModel>();      
         synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name());        
         synchronizationName_CB.setStore(new ListStore());
-//        synchronizationName_CB.setReadOnly(true);
         synchronizationName_CB.setDisplayField("name");
         synchronizationName_CB.setValueField("id");
         synchronizationName_CB.setTypeAhead(true);
@@ -223,7 +214,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         serverUrl_CB.setWidth(400);
         serverUrl_CB.setStore(new ListStore());
         serverUrl_CB.setDisplayField("name"); //$NON-NLS-1$
-        serverUrl_CB.setValueField("id"); //$NON-NLS-1$        
+        serverUrl_CB.setValueField("id"); //$NON-NLS-1$
 
         service.getSavedURLs(new AsyncCallback<ListRange>() {
 
@@ -232,8 +223,14 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
 
             public void onSuccess(ListRange result) {
+                urlString = new StringBuffer();
+                List<ItemBaseModel> items = result.getData();
                 serverUrl_CB.getStore().removeAll();
                 serverUrl_CB.getStore().add(result.getData());
+                for (int i=0;i<items.size();i++)
+                {
+                    urlString.append(items.get(i).get("id") + ";");
+                } 
             }            
         });
 
@@ -253,12 +250,11 @@ public class SynchronizationActionPanel extends ContentPanel {
 
                 SyncInfo syncInfo = getSyncInfo();
                 if (syncInfo != null) {
-                    System.out.println(syncInfo.getServerURL());
                
                     service.getSyncNames(syncInfo, new AsyncCallback<List<ItemBaseModel>>() {
 
-                        public void onFailure(Throwable caught) {
-                            caught.printStackTrace();
+                        public void onFailure(Throwable caught) { 
+                            MessageBox.alert("Error", caught.getMessage(), null);       
                         }
 
                         public void onSuccess(List<ItemBaseModel> result) {            
@@ -287,17 +283,14 @@ public class SynchronizationActionPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ButtonEvent ce) {
-                SyncInfo syncInfo = getSyncInfo();
+                final SyncInfo syncInfo = getSyncInfo();
                 if (syncInfo != null)
                 {
                     saveURLs();
-                    System.out.println(syncInfo.getUsername());
-                    System.out.println(syncInfo.getServerURL());
-                    System.out.println(syncInfo.getSyncName());
                     service.startFull(syncInfo, new AsyncCallback<Void>() {
                         
                         public void onSuccess(Void arg0) {
-                            MessageBox.alert("AAA", "BBB", null);
+                            refreshStatus(syncInfo);
                         }
                         
                         public void onFailure(Throwable caught) {
@@ -312,14 +305,14 @@ public class SynchronizationActionPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ButtonEvent ce) {
-                SyncInfo syncInfo = getSyncInfo();
+                final SyncInfo syncInfo = getSyncInfo();
                 if (syncInfo != null)
                 {
                     saveURLs();
                     service.startDifferent(syncInfo, new AsyncCallback<Void>() {
                         
                         public void onSuccess(Void arg0) {
-                            MessageBox.alert("AAA", "BBB", null);
+                            refreshStatus(syncInfo);
                         }
                         
                         public void onFailure(Throwable caught) {
@@ -334,11 +327,11 @@ public class SynchronizationActionPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ButtonEvent ce) {
-                SyncInfo syncInfo = getSyncInfo();
+                final SyncInfo syncInfo = getSyncInfo();
                 service.stop(syncInfo, new AsyncCallback<Void>() {
                     
                     public void onSuccess(Void arg0) {
-                        MessageBox.alert("AAA", "BBB", null);
+                        refreshStatus(syncInfo);
                     }
                     
                     public void onFailure(Throwable caught) {
@@ -352,12 +345,12 @@ public class SynchronizationActionPanel extends ContentPanel {
 
             @Override
             public void componentSelected(ButtonEvent ce) {
-                SyncInfo syncInfo = getSyncInfo();
+                final SyncInfo syncInfo = getSyncInfo();
 
                 service.reset(syncInfo, new AsyncCallback<Void>() {
                     
                     public void onSuccess(Void arg0) {
-                        MessageBox.alert("AAA", "BBB", null);
+                        refreshStatus(syncInfo);
                     }
                     
                     public void onFailure(Throwable caught) {
