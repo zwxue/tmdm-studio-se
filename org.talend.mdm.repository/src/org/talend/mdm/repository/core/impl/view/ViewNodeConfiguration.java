@@ -31,8 +31,17 @@ public class ViewNodeConfiguration extends RepositoryNodeConfigurationAdapter {
 
     public ViewNodeConfiguration() {
         setResourceProvider(new ViewNodeResourceProvider());
-        setLabelProvider(new ViewLabelProvider());
-        setContentProvider(new ViewContentProvider());
+
         setActionProvider(new ViewActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new ViewLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new ViewContentProvider());
     }
 }

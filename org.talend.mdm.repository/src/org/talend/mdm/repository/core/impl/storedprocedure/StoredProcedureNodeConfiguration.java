@@ -31,8 +31,17 @@ public class StoredProcedureNodeConfiguration extends RepositoryNodeConfiguratio
 
     public StoredProcedureNodeConfiguration() {
         setResourceProvider(new StoredProcedureNodeResourceProvider());
-        setLabelProvider(new StoredProcedureLabelProvider());
-        setContentProvider(new StoredProcedureContentProvider());
+
         setActionProvider(new StoredProcedureActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new StoredProcedureLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new StoredProcedureContentProvider());
     }
 }

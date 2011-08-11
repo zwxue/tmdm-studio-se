@@ -63,9 +63,14 @@ public class RepositoryNodeConfigurationManager {
 
     private static List<IRepositoryNodeConfiguration> configurations = new LinkedList<IRepositoryNodeConfiguration>();
 
+    private static boolean initedBean = false;
+
     public static List<IRepositoryNodeConfiguration> getConfigurations() {
         if (!inited) {
             initTemplateDefine();
+        }
+        if (!initedBean) {
+            initBeanMap();
         }
         return configurations;
     }
@@ -75,7 +80,7 @@ public class RepositoryNodeConfigurationManager {
         IRepositoryNodeConfiguration configuration = itemConfMap.get(eClass);
         if (configuration != null)
             return configuration;
-        for (IRepositoryNodeConfiguration conf : configurations) {
+        for (IRepositoryNodeConfiguration conf : getConfigurations()) {
             IRepositoryNodeResourceProvider resourceProvider = conf.getResourceProvider();
             if (resourceProvider != null) {
                 if (resourceProvider.canHandleItem(item)) {
@@ -131,9 +136,7 @@ public class RepositoryNodeConfigurationManager {
                                 IRepositoryNodeConfiguration configuration = (IRepositoryNodeConfiguration) element
                                         .createExecutableExtension(PROP_CLASS);
                                 configurations.add(configuration);
-                                // init class structure
-                                Class wsObjectClass = configuration.getContentProvider().getWSObjectClass();
-                                Bean2EObjUtil.getInstance().registerClassMap(wsObjectClass);
+
                             } catch (CoreException e) {
                                 log.error(e.getMessage(), e);
                             }
@@ -145,4 +148,15 @@ public class RepositoryNodeConfigurationManager {
             inited = true;
         }
     }
+
+    private static void initBeanMap() {
+        if (!initedBean)
+            for (IRepositoryNodeConfiguration conf : configurations) {
+                // init class structure
+                Class wsObjectClass = conf.getContentProvider().getWSObjectClass();
+                Bean2EObjUtil.getInstance().registerClassMap(wsObjectClass);
+            }
+        initedBean = true;
+    }
+
 }

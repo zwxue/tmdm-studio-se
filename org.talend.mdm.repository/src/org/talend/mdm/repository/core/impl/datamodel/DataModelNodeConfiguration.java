@@ -31,8 +31,18 @@ public class DataModelNodeConfiguration extends RepositoryNodeConfigurationAdapt
 
     public DataModelNodeConfiguration() {
         setResourceProvider(new DataModelNodeResourceProvider());
-        setLabelProvider(new DataModelLabelProvider());
-        setContentProvider(new DataModelContentProvider());
+
         setActionProvider(new DataModelActionProvider());
     }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new DataModelLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new DataModelContentProvider());
+    }
+
 }

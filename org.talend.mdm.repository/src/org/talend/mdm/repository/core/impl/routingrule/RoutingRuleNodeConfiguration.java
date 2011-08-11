@@ -31,8 +31,17 @@ public class RoutingRuleNodeConfiguration extends RepositoryNodeConfigurationAda
 
     public RoutingRuleNodeConfiguration() {
         setResourceProvider(new RoutingRuleNodeResourceProvider());
-        setLabelProvider(new RoutingRuleLabelProvider());
-        setContentProvider(new RoutingRuleContentProvider());
+
         setActionProvider(new RoutingRuleActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new RoutingRuleLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new RoutingRuleContentProvider());
     }
 }

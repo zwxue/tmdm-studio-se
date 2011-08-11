@@ -31,8 +31,17 @@ public class SynchronizationPlanNodeConfiguration extends RepositoryNodeConfigur
 
     public SynchronizationPlanNodeConfiguration() {
         setResourceProvider(new SynchronizationPlanNodeResourceProvider());
-        setLabelProvider(new SynchronizationPlanLabelProvider());
-        setContentProvider(new SynchronizationPlanContentProvider());
+
         setActionProvider(new SynchronizationPlanActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new SynchronizationPlanLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new SynchronizationPlanContentProvider());
     }
 }

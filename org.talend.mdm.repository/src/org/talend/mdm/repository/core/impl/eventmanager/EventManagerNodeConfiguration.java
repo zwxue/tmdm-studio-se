@@ -31,8 +31,17 @@ public class EventManagerNodeConfiguration extends RepositoryNodeConfigurationAd
 
     public EventManagerNodeConfiguration() {
         setResourceProvider(new EventManagerNodeResourceProvider());
-        setLabelProvider(new EventManagerLabelProvider());
-        setContentProvider(new EventManagerContentProvider());
         setActionProvider(new EventManagerActionProvider());
     }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new EventManagerLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new EventManagerContentProvider());
+    }
+
 }

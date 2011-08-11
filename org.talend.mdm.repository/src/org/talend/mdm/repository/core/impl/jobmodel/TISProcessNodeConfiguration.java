@@ -31,8 +31,17 @@ public class TISProcessNodeConfiguration extends RepositoryNodeConfigurationAdap
 
     public TISProcessNodeConfiguration() {
         setResourceProvider(new TISProcessNodeResourceProvider());
-        setLabelProvider(new TISProcessLabelProvider());
-        setContentProvider(new TISProcessContentProvider());
+
         setActionProvider(new TISProcessActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new TISProcessLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new TISProcessContentProvider());
     }
 }

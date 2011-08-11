@@ -31,8 +31,17 @@ public class UniverseNodeConfiguration extends RepositoryNodeConfigurationAdapte
 
     public UniverseNodeConfiguration() {
         setResourceProvider(new UniverseNodeResourceProvider());
-        setLabelProvider(new UniverseLabelProvider());
-        setContentProvider(new UniverseContentProvider());
+
         setActionProvider(new UniverseActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new UniverseLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new UniverseContentProvider());
     }
 }

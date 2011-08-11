@@ -52,6 +52,9 @@ public class RepositoryNodeConfigurationAdapter implements IRepositoryNodeConfig
     }
 
     public IRepositoryNodeContentProvider getContentProvider() {
+        if (contentProvider == null) {
+            initContentProvider();
+        }
         return this.contentProvider;
     }
 
@@ -69,6 +72,9 @@ public class RepositoryNodeConfigurationAdapter implements IRepositoryNodeConfig
     }
 
     public IRepositoryNodeLabelProvider getLabelProvider() {
+        if (labelProvider == null) {
+            initLabelProvider();
+        }
         return this.labelProvider;
     }
 
@@ -84,4 +90,11 @@ public class RepositoryNodeConfigurationAdapter implements IRepositoryNodeConfig
         return resourceProvider;
     }
 
+    protected void initLabelProvider() {
+
+    }
+
+    protected void initContentProvider() {
+
+    }
 }

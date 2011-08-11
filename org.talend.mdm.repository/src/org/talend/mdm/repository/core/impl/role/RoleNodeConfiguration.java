@@ -31,8 +31,17 @@ public class RoleNodeConfiguration extends RepositoryNodeConfigurationAdapter {
 
     public RoleNodeConfiguration() {
         setResourceProvider(new RoleNodeResourceProvider());
-        setLabelProvider(new RoleLabelProvider());
-        setContentProvider(new RoleContentProvider());
+
         setActionProvider(new RoleActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new RoleLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new RoleContentProvider());
     }
 }

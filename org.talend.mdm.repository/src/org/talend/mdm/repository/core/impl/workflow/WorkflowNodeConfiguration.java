@@ -31,8 +31,17 @@ public class WorkflowNodeConfiguration extends RepositoryNodeConfigurationAdapte
 
     public WorkflowNodeConfiguration() {
         setResourceProvider(new WorkflowNodeResourceProvider());
-        setLabelProvider(new WorkflowLabelProvider());
-        setContentProvider(new WorkflowContentProvider());
+
         setActionProvider(new WorkflowActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new WorkflowLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new WorkflowContentProvider());
     }
 }

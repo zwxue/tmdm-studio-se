@@ -31,8 +31,16 @@ public class TransformerV2NodeConfiguration extends RepositoryNodeConfigurationA
 
     public TransformerV2NodeConfiguration() {
         setResourceProvider(new TransformerV2NodeResourceProvider());
-        setLabelProvider(new TransformerV2LabelProvider());
-        setContentProvider(new TransformerV2ContentProvider());
         setActionProvider(new TransformerV2ActionProvider());
+    }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new TransformerV2LabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new TransformerV2ContentProvider());
     }
 }

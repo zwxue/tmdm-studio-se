@@ -31,8 +31,18 @@ public class DataClusterNodeConfiguration extends RepositoryNodeConfigurationAda
 
     public DataClusterNodeConfiguration() {
         setResourceProvider(new DataClusterNodeResourceProvider());
-        setLabelProvider(new DataClusterLabelProvider());
-        setContentProvider(new DataClusterContentProvider());
+
         setActionProvider(new DataClusterActionProvider());
     }
+
+    @Override
+    protected void initLabelProvider() {
+        setLabelProvider(new DataClusterLabelProvider());
+    }
+
+    @Override
+    protected void initContentProvider() {
+        setContentProvider(new DataClusterContentProvider());
+    }
+
 }

@@ -40,19 +40,22 @@ public class EventManagerContentProvider extends AbstractContentProvider {
      * DOC hbhong EventManagerContentProvider constructor comment.
      */
     public EventManagerContentProvider() {
-        result = new LinkedList<IRepositoryViewObject>();
-        IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
-                .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
-        IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
-                .getConfiguration(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
 
-        //
-        addCategoryViewObject(result, processConf);
-        addCategoryViewObject(result, triggerConf);
     }
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
+        if (result == null) {
+            result = new LinkedList<IRepositoryViewObject>();
+            IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
+                    .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+            IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
+                    .getConfiguration(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+
+            //
+            addCategoryViewObject(result, processConf);
+            addCategoryViewObject(result, triggerConf);
+        }
         return result;
     }
 
