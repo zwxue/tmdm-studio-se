@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getConceptPattern <em>Concept Pattern</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getXtentisObjectName <em>Xtentis Object Name</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getRevisionID <em>Revision ID</em>}</li>
  * </ul>
  * </p>
  *
@@ -53,29 +53,29 @@ public interface WSUniverseItemsRevisionIDsE extends EObject {
     void setConceptPattern(String value);
 
     /**
-     * Returns the value of the '<em><b>Xtentis Object Name</b></em>' attribute.
+     * Returns the value of the '<em><b>Revision ID</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Xtentis Object Name</em>' attribute isn't clear,
+     * If the meaning of the '<em>Revision ID</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Xtentis Object Name</em>' attribute.
-     * @see #setXtentisObjectName(String)
-     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSUniverseItemsRevisionIDsE_XtentisObjectName()
+     * @return the value of the '<em>Revision ID</em>' attribute.
+     * @see #setRevisionID(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSUniverseItemsRevisionIDsE_RevisionID()
      * @model
      * @generated
      */
-    String getXtentisObjectName();
+    String getRevisionID();
 
     /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getXtentisObjectName <em>Xtentis Object Name</em>}' attribute.
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getRevisionID <em>Revision ID</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Xtentis Object Name</em>' attribute.
-     * @see #getXtentisObjectName()
+     * @param value the new value of the '<em>Revision ID</em>' attribute.
+     * @see #getRevisionID()
      * @generated
      */
-    void setXtentisObjectName(String value);
+    void setRevisionID(String value);
 
 } // WSUniverseItemsRevisionIDsE

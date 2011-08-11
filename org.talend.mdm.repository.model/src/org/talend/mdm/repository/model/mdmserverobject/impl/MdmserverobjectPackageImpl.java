@@ -918,7 +918,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getWSUniverseItemsRevisionIDsE_XtentisObjectName() {
+    public EAttribute getWSUniverseItemsRevisionIDsE_RevisionID() {
         return (EAttribute)wsUniverseItemsRevisionIDsEEClass.getEStructuralFeatures().get(1);
     }
 
@@ -1639,7 +1639,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         wsUniverseItemsRevisionIDsEEClass = createEClass(WS_UNIVERSE_ITEMS_REVISION_IDS_E);
         createEAttribute(wsUniverseItemsRevisionIDsEEClass, WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN);
-        createEAttribute(wsUniverseItemsRevisionIDsEEClass, WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME);
+        createEAttribute(wsUniverseItemsRevisionIDsEEClass, WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID);
 
         wsSynchronizationPlanEEClass = createEClass(WS_SYNCHRONIZATION_PLAN_E);
         createEAttribute(wsSynchronizationPlanEEClass, WS_SYNCHRONIZATION_PLAN_E__REMOTE_SYSTEM_NAME);
@@ -1851,7 +1851,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         initEClass(wsUniverseItemsRevisionIDsEEClass, WSUniverseItemsRevisionIDsE.class, "WSUniverseItemsRevisionIDsE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSUniverseItemsRevisionIDsE_ConceptPattern(), ecorePackage.getEString(), "conceptPattern", null, 0, 1, WSUniverseItemsRevisionIDsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSUniverseItemsRevisionIDsE_XtentisObjectName(), ecorePackage.getEString(), "xtentisObjectName", null, 0, 1, WSUniverseItemsRevisionIDsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSUniverseItemsRevisionIDsE_RevisionID(), ecorePackage.getEString(), "revisionID", null, 0, 1, WSUniverseItemsRevisionIDsE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsSynchronizationPlanEEClass, WSSynchronizationPlanE.class, "WSSynchronizationPlanE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSSynchronizationPlanE_RemoteSystemName(), ecorePackage.getEString(), "remoteSystemName", null, 0, 1, WSSynchronizationPlanE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

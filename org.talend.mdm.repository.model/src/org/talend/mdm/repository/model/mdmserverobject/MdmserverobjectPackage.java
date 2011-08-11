@@ -1086,13 +1086,13 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN = 0;
 
     /**
-     * The feature id for the '<em><b>Xtentis Object Name</b></em>' attribute.
+     * The feature id for the '<em><b>Revision ID</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME = 1;
+    int WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID = 1;
 
     /**
      * The number of structural features of the '<em>WS Universe Items Revision IDs E</em>' class.
@@ -2801,15 +2801,15 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSUniverseItemsRevisionIDsE_ConceptPattern();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getXtentisObjectName <em>Xtentis Object Name</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getRevisionID <em>Revision ID</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Xtentis Object Name</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getXtentisObjectName()
+     * @return the meta object for the attribute '<em>Revision ID</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE#getRevisionID()
      * @see #getWSUniverseItemsRevisionIDsE()
      * @generated
      */
-    EAttribute getWSUniverseItemsRevisionIDsE_XtentisObjectName();
+    EAttribute getWSUniverseItemsRevisionIDsE_RevisionID();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE <em>WS Synchronization Plan E</em>}'.
@@ -4087,12 +4087,12 @@ public interface MdmserverobjectPackage extends EPackage {
         EAttribute WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN = eINSTANCE.getWSUniverseItemsRevisionIDsE_ConceptPattern();
 
         /**
-         * The meta object literal for the '<em><b>Xtentis Object Name</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Revision ID</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME = eINSTANCE.getWSUniverseItemsRevisionIDsE_XtentisObjectName();
+        EAttribute WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID = eINSTANCE.getWSUniverseItemsRevisionIDsE_RevisionID();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSSynchronizationPlanEImpl <em>WS Synchronization Plan E</em>}' class.

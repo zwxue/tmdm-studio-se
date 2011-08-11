@@ -168,6 +168,13 @@ public class XObjectEditor2 extends XObjectEditor {
                     log.error(e.getMessage(), e);
                 }
                 break;
+            case TreeObject.UNIVERSE:
+                try {
+                    addPage(new UniverseVersionMainPage(this));
+                } catch (PartInitException e) {
+                    log.error(e.getMessage(), e);
+                }
+                break;
             default:
                 // MessageDialog.openError(this.getSite().getShell(), "Error",
                 // "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());

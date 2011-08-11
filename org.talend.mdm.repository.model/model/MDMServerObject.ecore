@@ -96,7 +96,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSUniverseItemsRevisionIDsE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="conceptPattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xtentisObjectName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="revisionID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSSynchronizationPlanE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteSystemName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

@@ -397,7 +397,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_VDjJka33EeCWmY28u9rcNg"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_XSJvIK33EeCWmY28u9rcNg" type="2001">
-        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE/xtentisObjectName"/>
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSUniverseItemsRevisionIDsE/revisionID"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_XSJvIa33EeCWmY28u9rcNg"/>
       </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_PHuEVa33EeCWmY28u9rcNg"/>

@@ -24,7 +24,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionID
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSUniverseItemsRevisionIDsEImpl#getConceptPattern <em>Concept Pattern</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSUniverseItemsRevisionIDsEImpl#getXtentisObjectName <em>Xtentis Object Name</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSUniverseItemsRevisionIDsEImpl#getRevisionID <em>Revision ID</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,24 +52,24 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
     protected String conceptPattern = CONCEPT_PATTERN_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getXtentisObjectName() <em>Xtentis Object Name</em>}' attribute.
+     * The default value of the '{@link #getRevisionID() <em>Revision ID</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getXtentisObjectName()
+     * @see #getRevisionID()
      * @generated
      * @ordered
      */
-    protected static final String XTENTIS_OBJECT_NAME_EDEFAULT = null;
+    protected static final String REVISION_ID_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getXtentisObjectName() <em>Xtentis Object Name</em>}' attribute.
+     * The cached value of the '{@link #getRevisionID() <em>Revision ID</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getXtentisObjectName()
+     * @see #getRevisionID()
      * @generated
      * @ordered
      */
-    protected String xtentisObjectName = XTENTIS_OBJECT_NAME_EDEFAULT;
+    protected String revisionID = REVISION_ID_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -116,8 +116,8 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
      * <!-- end-user-doc -->
      * @generated
      */
-    public String getXtentisObjectName() {
-        return xtentisObjectName;
+    public String getRevisionID() {
+        return revisionID;
     }
 
     /**
@@ -125,11 +125,11 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setXtentisObjectName(String newXtentisObjectName) {
-        String oldXtentisObjectName = xtentisObjectName;
-        xtentisObjectName = newXtentisObjectName;
+    public void setRevisionID(String newRevisionID) {
+        String oldRevisionID = revisionID;
+        revisionID = newRevisionID;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME, oldXtentisObjectName, xtentisObjectName));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID, oldRevisionID, revisionID));
     }
 
     /**
@@ -142,8 +142,8 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
         switch (featureID) {
             case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN:
                 return getConceptPattern();
-            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME:
-                return getXtentisObjectName();
+            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID:
+                return getRevisionID();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -159,8 +159,8 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
             case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN:
                 setConceptPattern((String)newValue);
                 return;
-            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME:
-                setXtentisObjectName((String)newValue);
+            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID:
+                setRevisionID((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -177,8 +177,8 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
             case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN:
                 setConceptPattern(CONCEPT_PATTERN_EDEFAULT);
                 return;
-            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME:
-                setXtentisObjectName(XTENTIS_OBJECT_NAME_EDEFAULT);
+            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID:
+                setRevisionID(REVISION_ID_EDEFAULT);
                 return;
         }
         super.eUnset(featureID);
@@ -194,8 +194,8 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
         switch (featureID) {
             case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__CONCEPT_PATTERN:
                 return CONCEPT_PATTERN_EDEFAULT == null ? conceptPattern != null : !CONCEPT_PATTERN_EDEFAULT.equals(conceptPattern);
-            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__XTENTIS_OBJECT_NAME:
-                return XTENTIS_OBJECT_NAME_EDEFAULT == null ? xtentisObjectName != null : !XTENTIS_OBJECT_NAME_EDEFAULT.equals(xtentisObjectName);
+            case MdmserverobjectPackage.WS_UNIVERSE_ITEMS_REVISION_IDS_E__REVISION_ID:
+                return REVISION_ID_EDEFAULT == null ? revisionID != null : !REVISION_ID_EDEFAULT.equals(revisionID);
         }
         return super.eIsSet(featureID);
     }
@@ -212,8 +212,8 @@ public class WSUniverseItemsRevisionIDsEImpl extends EObjectImpl implements WSUn
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (conceptPattern: ");
         result.append(conceptPattern);
-        result.append(", xtentisObjectName: ");
-        result.append(xtentisObjectName);
+        result.append(", revisionID: ");
+        result.append(revisionID);
         result.append(')');
         return result.toString();
     }
