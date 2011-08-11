@@ -43,6 +43,10 @@ public final class SynchronizationActionMessagesImpl implements SynchronizationA
     public String label_synchronization_name() {
         return MESSAGES.getMessage("LABEL_SYNCHRONIZATION_NAME");
     }
+    
+    public String label_select_synchronization_name() {
+        return MESSAGES.getMessage("LABEL_SELECT_SYNCHRONIZATION_NAME");
+    }
 
     public String label_remote_system() {
         return MESSAGES.getMessage("label_remote_system");

@@ -26,6 +26,8 @@ public interface SynchronizationActionMessages extends Messages {
     
     String label_synchronization_name();
     
+    String label_select_synchronization_name();
+    
     String button_start_full();
     
     String button_start_different();

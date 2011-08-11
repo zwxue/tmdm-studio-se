@@ -40,10 +40,6 @@ public class SynchronizationActionPanel extends ContentPanel {
      private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync)
      Registry.get(SynchronizationAction2.SYNCHRONIZTIONACTION_SERVICE);
 
-    private FormData formData = new FormData("-20"); //$NON-NLS-1$
-
-    private VerticalPanel verticalPanel = new VerticalPanel();
-
     private ComboBox<ItemBaseModel> serverUrl_CB;
 
     private TextField<String> userName_TF;
@@ -73,7 +69,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         this.setLayout(new FitLayout());
         this.setWidth(800);
         this.setHeight(500);
-        this.initComponent();
+        this.initPanel();
 
     }
 
@@ -118,7 +114,7 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
 
             public void onFailure(Throwable caught) {
-                caught.printStackTrace();
+                MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
             }
         });
     }
@@ -152,7 +148,7 @@ public class SynchronizationActionPanel extends ContentPanel {
                 service.getStatus(syncInfo, new AsyncCallback<SyncStatus>() {
 
                     public void onFailure(Throwable caught) {
-                        caught.printStackTrace();
+                        MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
                     }
 
                     public void onSuccess(SyncStatus syncStatusAsync) {
@@ -168,34 +164,9 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
         };
         refreshTimer.scheduleRepeating(1000);
-    }
-
-    public void initComponent() {
-
-        FormPanel synchronizationForm_FP = new FormPanel();
-        synchronizationForm_FP.setFrame(true);
-        synchronizationForm_FP.setHeaderVisible(false);
-        synchronizationForm_FP.setLayout(new FlowLayout());
-        synchronizationForm_FP.setBorders(false);
-        synchronizationForm_FP.setBodyStyle("padding: 8px; background-color: transparent;"); //$NON-NLS-1$
-        synchronizationForm_FP.setLabelAlign(LabelAlign.LEFT);
-        synchronizationForm_FP.setLabelWidth(150);
-
-        FieldSet fieldSet = new FieldSet();
-        fieldSet.setHeading(MessagesFactory.getMessages().label_remote_system());
-        fieldSet.setAutoHeight(true);
-
-        FormLayout layout = new FormLayout();
-        layout.setLabelWidth(75);
-        fieldSet.setLayout(layout);        
-        
-        synchronizationName_CB = new ComboBox<ItemBaseModel>();       
-        synchronizationName_CB.setStore(new ListStore<ItemBaseModel>());
-        synchronizationName_CB.setDisplayField("name"); //$NON-NLS-1$
-        synchronizationName_CB.setValueField("id"); //$NON-NLS-1$
-        synchronizationName_CB.setTypeAhead(true);
-        synchronizationName_CB.setTriggerAction(TriggerAction.ALL);
-
+    }   
+    
+    public void initServerUrl(){
         serverUrl_CB = new ComboBox<ItemBaseModel>();
         serverUrl_CB.setFieldLabel(MessagesFactory.getMessages().label_server_url());
         serverUrl_CB.setWidth(400);
@@ -205,28 +176,29 @@ public class SynchronizationActionPanel extends ContentPanel {
         serverUrl_CB.setTypeAhead(true);
         serverUrl_CB.setTriggerAction(TriggerAction.ALL);
         service.getSavedURLs(new AsyncCallback<List<ItemBaseModel>>() {                   
-          
-              public void onFailure(Throwable caught) {
-                  caught.printStackTrace();
+      
+          public void onFailure(Throwable caught) {
+              MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
+          }
+    
+          public void onSuccess(List<ItemBaseModel> result) {
+              urlString = new StringBuffer();
+              serverUrl_CB.getStore().removeAll();
+              serverUrl_CB.getStore().add(result);
+              for (int i = 0; i < result.size(); i++) {
+                  urlString.append(result.get(i).get("id") + ";");  //$NON-NLS-1$//$NON-NLS-2$
               }
-        
-              public void onSuccess(List<ItemBaseModel> result) {
-                  urlString = new StringBuffer();
-                  serverUrl_CB.getStore().removeAll();
-                  serverUrl_CB.getStore().add(result);
-                  for (int i = 0; i < result.size(); i++) {
-                      urlString.append(result.get(i).get("id") + ";");  //$NON-NLS-1$//$NON-NLS-2$
-                  }
-              }
-          });
-
-        fieldSet.add(serverUrl_CB, formData);
-
+           }
+        });
+    }
+    
+    public void initUserName(){
         userName_TF = new TextField<String>();
         userName_TF.setFieldLabel(MessagesFactory.getMessages().label_user_name());
         userName_TF.setWidth(400);
-        fieldSet.add(userName_TF, formData);
-
+    }
+    
+    public void initPassword(){
         password_TF = new TextField<String>();
         password_TF.setFieldLabel(MessagesFactory.getMessages().label_password());
         password_TF.setWidth(400);
@@ -245,20 +217,27 @@ public class SynchronizationActionPanel extends ContentPanel {
                         }
 
                         public void onSuccess(List<ItemBaseModel> result) {
-                            synchronizationName_CB.setWidth(400);
-                            synchronizationName_CB.setEmptyText("Select a Synchronization Name"); //$NON-NLS-1$
+                            synchronizationName_CB.setEmptyText(MessagesFactory.getMessages().label_select_synchronization_name());    //$NON-NLS-1$
                             synchronizationName_CB.getStore().removeAll();
                             synchronizationName_CB.getStore().add(result);
                         }
                     });
                 }
             }
-        });
-
-        fieldSet.add(password_TF, formData);
-
-        message_LB = new Label();
-
+        });        
+    }    
+    
+    public void initSynchronizationName(){
+        synchronizationName_CB = new ComboBox<ItemBaseModel>();
+        synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name()); 
+        synchronizationName_CB.setStore(new ListStore<ItemBaseModel>());
+        synchronizationName_CB.setDisplayField("name"); //$NON-NLS-1$
+        synchronizationName_CB.setValueField("id"); //$NON-NLS-1$
+        synchronizationName_CB.setTypeAhead(true);
+        synchronizationName_CB.setTriggerAction(TriggerAction.ALL);
+    }
+    
+    public void initStartFull(){
         startFull_BT = new Button(MessagesFactory.getMessages().button_start_full());
         startDifferent_BT = new Button(MessagesFactory.getMessages().button_start_different());
         stop_BT = new Button(MessagesFactory.getMessages().button_stop());
@@ -280,13 +259,15 @@ public class SynchronizationActionPanel extends ContentPanel {
                         }
 
                         public void onFailure(Throwable caught) {
-                            caught.printStackTrace();
+                            MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
                         }
                     });
                 }
             }
         });
-
+    }
+    
+    public void initStartDifferent(){
         startDifferent_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
             @Override
@@ -301,13 +282,15 @@ public class SynchronizationActionPanel extends ContentPanel {
                         }
 
                         public void onFailure(Throwable caught) {
-                            caught.printStackTrace();
+                            MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
                         }
                     });
                 }
             }
         });
-
+    }
+    
+    public void initStop(){
         stop_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
             @Override
@@ -320,12 +303,14 @@ public class SynchronizationActionPanel extends ContentPanel {
                     }
 
                     public void onFailure(Throwable caught) {
-                        caught.printStackTrace();
+                        MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
                     }
                 });
             }
         });
-
+    }
+    
+    public void initReset(){
         reset_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
             @Override
@@ -339,18 +324,58 @@ public class SynchronizationActionPanel extends ContentPanel {
                     }
 
                     public void onFailure(Throwable caught) {
-                        caught.printStackTrace();
+                        MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
                     }
                 });
             }
-        });
+        });  
+    }
 
-        synchronizationForm_FP.add(fieldSet);
-        HorizontalPanel synchronizationName_PL = new HorizontalPanel();
-        synchronizationName_PL.add(new Label(MessagesFactory.getMessages().label_synchronization_name()));    
-        synchronizationName_PL.add(synchronizationName_CB);        
-        synchronizationForm_FP.add(synchronizationName_PL);            
-        synchronizationForm_FP.add(synchronizationName_CB);
+    public void initPanel() {
+        
+        message_LB = new Label();
+        initSynchronizationName();
+        initServerUrl();
+        initUserName();
+        initPassword();
+        initStartFull();
+        initStartDifferent();
+        initStop();
+        initReset();
+        
+        FormData formData = new FormData("-20"); //$NON-NLS-1$
+
+        VerticalPanel verticalPanel = new VerticalPanel();
+
+        FormPanel synchronizationForm_FP = new FormPanel();
+        synchronizationForm_FP.setFrame(true);
+        synchronizationForm_FP.setHeaderVisible(false);
+        synchronizationForm_FP.setLayout(new FlowLayout());
+        synchronizationForm_FP.setBorders(false);
+        synchronizationForm_FP.setBodyStyle("padding: 8px; background-color: transparent;"); //$NON-NLS-1$
+        synchronizationForm_FP.setLabelAlign(LabelAlign.LEFT);
+        synchronizationForm_FP.setLabelWidth(150);
+
+        FieldSet synchronizationInfo_FS = new FieldSet();
+        synchronizationInfo_FS.setHeading(MessagesFactory.getMessages().label_remote_system());
+        synchronizationInfo_FS.setAutoHeight(true);
+
+        FormLayout synchronizationInfo_FL = new FormLayout();
+        synchronizationInfo_FL.setLabelWidth(75);
+        synchronizationInfo_FS.setLayout(synchronizationInfo_FL);
+
+        synchronizationInfo_FS.add(serverUrl_CB, formData);
+        synchronizationInfo_FS.add(userName_TF, formData);
+        synchronizationInfo_FS.add(password_TF, formData);       
+        
+        FieldSet synchronizationName_FS = new FieldSet();
+        FormLayout synchronizationName_FL = new FormLayout();
+        synchronizationName_FL.setLabelWidth(150);
+        synchronizationName_FS.setLayout(synchronizationName_FL);    
+        synchronizationName_FS.add(synchronizationName_CB);
+        synchronizationName_FS.setBorders(false);
+        synchronizationForm_FP.add(synchronizationInfo_FS);
+        synchronizationForm_FP.add(synchronizationName_FS);        
         synchronizationForm_FP.add(message_LB);
         synchronizationForm_FP.addButton(startFull_BT);
         synchronizationForm_FP.addButton(startDifferent_BT);
