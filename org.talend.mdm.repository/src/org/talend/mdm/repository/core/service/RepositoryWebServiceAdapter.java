@@ -14,8 +14,10 @@ package org.talend.mdm.repository.core.service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -44,6 +46,8 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.models.KeyValue;
+import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
@@ -117,6 +121,45 @@ public class RepositoryWebServiceAdapter {
             addDetail(transformerPluginMap, new XPathPluginDetail(twoLettersLanguageCode));
             addDetail(transformerPluginMap, new XSLTPluginDetail(twoLettersLanguageCode));
         }
+    }
+
+    public static String[] getTheObjectsForUniverse() {
+        String[] objects = new String[] { "Routing Engine V2", "Synchronization Plan", "Service", "Universe", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+                "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", "Synchronization Conflict", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                "Transformer Plugin V2", "Role", "Data Cluster", "Configuration Info" };//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+        return objects;
+
+    }
+
+    public static List<String> getListForUniverseMap() {
+        List<String> list = new ArrayList<String>();
+
+        list.add("Transformer V2"); //$NON-NLS-1$ 
+        list.add("View");//$NON-NLS-1$
+        list.add("Data Model");//$NON-NLS-1$
+        list.add("Role");//$NON-NLS-1$
+        list.add("Routing Rule");//$NON-NLS-1$
+        list.add("Stored Procedure");//$NON-NLS-1$
+        list.add("Menu");//$NON-NLS-1$
+        list.add("Synchronization Plan");//$NON-NLS-1$
+
+        return list;
+    }
+
+    public static List<KeyValue> getListForUniverseXtentisObjects() {
+        List<KeyValue> list = new ArrayList<KeyValue>();
+        list.add(new KeyValue("Data Model", ""));//$NON-NLS-1$ //$NON-NLS-2$ 
+        list.add(new KeyValue("Menu", ""));//$NON-NLS-1$ //$NON-NLS-2$
+        list.add(new KeyValue("Role", ""));//$NON-NLS-1$ //$NON-NLS-2$  
+        list.add(new KeyValue(EXtentisObjects.RoutingRule.getDisplayName(), ""));//$NON-NLS-1$   
+        list.add(new KeyValue("Stored Procedure", ""));//$NON-NLS-1$ //$NON-NLS-2$
+        list.add(new KeyValue("Synchronization Plan", ""));//$NON-NLS-1$ //$NON-NLS-2$ 
+        list.add(new KeyValue(EXtentisObjects.Transformer.getDisplayName(), ""));//$NON-NLS-1$ 
+        list.add(new KeyValue("View", ""));//$NON-NLS-1$ //$NON-NLS-2$
+
+        return list;
+
     }
 
     private static void addDetail(Map<String, AbstractPluginDetail> map, AbstractPluginDetail detail) {
