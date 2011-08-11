@@ -39,18 +39,14 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
             WSSynchronizationPlanPK[] pks = array.getWsSynchronizationPlanPK();
             List<ItemBaseModel> syncNames = new ArrayList<ItemBaseModel>();
             if (pks != null && pks.length > 0) {
-                logger.debug("pks:" + pks.length); //$NON-NLS-1$
-                // String[] syncNames=new String[pks.length];
+                logger.debug("pks:" + pks.length); //$NON-NLS-1$           
                 for (int i = 0; i < pks.length; i++) {
-                    // syncNames.add(pks[i].getPk());
                     ItemBaseModel model = new ItemBaseModel();
                     model.set("id", pks[i].getPk()); //$NON-NLS-1$
                     model.set("name", pks[i].getPk()); //$NON-NLS-1$
-                    // syncNames[i]=pks[i].getPk();
                     syncNames.add(model);
                 }
-                logger.debug("getSyncNames() syncNames:" + Arrays.asList(syncNames)); //$NON-NLS-1$
-                // return syncNames;
+                logger.debug("getSyncNames() syncNames:" + syncNames); //$NON-NLS-1$
             }
             return syncNames;
         } catch (Exception exception) {
@@ -182,14 +178,4 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
             throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
         }
     }
-
-    public List<ItemBaseModel> getInfo(SyncInfo info) throws IllegalArgumentException {
-        List l = new ArrayList();
-        l.add(new ItemBaseModel());
-        l.add(new ItemBaseModel());
-        l.add(new ItemBaseModel());
-        l.add(new ItemBaseModel());
-        return l;
-    }
-
 }

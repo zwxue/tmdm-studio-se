@@ -25,8 +25,5 @@ public interface SynchronizationActionServiceAsync {
 
     void getSavedURLs(AsyncCallback<List<ItemBaseModel>> callback);
 
-    void saveURLs(String url, AsyncCallback<Void> callback);
-
-    void getInfo(SyncInfo info, AsyncCallback<List<ItemBaseModel>> callback);   
-    
+    void saveURLs(String url, AsyncCallback<Void> callback);    
 }

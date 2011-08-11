@@ -27,6 +27,4 @@ public interface SynchronizationActionService extends RemoteService{
     public List<ItemBaseModel> getSavedURLs()throws Exception;
     
     public void saveURLs(String url)throws Exception;
-    
-    public List<ItemBaseModel> getInfo(SyncInfo info)throws IllegalArgumentException;
 }
