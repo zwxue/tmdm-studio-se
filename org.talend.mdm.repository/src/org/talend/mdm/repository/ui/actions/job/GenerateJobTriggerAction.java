@@ -109,23 +109,22 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             // Generate the job call
             // create default CREATE operation express
             WSRoutingRuleExpressionE expression1 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
-            WSRoutingRuleOperatorE operat = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleOperatorE();
-            operat.setValue("CONTAINS");//$NON-NLS-1$
+
             expression1.setName("C1"); //$NON-NLS-1$
             expression1.setXpath("Update/OperationType"); //$NON-NLS-1$
-            expression1.setWsOperator(operat);
+            expression1.setWsOperator(newContainRoutingRuleOperator());
             expression1.setValue("CREATE"); //$NON-NLS-1$
 
             WSRoutingRuleExpressionE expression2 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
             expression2.setName("C2"); //$NON-NLS-1$
             expression2.setXpath("Update/OperationType"); //$NON-NLS-1$
-            expression2.setWsOperator(operat);
+            expression2.setWsOperator(newContainRoutingRuleOperator());
             expression2.setValue("UPDATE"); //$NON-NLS-1$
 
             WSRoutingRuleExpressionE expression3 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
             expression3.setName("C3"); //$NON-NLS-1$
             expression3.setXpath("Update/OperationType"); //$NON-NLS-1$
-            expression3.setWsOperator(operat);
+            expression3.setWsOperator(newContainRoutingRuleOperator());
             expression3.setValue("DELETE"); //$NON-NLS-1$
 
 
@@ -156,6 +155,11 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         return routingRule;
     }
 
+    private WSRoutingRuleOperatorE newContainRoutingRuleOperator() {
+        WSRoutingRuleOperatorE operator = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleOperatorE();
+        operator.setValue("CONTAINS");//$NON-NLS-1$
+        return operator;
+    }
     /**
      * DOC jsxie Comment method "AttachToTriggerView".
      * 
