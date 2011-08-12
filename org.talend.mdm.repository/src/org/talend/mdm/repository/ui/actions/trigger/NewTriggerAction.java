@@ -28,7 +28,6 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -50,12 +49,7 @@ public class NewTriggerAction extends AbstractSimpleAddAction {
     }
 
     private WSRoutingRuleE newRoutingRule(String key) {
-
-
-        WSRoutingRuleExpressionE expression = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
-
         WSRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleE();
-        routingRule.getWsRoutingRuleExpressions().add(expression);
 
         routingRule.setName(key);
         routingRule.setDescription(""); //$NON-NLS-1$
