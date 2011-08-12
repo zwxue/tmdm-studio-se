@@ -132,6 +132,8 @@ class BeanClassUtil {
     }
 
     private boolean isJavaClass(Class cls) {
+        if (cls.isPrimitive())
+            return true;
         return getComponentType(cls).getName().startsWith("java"); //$NON-NLS-1$
     }
 
