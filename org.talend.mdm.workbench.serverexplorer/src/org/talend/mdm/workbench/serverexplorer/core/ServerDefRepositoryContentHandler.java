@@ -20,9 +20,11 @@ import org.talend.commons.ui.runtime.image.IImage;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryContentHandler;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+import org.talend.repository.model.RepositoryNode;
 
 public class ServerDefRepositoryContentHandler implements IRepositoryContentHandler {
 
@@ -88,4 +90,10 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
     public ERepositoryObjectType getCodeType() {
         return null;
     }
+
+	public void addNode(ERepositoryObjectType type, RepositoryNode recBinNode,
+			IRepositoryViewObject repositoryObject, RepositoryNode node) {
+		// TODO Auto-generated method stub
+		
+	}
 }
