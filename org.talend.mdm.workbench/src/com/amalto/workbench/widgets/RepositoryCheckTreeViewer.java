@@ -77,7 +77,7 @@ public class RepositoryCheckTreeViewer {
 
     private TreeParent serverRoot;
 
-    private List<TreeObject> checkItems;
+    private List<TreeObject> checkItems = new ArrayList<TreeObject>();
 
     private String defaultTagText;
 
@@ -106,13 +106,19 @@ public class RepositoryCheckTreeViewer {
         serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
         checkItems = selection.toList();
     }
-    
+
+    public RepositoryCheckTreeViewer(TreeParent serverRoot) {
+        this.serverRoot = serverRoot;
+    }
     
     public void setCheckItems(List<TreeObject> list) {
         checkItems = list;
         refresh();
     }
 
+    public void setServerRoot(TreeParent serverRoot) {
+        this.serverRoot = serverRoot;
+    }
     public SashForm createContents(Composite parent) {
         // Splitter
         final GridData data = new GridData();

@@ -90,6 +90,7 @@ public class Messages extends NLS {
 
     public static String XSDEditor2_schemaSource;
 
+    public static String ImportServerObject;
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

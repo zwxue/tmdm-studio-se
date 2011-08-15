@@ -294,6 +294,25 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         this.isXObject = isXObject;
     }
 
+    public String getParentPath(TreeObject obj) {
+
+        if (obj.getParent().equals(getServerRoot())) {
+            return obj.getParent().getName() + "/" + obj.getName(); //$NON-NLS-1$
+        } else {
+            return getParentPath(obj.getParent()) + "/" + obj.getName();
+        }
+    }
+
+    public String getPath() {
+        String path = getParentPath(this.getParent());
+        int pos = path.indexOf('/');
+        if (pos != -1)
+            path = path.substring(pos + 1);
+        pos = path.indexOf('/');
+        if (pos != -1)
+        return path.substring(pos + 1);
+        return ""; //$NON-NLS-1$
+    }
     public void addListener(IXObjectModelListener listener) {
         if (listeners == null) {
             listeners = new ArrayList<IXObjectModelListener>();

@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -66,6 +66,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction copyAction;
 
+    protected AbstractRepositoryAction importServerObjectAction;
+
     protected AbstractRepositoryAction pasteAction;
 
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
@@ -85,6 +87,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         duplicateAction.initCommonViewer(commonViewer);
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
+        importServerObjectAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.IMPORT_SERVER_OBJECT);
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
         updateServerAction.initCommonViewer(commonViewer);
     }
@@ -118,6 +121,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
                 addAction(actions, copyAction);
                 addAction(actions, pasteAction);
+                addAction(actions, importServerObjectAction);
                 actions.add(duplicateAction);
             }
         }

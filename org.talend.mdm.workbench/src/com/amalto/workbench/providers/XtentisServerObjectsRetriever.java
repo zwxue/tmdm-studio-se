@@ -33,25 +33,39 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSComponent;
+import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
+import com.amalto.workbench.webservices.WSGetDataCluster;
+import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetMenu;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
+import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
+import com.amalto.workbench.webservices.WSGetStoredProcedure;
+import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
+import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSGetViewPKs;
+import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRegexStoredProcedure;
+import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSVersion;
+import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -75,6 +89,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
     private boolean isExistUniverse = true;
 
+    private boolean retriveWSObject;
+
     public XtentisServerObjectsRetriever(String serverName, String endpointaddress, String username, String password,
             String universe, ServerView view) {
         this.serverName = serverName;
@@ -87,6 +103,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
     public boolean isExistUniverse() {
         return isExistUniverse;
+    }
+
+    public boolean isRetriveWSObject() {
+        return retriveWSObject;
+    }
+
+    public void setRetriveWSObject(boolean retriveWSObject) {
+        this.retriveWSObject = retriveWSObject;
     }
 
     public synchronized void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -151,12 +175,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 for (int i = 0; i < xdmPKs.length; i++) {
                     String name = xdmPKs[i].getPk();
                     if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
-                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, xdmPKs[i], null // no
-                        // storage
-                        // to
-                        // save
-                        // space
-                        );
+                        WSDataModel wsobj = null;
+                        if (retriveWSObject)
+                            wsobj = port.getDataModel(new WSGetDataModel(xdmPKs[i]));
+                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, xdmPKs[i], wsobj);
                         models.addChild(obj);
                     }
                 }
@@ -180,12 +202,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 for (int i = 0; i < xdcPKs.length; i++) {
                     String name = xdcPKs[i].getPk();
                     if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE//$NON-NLS-1$
-                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], null // no
-                        // storage
-                        // to
-                        // save
-                        // space
-                        );
+                        WSDataCluster wsObject = null;
+                        if (retriveWSObject)
+                            wsObject = port.getDataCluster(new WSGetDataCluster(xdcPKs[i]));
+                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], wsObject);
                         dataClusters.addChild(obj);
                     }
                 }
@@ -217,12 +237,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 monitor.subTask("Loading Transfomers");
                 for (int i = 0; i < transformerPKs.length; i++) {
                     String id = transformerPKs[i].getPk();
-                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WSTransformerV2PK(id), null // no
-                    // storage
-                    // to
-                    // save
-                    // space
-                    );
+                    WSTransformerV2 wsobject = null;
+                    if (retriveWSObject)
+                        wsobject = port.getTransformerV2(new WSGetTransformerV2(transformerPKs[i]));
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WSTransformerV2PK(id), wsobject);
                     transformers.addChild(obj);
                 }
             }
@@ -242,12 +260,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 monitor.subTask("Loading Triggers");
                 for (int i = 0; i < routingRulePKs.length; i++) {
                     String id = routingRulePKs[i].getPk();
-                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WSRoutingRulePK(id), null // no
-                    // storage
-                    // to
-                    // save
-                    // space
-                    );
+                    WSRoutingRule wsobject = null;
+                    if (retriveWSObject)
+                        wsobject = port.getRoutingRule(new WSGetRoutingRule(routingRulePKs[i]));
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WSRoutingRulePK(id), wsobject);
                     rules.addChild(obj);
                 }
             }
@@ -269,12 +285,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 monitor.subTask("Loading Views");
                 for (int i = 0; i < viewPKs.length; i++) {
                     String name = viewPKs[i].getPk();
-                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WSViewPK(name), null // no
-                    // storage
-                    // to
-                    // save
-                    // space
-                    );
+                    WSView wsobject = null;
+                    if (retriveWSObject)
+                        wsobject = port.getView(new WSGetView(viewPKs[i]));
+                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WSViewPK(name), wsobject);
                     views.addChild(obj);
                 }
             }
@@ -296,9 +310,11 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 monitor.subTask("Loading Stored Procedures");
                 for (int i = 0; i < spk.length; i++) {
                     String name = spk[i].getPk();
+                    WSStoredProcedure wsobject = null;
+                    if (retriveWSObject)
+                        wsobject = port.getStoredProcedure(new WSGetStoredProcedure(spk[i]));
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.STORED_PROCEDURE, new WSStoredProcedurePK(name),
-                            null // no storage to save space
-                    );
+                            wsobject);
                     storedProcedures.addChild(obj);
                 }
             }
@@ -331,12 +347,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     monitor.subTask("Loading Menus");
                     for (int i = 0; i < menuPKs.length; i++) {
                         String id = menuPKs[i].getPk();
-                        TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), null // no
-                        // storage
-                        // to
-                        // save
-                        // space
-                        );
+                        WSMenu wsobject = null;
+                        if (retriveWSObject)
+                            wsobject = port.getMenu(new WSGetMenu(menuPKs[i]));
+                        TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), wsobject);
                         menus.addChild(obj);
                     }
                 }

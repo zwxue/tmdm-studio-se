@@ -100,7 +100,7 @@ public class RepositoryQueryService {
         return names;
     }
 
-    private static MDMServerObject findServerObjectByName(ERepositoryObjectType type, String name) {
+    public static MDMServerObject findServerObjectByName(ERepositoryObjectType type, String name) {
         List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type);
         if (viewObjects != null) {
             for (IRepositoryViewObject viewObj : viewObjects) {
@@ -116,10 +116,34 @@ public class RepositoryQueryService {
         return null;
     }
 
+    public static MDMServerObjectItem findServerObjectItemByName(ERepositoryObjectType type, String name) {
+        List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type);
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                Item item = viewObj.getProperty().getItem();
+                if (item instanceof MDMServerObjectItem) {
+                    MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                    if (serverObject.getName().equals(name)) {
+                        return (MDMServerObjectItem) item;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     private static void initTypeMap() {
         if (typeMap == null) {
             typeMap = new DualHashBidiMap();
             typeMap.put(TreeObject.DATA_MODEL, IServerObjectRepositoryType.TYPE_DATAMODEL);
+            typeMap.put(TreeObject.DATA_CLUSTER, IServerObjectRepositoryType.TYPE_DATACLUSTER);
+            typeMap.put(TreeObject.TRANSFORMER, IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+            typeMap.put(TreeObject.MENU, IServerObjectRepositoryType.TYPE_MENU);
+            typeMap.put(TreeObject.ROLE, IServerObjectRepositoryType.TYPE_ROLE);
+            typeMap.put(TreeObject.ROUTING_RULE, IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+            typeMap.put(TreeObject.UNIVERSE, IServerObjectRepositoryType.TYPE_UNIVERSE);
+            typeMap.put(TreeObject.STORED_PROCEDURE, IServerObjectRepositoryType.TYPE_STOREPROCEDURE);
+            typeMap.put(TreeObject.VIEW, IServerObjectRepositoryType.TYPE_VIEW);
         }
     }
 
