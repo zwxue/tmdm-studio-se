@@ -379,7 +379,7 @@ public class RepositoryResourceUtil {
             IFolder stableFolder = fsProject.getFolder(((ContainerItem) parentItem).getRepObjType().getFolder());
             List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder, useRepositoryViewObject);
             if (hasSystemFolder) {
-                IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "system", null, true); //$NON-NLS-1$
+                IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "System", null, true); //$NON-NLS-1$
                 for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {
                     IRepositoryViewObject viewObject = il.next();
                     String key = viewObject.getProperty().getLabel();

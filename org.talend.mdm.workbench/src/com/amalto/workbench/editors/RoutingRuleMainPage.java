@@ -13,6 +13,7 @@
 package com.amalto.workbench.editors;
 
 import java.awt.event.TextEvent;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -82,7 +83,6 @@ import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
 import com.amalto.workbench.widgets.TisTableViewer;
-import com.amalto.workbench.widgets.XpathWidget;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditor;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageDescription;
@@ -112,9 +112,6 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     private Map<String, ArrayList<ExternalInfoHolder<?>>> externalInfoName2Holder = new HashMap<String, ArrayList<ExternalInfoHolder<?>>>();
 
     // protected ListViewer routingExpressionsViewer;
-    protected XpathWidget xpathWidget;
-
-    protected XpathWidget xpathWidget1;
 
     protected Button xpathButton;
 
@@ -134,13 +131,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     private static String ROUTE_SERVICE = "amalto/local/service/";//$NON-NLS-1$
 
-    private String dataModelName;
+    protected String dataModelName;
 
     private Text conditionText;
 
     private final static String EXCONTENTEDITOR_ID = "trigger";//$NON-NLS-1$
 
-    private ComplexTableViewerColumn[] conditionsColumns = new ComplexTableViewerColumn[] {
+    protected ComplexTableViewerColumn[] conditionsColumns = new ComplexTableViewerColumn[] {
             new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                     new String[] {}, 0),
             new ComplexTableViewerColumn("Operator", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -168,7 +165,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         try {
 
             treeParent = this.getXObject().getParent();
-            if (treeParent == null) {// if it is a new page,treeParent should be ROUTING_RULE
+            if (treeParent == null && !isLocalInput()) {// if it is a new page,treeParent should be ROUTING_RULE
                 treeParent = this.getXObject().getServerRoot().findServerFolder(TreeObject.ROUTING_RULE);
             }
 
@@ -178,7 +175,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         }
     }
 
-    private void initExternalInfoHolder() {
+    protected void initExternalInfoHolder() {
 
         try {
             ExternalInfoHolder<?> allProcessNamesHolder = ExternalInfoHolder.getAllProcessesNamesHolder(Util
@@ -198,7 +195,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     }
 
-    private void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
+    protected void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
 
         ArrayList<ExternalInfoHolder<?>> externalInfoHolders = new ArrayList<ExternalInfoHolder<?>>();
         externalInfoHolders.addAll(Arrays.asList(infoHolders));
@@ -253,15 +250,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             xpathButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(SelectionEvent e) {
-                    
 
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                    
+
                     XpathSelectDialog xpathDialog;
-                    xpathDialog = new XpathSelectDialog(getSite().getShell(), treeParent, "Select Entity", getSite(), false,
-                            dataModelName);
+                    xpathDialog = getNewXpathDlg();
                     xpathDialog.setBlockOnOpen(true);
                     xpathDialog.open();
                     if (xpathDialog.getReturnCode() == Window.OK) {
@@ -344,20 +339,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             });
 
-            WSServicesList list = Util.getPort(getXObject()).getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
-            WSServicesListItem[] items = list.getItem();
-            if (items != null) {
-                String[] sortedList = new String[items.length];
-                for (int i = 0; i < items.length; i++) {
-                    sortedList[i] = items[i].getJndiName();
-                }
-                Arrays.sort(sortedList);
-                for (int i = 0; i < sortedList.length; i++) {
-                    serviceNameCombo.add(sortedList[i]);
-                }
-                // serviceNameCombo.add("");
-            }
-
+            initServiceNameCombo();
             // default parameters button
             defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);//$NON-NLS-1$
             defultParameterBtn.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
@@ -375,8 +357,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     String desc = "";//$NON-NLS-1$
                     // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
                     try {
-                        XtentisPort port = Util.getPort(getXObject());
-                        WSServiceGetDocument document = port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
+
+                        WSServiceGetDocument document = getServiceDocument(serviceNameCombo.getText().trim());
+
                         doc = document.getDocument();
                         desc = document.getDescription();
                     } catch (Exception e1) {
@@ -464,7 +447,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionsColumns[1].setColumnWidth(150);
             conditionsColumns[2].setColumnWidth(250);
             conditionsColumns[3].setColumnWidth(120);
-            conditionViewer = new TisTableViewer(Arrays.asList(conditionsColumns), toolkit, routingExpressionsGroup);
+            conditionViewer = getNewTisTableViewer(toolkit, routingExpressionsGroup);
             TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
             conditionViewer.setTreeParent(treeParent);
             conditionViewer.setDatamodelName("UpdateReport"); //$NON-NLS-1$
@@ -480,7 +463,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionText.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    
+
                     if (!refreshing)
                         markDirtyWithoutCommit();
                 }
@@ -509,6 +492,48 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         }
 
     }// createCharacteristicsContent
+
+    /**
+     * DOC hbhong Comment method "getNewXpathDlg".
+     * 
+     * @return
+     */
+    protected XpathSelectDialog getNewXpathDlg() {
+        return new XpathSelectDialog(getSite().getShell(), treeParent, "Select Entity", getSite(), false, dataModelName);
+    }
+
+    protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
+        XtentisPort port = getPort();
+        if (port != null) {
+            return port.getServiceDocument(new WSString(jndiName));
+        }
+        return null;
+    }
+    protected TisTableViewer getNewTisTableViewer(FormToolkit toolkit, Composite routingExpressionsGroup) {
+        return new TisTableViewer(Arrays.asList(conditionsColumns), toolkit, routingExpressionsGroup);
+    }
+
+    /**
+     * DOC hbhong Comment method "initServiceNameCombo".
+     * 
+     * @throws XtentisException
+     * @throws RemoteException
+     */
+    protected void initServiceNameCombo() throws RemoteException, XtentisException {
+        WSServicesList list = Util.getPort(getXObject()).getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
+        WSServicesListItem[] items = list.getItem();
+        if (items != null) {
+            String[] sortedList = new String[items.length];
+            for (int i = 0; i < items.length; i++) {
+                sortedList[i] = items[i].getJndiName();
+            }
+            Arrays.sort(sortedList);
+            for (int i = 0; i < sortedList.length; i++) {
+                serviceNameCombo.add(sortedList[i]);
+            }
+            // serviceNameCombo.add("");
+        }
+    }
 
     private void addSourceServiceParameterEditorPage(String serviceName) {
 
@@ -766,11 +791,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     // }
     @Override
     public Object getAdapter(Class adapter) {
-        if(adapter==TreeParent.class){
-            return Util.getServerTreeParent( getXObject());
+        if (adapter == TreeParent.class) {
+            return Util.getServerTreeParent(getXObject());
         }
         return super.getAdapter(adapter);
     }
+
     @Override
     public boolean beforeDoSave() {
         if (serviceNameCombo.getText() == null || serviceNameCombo.getText().length() == 0) {
@@ -782,7 +808,6 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     @Override
     protected void createActions() {
-        
 
     }
 

@@ -29,7 +29,6 @@ import com.amalto.workbench.editors.AFormPage;
 import com.amalto.workbench.editors.DataClusterMainPage;
 import com.amalto.workbench.editors.JobMainPage;
 import com.amalto.workbench.editors.MenuMainPage;
-import com.amalto.workbench.editors.RoutingRuleMainPage;
 import com.amalto.workbench.editors.ServiceConfigrationMainPage;
 import com.amalto.workbench.editors.ViewMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
@@ -146,34 +145,16 @@ public class XObjectEditor2 extends XObjectEditor {
                 // addPage(new CustomTypeMainPage(this));
                 break;
             case TreeObject.ROUTING_RULE:
-                try {
-                    addPage(new RoutingRuleMainPage(this));
-                } catch (PartInitException e) {
-                    // TODO Auto-generated catch block
-                    log.error(e.getMessage(), e);
-                }
+                addPage(new RoutingRuleMainPage2(this));
                 break;
             case TreeObject.TRANSFORMER:
-                try {
-                    addPage(new TransformerMainPage2(this));
-                } catch (PartInitException e) {
-                    // TODO Auto-generated catch block
-                    log.error(e.getMessage(), e);
-                }
+                addPage(new TransformerMainPage2(this));
                 break;
             case TreeObject.JOB:
-                try {
-                    addPage(new JobMainPage(this));
-                } catch (PartInitException e) {
-                    log.error(e.getMessage(), e);
-                }
+                addPage(new JobMainPage(this));
                 break;
             case TreeObject.UNIVERSE:
-                try {
-                    addPage(new UniverseVersionMainPage(this));
-                } catch (PartInitException e) {
-                    log.error(e.getMessage(), e);
-                }
+                addPage(new UniverseVersionMainPage(this));
                 break;
             default:
                 // MessageDialog.openError(this.getSite().getShell(), "Error",
@@ -182,6 +163,7 @@ public class XObjectEditor2 extends XObjectEditor {
             }// switch
 
         } catch (PartInitException e) {
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages.Common_Error,
                     Messages.bind(Messages.XObjectEditor2_unableOpenEditor, e.getLocalizedMessage()));
         }

@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -49,7 +48,6 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
-import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
 
@@ -149,8 +147,7 @@ public class TisTableViewer extends ComplexTableViewer {
                 @SuppressWarnings("unchecked")
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 
-                    xpathDialog = new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), "Select Multiple XPaths", ServerView.show()
-                            .getSite(), true, getDatamodelName());
+                    xpathDialog = getNewXpathDlgInstance();
                     xpathDialog.setConceptName(conceptName);
 
                     xpathDialog.setBlockOnOpen(true);
@@ -562,5 +559,10 @@ public class TisTableViewer extends ComplexTableViewer {
             sb = sb.append(column.name).append("#");//$NON-NLS-1$
         }
         return sb.toString();
+    }
+
+    protected XpathSelectDialog getNewXpathDlgInstance() {
+        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), "Select Multiple XPaths", ServerView.show()
+                .getSite(), true, getDatamodelName());
     }
 }

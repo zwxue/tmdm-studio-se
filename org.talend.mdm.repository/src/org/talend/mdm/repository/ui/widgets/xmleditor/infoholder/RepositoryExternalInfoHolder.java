@@ -25,15 +25,12 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ProcessAllCallJobVariab
 import com.amalto.workbench.widgets.xmleditor.infoholder.TriggerAllCallJobVariableCandidatesHolder;
 import com.amalto.workbench.widgets.xmleditor.util.WorkflowInfo;
 
-
 /**
  * DOC hbhong class global comment. Detailled comment
  * 
  * @param <T>
  */
 public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder<T> {
-
-
 
     public static ExternalInfoHolder<JobInfo[]> getAllJobInfosHolder(XtentisPort port) {
         return new RepositoryJobInfoHolder();
@@ -57,5 +54,9 @@ public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder
 
     public static ExternalInfoHolder<String[]> getTriggerAllCallJobVarsCandidatesHolder() {
         return new TriggerAllCallJobVariableCandidatesHolder();
+    }
+
+    public static ExternalInfoHolder<String[]> getAllProcessesNamesHolder(XtentisPort port) {
+        return new RepositoryProcessesNamesHolder(port);
     }
 }

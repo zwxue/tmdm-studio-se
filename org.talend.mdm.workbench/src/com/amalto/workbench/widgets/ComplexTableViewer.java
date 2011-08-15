@@ -687,7 +687,7 @@ public class ComplexTableViewer {
         viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
-                
+
                 Line line = (Line) ((IStructuredSelection) event.getSelection()).getFirstElement();
 
                 for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
@@ -779,7 +779,7 @@ public class ComplexTableViewer {
 
         @Override
         protected Control createControl(Composite parent) {
-            validationRule = new ValidationRuleWidget(parent,getCurrentTreeParent(), conceptName);
+            validationRule = new ValidationRuleWidget(parent, getCurrentTreeParent(), conceptName);
 
             ((GridData) validationRule.getComposite().getChildren()[0].getLayoutData()).heightHint = 15;
             ((GridData) validationRule.getComposite().getChildren()[1].getLayoutData()).heightHint = 15;
@@ -804,7 +804,7 @@ public class ComplexTableViewer {
                     }
 
                     public void keyReleased(KeyEvent e) {
-                        
+
                         if (e.character == SWT.CR) {
                             validationRule.setText(validationRule.getText().trim());
                             deactive();
@@ -889,7 +889,7 @@ public class ComplexTableViewer {
                     }
 
                     public void keyReleased(KeyEvent e) {
-                        
+
                         if (e.character == SWT.CR) {
                             multiMsg.setText(multiMsg.getText().trim());
                             deactive();
@@ -911,13 +911,13 @@ public class ComplexTableViewer {
 
         @Override
         protected Object doGetValue() {
-            
+
             return multiMsg.getText();
         }
 
         @Override
         protected void doSetFocus() {
-            
+
             multiMsg.getTextWidget().setFocus();
         }
 
@@ -929,10 +929,14 @@ public class ComplexTableViewer {
 
         @Override
         protected void doSetValue(Object value) {
-            
+
             multiMsg.setText(value.toString().trim());
         }
 
+    }
+
+    protected XpathWidget getNewXpathWidget(Composite parent) {
+        return new XpathWidget(parent, treeParent, false);
     }
 
     class XpathCellEditor extends CellEditor implements ICellEditor {
@@ -955,7 +959,7 @@ public class ComplexTableViewer {
             // else
             // xpath = new XpathWidget(parent, false);
 
-            xpath = new XpathWidget(parent, treeParent, false);
+            xpath = getNewXpathWidget(parent);
             // The ending| bug:21784
             xpaths.add(xpath);
             xpath.setConceptName(conceptName);
@@ -967,12 +971,10 @@ public class ComplexTableViewer {
                 ((Table) parent).addMouseListener(new MouseListener() {
 
                     public void mouseDoubleClick(MouseEvent e) {
-                        
 
                     }
 
                     public void mouseDown(MouseEvent e) {
-                        
 
                     }
 
@@ -987,12 +989,11 @@ public class ComplexTableViewer {
                 xpath.getTextWidget().addKeyListener(new KeyListener() {
 
                     public void keyPressed(KeyEvent e) {
-                        
 
                     }
 
                     public void keyReleased(KeyEvent e) {
-                        
+
                         if (e.character == SWT.CR) {
                             xpath.setText(xpath.getText().trim());
                             deactive();
@@ -1016,7 +1017,7 @@ public class ComplexTableViewer {
 
         @Override
         protected Object doGetValue() {
-            
+
             if (context)
                 XpathSelectDialog.setContext(null);
             return xpath.getText();
@@ -1024,7 +1025,7 @@ public class ComplexTableViewer {
 
         @Override
         protected void doSetFocus() {
-            
+
             xpath.getTextWidget().setFocus();
         }
 
@@ -1036,7 +1037,7 @@ public class ComplexTableViewer {
 
         @Override
         protected void doSetValue(Object value) {
-            // 
+            //
             // if(context && viewer.getTable().getSelection().length>0){
             // Line line=(Line)viewer.getTable().getSelection()[0].getData();
             // String context=line.keyValues.get(1).value;

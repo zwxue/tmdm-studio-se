@@ -31,6 +31,7 @@ import com.amalto.workbench.utils.Util;
 public class XpathSelectDialog2 extends XpathSelectDialog {
 
     private static Logger log = Logger.getLogger(XpathSelectDialog2.class);
+
     /**
      * DOC hbhong XpathSelectDialog2 constructor comment.
      * 
@@ -62,13 +63,16 @@ public class XpathSelectDialog2 extends XpathSelectDialog {
         this.dataModelName = modelDisplay;
 
         WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
-        try {
-            XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-            String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
-            XSDSchema xsd = Util.createXsdSchema(schema, pObject);
-            provideViwerContent(xsd, filter);
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+        if (wsDataModel != null) {
+            try {
+
+                // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
+                String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
+                XSDSchema xsd = Util.createXsdSchema(schema, pObject);
+                provideViwerContent(xsd, filter);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
         }
     }
 }

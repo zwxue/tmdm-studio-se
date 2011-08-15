@@ -23,6 +23,18 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Shell;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.AbstractGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.CallJobGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.CallTransformerGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.DumpToConsoleGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.ItemDispatcherGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.JdbcGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.LoggingGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.LoggingSmtpGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SVNGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SmtpGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SynchronizationServiceGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.BatchProjectPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.CSVParserPluginDetail;
@@ -50,6 +62,7 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -61,6 +74,8 @@ public class RepositoryWebServiceAdapter {
     private static Logger log = Logger.getLogger(RepositoryWebServiceAdapter.class);
 
     private static Map<String, AbstractPluginDetail> transformerPluginMap;
+
+    private static Map<String, AbstractGetDocument> documentServiceMap;
 
     public static XtentisPort getXtentisPort(MDMServerDef serverDef) throws XtentisException {
         try {
@@ -96,6 +111,31 @@ public class RepositoryWebServiceAdapter {
     public static Collection<AbstractPluginDetail> findAllTransformerPluginV2Details() {
         initTransformerPluginDetails();
         return transformerPluginMap.values();
+    }
+
+    public static WSServiceGetDocument getServiceDocument(String jndiName) {
+        if (jndiName == null)
+            return null;
+        initGetDocumentServices();
+        return documentServiceMap.get(jndiName);
+    }
+
+    private static void initGetDocumentServices() {
+        if (documentServiceMap == null) {
+            documentServiceMap = new LinkedHashMap<String, AbstractGetDocument>();
+            String twoLettersLanguageCode = "en"; //$NON-NLS-1$
+            addGetDoc(documentServiceMap, new CallJobGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new CallTransformerGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new DumpToConsoleGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new ItemDispatcherGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new JdbcGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new LoggingGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new LoggingSmtpGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new SmtpGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new SVNGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new SynchronizationServiceGetDocument(twoLettersLanguageCode));
+            addGetDoc(documentServiceMap, new WorkflowGetDocument(twoLettersLanguageCode));
+        }
     }
 
     private static void initTransformerPluginDetails() {
@@ -164,5 +204,14 @@ public class RepositoryWebServiceAdapter {
 
     private static void addDetail(Map<String, AbstractPluginDetail> map, AbstractPluginDetail detail) {
         map.put(detail.getJNDIName(), detail);
+    }
+
+    private static void addGetDoc(Map<String, AbstractGetDocument> map, AbstractGetDocument doc) {
+        map.put(doc.getJNDIName(), doc);
+    }
+
+    public static String[] getServiceNames() {
+        initGetDocumentServices();
+        return documentServiceMap.keySet().toArray(new String[0]);
     }
 }

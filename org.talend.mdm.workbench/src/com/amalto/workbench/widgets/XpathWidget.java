@@ -38,13 +38,13 @@ public class XpathWidget implements SelectionListener {
 
     private Button annotationButton;
 
-    private Text descriptionText;
+    protected Text descriptionText;
 
     private String descriptionValue;
 
-    private AMainPageV2 accommodation;
+    protected AMainPageV2 accommodation;
 
-    private String dlgTitle;
+    protected String dlgTitle;
 
     protected TreeParent treeParent;
 
@@ -52,15 +52,15 @@ public class XpathWidget implements SelectionListener {
 
     private boolean readOnly = false;
 
-    private Composite parent;
+    protected Composite parent;
 
-    private IWorkbenchPartSite site;
+    protected IWorkbenchPartSite site;
 
-    private String dataModelName;
+    protected String dataModelName;
 
-    boolean isMulti = true;
+    protected boolean isMulti = true;
 
-    private String conceptName;
+    protected String conceptName;
 
     private String context;
 
@@ -166,15 +166,14 @@ public class XpathWidget implements SelectionListener {
 
     }
 
-    XpathSelectDialog dlg;
+    protected XpathSelectDialog dlg;
 
     public void widgetDefaultSelected(SelectionEvent e) {
-        
 
     }
 
     public void widgetSelected(SelectionEvent e) {
-        
+
         if (accommodation != null) {
             if (dlg == null) {
                 dlg = new XpathSelectDialog(accommodation.getSite().getShell(), treeParent, dlgTitle, accommodation.getSite(),
