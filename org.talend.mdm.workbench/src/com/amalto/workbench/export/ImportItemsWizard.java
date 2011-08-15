@@ -197,7 +197,7 @@ public class ImportItemsWizard extends Wizard {
             importFolder = folder.getText().getText();
         }
 
-        final TreeObject[] objs = treeViewer.getCheckNodes();
+        final Object[] objs = treeViewer.getCheckNodes();
         UIJob job = new UIJob("Import Objects ...") {
 
             @Override
@@ -221,7 +221,7 @@ public class ImportItemsWizard extends Wizard {
                         }
 
                     }.schedule();
-                    //modified by honghb ,fix bug 21552
+                    // modified by honghb ,fix bug 21552
                     if (selectZip && zipFilePath != null) {
                         importFolder = System.getProperty("user.dir") + "/temp";//$NON-NLS-1$//$NON-NLS-2$
                         ZipToFile.deleteDirectory(new File(importFolder));
@@ -507,12 +507,14 @@ public class ImportItemsWizard extends Wizard {
                     treeViewer.getViewer().getControl().getParent().layout(true);
                     treeViewer.getViewer().getControl().getShell().layout(true);
                     try {
-                        LocalTreeObjectRepository.getInstance().setOriginalXobjectsToImport(treeViewer.getCheckNodes());
+                        Object[] checkNodes = treeViewer.getCheckNodes();
+                        if (checkNodes != null) {
+                            LocalTreeObjectRepository.getInstance().setOriginalXobjectsToImport((TreeObject[]) checkNodes);
+                        }
                     } catch (Exception e) {
                     }
                 }
             });
-
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -549,7 +551,13 @@ public class ImportItemsWizard extends Wizard {
 
     }
 
-    public void doImport(TreeObject[] objs, IProgressMonitor monitor) {
+    public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
+        TreeObject[] objs = null;
+        if (selectedObjs instanceof TreeObject[]) {
+            objs = (TreeObject[]) selectedObjs;
+        }
+        if (objs == null || objs.length == 0)
+            return;
         monitor.beginTask("Import ...", IProgressMonitor.UNKNOWN);
         Reader reader = null;
         // sort the objs for first import data_model.
@@ -1230,7 +1238,7 @@ public class ImportItemsWizard extends Wizard {
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                    
+
                     FormToolkit toolkit = WidgetFactory.getWidgetFactory();
                     ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(view.getSite().getShell(), toolkit, true,
                             zipFileRepository);

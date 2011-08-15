@@ -37,3 +37,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.mdm.workbench.enterprise;bundle-version="3.2.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.apache.commons.logging

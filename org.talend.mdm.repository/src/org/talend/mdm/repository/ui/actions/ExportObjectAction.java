@@ -21,8 +21,18 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import importorexport.MDMExportRepositoryItemsWizard;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+
+import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -31,6 +41,10 @@ import com.amalto.workbench.image.ImageCache;
  * 
  */
 public class ExportObjectAction extends AbstractRepositoryAction {
+
+    private static Log log = LogFactory.getLog(ExportItemsAction.class);
+
+    private MDMRepositoryView view = null;
 
     /**
      * DOC hbhong AddMenu constructor comment.
@@ -44,11 +58,31 @@ public class ExportObjectAction extends AbstractRepositoryAction {
 
     @Override
     public void run() {
-        System.out.println("JUST TEST");
-        for (Object obj : getSelectedObject()) {
-            System.out.println(obj);
+
+        try {
+            super.run();
+            ISelection selection = null;
+            // if (this.view != null) { // called from ServerView
+            view = MDMRepositoryView.show();
+            selection = view.getCommonViewer().getSelection();
+            // }
+            MDMExportRepositoryItemsWizard wizard = new MDMExportRepositoryItemsWizard((IStructuredSelection) selection);
+            WizardDialog dialog = new WizardDialog(view.getSite().getShell(), wizard);
+            dialog.create();
+            dialog.getShell().setText("Export Repository items");
+            dialog.open();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            MessageDialog.openError(view.getSite().getShell(), "Error",
+                    "An error occured trying to Export Data Container: " + e.getLocalizedMessage());
         }
     }
+
+    // System.out.println("JUST TEST");
+    // for (Object obj : getSelectedObject()) {
+    // System.out.println(obj);
+    // IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+    // }
 
     public String getGroupName() {
         return GROUP_EXPORT;

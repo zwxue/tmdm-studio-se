@@ -99,21 +99,21 @@ public class ExportItemsWizard extends Wizard {
 
     private static Log log = LogFactory.getLog(ExportItemsWizard.class);
 
-    private IStructuredSelection sel;
+    protected IStructuredSelection sel;
 
-    private RepositoryCheckTreeViewer treeViewer;
+    protected RepositoryCheckTreeViewer treeViewer;
 
-    private String exportFolder;
+    protected String exportFolder;
 
-    private FileSelectWidget folder;
+    protected FileSelectWidget folder;
 
-    private Button zipBtn;
+    protected Button zipBtn;
 
-    private Button folderBtn;
+    protected Button folderBtn;
 
-    private FileSelectWidget zip;
+    protected FileSelectWidget zip;
 
-    private String zipfile;
+    protected String zipfile;
 
     public ExportItemsWizard(IStructuredSelection sel) {
         this.sel = sel;
@@ -137,7 +137,8 @@ public class ExportItemsWizard extends Wizard {
         if (folderBtn.getSelection()) {
             exportFolder = folder.getText().getText();
         }
-        final TreeObject[] objs = treeViewer.getCheckNodes();
+
+        final Object[] objs = treeViewer.getCheckNodes();
         Job job = new Job("Export ...") {
 
             @Override
@@ -165,9 +166,16 @@ public class ExportItemsWizard extends Wizard {
         return true;
     }
 
-    public void doexport(TreeObject[] objs, IProgressMonitor monitor) {
+    protected void createViewer() {
+        treeViewer = new RepositoryCheckTreeViewer(sel);
+    }
 
-        if (objs.length == 0)
+    protected void doexport(Object[] selectedObjs, IProgressMonitor monitor) {
+        TreeObject[] objs = null;
+        if (selectedObjs instanceof TreeObject[]) {
+            objs = (TreeObject[]) selectedObjs;
+        }
+        if (objs == null || objs.length == 0)
             return;
         monitor.beginTask("Export ...", IProgressMonitor.UNKNOWN);
         Exports eps = new Exports();
@@ -524,7 +532,7 @@ public class ExportItemsWizard extends Wizard {
 
     @Override
     public void addPages() {
-        
+
         addPage(new SelectItemsPage());
     }
 
@@ -575,7 +583,7 @@ public class ExportItemsWizard extends Wizard {
             folderBtn = new Button(composite, SWT.RADIO);
             folderBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             folderBtn.setText("Select root directory:");
-            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false,SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false, SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
             folderBtn.addSelectionListener(new SelectionListener() {
@@ -593,7 +601,7 @@ public class ExportItemsWizard extends Wizard {
             zipBtn = new Button(composite, SWT.RADIO);
             zipBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             zipBtn.setText("Select archive file:");
-            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true,SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true, SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             zipBtn.addSelectionListener(new SelectionListener() {
 
@@ -611,7 +619,7 @@ public class ExportItemsWizard extends Wizard {
             folder.getText().addListener(SWT.Modify, new PageListener(this));
             folder.getButton().addListener(SWT.Selection, new PageListener(this));
             // create viewer
-            treeViewer = new RepositoryCheckTreeViewer(sel);
+            createViewer();
             Composite itemcom = treeViewer.createItemList(composite);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 5));
             treeViewer.setItemText("Select items to export:");

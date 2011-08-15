@@ -22,9 +22,9 @@ public class MDMRepositoryContentProvider implements ITreeContentProvider {
         IRepositoryNodeContentProvider contentProvider = getContentProvider(element);
         if (contentProvider != null) {
             Object[] children = contentProvider.getChildren(element);
-           if(children!=null){
-               return children;
-           }
+            if (children != null) {
+                return children;
+            }
         }
         return new Object[0];
     }
@@ -34,7 +34,6 @@ public class MDMRepositoryContentProvider implements ITreeContentProvider {
     }
 
     public void dispose() {
-
     }
 
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -58,4 +57,5 @@ public class MDMRepositoryContentProvider implements ITreeContentProvider {
         }
         return null;
     }
+
 }
