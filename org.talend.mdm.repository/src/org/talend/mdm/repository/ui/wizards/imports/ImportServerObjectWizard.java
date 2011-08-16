@@ -54,6 +54,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -126,9 +127,8 @@ public class ImportServerObjectWizard extends Wizard {
     
     private int isOveride(String name, String obTypeName) {
 
-        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), "Confirm Overwrite", null,
-                "There is already a " + obTypeName + " named " + name
-                        + ". Do you really want to overwrite it with the new one when the export runs?", MessageDialog.QUESTION,
+        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.Confirm_Overwrite, null,
+                Messages.bind(Messages.Confirm_Overwrite_Info, obTypeName, name), MessageDialog.QUESTION,
                 new String[] { IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL,
                         IDialogConstants.CANCEL_LABEL }, 0);
         dialog.open();
@@ -148,7 +148,7 @@ public class ImportServerObjectWizard extends Wizard {
 
 
     public void doImport(Object[] objs, IProgressMonitor monitor) {
-        monitor.beginTask("Import Objects ...", IProgressMonitor.UNKNOWN);
+        monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
 
         List<Integer> types = new ArrayList<Integer>();
         types.add(TreeObject.DATA_CLUSTER);
@@ -213,7 +213,7 @@ public class ImportServerObjectWizard extends Wizard {
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
-            UIJob job = new UIJob("Import Objects ...") {
+            UIJob job = new UIJob(Messages.Import_Objects) {
 
                 @Override
                 public IStatus runInUIThread(IProgressMonitor arg0) {
@@ -292,8 +292,8 @@ public class ImportServerObjectWizard extends Wizard {
     class SelectItemsPage extends WizardPage {
 
         protected SelectItemsPage() {
-            super("SelectServerPage");
-            setTitle("Import Server Objects");
+            super("SelectServerPage"); //$NON-NLS-1$
+            setTitle(Messages.ImportServerObject);
 
             // Page isn't complete until an e-mail address has been added
             setPageComplete(false);
@@ -315,7 +315,7 @@ public class ImportServerObjectWizard extends Wizard {
             setControl(composite);
 
             Group serverGroup = new Group(composite, SWT.NORMAL);
-            serverGroup.setText("Select Server");
+            serverGroup.setText(Messages.Select_Server);
             serverGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
             serverGroup.setLayout(new GridLayout(2, false));
             // serverGroup.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -323,8 +323,8 @@ public class ImportServerObjectWizard extends Wizard {
             txtServer = new Text(serverGroup, SWT.BORDER);
             txtServer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             Button btnSel = new Button(serverGroup, SWT.PUSH);
-            btnSel.setText("...");
-            btnSel.setToolTipText("Select One Server");
+            btnSel.setText("..."); //$NON-NLS-1$
+            btnSel.setToolTipText(Messages.Select_Server);
             txtServer.setEnabled(false);
 
             btnSel.addSelectionListener(new SelectionAdapter() {
@@ -366,7 +366,7 @@ public class ImportServerObjectWizard extends Wizard {
                     }
                 }
             });
-            comboVersion = new LabelCombo(toolkit, serverGroup, "Version", SWT.BORDER, 2);
+            comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
             comboVersion.getCombo().setEditable(false);
 
             comboVersion.getCombo().addModifyListener(new ModifyListener() {
@@ -384,7 +384,7 @@ public class ImportServerObjectWizard extends Wizard {
             Composite itemcom = treeViewer.createItemList(composite);
             treeViewer.getViewer().setInput(null);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 5));
-            treeViewer.setItemText("Select items to import:");
+            treeViewer.setItemText(Messages.Select_Items_To_Imports);
             treeViewer.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 
                 public void selectionChanged(SelectionChangedEvent arg0) {
@@ -392,7 +392,7 @@ public class ImportServerObjectWizard extends Wizard {
                 }
             });
             btnOverwrite = new Button(composite, SWT.CHECK);
-            btnOverwrite.setText("Overwrite existing items");
+            btnOverwrite.setText(Messages.Overwrite_Exists_Items);
             // btnOverwrite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
             btnOverwrite.setSelection(true);
             GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(920, 600).applyTo(composite);

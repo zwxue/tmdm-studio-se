@@ -94,6 +94,23 @@ public class Messages extends NLS {
     public static String XSDEditor2_schemaSource;
 
     public static String ImportServerObject;
+
+    public static String Import_Objects;
+
+    public static String Confirm_Overwrite;
+
+    public static String Confirm_Overwrite_Info;
+
+    public static String SelectItemsPage_Title;
+
+    public static String Select_Server;
+
+    public static String Version;
+
+    public static String Select_Items_To_Imports;
+
+    public static String Overwrite_Exists_Items;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
