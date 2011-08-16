@@ -147,7 +147,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
 
-    public void doImport(TreeObject[] objs, IProgressMonitor monitor) {
+    public void doImport(Object[] objs, IProgressMonitor monitor) {
         monitor.beginTask("Import Objects ...", IProgressMonitor.UNKNOWN);
 
         List<Integer> types = new ArrayList<Integer>();
@@ -161,17 +161,19 @@ public class ImportServerObjectWizard extends Wizard {
         types.add(TreeObject.STORED_PROCEDURE);
         types.add(TreeObject.UNIVERSE);
         types.add(TreeObject.VIEW);
-        for (TreeObject obj : objs) {
-            if (!types.contains(obj.getType()) || obj.getWsObject() == null
-                    || ("JCAAdapers".equals(obj.getName()) && obj.getType() == TreeObject.DATA_CLUSTER)) //$NON-NLS-1$
+        for (Object obj : objs) {
+            TreeObject treeObj = (TreeObject) obj;
+            if (!types.contains(treeObj.getType()) || treeObj.getWsObject() == null
+                    || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) //$NON-NLS-1$
                 continue;
-            monitor.subTask(obj.getDisplayName());
-            MDMServerObject eobj = (MDMServerObject) Bean2EObjUtil.getInstance().convertFromBean2EObj(obj.getWsObject(), null);
-            ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(obj.getType());
-            MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByName(type, obj.getName());
+            monitor.subTask(treeObj.getDisplayName());
+            MDMServerObject eobj = (MDMServerObject) Bean2EObjUtil.getInstance()
+                    .convertFromBean2EObj(treeObj.getWsObject(), null);
+            ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
+            MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByName(type, treeObj.getName());
             if (item != null) {
                 if (!isOverrideAll) {
-                    int result = isOveride(obj.getName(), TreeObject.getTypeName(obj.getType()));
+                    int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
                     if (result == IDialogConstants.CANCEL_ID) {
                         return;
                     }
@@ -195,9 +197,9 @@ public class ImportServerObjectWizard extends Wizard {
                 item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);
                 item.setMDMServerObject(eobj);
                 ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
-                itemState.setPath(obj.getPath());
+                itemState.setPath(treeObj.getPath());
                 item.setState(itemState);
-                RepositoryResourceUtil.createItem(item, obj.getName());
+                RepositoryResourceUtil.createItem(item, treeObj.getName());
             }
         }
         monitor.done();
