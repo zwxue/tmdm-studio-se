@@ -553,8 +553,8 @@ public class ImportItemsWizard extends Wizard {
 
     public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
         TreeObject[] objs = null;
-        if (selectedObjs instanceof TreeObject[]) {
-            objs = (TreeObject[]) selectedObjs;
+        if (selectedObjs.length > 0 && selectedObjs[0] instanceof TreeObject) {
+            objs = Arrays.asList(selectedObjs).toArray(new TreeObject[0]);
         }
         if (objs == null || objs.length == 0)
             return;

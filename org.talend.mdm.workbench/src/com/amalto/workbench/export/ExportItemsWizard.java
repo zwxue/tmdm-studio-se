@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -172,8 +173,8 @@ public class ExportItemsWizard extends Wizard {
 
     protected void doexport(Object[] selectedObjs, IProgressMonitor monitor) {
         TreeObject[] objs = null;
-        if (selectedObjs instanceof TreeObject[]) {
-            objs = (TreeObject[]) selectedObjs;
+        if (selectedObjs.length > 0 && selectedObjs[0] instanceof TreeObject) {
+            objs = Arrays.asList(selectedObjs).toArray(new TreeObject[0]);
         }
         if (objs == null || objs.length == 0)
             return;

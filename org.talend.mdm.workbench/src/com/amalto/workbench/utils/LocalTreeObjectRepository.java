@@ -1183,7 +1183,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     public void mergeImportCategory(TreeObject[] xobjectsToImport, TreeParent serverRoot) {
-        if (xobjectsToImport.length == 0)
+        if (xobjectsToImport.length == 0 || originalImportXobjects == null || originalImportXobjects.length == 0)
             return;
 
         Collection dels = CollectionUtils.subtract(Arrays.asList(originalImportXobjects), Arrays.asList(xobjectsToImport));
