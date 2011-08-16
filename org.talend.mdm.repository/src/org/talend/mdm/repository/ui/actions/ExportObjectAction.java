@@ -21,8 +21,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import importorexport.MDMExportRepositoryItemsWizard;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -31,6 +29,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+import org.talend.mdm.repository.ui.wizards.exports.MDMExportRepositoryItemsWizard;
 
 import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.image.EImage;
@@ -52,7 +51,7 @@ public class ExportObjectAction extends AbstractRepositoryAction {
      * @param text
      */
     public ExportObjectAction() {
-        super("Export"); //$NON-NLS-1$
+        super("Export to local"); //$NON-NLS-1$
         setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
     }
 

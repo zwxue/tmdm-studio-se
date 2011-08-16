@@ -10,7 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package importorexport;
+package org.talend.mdm.repository.ui.wizards.exports;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.RepositoryViewObject;
+import org.talend.mdm.repository.ui.wizards.exports.viewers.RepositoryViewCheckTreeViewer;
 import org.talend.repository.local.ExportItemUtil;
 
 import com.amalto.workbench.export.ExportItemsWizard;
