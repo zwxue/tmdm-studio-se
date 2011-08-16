@@ -70,9 +70,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
 
         view.setName(key);
         view.setDescription(""); //$NON-NLS-1$
-        view.setViewableBusinessElements(new String[] {});
         view.getWhereConditions().add(condi);
-        view.setSearchableBusinessElements(new String[] {});
         view.setTransformerPK(null);
         view.setIsTransformerActive(bol);
 

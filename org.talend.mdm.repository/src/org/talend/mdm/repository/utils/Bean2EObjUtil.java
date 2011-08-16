@@ -130,8 +130,17 @@ public class Bean2EObjUtil {
                             if (value != null) {
                                 ((EList) eObj.eGet(feature)).clear();
                                 for (Object childObj : (Object[]) value) {
-                                    EObject eChildObj = convertFromBean2EObj(childObj, null);
-                                    ((EList) eObj.eGet(feature)).add(eChildObj);
+                                    if (childObj != null) {
+                                        Object eChildObj = null;
+                                        if (beanClassUtil.isJavaClass(childObj.getClass())) {
+                                            eChildObj = childObj;
+                                        } else {
+                                            eChildObj = convertFromBean2EObj(childObj, null);
+                                        }
+                                        if (eChildObj != null) {
+                                            ((EList) eObj.eGet(feature)).add(eChildObj);
+                                        }
+                                    }
                                 }
                             }
                         } else {
@@ -187,7 +196,12 @@ public class Bean2EObjUtil {
                                     Object[] children = (Object[]) newInstance;
                                     int i = 0;
                                     for (Object echildObj : list) {
-                                        Object childObj = convertFromEObj2Bean((EObject) echildObj);
+                                        Object childObj = null;
+                                        if (echildObj != null && beanClassUtil.isJavaClass(echildObj.getClass())) {
+                                            childObj = echildObj;
+                                        } else {
+                                            childObj = convertFromEObj2Bean((EObject) echildObj);
+                                        }
                                         children[i] = childObj;
                                         i++;
                                     }
