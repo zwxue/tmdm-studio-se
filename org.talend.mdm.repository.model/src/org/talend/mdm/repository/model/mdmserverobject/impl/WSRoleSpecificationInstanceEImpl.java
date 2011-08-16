@@ -6,13 +6,16 @@
  */
 package org.talend.mdm.repository.model.mdmserverobject.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
 
@@ -73,24 +76,14 @@ public class WSRoleSpecificationInstanceEImpl extends EObjectImpl implements WSR
     protected boolean writable = WRITABLE_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getParameter() <em>Parameter</em>}' attribute.
+     * The cached value of the '{@link #getParameter() <em>Parameter</em>}' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getParameter()
      * @generated
      * @ordered
      */
-    protected static final String[] PARAMETER_EDEFAULT = null;
-
-    /**
-     * The cached value of the '{@link #getParameter() <em>Parameter</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getParameter()
-     * @generated
-     * @ordered
-     */
-    protected String[] parameter = PARAMETER_EDEFAULT;
+    protected EList<String> parameter;
 
     /**
      * <!-- begin-user-doc -->
@@ -158,20 +151,11 @@ public class WSRoleSpecificationInstanceEImpl extends EObjectImpl implements WSR
      * <!-- end-user-doc -->
      * @generated
      */
-    public String[] getParameter() {
+    public EList<String> getParameter() {
+        if (parameter == null) {
+            parameter = new EDataTypeUniqueEList<String>(String.class, this, MdmserverobjectPackage.WS_ROLE_SPECIFICATION_INSTANCE_E__PARAMETER);
+        }
         return parameter;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setParameter(String[] newParameter) {
-        String[] oldParameter = parameter;
-        parameter = newParameter;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_ROLE_SPECIFICATION_INSTANCE_E__PARAMETER, oldParameter, parameter));
     }
 
     /**
@@ -197,6 +181,7 @@ public class WSRoleSpecificationInstanceEImpl extends EObjectImpl implements WSR
      * <!-- end-user-doc -->
      * @generated
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
@@ -207,7 +192,8 @@ public class WSRoleSpecificationInstanceEImpl extends EObjectImpl implements WSR
                 setWritable((Boolean)newValue);
                 return;
             case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_INSTANCE_E__PARAMETER:
-                setParameter((String[])newValue);
+                getParameter().clear();
+                getParameter().addAll((Collection<? extends String>)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -228,7 +214,7 @@ public class WSRoleSpecificationInstanceEImpl extends EObjectImpl implements WSR
                 setWritable(WRITABLE_EDEFAULT);
                 return;
             case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_INSTANCE_E__PARAMETER:
-                setParameter(PARAMETER_EDEFAULT);
+                getParameter().clear();
                 return;
         }
         super.eUnset(featureID);
@@ -247,7 +233,7 @@ public class WSRoleSpecificationInstanceEImpl extends EObjectImpl implements WSR
             case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_INSTANCE_E__WRITABLE:
                 return writable != WRITABLE_EDEFAULT;
             case MdmserverobjectPackage.WS_ROLE_SPECIFICATION_INSTANCE_E__PARAMETER:
-                return PARAMETER_EDEFAULT == null ? parameter != null : !PARAMETER_EDEFAULT.equals(parameter);
+                return parameter != null && !parameter.isEmpty();
         }
         return super.eIsSet(featureID);
     }

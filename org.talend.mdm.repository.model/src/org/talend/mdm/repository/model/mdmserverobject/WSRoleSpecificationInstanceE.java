@@ -6,6 +6,7 @@
  */
 package org.talend.mdm.repository.model.mdmserverobject;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -80,29 +81,19 @@ public interface WSRoleSpecificationInstanceE extends EObject {
     void setWritable(boolean value);
 
     /**
-     * Returns the value of the '<em><b>Parameter</b></em>' attribute.
+     * Returns the value of the '<em><b>Parameter</b></em>' attribute list.
+     * The list contents are of type {@link java.lang.String}.
      * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Parameter</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Parameter</em>' attribute.
-     * @see #setParameter(String[])
+     * @return the value of the '<em>Parameter</em>' attribute list.
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSRoleSpecificationInstanceE_Parameter()
-     * @model dataType="org.talend.mdm.repository.model.mdmserverobject.StringArray"
+     * @model
      * @generated
      */
-    String[] getParameter();
-
-    /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE#getParameter <em>Parameter</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Parameter</em>' attribute.
-     * @see #getParameter()
-     * @generated
-     */
-    void setParameter(String[] value);
+    EList<String> getParameter();
 
 } // WSRoleSpecificationInstanceE

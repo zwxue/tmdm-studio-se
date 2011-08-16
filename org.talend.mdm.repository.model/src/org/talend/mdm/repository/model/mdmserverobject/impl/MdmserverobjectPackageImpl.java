@@ -294,13 +294,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     private EClass wsEventManagerEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EDataType stringArrayEDataType = null;
-
-    /**
      * Creates an instance of the model <b>Package</b>, registered with
      * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
      * package URI value.
@@ -1530,15 +1523,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EDataType getStringArray() {
-        return stringArrayEDataType;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
@@ -1723,9 +1707,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsJobModelEEClass = createEClass(WS_JOB_MODEL_E);
 
         wsEventManagerEEClass = createEClass(WS_EVENT_MANAGER_E);
-
-        // Create data types
-        stringArrayEDataType = createEDataType(STRING_ARRAY);
     }
 
     /**
@@ -1807,11 +1788,11 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(wsRoleSpecificationInstanceEEClass, WSRoleSpecificationInstanceE.class, "WSRoleSpecificationInstanceE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSRoleSpecificationInstanceE_InstanceName(), ecorePackage.getEString(), "instanceName", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSRoleSpecificationInstanceE_Writable(), ecorePackage.getEBoolean(), "writable", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSRoleSpecificationInstanceE_Parameter(), this.getStringArray(), "parameter", null, 0, 1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSRoleSpecificationInstanceE_Parameter(), ecorePackage.getEString(), "parameter", null, 0, -1, WSRoleSpecificationInstanceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsViewEEClass, WSViewE.class, "WSViewE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSViewE_SearchableBusinessElements(), this.getStringArray(), "searchableBusinessElements", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getWSViewE_ViewableBusinessElements(), this.getStringArray(), "viewableBusinessElements", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSViewE_SearchableBusinessElements(), ecorePackage.getEString(), "searchableBusinessElements", null, 0, -1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSViewE_ViewableBusinessElements(), ecorePackage.getEString(), "viewableBusinessElements", null, 0, -1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSViewE_TransformerActive(), ecorePackage.getEBoolean(), "transformerActive", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getWSViewE_WhereConditions(), this.getWSWhereConditionE(), null, "whereConditions", null, 0, -1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getWSViewE_IsTransformerActive(), this.getWSBooleanE(), null, "isTransformerActive", null, 0, 1, WSViewE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1935,9 +1916,6 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(wsJobModelEEClass, WSJobModelE.class, "WSJobModelE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(wsEventManagerEEClass, WSEventManagerE.class, "WSEventManagerE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-        // Initialize data types
-        initEDataType(stringArrayEDataType, String[].class, "StringArray", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
         // Create resource
         createResource(eNS_URI);

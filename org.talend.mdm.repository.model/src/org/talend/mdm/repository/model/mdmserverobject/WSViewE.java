@@ -31,56 +31,36 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface WSViewE extends MDMServerObject {
     /**
-     * Returns the value of the '<em><b>Searchable Business Elements</b></em>' attribute.
+     * Returns the value of the '<em><b>Searchable Business Elements</b></em>' attribute list.
+     * The list contents are of type {@link java.lang.String}.
      * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Searchable Business Elements</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Searchable Business Elements</em>' attribute.
-     * @see #setSearchableBusinessElements(String[])
+     * @return the value of the '<em>Searchable Business Elements</em>' attribute list.
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSViewE_SearchableBusinessElements()
-     * @model dataType="org.talend.mdm.repository.model.mdmserverobject.StringArray"
+     * @model
      * @generated
      */
-    String[] getSearchableBusinessElements();
+    EList<String> getSearchableBusinessElements();
 
     /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getSearchableBusinessElements <em>Searchable Business Elements</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Searchable Business Elements</em>' attribute.
-     * @see #getSearchableBusinessElements()
-     * @generated
-     */
-    void setSearchableBusinessElements(String[] value);
-
-    /**
-     * Returns the value of the '<em><b>Viewable Business Elements</b></em>' attribute.
+     * Returns the value of the '<em><b>Viewable Business Elements</b></em>' attribute list.
+     * The list contents are of type {@link java.lang.String}.
      * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Viewable Business Elements</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Viewable Business Elements</em>' attribute.
-     * @see #setViewableBusinessElements(String[])
+     * @return the value of the '<em>Viewable Business Elements</em>' attribute list.
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSViewE_ViewableBusinessElements()
-     * @model dataType="org.talend.mdm.repository.model.mdmserverobject.StringArray"
+     * @model
      * @generated
      */
-    String[] getViewableBusinessElements();
-
-    /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getViewableBusinessElements <em>Viewable Business Elements</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Viewable Business Elements</em>' attribute.
-     * @see #getViewableBusinessElements()
-     * @generated
-     */
-    void setViewableBusinessElements(String[] value);
+    EList<String> getViewableBusinessElements();
 
     /**
      * Returns the value of the '<em><b>Transformer Active</b></em>' attribute.

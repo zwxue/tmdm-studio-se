@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
@@ -41,44 +42,24 @@ import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
  */
 public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
     /**
-     * The default value of the '{@link #getSearchableBusinessElements() <em>Searchable Business Elements</em>}' attribute.
+     * The cached value of the '{@link #getSearchableBusinessElements() <em>Searchable Business Elements</em>}' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getSearchableBusinessElements()
      * @generated
      * @ordered
      */
-    protected static final String[] SEARCHABLE_BUSINESS_ELEMENTS_EDEFAULT = null;
+    protected EList<String> searchableBusinessElements;
 
     /**
-     * The cached value of the '{@link #getSearchableBusinessElements() <em>Searchable Business Elements</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getSearchableBusinessElements()
-     * @generated
-     * @ordered
-     */
-    protected String[] searchableBusinessElements = SEARCHABLE_BUSINESS_ELEMENTS_EDEFAULT;
-
-    /**
-     * The default value of the '{@link #getViewableBusinessElements() <em>Viewable Business Elements</em>}' attribute.
+     * The cached value of the '{@link #getViewableBusinessElements() <em>Viewable Business Elements</em>}' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @see #getViewableBusinessElements()
      * @generated
      * @ordered
      */
-    protected static final String[] VIEWABLE_BUSINESS_ELEMENTS_EDEFAULT = null;
-
-    /**
-     * The cached value of the '{@link #getViewableBusinessElements() <em>Viewable Business Elements</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getViewableBusinessElements()
-     * @generated
-     * @ordered
-     */
-    protected String[] viewableBusinessElements = VIEWABLE_BUSINESS_ELEMENTS_EDEFAULT;
+    protected EList<String> viewableBusinessElements;
 
     /**
      * The default value of the '{@link #isTransformerActive() <em>Transformer Active</em>}' attribute.
@@ -164,7 +145,10 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
      * <!-- end-user-doc -->
      * @generated
      */
-    public String[] getSearchableBusinessElements() {
+    public EList<String> getSearchableBusinessElements() {
+        if (searchableBusinessElements == null) {
+            searchableBusinessElements = new EDataTypeUniqueEList<String>(String.class, this, MdmserverobjectPackage.WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS);
+        }
         return searchableBusinessElements;
     }
 
@@ -173,32 +157,11 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setSearchableBusinessElements(String[] newSearchableBusinessElements) {
-        String[] oldSearchableBusinessElements = searchableBusinessElements;
-        searchableBusinessElements = newSearchableBusinessElements;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS, oldSearchableBusinessElements, searchableBusinessElements));
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public String[] getViewableBusinessElements() {
+    public EList<String> getViewableBusinessElements() {
+        if (viewableBusinessElements == null) {
+            viewableBusinessElements = new EDataTypeUniqueEList<String>(String.class, this, MdmserverobjectPackage.WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS);
+        }
         return viewableBusinessElements;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setViewableBusinessElements(String[] newViewableBusinessElements) {
-        String[] oldViewableBusinessElements = viewableBusinessElements;
-        viewableBusinessElements = newViewableBusinessElements;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS, oldViewableBusinessElements, viewableBusinessElements));
     }
 
     /**
@@ -348,10 +311,12 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
             case MdmserverobjectPackage.WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS:
-                setSearchableBusinessElements((String[])newValue);
+                getSearchableBusinessElements().clear();
+                getSearchableBusinessElements().addAll((Collection<? extends String>)newValue);
                 return;
             case MdmserverobjectPackage.WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS:
-                setViewableBusinessElements((String[])newValue);
+                getViewableBusinessElements().clear();
+                getViewableBusinessElements().addAll((Collection<? extends String>)newValue);
                 return;
             case MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_ACTIVE:
                 setTransformerActive((Boolean)newValue);
@@ -379,10 +344,10 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
     public void eUnset(int featureID) {
         switch (featureID) {
             case MdmserverobjectPackage.WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS:
-                setSearchableBusinessElements(SEARCHABLE_BUSINESS_ELEMENTS_EDEFAULT);
+                getSearchableBusinessElements().clear();
                 return;
             case MdmserverobjectPackage.WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS:
-                setViewableBusinessElements(VIEWABLE_BUSINESS_ELEMENTS_EDEFAULT);
+                getViewableBusinessElements().clear();
                 return;
             case MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_ACTIVE:
                 setTransformerActive(TRANSFORMER_ACTIVE_EDEFAULT);
@@ -409,9 +374,9 @@ public class WSViewEImpl extends MDMServerObjectImpl implements WSViewE {
     public boolean eIsSet(int featureID) {
         switch (featureID) {
             case MdmserverobjectPackage.WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS:
-                return SEARCHABLE_BUSINESS_ELEMENTS_EDEFAULT == null ? searchableBusinessElements != null : !SEARCHABLE_BUSINESS_ELEMENTS_EDEFAULT.equals(searchableBusinessElements);
+                return searchableBusinessElements != null && !searchableBusinessElements.isEmpty();
             case MdmserverobjectPackage.WS_VIEW_E__VIEWABLE_BUSINESS_ELEMENTS:
-                return VIEWABLE_BUSINESS_ELEMENTS_EDEFAULT == null ? viewableBusinessElements != null : !VIEWABLE_BUSINESS_ELEMENTS_EDEFAULT.equals(viewableBusinessElements);
+                return viewableBusinessElements != null && !viewableBusinessElements.isEmpty();
             case MdmserverobjectPackage.WS_VIEW_E__TRANSFORMER_ACTIVE:
                 return transformerActive != TRANSFORMER_ACTIVE_EDEFAULT;
             case MdmserverobjectPackage.WS_VIEW_E__WHERE_CONDITIONS:

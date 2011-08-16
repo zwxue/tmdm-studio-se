@@ -42,14 +42,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="WSRoleSpecificationInstanceE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="writable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameter" eType="#//StringArray"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameter" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="StringArray" instanceClassName="java.lang.String[]"/>
   <eClassifiers xsi:type="ecore:EClass" name="WSViewE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="searchableBusinessElements"
-        eType="#//StringArray"/>
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewableBusinessElements"
-        eType="#//StringArray"/>
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="transformerActive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="whereConditions" upperBound="-1"
         eType="#//WSWhereConditionE" containment="true"/>

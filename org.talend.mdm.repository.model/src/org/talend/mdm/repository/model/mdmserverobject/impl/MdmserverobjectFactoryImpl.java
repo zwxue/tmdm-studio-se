@@ -105,36 +105,6 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    @Override
-    public Object createFromString(EDataType eDataType, String initialValue) {
-        switch (eDataType.getClassifierID()) {
-            case MdmserverobjectPackage.STRING_ARRAY:
-                return createStringArrayFromString(eDataType, initialValue);
-            default:
-                throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
-        }
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public String convertToString(EDataType eDataType, Object instanceValue) {
-        switch (eDataType.getClassifierID()) {
-            case MdmserverobjectPackage.STRING_ARRAY:
-                return convertStringArrayToString(eDataType, instanceValue);
-            default:
-                throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
-        }
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     public MDMServerObject createMDMServerObject() {
         MDMServerObjectImpl mdmServerObject = new MDMServerObjectImpl();
         return mdmServerObject;
@@ -458,24 +428,6 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSEventManagerE createWSEventManagerE() {
         WSEventManagerEImpl wsEventManagerE = new WSEventManagerEImpl();
         return wsEventManagerE;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public String[] createStringArrayFromString(EDataType eDataType, String initialValue) {
-        return (String[])super.createFromString(initialValue);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public String convertStringArrayToString(EDataType eDataType, Object instanceValue) {
-        return super.convertToString(instanceValue);
     }
 
     /**

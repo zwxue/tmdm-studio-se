@@ -455,7 +455,7 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROLE_SPECIFICATION_INSTANCE_E__WRITABLE = 1;
 
     /**
-     * The feature id for the '<em><b>Parameter</b></em>' attribute.
+     * The feature id for the '<em><b>Parameter</b></em>' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -528,7 +528,7 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_VIEW_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
-     * The feature id for the '<em><b>Searchable Business Elements</b></em>' attribute.
+     * The feature id for the '<em><b>Searchable Business Elements</b></em>' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -537,7 +537,7 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
-     * The feature id for the '<em><b>Viewable Business Elements</b></em>' attribute.
+     * The feature id for the '<em><b>Viewable Business Elements</b></em>' attribute list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2137,16 +2137,6 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_EVENT_MANAGER_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
-     * The meta object id for the '<em>String Array</em>' data type.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getStringArray()
-     * @generated
-     */
-    int STRING_ARRAY = 33;
-
-
-    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2437,10 +2427,10 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSRoleSpecificationInstanceE_Writable();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE#getParameter <em>Parameter</em>}'.
+     * Returns the meta object for the attribute list '{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE#getParameter <em>Parameter</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Parameter</em>'.
+     * @return the meta object for the attribute list '<em>Parameter</em>'.
      * @see org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE#getParameter()
      * @see #getWSRoleSpecificationInstanceE()
      * @generated
@@ -2458,10 +2448,10 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSViewE();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getSearchableBusinessElements <em>Searchable Business Elements</em>}'.
+     * Returns the meta object for the attribute list '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getSearchableBusinessElements <em>Searchable Business Elements</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Searchable Business Elements</em>'.
+     * @return the meta object for the attribute list '<em>Searchable Business Elements</em>'.
      * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE#getSearchableBusinessElements()
      * @see #getWSViewE()
      * @generated
@@ -2469,10 +2459,10 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSViewE_SearchableBusinessElements();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getViewableBusinessElements <em>Viewable Business Elements</em>}'.
+     * Returns the meta object for the attribute list '{@link org.talend.mdm.repository.model.mdmserverobject.WSViewE#getViewableBusinessElements <em>Viewable Business Elements</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Viewable Business Elements</em>'.
+     * @return the meta object for the attribute list '<em>Viewable Business Elements</em>'.
      * @see org.talend.mdm.repository.model.mdmserverobject.WSViewE#getViewableBusinessElements()
      * @see #getWSViewE()
      * @generated
@@ -3533,16 +3523,6 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSEventManagerE();
 
     /**
-     * Returns the meta object for data type '<em>String Array</em>'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for data type '<em>String Array</em>'.
-     * @model instanceClass="java.lang.String[]"
-     * @generated
-     */
-    EDataType getStringArray();
-
-    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3795,7 +3775,7 @@ public interface MdmserverobjectPackage extends EPackage {
         EAttribute WS_ROLE_SPECIFICATION_INSTANCE_E__WRITABLE = eINSTANCE.getWSRoleSpecificationInstanceE_Writable();
 
         /**
-         * The meta object literal for the '<em><b>Parameter</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Parameter</b></em>' attribute list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
@@ -3813,7 +3793,7 @@ public interface MdmserverobjectPackage extends EPackage {
         EClass WS_VIEW_E = eINSTANCE.getWSViewE();
 
         /**
-         * The meta object literal for the '<em><b>Searchable Business Elements</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Searchable Business Elements</b></em>' attribute list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
@@ -3821,7 +3801,7 @@ public interface MdmserverobjectPackage extends EPackage {
         EAttribute WS_VIEW_E__SEARCHABLE_BUSINESS_ELEMENTS = eINSTANCE.getWSViewE_SearchableBusinessElements();
 
         /**
-         * The meta object literal for the '<em><b>Viewable Business Elements</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Viewable Business Elements</b></em>' attribute list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
@@ -4661,15 +4641,6 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EClass WS_EVENT_MANAGER_E = eINSTANCE.getWSEventManagerE();
-
-        /**
-         * The meta object literal for the '<em>String Array</em>' data type.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getStringArray()
-         * @generated
-         */
-        EDataType STRING_ARRAY = eINSTANCE.getStringArray();
 
     }
 
