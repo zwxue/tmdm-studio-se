@@ -16,7 +16,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.ui.dialogs.imports.ImportServerObjectWizard;
+import org.talend.mdm.repository.ui.wizards.imports.ImportServerObjectWizard;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;

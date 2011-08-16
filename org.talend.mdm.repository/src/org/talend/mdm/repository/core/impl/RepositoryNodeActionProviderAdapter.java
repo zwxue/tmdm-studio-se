@@ -121,7 +121,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
                 addAction(actions, copyAction);
                 addAction(actions, pasteAction);
-                addAction(actions, importServerObjectAction);
                 actions.add(duplicateAction);
                 actions.add(exportObjectAction);
             }
@@ -130,7 +129,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         //
         // actions.add(exportAction);
         actions.add(refreshAction);
-
+        actions.add(importServerObjectAction);
         return actions;
     }
 

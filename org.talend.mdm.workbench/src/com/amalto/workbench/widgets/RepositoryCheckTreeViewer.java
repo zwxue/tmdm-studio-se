@@ -270,14 +270,16 @@ public class RepositoryCheckTreeViewer {
     }
 
     protected void filterCheckedObjects(Object[] selected, List ret) {
-        if (selected instanceof TreeObject[]) {
+
             for (int i = 0; i < selected.length; i++) {
+            if (selected[i] instanceof TreeObject) {
                 TreeObject node = (TreeObject) selected[i];
                 if (node.isXObject()) {
                     ret.add(node);
                 }
             }
-        }
+            }
+
     }
 
     private ServerTreeContentProvider contentProvider;
