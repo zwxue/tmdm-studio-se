@@ -1009,6 +1009,61 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_EVENT_MANAGER_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSServiceConfigurationItemImpl <em>WS Service Configuration Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSServiceConfigurationItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSServiceConfigurationItem()
+     * @generated
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM = 17;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Ws Service Configuration</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM__WS_SERVICE_CONFIGURATION = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Service Configuration Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1016,7 +1071,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 17;
+    int EREPOSITORY_OBJECT_TYPE = 18;
 
 
     /**
@@ -1366,6 +1421,27 @@ public interface MdmpropertiesPackage extends EPackage {
     EReference getWSEventManagerItem_WsEventManager();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem <em>WS Service Configuration Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Service Configuration Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem
+     * @generated
+     */
+    EClass getWSServiceConfigurationItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem#getWsServiceConfiguration <em>Ws Service Configuration</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Service Configuration</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem#getWsServiceConfiguration()
+     * @see #getWSServiceConfigurationItem()
+     * @generated
+     */
+    EReference getWSServiceConfigurationItem_WsServiceConfiguration();
+
+    /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1695,6 +1771,24 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_EVENT_MANAGER_ITEM__WS_EVENT_MANAGER = eINSTANCE.getWSEventManagerItem_WsEventManager();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSServiceConfigurationItemImpl <em>WS Service Configuration Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSServiceConfigurationItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSServiceConfigurationItem()
+         * @generated
+         */
+        EClass WS_SERVICE_CONFIGURATION_ITEM = eINSTANCE.getWSServiceConfigurationItem();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Service Configuration</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_SERVICE_CONFIGURATION_ITEM__WS_SERVICE_CONFIGURATION = eINSTANCE.getWSServiceConfigurationItem_WsServiceConfiguration();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

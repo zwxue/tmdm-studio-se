@@ -323,6 +323,24 @@ public interface MdmserverobjectFactory extends EFactory {
     WSEventManagerE createWSEventManagerE();
 
     /**
+     * Returns a new object of class '<em>WS Service Configuration E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Service Configuration E</em>'.
+     * @generated
+     */
+    WSServiceConfigurationE createWSServiceConfigurationE();
+
+    /**
+     * Returns a new object of class '<em>WS Service Put Configuration E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Service Put Configuration E</em>'.
+     * @generated
+     */
+    WSServicePutConfigurationE createWSServicePutConfigurationE();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

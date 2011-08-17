@@ -80,6 +80,7 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
             case MdmpropertiesPackage.WS_ROUTING_RULE_ITEM: return createWSRoutingRuleItem();
             case MdmpropertiesPackage.WS_JOB_MODEL_ITEM: return createWSJobModelItem();
             case MdmpropertiesPackage.WS_EVENT_MANAGER_ITEM: return createWSEventManagerItem();
+            case MdmpropertiesPackage.WS_SERVICE_CONFIGURATION_ITEM: return createWSServiceConfigurationItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -283,6 +284,16 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public WSEventManagerItem createWSEventManagerItem() {
         WSEventManagerItemImpl wsEventManagerItem = new WSEventManagerItemImpl();
         return wsEventManagerItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSServiceConfigurationItem createWSServiceConfigurationItem() {
+        WSServiceConfigurationItemImpl wsServiceConfigurationItem = new WSServiceConfigurationItemImpl();
+        return wsServiceConfigurationItem;
     }
 
     /**

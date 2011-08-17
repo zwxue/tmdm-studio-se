@@ -19,18 +19,18 @@ import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSMenuItemImpl#getWsMenu <em>Ws Menu</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSMenuItemImpl#getWsMenu <em>Ws Menu</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuItem {
 
     /**
-     * The cached value of the '{@link #getWsMenu() <em>Ws Menu</em>}' reference. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #getWsMenu() <em>Ws Menu</em>}' reference.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getWsMenu()
      * @generated
      * @ordered
@@ -39,7 +39,6 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     protected WSMenuItemImpl() {
@@ -48,7 +47,6 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -58,17 +56,15 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public WSMenuE getWsMenu() {
         if (wsMenu != null && wsMenu.eIsProxy()) {
-            InternalEObject oldWsMenu = (InternalEObject) wsMenu;
-            wsMenu = (WSMenuE) eResolveProxy(oldWsMenu);
+            InternalEObject oldWsMenu = (InternalEObject)wsMenu;
+            wsMenu = (WSMenuE)eResolveProxy(oldWsMenu);
             if (wsMenu != oldWsMenu) {
                 if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU,
-                            oldWsMenu, wsMenu));
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU, oldWsMenu, wsMenu));
             }
         }
         return wsMenu;
@@ -76,7 +72,6 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public WSMenuE basicGetWsMenu() {
@@ -85,7 +80,6 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setWsMenu(WSMenuE newWsMenu) {
@@ -97,60 +91,55 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
-            if (resolve)
-                return getWsMenu();
-            return basicGetWsMenu();
+            case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
+                if (resolve) return getWsMenu();
+                return basicGetWsMenu();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
-            setWsMenu((WSMenuE) newValue);
-            return;
+            case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
+                setWsMenu((WSMenuE)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
-            setWsMenu((WSMenuE) null);
-            return;
+            case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
+                setWsMenu((WSMenuE)null);
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
-            return wsMenu != null;
+            case MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU:
+                return wsMenu != null;
         }
         return super.eIsSet(featureID);
     }

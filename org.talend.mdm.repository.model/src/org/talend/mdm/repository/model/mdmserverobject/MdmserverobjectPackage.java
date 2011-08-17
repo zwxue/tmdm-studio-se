@@ -2137,6 +2137,116 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_EVENT_MANAGER_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSServiceConfigurationEImpl <em>WS Service Configuration E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSServiceConfigurationEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSServiceConfigurationE()
+     * @generated
+     */
+    int WS_SERVICE_CONFIGURATION_E = 33;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Service Put Configurations</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__SERVICE_PUT_CONFIGURATIONS = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Service Configuration E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSServicePutConfigurationEImpl <em>WS Service Put Configuration E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSServicePutConfigurationEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSServicePutConfigurationE()
+     * @generated
+     */
+    int WS_SERVICE_PUT_CONFIGURATION_E = 34;
+
+    /**
+     * The feature id for the '<em><b>Jndi Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_PUT_CONFIGURATION_E__JNDI_NAME = 0;
+
+    /**
+     * The feature id for the '<em><b>Configuration</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_PUT_CONFIGURATION_E__CONFIGURATION = 1;
+
+    /**
+     * The number of structural features of the '<em>WS Service Put Configuration E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_PUT_CONFIGURATION_E_FEATURE_COUNT = 2;
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3523,6 +3633,59 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSEventManagerE();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE <em>WS Service Configuration E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Service Configuration E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE
+     * @generated
+     */
+    EClass getWSServiceConfigurationE();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE#getServicePutConfigurations <em>Service Put Configurations</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Service Put Configurations</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE#getServicePutConfigurations()
+     * @see #getWSServiceConfigurationE()
+     * @generated
+     */
+    EReference getWSServiceConfigurationE_ServicePutConfigurations();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE <em>WS Service Put Configuration E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Service Put Configuration E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE
+     * @generated
+     */
+    EClass getWSServicePutConfigurationE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE#getJndiName <em>Jndi Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Jndi Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE#getJndiName()
+     * @see #getWSServicePutConfigurationE()
+     * @generated
+     */
+    EAttribute getWSServicePutConfigurationE_JndiName();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE#getConfiguration <em>Configuration</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Configuration</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE#getConfiguration()
+     * @see #getWSServicePutConfigurationE()
+     * @generated
+     */
+    EAttribute getWSServicePutConfigurationE_Configuration();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4641,6 +4804,50 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EClass WS_EVENT_MANAGER_E = eINSTANCE.getWSEventManagerE();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSServiceConfigurationEImpl <em>WS Service Configuration E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSServiceConfigurationEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSServiceConfigurationE()
+         * @generated
+         */
+        EClass WS_SERVICE_CONFIGURATION_E = eINSTANCE.getWSServiceConfigurationE();
+
+        /**
+         * The meta object literal for the '<em><b>Service Put Configurations</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_SERVICE_CONFIGURATION_E__SERVICE_PUT_CONFIGURATIONS = eINSTANCE.getWSServiceConfigurationE_ServicePutConfigurations();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSServicePutConfigurationEImpl <em>WS Service Put Configuration E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSServicePutConfigurationEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSServicePutConfigurationE()
+         * @generated
+         */
+        EClass WS_SERVICE_PUT_CONFIGURATION_E = eINSTANCE.getWSServicePutConfigurationE();
+
+        /**
+         * The meta object literal for the '<em><b>Jndi Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_SERVICE_PUT_CONFIGURATION_E__JNDI_NAME = eINSTANCE.getWSServicePutConfigurationE_JndiName();
+
+        /**
+         * The meta object literal for the '<em><b>Configuration</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_SERVICE_PUT_CONFIGURATION_E__CONFIGURATION = eINSTANCE.getWSServicePutConfigurationE_Configuration();
 
     }
 

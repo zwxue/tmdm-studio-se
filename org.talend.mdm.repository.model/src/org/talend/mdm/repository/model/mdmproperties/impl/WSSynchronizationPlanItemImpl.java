@@ -20,11 +20,10 @@ import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSSynchronizationPlanItemImpl#getWsSynchronizationPlan
- * <em>Ws Synchronization Plan</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSSynchronizationPlanItemImpl#getWsSynchronizationPlan <em>Ws Synchronization Plan</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl implements WSSynchronizationPlanItem {
@@ -41,7 +40,6 @@ public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl imple
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     protected WSSynchronizationPlanItemImpl() {
@@ -50,7 +48,6 @@ public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl imple
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -60,18 +57,15 @@ public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl imple
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public WSSynchronizationPlanE getWsSynchronizationPlan() {
         if (wsSynchronizationPlan != null && wsSynchronizationPlan.eIsProxy()) {
-            InternalEObject oldWsSynchronizationPlan = (InternalEObject) wsSynchronizationPlan;
-            wsSynchronizationPlan = (WSSynchronizationPlanE) eResolveProxy(oldWsSynchronizationPlan);
+            InternalEObject oldWsSynchronizationPlan = (InternalEObject)wsSynchronizationPlan;
+            wsSynchronizationPlan = (WSSynchronizationPlanE)eResolveProxy(oldWsSynchronizationPlan);
             if (wsSynchronizationPlan != oldWsSynchronizationPlan) {
                 if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-                            MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN, oldWsSynchronizationPlan,
-                            wsSynchronizationPlan));
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN, oldWsSynchronizationPlan, wsSynchronizationPlan));
             }
         }
         return wsSynchronizationPlan;
@@ -79,7 +73,6 @@ public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl imple
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public WSSynchronizationPlanE basicGetWsSynchronizationPlan() {
@@ -88,74 +81,66 @@ public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl imple
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setWsSynchronizationPlan(WSSynchronizationPlanE newWsSynchronizationPlan) {
         WSSynchronizationPlanE oldWsSynchronizationPlan = wsSynchronizationPlan;
         wsSynchronizationPlan = newWsSynchronizationPlan;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET,
-                    MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN, oldWsSynchronizationPlan,
-                    wsSynchronizationPlan));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN, oldWsSynchronizationPlan, wsSynchronizationPlan));
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
-            if (resolve)
-                return getWsSynchronizationPlan();
-            return basicGetWsSynchronizationPlan();
+            case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
+                if (resolve) return getWsSynchronizationPlan();
+                return basicGetWsSynchronizationPlan();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
-            setWsSynchronizationPlan((WSSynchronizationPlanE) newValue);
-            return;
+            case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
+                setWsSynchronizationPlan((WSSynchronizationPlanE)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
-            setWsSynchronizationPlan((WSSynchronizationPlanE) null);
-            return;
+            case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
+                setWsSynchronizationPlan((WSSynchronizationPlanE)null);
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
-            return wsSynchronizationPlan != null;
+            case MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN:
+                return wsSynchronizationPlan != null;
         }
         return super.eIsSet(featureID);
     }

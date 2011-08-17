@@ -37,6 +37,8 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE;
+import org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE;
+import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSStoredProcedureE;
 import org.talend.mdm.repository.model.mdmserverobject.WSStringPredicateE;
 import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE;
@@ -292,6 +294,20 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsEventManagerEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsServiceConfigurationEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsServicePutConfigurationEEClass = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -1523,6 +1539,51 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSServiceConfigurationE() {
+        return wsServiceConfigurationEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSServiceConfigurationE_ServicePutConfigurations() {
+        return (EReference)wsServiceConfigurationEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSServicePutConfigurationE() {
+        return wsServicePutConfigurationEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSServicePutConfigurationE_JndiName() {
+        return (EAttribute)wsServicePutConfigurationEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSServicePutConfigurationE_Configuration() {
+        return (EAttribute)wsServicePutConfigurationEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
@@ -1707,6 +1768,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsJobModelEEClass = createEClass(WS_JOB_MODEL_E);
 
         wsEventManagerEEClass = createEClass(WS_EVENT_MANAGER_E);
+
+        wsServiceConfigurationEEClass = createEClass(WS_SERVICE_CONFIGURATION_E);
+        createEReference(wsServiceConfigurationEEClass, WS_SERVICE_CONFIGURATION_E__SERVICE_PUT_CONFIGURATIONS);
+
+        wsServicePutConfigurationEEClass = createEClass(WS_SERVICE_PUT_CONFIGURATION_E);
+        createEAttribute(wsServicePutConfigurationEEClass, WS_SERVICE_PUT_CONFIGURATION_E__JNDI_NAME);
+        createEAttribute(wsServicePutConfigurationEEClass, WS_SERVICE_PUT_CONFIGURATION_E__CONFIGURATION);
     }
 
     /**
@@ -1753,6 +1821,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsRoutingRuleEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsJobModelEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsEventManagerEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsServiceConfigurationEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1916,6 +1985,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(wsJobModelEEClass, WSJobModelE.class, "WSJobModelE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(wsEventManagerEEClass, WSEventManagerE.class, "WSEventManagerE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+        initEClass(wsServiceConfigurationEEClass, WSServiceConfigurationE.class, "WSServiceConfigurationE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSServiceConfigurationE_ServicePutConfigurations(), this.getWSServicePutConfigurationE(), null, "servicePutConfigurations", null, 0, -1, WSServiceConfigurationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsServicePutConfigurationEEClass, WSServicePutConfigurationE.class, "WSServicePutConfigurationE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSServicePutConfigurationE_JndiName(), ecorePackage.getEString(), "jndiName", null, 0, 1, WSServicePutConfigurationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSServicePutConfigurationE_Configuration(), ecorePackage.getEString(), "configuration", null, 0, 1, WSServicePutConfigurationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

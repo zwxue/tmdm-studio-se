@@ -298,6 +298,19 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmserverobjectPackage.WS_SERVICE_CONFIGURATION_E: {
+                WSServiceConfigurationE wsServiceConfigurationE = (WSServiceConfigurationE)theEObject;
+                T result = caseWSServiceConfigurationE(wsServiceConfigurationE);
+                if (result == null) result = caseMDMServerObject(wsServiceConfigurationE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case MdmserverobjectPackage.WS_SERVICE_PUT_CONFIGURATION_E: {
+                WSServicePutConfigurationE wsServicePutConfigurationE = (WSServicePutConfigurationE)theEObject;
+                T result = caseWSServicePutConfigurationE(wsServicePutConfigurationE);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -794,6 +807,36 @@ public class MdmserverobjectSwitch<T> {
      * @generated
      */
     public T caseWSEventManagerE(WSEventManagerE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Service Configuration E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Service Configuration E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSServiceConfigurationE(WSServiceConfigurationE object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Service Put Configuration E</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Service Put Configuration E</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSServicePutConfigurationE(WSServicePutConfigurationE object) {
         return null;
     }
 

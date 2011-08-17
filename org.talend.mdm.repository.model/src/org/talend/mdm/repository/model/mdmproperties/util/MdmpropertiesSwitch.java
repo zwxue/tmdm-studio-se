@@ -240,6 +240,15 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.WS_SERVICE_CONFIGURATION_ITEM: {
+                WSServiceConfigurationItem wsServiceConfigurationItem = (WSServiceConfigurationItem)theEObject;
+                T result = caseWSServiceConfigurationItem(wsServiceConfigurationItem);
+                if (result == null) result = caseMDMServerObjectItem(wsServiceConfigurationItem);
+                if (result == null) result = caseMDMItem(wsServiceConfigurationItem);
+                if (result == null) result = caseItem(wsServiceConfigurationItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -496,6 +505,21 @@ public class MdmpropertiesSwitch<T> {
      * @generated
      */
     public T caseWSEventManagerItem(WSEventManagerItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Service Configuration Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Service Configuration Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSServiceConfigurationItem(WSServiceConfigurationItem object) {
         return null;
     }
 

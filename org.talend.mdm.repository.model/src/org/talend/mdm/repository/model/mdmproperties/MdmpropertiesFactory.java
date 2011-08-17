@@ -179,6 +179,15 @@ public interface MdmpropertiesFactory extends EFactory {
     WSEventManagerItem createWSEventManagerItem();
 
     /**
+     * Returns a new object of class '<em>WS Service Configuration Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Service Configuration Item</em>'.
+     * @generated
+     */
+    WSServiceConfigurationItem createWSServiceConfigurationItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

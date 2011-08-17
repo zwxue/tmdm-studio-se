@@ -29,9 +29,9 @@ import org.talend.mdm.repository.model.mdmserverobject.WSUniverseE;
 public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUniverseItem {
 
     /**
-     * The cached value of the '{@link #getWsUniverse() <em>Ws Universe</em>}' reference. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #getWsUniverse() <em>Ws Universe</em>}' reference.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getWsUniverse()
      * @generated
      * @ordered
@@ -40,7 +40,6 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     protected WSUniverseItemImpl() {
@@ -49,7 +48,6 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -59,17 +57,15 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public WSUniverseE getWsUniverse() {
         if (wsUniverse != null && wsUniverse.eIsProxy()) {
-            InternalEObject oldWsUniverse = (InternalEObject) wsUniverse;
-            wsUniverse = (WSUniverseE) eResolveProxy(oldWsUniverse);
+            InternalEObject oldWsUniverse = (InternalEObject)wsUniverse;
+            wsUniverse = (WSUniverseE)eResolveProxy(oldWsUniverse);
             if (wsUniverse != oldWsUniverse) {
                 if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE,
-                            oldWsUniverse, wsUniverse));
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE, oldWsUniverse, wsUniverse));
             }
         }
         return wsUniverse;
@@ -77,7 +73,6 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public WSUniverseE basicGetWsUniverse() {
@@ -86,73 +81,66 @@ public class WSUniverseItemImpl extends MDMServerObjectItemImpl implements WSUni
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setWsUniverse(WSUniverseE newWsUniverse) {
         WSUniverseE oldWsUniverse = wsUniverse;
         wsUniverse = newWsUniverse;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE,
-                    oldWsUniverse, wsUniverse));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE, oldWsUniverse, wsUniverse));
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-            if (resolve)
-                return getWsUniverse();
-            return basicGetWsUniverse();
+            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+                if (resolve) return getWsUniverse();
+                return basicGetWsUniverse();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-            setWsUniverse((WSUniverseE) newValue);
-            return;
+            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+                setWsUniverse((WSUniverseE)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-            setWsUniverse((WSUniverseE) null);
-            return;
+            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+                setWsUniverse((WSUniverseE)null);
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
-            return wsUniverse != null;
+            case MdmpropertiesPackage.WS_UNIVERSE_ITEM__WS_UNIVERSE:
+                return wsUniverse != null;
         }
         return super.eIsSet(featureID);
     }

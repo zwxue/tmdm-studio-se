@@ -30,6 +30,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSJobModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoutingRuleItem;
+import org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem;
 import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
 import org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
@@ -163,6 +164,13 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass wsEventManagerItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsServiceConfigurationItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -538,6 +546,24 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSServiceConfigurationItem() {
+        return wsServiceConfigurationItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSServiceConfigurationItem_WsServiceConfiguration() {
+        return (EReference)wsServiceConfigurationItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -620,6 +646,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsEventManagerItemEClass = createEClass(WS_EVENT_MANAGER_ITEM);
         createEReference(wsEventManagerItemEClass, WS_EVENT_MANAGER_ITEM__WS_EVENT_MANAGER);
 
+        wsServiceConfigurationItemEClass = createEClass(WS_SERVICE_CONFIGURATION_ITEM);
+        createEReference(wsServiceConfigurationItemEClass, WS_SERVICE_CONFIGURATION_ITEM__WS_SERVICE_CONFIGURATION);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -676,6 +705,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsRoutingRuleItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsJobModelItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsEventManagerItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsServiceConfigurationItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -732,6 +762,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         initEClass(wsEventManagerItemEClass, WSEventManagerItem.class, "WSEventManagerItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSEventManagerItem_WsEventManager(), theMdmserverobjectPackage.getWSEventManagerE(), null, "wsEventManager", null, 0, 1, WSEventManagerItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsServiceConfigurationItemEClass, WSServiceConfigurationItem.class, "WSServiceConfigurationItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSServiceConfigurationItem_WsServiceConfiguration(), theMdmserverobjectPackage.getWSServiceConfigurationE(), null, "wsServiceConfiguration", null, 0, 1, WSServiceConfigurationItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
