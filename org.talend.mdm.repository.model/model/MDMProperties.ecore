@@ -58,4 +58,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="WSEventManagerItem" eSuperTypes="#//MDMServerObjectItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsEventManager" eType="ecore:EClass MDMServerObject.ecore#//WSEventManagerE"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSServiceConfigurationItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsServiceConfiguration"
+        eType="ecore:EClass MDMServerObject.ecore#//WSServiceConfigurationE"/>
+  </eClassifiers>
 </ecore:EPackage>
