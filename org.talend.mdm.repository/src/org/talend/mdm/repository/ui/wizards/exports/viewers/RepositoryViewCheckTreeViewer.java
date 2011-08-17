@@ -42,9 +42,9 @@ public class RepositoryViewCheckTreeViewer extends RepositoryCheckTreeViewer {
 
     private MDMRepositoryView repositoryView = MDMRepositoryView.show();
 
-    private MDMRepositoryContentProvider contentProvider = new MDMRepositoryContentProvider();
+    protected MDMRepositoryContentProvider contentProvider = new MDMRepositoryContentProvider();
 
-    private CheckboxMDMRepositoryTreeViewer checkboxViewer = null;
+    protected CheckboxMDMRepositoryTreeViewer checkboxViewer = null;
 
     private List<RepositoryViewObject> checkedNodes = null;
 

@@ -141,21 +141,21 @@ public class ImportItemsWizard extends Wizard {
 
     private static Log log = LogFactory.getLog(ImportItemsWizard.class);
 
-    private IStructuredSelection sel;
+    protected IStructuredSelection sel;
 
-    private RepositoryCheckTreeViewer treeViewer;
+    protected RepositoryCheckTreeViewer treeViewer;
 
-    private String importFolder;
+    protected String importFolder;
 
     private StringBuffer zipFileRepository = new StringBuffer();;
 
-    private FileSelectWidget folder;
+    protected FileSelectWidget folder;
 
     private Button zipBtn;
 
-    private Button folderBtn;
+    protected Button folderBtn;
 
-    private FileSelectWidget zip;
+    protected FileSelectWidget zip;
 
     private ServerView view;
 
@@ -165,6 +165,10 @@ public class ImportItemsWizard extends Wizard {
     private TreeParent serverRoot;
 
     private XtentisPort port = null;
+
+    protected Button btnOverwrite = null;
+
+    protected boolean isOverride = false;
 
     public ImportItemsWizard(IStructuredSelection sel, ServerView view) {
         setNeedsProgressMonitor(true);
@@ -176,6 +180,23 @@ public class ImportItemsWizard extends Wizard {
         } catch (XtentisException e3) {
             log.error(e3.getMessage(), e3);
         }
+    }
+
+    public ImportItemsWizard(IStructuredSelection sel) {
+        setNeedsProgressMonitor(true);
+        this.sel = sel;
+    }
+
+    protected void refreshViewJob() {
+        new UIJob("Refreshing server") {
+
+            @Override
+            public IStatus runInUIThread(IProgressMonitor monitor) {
+                new ServerRefreshAction(view, serverRoot).run();
+                return Status.OK_STATUS;
+            }
+
+        }.schedule();
     }
 
     @Override
@@ -206,21 +227,15 @@ public class ImportItemsWizard extends Wizard {
 
                     doImport(objs, monitor);
                     // run initMDM to call backend migration task
-                    port.initMDM(null);
+                    if (port != null) {
+                        port.initMDM(null);
+                    }
                     return Status.OK_STATUS;
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     return Status.CANCEL_STATUS;
                 } finally {
-                    new UIJob("Refreshing server") {
-
-                        @Override
-                        public IStatus runInUIThread(IProgressMonitor monitor) {
-                            new ServerRefreshAction(view, serverRoot).run();
-                            return Status.OK_STATUS;
-                        }
-
-                    }.schedule();
+                    refreshViewJob();
                     // modified by honghb ,fix bug 21552
                     if (selectZip && zipFilePath != null) {
                         importFolder = System.getProperty("user.dir") + "/temp";//$NON-NLS-1$//$NON-NLS-2$
@@ -228,6 +243,7 @@ public class ImportItemsWizard extends Wizard {
                     }
                 }
             }
+
         };
         job.setPriority(Job.INTERACTIVE);
         job.schedule();
@@ -296,7 +312,7 @@ public class ImportItemsWizard extends Wizard {
 
     }
 
-    private void parse() {
+    protected void parse() {
         try {
             boolean importFromArchieve = zipBtn.getSelection();
             if (importFromArchieve) {
@@ -331,7 +347,7 @@ public class ImportItemsWizard extends Wizard {
         }
     };
 
-    private void parses(boolean importFromArchieve, String zipFilePath, IProgressMonitor monitor) {
+    protected void parses(boolean importFromArchieve, String zipFilePath, IProgressMonitor monitor) {
         // init var for progressMonitor
         int total = 500, zipCount = 200, readCount = 100;
         int step = 1, interval = 1;
@@ -1150,6 +1166,9 @@ public class ImportItemsWizard extends Wizard {
         addPage(new SelectItemsPage());
     }
 
+    protected void createOverwriteBtn(Composite composite) {
+    }
+
     class PageListener implements Listener {
 
         SelectItemsPage page;
@@ -1269,7 +1288,7 @@ public class ImportItemsWizard extends Wizard {
             folder.getText().addListener(SWT.Modify, new PageListener(this));
             // folder.getButton().addListener(SWT.Selection, new PageListener(this));
             // create viewer
-            treeViewer = new RepositoryCheckTreeViewer(sel);
+            createViewer();
             Composite itemcom = treeViewer.createItemList(composite);
             treeViewer.getViewer().setInput(null);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 5));
@@ -1277,6 +1296,8 @@ public class ImportItemsWizard extends Wizard {
 
             folder.setEnabled(folderBtn.getSelection());
             zip.setEnabled(zipBtn.getSelection());
+
+            createOverwriteBtn(composite);
 
             GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(920, 600).applyTo(composite);
         }
@@ -1298,4 +1319,7 @@ public class ImportItemsWizard extends Wizard {
         return orignalPicturepath.replaceAll(pictureName1, targetPicturePath.substring(targetPicturePath.indexOf("/") + 1));//$NON-NLS-1$
     }
 
+    protected void createViewer() {
+        treeViewer = new RepositoryCheckTreeViewer(sel);
+    }
 }

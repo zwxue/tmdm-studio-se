@@ -38,6 +38,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DuplicateAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
+import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
@@ -51,6 +52,8 @@ import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
 public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActionProvider {
 
     static AbstractRepositoryAction exportObjectAction;
+
+    static AbstractRepositoryAction importObjectAction;
 
     static AbstractRepositoryAction createFolderAction;
 
@@ -73,6 +76,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
     public void initCommonViewer(CommonViewer commonViewer) {
+        importObjectAction = new ImportObjectAction();
         exportObjectAction = new ExportObjectAction();
         createFolderAction = new CreateFolderAction();
         removeFromRepositoryAction = new RemoveFromRepositoryAction();
@@ -122,7 +126,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, copyAction);
                 addAction(actions, pasteAction);
                 actions.add(duplicateAction);
-                actions.add(exportObjectAction);
             }
         }
 
@@ -130,6 +133,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         // actions.add(exportAction);
         actions.add(refreshAction);
         actions.add(importServerObjectAction);
+        actions.add(exportObjectAction);
+        actions.add(importObjectAction);
         return actions;
     }
 
