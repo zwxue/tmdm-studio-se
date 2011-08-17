@@ -156,6 +156,14 @@ public class XObjectEditor2 extends XObjectEditor {
             case TreeObject.UNIVERSE:
                 addPage(new UniverseVersionMainPage(this));
                 break;
+
+            case TreeObject.SYNCHRONIZATIONPLAN:
+                try {
+                    addPage(new MDMSynchronizationMainPage(this));
+                } catch (PartInitException e) {
+                    log.error(e.getMessage(), e);
+                }
+                break;
             default:
                 // MessageDialog.openError(this.getSite().getShell(), "Error",
                 // "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());

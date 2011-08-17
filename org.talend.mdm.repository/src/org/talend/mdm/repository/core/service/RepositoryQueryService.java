@@ -43,6 +43,10 @@ public class RepositoryQueryService {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_DATAMODEL);
     }
 
+    public static List<String> findAllDataContainerNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_DATACLUSTER);
+    }
+
     public static WSDataModelE findDataModelByName(String name) {
         return (WSDataModelE) findServerObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL, name);
     }

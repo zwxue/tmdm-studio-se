@@ -76,4 +76,6 @@ public interface IServerObjectRepositoryType {
     public static ERepositoryObjectType TYPE_EVENTMANAGER = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.EventManager"); //$NON-NLS-1$
 
+    public static ERepositoryObjectType TYPE_SERVICECONFIGURATION = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.ServiceConfiguration"); //$NON-NLS-1$
 }

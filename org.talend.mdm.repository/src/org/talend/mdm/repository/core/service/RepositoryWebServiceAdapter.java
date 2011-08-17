@@ -187,6 +187,30 @@ public class RepositoryWebServiceAdapter {
         return list;
     }
 
+    public static String[] getItemsAlgorithmsStringsForSynchronization() {
+
+        String algorithms[] = new String[] { "Local Wins", "Manual", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+
+        return algorithms;
+    }
+
+    public static String[] getObjectsAlgorithmsStringsForSynchronization() {
+
+        String algorithms[] = new String[] { "Local Wins", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+
+        return algorithms;
+    }
+
+    public static String[] getXtentisObjectsForSynchronizationPlans() {
+
+        String objects[] = new String[] {
+                "Background Job", "Data Cluster", "Data Model", "Item", "Menu", "Role", "Routing Engine V2", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ 
+                "Routing Order V2 Completed", "Routing Order V2 Failed", "Routing Rule", "Service", "Stored Procedure", "Synchronization Conflict",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ 
+                "Transformer Plugin V2", "Transformer V2", "Universe", "View" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
+
+        return objects;
+    }
+
     public static List<KeyValue> getListForUniverseXtentisObjects() {
         List<KeyValue> list = new ArrayList<KeyValue>();
         list.add(new KeyValue("Data Model", ""));//$NON-NLS-1$ //$NON-NLS-2$ 

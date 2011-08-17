@@ -143,6 +143,14 @@
             products="MDM"
             type="MDM.EventManager">
       </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.ServiceConfigurationRepositoryNode"
+            folder="MDM/serviceconfiguration"
+            isResouce="true"
+            label="Service Configuration"
+            products="MDM"
+            type="MDM.ServiceConfiguration">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.core.repository.repository_content">
@@ -306,6 +314,10 @@
       <configuration
             class="org.talend.mdm.repository.core.impl.eventmanager.EventManagerNodeConfiguration"
             label="Event Manager">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.serviceconfiguration.ServiceConfigurationNodeConfiguration"
+            label="Service Configuration">
       </configuration>
    </extension>
    <extension
