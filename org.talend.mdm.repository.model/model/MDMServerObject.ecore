@@ -191,4 +191,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSJobModelE" eSuperTypes="#//MDMServerObject"/>
   <eClassifiers xsi:type="ecore:EClass" name="WSEventManagerE" eSuperTypes="#//MDMServerObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WSServiceConfigurationE" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="servicePutConfigurations"
+        upperBound="-1" eType="#//WSServicePutConfigurationE" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSServicePutConfigurationE">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jndiName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="configuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
 </ecore:EPackage>
