@@ -100,6 +100,15 @@ public interface MdmpropertiesPackage extends EPackage {
 	int MDM_ITEM__PARENT = PropertiesPackage.ITEM__PARENT;
 
 	/**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_ITEM__REFERENCE_RESOURCES = PropertiesPackage.ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The number of structural features of the '<em>MDM Item</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -146,6 +155,15 @@ public interface MdmpropertiesPackage extends EPackage {
 	int MDM_SERVER_DEF_ITEM__PARENT = MDM_ITEM__PARENT;
 
 	/**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_DEF_ITEM__REFERENCE_RESOURCES = MDM_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Server Def</b></em>' reference.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -202,6 +220,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int MDM_SERVER_OBJECT_ITEM__PARENT = MDM_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES = MDM_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The number of structural features of the '<em>MDM Server Object Item</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -246,6 +273,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_MENU_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MENU_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
      * The feature id for the '<em><b>Ws Menu</b></em>' reference.
@@ -303,6 +339,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_ROLE_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROLE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Role</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -357,6 +402,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int CONTAINER_ITEM__PARENT = MDM_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONTAINER_ITEM__REFERENCE_RESOURCES = MDM_ITEM__REFERENCE_RESOURCES;
 
     /**
      * The feature id for the '<em><b>Children</b></em>' reference list.
@@ -441,6 +495,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_DATA_MODEL_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Data Model</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -494,6 +557,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_DATA_CLUSTER_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
      * The feature id for the '<em><b>Ws Data Cluster</b></em>' reference.
@@ -551,6 +623,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_STORED_PROCEDURE_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Stored Procedure</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -604,6 +685,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_UNIVERSE_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_UNIVERSE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
      * The feature id for the '<em><b>Ws Universe</b></em>' reference.
@@ -661,6 +751,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_SYNCHRONIZATION_PLAN_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SYNCHRONIZATION_PLAN_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Synchronization Plan</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -714,6 +813,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_VIEW_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
      * The feature id for the '<em><b>Ws View</b></em>' reference.
@@ -771,6 +879,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_WORKFLOW_DEPLOY_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_DEPLOY_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Workflow Deploy</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -824,6 +941,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_TRANSFORMER_V2_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
      * The feature id for the '<em><b>Ws Transformer V2</b></em>' reference.
@@ -881,6 +1007,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_ROUTING_RULE_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Routing Rule</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -934,6 +1069,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_JOB_MODEL_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
      * The feature id for the '<em><b>Ws Job Model Item</b></em>' reference.
@@ -991,6 +1135,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_EVENT_MANAGER_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Event Manager</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1046,6 +1199,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_SERVICE_CONFIGURATION_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
 
     /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
      * The feature id for the '<em><b>Ws Service Configuration</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1064,6 +1226,70 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_SERVICE_CONFIGURATION_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSWorkflowItemImpl <em>WS Workflow Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSWorkflowItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSWorkflowItem()
+     * @generated
+     */
+    int WS_WORKFLOW_ITEM = 18;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>Ws Workflow</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_ITEM__WS_WORKFLOW = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Workflow Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1071,7 +1297,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 18;
+    int EREPOSITORY_OBJECT_TYPE = 19;
 
 
     /**
@@ -1442,6 +1668,27 @@ public interface MdmpropertiesPackage extends EPackage {
     EReference getWSServiceConfigurationItem_WsServiceConfiguration();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem <em>WS Workflow Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Workflow Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem
+     * @generated
+     */
+    EClass getWSWorkflowItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem#getWsWorkflow <em>Ws Workflow</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Ws Workflow</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem#getWsWorkflow()
+     * @see #getWSWorkflowItem()
+     * @generated
+     */
+    EReference getWSWorkflowItem_WsWorkflow();
+
+    /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1789,6 +2036,24 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_SERVICE_CONFIGURATION_ITEM__WS_SERVICE_CONFIGURATION = eINSTANCE.getWSServiceConfigurationItem_WsServiceConfiguration();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSWorkflowItemImpl <em>WS Workflow Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSWorkflowItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSWorkflowItem()
+         * @generated
+         */
+        EClass WS_WORKFLOW_ITEM = eINSTANCE.getWSWorkflowItem();
+
+        /**
+         * The meta object literal for the '<em><b>Ws Workflow</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_WORKFLOW_ITEM__WS_WORKFLOW = eINSTANCE.getWSWorkflowItem_WsWorkflow();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

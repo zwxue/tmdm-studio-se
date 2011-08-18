@@ -62,4 +62,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="wsServiceConfiguration"
         eType="ecore:EClass MDMServerObject.ecore#//WSServiceConfigurationE"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSWorkflowItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wsWorkflow" eType="ecore:EClass MDMServerObject.ecore#//WSWorkflowE"/>
+  </eClassifiers>
 </ecore:EPackage>

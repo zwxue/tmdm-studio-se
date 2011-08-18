@@ -313,6 +313,22 @@
     <element xmi:type="ecore:EClass" href="MDMProperties.ecore#//WSServiceConfigurationItem"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_5b3kIsfaEeCZ1tjWgVNqAg" x="674" y="552"/>
   </children>
+  <children xmi:type="notation:Node" xmi:id="_bDyMcMl8EeCRG4ESnHIh_g" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_bDyMc8l8EeCRG4ESnHIh_g" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_bDyMdMl8EeCRG4ESnHIh_g" type="5001">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_bDyMdcl8EeCRG4ESnHIh_g"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_bDyMdsl8EeCRG4ESnHIh_g"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_bDyMd8l8EeCRG4ESnHIh_g"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_bDyMeMl8EeCRG4ESnHIh_g" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_bDyMecl8EeCRG4ESnHIh_g"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_bDyMesl8EeCRG4ESnHIh_g"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_bDyMe8l8EeCRG4ESnHIh_g"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_bDyMccl8EeCRG4ESnHIh_g" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="MDMProperties.ecore#//WSWorkflowItem"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_bDyMcsl8EeCRG4ESnHIh_g" x="358" y="176"/>
+  </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_OE5ZkZMVEeCcksxzfvS-Pw"/>
   <element xmi:type="ecore:EPackage" href="MDMProperties.ecore#/"/>
   <edges xmi:type="notation:Edge" xmi:id="_eaERMJMVEeCcksxzfvS-Pw" type="3003" source="_b8td8JMVEeCcksxzfvS-Pw" target="_ZSYlsJMVEeCcksxzfvS-Pw">
@@ -428,5 +444,11 @@
     <element xsi:nil="true"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_79i2s8faEeCZ1tjWgVNqAg" points="[-14, -20, 177, 262]$[-189, -306, 2, -24]"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_79i2tMfaEeCZ1tjWgVNqAg" id="(0.8888888888888888,0.38461538461538464)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_fZscwMl8EeCRG4ESnHIh_g" type="3003" source="_bDyMcMl8EeCRG4ESnHIh_g" target="_XTVl8ZujEeChOtNeWEXMkQ">
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fZscwcl8EeCRG4ESnHIh_g" routing="Rectilinear" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fZscwsl8EeCRG4ESnHIh_g" fontName="宋体"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fZscw8l8EeCRG4ESnHIh_g" points="[-1, 20, -3, -81]$[-17, 70, -19, -31]"/>
   </edges>
 </notation:Diagram>

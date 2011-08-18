@@ -81,6 +81,7 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
             case MdmpropertiesPackage.WS_JOB_MODEL_ITEM: return createWSJobModelItem();
             case MdmpropertiesPackage.WS_EVENT_MANAGER_ITEM: return createWSEventManagerItem();
             case MdmpropertiesPackage.WS_SERVICE_CONFIGURATION_ITEM: return createWSServiceConfigurationItem();
+            case MdmpropertiesPackage.WS_WORKFLOW_ITEM: return createWSWorkflowItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -294,6 +295,16 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public WSServiceConfigurationItem createWSServiceConfigurationItem() {
         WSServiceConfigurationItemImpl wsServiceConfigurationItem = new WSServiceConfigurationItemImpl();
         return wsServiceConfigurationItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSWorkflowItem createWSWorkflowItem() {
+        WSWorkflowItemImpl wsWorkflowItem = new WSWorkflowItemImpl();
+        return wsWorkflowItem;
     }
 
     /**

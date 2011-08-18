@@ -249,6 +249,15 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.WS_WORKFLOW_ITEM: {
+                WSWorkflowItem wsWorkflowItem = (WSWorkflowItem)theEObject;
+                T result = caseWSWorkflowItem(wsWorkflowItem);
+                if (result == null) result = caseMDMServerObjectItem(wsWorkflowItem);
+                if (result == null) result = caseMDMItem(wsWorkflowItem);
+                if (result == null) result = caseItem(wsWorkflowItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -520,6 +529,21 @@ public class MdmpropertiesSwitch<T> {
      * @generated
      */
     public T caseWSServiceConfigurationItem(WSServiceConfigurationItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Workflow Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Workflow Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSWorkflowItem(WSWorkflowItem object) {
         return null;
     }
 

@@ -188,6 +188,15 @@ public interface MdmpropertiesFactory extends EFactory {
     WSServiceConfigurationItem createWSServiceConfigurationItem();
 
     /**
+     * Returns a new object of class '<em>WS Workflow Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Workflow Item</em>'.
+     * @generated
+     */
+    WSWorkflowItem createWSWorkflowItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

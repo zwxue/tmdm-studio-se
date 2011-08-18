@@ -97,6 +97,7 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_EVENT_MANAGER_E: return createWSEventManagerE();
             case MdmserverobjectPackage.WS_SERVICE_CONFIGURATION_E: return createWSServiceConfigurationE();
             case MdmserverobjectPackage.WS_SERVICE_PUT_CONFIGURATION_E: return createWSServicePutConfigurationE();
+            case MdmserverobjectPackage.WS_WORKFLOW_E: return createWSWorkflowE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -450,6 +451,16 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSServicePutConfigurationE createWSServicePutConfigurationE() {
         WSServicePutConfigurationEImpl wsServicePutConfigurationE = new WSServicePutConfigurationEImpl();
         return wsServicePutConfigurationE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSWorkflowE createWSWorkflowE() {
+        WSWorkflowEImpl wsWorkflowE = new WSWorkflowEImpl();
+        return wsWorkflowE;
     }
 
     /**

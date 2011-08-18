@@ -37,6 +37,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmproperties.WSUniverseItem;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
+import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 
 /**
@@ -171,6 +172,13 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass wsServiceConfigurationItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsWorkflowItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -564,6 +572,24 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSWorkflowItem() {
+        return wsWorkflowItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSWorkflowItem_WsWorkflow() {
+        return (EReference)wsWorkflowItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -649,6 +675,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsServiceConfigurationItemEClass = createEClass(WS_SERVICE_CONFIGURATION_ITEM);
         createEReference(wsServiceConfigurationItemEClass, WS_SERVICE_CONFIGURATION_ITEM__WS_SERVICE_CONFIGURATION);
 
+        wsWorkflowItemEClass = createEClass(WS_WORKFLOW_ITEM);
+        createEReference(wsWorkflowItemEClass, WS_WORKFLOW_ITEM__WS_WORKFLOW);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -706,6 +735,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsJobModelItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsEventManagerItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsServiceConfigurationItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsWorkflowItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -765,6 +795,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         initEClass(wsServiceConfigurationItemEClass, WSServiceConfigurationItem.class, "WSServiceConfigurationItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSServiceConfigurationItem_WsServiceConfiguration(), theMdmserverobjectPackage.getWSServiceConfigurationE(), null, "wsServiceConfiguration", null, 0, 1, WSServiceConfigurationItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsWorkflowItemEClass, WSWorkflowItem.class, "WSWorkflowItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSWorkflowItem_WsWorkflow(), theMdmserverobjectPackage.getWSWorkflowE(), null, "wsWorkflow", null, 0, 1, WSWorkflowItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
