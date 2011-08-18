@@ -147,6 +147,7 @@ public class RepositoryQueryService {
             typeMap.put(TreeObject.ROUTING_RULE, IServerObjectRepositoryType.TYPE_ROUTINGRULE);
             typeMap.put(TreeObject.UNIVERSE, IServerObjectRepositoryType.TYPE_UNIVERSE);
             typeMap.put(TreeObject.STORED_PROCEDURE, IServerObjectRepositoryType.TYPE_STOREPROCEDURE);
+            typeMap.put(TreeObject.SYNCHRONIZATIONPLAN, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN);
             typeMap.put(TreeObject.VIEW, IServerObjectRepositoryType.TYPE_VIEW);
         }
     }
