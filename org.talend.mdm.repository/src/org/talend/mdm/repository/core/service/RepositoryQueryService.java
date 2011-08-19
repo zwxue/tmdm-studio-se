@@ -47,6 +47,10 @@ public class RepositoryQueryService {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_DATACLUSTER);
     }
 
+    public static List<String> findAllRoleNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_ROLE);
+    }
+
     public static WSDataModelE findDataModelByName(String name) {
         return (WSDataModelE) findServerObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL, name);
     }

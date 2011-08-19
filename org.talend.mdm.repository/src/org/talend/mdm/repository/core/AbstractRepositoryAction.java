@@ -34,6 +34,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -98,7 +99,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     }
 
     protected void refreshRepositoryRoot(ERepositoryObjectType type) {
-        Object input = commonViewer.getInput();
+        Object input = getCommonViewer().getInput();
         if (input != null && input instanceof IRepositoryViewObject[]) {
             for (IRepositoryViewObject viewObject : (IRepositoryViewObject[]) input) {
                 if (refreshRepositoryContainer(viewObject, type)) {
@@ -115,6 +116,13 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
             }
         }
+    }
+
+    private CommonViewer getCommonViewer() {
+        if (commonViewer == null) {
+            commonViewer = MDMRepositoryView.show().getCommonViewer();
+        }
+        return commonViewer;
     }
 
     private boolean refreshRepositoryContainer(IRepositoryViewObject viewObj, ERepositoryObjectType type) {

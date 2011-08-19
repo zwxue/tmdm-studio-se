@@ -15,6 +15,7 @@ package org.talend.mdm.repository.ui.widgets;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
@@ -27,6 +28,12 @@ import com.amalto.workbench.widgets.XpathWidget;
  * DOC hbhong class global comment. Detailled comment
  */
 public class TisTableViewerR extends TisTableViewer {
+
+    private IWorkbenchPartSite site;
+
+    public void setSite(IWorkbenchPartSite site) {
+        this.site = site;
+    }
 
     /**
      * DOC hbhong TisTableViewerR constructor comment.
@@ -41,7 +48,10 @@ public class TisTableViewerR extends TisTableViewer {
 
     @Override
     protected XpathSelectDialog getNewXpathDlgInstance() {
-        return new XpathSelectDialog2(table.getShell(), "Select Multiple XPaths", getMainPage().getSite(), true,
+        if (site == null) {
+            site = getMainPage().getSite();
+        }
+        return new XpathSelectDialog2(table.getShell(), "Select Multiple XPaths", site, true,
                 getDatamodelName());
     }
 

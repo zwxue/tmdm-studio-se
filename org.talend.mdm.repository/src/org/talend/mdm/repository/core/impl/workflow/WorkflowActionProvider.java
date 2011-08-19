@@ -23,10 +23,20 @@ package org.talend.mdm.repository.core.impl.workflow;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.ui.editors.WorkflowEditorInput;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryWorkflowUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -49,4 +59,17 @@ public class WorkflowActionProvider extends RepositoryNodeActionProviderAdapter 
         return actions;
     }
 
+    @Override
+    public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
+        return new WorkflowEditorInput(item, getProcFile((MDMServerObjectItem) item));
+    }
+
+    private IFile getProcFile(MDMServerObjectItem item) {
+        String version = item.getProperty().getVersion();
+        MDMServerObject mdmServerObject = item.getMDMServerObject();
+        String name = mdmServerObject.getName();
+        String fileName = RepositoryWorkflowUtil.getProcFileName(name, version);
+        IFolder folder = RepositoryResourceUtil.getFolder(IServerObjectRepositoryType.TYPE_WORKFLOW);
+        return folder.getFile(fileName);
+    }
 }

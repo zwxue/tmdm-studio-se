@@ -33,7 +33,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
+import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -42,7 +42,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
 public class WorkflowNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSWorkflowDeployItem || item instanceof ContainerItem) {
+        if (item instanceof WSWorkflowItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_WORKFLOW;
         }
         return null;
@@ -53,18 +53,18 @@ public class WorkflowNodeResourceProvider extends AbstractRepositoryNodeResource
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSWorkflowDeployItem) item).getWsWorkflowDeploy());
+            contents.add(((WSWorkflowItem) item).getWsWorkflow());
             return itemResource;
         }
         return null;
     }
 
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSWorkflowDeployItem) {
+        if (item instanceof WSWorkflowItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSWorkflowDeployItem) item).getWsWorkflowDeploy());
-            Resource eResource = ((WSWorkflowDeployItem) item).getWsWorkflowDeploy().eResource();
+            resource.getContents().add(((WSWorkflowItem) item).getWsWorkflow());
+            Resource eResource = ((WSWorkflowItem) item).getWsWorkflow().eResource();
             return resource;
         }
         return null;

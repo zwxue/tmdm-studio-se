@@ -80,6 +80,10 @@ public class RepositoryResourceUtil {
     private static final String DIVIDE = "/"; //$NON-NLS-1$
 
     public static boolean createItem(Item item, String propLabel) {
+        return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
+    }
+
+    public static boolean createItem(Item item, String propLabel, String version) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
 
@@ -89,7 +93,7 @@ public class RepositoryResourceUtil {
             String nextId = factory.getNextId();
             Property property = item.getProperty();
             property.setId(nextId);
-            property.setVersion(VersionUtils.DEFAULT_VERSION);
+            property.setVersion(version);
             property.setAuthor(context.getUser());
             property.setLabel(propLabel);
             //
@@ -118,6 +122,23 @@ public class RepositoryResourceUtil {
             log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static IFolder getFolder(ERepositoryObjectType type) {
+        IFolder objectFolder = null;
+        try {
+            Project currentProject = ProjectManager.getInstance().getCurrentProject();
+            IProject fsProject = ResourceModelUtils.getProject(currentProject);
+            if (fsProject == null) {
+                return null;
+            }
+
+            objectFolder = ResourceUtils.getFolder(fsProject, ERepositoryObjectType.getFolderName(type), true);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return objectFolder;
     }
 
     public static IRepositoryViewObject createFolderViewObject(ERepositoryObjectType type, String folderName, Item pItem,

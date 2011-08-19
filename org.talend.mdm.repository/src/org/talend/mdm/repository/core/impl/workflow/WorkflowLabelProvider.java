@@ -25,7 +25,7 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
-import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
+import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -52,7 +52,7 @@ public class WorkflowLabelProvider extends AbstractLabelProvider {
         if (img == null) {
             Item item = getItem(element);
             if (item != null) {
-                if (item instanceof WSWorkflowDeployItem) {
+                if (item instanceof WSWorkflowItem) {
                     img = IMG;
                 }
             }
@@ -62,8 +62,8 @@ public class WorkflowLabelProvider extends AbstractLabelProvider {
 
     @Override
     protected String getServerObjectItemText(Item item) {
-        WSWorkflowDeployItem workflowItem = (WSWorkflowDeployItem) item;
-        return workflowItem.getWsWorkflowDeploy().getName();
+        WSWorkflowItem workflowItem = (WSWorkflowItem) item;
+        return workflowItem.getWsWorkflow().getName();
     }
 
 }
