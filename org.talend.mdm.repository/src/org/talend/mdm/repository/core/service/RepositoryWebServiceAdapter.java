@@ -211,6 +211,13 @@ public class RepositoryWebServiceAdapter {
         return objects;
     }
 
+    public static String[] getComboListForServiceConfig() {
+        String[] comblist = new String[] { "smtp", "svn", "workflow" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+        return comblist;
+
+    }
+
     public static List<KeyValue> getListForUniverseXtentisObjects() {
         List<KeyValue> list = new ArrayList<KeyValue>();
         list.add(new KeyValue("Data Model", ""));//$NON-NLS-1$ //$NON-NLS-2$ 

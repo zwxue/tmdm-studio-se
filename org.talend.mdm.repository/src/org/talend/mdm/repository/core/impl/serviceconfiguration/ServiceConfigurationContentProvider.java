@@ -30,7 +30,7 @@ import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WSMenu;
+import com.amalto.workbench.webservices.WSServiceConfiguration;
 
 /**
  * DOC jsxie class global comment. Detailled comment <br/>
@@ -45,7 +45,7 @@ public class ServiceConfigurationContentProvider extends AbstractContentProvider
     }
 
     public Class<?> getWSObjectClass() {
-        return WSMenu.class;
+        return WSServiceConfiguration.class;
     }
 
 }

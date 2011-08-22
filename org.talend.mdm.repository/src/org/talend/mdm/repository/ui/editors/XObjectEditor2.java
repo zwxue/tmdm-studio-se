@@ -29,7 +29,6 @@ import com.amalto.workbench.editors.AFormPage;
 import com.amalto.workbench.editors.DataClusterMainPage;
 import com.amalto.workbench.editors.JobMainPage;
 import com.amalto.workbench.editors.MenuMainPage;
-import com.amalto.workbench.editors.ServiceConfigrationMainPage;
 import com.amalto.workbench.editors.ViewMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -134,7 +133,7 @@ public class XObjectEditor2 extends XObjectEditor {
                 addPage(new MenuMainPage(this));
                 break;
             case TreeObject.SERVICE_CONFIGURATION:
-                addPage(new ServiceConfigrationMainPage(this));
+                addPage(new MDMServiceConfigrationMainPage(this));
                 break;
             /*
              * case TreeObject.RESOURCES: case TreeObject.DATA_MODEL_RESOURCE: case
