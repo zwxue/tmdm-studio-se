@@ -64,7 +64,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     private static Log log = LogFactory.getLog(ServiceConfigrationMainPage.class);
 
-    private Combo serviceNameCombo;
+    protected Combo serviceNameCombo;
 
     protected Text serviceConfigurationsText;
 
@@ -72,24 +72,97 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     private Button checkButton;
 
-    private XtentisPort port;
+    protected XtentisPort port;
 
     protected WSServiceGetDocument document;
 
     private boolean refreshing = false;
 
-    private WSServicePutConfiguration ws = new WSServicePutConfiguration();
+    protected WSServicePutConfiguration ws = new WSServicePutConfiguration();
 
-    private Text errorLabel;
+    protected Text errorLabel;
 
-    private static final String CHECKMSG_NOSELECTION = ""; //$NON-NLS-1$
+    protected static final String CHECKMSG_NOSELECTION = ""; //$NON-NLS-1$
 
-    private static final String CHECKMSG_SUCCESSFULCONN = "Connection succeeded!";
+    protected static final String CHECKMSG_SUCCESSFULCONN = "Connection succeeded!";
 
-    private static final String CHECKMSG_ERRORCONN = "Connection failed, please check your url, username and password";
+    protected static final String CHECKMSG_ERRORCONN = "Connection failed, please check your url, username and password";
 
     public ServiceConfigrationMainPage(FormEditor editor) {
         super(editor, ServiceConfigrationMainPage.class.getName(), ((XObjectEditorInput) editor.getEditorInput()).getName());
+    }
+
+    protected void setForConfigureContent(String serviceName) {
+
+        try {
+            if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
+                document = port.getServiceDocument(new WSString(serviceName.trim()));
+                String documentConfigure = ServiceConfigrationMainPage.this.formartXml(document.getConfigure());
+                serviceConfigurationsText.setText(documentConfigure);
+                errorLabel.setText("");//$NON-NLS-1$
+            }
+        } catch (RemoteException e1) {
+            log.error(e1.getMessage(), e1);
+        }
+
+    }
+
+    protected void setForServiceNameCombo() {
+        try {
+            port = Util.getPort(getXObject());
+            WSServicesList list = port.getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
+            WSServicesListItem[] items = list.getItem();
+            if (items != null) {
+                String[] sortedList = new String[items.length];
+                for (int i = 0; i < items.length; i++) {
+                    sortedList[i] = items[i].getJndiName();
+                }
+                Arrays.sort(sortedList);
+                for (int i = 0; i < sortedList.length; i++) {
+                    WSServiceGetDocument document = port.getServiceDocument(new WSString(sortedList[i].trim()));
+                    if (document.getConfigureSchema() == null || document.getConfigureSchema().length() == 0)
+                        continue;
+                    serviceNameCombo.add(sortedList[i]);
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+    }
+
+    protected String getDoc() {
+        WSServiceGetDocument document = null;
+        try {
+            document = getServiceDocument(serviceNameCombo.getText());
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            log.error(e.getMessage(), e);
+        }
+
+        String doc = document.getDefaultConfig();
+        return doc;
+    }
+
+    protected String getDesc() {
+
+        WSServiceGetDocument document = null;
+        try {
+            document = getServiceDocument(serviceNameCombo.getText());
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            log.error(e.getMessage(), e);
+        }
+
+        String desc = document.getDescription();
+        return desc;
+
+    }
+
+    protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
+
+// return port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
+        return port.getServiceDocument(new WSString(jndiName.trim()));
     }
 
     @Override
@@ -114,40 +187,12 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 if (refreshing)
                     return;
                 String serviceName = serviceNameCombo.getText();
-                try {
-                    if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
-                        document = port.getServiceDocument(new WSString(serviceName.trim()));
-                        String documentConfigure = ServiceConfigrationMainPage.this.formartXml(document.getConfigure());
-                        serviceConfigurationsText.setText(documentConfigure);
-                        errorLabel.setText("");//$NON-NLS-1$
-                    }
-                } catch (RemoteException e1) {
-                    log.error(e1.getMessage(), e1);
-                }
+                setForConfigureContent(serviceName);
                 markDirty();
             }
         });
-        try {
-            port = Util.getPort(getXObject());
-            WSServicesList list = port.getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
-            WSServicesListItem[] items = list.getItem();
-            if (items != null) {
-                String[] sortedList = new String[items.length];
-                for (int i = 0; i < items.length; i++) {
-                    sortedList[i] = items[i].getJndiName();
-                }
-                Arrays.sort(sortedList);
-                for (int i = 0; i < sortedList.length; i++) {
-                    WSServiceGetDocument document = port.getServiceDocument(new WSString(sortedList[i].trim()));
-                    if (document.getConfigureSchema() == null || document.getConfigureSchema().length() == 0)
-                        continue;
-                    serviceNameCombo.add(sortedList[i]);
-                }
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
 
+        setForServiceNameCombo();
         // default parameters button
         defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);//$NON-NLS-1$
         defultParameterBtn.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
@@ -166,10 +211,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
                 try {
 
-                    WSServiceGetDocument document = port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
+                    desc = getDesc();
+                    doc = getDoc();
 
-                    desc = document.getDescription();
-                    doc = document.getDefaultConfig();
                 } catch (Exception e1) {
                     doc = "N/A";//$NON-NLS-1$
                 } finally {
@@ -232,7 +276,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     }
 
-    private String formartXml(String doc) {
+    public static String formartXml(String doc) {
         // format output
         if (doc != null && doc.length() > 0) {
             try {
@@ -244,10 +288,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         return doc;
     }
 
-    protected void saveChanges() {
-        ws.setJndiName(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"//$NON-NLS-1$//$NON-NLS-2$
-                + serviceNameCombo.getText());
-        ws.setConfiguration(serviceConfigurationsText.getText());
+    protected void doSaveChanges() {
+
         try {
             if (!"".equalsIgnoreCase(ws.getJndiName()) && !"".equalsIgnoreCase(ws.getConfiguration())) {//$NON-NLS-1$//$NON-NLS-2$
                 port.putServiceConfiguration(ws);
@@ -259,6 +301,15 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         } catch (Exception e1) {
             log.error(e1.getMessage(), e1);
         }
+
+    }
+
+    protected void saveChanges() {
+        ws.setJndiName(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"//$NON-NLS-1$//$NON-NLS-2$
+                + serviceNameCombo.getText());
+        ws.setConfiguration(serviceConfigurationsText.getText());
+
+        doSaveChanges();
     }
 
     private WSPutVersioningSystemConfiguration getDefaultSvn(String svnConfig) throws Exception {
@@ -302,7 +353,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         super.doSave(monitor);
     }
 
-    private String getContentsCheckResult() {
+    protected String getContentsCheckResult() {
 
         if (serviceNameCombo.getText().trim().length() == 0)
             return CHECKMSG_NOSELECTION;
