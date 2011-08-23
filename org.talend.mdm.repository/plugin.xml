@@ -245,6 +245,10 @@
                   name="group.export"
                   separator="true">
             </insertionPoint>
+            <insertionPoint
+                  name="group.deploy"
+                  separator="true">
+            </insertionPoint>
          </popupMenu>
       </viewer>
       <viewerContentBinding

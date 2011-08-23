@@ -33,6 +33,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
@@ -357,13 +358,20 @@ public class RepositoryResourceUtil {
         }
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
+
             List<IRepositoryViewObject> allObjs = factory.getAll(type);
             for (IRepositoryViewObject viewObj : allObjs) {
-                ItemState state = viewObj.getProperty().getItem().getState();
+                Property property = viewObj.getProperty();
+                Resource eResource = property.eResource();
+                // factory.reload(property);
+                // eResource = property.eResource();
+                // IRepositoryViewObject lastVersion = factory.getLastVersion(property.getId());
+                // eResource = lastVersion.getProperty().eResource();
+                ItemState state = property.getItem().getState();
                 if ((!state.isDeleted())
                         && (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2))) {
                     if (useRepositoryViewObject) {
-                        viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
+                        viewObjects.add(new RepositoryViewObject(property));
                     } else {
                         viewObjects.add(viewObj);
                     }

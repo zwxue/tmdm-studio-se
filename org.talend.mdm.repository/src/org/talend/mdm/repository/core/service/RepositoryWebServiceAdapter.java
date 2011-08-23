@@ -196,7 +196,7 @@ public class RepositoryWebServiceAdapter {
 
     public static String[] getObjectsAlgorithmsStringsForSynchronization() {
 
-        String algorithms[] = new String[] { "Local Wins", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        String algorithms[] = new String[] { "Local Wins", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$  
 
         return algorithms;
     }

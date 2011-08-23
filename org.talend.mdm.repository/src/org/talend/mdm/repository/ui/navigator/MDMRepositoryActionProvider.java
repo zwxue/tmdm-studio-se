@@ -20,7 +20,6 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.ui.actions.CopyAction;
-import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.OpenObjectAction;
 import org.talend.mdm.repository.ui.actions.PasteAction;
 import org.talend.mdm.repository.ui.actions.RefreshAction;
@@ -48,7 +47,6 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
         registerCommonAction(new RefreshAction());
         registerCommonAction(new CopyAction());
         registerCommonAction(new PasteAction());
-        registerCommonAction(new ImportServerObjectAction());
     }
 
     private void initCommonViewerForActions(CommonViewer commonViewer) {
@@ -98,8 +96,10 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
                 IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(viewObj);
-                if (conf != null && conf.getActionProvider() != null) {
-                    List<AbstractRepositoryAction> actions = conf.getActionProvider().getActions(viewObj);
+                IRepositoryNodeActionProvider actionProvider = conf.getActionProvider();
+                if (conf != null && actionProvider != null) {
+                    actionProvider.updateSelection(selection);
+                    List<AbstractRepositoryAction> actions = actionProvider.getActions(viewObj);
                     if (actions != null) {
                         if (finalActions == null) {
                             finalActions = actions;

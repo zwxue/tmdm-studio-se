@@ -25,8 +25,6 @@ public interface IRepositoryViewGlobalActionHandler {
 
     public static final String PASTE = "com.talend.mdm.repository.paste"; //$NON-NLS-1$
 
-    public static final String IMPORT_SERVER_OBJECT = "com.talend.mdm.repository.importserverobject"; //$NON-NLS-1$
-
     public static final String OPEN = ICommonActionConstants.OPEN;
 
     public AbstractRepositoryAction getGlobalAction(String actionId);

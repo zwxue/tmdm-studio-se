@@ -92,14 +92,14 @@ public class PasteAction extends AbstractRepositoryAction {
         return null;
     }
 
-    public boolean isVisible() {
+    public boolean isVisible(IRepositoryViewObject viewObj) {
         RepositoryDropAssistant dropAssistant = getDropAssistant();
         if (dropAssistant != null) {
             IRepositoryViewObject dragViewObj = getSelectedDragViewObj();
             IRepositoryViewObject dropViewObj = (IRepositoryViewObject) getSelectedObject().get(0);
             return dropAssistant.validate(dragViewObj, dropViewObj);
         }
-        return super.isVisible();
+        return super.isVisible(viewObj);
     }
 
 }

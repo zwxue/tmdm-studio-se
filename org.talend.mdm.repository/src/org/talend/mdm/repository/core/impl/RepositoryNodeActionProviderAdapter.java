@@ -24,6 +24,7 @@ package org.talend.mdm.repository.core.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
@@ -36,9 +37,12 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
+import org.talend.mdm.repository.ui.actions.DeployToAction;
+import org.talend.mdm.repository.ui.actions.DeployToLastServerAction;
 import org.talend.mdm.repository.ui.actions.DuplicateAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
+import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
@@ -63,6 +67,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     static AbstractRepositoryAction updateServerAction;
 
+    static AbstractRepositoryAction deployToAction;
+
+    static AbstractRepositoryAction deployToLastServerAction;
+
     protected static AbstractRepositoryAction renameAction;
 
     protected AbstractRepositoryAction refreshAction;
@@ -75,6 +83,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
+    private IStructuredSelection selection;
+
     public void initCommonViewer(CommonViewer commonViewer) {
         importObjectAction = new ImportObjectAction();
         exportObjectAction = new ExportObjectAction();
@@ -83,6 +93,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         renameAction = new RenameObjectAction();
         duplicateAction = new DuplicateAction();
         updateServerAction = new UpdateServerDefAction();
+        deployToAction = new DeployToAction();
+        deployToLastServerAction = new DeployToLastServerAction();
+        importServerObjectAction = new ImportServerObjectAction();
         //
         exportObjectAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
@@ -91,9 +104,12 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         duplicateAction.initCommonViewer(commonViewer);
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
-        importServerObjectAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.IMPORT_SERVER_OBJECT);
+
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
         updateServerAction.initCommonViewer(commonViewer);
+        importServerObjectAction.initCommonViewer(commonViewer);
+        deployToAction.initCommonViewer(commonViewer);
+        deployToLastServerAction.initCommonViewer(commonViewer);
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -106,7 +122,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 switch (type.getValue()) {
                 case FolderType.SYSTEM_FOLDER:
                     actions.add(createFolderAction);
-                    addAction(actions, pasteAction);
+                    addAction(actions, pasteAction, viewObj);
                     break;
                 case FolderType.STABLE_SYSTEM_FOLDER:
 
@@ -115,7 +131,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 case FolderType.FOLDER:
                     actions.add(createFolderAction);
                     actions.add(removeFromRepositoryAction);
-                    addAction(actions, pasteAction);
+                    addAction(actions, pasteAction, viewObj);
                     break;
                 }
 
@@ -123,9 +139,12 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 actions.add(removeFromRepositoryAction);
                 actions.add(updateServerAction);
 
-                addAction(actions, copyAction);
-                addAction(actions, pasteAction);
+                addAction(actions, copyAction, viewObj);
+                addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
+                // deploy
+                actions.add(deployToAction);
+                addAction(actions, deployToLastServerAction, viewObj);
             }
         }
 
@@ -138,8 +157,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         return actions;
     }
 
-    private void addAction(List<AbstractRepositoryAction> actions, AbstractRepositoryAction action) {
-        if (action.isVisible()) {
+    private void addAction(List<AbstractRepositoryAction> actions, AbstractRepositoryAction action, IRepositoryViewObject viewObj) {
+        action.selectionChanged(selection);
+        if (action.isVisible(viewObj)) {
             actions.add(action);
         }
     }
@@ -157,6 +177,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     public void setRepositoryViewGlobalActionHandler(IRepositoryViewGlobalActionHandler handler) {
         this.globalActionHandler = handler;
+    }
+
+    public void updateSelection(IStructuredSelection selection) {
+        this.selection = selection;
     }
 
 }

@@ -50,6 +50,8 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     public static final String GROUP_SERVER = "group.server"; //$NON-NLS-1$
 
+    public static final String GROUP_DEPLOY = "group.deploy"; //$NON-NLS-1$
+
     protected CommonViewer commonViewer;
 
     /**
@@ -68,6 +70,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     }
 
+    @SuppressWarnings("unchecked")
     public List<Object> getSelectedObject() {
 
         IStructuredSelection structuredSelection = getStructuredSelection();
@@ -84,7 +87,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
         return commonViewer.getControl().getShell();
     }
 
-    public boolean isVisible() {
+    public boolean isVisible(IRepositoryViewObject viewObj) {
         return true;
     }
 

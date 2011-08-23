@@ -23,6 +23,7 @@ package org.talend.mdm.repository.core;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -43,4 +44,6 @@ public interface IRepositoryNodeActionProvider {
     public AbstractRepositoryAction getOpenAction(IRepositoryViewObject viewObj);
 
     public void setRepositoryViewGlobalActionHandler(IRepositoryViewGlobalActionHandler handler);
+
+    public void updateSelection(IStructuredSelection selection);
 }

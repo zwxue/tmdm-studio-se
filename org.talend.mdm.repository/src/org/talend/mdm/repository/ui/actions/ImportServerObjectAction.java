@@ -14,7 +14,6 @@ package org.talend.mdm.repository.ui.actions;
 
 import org.eclipse.jface.wizard.WizardDialog;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.wizards.imports.ImportServerObjectWizard;
 
@@ -34,12 +33,10 @@ public class ImportServerObjectAction extends AbstractRepositoryAction {
     public ImportServerObjectAction() {
         super(Messages.ImportServerObject);
         setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
-        this.setId(IRepositoryViewGlobalActionHandler.IMPORT_SERVER_OBJECT);
-        this.setActionDefinitionId(IRepositoryViewGlobalActionHandler.IMPORT_SERVER_OBJECT);
     }
 
     public String getGroupName() {
-        return GROUP_COMMON;
+        return GROUP_EXPORT;
     }
 
     public void run() {
