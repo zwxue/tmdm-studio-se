@@ -1149,8 +1149,12 @@ public class ImportItemsWizard extends Wizard {
                 BulkloadClient bulkloadClient = new BulkloadClient(url, item.getUsername(), item.getPassword(), null, cluster,
                         concept, datamodel);
                 bulkloadClient.setOptions(new BulkloadOptions(false, false, 500));
+                StringBuffer sb = new StringBuffer();
+                for (String xml : entry.getValue()) {
+                    sb.append(xml).append("\n"); //$NON-NLS-1$
+                }
                 try {
-                    bulkloadClient.load(entry.getValue());
+                    bulkloadClient.load(sb.toString());
                 } catch (Exception e) {
                     // MessageDialog.openWarning(null, "Warning", "Importing  Entity: "+ concept+
                     // " in Data Container: "+cluster + " Error --> "+e.getLocalizedMessage());
