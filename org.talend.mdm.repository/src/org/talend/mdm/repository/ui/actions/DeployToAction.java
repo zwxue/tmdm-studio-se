@@ -36,7 +36,7 @@ public class DeployToAction extends AbstractDeployAction {
     private static Logger log = Logger.getLogger(DeployToAction.class);
 
     public DeployToAction() {
-        super("Deply To...");
+        super("Deploy To...");
 
     }
 
@@ -58,6 +58,7 @@ public class DeployToAction extends AbstractDeployAction {
                         saveLastServer(deployStatus.getItem(), serverDef);
                     }
                 }
+                showDeployStatus(status);
             }
 
         }

@@ -67,9 +67,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     static AbstractRepositoryAction updateServerAction;
 
-    static AbstractRepositoryAction deployToAction;
+    protected static AbstractRepositoryAction deployToAction;
 
-    static AbstractRepositoryAction deployToLastServerAction;
+    protected static AbstractRepositoryAction deployToLastServerAction;
 
     protected static AbstractRepositoryAction renameAction;
 
@@ -142,9 +142,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
-                // deploy
-                actions.add(deployToAction);
-                addAction(actions, deployToLastServerAction, viewObj);
+
             }
         }
 
@@ -157,7 +155,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         return actions;
     }
 
-    private void addAction(List<AbstractRepositoryAction> actions, AbstractRepositoryAction action, IRepositoryViewObject viewObj) {
+    protected void addAction(List<AbstractRepositoryAction> actions, AbstractRepositoryAction action,
+            IRepositoryViewObject viewObj) {
         action.selectionChanged(selection);
         if (action.isVisible(viewObj)) {
             actions.add(action);

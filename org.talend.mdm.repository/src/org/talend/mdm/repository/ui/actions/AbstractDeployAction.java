@@ -19,6 +19,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -32,6 +33,12 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
     protected IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
         return DeployService.getInstance().deploy(serverDef, viewObjs);
+    }
+
+    protected void showDeployStatus(IStatus status) {
+        MutliStatusDialog dialog = new MutliStatusDialog(getShell(), status.getChildren().length
+                + " server objects are deployed, following is the detail:", status);
+        dialog.open();
     }
 
     public String getGroupName() {

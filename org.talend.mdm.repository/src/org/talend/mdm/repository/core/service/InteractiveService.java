@@ -17,6 +17,14 @@ import java.util.List;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.service.interactive.MenuInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.RoleInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.RoutingRuleInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.ServiceConfigurationInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.StoredProcedureInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.SynchronizationPlanInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.TransformerInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.VersionInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.ViewInteractiveHandler;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -43,5 +51,13 @@ public class InteractiveService {
 
     private static void initHandler() {
         registerHandler(new MenuInteractiveHandler());
+        registerHandler(new RoutingRuleInteractiveHandler());
+        registerHandler(new RoleInteractiveHandler());
+        registerHandler(new ServiceConfigurationInteractiveHandler());
+        registerHandler(new StoredProcedureInteractiveHandler());
+        registerHandler(new TransformerInteractiveHandler());
+        registerHandler(new VersionInteractiveHandler());
+        registerHandler(new ViewInteractiveHandler());
+        registerHandler(new SynchronizationPlanInteractiveHandler());
     }
 }

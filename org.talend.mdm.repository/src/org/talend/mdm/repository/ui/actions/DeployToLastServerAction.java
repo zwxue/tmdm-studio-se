@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IStatus;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -30,7 +31,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
     private static Logger log = Logger.getLogger(DeployToLastServerAction.class);
 
     public DeployToLastServerAction() {
-        super("Deply To Last Server");
+        super("Deploy To Last Server");
 
     }
 
@@ -45,7 +46,10 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
         MDMServerDef currentServerDef = mdmServerObject.getLastServerDef();
         //
-        deploy(currentServerDef, viewObjs);
+        IStatus status = deploy(currentServerDef, viewObjs);
+        if (status.isMultiStatus()) {
+            showDeployStatus(status);
+        }
     }
 
     @Override

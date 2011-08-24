@@ -61,8 +61,8 @@ public class DeployService {
             this.item = item;
         }
 
-        public static DeployStatus getOKStatus(MDMServerObjectItem item) {
-            return new DeployStatus(Status.OK, "", null, item); //$NON-NLS-1$
+        public static DeployStatus getOKStatus(MDMServerObjectItem item, String msg) {
+            return new DeployStatus(Status.OK, msg, null, item); //$NON-NLS-1$
         }
 
         public static DeployStatus getErrorStatus(MDMServerObjectItem item, Throwable exception) {
@@ -71,6 +71,10 @@ public class DeployService {
 
         public static DeployStatus getErrorStatus(MDMServerObjectItem item, String errMsg) {
             return new DeployStatus(Status.ERROR, errMsg, null, item);
+        }
+
+        public static DeployStatus getErrorStatus(MDMServerObjectItem item, String errMsg, Throwable exception) {
+            return new DeployStatus(Status.ERROR, errMsg, exception, item);
         }
     }
 
@@ -90,16 +94,20 @@ public class DeployService {
 
         IInteractiveHandler handler = InteractiveService.findHandler(type);
         if (handler != null) {
-            monitor.subTask("Deploying " + handler.getLabel() + "...");
+            String typeLabel = handler.getLabel();
+            monitor.subTask("Deploying " + typeLabel + "...");
             try {
                 handler.deploy(port, item, serverObj);
-                return DeployStatus.getOKStatus((MDMServerObjectItem) item);
+                return DeployStatus.getOKStatus((MDMServerObjectItem) item,
+                        "Success to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
             } catch (RemoteException e) {
-                return DeployStatus.getErrorStatus((MDMServerObjectItem) item, e);
+                return DeployStatus.getErrorStatus((MDMServerObjectItem) item,
+                        "Fail to deploy " + typeLabel + " \"" + serverObj.getName() + "\",Cause is:" + e.getMessage(), e);
             }
         } else {
             log.error("Not found IInteractiveHandler for type:" + type);
-            return DeployStatus.getErrorStatus((MDMServerObjectItem) item, "Not support for deploying " + serverObj.getName());
+            return DeployStatus.getErrorStatus((MDMServerObjectItem) item, "Not support for deploying \"" + serverObj.getName()
+                    + "\"");
         }
 
     }

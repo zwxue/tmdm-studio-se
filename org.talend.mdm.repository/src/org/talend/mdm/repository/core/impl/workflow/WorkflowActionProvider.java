@@ -55,7 +55,11 @@ public class WorkflowActionProvider extends RepositoryNodeActionProviderAdapter 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
-
+        if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            // deploy
+            actions.add(deployToAction);
+            addAction(actions, deployToLastServerAction, viewObj);
+        }
         return actions;
     }
 

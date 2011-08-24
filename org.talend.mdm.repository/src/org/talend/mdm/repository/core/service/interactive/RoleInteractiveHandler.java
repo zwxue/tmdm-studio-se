@@ -1,0 +1,46 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.mdm.repository.core.service.interactive;
+
+import java.rmi.RemoteException;
+
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+
+import com.amalto.workbench.webservices.WSPutRole;
+import com.amalto.workbench.webservices.WSRole;
+import com.amalto.workbench.webservices.XtentisPort;
+
+/**
+ * DOC hbhong class global comment. Detailled comment
+ */
+public class RoleInteractiveHandler extends AbstractInteractiveHandler {
+
+    public ERepositoryObjectType getRepositoryObjectType() {
+        return IServerObjectRepositoryType.TYPE_ROLE;
+    }
+
+    public String getLabel() {
+
+        return "Role";
+    }
+
+    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+        if (wsObj != null) {
+            port.putRole(new WSPutRole((WSRole) wsObj));
+            return true;
+        }
+        return false;
+    }
+
+}

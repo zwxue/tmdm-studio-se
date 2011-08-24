@@ -60,6 +60,9 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             actions.add(renameAction);
+            // deploy
+            actions.add(deployToAction);
+            addAction(actions, deployToLastServerAction, viewObj);
         }
         return actions;
     }
