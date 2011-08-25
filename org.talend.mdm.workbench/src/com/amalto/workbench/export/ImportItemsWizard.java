@@ -12,9 +12,11 @@
 // ============================================================================
 package com.amalto.workbench.export;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
@@ -62,6 +64,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
 import org.talend.mdm.bulkload.client.BulkloadClient;
 import org.talend.mdm.bulkload.client.BulkloadOptions;
+import org.talend.mdm.bulkload.client.InputStreamMerger;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
@@ -1149,12 +1152,17 @@ public class ImportItemsWizard extends Wizard {
                 BulkloadClient bulkloadClient = new BulkloadClient(url, item.getUsername(), item.getPassword(), null, cluster,
                         concept, datamodel);
                 bulkloadClient.setOptions(new BulkloadOptions(false, false, 500));
+
                 StringBuffer sb = new StringBuffer();
                 for (String xml : entry.getValue()) {
                     sb.append(xml).append("\n"); //$NON-NLS-1$
                 }
                 try {
-                    bulkloadClient.load(sb.toString());
+                    InputStreamMerger manager = bulkloadClient.load();
+                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));
+                    manager.push(bin);
+                    // bulkloadClient.load(sb.toString());
+                    manager.close();
                 } catch (Exception e) {
                     // MessageDialog.openWarning(null, "Warning", "Importing  Entity: "+ concept+
                     // " in Data Container: "+cluster + " Error --> "+e.getLocalizedMessage());
