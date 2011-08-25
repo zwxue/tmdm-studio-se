@@ -35,7 +35,7 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
         return "Trigger";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putRoutingRule(new WSPutRoutingRule((WSRoutingRule) wsObj));
             return true;

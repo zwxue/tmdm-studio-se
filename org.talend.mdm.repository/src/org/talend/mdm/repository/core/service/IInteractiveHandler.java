@@ -13,9 +13,13 @@
 package org.talend.mdm.repository.core.service;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
 import com.amalto.workbench.webservices.XtentisPort;
@@ -31,7 +35,9 @@ public interface IInteractiveHandler {
 
     public Object convert(Item item, MDMServerObject serverObj);
 
-    public boolean deploy(XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException;
+    public boolean deployMDM(XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException;
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException;
+    public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException;
+
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException;
 }

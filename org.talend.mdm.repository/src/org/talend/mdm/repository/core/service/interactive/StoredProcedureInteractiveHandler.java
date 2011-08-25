@@ -35,7 +35,7 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
         return "Stored Procedure";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure) wsObj));
             return true;

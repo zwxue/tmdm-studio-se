@@ -41,13 +41,18 @@ public class MutliStatusDialog extends Dialog {
 
     private static final Image IMG_ERR = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "/icons/fatalerror_obj.gif"); //$NON-NLS-1$
 
+    private static final Image IMG_INFO = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "/icons/info_obj.gif"); //$NON-NLS-1$
+
     private class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
 
         public Image getColumnImage(Object element, int columnIndex) {
             if (element instanceof IStatus) {
-                if (((IStatus) element).isOK()) {
+                switch (((IStatus) element).getSeverity()) {
+                case IStatus.OK:
                     return IMG_OK;
-                } else {
+                case IStatus.INFO:
+                    return IMG_INFO;
+                case IStatus.ERROR:
                     return IMG_ERR;
                 }
             }

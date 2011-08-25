@@ -13,9 +13,13 @@
 package org.talend.mdm.repository.core.service.interactive;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 
@@ -37,6 +41,11 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return wsObj;
     }
 
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+        return false;
+        // do nothing
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -44,9 +53,12 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
      * org.talend.mdm.repository.core.service.IInteractiveHandler#deploy(com.amalto.workbench.webservices.XtentisPort,
      * org.talend.core.model.properties.Item, org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)
      */
-    public boolean deploy(XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException {
+    public boolean deployMDM(XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException {
         Object wsObj = convert(item, serverObj);
-        return deploy(port, wsObj);
+        return doDeploy(port, wsObj);
     }
 
+    public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {
+        return null;
+    }
 }

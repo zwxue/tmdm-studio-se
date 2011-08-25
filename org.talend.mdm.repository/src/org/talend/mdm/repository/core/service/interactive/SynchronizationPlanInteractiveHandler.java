@@ -35,7 +35,7 @@ public class SynchronizationPlanInteractiveHandler extends AbstractInteractiveHa
         return "Synchronization Plan";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putSynchronizationPlan(new WSPutSynchronizationPlan((WSSynchronizationPlan) wsObj));
             return true;

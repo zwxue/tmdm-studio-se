@@ -55,7 +55,8 @@ public class DeployToAction extends AbstractDeployAction {
                 for (IStatus childStatus : status.getChildren()) {
                     DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
                     if (deployStatus.isOK()) {
-                        saveLastServer(deployStatus.getItem(), serverDef);
+                        if (deployStatus.getItem() instanceof MDMServerObjectItem)
+                            saveLastServer((MDMServerObjectItem) deployStatus.getItem(), serverDef);
                     }
                 }
                 showDeployStatus(status);

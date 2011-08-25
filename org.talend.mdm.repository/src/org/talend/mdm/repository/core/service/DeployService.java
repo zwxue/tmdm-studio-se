@@ -14,6 +14,7 @@ package org.talend.mdm.repository.core.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -42,9 +43,9 @@ public class DeployService {
 
     public static class DeployStatus extends Status {
 
-        private final MDMServerObjectItem item;
+        private final Item item;
 
-        public MDMServerObjectItem getItem() {
+        public Item getItem() {
             return this.item;
         }
 
@@ -56,26 +57,31 @@ public class DeployService {
          * @param message
          * @param exception
          */
-        DeployStatus(int severity, String message, Throwable exception, MDMServerObjectItem item) {
+        DeployStatus(int severity, String message, Throwable exception, Item item) {
             super(severity, RepositoryPlugin.PLUGIN_ID, message, exception);
             this.item = item;
         }
 
-        public static DeployStatus getOKStatus(MDMServerObjectItem item, String msg) {
-            return new DeployStatus(Status.OK, msg, null, item); //$NON-NLS-1$
+        public static DeployStatus getOKStatus(Item item, String msg) {
+            return new DeployStatus(Status.OK, msg, null, item);
         }
 
-        public static DeployStatus getErrorStatus(MDMServerObjectItem item, Throwable exception) {
+        public static DeployStatus getInfoStatus(Item item, String msg) {
+            return new DeployStatus(Status.INFO, msg, null, item);
+        }
+
+        public static DeployStatus getErrorStatus(Item item, Throwable exception) {
             return new DeployStatus(Status.ERROR, exception.getMessage(), exception, item);
         }
 
-        public static DeployStatus getErrorStatus(MDMServerObjectItem item, String errMsg) {
+        public static DeployStatus getErrorStatus(Item item, String errMsg) {
             return new DeployStatus(Status.ERROR, errMsg, null, item);
         }
 
-        public static DeployStatus getErrorStatus(MDMServerObjectItem item, String errMsg, Throwable exception) {
+        public static DeployStatus getErrorStatus(Item item, String errMsg, Throwable exception) {
             return new DeployStatus(Status.ERROR, errMsg, exception, item);
         }
+
     }
 
     private static Logger log = Logger.getLogger(DeployService.class);
@@ -89,7 +95,7 @@ public class DeployService {
         return instance;
     }
 
-    public DeployStatus deploy(XtentisPort port, ERepositoryObjectType type, MDMServerObject serverObj, Item item,
+    private DeployStatus deployMDM(XtentisPort port, ERepositoryObjectType type, MDMServerObject serverObj, Item item,
             IProgressMonitor monitor) {
 
         IInteractiveHandler handler = InteractiveService.findHandler(type);
@@ -97,32 +103,45 @@ public class DeployService {
             String typeLabel = handler.getLabel();
             monitor.subTask("Deploying " + typeLabel + "...");
             try {
-                handler.deploy(port, item, serverObj);
-                return DeployStatus.getOKStatus((MDMServerObjectItem) item,
-                        "Success to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
+                if (handler.deployMDM(port, item, serverObj))
+                    return DeployStatus.getOKStatus(item, "Success to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
+                else
+                    return DeployStatus.getInfoStatus(item, "Skip to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
             } catch (RemoteException e) {
-                return DeployStatus.getErrorStatus((MDMServerObjectItem) item,
-                        "Fail to deploy " + typeLabel + " \"" + serverObj.getName() + "\",Cause is:" + e.getMessage(), e);
+                return DeployStatus.getErrorStatus(item, "Fail to deploy " + typeLabel + " \"" + serverObj.getName()
+                        + "\",Cause is:" + e.getMessage(), e);
             }
         } else {
             log.error("Not found IInteractiveHandler for type:" + type);
-            return DeployStatus.getErrorStatus((MDMServerObjectItem) item, "Not support for deploying \"" + serverObj.getName()
-                    + "\"");
+            return DeployStatus.getErrorStatus(item, "Not support for deploying \"" + serverObj.getName() + "\"");
+        }
+
+    }
+
+    private IStatus deployJob(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, IProgressMonitor monitor) {
+
+        IInteractiveHandler handler = InteractiveService.findHandler(ERepositoryObjectType.PROCESS);
+        if (handler != null) {
+            String typeLabel = handler.getLabel();
+            monitor.subTask("Deploying " + typeLabel + "...");
+            try {
+                return handler.deployOther(serverDef, viewObjs);
+            } catch (RemoteException e) {
+                return DeployStatus.getErrorStatus(null, "Fail to deploy \"" + typeLabel + "\",Cause is:" + e.getMessage(), e);
+            }
+        } else {
+            log.error("Not found IInteractiveHandler for type:Job");
+            return DeployStatus.getErrorStatus(null, "Not support for deploying \"Job\"");
         }
 
     }
 
     public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
         try {
-            XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-            if (port != null) {
-                IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
-                DeployProcess runnable = new DeployProcess(port, viewObjs);
-                progressService.run(true, true, runnable);
-                return runnable.getStatus();
-            }
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
+            IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+            DeployProcess runnable = new DeployProcess(serverDef, viewObjs);
+            progressService.run(true, true, runnable);
+            return runnable.getStatus();
         } catch (InvocationTargetException e) {
             log.error(e.getMessage(), e);
         } catch (InterruptedException e) {
@@ -133,12 +152,13 @@ public class DeployService {
 
     class DeployProcess implements IRunnableWithProgress {
 
-        private final XtentisPort port;
-
         private final List<IRepositoryViewObject> viewObjs;
 
-        public DeployProcess(XtentisPort port, List<IRepositoryViewObject> viewObjs) {
-            this.port = port;
+        private final MDMServerDef serverDef;
+
+        public DeployProcess(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
+            this.serverDef = serverDef;
+
             this.viewObjs = viewObjs;
         }
 
@@ -148,20 +168,63 @@ public class DeployService {
             return this.mStatus;
         }
 
-        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-            monitor.beginTask("Deploy to MDM Server", viewObjs.size());
-            for (IRepositoryViewObject viewObj : viewObjs) {
-                if (monitor.isCanceled())
-                    return;
-                ERepositoryObjectType type = viewObj.getRepositoryObjectType();
-                Item item = viewObj.getProperty().getItem();
-                if (item instanceof MDMServerObjectItem) {
-                    DeployStatus deployStatus = deploy(port, type, ((MDMServerObjectItem) item).getMDMServerObject(), item,
-                            monitor);
+        private void runMDMDeployProcess(List<IRepositoryViewObject> viewObjs, IProgressMonitor monitor) {
+
+            try {
+                XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+                if (port != null) {
+                    for (IRepositoryViewObject viewObj : viewObjs) {
+                        if (monitor.isCanceled())
+                            return;
+                        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+                        Item item = viewObj.getProperty().getItem();
+                        DeployStatus deployStatus = deployMDM(port, type, ((MDMServerObjectItem) item).getMDMServerObject(),
+                                item, monitor);
+                        mStatus.add(deployStatus);
+                        monitor.worked(1);
+                    }
+                }
+            } catch (XtentisException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        private void runOtherDeployProcess(List<IRepositoryViewObject> viewObjs, IProgressMonitor monitor) {
+            if (monitor.isCanceled())
+                return;
+            if (viewObjs == null || viewObjs.isEmpty())
+                return;
+            IStatus deployStatus = deployJob(serverDef, viewObjs, monitor);
+            if (deployStatus != null) {
+                if (deployStatus.isMultiStatus()) {
+                    mStatus.addAll(deployStatus);
+                } else {
                     mStatus.add(deployStatus);
-                    monitor.worked(1);
                 }
             }
+            monitor.worked(viewObjs.size());
+        }
+
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+            monitor.beginTask("Deploy to MDM Server", viewObjs.size());
+            // distribute
+            List<IRepositoryViewObject> mdmViewObjs = new LinkedList<IRepositoryViewObject>();
+            List<IRepositoryViewObject> otherViewObjs = new LinkedList<IRepositoryViewObject>();
+            for (IRepositoryViewObject viewObj : viewObjs) {
+                Item item = viewObj.getProperty().getItem();
+                if (item instanceof MDMServerObjectItem) {
+                    mdmViewObjs.add(viewObj);
+                } else {
+                    // only job
+                    otherViewObjs.add(viewObj);
+                }
+            }
+
+            // MDM deploy
+            runMDMDeployProcess(mdmViewObjs, monitor);
+            // other deploy
+            runOtherDeployProcess(otherViewObjs, monitor);
+
             monitor.done();
         }
     };

@@ -35,7 +35,7 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
         return "Process";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putTransformerV2(new WSPutTransformerV2((WSTransformerV2) wsObj));
             return true;

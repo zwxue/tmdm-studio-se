@@ -35,7 +35,7 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
         return "View";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putView(new WSPutView((WSView) wsObj));
             return true;

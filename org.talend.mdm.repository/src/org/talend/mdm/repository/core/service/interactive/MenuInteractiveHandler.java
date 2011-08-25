@@ -35,7 +35,7 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
         return "Menu";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putMenu(new WSPutMenu((WSMenu) wsObj));
             return true;

@@ -35,7 +35,7 @@ public class VersionInteractiveHandler extends AbstractInteractiveHandler {
         return "Version";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putUniverse(new WSPutUniverse((WSUniverse) wsObj));
             return true;

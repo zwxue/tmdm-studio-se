@@ -40,7 +40,7 @@ public class ServiceConfigurationInteractiveHandler extends AbstractInteractiveH
         return "Service Configuration";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             WSServiceConfiguration configurations = (WSServiceConfiguration) wsObj;
             for (WSServicePutConfiguration config : configurations.getServicePutConfigurations()) {

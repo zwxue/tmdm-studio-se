@@ -35,7 +35,7 @@ public class RoleInteractiveHandler extends AbstractInteractiveHandler {
         return "Role";
     }
 
-    public boolean deploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putRole(new WSPutRole((WSRole) wsObj));
             return true;

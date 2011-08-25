@@ -30,11 +30,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.model;bundle-version="2.2.0",
  org.talend.repository;bundle-version="2.2.0",
  org.talend.mdm.commmon;bundle-version="3.2.0",
- org.talend.mdm.workbench;bundle-version="3.2.0",
+ org.talend.mdm.engines.client;bundle-version="2.2.0",
  org.talend.mdm.repository.model;bundle-version="1.0.0",
+ org.talend.mdm.workbench;bundle-version="3.2.0",
+ org.talend.mdm.workbench.enterprise;bundle-version="3.2.0",
  org.talend.mdm.workbench.serverexplorer;bundle-version="1.0.0",
- org.junit,
- org.talend.mdm.workbench.enterprise;bundle-version="3.2.0"
+ org.junit
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging
