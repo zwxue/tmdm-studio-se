@@ -14,6 +14,9 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -39,7 +42,9 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
         super(file);
         this.item = item;
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        treeObject = Bean2EObjUtil.getInstance().wrapWithTreeObject(serverObject);
+        IInteractiveHandler handler = InteractiveService.findHandler(IServerObjectRepositoryType.TYPE_DATAMODEL);
+        Object wsObj = handler.convert(item, serverObject);
+        treeObject = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObject, wsObj);
 
     }
 

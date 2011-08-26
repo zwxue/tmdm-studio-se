@@ -21,18 +21,10 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.workflow;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.properties.ByteArray;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
-import org.talend.core.model.properties.ReferenceFileItem;
-import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
@@ -40,7 +32,6 @@ import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC class global comment. Detailled comment <br/>
@@ -96,33 +87,33 @@ public class NewWorkflowAction extends AbstractSimpleAddAction {
 
         boolean result = RepositoryResourceUtil.createItem(item, workflowName, version);
         if (result) {
-            linkProcFile(item);
-            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-            try {
-                factory.save(item);
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-                return false;
-            }
+            // linkProcFile(item);
+            // IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            // try {
+            // factory.save(item);
+            // } catch (PersistenceException e) {
+            // log.error(e.getMessage(), e);
+            // return false;
+            // }
             refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_WORKFLOW);
         }
         return result;
     }
 
-    private void linkProcFile(Item item) {
-        try {
-            ReferenceFileItem procFileItem = PropertiesFactory.eINSTANCE.createReferenceFileItem();
-            ByteArray byteArray = PropertiesFactory.eINSTANCE.createByteArray();
-            byteArray.setInnerContentFromFile(procFile);
-            procFileItem.setContent(byteArray);
-            procFileItem.setExtension("proc"); //$NON-NLS-1$
-            item.getReferenceResources().add(procFileItem);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } catch (CoreException e) {
-            log.error(e.getMessage(), e);
-        }
-
-    }
+    // private void linkProcFile(Item item) {
+    // try {
+    // ReferenceFileItem procFileItem = PropertiesFactory.eINSTANCE.createReferenceFileItem();
+    // ByteArray byteArray = PropertiesFactory.eINSTANCE.createByteArray();
+    // byteArray.setInnerContentFromFile(procFile);
+    // procFileItem.setContent(byteArray);
+    //            procFileItem.setExtension("proc"); //$NON-NLS-1$
+    // item.getReferenceResources().add(procFileItem);
+    // } catch (IOException e) {
+    // log.error(e.getMessage(), e);
+    // } catch (CoreException e) {
+    // log.error(e.getMessage(), e);
+    // }
+    //
+    // }
 
 }

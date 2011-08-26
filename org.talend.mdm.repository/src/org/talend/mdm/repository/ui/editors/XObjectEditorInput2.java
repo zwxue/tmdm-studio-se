@@ -28,7 +28,7 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
         super(new TreeObject(), null);
         this.item = item;
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        Object treeObject = Bean2EObjUtil.getInstance().wrapWithTreeObject(serverObject);
+        Object treeObject = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObject);
 
         setModel(treeObject);
         setName(serverObject.getName());

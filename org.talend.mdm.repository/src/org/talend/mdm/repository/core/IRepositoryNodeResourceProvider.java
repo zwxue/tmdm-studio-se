@@ -46,4 +46,8 @@ public interface IRepositoryNodeResourceProvider {
 
     public boolean canHandleItem(Item item);
 
+    public boolean needSaveReferenceFile();
+
+    public void handleReferenceFile(Item item);
+
 }

@@ -248,15 +248,22 @@ public class Bean2EObjUtil {
         }
     }
 
-    public TreeObject wrapWithTreeObject(EObject eobj) {
+    public TreeObject wrapEObjWithTreeObject(EObject eobj) {
         if (eobj instanceof MDMServerObject) {
             MDMServerObject serverObject = (MDMServerObject) eobj;
             Object wsObj = convertFromEObj2Bean(eobj);
+            return wrapEObjWithTreeObject(eobj, wsObj);
+        }
+        return null;
+    }
+
+    public TreeObject wrapEObjWithTreeObject(EObject eobj, Object wsObj) {
+        if (eobj instanceof MDMServerObject) {
+            MDMServerObject serverObject = (MDMServerObject) eobj;
             TreeObject treeObj = new TreeObject(serverObject.getName(), null, serverObject.getType(), serverObject.getName(),
                     wsObj);
             return treeObj;
         }
         return null;
     }
-
 }

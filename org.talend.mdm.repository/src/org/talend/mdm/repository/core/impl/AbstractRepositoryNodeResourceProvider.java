@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.ByteArray;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
+import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.utils.XmiResourceManager;
@@ -73,22 +77,23 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
     }
 
     public List<IRepositoryViewObject> findMember(IProject project, ERepositoryObjectType type, boolean hasSystemFolder) {
-      
+
         String folderPath = type.getFolder();
         IFolder folder = project.getFolder(folderPath);
         if (!folder.exists()) {
             try {
                 folder.create(true, true, null);
             } catch (CoreException e) {
-               log.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
-        return findMember(folder,type);
-     
+        return findMember(folder, type);
+
     }
 
     /**
      * DOC hbhong Comment method "findMember".
+     * 
      * @param folder
      * @param type
      * @return
@@ -96,11 +101,11 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
     private List<IRepositoryViewObject> findMember(IFolder folder, ERepositoryObjectType type) {
         List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
         try {
-            for(IResource resource:folder.members()){
-                if(resource instanceof IFile){
-                    if(xmiResourceManager.isPropertyFile((IFile) resource)){
+            for (IResource resource : folder.members()) {
+                if (resource instanceof IFile) {
+                    if (xmiResourceManager.isPropertyFile((IFile) resource)) {
                         Property property = xmiResourceManager.loadProperty(resource);
-                        
+
                     }
                 }
             }
@@ -109,4 +114,31 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
         }
         return null;
     }
+
+    public boolean needSaveReferenceFile() {
+        return false;
+    }
+
+    public void handleReferenceFile(Item item) {
+        // do nothing
+    }
+
+    protected void linkReferenceFile(Item item, IFile file) {
+        try {
+            ReferenceFileItem procFileItem = PropertiesFactory.eINSTANCE.createReferenceFileItem();
+            ByteArray byteArray = PropertiesFactory.eINSTANCE.createByteArray();
+            byteArray.setInnerContentFromFile(file);
+            procFileItem.setContent(byteArray);
+            procFileItem.setExtension(file.getFileExtension());
+            item.getReferenceResources().clear();
+            item.getReferenceResources().add(procFileItem);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        }
+
+    }
+
+
 }

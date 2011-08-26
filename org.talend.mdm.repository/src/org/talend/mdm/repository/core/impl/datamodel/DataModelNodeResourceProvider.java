@@ -21,26 +21,38 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.datamodel;
 
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
-
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
 public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
+
+    Logger log = Logger.getLogger(DataModelNodeResourceProvider.class);
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
         if (item instanceof WSDataModelItem || item instanceof ContainerItem) {
@@ -79,4 +91,41 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
         return type == IServerObjectRepositoryType.TYPE_DATAMODEL;
     }
 
+    @Override
+    public boolean needSaveReferenceFile() {
+        return true;
+    }
+
+    @Override
+    public void handleReferenceFile(Item item) {
+        IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
+
+        try {
+
+            createOrUpdateFile(item, file);
+
+            linkReferenceFile(item, file);
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+            factory.save(item);
+
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private IFile createOrUpdateFile(Item item, IFile file) throws UnsupportedEncodingException, CoreException {
+        WSDataModelE dataModel = ((WSDataModelItem) item).getWsDataModel();
+        String content = dataModel.getXsdSchema();
+        if (!file.exists())
+            file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+        else
+            file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+
+        return file;
+    }
 }

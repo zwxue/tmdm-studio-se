@@ -45,6 +45,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
         MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
+        EObject eContainer = serverObject.eContainer();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(wsObject, serverObject);
         if (eObj != null) {
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();

@@ -35,7 +35,7 @@ public interface WSDataModelE extends MDMServerObject {
      * @return the value of the '<em>Xsd Schema</em>' attribute.
      * @see #setXsdSchema(String)
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSDataModelE_XsdSchema()
-     * @model
+     * @model transient="true"
      * @generated
      */
     String getXsdSchema();

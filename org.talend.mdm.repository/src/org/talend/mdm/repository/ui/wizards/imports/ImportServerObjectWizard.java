@@ -46,11 +46,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.progress.UIJob;
-import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
@@ -61,7 +59,6 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -76,7 +73,7 @@ import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class ImportServerObjectWizard extends Wizard {
 
@@ -101,6 +98,7 @@ public class ImportServerObjectWizard extends Wizard {
     boolean isOverrideAll = false;
 
     private Button btnOverwrite;
+
     public ImportServerObjectWizard(CommonViewer commonViewer) {
         setNeedsProgressMonitor(true);
         this.commonViewer = commonViewer;
@@ -124,12 +122,12 @@ public class ImportServerObjectWizard extends Wizard {
         }
         return true;
     }
-    
+
     private int isOveride(String name, String obTypeName) {
 
         final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.Confirm_Overwrite, null,
-                Messages.bind(Messages.Confirm_Overwrite_Info, obTypeName, name), MessageDialog.QUESTION,
-                new String[] { IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL,
+                Messages.bind(Messages.Confirm_Overwrite_Info, obTypeName, name), MessageDialog.QUESTION, new String[] {
+                        IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL,
                         IDialogConstants.CANCEL_LABEL }, 0);
         dialog.open();
         int result = dialog.getReturnCode();
@@ -145,7 +143,6 @@ public class ImportServerObjectWizard extends Wizard {
         return IDialogConstants.CANCEL_ID;
 
     }
-
 
     public void doImport(Object[] objs, IProgressMonitor monitor) {
         monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
@@ -186,12 +183,7 @@ public class ImportServerObjectWizard extends Wizard {
                 }
                 item.setMDMServerObject(eobj);
                 // save
-                IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-                try {
-                    factory.save(item);
-                } catch (PersistenceException e) {
-                    log.error(e);
-                }
+                RepositoryResourceUtil.saveItem(item);
             } else {
                 IRepositoryNodeConfiguration config = RepositoryNodeConfigurationManager.getConfiguration(type);
                 item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);
@@ -257,6 +249,7 @@ public class ImportServerObjectWizard extends Wizard {
             });
         }
     }
+
     @Override
     public void addPages() {
         addPage(new SelectItemsPage());
@@ -265,6 +258,7 @@ public class ImportServerObjectWizard extends Wizard {
     private void doImport() throws InvocationTargetException, InterruptedException {
         getContainer().run(true, false, new ImportProcess());
     }
+
     private void retriveServerRoot() {
         if (def != null) {
             try {
@@ -289,6 +283,7 @@ public class ImportServerObjectWizard extends Wizard {
             page.checkCompleted();
         }
     };
+
     class SelectItemsPage extends WizardPage {
 
         protected SelectItemsPage() {

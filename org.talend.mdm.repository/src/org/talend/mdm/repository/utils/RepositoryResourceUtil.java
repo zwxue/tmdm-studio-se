@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -54,6 +55,7 @@ import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.core.bridge.MDMRepositoryNode;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
@@ -84,6 +86,24 @@ public class RepositoryResourceUtil {
         return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
     }
 
+    public static void saveItem(Item item) {
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+        if (configuration != null) {
+            IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
+            if (resourceProvider.needSaveReferenceFile()) {
+                resourceProvider.handleReferenceFile(item);
+            }
+        } else {
+            // save
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            try {
+                factory.save(item);
+            } catch (PersistenceException e) {
+                log.error(e);
+            }
+        }
+    }
+
     public static boolean createItem(Item item, String propLabel, String version) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
@@ -99,6 +119,14 @@ public class RepositoryResourceUtil {
             property.setLabel(propLabel);
             //
             factory.create(item, new Path(item.getState().getPath()));
+            //
+            IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+            if (configuration != null) {
+                IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
+                if (resourceProvider.needSaveReferenceFile()) {
+                    resourceProvider.handleReferenceFile(item);
+                }
+            }
             return true;
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -123,6 +151,18 @@ public class RepositoryResourceUtil {
             log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static IFile findReferenceFile(ERepositoryObjectType type, Item item, String fileExtension) {
+        IFolder folder = RepositoryResourceUtil.getFolder(type);
+        String path = item.getState().getPath();
+        if (path != null && path.length() > 0) {
+            folder = folder.getFolder(path);
+        }
+        Property property = item.getProperty();
+        String fileName = property.getLabel() + "_" + property.getVersion() + "." + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        IFile file = folder.getFile(fileName);
+        return file;
     }
 
     public static IFolder getFolder(ERepositoryObjectType type) {

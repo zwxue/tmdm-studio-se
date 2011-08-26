@@ -1901,7 +1901,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSStringPredicateE_Value(), ecorePackage.getEString(), "value", null, 0, 1, WSStringPredicateE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsDataModelEEClass, WSDataModelE.class, "WSDataModelE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getWSDataModelE_XsdSchema(), ecorePackage.getEString(), "xsdSchema", null, 0, 1, WSDataModelE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSDataModelE_XsdSchema(), ecorePackage.getEString(), "xsdSchema", null, 0, 1, WSDataModelE.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsDataClusterEEClass, WSDataClusterE.class, "WSDataClusterE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSDataClusterE_Vocabulary(), ecorePackage.getEString(), "vocabulary", null, 0, 1, WSDataClusterE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

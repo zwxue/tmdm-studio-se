@@ -21,6 +21,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.workflow;
 
+import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.EList;
@@ -29,17 +31,22 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
 public class WorkflowNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
+
+    Logger log = Logger.getLogger(WorkflowNodeResourceProvider.class);
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
         if (item instanceof WSWorkflowItem || item instanceof ContainerItem) {
@@ -76,6 +83,25 @@ public class WorkflowNodeResourceProvider extends AbstractRepositoryNodeResource
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {
         return type == IServerObjectRepositoryType.TYPE_WORKFLOW;
+    }
+
+    @Override
+    public boolean needSaveReferenceFile() {
+        return true;
+    }
+
+    @Override
+    public void handleReferenceFile(Item item) {
+        IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_WORKFLOW, item, "proc"); //$NON-NLS-1$
+        if (file.exists()) {
+            linkReferenceFile(item, file);
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            try {
+                factory.save(item);
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
     }
 
 }
