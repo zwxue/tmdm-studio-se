@@ -31,8 +31,11 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.ui.actions.ExportObjectAction;
+import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.bridge.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.bridge.DeleteAction;
 import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
@@ -71,11 +74,15 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction deleteAction;
 
+    AbstractRepositoryAction refreshAction;
+
     // AbstractRepositoryAction exportJobScriptAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
+        importObjectAction = new ImportObjectAction();
+        exportObjectAction = new ExportObjectAction();
         createFolderAction = new CreateFolderAction();
         renameFolderAction = new RenameFolderAction();
         createProcessAction = new CreateProcessAction();
@@ -86,9 +93,11 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         deleteAction = new DeleteAction();
         generateTransformerAction = new GenerateJobTransformerAction();
         generateTriggerAction = new GenerateJobTriggerAction();
-
+        refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         // exportJobScriptAction = new ExportJobScriptAction();
         //
+        importObjectAction.initCommonViewer(commonViewer);
+        exportObjectAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
         renameFolderAction.initCommonViewer(commonViewer);
         createProcessAction.initCommonViewer(commonViewer);
@@ -139,6 +148,10 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             actions.add(deployToAction);
 
         }
+
+        actions.add(exportObjectAction);
+        actions.add(importObjectAction);
+        actions.add(refreshAction);
         return actions;
     }
 

@@ -54,16 +54,15 @@ import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
  */
 public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActionProvider {
 
-    static AbstractRepositoryAction exportObjectAction;
-
-    static AbstractRepositoryAction importObjectAction;
-
     static AbstractRepositoryAction createFolderAction;
 
     static AbstractRepositoryAction removeFromRepositoryAction;
 
     static AbstractRepositoryAction duplicateAction;
 
+    protected static AbstractRepositoryAction exportObjectAction;
+
+    protected static AbstractRepositoryAction importObjectAction;
 
     protected static AbstractRepositoryAction deployToAction;
 
@@ -94,6 +93,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         deployToLastServerAction = new DeployToLastServerAction();
         importServerObjectAction = new ImportServerObjectAction();
         //
+        importObjectAction.initCommonViewer(commonViewer);
         exportObjectAction.initCommonViewer(commonViewer);
         createFolderAction.initCommonViewer(commonViewer);
         removeFromRepositoryAction.initCommonViewer(commonViewer);
