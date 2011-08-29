@@ -17,6 +17,7 @@ import java.rmi.RemoteException;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 import org.w3c.dom.Node;
 
 import com.amalto.workbench.utils.Util;
@@ -37,7 +38,7 @@ public class ServiceConfigurationInteractiveHandler extends AbstractInteractiveH
 
     public String getLabel() {
 
-        return "Service Configuration";
+        return Messages.ServiceConfigurationInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

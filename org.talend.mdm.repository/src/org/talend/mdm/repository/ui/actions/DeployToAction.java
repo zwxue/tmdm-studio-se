@@ -23,6 +23,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
@@ -36,7 +37,7 @@ public class DeployToAction extends AbstractDeployAction {
     private static Logger log = Logger.getLogger(DeployToAction.class);
 
     public DeployToAction() {
-        super("Deploy To...");
+        super(Messages.DeployToAction_deployTo);
 
     }
 

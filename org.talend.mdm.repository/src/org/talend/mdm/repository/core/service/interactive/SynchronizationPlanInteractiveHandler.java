@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
@@ -32,7 +33,7 @@ public class SynchronizationPlanInteractiveHandler extends AbstractInteractiveHa
 
     public String getLabel() {
 
-        return "Synchronization Plan";
+        return Messages.SynchronizationPlanInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

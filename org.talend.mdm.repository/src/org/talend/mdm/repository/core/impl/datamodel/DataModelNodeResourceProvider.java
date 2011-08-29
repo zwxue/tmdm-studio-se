@@ -77,7 +77,6 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
             resource.getContents().add(((WSDataModelItem) item).getWsDataModel());
-            Resource eResource = ((WSDataModelItem) item).getWsDataModel().eResource();
             return resource;
         }
         return null;

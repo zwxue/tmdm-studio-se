@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSPutMenu;
@@ -32,7 +33,7 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Menu";
+        return Messages.MenuInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -32,7 +33,7 @@ public class VersionInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Version";
+        return Messages.VersionInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

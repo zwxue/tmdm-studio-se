@@ -47,7 +47,7 @@ public class ImportServerObjectAction extends AbstractRepositoryAction {
         dialog.create();
         dialog.getShell().setSize(600, 650);
         dialog.getShell().layout(true);
-        dialog.getShell().setText("Import Server Objects");
+        dialog.getShell().setText(Messages.ImportServerObjectAction_importServerObject);
         dialog.open();
     }
 

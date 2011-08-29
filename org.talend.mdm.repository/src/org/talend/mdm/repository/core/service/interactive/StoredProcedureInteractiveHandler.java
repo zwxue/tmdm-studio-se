@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedure;
@@ -32,7 +33,7 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
 
     public String getLabel() {
 
-        return "Stored Procedure";
+        return Messages.StoredProcedureInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

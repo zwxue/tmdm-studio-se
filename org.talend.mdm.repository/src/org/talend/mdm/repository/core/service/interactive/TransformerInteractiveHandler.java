@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2;
@@ -32,7 +33,7 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Process";
+        return Messages.TransformerInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

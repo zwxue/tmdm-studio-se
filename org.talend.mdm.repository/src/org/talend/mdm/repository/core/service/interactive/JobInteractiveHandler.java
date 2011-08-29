@@ -31,6 +31,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -47,7 +48,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Job";
+        return Messages.JobInteractiveHandler_label;
     }
 
     public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {
@@ -58,7 +59,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         publishWizard.setMdmServer(server);
 
         IWorkbench workbench = RepositoryPlugin.getDefault().getWorkbench();
-        publishWizard.setWindowTitle("Deploy to Talend MDM Server");
+        publishWizard.setWindowTitle(Messages.JobInteractiveHandler_wizardTitle);
         publishWizard.init(workbench, selection);
         final Display display = Display.getDefault();
 
@@ -99,11 +100,11 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         for (IRepositoryViewObject viewObj : viewObjs) {
             DeployStatus deployStatus = null;
             if (result) {
-                deployStatus = DeployStatus.getOKStatus(null, "Success to deploy " + getLabel() + " \"" + viewObj.getLabel()
-                        + "\"");
+                deployStatus = DeployStatus.getOKStatus(null,
+                        Messages.bind(Messages.JobInteractiveHandler_sucessToDeploy, getLabel(), viewObj.getLabel()));
             } else {
-                deployStatus = DeployStatus.getInfoStatus(null, "Skip to deploy " + getLabel() + " \"" + viewObj.getLabel()
-                        + "\"");
+                deployStatus = DeployStatus.getInfoStatus(null,
+                        Messages.bind(Messages.JobInteractiveHandler_skipToDeploy, getLabel(), viewObj.getLabel()));
             }
             status.add(deployStatus);
         }

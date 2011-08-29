@@ -15,20 +15,28 @@ package org.talend.mdm.repository.ui.actions;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
+import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
+    private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
+            "/icons/deploy.png"); //$NON-NLS-1$
+
     // private static Logger log = Logger.getLogger(AbstractDeployAction.class);
     protected AbstractDeployAction(String text) {
         super(text);
+        setImageDescriptor(DEPLOY_IMG);
     }
 
     protected IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
@@ -37,7 +45,7 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
     protected void showDeployStatus(IStatus status) {
         MutliStatusDialog dialog = new MutliStatusDialog(getShell(), status.getChildren().length
-                + " server objects are deployed, following is the detail:", status);
+                + Messages.AbstractDeployAction_deployMessage, status);
         dialog.open();
     }
 

@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRule;
@@ -32,7 +33,7 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Trigger";
+        return Messages.RoutingRuleInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

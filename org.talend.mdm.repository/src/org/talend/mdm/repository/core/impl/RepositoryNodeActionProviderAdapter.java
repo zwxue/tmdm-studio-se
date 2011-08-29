@@ -45,7 +45,6 @@ import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
-import org.talend.mdm.repository.ui.actions.UpdateServerDefAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
 
@@ -65,7 +64,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     static AbstractRepositoryAction duplicateAction;
 
-    static AbstractRepositoryAction updateServerAction;
 
     protected static AbstractRepositoryAction deployToAction;
 
@@ -92,7 +90,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         removeFromRepositoryAction = new RemoveFromRepositoryAction();
         renameAction = new RenameObjectAction();
         duplicateAction = new DuplicateAction();
-        updateServerAction = new UpdateServerDefAction();
         deployToAction = new DeployToAction();
         deployToLastServerAction = new DeployToLastServerAction();
         importServerObjectAction = new ImportServerObjectAction();
@@ -106,7 +103,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
 
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
-        updateServerAction.initCommonViewer(commonViewer);
         importServerObjectAction.initCommonViewer(commonViewer);
         deployToAction.initCommonViewer(commonViewer);
         deployToLastServerAction.initCommonViewer(commonViewer);
@@ -137,7 +133,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
             } else if (item instanceof MDMServerObjectItem) {
                 actions.add(removeFromRepositoryAction);
-                actions.add(updateServerAction);
 
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);

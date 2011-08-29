@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.exports.MDMExportRepositoryItemsWizard;
 
@@ -68,12 +69,12 @@ public class ExportObjectAction extends AbstractRepositoryAction {
             MDMExportRepositoryItemsWizard wizard = new MDMExportRepositoryItemsWizard((IStructuredSelection) selection);
             WizardDialog dialog = new WizardDialog(view.getSite().getShell(), wizard);
             dialog.create();
-            dialog.getShell().setText("Export Repository items");
+            dialog.getShell().setText(Messages.ExportObjectAction_exportRepositoryItems);
             dialog.open();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error",
-                    "An error occured trying to Export Data Container: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages.ExportObjectAction_error,
+                    Messages.ExportObjectAction_hasError + e.getLocalizedMessage());
         }
     }
 

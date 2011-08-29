@@ -25,7 +25,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
- * DOC hbhong class global comment. Detailled comment
+ * DOC hbhong class global comment. This class just be used for test
  */
 public class UpdateServerDefAction extends AbstractRepositoryAction {
 
@@ -34,7 +34,7 @@ public class UpdateServerDefAction extends AbstractRepositoryAction {
     static Logger log = Logger.getLogger(RemoveFromRepositoryAction.class);
 
     public UpdateServerDefAction() {
-        super("Update Last Server");
+        super("Update Last Server"); //$NON-NLS-1$
     }
 
     public String getGroupName() {

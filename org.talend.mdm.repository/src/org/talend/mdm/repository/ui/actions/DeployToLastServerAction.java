@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -31,7 +32,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
     private static Logger log = Logger.getLogger(DeployToLastServerAction.class);
 
     public DeployToLastServerAction() {
-        super("Deploy To Last Server");
+        super(Messages.DeployToLastServerAction_deployToLastServer);
 
     }
 

@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSView;
@@ -32,7 +33,7 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "View";
+        return Messages.ViewInteractiveHandler_label;
     }
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {

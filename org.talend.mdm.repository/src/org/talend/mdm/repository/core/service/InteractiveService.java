@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.mdm.repository.core.service.interactive.DataModelInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.JobInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.MenuInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.RoleInteractiveHandler;
@@ -51,6 +52,7 @@ public class InteractiveService {
     }
 
     private static void initHandler() {
+        registerHandler(new DataModelInteractiveHandler());
         registerHandler(new MenuInteractiveHandler());
         registerHandler(new JobInteractiveHandler());
         registerHandler(new RoutingRuleInteractiveHandler());

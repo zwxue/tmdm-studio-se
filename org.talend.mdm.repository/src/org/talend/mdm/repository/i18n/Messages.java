@@ -7,6 +7,9 @@ public class Messages extends NLS {
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
 
+    public static String AbstractDeployAction_deployMessage;
+
+
     public static String Common_inputName;
 
     public static String Common_nameCanNotBeEmpty;
@@ -26,6 +29,15 @@ public class Messages extends NLS {
     public static String CreateFolderAction_newCategory;
 
 
+    public static String DataModelInteractiveHandler_label;
+
+
+    public static String DeployToAction_deployTo;
+
+
+    public static String DeployToLastServerAction_deployToLastServer;
+
+
     public static String DuplicateAction_duplicate;
 
     public static String NewDataModelAction_newDataModel;
@@ -33,6 +45,18 @@ public class Messages extends NLS {
     public static String NewMenuAction_newMenu;
 
     public static String NewServiceConfigurationAction_newServiceConfiguration;
+
+    public static String JobInteractiveHandler_label;
+
+
+    public static String JobInteractiveHandler_skipToDeploy;
+
+
+    public static String JobInteractiveHandler_sucessToDeploy;
+
+
+    public static String JobInteractiveHandler_wizardTitle;
+
 
     public static String JobProcesssOptionsDialogTitle_title;
 
@@ -78,10 +102,19 @@ public class Messages extends NLS {
     public static String RepositoryWebServiceAdapter_InvalidEndpointAddress;
 
 
+    public static String RoleInteractiveHandler_label;
+
+
+    public static String RoutingRuleInteractiveHandler_label;
+
+
     public static String RoutingRuleMainPage2_selectEntity;
 
 
     public static String Common_Error;
+
+
+    public static String StoredProcedureInteractiveHandler_label;
 
 
     public static String StoredProcedureMainPage2_noDataContainer;
@@ -97,11 +130,35 @@ public class Messages extends NLS {
 
     public static String ImportServerObject;
 
+
+    public static String ImportServerObjectAction_importServerObject;
+
     public static String Import_Objects;
+
+    public static String ImportObjectAction_error;
+
+
+    public static String ImportObjectAction_hasError;
+
+
+    public static String ImportObjectAction_importRepositoryItem;
+
 
     public static String Confirm_Overwrite;
 
     public static String Confirm_Overwrite_Info;
+
+    public static String ExportObjectAction_error;
+
+
+    public static String ExportObjectAction_exportRepositoryItems;
+
+
+    public static String ExportObjectAction_hasError;
+
+
+    public static String MenuInteractiveHandler_label;
+
 
     public static String SelectItemsPage_Title;
 
@@ -109,9 +166,24 @@ public class Messages extends NLS {
 
     public static String Version;
 
+
+    public static String VersionInteractiveHandler_label;
+
+
+    public static String ViewInteractiveHandler_label;
+
     public static String Select_Items_To_Imports;
 
+
+    public static String ServiceConfigurationInteractiveHandler_label;
+
+
+    public static String SynchronizationPlanInteractiveHandler_label;
+
     public static String Overwrite_Exists_Items;
+
+
+    public static String TransformerInteractiveHandler_label;
 
     // //////////////////////////////////////////////////////////////////////////
     //
