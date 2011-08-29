@@ -40,7 +40,7 @@ public class RoleContentProvider extends AbstractContentProvider {
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_ROLE, parentItem, TreeObject.ROLE, true);
+        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_ROLE, parentItem, TreeObject.ROLE);
     }
 
     public Class getWSObjectClass() {

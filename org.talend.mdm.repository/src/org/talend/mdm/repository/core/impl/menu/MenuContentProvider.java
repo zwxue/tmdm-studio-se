@@ -40,8 +40,7 @@ public class MenuContentProvider extends AbstractContentProvider {
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_MENU, parentItem, TreeObject.MENU,
-                true, true);
+        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_MENU, parentItem, TreeObject.MENU);
     }
 
     public Class<?> getWSObjectClass() {

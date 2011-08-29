@@ -41,7 +41,7 @@ public class ServiceConfigurationContentProvider extends AbstractContentProvider
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION, parentItem,
-                TreeObject.SERVICE_CONFIGURATION, false);
+                TreeObject.SERVICE_CONFIGURATION);
     }
 
     public Class<?> getWSObjectClass() {

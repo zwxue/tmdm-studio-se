@@ -41,7 +41,7 @@ public class DataModelContentProvider extends AbstractContentProvider {
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_DATAMODEL, parentItem,
-                TreeObject.DATA_MODEL, true);
+                TreeObject.DATA_MODEL);
     }
 
     public Class<?> getWSObjectClass() {

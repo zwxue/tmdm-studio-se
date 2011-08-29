@@ -38,7 +38,7 @@ public class TISProcessContentProvider extends AbstractContentProvider {
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(ERepositoryObjectType.PROCESS, parentItem, -1, false, true);
+        return RepositoryResourceUtil.findViewObjectsByType(ERepositoryObjectType.PROCESS, parentItem, -1);
     }
 
     protected List<IRepositoryViewObject> getViewObjFromFolder(ContainerItem containerItem) {

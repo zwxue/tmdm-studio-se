@@ -41,26 +41,27 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null && item instanceof ContainerItem) {
             ContainerItem containerItem = (ContainerItem) item;
-            if (containerItem.getType() == FolderType.SYSTEM_FOLDER_LITERAL) {
+            FolderType containerType = containerItem.getType();
+            if (containerType == FolderType.SYSTEM_FOLDER_LITERAL) {
                 List<IRepositoryViewObject> viewObjects = getViewObjFromSystemFolder(containerItem);
                 if (viewObjects != null) {
                     ((ContainerRepositoryObject) element).getChildren().addAll(viewObjects);
                     return viewObjects.toArray();
                 }
             }
-            if (containerItem.getType() == FolderType.FOLDER_LITERAL) {
+            if (containerType == FolderType.FOLDER_LITERAL || containerType == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
                 List<IRepositoryViewObject> children = getViewObjFromFolder(containerItem);
                 if (children != null) {
                     ((ContainerRepositoryObject) element).getChildren().addAll(children);
                     return children.toArray();
                 }
             }
-            if (containerItem.getType() == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
-                List<IRepositoryViewObject> children = ((ContainerRepositoryObject) element).getChildren();
-                if (children != null) {
-                    return children.toArray();
-                }
-            }
+            // if (containerType == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
+            // List<IRepositoryViewObject> children = ((ContainerRepositoryObject) element).getChildren();
+            // if (children != null) {
+            // return children.toArray();
+            // }
+            // }
         }
         return new Object[0];
     }

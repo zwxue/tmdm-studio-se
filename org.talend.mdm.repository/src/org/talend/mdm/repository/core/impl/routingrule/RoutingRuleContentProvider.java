@@ -41,7 +41,7 @@ public class RoutingRuleContentProvider extends AbstractContentProvider {
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_ROUTINGRULE, parentItem,
-                TreeObject.ROUTING_RULE, false);
+                TreeObject.ROUTING_RULE);
     }
 
     public Class getWSObjectClass() {

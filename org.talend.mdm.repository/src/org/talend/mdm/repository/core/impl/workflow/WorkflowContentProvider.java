@@ -40,8 +40,7 @@ public class WorkflowContentProvider extends AbstractContentProvider {
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_WORKFLOW, parentItem,
-                TreeObject.WORKFLOW,
-                false);
+                TreeObject.WORKFLOW);
     }
 
     public Class<?> getWSObjectClass() {

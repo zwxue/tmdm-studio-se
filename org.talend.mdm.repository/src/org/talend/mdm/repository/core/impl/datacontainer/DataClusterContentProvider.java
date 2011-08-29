@@ -41,7 +41,7 @@ public class DataClusterContentProvider extends AbstractContentProvider {
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_DATACLUSTER, parentItem,
-                TreeObject.DATA_CLUSTER, true);
+                TreeObject.DATA_CLUSTER);
     }
     public Class getWSObjectClass() {
         return WSDataCluster.class;

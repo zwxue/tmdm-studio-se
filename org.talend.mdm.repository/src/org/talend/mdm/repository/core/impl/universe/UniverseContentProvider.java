@@ -41,7 +41,7 @@ public class UniverseContentProvider extends AbstractContentProvider {
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_UNIVERSE, parentItem,
-                TreeObject.UNIVERSE, false);
+                TreeObject.UNIVERSE);
     }
 
     public Class<?> getWSObjectClass() {

@@ -41,8 +41,7 @@ public class TransformerV2ContentProvider extends AbstractContentProvider {
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, parentItem,
-                TreeObject.TRANSFORMER,
-                false);
+                TreeObject.TRANSFORMER);
     }
 
     public Class getWSObjectClass() {

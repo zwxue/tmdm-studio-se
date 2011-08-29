@@ -40,8 +40,7 @@ public class ViewContentProvider extends AbstractContentProvider {
 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
-        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_VIEW, parentItem, TreeObject.VIEW,
-                false);
+        return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_VIEW, parentItem, TreeObject.VIEW);
     }
 
     public Class<?> getWSObjectClass() {

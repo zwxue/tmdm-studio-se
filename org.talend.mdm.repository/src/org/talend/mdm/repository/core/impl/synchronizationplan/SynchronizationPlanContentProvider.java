@@ -41,7 +41,7 @@ public class SynchronizationPlanContentProvider extends AbstractContentProvider 
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN, parentItem,
-                TreeObject.SYNCHRONIZATIONPLAN, false);
+                TreeObject.SYNCHRONIZATIONPLAN);
     }
 
     public Class<?> getWSObjectClass() {

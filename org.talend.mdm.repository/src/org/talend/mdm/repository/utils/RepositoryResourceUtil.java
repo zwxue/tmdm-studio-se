@@ -22,7 +22,6 @@
 package org.talend.mdm.repository.utils;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +33,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
@@ -53,7 +51,6 @@ import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.core.bridge.MDMRepositoryNode;
@@ -182,6 +179,14 @@ public class RepositoryResourceUtil {
         return objectFolder;
     }
 
+    private static boolean isSystemFolder(Item pItem, String folderName) {
+        if (pItem instanceof ContainerItem) {
+            return ((ContainerItem) pItem).getType().equals(FolderType.SYSTEM_FOLDER_LITERAL)
+                    && folderName.equalsIgnoreCase("system"); //$NON-NLS-1$
+        }
+        return false;
+    }
+
     public static IRepositoryViewObject createFolderViewObject(ERepositoryObjectType type, String folderName, Item pItem,
             boolean isSystem) {
         Property prop = PropertiesFactory.eINSTANCE.createProperty();
@@ -189,6 +194,7 @@ public class RepositoryResourceUtil {
         //
 
         ContainerItem item = MdmpropertiesFactory.eINSTANCE.createContainerItem();
+        isSystem = isSystemFolder(pItem, folderName);
         item.setType(isSystem ? FolderType.STABLE_SYSTEM_FOLDER_LITERAL : FolderType.FOLDER_LITERAL);
 
         item.setLabel(folderName);
@@ -331,6 +337,8 @@ public class RepositoryResourceUtil {
 
             String path = ERepositoryObjectType.getFolderName(type);
             if (!path.isEmpty()) {
+                if (!path.endsWith(DIVIDE))
+                    path += DIVIDE;
                 path += parentItem.getState().getPath();
                 IFolder folder = fsProject.getFolder(new Path(path));
                 return findViewObjects(type, parentItem, folder, useRepositoryViewObject);
@@ -402,11 +410,7 @@ public class RepositoryResourceUtil {
             List<IRepositoryViewObject> allObjs = factory.getAll(type);
             for (IRepositoryViewObject viewObj : allObjs) {
                 Property property = viewObj.getProperty();
-                Resource eResource = property.eResource();
-                // factory.reload(property);
-                // eResource = property.eResource();
-                // IRepositoryViewObject lastVersion = factory.getLastVersion(property.getId());
-                // eResource = lastVersion.getProperty().eResource();
+
                 ItemState state = property.getItem().getState();
                 if ((!state.isDeleted())
                         && (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2))) {
@@ -435,31 +439,30 @@ public class RepositoryResourceUtil {
         return null;
     }
 
-    public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType,
-            boolean hasSystemFolder) {
-        return findViewObjectsByType(type, parentItem, systemType, hasSystemFolder, true);
+    public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType) {
+        return findViewObjectsByType(type, parentItem, systemType, true);
     }
 
     public static List<IRepositoryViewObject> findViewObjectsByType(ERepositoryObjectType type, Item parentItem, int systemType,
-            boolean hasSystemFolder, boolean useRepositoryViewObject) {
+            boolean useRepositoryViewObject) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
             IProject fsProject = ResourceModelUtils.getProject(project);
             IFolder stableFolder = fsProject.getFolder(((ContainerItem) parentItem).getRepObjType().getFolder());
             List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder, useRepositoryViewObject);
-            if (hasSystemFolder) {
-                IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "System", null, true); //$NON-NLS-1$
-                for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {
-                    IRepositoryViewObject viewObject = il.next();
-                    String key = viewObject.getProperty().getLabel();
-                    if (XSystemObjects.isXSystemObject(systemType, key)) {
-                        sysFolderViewOj.getChildren().add(viewObject);
-                        ((MDMServerObjectItem) viewObject.getProperty().getItem()).getMDMServerObject().setSystem(true);
-                        il.remove();
-                    }
-                }
-                viewObjects.add(0, sysFolderViewOj);
-            }
+            // if (hasSystemFolder) {
+            //                IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "System", null, true); //$NON-NLS-1$
+            // for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {
+            // IRepositoryViewObject viewObject = il.next();
+            // String key = viewObject.getProperty().getLabel();
+            // if (XSystemObjects.isXSystemObject(systemType, key)) {
+            // sysFolderViewOj.getChildren().add(viewObject);
+            // ((MDMServerObjectItem) viewObject.getProperty().getItem()).getMDMServerObject().setSystem(true);
+            // il.remove();
+            // }
+            // }
+            // viewObjects.add(0, sysFolderViewOj);
+            // }
             return viewObjects;
         } catch (PersistenceException e) {
             return Collections.EMPTY_LIST;

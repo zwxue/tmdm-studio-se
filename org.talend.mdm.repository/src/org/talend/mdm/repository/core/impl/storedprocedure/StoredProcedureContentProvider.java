@@ -41,7 +41,7 @@ public class StoredProcedureContentProvider extends AbstractContentProvider {
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return RepositoryResourceUtil.findViewObjectsByType(IServerObjectRepositoryType.TYPE_STOREPROCEDURE, parentItem,
-                TreeObject.STORED_PROCEDURE, false);
+                TreeObject.STORED_PROCEDURE);
     }
 
     public Class getWSObjectClass() {
