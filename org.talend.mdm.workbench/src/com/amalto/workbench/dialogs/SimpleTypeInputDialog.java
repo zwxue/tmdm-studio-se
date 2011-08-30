@@ -120,15 +120,11 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
         String type = elemPanel.getText();
 
-        if ("".equals(type.trim())) {//$NON-NLS-1$
-            infoLabel.setText("The name cannot contain the empty");
-            getButton(IDialogConstants.OK_ID).setEnabled(false);
-            return;
-        }
+
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
                 || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
-            infoLabel.setText("The name cannot contain the empty characters");
+            infoLabel.setText("The name cannot contain empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         }
