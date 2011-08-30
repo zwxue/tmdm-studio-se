@@ -89,7 +89,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     private String viewName = null;
 
-    private String concept;
+    protected String concept;
 
     private ComplexTableViewerColumn[] viewableElementColumns = new ComplexTableViewerColumn[] { new ComplexTableViewerColumn(
             "XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0) };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -103,7 +103,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     private Button btnRunProcess;
 
-    private Combo cboProcessList;
+    protected Combo cboProcessList;
 
     /*
      * private ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{ new
@@ -123,6 +123,17 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     }
 
+    protected void initProcessCombo() throws RemoteException, XtentisException {
+        java.util.List<String> pList = new ArrayList<String>();
+        WSTransformerPKArray array = Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs(""));
+        if (array != null && array.getWsTransformerPK() != null) {
+            for (WSTransformerPK pk : array.getWsTransformerPK()) {
+                pList.add(pk.getPk());
+            }
+        }
+        cboProcessList.setItems((String[]) pList.toArray(new String[pList.size()]));
+    }
+
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
@@ -140,14 +151,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             btnRunProcess.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
             cboProcessList = new Combo(comp, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
             cboProcessList.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
-            java.util.List<String> pList = new ArrayList<String>();
-            WSTransformerPKArray array = Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs(""));
-            if (array != null && array.getWsTransformerPK() != null) {
-                for (WSTransformerPK pk : array.getWsTransformerPK()) {
-                    pList.add(pk.getPk());
-                }
-            }
-            cboProcessList.setItems((String[]) pList.toArray(new String[pList.size()]));
+            initProcessCombo();
 
             // add listener
             btnRunProcess.addSelectionListener(new SelectionListener() {
@@ -176,20 +180,15 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             /****
              * /viewable Business Elements
              ****/
-            // Modified by hbhong,to fix bug 21784
             TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
-            // The ending| bug:21784
             Composite viewablehGroup = this.getNewSectionComposite("Viewable Business Elements");
             viewablehGroup.setLayout(new GridLayout(2, false));
             viewableElementColumns[0].setColumnWidth(220);
-            viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns), toolkit, viewablehGroup);
-            // Modified by hbhong,to fix bug 21784
+            viewableViewer = getNewTisTableViewer(viewablehGroup, toolkit, Arrays.asList(viewableElementColumns));
             viewableViewer.setTreeParent(treeParent);
-            // The ending| bug:21784
             viewableViewer.setXpath(true);
             if (viewName.startsWith("Browse_items_")) {
                 concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-
             }
             viewableViewer.setConceptName(concept);
             viewableViewer.setMainPage(this);
@@ -201,10 +200,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             Composite searchGroup = this.getNewSectionComposite("Searchable Business Elements");
             searchGroup.setLayout(new GridLayout(2, false));
             searchableElementColumns[0].setColumnWidth(220);
-            searchableViewer = new TisTableViewer(Arrays.asList(searchableElementColumns), toolkit, searchGroup);
-            // Modified by hbhong,to fix bug 21784
+            searchableViewer = getNewTisTableViewer(searchGroup, toolkit, Arrays.asList(searchableElementColumns));
             searchableViewer.setTreeParent(treeParent);
-            // The ending| bug:21784
             searchableViewer.setXpath(true);
             searchableViewer.setConceptName(concept);
             searchableViewer.setMainPage(this);
@@ -225,10 +222,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             conditionsColumns[1].setColumnWidth(150);
             conditionsColumns[2].setColumnWidth(250);
             conditionsColumns[3].setColumnWidth(120);
-            conditionViewer = new TisTableViewer(Arrays.asList(conditionsColumns), toolkit, wcGroup);
-            // Modified by hbhong,to fix bug 21784
+            conditionViewer = getNewTisTableViewer(wcGroup, toolkit, Arrays.asList(conditionsColumns));
             conditionViewer.setTreeParent(treeParent);
-            // The ending| bug:21784
             conditionViewer.setXpath(true);
             conditionViewer.setConceptName(concept);
             conditionViewer.setMainPage(this);
@@ -245,6 +240,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
 
     }// createCharacteristicsContent
+
+    protected TisTableViewer getNewTisTableViewer(Composite parent, FormToolkit toolkit,
+            java.util.List<ComplexTableViewerColumn> columns) {
+        return new TisTableViewer(columns, toolkit, parent);
+    }
 
     protected void refreshData() {
         try {
@@ -304,7 +304,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
     }
 
-    private WSView getWsViewObject() {
+    protected WSView getWsViewObject() {
         WSView wsObject = null;
         try {
             if (getXObject().getWsObject() == null) { // then fetch from server
@@ -332,7 +332,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
             this.comitting = true;
 
-            WSView wsObject = (WSView) (getWsViewObject());
+            WSView wsObject = (WSView) getWsViewObject();
             wsObject.setDescription(desAntionComposite.getText());
             wsObject.setIsTransformerActive(new WSBoolean(btnRunProcess.getSelection()));
             wsObject.setTransformerPK(cboProcessList.getText());
@@ -372,13 +372,22 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
     }
 
+    protected java.util.List<String> getAvailableDataModel() {
+        return Util.getDataModel(this.getXObject(), null, concept);
+    }
+
+    protected WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws RemoteException,
+            XtentisException {
+        return Util.getPort(getXObject()).getBusinessConceptKey(businessConcepKey);
+    }
+
     public void doSave(IProgressMonitor monitor) {
         super.doSave(monitor);
         if (this.viewName != null && this.viewName.length() > 0) {
             if (viewName.matches("Browse_items.*")) {//$NON-NLS-1$
                 // lastDataModelName=XpathSelectDialog.getDataModelName();
                 String concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-                java.util.List<String> avaiList = Util.getDataModel(this.getXObject(), null, concept);
+                java.util.List<String> avaiList = getAvailableDataModel();
                 if (avaiList.size() > 0)
                     lastDataModelName = avaiList.get(0);
                 if (concept != null && concept.length() > 0 && lastDataModelName != null && lastDataModelName.length() > 0) {
@@ -391,7 +400,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                             lastDataModelName), concept);
                     WSConceptKey wsConceptKey = null;
                     try {
-                        wsConceptKey = Util.getPort(getXObject()).getBusinessConceptKey(wsGetBusinessConceptKey);
+                        wsConceptKey = getBusinessConceptKey(wsGetBusinessConceptKey);
                     } catch (RemoteException e) {
                         log.error(e.getMessage(), e);
                     } catch (XtentisException e) {
@@ -619,13 +628,14 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
         }
         return true;
     }
-  //Modified by hhb,to fix bug 21784
+
+    // Modified by hhb,to fix bug 21784
     @Override
     public Object getAdapter(Class adapter) {
-        if(adapter==TreeParent.class){
-            return Util.getServerTreeParent( getXObject());
+        if (adapter == TreeParent.class) {
+            return Util.getServerTreeParent(getXObject());
         }
         return super.getAdapter(adapter);
     }
-    //The ending| bug:21784
+    // The ending| bug:21784
 }

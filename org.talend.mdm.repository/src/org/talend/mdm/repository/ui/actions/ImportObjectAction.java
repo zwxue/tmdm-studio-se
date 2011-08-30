@@ -37,7 +37,7 @@ public class ImportObjectAction extends AbstractRepositoryAction {
     private MDMRepositoryView view = null;
 
     public ImportObjectAction() {
-        super("Import from Local"); //$NON-NLS-1$
+        super(Messages.ImportObjectAction_label);
         setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
     }
 

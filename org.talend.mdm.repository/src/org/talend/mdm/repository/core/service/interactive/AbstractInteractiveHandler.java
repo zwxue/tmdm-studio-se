@@ -61,4 +61,8 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
     public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {
         return null;
     }
+
+    public void assertPropertyIsInited(Item item) {
+    }
+
 }

@@ -144,6 +144,9 @@ public class Messages extends NLS {
     public static String ImportObjectAction_importRepositoryItem;
 
 
+    public static String ImportObjectAction_label;
+
+
     public static String Confirm_Overwrite;
 
     public static String Confirm_Overwrite_Info;
@@ -155,6 +158,9 @@ public class Messages extends NLS {
 
 
     public static String ExportObjectAction_hasError;
+
+
+    public static String ExportObjectAction_label;
 
 
     public static String MenuInteractiveHandler_label;

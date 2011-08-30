@@ -38,7 +38,6 @@ import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
-import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.dialogs.ViewInputDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -62,17 +61,14 @@ public class NewViewAction extends AbstractSimpleAddAction {
 
     private WSViewE newView(String key) {
 
-        WSWhereConditionE condi = MdmserverobjectFactory.eINSTANCE.createWSWhereConditionE();
-        WSBooleanE bol = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
-        bol.set_true(false);
+        WSBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
+        wsBool.set_true(false);
 
         WSViewE view = MdmserverobjectFactory.eINSTANCE.createWSViewE();
-
         view.setName(key);
         view.setDescription(""); //$NON-NLS-1$
-        view.getWhereConditions().add(condi);
         view.setTransformerPK(null);
-        view.setIsTransformerActive(bol);
+        view.setIsTransformerActive(wsBool);
 
         return view;
     }

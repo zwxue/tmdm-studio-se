@@ -29,7 +29,6 @@ import com.amalto.workbench.editors.AFormPage;
 import com.amalto.workbench.editors.DataClusterMainPage;
 import com.amalto.workbench.editors.JobMainPage;
 import com.amalto.workbench.editors.MenuMainPage;
-import com.amalto.workbench.editors.ViewMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 
@@ -120,7 +119,7 @@ public class XObjectEditor2 extends XObjectEditor {
             case TreeObject.OUTBOUND_PLUGIN:
                 break;
             case TreeObject.VIEW:
-                addPage(new ViewMainPage(this));
+                addPage(new ViewMainPage2(this));
                 break;
             case TreeObject.DATA_CLUSTER:
                 addPage(new DataClusterMainPage(this));

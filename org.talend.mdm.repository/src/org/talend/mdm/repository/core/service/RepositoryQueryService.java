@@ -51,6 +51,10 @@ public class RepositoryQueryService {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_ROLE);
     }
 
+    public static List<String> findAllProcessNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+    }
+
     public static WSDataModelE findDataModelByName(String name) {
         return (WSDataModelE) findServerObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL, name);
     }

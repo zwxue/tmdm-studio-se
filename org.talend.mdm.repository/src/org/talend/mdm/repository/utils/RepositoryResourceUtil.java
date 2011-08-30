@@ -21,6 +21,9 @@
 // ============================================================================
 package org.talend.mdm.repository.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,6 +58,8 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.core.bridge.MDMRepositoryNode;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -146,6 +151,39 @@ public class RepositoryResourceUtil {
             return fsProject.getFolder(path);
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static String getTextFileContent(IFile file, String encode) {
+        InputStream inputStream = null;
+
+        ByteArrayOutputStream os = null;
+        try {
+            os = new ByteArrayOutputStream();
+            inputStream = file.getContents();
+            byte[] ba = new byte[inputStream.available()];
+            inputStream.read(ba);
+            os.write(ba);
+            return os.toString(encode);
+
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                }
+            }
         }
         return null;
     }
@@ -297,8 +335,11 @@ public class RepositoryResourceUtil {
             List<IRepositoryViewObject> allObjs = factory.getAll(type);
             List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
             for (IRepositoryViewObject viewObj : allObjs) {
-                ItemState state = viewObj.getProperty().getItem().getState();
+                Item item = viewObj.getProperty().getItem();
+                ItemState state = item.getState();
                 if (!state.isDeleted()) {
+                    IInteractiveHandler handler = InteractiveService.findHandler(viewObj.getRepositoryObjectType());
+                    handler.assertPropertyIsInited(item);
                     if (useRepositoryViewObject) {
                         viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
                     } else {

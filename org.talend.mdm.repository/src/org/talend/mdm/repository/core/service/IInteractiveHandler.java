@@ -40,4 +40,6 @@ public interface IInteractiveHandler {
     public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException;
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException;
+
+    public void assertPropertyIsInited(Item item);
 }

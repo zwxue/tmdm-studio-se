@@ -52,7 +52,7 @@ public class ExportObjectAction extends AbstractRepositoryAction {
      * @param text
      */
     public ExportObjectAction() {
-        super("Export to local"); //$NON-NLS-1$
+        super(Messages.ExportObjectAction_label);
         setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
     }
 
@@ -78,11 +78,7 @@ public class ExportObjectAction extends AbstractRepositoryAction {
         }
     }
 
-    // System.out.println("JUST TEST");
-    // for (Object obj : getSelectedObject()) {
-    // System.out.println(obj);
-    // IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
-    // }
+
 
     public String getGroupName() {
         return GROUP_EXPORT;
