@@ -1,8 +1,10 @@
 package org.talend.mdm.repository.core;
 
-import org.apache.log4j.Logger;
+import java.util.Collection;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
@@ -17,13 +19,10 @@ import org.talend.repository.model.RepositoryNode;
 
 public class ServerObjectRepositoryContentHandler implements IRepositoryContentHandler, IServerObjectRepositoryType {
 
-    private static Logger log = Logger.getLogger(ServerObjectRepositoryContentHandler.class);
-
     private XmiResourceManager xmiResourceManager = new XmiResourceManager();
 
     public ServerObjectRepositoryContentHandler() {
     }
-
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
@@ -33,23 +32,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-
     public Resource create(IProject project, Item item, int classifierID, IPath path) throws PersistenceException {
-
-        // if (item instanceof MDMServerObjectItem) {
-        // ERepositoryObjectType repositoryType = getRepositoryObjectType(item);
-        // if (repositoryType != null) {
-        // Resource itemResource = xmiResourceManager.createItemResource(project, item, path, repositoryType, false);
-        //
-        // EList<EObject> contents = itemResource.getContents();
-        // if (item instanceof WSMenuItem) {
-        // contents.add(((WSMenuItem) item).getWsMenu());
-        // }
-        //
-        // return itemResource;
-        // }
-        // }
-        //
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
             Resource resource = configuration.getResourceProvider().create(project, item, classifierID, path);
@@ -57,7 +40,6 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         }
         return null;
     }
-
 
     public Resource save(Item item) throws PersistenceException {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
@@ -69,7 +51,6 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-
     public IImage getIcon(ERepositoryObjectType type) {
         if (type == TYPE_MENU)
             return ServerObjectImage.MENU_ICON;
@@ -78,14 +59,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-
     public Item createNewItem(ERepositoryObjectType type) {
-        // if (type == TYPE_MENU) {
-        // return MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
-        // }
-        // if (type == TYPE_ROLE) {
-        // return MdmpropertiesFactory.eINSTANCE.createWSRoleItem();
-        // }
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
         if (configuration != null) {
             return configuration.getResourceProvider().createNewItem(type);
@@ -93,11 +67,9 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         return null;
     }
 
-
     public boolean isProcess(Item item) {
         return false;
     }
-
 
     public boolean isRepObjType(ERepositoryObjectType type) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
@@ -105,20 +77,22 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
 
     }
 
-
     public ERepositoryObjectType getProcessType() {
         return null;
     }
-
 
     public ERepositoryObjectType getCodeType() {
         return null;
     }
 
-	public void addNode(ERepositoryObjectType type, RepositoryNode recBinNode,
-			IRepositoryViewObject repositoryObject, RepositoryNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void addNode(ERepositoryObjectType type, RepositoryNode recBinNode, IRepositoryViewObject repositoryObject,
+            RepositoryNode node) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addContents(Collection<EObject> collection, Resource resource) {
+        // TODO Auto-generated method stub
+    }
 
 }

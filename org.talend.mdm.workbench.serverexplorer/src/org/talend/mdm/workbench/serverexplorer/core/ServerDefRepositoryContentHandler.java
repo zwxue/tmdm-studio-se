@@ -12,8 +12,11 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.core;
 
+import java.util.Collection;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
@@ -91,9 +94,12 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
         return null;
     }
 
-	public void addNode(ERepositoryObjectType type, RepositoryNode recBinNode,
-			IRepositoryViewObject repositoryObject, RepositoryNode node) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void addNode(ERepositoryObjectType type, RepositoryNode recBinNode, IRepositoryViewObject repositoryObject,
+            RepositoryNode node) {
+        // TODO Auto-generated method stub
+    }
+
+    public void addContents(Collection<EObject> collection, Resource resource) {
+        // TODO Auto-generated method stub
+    }
 }
