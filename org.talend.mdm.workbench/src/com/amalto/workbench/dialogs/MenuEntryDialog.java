@@ -405,12 +405,14 @@ public class MenuEntryDialog extends Dialog {
                         Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",//$NON-NLS-1$//$NON-NLS-2$
                                 "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
                         if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
-                            icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText()//$NON-NLS-1$
+                            icon = Util.uploadImageFile(
+                                    uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText()//$NON-NLS-1$
                                     .getText(), "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
                         getIconPathText().setText(icon);
                     }
                 } else if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
-                    icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText().getText(),//$NON-NLS-1$
+                    icon = Util.uploadImageFile(
+                            uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText().getText(),//$NON-NLS-1$
                             "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
                 getIconPathText().setText(icon);
                 // ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);

@@ -742,6 +742,37 @@ public class Util {
         }
     }
 
+    public static void main(String[] args) {
+        String url = "http://localhost:8080/imageserver/upload/c201108/di_perspective_16x16.png.png";
+        downloadFile(url, "/tmp");
+    }
+    public static OutputStream downloadFile(String url, String downloadFolder) {
+        try {
+            URL urlFile = new URL(url);
+            String filename = urlFile.getFile();
+            if (filename != null) {
+                int pos = filename.lastIndexOf('/');
+                if (pos != -1) {
+                    filename = filename.substring(pos + 1);
+                }
+            } else {
+                int pos = url.lastIndexOf('/');
+                if (pos != -1) {
+                    filename = url.substring(pos + 1);
+                }
+            }
+            InputStream input = urlFile.openStream();
+            byte[] bytes = IOUtils.toByteArray(input);
+            FileOutputStream output = new FileOutputStream(new File(downloadFolder + "/" + filename)); //$NON-NLS-1$
+            IOUtils.write(bytes, output);
+            return output;
+        } catch (MalformedURLException e) {
+            log.error(e.getMessage(), e);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
     public static String uploadImageFile(String URL, String localFilename, String username, String password,
             HashMap<String, String> picturePathMap) throws XtentisException {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
