@@ -89,6 +89,8 @@ public class GenerateWorkflowWizardR extends GenerateWorkflowWizard {
                 }
             }
             if (bytes != null) {
+                RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_WORKFLOW,
+                        uuid.getProcessName(), uuid.getProcessVersion(), null);
                 procFile.create(new ByteArrayInputStream(bytes), IResource.NONE, null);
                 NewWorkflowAction createAction = new NewWorkflowAction(uuid.getProcessName(), procFile, uuid.getProcessVersion());
                 createAction.run();

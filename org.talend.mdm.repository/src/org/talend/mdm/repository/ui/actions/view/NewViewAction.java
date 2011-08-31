@@ -27,10 +27,12 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.xsd.XSDElementDeclaration;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -48,18 +50,22 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public class NewViewAction extends AbstractSimpleAddAction {
 
+    private XSDElementDeclaration decl;
+
+    public XSDElementDeclaration getXSDElementDeclaration() {
+        return this.decl;
+    }
 
     public NewViewAction() {
         super();
     }
-
 
     @Override
     protected String getDialogTitle() {
         return Messages.NewViewAction_newView;
     }
 
-    private WSViewE newView(String key) {
+    protected WSViewE newView(String key) {
 
         WSBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
         wsBool.set_true(false);
@@ -112,6 +118,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
         commonViewer.expandToLevel(selectObj, 1);
 
     }
+
     protected boolean createServerObject(String key) {
 
         WSViewItem item = MdmpropertiesFactory.eINSTANCE.createWSViewItem();
@@ -124,10 +131,20 @@ public class NewViewAction extends AbstractSimpleAddAction {
 
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
-            return RepositoryResourceUtil.createItem(item, key);
+        } else {
+            item.getState().setPath(""); //$NON-NLS-1$
         }
-        return true;
+        return RepositoryResourceUtil.createItem(item, key);
     }
 
+    public void setXSDElementDeclaration(XSDElementDeclaration decl) {
+        this.decl = decl;
 
+    }
+
+    public void createNewView(String viewName) {
+        RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_VIEW, viewName, null, null);
+        createServerObject(viewName);
+        refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_VIEW);
+    }
 }

@@ -34,13 +34,15 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMap
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-
 /**
  * DOC jsxie class global comment. Detailled comment
  */
 public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
-
+    /**
+     * 
+     */
+    private static final String PREFIX = "CallJob_"; //$NON-NLS-1$
 
     protected Object selectObj;
 
@@ -82,6 +84,8 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         }
 
         WSTransformerV2E transformer = createTransformer(jobName, jobVersion, dialog);
+        RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, PREFIX + jobName,
+                jobVersion, null);
         AttachToProcessView(jobName, transformer);
 
     }
@@ -138,7 +142,6 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             inputLine2.setPluginVariable("law_text");//$NON-NLS-1$
             inItems2.add(inputLine2);
 
-
             List<WSTransformerVariablesMappingE> outItems2 = new ArrayList<WSTransformerVariablesMappingE>();
             WSTransformerVariablesMappingE outputLine2 = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
             outputLine2.setPipelineVariable("decode_xml");//$NON-NLS-1$
@@ -170,7 +173,6 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             steps3.setPluginJNDI("amalto/local/transformer/plugin/callJob");//$NON-NLS-1$ 
             steps3.setDescription("Invoke the job"); //$NON-NLS-1$
 
-
             String server = "http://localhost:8080"; //$NON-NLS-1$
 
             boolean isWar = dialog.isWar();
@@ -190,7 +192,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             steps3.setDisabled(false);
             // Generate the job call
 
-            transformer.setName("CallJob_" + jobName);//$NON-NLS-1$
+            transformer.setName(PREFIX + jobName);//$NON-NLS-1$
             transformer.setDescription("Process that calls the Talend Job: " + jobName);//$NON-NLS-1$ 
 
             list.add(steps1);
@@ -217,10 +219,9 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         item.setState(itemState);
         item.setWsTransformerV2(transformer);
         item.getState().setPath(""); //$NON-NLS-1$
-        RepositoryResourceUtil.createItem(item, "CallJob_" + filename); //$NON-NLS-1$
+        RepositoryResourceUtil.createItem(item, PREFIX + filename); //$NON-NLS-1$
         refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
 
     }
-
 
 }

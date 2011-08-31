@@ -16,11 +16,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.ui.wizards.workflow.GenerateWorkflowWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.workbench.enterprice.dialog.GenerateWorkflowWizard;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -57,6 +59,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
     public Object getAdapter(Class cls) {
         if (cls == GenerateWorkflowWizard.class) {
             return new GenerateWorkflowWizardR(this);
+        }
+        if (cls == AddBrowseItemsWizard.class) {
+            return new AddBrowseItemsWizardR(this);
         }
         return super.getAdapter(cls);
     }

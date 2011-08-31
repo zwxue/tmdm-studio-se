@@ -36,7 +36,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public class GenerateJobTriggerAction extends AbstractRepositoryAction {
 
-
+    private static final String PREFIX = "CallJob_"; //$NON-NLS-1$
 
     protected Object selectObj;
 
@@ -77,6 +77,8 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         }
 
         WSRoutingRuleE routingRule = createTrigger(jobName, jobVersion, dialog);
+        RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_ROUTINGRULE, PREFIX + jobName,
+                jobVersion, null);
         AttachToTriggerView(jobName, routingRule);
 
     }
@@ -93,7 +95,6 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         try {
             String parameter = "";//$NON-NLS-1$
             String server = "http://localhost:8080"; //$NON-NLS-1$
-
 
             boolean isWar = dialog.isWar();
             if (!isWar) {
@@ -127,8 +128,6 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             expression3.setWsOperator(newContainRoutingRuleOperator());
             expression3.setValue("DELETE"); //$NON-NLS-1$
 
-
-
             routingRule.setName("CallJob_" + jobName);//$NON-NLS-1$
             routingRule.setDescription("Trigger that calls the Talend Job: " + jobName); //$NON-NLS-1$
             routingRule.setSynchronous(false);
@@ -146,8 +145,6 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             routingRule.setCondition("C1 Or C2 Or C3"); //$NON-NLS-1$
             routingRule.setDeactive(false);
 
-
-
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -160,6 +157,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         operator.setValue("CONTAINS");//$NON-NLS-1$
         return operator;
     }
+
     /**
      * DOC jsxie Comment method "AttachToTriggerView".
      * 
@@ -173,10 +171,9 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         item.setState(itemState);
         item.setWsRoutingRule(trigger);
         item.getState().setPath(""); //$NON-NLS-1$
-        RepositoryResourceUtil.createItem(item, "CallJob_" + filename); //$NON-NLS-1$
+        RepositoryResourceUtil.createItem(item, PREFIX + filename); //$NON-NLS-1$
         refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
 
     }
-
 
 }

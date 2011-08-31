@@ -107,6 +107,7 @@ public class RepositoryResourceUtil {
     }
 
     public static boolean createItem(Item item, String propLabel, String version) {
+
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
 
@@ -327,6 +328,28 @@ public class RepositoryResourceUtil {
             }
         }
         return serverObjects;
+    }
+
+    public static void removeViewObjectPhysically(ERepositoryObjectType type, String name, String version, String path) {
+        if (type == null || name == null)
+            throw new IllegalArgumentException();
+        if (version == null)
+            version = VersionUtils.DEFAULT_VERSION;
+        if (path == null)
+            path = ""; //$NON-NLS-1$
+        try {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            for (IRepositoryViewObject viewObj : factory.getAll(type)) {
+                Property property = viewObj.getProperty();
+                String itemPath = property.getItem().getState().getPath();
+                if (itemPath.equals(path) && property.getLabel().equals(name) && property.getVersion().equals(version)) {
+                    factory.deleteObjectPhysical(viewObj, version);
+                    return;
+                }
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type, boolean useRepositoryViewObject) {

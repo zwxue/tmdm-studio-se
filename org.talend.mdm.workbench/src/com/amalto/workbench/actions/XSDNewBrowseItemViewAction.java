@@ -68,9 +68,20 @@ public class XSDNewBrowseItemViewAction extends Action {
                     declList.add(declaration);
             }
         }
-        AddBrowseItemsWizard wizard = new AddBrowseItemsWizard(page, declList);
+        AddBrowseItemsWizard wizard = getAddBrowseItemsWizard(declList);
         WizardDialog dialog = new WizardDialog(page.getSite().getShell(), wizard);
         dialog.open();
+    }
+
+    private AddBrowseItemsWizard getAddBrowseItemsWizard(List<XSDElementDeclaration> declList) {
+        Object object = page.getAdapter(AddBrowseItemsWizard.class);
+        if (object != null) {
+            AddBrowseItemsWizard wizard = (AddBrowseItemsWizard) object;
+            wizard.setDeclarations(declList);
+            return wizard;
+        } else {
+            return new AddBrowseItemsWizard(page, declList);
+        }
     }
 
     public void runWithEvent(Event event) {

@@ -86,13 +86,13 @@ public class AddBrowseItemsWizard extends Wizard {
 
     private XtentisPort port;
 
-    private List<XSDElementDeclaration> declList = null;
+    protected List<XSDElementDeclaration> declList = null;
 
     private Map<String, List<Line>> browseItemToRoles = new HashMap<String, List<Line>>();
 
-    private static String INSTANCE_NAME = "Browse Item View";//$NON-NLS-1$
+    protected static String INSTANCE_NAME = "Browse Item View";//$NON-NLS-1$
 
-    private static String BROWSE_ITEMS = "Browse_items_";//$NON-NLS-1$
+    protected static String BROWSE_ITEMS = "Browse_items_";//$NON-NLS-1$
 
     private static ComplexTableViewerColumn[] roleConfigurationColumns = new ComplexTableViewerColumn[] {
             new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -101,9 +101,17 @@ public class AddBrowseItemsWizard extends Wizard {
     private ConfigureRolePage configureRolePage;
 
     public AddBrowseItemsWizard(DataModelMainPage launchPage, List<XSDElementDeclaration> list) {
+        this(launchPage);
+        setDeclarations(list);
+    }
+
+    public AddBrowseItemsWizard(DataModelMainPage launchPage) {
         super();
         setWindowTitle("Generate default Browse Items Views");
         page = launchPage;
+    }
+
+    public void setDeclarations(List<XSDElementDeclaration> list) {
         declList = list;
         for (XSDElementDeclaration dl : declList) {
             browseItemToRoles.put(BROWSE_ITEMS + dl.getName(), new ArrayList<Line>());
@@ -139,7 +147,7 @@ public class AddBrowseItemsWizard extends Wizard {
         return port;
     }
 
-    private void newBrowseItemView(String browseItem) throws RemoteException {
+    protected void newBrowseItemView(String browseItem) throws RemoteException {
         for (XSDElementDeclaration decl : declList) {
             String fullName = BROWSE_ITEMS + decl.getName();
             if (fullName.equals(browseItem)) {
@@ -195,7 +203,7 @@ public class AddBrowseItemsWizard extends Wizard {
         }
     }
 
-    private void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) throws RemoteException {
+    protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) throws RemoteException {
         for (Line line : roles) {
             List<KeyValue> keyValues = line.keyValues;
             String roleName = keyValues.get(0).value;
@@ -382,7 +390,7 @@ public class AddBrowseItemsWizard extends Wizard {
                 ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
                 ruleColumn.setColumnWidth(250);
                 // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
-                List<String> roles = Util.getChildren(page.getXObject().getServerRoot(), TreeObject.ROLE);
+                List<String> roles = getAllRoleNames();
                 ruleColumn.setComboValues(roles.toArray(new String[] {}));
                 ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
                 acsColumn.setColumnWidth(250);
@@ -415,7 +423,6 @@ public class AddBrowseItemsWizard extends Wizard {
             }
         }
 
-
         private boolean isCommitMultiChanges = false;
 
         private List selectedMultiViews = null;
@@ -432,22 +439,31 @@ public class AddBrowseItemsWizard extends Wizard {
         }
 
         private void applyChangeToRoles() {
-            if (isCommitMultiChanges&&selectedMultiViews!=null&&multiChanges.size()>0) {
+            if (isCommitMultiChanges && selectedMultiViews != null && multiChanges.size() > 0) {
                 for (Object obj : selectedMultiViews) {
                     XSDElementDeclaration decl = (XSDElementDeclaration) obj;
                     String browseItem = BROWSE_ITEMS + decl.getName();
                     for (Line line : multiChanges) {
                         List<Line> lines = browseItemToRoles.get(browseItem);
                         Line newLine = line.clone();
-                        if(!lines.contains(newLine)){
+                        if (!lines.contains(newLine)) {
                             lines.add(line);
                         }
                     }
                 }
-                selectedMultiViews=null;
+                selectedMultiViews = null;
                 isCommitMultiChanges = false;
                 multiChanges.clear();
             }
         }
+    }
+
+    /**
+     * DOC hbhong Comment method "getAllRoleNames".
+     * 
+     * @return
+     */
+    protected List<String> getAllRoleNames() {
+        return Util.getChildren(page.getXObject().getServerRoot(), TreeObject.ROLE);
     }
 }
