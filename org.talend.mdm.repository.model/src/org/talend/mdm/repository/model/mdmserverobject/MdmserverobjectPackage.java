@@ -2311,6 +2311,79 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_WORKFLOW_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl <em>WS Resource E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSResourceE()
+     * @generated
+     */
+    int WS_RESOURCE_E = 36;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Filename</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__FILENAME = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Resource E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3760,6 +3833,27 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSWorkflowE();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE <em>WS Resource E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Resource E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSResourceE
+     * @generated
+     */
+    EClass getWSResourceE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFilename <em>Filename</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Filename</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFilename()
+     * @see #getWSResourceE()
+     * @generated
+     */
+    EAttribute getWSResourceE_Filename();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4932,6 +5026,24 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EClass WS_WORKFLOW_E = eINSTANCE.getWSWorkflowE();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl <em>WS Resource E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSResourceE()
+         * @generated
+         */
+        EClass WS_RESOURCE_E = eINSTANCE.getWSResourceE();
+
+        /**
+         * The meta object literal for the '<em><b>Filename</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_RESOURCE_E__FILENAME = eINSTANCE.getWSResourceE_Filename();
 
     }
 

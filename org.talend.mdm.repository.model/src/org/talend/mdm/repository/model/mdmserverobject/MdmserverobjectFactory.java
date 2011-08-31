@@ -350,6 +350,15 @@ public interface MdmserverobjectFactory extends EFactory {
     WSWorkflowE createWSWorkflowE();
 
     /**
+     * Returns a new object of class '<em>WS Resource E</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Resource E</em>'.
+     * @generated
+     */
+    WSResourceE createWSResourceE();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

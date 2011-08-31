@@ -150,6 +150,10 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
                 return createWSWorkflowItemAdapter();
             }
             @Override
+            public Adapter caseWSResourceItem(WSResourceItem object) {
+                return createWSResourceItemAdapter();
+            }
+            @Override
             public Adapter caseItem(Item object) {
                 return createItemAdapter();
             }
@@ -440,6 +444,20 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createWSWorkflowItemAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSResourceItem <em>WS Resource Item</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSResourceItem
+     * @generated
+     */
+    public Adapter createWSResourceItemAdapter() {
         return null;
     }
 

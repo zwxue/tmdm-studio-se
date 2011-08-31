@@ -258,6 +258,15 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.WS_RESOURCE_ITEM: {
+                WSResourceItem wsResourceItem = (WSResourceItem)theEObject;
+                T result = caseWSResourceItem(wsResourceItem);
+                if (result == null) result = caseMDMServerObjectItem(wsResourceItem);
+                if (result == null) result = caseMDMItem(wsResourceItem);
+                if (result == null) result = caseItem(wsResourceItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -544,6 +553,21 @@ public class MdmpropertiesSwitch<T> {
      * @generated
      */
     public T caseWSWorkflowItem(WSWorkflowItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Resource Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Resource Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSResourceItem(WSResourceItem object) {
         return null;
     }
 

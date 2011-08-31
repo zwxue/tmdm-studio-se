@@ -1290,6 +1290,70 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_WORKFLOW_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSResourceItemImpl <em>WS Resource Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WSResourceItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSResourceItem()
+     * @generated
+     */
+    int WS_RESOURCE_ITEM = 19;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>Resource</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_ITEM__RESOURCE = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Resource Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1297,7 +1361,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 19;
+    int EREPOSITORY_OBJECT_TYPE = 20;
 
 
     /**
@@ -1689,6 +1753,27 @@ public interface MdmpropertiesPackage extends EPackage {
     EReference getWSWorkflowItem_WsWorkflow();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSResourceItem <em>WS Resource Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Resource Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSResourceItem
+     * @generated
+     */
+    EClass getWSResourceItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.WSResourceItem#getResource <em>Resource</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Resource</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WSResourceItem#getResource()
+     * @see #getWSResourceItem()
+     * @generated
+     */
+    EReference getWSResourceItem_Resource();
+
+    /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2054,6 +2139,24 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_WORKFLOW_ITEM__WS_WORKFLOW = eINSTANCE.getWSWorkflowItem_WsWorkflow();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSResourceItemImpl <em>WS Resource Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WSResourceItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWSResourceItem()
+         * @generated
+         */
+        EClass WS_RESOURCE_ITEM = eINSTANCE.getWSResourceItem();
+
+        /**
+         * The meta object literal for the '<em><b>Resource</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_RESOURCE_ITEM__RESOURCE = eINSTANCE.getWSResourceItem_Resource();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

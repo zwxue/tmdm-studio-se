@@ -30,6 +30,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSJobModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
@@ -316,6 +317,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsWorkflowEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsResourceEEClass = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -1601,6 +1609,24 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSResourceE() {
+        return wsResourceEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSResourceE_Filename() {
+        return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
@@ -1794,6 +1820,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsServicePutConfigurationEEClass, WS_SERVICE_PUT_CONFIGURATION_E__CONFIGURATION);
 
         wsWorkflowEEClass = createEClass(WS_WORKFLOW_E);
+
+        wsResourceEEClass = createEClass(WS_RESOURCE_E);
+        createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILENAME);
     }
 
     /**
@@ -1842,6 +1871,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsEventManagerEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsServiceConfigurationEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsWorkflowEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsResourceEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2014,6 +2044,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSServicePutConfigurationE_Configuration(), ecorePackage.getEString(), "configuration", null, 0, 1, WSServicePutConfigurationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsWorkflowEEClass, WSWorkflowE.class, "WSWorkflowE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+        initEClass(wsResourceEEClass, WSResourceE.class, "WSResourceE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSResourceE_Filename(), ecorePackage.getEString(), "filename", null, 0, 1, WSResourceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);
