@@ -59,6 +59,30 @@ public class RepositoryQueryService {
         return (WSDataModelE) findServerObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL, name);
     }
 
+    public static List<String> findAllMenuNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_MENU);
+    }
+
+    public static List<String> findAllRoutingRuleNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+    }
+
+    public static List<String> findAllStoredProcedureNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_STOREPROCEDURE);
+    }
+
+    public static List<String> findAllViewNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_VIEW);
+    }
+
+    public static List<String> findAllTransformerV2Names() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+    }
+
+    public static List<String> findAllUniverseNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_UNIVERSE);
+    }
+
     /**
      * this method is compatible with Util.getDataModel, but for Repository view
      * 
