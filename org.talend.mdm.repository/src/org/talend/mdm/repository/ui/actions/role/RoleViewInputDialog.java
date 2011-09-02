@@ -383,19 +383,10 @@ public class RoleViewInputDialog extends Dialog implements SelectionListener {
      * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
      */
     public void widgetSelected(SelectionEvent arg0) {
-        // TODO Auto-generated method stub
+
 
     }
 
-    // public void widgetSelected(SelectionEvent e) {
-    // dlg = new XpathSelectDialog(composite.getShell(), treeParent, "Select one Entity", site, false, null);
-    // dlg.setBlockOnOpen(true);
-    // dlg.open();
-    //
-    // if (dlg.getReturnCode() == Window.OK) {
-    // text.setText(value + dlg.getEntityName());
-    // dlg.close();
-    // }
-    // }
+
 
 }

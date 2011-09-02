@@ -70,7 +70,7 @@ public class NewTriggerAction extends AbstractSimpleAddAction {
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
-        //
+
         WSRoutingRuleE routingRule = newRoutingRule(key);
         item.setWsRoutingRule(routingRule);
 

@@ -30,12 +30,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.views.ServerView;
-
 public class NewUserWizard extends Wizard {
 
-    // private static Log log = LogFactory.getLog(NewUserWizard.class);
 
     private EditUserNamePage page1;
 
@@ -43,21 +39,12 @@ public class NewUserWizard extends Wizard {
 
     private ISelection selection;
 
-    private TreeObject xobject;
-
-    private ServerView view;
-
     private boolean isFinish = false;
 
     private String userName;
 
     private boolean isadmin;
 
-    public NewUserWizard(TreeObject xobject, ServerView view) {
-        super();
-        this.xobject = xobject;
-        this.view = view;
-    }
 
     public NewUserWizard() {
         super();
@@ -66,7 +53,6 @@ public class NewUserWizard extends Wizard {
     @Override
     public boolean performFinish() {
         userName = page1.getUserName();
-        TreeObject newInstance = null;
         isadmin = page2.isAdmin;
 
         return true;
@@ -90,7 +76,6 @@ public class NewUserWizard extends Wizard {
             super("RoleName");
             setTitle("Role Name");
             setDescription("Please enter a name for the new Role");
-            // setPageComplete(false);
             setPageComplete(true);
 
         }
@@ -102,34 +87,15 @@ public class NewUserWizard extends Wizard {
             tipLabel.setText("Enter a name for the Role:");
             GridData gd = new GridData(GridData.FILL_HORIZONTAL);
             gd.widthHint = 150;
-            // gd.heightHint =150;
             final Text nameText = new Text(composite, SWT.BORDER);
             nameText.setLayoutData(gd);
             nameText.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    String name = nameText.getText();
-                    userName = name;
-                    // String errmsg = isValid(name);
-                    String errmsg = null;
-                    // if (errmsg != null) {
-                    // // warningLabel.setText(isValid(name));
-                    // setErrorMessage(errmsg);
-                    // setPageComplete(false);
-                    // } else {
-                    // setErrorMessage(errmsg);
-                    // userName = name;
-                    // setPageComplete(true);
-                    // }
+                    userName = nameText.getText();
                 }
             });
-            // warningLabel = new Label(composite,SWT.NONE);
-            // warningLabel.setText(isValid(null));
-            // setPageComplete(false);
-            // GridData gd1 = new GridData(GridData.FILL_HORIZONTAL);
-            // gd1.widthHint = 200;
-            // gd1.heightHint = 20;
-            // warningLabel.setLayoutData(gd1);
+
             setControl(composite);
         }
 
@@ -170,7 +136,6 @@ public class NewUserWizard extends Wizard {
             radioGroup.setLayout(new GridLayout(2, false));
             adminButton = new Button(radioGroup, SWT.RADIO);
             adminButton.setText("Administrator");
-            // adminButton.setSelection(true);
 
             userButton = new Button(radioGroup, SWT.RADIO);
             userButton.setText("Normal User");
@@ -220,7 +185,7 @@ public class NewUserWizard extends Wizard {
     }
 
     public String isValid(String newText) {
-        if ((newText == null) || "".equals(newText))
+        if ((newText == null) || "".equals(newText))//$NON-NLS-1$
             return "The Name cannot be empty";
 
         if (!Pattern.matches("\\w*(#|\\w*)+\\w+", newText)) {//$NON-NLS-1$
@@ -240,20 +205,12 @@ public class NewUserWizard extends Wizard {
         return false;
     }
 
-    /**
-     * Getter for userName.
-     * 
-     * @return the userName
-     */
+
     public String getUserName() {
         return this.userName;
     }
 
-    /**
-     * Getter for isadmin.
-     * 
-     * @return the isadmin
-     */
+
     public boolean isAdmin() {
         return this.isadmin;
     }

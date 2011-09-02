@@ -93,7 +93,7 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
         WSServiceConfigurationItem item = MdmpropertiesFactory.eINSTANCE.createWSServiceConfigurationItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
-        //
+
         WSServiceConfigurationE serConfig = newServiceConfiguration(key);
         item.setWsServiceConfiguration(serConfig);
 

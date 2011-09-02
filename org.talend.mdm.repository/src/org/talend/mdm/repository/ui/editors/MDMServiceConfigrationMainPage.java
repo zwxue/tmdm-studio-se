@@ -34,6 +34,9 @@ import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
 
+/**
+ * DOC jsxie class global comment. Detailled comment
+ */
 public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage {
 
     private static Log log = LogFactory.getLog(MDMServiceConfigrationMainPage.class);

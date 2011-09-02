@@ -34,6 +34,9 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanStatus;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 
+/**
+ * DOC jsxie class global comment. Detailled comment
+ */
 public class MDMSynchronizationMainPage extends SynchronizationMainPage {
 
     private XtentisPort port;

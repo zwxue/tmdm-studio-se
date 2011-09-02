@@ -121,7 +121,7 @@ public class NewSynchronizationPlanAction extends AbstractSimpleAddAction {
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
-        //
+
         WSSynchronizationPlanE synchronizationplan = newSynchronizationPlan(key);
         item.setWsSynchronizationPlan(synchronizationplan);
 

@@ -21,6 +21,9 @@ import org.talend.mdm.workbench.enterprice.editors.RoleMainPage;
 
 import com.amalto.workbench.utils.XtentisException;
 
+/**
+ * DOC jsxie class global comment. Detailled comment
+ */
 public class MDMRoleMainPage extends RoleMainPage {
 
     public MDMRoleMainPage(FormEditor editor) {

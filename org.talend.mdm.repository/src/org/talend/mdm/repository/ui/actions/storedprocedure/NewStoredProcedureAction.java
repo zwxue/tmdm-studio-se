@@ -67,7 +67,7 @@ public class NewStoredProcedureAction extends AbstractSimpleAddAction {
 
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
-        //
+
         WSStoredProcedureE storedProcedure = newStoredProcedure(key);
         item.setWsStoredProcedure(storedProcedure);
 

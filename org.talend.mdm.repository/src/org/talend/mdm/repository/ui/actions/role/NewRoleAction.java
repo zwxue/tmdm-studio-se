@@ -49,7 +49,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * DOC class global comment. Detailled comment <br/>
+ * DOC jsxie class global comment. Detailled comment <br/>
  * 
  */
 public class NewRoleAction extends AbstractSimpleAddAction {
@@ -126,6 +126,9 @@ public class NewRoleAction extends AbstractSimpleAddAction {
         return true;
     }
 
+    /**
+     * Read the initial value from admin.xml or user.xml
+     */
     public void xmlParseSpecification(WSRoleE role, boolean isAdmin) {
 
         try {
