@@ -159,7 +159,7 @@ public class RepositoryQueryService {
                 Item item = viewObj.getProperty().getItem();
                 if (item instanceof MDMServerObjectItem) {
                     MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                    if (serverObject.getName().equals(name)) {
+                    if (serverObject.getUniqueName().equals(name)) {
                         return (MDMServerObjectItem) item;
                     }
                 }
@@ -181,6 +181,7 @@ public class RepositoryQueryService {
             typeMap.put(TreeObject.STORED_PROCEDURE, IServerObjectRepositoryType.TYPE_STOREPROCEDURE);
             typeMap.put(TreeObject.SYNCHRONIZATIONPLAN, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN);
             typeMap.put(TreeObject.VIEW, IServerObjectRepositoryType.TYPE_VIEW);
+            typeMap.put(TreeObject.PICTURES_RESOURCE, IServerObjectRepositoryType.TYPE_RESOURCE);
         }
     }
 

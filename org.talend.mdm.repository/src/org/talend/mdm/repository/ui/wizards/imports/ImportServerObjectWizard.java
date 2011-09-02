@@ -12,10 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.imports;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,6 +30,8 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -46,16 +51,20 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.progress.UIJob;
+import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
@@ -83,7 +92,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     private TreeObject serverRoot;
 
-    MDMServerDef def;
+    MDMServerDef serverDef;
 
     private LabelCombo comboVersion;
 
@@ -144,6 +153,74 @@ public class ImportServerObjectWizard extends Wizard {
 
     }
 
+    Pattern fileNamePattern = Pattern.compile("(.*?)-(.*)\\.(.*?)"); //$NON-NLS-1$
+
+    Pattern fileVersionPattern = Pattern.compile("(.*)_(\\d+\\.\\d+)"); //$NON-NLS-1$
+
+    /**
+     * DOC hbhong Comment method "getFileInfo".
+     * 
+     * @param input
+     * @return // dirName result[0] // fileQName result[1] // fileExtension result[2] // fileName result[3] // version
+     * result[4]
+     */
+    private String[] getFileInfo(String input) {
+        Matcher m = fileNamePattern.matcher(input);
+        if (m.matches()) {
+            String[] result = new String[5];
+            // dirName
+            result[0] = m.group(1);
+            // fileQName
+            result[1] = m.group(2);
+            // fileExtension
+            result[2] = m.group(3);
+            // fileName
+            result[3] = result[1];
+            // version
+            result[4] = VersionUtils.DEFAULT_VERSION;
+            Matcher versionM = fileVersionPattern.matcher(result[1]);
+            if (versionM.matches()) {
+                // fileName
+                result[3] = versionM.group(1);
+                // version
+                result[4] = versionM.group(2);
+            }
+            return result;
+        }
+        return null;
+
+    }
+
+    private MDMServerObject handleSpecialTreeObject(TreeObject treeObj) throws IOException {
+        if (treeObj.getType() == TreeObject.PICTURES_RESOURCE) {
+            String[] fileInfo = getFileInfo(treeObj.getName());
+
+            if (fileInfo != null) {
+                String dirName = fileInfo[0];
+                String fileQName = fileInfo[1];
+                String fileExtension = fileInfo[2];
+
+                String fileName = fileInfo[3];
+
+
+                WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
+                resource.setName(fileName);
+                resource.setFileExtension(fileExtension);
+                StringBuffer strBuf = new StringBuffer();
+                strBuf.append("http://").append(serverDef.getHost()).append(":").append(serverDef.getPort()) //$NON-NLS-1$ //$NON-NLS-2$
+                        .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$
+                String url = strBuf.toString();
+                byte[] bytes = Util.downloadFile(url);
+                resource.setFileContent(bytes);
+
+                treeObj.setName(fileName);
+                return resource;
+            }
+
+        }
+        return null;
+    }
+
     public void doImport(Object[] objs, IProgressMonitor monitor) {
         monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
 
@@ -159,42 +236,101 @@ public class ImportServerObjectWizard extends Wizard {
         types.add(TreeObject.UNIVERSE);
         types.add(TreeObject.VIEW);
         for (Object obj : objs) {
-            TreeObject treeObj = (TreeObject) obj;
-            if (!types.contains(treeObj.getType()) || treeObj.getWsObject() == null
-                    || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) //$NON-NLS-1$
-                continue;
-            monitor.subTask(treeObj.getDisplayName());
-            MDMServerObject eobj = (MDMServerObject) Bean2EObjUtil.getInstance()
-                    .convertFromBean2EObj(treeObj.getWsObject(), null);
-            ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
-            MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByName(type, treeObj.getName());
-            if (item != null) {
-                if (!isOverrideAll) {
-                    int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
-                    if (result == IDialogConstants.CANCEL_ID) {
-                        return;
-                    }
-                    if (result == IDialogConstants.YES_TO_ALL_ID) {
-                        isOverrideAll = true;
-                    }
-                    if (result == IDialogConstants.NO_ID) {
-                        break;
-                    }
+            try {
+                TreeObject treeObj = (TreeObject) obj;
+                monitor.subTask(treeObj.getDisplayName());
+                String treeObjName = treeObj.getName();
+                MDMServerObject eobj = handleSpecialTreeObject(treeObj);
+                if (eobj == null) {
+                    if (!types.contains(treeObj.getType()) || treeObj.getWsObject() == null
+                            || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) //$NON-NLS-1$
+                        continue;
+                    eobj = (MDMServerObject) Bean2EObjUtil.getInstance().convertFromBean2EObj(treeObj.getWsObject(), null);
                 }
-                item.setMDMServerObject(eobj);
-                // save
-                RepositoryResourceUtil.saveItem(item);
-            } else {
-                IRepositoryNodeConfiguration config = RepositoryNodeConfigurationManager.getConfiguration(type);
-                item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);
-                item.setMDMServerObject(eobj);
-                ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
-                itemState.setPath(treeObj.getPath());
-                item.setState(itemState);
-                RepositoryResourceUtil.createItem(item, treeObj.getName());
+
+                ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
+                String uniqueName = getUniqueName(treeObj, treeObjName);
+                MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByName(type, uniqueName);
+                if (item != null) {
+                    if (!isOverrideAll) {
+                        int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
+                        if (result == IDialogConstants.CANCEL_ID) {
+                            return;
+                        }
+                        if (result == IDialogConstants.YES_TO_ALL_ID) {
+                            isOverrideAll = true;
+                        }
+                        if (result == IDialogConstants.NO_ID) {
+                            break;
+                        }
+                    }
+                    item.setMDMServerObject(eobj);
+                    // save
+                    RepositoryResourceUtil.saveItem(item);
+                } else {
+                    IRepositoryNodeConfiguration config = RepositoryNodeConfigurationManager.getConfiguration(type);
+                    item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);
+                    item.setMDMServerObject(eobj);
+                    ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
+                    itemState.setPath(treeObj.getPath());
+                    handlePath(itemState, type);
+                    item.setState(itemState);
+                    String version = getVersion(treeObj);
+                    RepositoryResourceUtil.createItem(item, treeObj.getName(), version);
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
             }
         }
         monitor.done();
+    }
+
+    /**
+     * DOC hbhong Comment method "getVersion".
+     * 
+     * @param treeObj
+     * @return
+     */
+    private String getVersion(TreeObject treeObj) {
+        if (treeObj.getType() == TreeObject.PICTURES_RESOURCE) {
+            String[] fileInfo = getFileInfo(treeObj.getName());
+            if (fileInfo != null) {
+                return fileInfo[4];
+            }
+        }
+        return VersionUtils.DEFAULT_VERSION;
+    }
+
+    /**
+     * DOC hbhong Comment method "getUniqueName".
+     * 
+     * @param treeObj
+     * @return
+     */
+    private String getUniqueName(TreeObject treeObj, String name) {
+        if (treeObj.getType() == TreeObject.PICTURES_RESOURCE) {
+            if (name == null) {
+                name = treeObj.getName();
+            }
+            String[] fileInfo = getFileInfo(name);
+            if (fileInfo != null) {
+                return fileInfo[3] + "." + fileInfo[2]; //$NON-NLS-1$
+            }
+        }
+        return treeObj.getName();
+    }
+
+    /**
+     * DOC hbhong Comment method "handlePath".
+     * 
+     * @param itemState
+     * @param type
+     */
+    private void handlePath(ItemState itemState, ERepositoryObjectType type) {
+        if (type == IServerObjectRepositoryType.TYPE_RESOURCE) {
+            itemState.setPath(""); //$NON-NLS-1$
+        }
+
     }
 
     class ImportProcess implements IRunnableWithProgress {
@@ -227,10 +363,9 @@ public class ImportServerObjectWizard extends Wizard {
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
-            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(def.getName(), def.getUrl(),
-                    def.getUser(), def.getPasswd(), def.getUniverse(), view);
+            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
+                    serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), view);
             final IProgressMonitor monitor = arg0;
-            // TODO Auto-generated method stub
             retriever.setRetriveWSObject(true);
             retriever.run(monitor);
             serverRoot = retriever.getServerRoot();
@@ -260,7 +395,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private void retriveServerRoot() {
-        if (def != null) {
+        if (serverDef != null) {
             try {
                 getContainer().run(true, false, new RetriveProcess());
             } catch (InvocationTargetException e) {
@@ -333,12 +468,12 @@ public class ImportServerObjectWizard extends Wizard {
                 public void widgetSelected(SelectionEvent e) {
                     SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
                     if (dlg.open() == IDialogConstants.OK_ID) {
-                        def = dlg.getSelectedServerDef();
-                        txtServer.setText(def.getUrl());
+                        serverDef = dlg.getSelectedServerDef();
+                        txtServer.setText(serverDef.getUrl());
                         checkCompleted();
-                        String url = def.getUrl();
-                        String user = def.getUser();
-                        String password = def.getPasswd();
+                        String url = serverDef.getUrl();
+                        String user = serverDef.getUser();
+                        String password = serverDef.getPasswd();
                         try {
                             // get Version
                             XtentisPort port;
@@ -367,8 +502,7 @@ public class ImportServerObjectWizard extends Wizard {
             comboVersion.getCombo().addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    // TODO Auto-generated method stub
-                    def.setUniverse(comboVersion.getCombo().getText());
+                    serverDef.setUniverse(comboVersion.getCombo().getText());
                     retriveServerRoot();
 
                 }
@@ -384,6 +518,18 @@ public class ImportServerObjectWizard extends Wizard {
 
                 public void selectionChanged(SelectionChangedEvent arg0) {
                     checkCompleted();
+                }
+            });
+            treeViewer.getViewer().addFilter(new ViewerFilter() {
+
+                @Override
+                public boolean select(Viewer viewer, Object parentElement, Object element) {
+                    if (element instanceof TreeObject) {
+                        int type = ((TreeObject) element).getType();
+                        if (type == 26 || type == 24 || type == 25)
+                            return false;
+                    }
+                    return true;
                 }
             });
             btnOverwrite = new Button(composite, SWT.CHECK);

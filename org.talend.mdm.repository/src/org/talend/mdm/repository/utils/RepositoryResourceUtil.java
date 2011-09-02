@@ -22,6 +22,9 @@
 package org.talend.mdm.repository.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -35,6 +38,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.commons.exception.PersistenceException;
@@ -77,6 +81,10 @@ import org.talend.repository.model.RepositoryNode;
  * 
  */
 public class RepositoryResourceUtil {
+
+    private static final String DOT = "."; //$NON-NLS-1$
+
+    private static final String UNDERLINE = "_"; //$NON-NLS-1$
 
     static Logger log = Logger.getLogger(RepositoryResourceUtil.class);
 
@@ -137,14 +145,76 @@ public class RepositoryResourceUtil {
         return false;
     }
 
+    public static String getVersionFileName(File file, String version) {
+        if (version == null) {
+            version = VersionUtils.DEFAULT_VERSION;
+        }
+        String fileName = file.getName();
+        int index = fileName.lastIndexOf(DOT);
+        if (index > 0) {
+            fileName = fileName.substring(0, index) + UNDERLINE + version + fileName.substring(index);
+        }
+        return fileName;
+    }
+
+    public static IFile copyOSFileTOProject(IProject prj, String path, IFolder desFolder, String version, boolean overwrite,
+            IProgressMonitor progressMonitor) throws CoreException, PersistenceException {
+        if (path == null || desFolder == null)
+            throw new IllegalArgumentException();
+        if (prj == null) {
+            Project project = ProjectManager.getInstance().getCurrentProject();
+            prj = ResourceModelUtils.getProject(project);
+        }
+        if (version == null) {
+            version = VersionUtils.DEFAULT_VERSION;
+        }
+        if (desFolder.exists()) {
+            File file = new File(path);
+            if (file.exists()) {
+                FileInputStream fileInputStream = null;
+                try {
+                    String fileName = getVersionFileName(file, version);
+                    IFile desfile = desFolder.getFile(fileName);
+                    File osDesFile = new File(desfile.getLocation().toOSString());
+                    boolean exists = osDesFile.exists();
+                    if (exists) {
+                        if (overwrite) {
+                            osDesFile.delete();
+                            desFolder.refreshLocal(IResource.DEPTH_ONE, progressMonitor);
+                        }
+                    }
+                    fileInputStream = new FileInputStream(file);
+                    desfile.create(fileInputStream, false, progressMonitor);
+                    return desfile;
+                } catch (FileNotFoundException e) {
+                } finally {
+                    if (fileInputStream != null) {
+                        try {
+                            fileInputStream.close();
+                        } catch (IOException e) {
+                        }
+                    }
+                }
+            }
+
+        }
+        return null;
+    }
+
     public static IFolder getFolder(IRepositoryViewObject viewObj) {
+
+        Item pItem = viewObj.getProperty().getItem();
+        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+        return getFolder(type, pItem);
+    }
+
+    public static IFolder getFolder(ERepositoryObjectType type, Item item) {
         try {
-            Item pItem = viewObj.getProperty().getItem();
             Project project = ProjectManager.getInstance().getCurrentProject();
             IProject fsProject = ResourceModelUtils.getProject(project);
-            ItemState state = pItem.getState();
+            ItemState state = item.getState();
 
-            String path = ERepositoryObjectType.getFolderName(viewObj.getRepositoryObjectType());
+            String path = ERepositoryObjectType.getFolderName(type);
             if (!path.isEmpty()) {
                 path += state.getPath();
             }
@@ -195,8 +265,15 @@ public class RepositoryResourceUtil {
         if (path != null && path.length() > 0) {
             folder = folder.getFolder(path);
         }
+        String name = null;
         Property property = item.getProperty();
-        String fileName = property.getLabel() + "_" + property.getVersion() + "." + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        if (item instanceof MDMServerObjectItem) {
+            name = ((MDMServerObjectItem) item).getMDMServerObject().getName();
+        } else {
+            name = property.getLabel();
+        }
+
+        String fileName = name + UNDERLINE + property.getVersion() + DOT + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$ 
         IFile file = folder.getFile(fileName);
         return file;
     }

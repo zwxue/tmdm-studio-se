@@ -19,6 +19,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.service.interactive.DataModelInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.JobInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.MenuInteractiveHandler;
+import org.talend.mdm.repository.core.service.interactive.ResourceInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.RoleInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.RoutingRuleInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.ServiceConfigurationInteractiveHandler;
@@ -55,6 +56,7 @@ public class InteractiveService {
         registerHandler(new DataModelInteractiveHandler());
         registerHandler(new MenuInteractiveHandler());
         registerHandler(new JobInteractiveHandler());
+        registerHandler(new ResourceInteractiveHandler());
         registerHandler(new RoutingRuleInteractiveHandler());
         registerHandler(new RoleInteractiveHandler());
         registerHandler(new ServiceConfigurationInteractiveHandler());

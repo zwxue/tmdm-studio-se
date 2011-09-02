@@ -2366,13 +2366,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_RESOURCE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
-     * The feature id for the '<em><b>Filename</b></em>' attribute.
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_RESOURCE_E__FILENAME = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+    int WS_RESOURCE_E__FILE_EXTENSION = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>File Content</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__FILE_CONTENT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
      * The number of structural features of the '<em>WS Resource E</em>' class.
@@ -2381,7 +2390,7 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int WS_RESOURCE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+    int WS_RESOURCE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
@@ -3843,15 +3852,26 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSResourceE();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFilename <em>Filename</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFileExtension <em>File Extension</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Filename</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFilename()
+     * @return the meta object for the attribute '<em>File Extension</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFileExtension()
      * @see #getWSResourceE()
      * @generated
      */
-    EAttribute getWSResourceE_Filename();
+    EAttribute getWSResourceE_FileExtension();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFileContent <em>File Content</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>File Content</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFileContent()
+     * @see #getWSResourceE()
+     * @generated
+     */
+    EAttribute getWSResourceE_FileContent();
 
     /**
      * Returns the factory that creates the instances of the model.
@@ -5038,12 +5058,20 @@ public interface MdmserverobjectPackage extends EPackage {
         EClass WS_RESOURCE_E = eINSTANCE.getWSResourceE();
 
         /**
-         * The meta object literal for the '<em><b>Filename</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>File Extension</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute WS_RESOURCE_E__FILENAME = eINSTANCE.getWSResourceE_Filename();
+        EAttribute WS_RESOURCE_E__FILE_EXTENSION = eINSTANCE.getWSResourceE_FileExtension();
+
+        /**
+         * The meta object literal for the '<em><b>File Content</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_RESOURCE_E__FILE_CONTENT = eINSTANCE.getWSResourceE_FileContent();
 
     }
 

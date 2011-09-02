@@ -95,15 +95,15 @@ public class DeployService {
         return instance;
     }
 
-    private DeployStatus deployMDM(XtentisPort port, ERepositoryObjectType type, MDMServerObject serverObj, Item item,
-            IProgressMonitor monitor) {
+    private DeployStatus deployMDM(MDMServerDef serverDef, XtentisPort port, ERepositoryObjectType type,
+            MDMServerObject serverObj, Item item, IProgressMonitor monitor) {
 
         IInteractiveHandler handler = InteractiveService.findHandler(type);
         if (handler != null) {
             String typeLabel = handler.getLabel();
             monitor.subTask("Deploying " + typeLabel + "...");
             try {
-                if (handler.deployMDM(port, item, serverObj))
+                if (handler.deployMDM(serverDef, port, item, serverObj))
                     return DeployStatus.getOKStatus(item, "Success to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
                 else
                     return DeployStatus.getInfoStatus(item, "Skip to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
@@ -178,8 +178,8 @@ public class DeployService {
                             return;
                         ERepositoryObjectType type = viewObj.getRepositoryObjectType();
                         Item item = viewObj.getProperty().getItem();
-                        DeployStatus deployStatus = deployMDM(port, type, ((MDMServerObjectItem) item).getMDMServerObject(),
-                                item, monitor);
+                        DeployStatus deployStatus = deployMDM(serverDef, port, type,
+                                ((MDMServerObjectItem) item).getMDMServerObject(), item, monitor);
                         mStatus.add(deployStatus);
                         monitor.worked(1);
                     }

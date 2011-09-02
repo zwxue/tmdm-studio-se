@@ -53,7 +53,7 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
      * org.talend.mdm.repository.core.service.IInteractiveHandler#deploy(com.amalto.workbench.webservices.XtentisPort,
      * org.talend.core.model.properties.Item, org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)
      */
-    public boolean deployMDM(XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException {
+    public boolean deployMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException {
         Object wsObj = convert(item, serverObj);
         return doDeploy(port, wsObj);
     }

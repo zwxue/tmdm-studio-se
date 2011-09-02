@@ -78,4 +78,7 @@ public interface IServerObjectRepositoryType {
 
     public static ERepositoryObjectType TYPE_SERVICECONFIGURATION = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.ServiceConfiguration"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_RESOURCE = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.Resource"); //$NON-NLS-1$
 }

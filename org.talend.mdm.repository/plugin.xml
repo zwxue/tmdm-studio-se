@@ -151,6 +151,14 @@
             products="MDM"
             type="MDM.ServiceConfiguration">
       </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.ResourceRepositoryNode"
+            folder="MDM/resource"
+            isResouce="true"
+            label="Resource"
+            products="MDM"
+            type="MDM.Resource">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.core.repository.repository_content">
@@ -322,6 +330,10 @@
       <configuration
             class="org.talend.mdm.repository.core.impl.serviceconfiguration.ServiceConfigurationNodeConfiguration"
             label="Service Configuration">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.resource.ResourceNodeConfiguration"
+            label="Resource">
       </configuration>
    </extension>
    <extension

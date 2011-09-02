@@ -19,12 +19,17 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // ============================================================================
-package org.talend.mdm.repository.core.impl.workflow;
+package org.talend.mdm.repository.core.impl.resource;
+
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -36,7 +41,8 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
+import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -44,13 +50,13 @@ import org.talend.repository.model.IProxyRepositoryFactory;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class WorkflowNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
+public class ResourceNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
-    Logger log = Logger.getLogger(WorkflowNodeResourceProvider.class);
+    Logger log = Logger.getLogger(ResourceNodeResourceProvider.class);
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof WSWorkflowItem || item instanceof ContainerItem) {
-            return IServerObjectRepositoryType.TYPE_WORKFLOW;
+        if (item instanceof WSResourceItem || item instanceof ContainerItem) {
+            return IServerObjectRepositoryType.TYPE_RESOURCE;
         }
         return null;
     }
@@ -60,28 +66,28 @@ public class WorkflowNodeResourceProvider extends AbstractRepositoryNodeResource
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((WSWorkflowItem) item).getWsWorkflow());
+            contents.add(((WSResourceItem) item).getResource());
             return itemResource;
         }
         return null;
     }
 
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof WSWorkflowItem) {
+        if (item instanceof WSResourceItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((WSWorkflowItem) item).getWsWorkflow());
+            resource.getContents().add(((WSResourceItem) item).getResource());
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSWorkflowDeployItem();
+        return MdmpropertiesFactory.eINSTANCE.createWSResourceItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {
-        return type == IServerObjectRepositoryType.TYPE_WORKFLOW;
+        return type == IServerObjectRepositoryType.TYPE_RESOURCE;
     }
 
     @Override
@@ -91,16 +97,36 @@ public class WorkflowNodeResourceProvider extends AbstractRepositoryNodeResource
 
     @Override
     public void handleReferenceFile(Item item) {
-        IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_WORKFLOW, item, "proc"); //$NON-NLS-1$
-        if (file.exists()) {
+        String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
+        IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
+
+        try {
+
+            createOrUpdateFile(item, file);
+
             linkReferenceFile(item, file);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-            try {
-                factory.save(item);
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            }
+
+            factory.save(item);
+
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
         }
     }
 
+    private IFile createOrUpdateFile(Item item, IFile file) throws UnsupportedEncodingException, CoreException {
+        WSResourceE resource = ((WSResourceItem) item).getResource();
+        byte[] content = resource.getFileContent();
+        if (content != null) {
+            if (!file.exists())
+                file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+            else
+                file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+        }
+        return file;
+    }
 }
