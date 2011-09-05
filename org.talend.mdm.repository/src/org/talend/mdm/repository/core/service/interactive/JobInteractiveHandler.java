@@ -54,22 +54,22 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {
         IStructuredSelection selection = getSelection(viewObjs);
         //
-        final DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
+        // final DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
         SpagoBiServer server = getServer(serverDef);
-        publishWizard.setMdmServer(server);
+        // publishWizard.setMdmServer(server);
 
         IWorkbench workbench = RepositoryPlugin.getDefault().getWorkbench();
-        publishWizard.setWindowTitle(Messages.JobInteractiveHandler_wizardTitle);
-        publishWizard.init(workbench, selection);
+        // publishWizard.setWindowTitle(Messages.JobInteractiveHandler_wizardTitle);
+        // publishWizard.init(workbench, selection);
         final Display display = Display.getDefault();
 
         display.syncExec(new Runnable() {
 
             public void run() {
                 Shell activeShell = display.getActiveShell();
-                WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-
-                setResult(dialog.open() == IDialogConstants.OK_ID);
+                // WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
+                // setResult(dialog.open() == IDialogConstants.OK_ID);
+                setResult(true);
             }
         });
 
