@@ -13,38 +13,46 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.ui.part.FileEditorInput;
 import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+
+import com.amalto.workbench.models.TreeObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class ResourceRepositoryFileEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
-
+// public class ResourceRepositoryFileEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
+public class ResourceRepositoryFileEditorInput extends XObjectEditorInput2 {
     private Item item;
 
-    public static String EDITOR_ID = " "; //$NON-NLS-1$
+    private IFile file;
+   
 
-    /**
-     * DOC hbhong WorkflowEditorInput constructor comment.
-     * 
-     * @param file
-     */
-    public ResourceRepositoryFileEditorInput(Item item, IFile file) {
-        super(file);
+    public ResourceRepositoryFileEditorInput(Item item) {
+
+        super(item);
         this.item = item;
+
     }
 
+    protected void init(Item item) {
 
-  
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput#getEditorId()
-     */
-    public String getEditorId() {
-        return EDITOR_ID;
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        String name = null;
+        if (serverObject instanceof WSResourceE) {
+            name = serverObject.getName() + "." + ((WSResourceE) serverObject).getFileExtension(); //$NON-NLS-1$
+        }
+        Object treeObject = new TreeObject(name, null, TreeObject.RESOURCES, null, null, null);
+
+        setModel(treeObject);
+        setName(name);
     }
+
 
     /*
      * (non-Javadoc)
@@ -55,5 +63,14 @@ public class ResourceRepositoryFileEditorInput extends FileEditorInput implement
         return item;
     }
 
+
+
+    public IFile getReferenceFile() {
+        if (file == null) {
+        String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
+            file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
+        }
+        return file;
+    }
 
 }

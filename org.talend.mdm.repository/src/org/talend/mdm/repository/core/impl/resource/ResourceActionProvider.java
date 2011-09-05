@@ -23,16 +23,13 @@ package org.talend.mdm.repository.core.impl.resource;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.ui.actions.resource.NewResourceAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.ResourceRepositoryFileEditorInput;
@@ -73,14 +70,9 @@ public class ResourceActionProvider extends RepositoryNodeActionProviderAdapter 
 
     @Override
     public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
-        IFile refFile = getReferenceFile(item);
-        return new ResourceRepositoryFileEditorInput(item, refFile);
+        return new ResourceRepositoryFileEditorInput(item);
     }
 
-    private IFile getReferenceFile(Item item) {
-        String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
-        IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
-        return file;
-    }
+  
 
 }

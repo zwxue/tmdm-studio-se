@@ -159,6 +159,10 @@ public class XObjectEditor2 extends XObjectEditor {
                 addPage(new MDMRoleMainPage(this));
                 break;
 
+            case TreeObject.RESOURCES:
+                addPage(new MDMResourceMainPage(this));
+                break;
+
             case TreeObject.SYNCHRONIZATIONPLAN:
                 try {
                     addPage(new MDMSynchronizationMainPage(this));
