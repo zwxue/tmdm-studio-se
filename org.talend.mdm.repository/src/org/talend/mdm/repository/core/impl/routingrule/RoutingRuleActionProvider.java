@@ -63,7 +63,7 @@ public class RoutingRuleActionProvider extends RepositoryNodeActionProviderAdapt
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
         }
-
+        actions.add(deployAllAction);
         return actions;
     }
 

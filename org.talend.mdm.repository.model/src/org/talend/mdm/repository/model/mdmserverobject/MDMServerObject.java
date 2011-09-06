@@ -22,6 +22,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isSystem <em>System</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerDef <em>Last Server Def</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getType <em>Type</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isChanged <em>Changed</em>}</li>
  * </ul>
  * </p>
  *
@@ -159,6 +160,32 @@ public interface MDMServerObject extends EObject {
      * @generated
      */
     void setType(int value);
+
+    /**
+     * Returns the value of the '<em><b>Changed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Changed</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Changed</em>' attribute.
+     * @see #setChanged(boolean)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getMDMServerObject_Changed()
+     * @model transient="true"
+     * @generated
+     */
+    boolean isChanged();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#isChanged <em>Changed</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Changed</em>' attribute.
+     * @see #isChanged()
+     * @generated
+     */
+    void setChanged(boolean value);
 
     /**
      * <!-- begin-user-doc -->

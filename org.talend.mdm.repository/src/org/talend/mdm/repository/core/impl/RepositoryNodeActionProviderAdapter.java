@@ -37,6 +37,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
+import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.DeployToAction;
 import org.talend.mdm.repository.ui.actions.DeployToLastServerAction;
 import org.talend.mdm.repository.ui.actions.DuplicateAction;
@@ -68,6 +69,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected static AbstractRepositoryAction deployToLastServerAction;
 
+    protected static AbstractRepositoryAction deployAllAction;
+
     protected static AbstractRepositoryAction renameAction;
 
     protected AbstractRepositoryAction refreshAction;
@@ -91,6 +94,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         duplicateAction = new DuplicateAction();
         deployToAction = new DeployToAction();
         deployToLastServerAction = new DeployToLastServerAction();
+        deployAllAction = new DeployAllAction();
         importServerObjectAction = new ImportServerObjectAction();
         //
         importObjectAction.initCommonViewer(commonViewer);
@@ -106,6 +110,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         importServerObjectAction.initCommonViewer(commonViewer);
         deployToAction.initCommonViewer(commonViewer);
         deployToLastServerAction.initCommonViewer(commonViewer);
+        deployAllAction.initCommonViewer(commonViewer);
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -147,6 +152,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         actions.add(importServerObjectAction);
         actions.add(exportObjectAction);
         actions.add(importObjectAction);
+
+        //
         return actions;
     }
 

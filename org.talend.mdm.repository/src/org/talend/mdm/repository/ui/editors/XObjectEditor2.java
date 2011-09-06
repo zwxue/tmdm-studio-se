@@ -70,6 +70,7 @@ public class XObjectEditor2 extends XObjectEditor {
         }
         // if(xmlEditor!=null)xmlEditor.doSave(monitor);
         // perform the actual save
+
         boolean saved = saveResourceToRepository();
         if (xmlEditor != null && saved) {
             xmlEditor.refresh();
@@ -84,6 +85,7 @@ public class XObjectEditor2 extends XObjectEditor {
         MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(xobject.getWsObject(), serverObject);
         if (eObj != null) {
+            serverObject.setChanged(true);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
                 factory.save(serverObjectItem);

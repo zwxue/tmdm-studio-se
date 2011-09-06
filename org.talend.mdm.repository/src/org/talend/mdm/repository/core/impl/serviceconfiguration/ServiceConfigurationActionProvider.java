@@ -63,6 +63,7 @@ public class ServiceConfigurationActionProvider extends RepositoryNodeActionProv
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
         }
+        actions.add(deployAllAction);
         return actions;
     }
 

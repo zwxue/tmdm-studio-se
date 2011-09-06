@@ -17,9 +17,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.models.ContainerRepositoryObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -32,6 +34,8 @@ public class ContainerCacheService {
     private static final String DIVIDE = "/"; //$NON-NLS-1$
 
     private static Map<ERepositoryObjectType, Map<String, IRepositoryViewObject>> containerMap = new HashMap<ERepositoryObjectType, Map<String, IRepositoryViewObject>>();
+
+    private static Map<Property, IRepositoryViewObject> viewObjMap = new HashMap<Property, IRepositoryViewObject>();
 
     public static void put(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
@@ -48,11 +52,30 @@ public class ContainerCacheService {
         }
     }
 
+    public static void put(Property prop, IRepositoryViewObject viewObj) {
+        if (prop == null || viewObj == null)
+            throw new IllegalArgumentException();
+        viewObjMap.put(prop, viewObj);
+    }
+
+    public static void remove(Property prop) {
+        if (prop != null)
+            viewObjMap.remove(prop);
+    }
+
     public static void remove(ERepositoryObjectType repObjType, String path) {
         Map<String, IRepositoryViewObject> map = containerMap.get(repObjType);
         if (map != null) {
             for (Iterator<String> il = map.keySet().iterator(); il.hasNext();) {
-                if (il.next().startsWith(path)) {
+                String next = il.next();
+                if (next.startsWith(path)) {
+                    IRepositoryViewObject viewObj = map.get(next);
+                    if (viewObj != null && viewObj instanceof ContainerRepositoryObject) {
+                        if (viewObj.getChildren() != null)
+                            for (IRepositoryViewObject child : viewObj.getChildren()) {
+                                remove(child.getProperty());
+                            }
+                    }
                     il.remove();
                 }
             }
@@ -75,6 +98,12 @@ public class ContainerCacheService {
             return map.get(path);
         }
         return null;
+    }
+
+    public static IRepositoryViewObject get(Property prop) {
+        if (prop == null)
+            throw new IllegalArgumentException();
+        return viewObjMap.get(prop);
     }
 
     public static IRepositoryViewObject getParent(IRepositoryViewObject obj) {

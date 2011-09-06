@@ -48,6 +48,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         MDMServerDef currentServerDef = mdmServerObject.getLastServerDef();
         //
         IStatus status = deploy(currentServerDef, viewObjs);
+        updateChangedStatus(status);
         if (status.isMultiStatus()) {
             showDeployStatus(status);
         }

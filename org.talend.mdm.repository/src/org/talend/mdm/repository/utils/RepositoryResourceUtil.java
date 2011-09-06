@@ -439,7 +439,9 @@ public class RepositoryResourceUtil {
                 ItemState state = item.getState();
                 if (!state.isDeleted()) {
                     IInteractiveHandler handler = InteractiveService.findHandler(viewObj.getRepositoryObjectType());
-                    handler.assertPropertyIsInited(item);
+                    if (handler != null) {
+                        handler.assertPropertyIsInited(item);
+                    }
                     if (useRepositoryViewObject) {
                         viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
                     } else {
@@ -555,11 +557,17 @@ public class RepositoryResourceUtil {
                 ItemState state = property.getItem().getState();
                 if ((!state.isDeleted())
                         && (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2))) {
-                    if (useRepositoryViewObject) {
-                        viewObjects.add(new RepositoryViewObject(property));
-                    } else {
-                        viewObjects.add(viewObj);
+                    IRepositoryViewObject cacheViewObj = ContainerCacheService.get(property);
+                    if (cacheViewObj == null) {
+                        if (useRepositoryViewObject) {
+                            cacheViewObj = new RepositoryViewObject(property);
+                        } else {
+                            cacheViewObj = viewObj;
+                        }
+                        ContainerCacheService.put(property, cacheViewObj);
                     }
+                    viewObjects.add(cacheViewObj);
+
                 }
             }
         } catch (PersistenceException e) {

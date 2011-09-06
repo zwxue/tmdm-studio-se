@@ -63,6 +63,7 @@ public class MenuActionProvider extends RepositoryNodeActionProviderAdapter {
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
         }
+        actions.add(deployAllAction);
         return actions;
     }
 

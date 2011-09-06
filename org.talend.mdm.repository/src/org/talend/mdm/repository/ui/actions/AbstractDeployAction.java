@@ -19,8 +19,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -53,4 +56,18 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         return GROUP_DEPLOY;
     }
 
+    protected void updateChangedStatus(IStatus status) {
+        if (status.isMultiStatus()) {
+            for (IStatus childStatus : status.getChildren()) {
+                DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
+                if (deployStatus.isOK()) {
+                    if (deployStatus.getItem() instanceof MDMServerObjectItem) {
+                        MDMServerObjectItem item = (MDMServerObjectItem) deployStatus.getItem();
+                        MDMServerObject mdmServerObject = item.getMDMServerObject();
+                        mdmServerObject.setChanged(false);
+                    }
+                }
+            }
+        }
+    }
 }

@@ -74,6 +74,8 @@ public class XSDEditor2 extends XSDEditor {
         return ((IFileEditorInput) getEditorInput()).getFile();
     }
 
+
+
     // public void doSave(IProgressMonitor monitor) {
     //
     // super.superDoSave(monitor);

@@ -97,17 +97,26 @@ public class DeployService {
 
     private DeployStatus deployMDM(MDMServerDef serverDef, XtentisPort port, ERepositoryObjectType type,
             MDMServerObject serverObj, Item item, IProgressMonitor monitor) {
-
+        XtentisPort deployPort = port;
+        MDMServerDef lastServerDef = serverDef;
         IInteractiveHandler handler = InteractiveService.findHandler(type);
         if (handler != null) {
             String typeLabel = handler.getLabel();
             monitor.subTask("Deploying " + typeLabel + "...");
             try {
-                if (handler.deployMDM(serverDef, port, item, serverObj))
+                if (port == null) {
+                    lastServerDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
+                    deployPort = RepositoryWebServiceAdapter.getXtentisPort(lastServerDef);
+                }
+
+                if (handler.deployMDM(lastServerDef, deployPort, item, serverObj))
                     return DeployStatus.getOKStatus(item, "Success to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
                 else
                     return DeployStatus.getInfoStatus(item, "Skip to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
             } catch (RemoteException e) {
+                return DeployStatus.getErrorStatus(item, "Fail to deploy " + typeLabel + " \"" + serverObj.getName()
+                        + "\",Cause is:" + e.getMessage(), e);
+            } catch (XtentisException e) {
                 return DeployStatus.getErrorStatus(item, "Fail to deploy " + typeLabel + " \"" + serverObj.getName()
                         + "\",Cause is:" + e.getMessage(), e);
             }
@@ -172,17 +181,15 @@ public class DeployService {
 
             try {
                 XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-                if (port != null) {
-                    for (IRepositoryViewObject viewObj : viewObjs) {
-                        if (monitor.isCanceled())
-                            return;
-                        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
-                        Item item = viewObj.getProperty().getItem();
-                        DeployStatus deployStatus = deployMDM(serverDef, port, type,
-                                ((MDMServerObjectItem) item).getMDMServerObject(), item, monitor);
-                        mStatus.add(deployStatus);
-                        monitor.worked(1);
-                    }
+                for (IRepositoryViewObject viewObj : viewObjs) {
+                    if (monitor.isCanceled())
+                        return;
+                    ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+                    Item item = viewObj.getProperty().getItem();
+                    DeployStatus deployStatus = deployMDM(serverDef, port, type,
+                            ((MDMServerObjectItem) item).getMDMServerObject(), item, monitor);
+                    mStatus.add(deployStatus);
+                    monitor.worked(1);
                 }
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);

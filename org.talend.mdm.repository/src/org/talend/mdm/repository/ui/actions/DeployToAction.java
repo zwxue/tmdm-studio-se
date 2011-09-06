@@ -26,6 +26,7 @@ import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -70,7 +71,9 @@ public class DeployToAction extends AbstractDeployAction {
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
-        item.getMDMServerObject().setLastServerDef(serverDef);
+        MDMServerObject mdmServerObject = item.getMDMServerObject();
+        mdmServerObject.setChanged(false);
+        mdmServerObject.setLastServerDef(serverDef);
         try {
             factory.save(item);
             refreshParent();

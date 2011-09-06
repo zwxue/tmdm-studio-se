@@ -50,6 +50,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
         EObject eContainer = serverObject.eContainer();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(wsObject, serverObject);
         if (eObj != null) {
+            serverObject.setChanged(true);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             factory.save(serverObjectItem);
         }

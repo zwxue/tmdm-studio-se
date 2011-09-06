@@ -57,9 +57,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected String name = NAME_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getDescription() <em>Description</em>}' attribute. <!-- begin-user-doc --> <!--
+     * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getDescription()
      * @generated
      * @ordered
@@ -67,9 +67,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected static final String DESCRIPTION_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getDescription()
      * @generated
      * @ordered
@@ -77,9 +77,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected String description = DESCRIPTION_EDEFAULT;
 
     /**
-     * The default value of the '{@link #isSystem() <em>System</em>}' attribute. <!-- begin-user-doc --> <!--
+     * The default value of the '{@link #isSystem() <em>System</em>}' attribute.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #isSystem()
      * @generated
      * @ordered
@@ -87,9 +87,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected static final boolean SYSTEM_EDEFAULT = false;
 
     /**
-     * The cached value of the '{@link #isSystem() <em>System</em>}' attribute. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #isSystem() <em>System</em>}' attribute.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #isSystem()
      * @generated
      * @ordered
@@ -127,8 +127,27 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected int type = TYPE_EDEFAULT;
 
     /**
+     * The default value of the '{@link #isChanged() <em>Changed</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isChanged()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean CHANGED_EDEFAULT = false;
+
+    /**
+     * The cached value of the '{@link #isChanged() <em>Changed</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isChanged()
+     * @generated
+     * @ordered
+     */
+    protected boolean changed = CHANGED_EDEFAULT;
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     protected MDMServerObjectImpl() {
@@ -137,7 +156,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -147,7 +165,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getName() {
@@ -156,7 +173,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setName(String newName) {
@@ -168,7 +184,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getDescription() {
@@ -177,20 +192,17 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setDescription(String newDescription) {
         String oldDescription = description;
         description = newDescription;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION,
-                    oldDescription, description));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION, oldDescription, description));
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public boolean isSystem() {
@@ -199,20 +211,17 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setSystem(boolean newSystem) {
         boolean oldSystem = system;
         system = newSystem;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM, oldSystem,
-                    system));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM, oldSystem, system));
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public MDMServerDef getLastServerDef() {
@@ -221,19 +230,14 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public NotificationChain basicSetLastServerDef(MDMServerDef newLastServerDef, NotificationChain msgs) {
         MDMServerDef oldLastServerDef = lastServerDef;
         lastServerDef = newLastServerDef;
         if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
-                    MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF, oldLastServerDef, newLastServerDef);
-            if (msgs == null)
-                msgs = notification;
-            else
-                msgs.add(notification);
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF, oldLastServerDef, newLastServerDef);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
         }
         return msgs;
     }
@@ -266,7 +270,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public int getType() {
@@ -275,7 +278,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setType(int newType) {
@@ -283,6 +285,27 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         type = newType;
         if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE, oldType, type));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean isChanged() {
+        return changed;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setChanged(boolean newChanged) {
+        boolean oldChanged = changed;
+        changed = newChanged;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED, oldChanged, changed));
     }
 
     /**
@@ -296,125 +319,128 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
-            return basicSetLastServerDef(null, msgs);
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
+                return basicSetLastServerDef(null, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
-            return getName();
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
-            return getDescription();
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
-            return isSystem();
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
-            return getLastServerDef();
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
-            return getType();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
+                return getName();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
+                return getDescription();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
+                return isSystem();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
+                return getLastServerDef();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                return getType();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
+                return isChanged();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
-            setName((String) newValue);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
-            setDescription((String) newValue);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
-            setSystem((Boolean) newValue);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
-            setLastServerDef((MDMServerDef) newValue);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
-            setType((Integer) newValue);
-            return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
+                setName((String)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
+                setDescription((String)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
+                setSystem((Boolean)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
+                setLastServerDef((MDMServerDef)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                setType((Integer)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
+                setChanged((Boolean)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
-            setName(NAME_EDEFAULT);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
-            setDescription(DESCRIPTION_EDEFAULT);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
-            setSystem(SYSTEM_EDEFAULT);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
-            setLastServerDef((MDMServerDef) null);
-            return;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
-            setType(TYPE_EDEFAULT);
-            return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
+                setName(NAME_EDEFAULT);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
+                setDescription(DESCRIPTION_EDEFAULT);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
+                setSystem(SYSTEM_EDEFAULT);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
+                setLastServerDef((MDMServerDef)null);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                setType(TYPE_EDEFAULT);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
+                setChanged(CHANGED_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
-            return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
-            return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
-            return system != SYSTEM_EDEFAULT;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
-            return lastServerDef != null;
-        case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
-            return type != TYPE_EDEFAULT;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__NAME:
+                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DESCRIPTION:
+                return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__SYSTEM:
+                return system != SYSTEM_EDEFAULT;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__LAST_SERVER_DEF:
+                return lastServerDef != null;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
+                return type != TYPE_EDEFAULT;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
+                return changed != CHANGED_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public String toString() {
-        if (eIsProxy())
-            return super.toString();
+        if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (name: ");
@@ -425,6 +451,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         result.append(system);
         result.append(", type: ");
         result.append(type);
+        result.append(", changed: ");
+        result.append(changed);
         result.append(')');
         return result.toString();
     }

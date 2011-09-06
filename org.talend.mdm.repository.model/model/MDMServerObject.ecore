@@ -11,6 +11,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="lastServerDef" eType="ecore:EClass MDMMetadata.ecore#//MDMServerDef"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSMenuE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="menuEntries" upperBound="-1"

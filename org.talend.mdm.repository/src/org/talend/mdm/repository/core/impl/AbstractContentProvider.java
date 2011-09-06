@@ -42,18 +42,21 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
         if (item != null && item instanceof ContainerItem) {
             ContainerItem containerItem = (ContainerItem) item;
             FolderType containerType = containerItem.getType();
+            List<IRepositoryViewObject> children = ((ContainerRepositoryObject) element).getChildren();
             if (containerType == FolderType.SYSTEM_FOLDER_LITERAL) {
                 List<IRepositoryViewObject> viewObjects = getViewObjFromSystemFolder(containerItem);
                 if (viewObjects != null) {
-                    ((ContainerRepositoryObject) element).getChildren().addAll(viewObjects);
+                    children.clear();
+                    children.addAll(viewObjects);
                     return viewObjects.toArray();
                 }
             }
             if (containerType == FolderType.FOLDER_LITERAL || containerType == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {
-                List<IRepositoryViewObject> children = getViewObjFromFolder(containerItem);
-                if (children != null) {
-                    ((ContainerRepositoryObject) element).getChildren().addAll(children);
-                    return children.toArray();
+                List<IRepositoryViewObject> viewObjects = getViewObjFromFolder(containerItem);
+                if (viewObjects != null) {
+                    children.clear();
+                    children.addAll(viewObjects);
+                    return viewObjects.toArray();
                 }
             }
             // if (containerType == FolderType.STABLE_SYSTEM_FOLDER_LITERAL) {

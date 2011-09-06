@@ -32,6 +32,18 @@ public class Messages extends NLS {
     public static String DataModelInteractiveHandler_label;
 
 
+    public static String DeployAllAction_label;
+
+
+    public static String DeployAllDialog_deselectAll;
+
+
+    public static String DeployAllDialog_label;
+
+
+    public static String DeployAllDialog_selectAll;
+
+
     public static String DeployToAction_deployTo;
 
 

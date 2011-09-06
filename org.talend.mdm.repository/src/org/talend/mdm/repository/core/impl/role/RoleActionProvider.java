@@ -59,9 +59,10 @@ public class RoleActionProvider extends RepositoryNodeActionProviderAdapter {
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             actions.add(renameAction);
             // deploy
-            // actions.add(deployToAction);
-            // addAction(actions, deployToLastServerAction, viewObj);
+            actions.add(deployToAction);
+            addAction(actions, deployToLastServerAction, viewObj);
         }
+        actions.add(deployAllAction);
         return actions;
     }
 

@@ -63,6 +63,7 @@ public class SynchronizationPlanActionProvider extends RepositoryNodeActionProvi
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
         }
+        actions.add(deployAllAction);
         return actions;
     }
 
