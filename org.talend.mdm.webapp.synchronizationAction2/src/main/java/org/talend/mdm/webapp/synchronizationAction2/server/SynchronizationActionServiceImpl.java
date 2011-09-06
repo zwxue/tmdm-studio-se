@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.webapp.synchronizationAction2.server;
 
 import java.util.ArrayList;
@@ -39,18 +51,21 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
             WSSynchronizationPlanPK[] pks = array.getWsSynchronizationPlanPK();
             List<ItemBaseModel> syncNames = new ArrayList<ItemBaseModel>();
             if (pks != null && pks.length > 0) {
-                logger.debug("pks:" + pks.length); //$NON-NLS-1$           
+                if (logger.isDebugEnabled())
+                    logger.debug("pks:" + pks.length); //$NON-NLS-1$           
                 for (int i = 0; i < pks.length; i++) {
                     ItemBaseModel model = new ItemBaseModel();
                     model.set("id", pks[i].getPk()); //$NON-NLS-1$
                     model.set("name", pks[i].getPk()); //$NON-NLS-1$
                     syncNames.add(model);
                 }
-                logger.debug("getSyncNames() syncNames:" + syncNames); //$NON-NLS-1$
+                if (logger.isDebugEnabled())
+                    logger.debug("getSyncNames() syncNames:" + syncNames); //$NON-NLS-1$
             }
             return syncNames;
-        } catch (Exception exception) {
-            throw new SynchronizationActionException(exception.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -61,10 +76,8 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
                             new WSSynchronizationPlanAction(new WSSynchronizationPlanPK(info.getSyncName()),
                                     WSSynchronizationPlanActionCode.START_FULL));
         } catch (Exception e) {
-            e.printStackTrace();
-            // Matcher m = Pattern.compile("(.*Exception:)(.+)",Pattern.DOTALL).matcher(e.getLocalizedMessage());
-            // if (m.matches()) throw new Exception(m.group(2));
-            throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -76,10 +89,8 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
                             new WSSynchronizationPlanAction(new WSSynchronizationPlanPK(info.getSyncName()),
                                     WSSynchronizationPlanActionCode.START_DIFFERENTIAL));
         } catch (Exception e) {
-            e.printStackTrace();
-            // Matcher m = Pattern.compile("(.*Exception:)(.+)",Pattern.DOTALL).matcher(e.getLocalizedMessage());
-            // if (m.matches()) throw new Exception(m.group(2));
-            throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -91,10 +102,8 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
                             new WSSynchronizationPlanAction(new WSSynchronizationPlanPK(info.getSyncName()),
                                     WSSynchronizationPlanActionCode.STOP));
         } catch (Exception e) {
-            e.printStackTrace();
-            // Matcher m = Pattern.compile("(.*Exception:)(.+)",Pattern.DOTALL).matcher(e.getLocalizedMessage());
-            // if (m.matches()) throw new Exception(m.group(2));
-            throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -106,10 +115,8 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
                             new WSSynchronizationPlanAction(new WSSynchronizationPlanPK(info.getSyncName()),
                                     WSSynchronizationPlanActionCode.RESET));
         } catch (Exception e) {
-            e.printStackTrace();
-            // Matcher m = Pattern.compile("(.*Exception:)(.+)",Pattern.DOTALL).matcher(e.getLocalizedMessage());
-            // if (m.matches()) throw new Exception(m.group(2));
-            throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -125,8 +132,8 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
             status.setMessage(wsStatus.getStatusMessage());
             return status;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
     }
 
@@ -149,14 +156,15 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
 
             return items;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
 
     }
 
     public void saveURLs(String url) throws Exception {
-        logger.debug("saveURLs()---- url ==" + url); //$NON-NLS-1$
+        if (logger.isDebugEnabled())
+            logger.debug("saveURLs()---- url ==" + url); //$NON-NLS-1$
         try {
 
             String[] urls = url.split(";"); //$NON-NLS-1$
@@ -174,8 +182,8 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
 
             MDMConfiguration.save();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            logger.error(e.getMessage(), e);
+            throw new SynchronizationActionException(e.getLocalizedMessage(), e);
         }
     }
 }

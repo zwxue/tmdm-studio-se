@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.webapp.synchronizationAction2.client.widget;
 
 import java.util.List;
@@ -17,7 +29,6 @@ import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -35,10 +46,22 @@ import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 public class SynchronizationActionPanel extends ContentPanel {
 
-     private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync)
-     Registry.get(SynchronizationAction2.SYNCHRONIZTIONACTION_SERVICE);
+    private final SynchronizationActionServiceAsync service = (SynchronizationActionServiceAsync) Registry
+            .get(SynchronizationAction2.SYNCHRONIZTIONACTION_SERVICE);
 
     private ComboBox<ItemBaseModel> serverUrl_CB;
 
@@ -74,7 +97,7 @@ public class SynchronizationActionPanel extends ContentPanel {
     }
 
     public SyncInfo getSyncInfo() {
-        if (serverUrl_CB != null) {            
+        if (serverUrl_CB != null) {
             if ("".equals(serverUrl_CB.getRawValue()) || serverUrl_CB.getRawValue() == null) { //$NON-NLS-1$
                 serverUrl_CB.focus();
                 return null;
@@ -109,14 +132,14 @@ public class SynchronizationActionPanel extends ContentPanel {
         }
         service.saveURLs(urlString.substring(0, urlString.lastIndexOf(";")).toString(), new AsyncCallback<Void>() { //$NON-NLS-1$
 
-            public void onSuccess(Void arg0) {
+                    public void onSuccess(Void arg0) {
 
-            }
+                    }
 
-            public void onFailure(Throwable caught) {
-                MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
-            }
-        });
+                    public void onFailure(Throwable caught) {
+                        MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
+                    }
+                });
     }
 
     public void updateStatus(SyncStatus syncStatusAsync) {
@@ -144,6 +167,7 @@ public class SynchronizationActionPanel extends ContentPanel {
 
         Timer refreshTimer = new Timer() {
 
+            @Override
             public void run() {
                 service.getStatus(syncInfo, new AsyncCallback<SyncStatus>() {
 
@@ -156,7 +180,7 @@ public class SynchronizationActionPanel extends ContentPanel {
                     }
                 });
                 if (syncStatus != null) {
-                    if (!("RUNNING" == syncStatus.getValue() || "SCHEDULED" == syncStatus.getValue())) {  //$NON-NLS-1$//$NON-NLS-2$
+                    if (!("RUNNING" == syncStatus.getValue() || "SCHEDULED" == syncStatus.getValue())) { //$NON-NLS-1$//$NON-NLS-2$
                         this.cancel();
                         updateStatus(syncStatus);
                     }
@@ -164,9 +188,9 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
         };
         refreshTimer.scheduleRepeating(1000);
-    }   
-    
-    public void initServerUrl(){
+    }
+
+    public void initServerUrl() {
         serverUrl_CB = new ComboBox<ItemBaseModel>();
         serverUrl_CB.setFieldLabel(MessagesFactory.getMessages().label_server_url());
         serverUrl_CB.setWidth(400);
@@ -175,30 +199,30 @@ public class SynchronizationActionPanel extends ContentPanel {
         serverUrl_CB.setValueField("id"); //$NON-NLS-1$
         serverUrl_CB.setTypeAhead(true);
         serverUrl_CB.setTriggerAction(TriggerAction.ALL);
-        service.getSavedURLs(new AsyncCallback<List<ItemBaseModel>>() {                   
-      
-          public void onFailure(Throwable caught) {
-              MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
-          }
-    
-          public void onSuccess(List<ItemBaseModel> result) {
-              urlString = new StringBuffer();
-              serverUrl_CB.getStore().removeAll();
-              serverUrl_CB.getStore().add(result);
-              for (int i = 0; i < result.size(); i++) {
-                  urlString.append(result.get(i).get("id") + ";");  //$NON-NLS-1$//$NON-NLS-2$
-              }
-           }
+        service.getSavedURLs(new AsyncCallback<List<ItemBaseModel>>() {
+
+            public void onFailure(Throwable caught) {
+                MessageBox.alert("Error", caught.getMessage(), null); //$NON-NLS-1$
+            }
+
+            public void onSuccess(List<ItemBaseModel> result) {
+                urlString = new StringBuffer();
+                serverUrl_CB.getStore().removeAll();
+                serverUrl_CB.getStore().add(result);
+                for (int i = 0; i < result.size(); i++) {
+                    urlString.append(result.get(i).get("id") + ";"); //$NON-NLS-1$//$NON-NLS-2$
+                }
+            }
         });
     }
-    
-    public void initUserName(){
+
+    public void initUserName() {
         userName_TF = new TextField<String>();
         userName_TF.setFieldLabel(MessagesFactory.getMessages().label_user_name());
         userName_TF.setWidth(400);
     }
-    
-    public void initPassword(){
+
+    public void initPassword() {
         password_TF = new TextField<String>();
         password_TF.setFieldLabel(MessagesFactory.getMessages().label_password());
         password_TF.setWidth(400);
@@ -207,7 +231,7 @@ public class SynchronizationActionPanel extends ContentPanel {
             public void handleEvent(FieldEvent fieldEvent) {
 
                 SyncInfo syncInfo = getSyncInfo();
-                
+
                 if (syncInfo != null) {
 
                     service.getSyncNames(syncInfo, new AsyncCallback<List<ItemBaseModel>>() {
@@ -217,27 +241,28 @@ public class SynchronizationActionPanel extends ContentPanel {
                         }
 
                         public void onSuccess(List<ItemBaseModel> result) {
-                            synchronizationName_CB.setEmptyText(MessagesFactory.getMessages().label_select_synchronization_name());    //$NON-NLS-1$
+                            synchronizationName_CB
+                                    .setEmptyText(MessagesFactory.getMessages().label_select_synchronization_name());
                             synchronizationName_CB.getStore().removeAll();
                             synchronizationName_CB.getStore().add(result);
                         }
                     });
                 }
             }
-        });        
-    }    
-    
-    public void initSynchronizationName(){
+        });
+    }
+
+    public void initSynchronizationName() {
         synchronizationName_CB = new ComboBox<ItemBaseModel>();
-        synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name()); 
+        synchronizationName_CB.setFieldLabel(MessagesFactory.getMessages().label_synchronization_name());
         synchronizationName_CB.setStore(new ListStore<ItemBaseModel>());
         synchronizationName_CB.setDisplayField("name"); //$NON-NLS-1$
         synchronizationName_CB.setValueField("id"); //$NON-NLS-1$
         synchronizationName_CB.setTypeAhead(true);
         synchronizationName_CB.setTriggerAction(TriggerAction.ALL);
     }
-    
-    public void initStartFull(){
+
+    public void initStartFull() {
         startFull_BT = new Button(MessagesFactory.getMessages().button_start_full());
         startDifferent_BT = new Button(MessagesFactory.getMessages().button_start_different());
         stop_BT = new Button(MessagesFactory.getMessages().button_stop());
@@ -266,8 +291,8 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
         });
     }
-    
-    public void initStartDifferent(){
+
+    public void initStartDifferent() {
         startDifferent_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
             @Override
@@ -289,8 +314,8 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
         });
     }
-    
-    public void initStop(){
+
+    public void initStop() {
         stop_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
             @Override
@@ -309,8 +334,8 @@ public class SynchronizationActionPanel extends ContentPanel {
             }
         });
     }
-    
-    public void initReset(){
+
+    public void initReset() {
         reset_BT.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
             @Override
@@ -328,11 +353,11 @@ public class SynchronizationActionPanel extends ContentPanel {
                     }
                 });
             }
-        });  
+        });
     }
 
     public void initPanel() {
-        
+
         message_LB = new Label();
         initSynchronizationName();
         initServerUrl();
@@ -342,7 +367,7 @@ public class SynchronizationActionPanel extends ContentPanel {
         initStartDifferent();
         initStop();
         initReset();
-        
+
         FormData formData = new FormData("-20"); //$NON-NLS-1$
 
         VerticalPanel verticalPanel = new VerticalPanel();
@@ -366,16 +391,16 @@ public class SynchronizationActionPanel extends ContentPanel {
 
         synchronizationInfo_FS.add(serverUrl_CB, formData);
         synchronizationInfo_FS.add(userName_TF, formData);
-        synchronizationInfo_FS.add(password_TF, formData);       
-        
+        synchronizationInfo_FS.add(password_TF, formData);
+
         FieldSet synchronizationName_FS = new FieldSet();
         FormLayout synchronizationName_FL = new FormLayout();
         synchronizationName_FL.setLabelWidth(150);
-        synchronizationName_FS.setLayout(synchronizationName_FL);    
+        synchronizationName_FS.setLayout(synchronizationName_FL);
         synchronizationName_FS.add(synchronizationName_CB);
         synchronizationName_FS.setBorders(false);
         synchronizationForm_FP.add(synchronizationInfo_FS);
-        synchronizationForm_FP.add(synchronizationName_FS);        
+        synchronizationForm_FP.add(synchronizationName_FS);
         synchronizationForm_FP.add(message_LB);
         synchronizationForm_FP.addButton(startFull_BT);
         synchronizationForm_FP.addButton(startDifferent_BT);
