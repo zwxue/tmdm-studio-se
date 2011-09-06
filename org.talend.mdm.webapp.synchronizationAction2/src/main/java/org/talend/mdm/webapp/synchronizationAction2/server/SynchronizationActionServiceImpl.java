@@ -41,7 +41,7 @@ public class SynchronizationActionServiceImpl extends RemoteServiceServlet imple
 
     public static final String SERVER_URL_DEFAULT = "http://localhost:8080/talend/TalendPort"; //$NON-NLS-1$
 
-    private Logger logger = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static final Logger logger = Logger.getLogger(SynchronizationActionServiceImpl.class);
 
     public List<ItemBaseModel> getSyncNames(SyncInfo info) throws SynchronizationActionException {
 
