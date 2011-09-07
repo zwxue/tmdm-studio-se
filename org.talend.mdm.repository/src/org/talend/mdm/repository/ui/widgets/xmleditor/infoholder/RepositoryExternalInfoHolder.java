@@ -18,8 +18,6 @@ import com.amalto.workbench.utils.JobInfo;
 import com.amalto.workbench.webservices.WSMDMConfig;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.amalto.workbench.widgets.xmleditor.infoholder.AllDataModelInfoHolderProxy;
-import com.amalto.workbench.widgets.xmleditor.infoholder.AllWorkflowInfoHolder;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ProcessAllCallJobVariableCandidatesHolder;
 import com.amalto.workbench.widgets.xmleditor.infoholder.TriggerAllCallJobVariableCandidatesHolder;
@@ -41,11 +39,11 @@ public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder
     }
 
     public static ExternalInfoHolder<IAllDataModelHolder> getAllDataModelInfoHolderProxy(TreeObject treeNode) {
-        return new AllDataModelInfoHolderProxy(treeNode);
+        return new RepositoryDataModelInfoHolder();
     }
 
     public static ExternalInfoHolder<WorkflowInfo[]> getAllWorkflowInfoHolder(XtentisPort port) {
-        return new AllWorkflowInfoHolder(port);
+        return new RepositoryWorkflowInfoHolder();
     }
 
     public static ExternalInfoHolder<String[]> getProcessAllCallJobVarsCandidatesHolder(WSTransformerV2 service) {
