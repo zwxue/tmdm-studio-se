@@ -18,8 +18,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
@@ -27,6 +29,7 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -51,22 +54,22 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {
         IStructuredSelection selection = getSelection(viewObjs);
         //
-        // final DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
+        final DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
         SpagoBiServer server = getServer(serverDef);
-        // publishWizard.setMdmServer(server);
+        publishWizard.setMdmServer(server);
 
         IWorkbench workbench = RepositoryPlugin.getDefault().getWorkbench();
-        // publishWizard.setWindowTitle(Messages.JobInteractiveHandler_wizardTitle);
-        // publishWizard.init(workbench, selection);
+        publishWizard.setWindowTitle(Messages.JobInteractiveHandler_wizardTitle);
+        publishWizard.init(workbench, selection);
         final Display display = Display.getDefault();
 
         display.syncExec(new Runnable() {
 
             public void run() {
                 Shell activeShell = display.getActiveShell();
-                // WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-                // setResult(dialog.open() == IDialogConstants.OK_ID);
-                setResult(true);
+                WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
+                setResult(dialog.open() == IDialogConstants.OK_ID);
+                // setResult(true);
             }
         });
 
