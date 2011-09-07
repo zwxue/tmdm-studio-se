@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.webapp.synchronization2.server;
 
 import java.rmi.RemoteException;
@@ -6,6 +18,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.talend.mdm.webapp.synchronization2.client.Synchronization2Service;
 import org.talend.mdm.webapp.synchronization2.server.model.SynchronizationItem;
 import org.talend.mdm.webapp.synchronization2.server.model.TreeNode;
@@ -30,6 +43,8 @@ public class Synchronization2ServiceImpl extends RemoteServiceServlet implements
 
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOGGER = Logger.getLogger(Synchronization2ServiceImpl.class);
+
     public PagingLoadResult<SynBaseModel> getSyncItems(String regex, PagingLoadConfig load) throws Exception {
 
         List<SynchronizationItem> list = new ArrayList<SynchronizationItem>();
@@ -52,9 +67,9 @@ public class Synchronization2ServiceImpl extends RemoteServiceServlet implements
             syncItem.setNode(node);
             list.add(syncItem);
         }
-        
+
         List<SynBaseModel> resultList = new ArrayList<SynBaseModel>();
-        for(SynchronizationItem item : list){
+        for (SynchronizationItem item : list) {
             SynBaseModel model = new SynBaseModel();
             model.set("pk", item.getItemPOJOPK().toString()); //$NON-NLS-1$
             model.set("lri", item.getLocalRevisionID()); //$NON-NLS-1$
@@ -62,7 +77,7 @@ public class Synchronization2ServiceImpl extends RemoteServiceServlet implements
             model.set("status", item.getStatus()); //$NON-NLS-1$
             resultList.add(model);
         }
-         
+
         return new BasePagingLoadResult<SynBaseModel>(resultList, load.getOffset(), list.size());
     }
 
@@ -73,26 +88,26 @@ public class Synchronization2ServiceImpl extends RemoteServiceServlet implements
                     .getWsSynchronizationItemPK().getIds()));
             return XConverter.POJO2WS(pojo);
         } catch (Exception e) {
-            String err = "ERROR SYSTRACE: " + e.getMessage(); //$NON-NLS-1$
-            org.apache.log4j.Logger.getLogger(this.getClass()).debug(err, e);
-            throw new RemoteException(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            LOGGER.error(e.getMessage(), e);
+            throw new RemoteException(e.getLocalizedMessage(), e);
         }
     }
 
     public WSSynchronizationItemPKArray getSynchronizationItemPKs(WSGetSynchronizationItemPKs regex) throws RemoteException {
         try {
             SynchronizationItemCtrlLocal ctrl = EnterpriseUtil.getSynchronizationItemCtrlLocal();
-            Collection c = ctrl.getSynchronizationItemPKs(regex.getRegex());
+            Collection<?> c = ctrl.getSynchronizationItemPKs(regex.getRegex());
             if (c == null)
                 return null;
             WSSynchronizationItemPK[] pks = new WSSynchronizationItemPK[c.size()];
             int i = 0;
-            for (Iterator iter = c.iterator(); iter.hasNext();) {
+            for (Iterator<?> iter = c.iterator(); iter.hasNext();) {
                 pks[i++] = new WSSynchronizationItemPK(((SynchronizationItemPOJOPK) iter.next()).getIds());
             }
             return new WSSynchronizationItemPKArray(pks);
         } catch (Exception e) {
-            throw new RemoteException(e.getClass().getName() + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
+            LOGGER.error(e.getMessage(), e);
+            throw new RemoteException(e.getLocalizedMessage(), e);
         }
     }
 }

@@ -1,11 +1,21 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.webapp.synchronization2.client;
 
 import org.talend.mdm.webapp.synchronization2.client.widget.GenerateContainer;
-import org.talend.mdm.webapp.synchronization2.client.widget.Synchronization2Panel;
 
 import com.extjs.gxt.ui.client.Registry;
 import com.extjs.gxt.ui.client.core.XDOM;
-import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -20,7 +30,7 @@ public class Synchronization2 implements EntryPoint {
         Window.setTitle(Window.getTitle() + " synchronization2"); //$NON-NLS-1$
         XDOM.setAutoIdPrefix(GWT.getModuleName() + "-" + XDOM.getAutoIdPrefix()); //$NON-NLS-1$
         registerPubService();
-        
+
         Registry.register(SYNCHRONIZATION2_SERVICE, GWT.create(Synchronization2Service.class));
     }
 

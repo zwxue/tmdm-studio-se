@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.webapp.synchronization2.server.model;
 
 import java.util.ArrayList;
@@ -42,7 +54,7 @@ public class TreeNode {
     }
 
     public void setText(String text) {
-        Pattern AMP = Pattern.compile("&((amp)*)");
+        Pattern AMP = Pattern.compile("&((amp)*)"); //$NON-NLS-1$
         Matcher matchamp = AMP.matcher(text);
         StringBuffer sb = null;
         while (matchamp.find()) {
@@ -51,7 +63,7 @@ public class TreeNode {
                 if (sb == null) {
                     sb = new StringBuffer();
                 }
-                matchamp.appendReplacement(sb, "&amp;");
+                matchamp.appendReplacement(sb, "&amp;"); //$NON-NLS-1$
             }
         }
         if (sb != null) {
@@ -75,18 +87,18 @@ public class TreeNode {
     private String getXMLStr(TreeNode node) {
         StringBuffer sb = new StringBuffer();
         if (node.text.trim().length() > 0) {
-            sb.append("<" + node.text + ">");
+            sb.append('<').append(node.text).append('>');
             for (TreeNode n : node.childNodes) {
                 if (n.isLeaf() && n.text.trim().length() > 0) {
                     if (n.type == Node.TEXT_NODE)
                         sb.append(n.text);
                     else if (n.type == Node.ELEMENT_NODE)
-                        sb.append("<" + n.text + "/>");
+                        sb.append('<').append(n.text).append("/>"); //$NON-NLS-1$
                 } else {
                     sb.append(getXMLStr(n));
                 }
             }
-            sb.append("</" + node.text + ">");
+            sb.append("</").append(node.text).append('>'); //$NON-NLS-1$
         }
         return sb.toString();
     }
@@ -100,20 +112,20 @@ public class TreeNode {
 
     private TreeNode parseElement(Element element) throws Exception {
         TreeNode node = new TreeNode();
-        node.setType(Element.ELEMENT_NODE);
+        node.setType(Node.ELEMENT_NODE);
         node.setText(element.getNodeName());
         NodeList list = element.getChildNodes();
         List<TreeNode> childs = new ArrayList<TreeNode>();
         if (list != null && list.getLength() > 0) {
             for (int i = 0; i < list.getLength(); i++) {
                 Node el = (Node) list.item(i);
-                if (el.getNodeType() == Element.TEXT_NODE && el.getNodeValue().trim().length() > 0) {
+                if (el.getNodeType() == Node.TEXT_NODE && el.getNodeValue().trim().length() > 0) {
                     TreeNode child = new TreeNode();
                     child.setText(el.getNodeValue().trim());
                     child.setLeaf(true);
-                    child.setType(Element.TEXT_NODE);
+                    child.setType(Node.TEXT_NODE);
                     childs.add(child);
-                } else if (el.getNodeType() == Element.ELEMENT_NODE) {
+                } else if (el.getNodeType() == Node.ELEMENT_NODE) {
 
                     childs.add(parseElement((Element) el));
                 }
