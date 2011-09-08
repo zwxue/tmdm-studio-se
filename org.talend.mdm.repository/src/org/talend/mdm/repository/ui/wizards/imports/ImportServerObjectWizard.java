@@ -45,10 +45,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.utils.VersionUtils;
@@ -104,9 +104,11 @@ public class ImportServerObjectWizard extends Wizard {
 
     CommonViewer commonViewer;
 
-    boolean isOverrideAll = false;
+    boolean isOverrideAll = true;
 
     private Button btnOverwrite;
+
+    private Object[] selectedObjects;
 
     public ImportServerObjectWizard(CommonViewer commonViewer) {
         setNeedsProgressMonitor(true);
@@ -122,6 +124,7 @@ public class ImportServerObjectWizard extends Wizard {
     public boolean performFinish() {
         try {
             doImport();
+            hideServerView(view);
         } catch (InvocationTargetException e) {
             log.error(e);
             return false;
@@ -132,12 +135,29 @@ public class ImportServerObjectWizard extends Wizard {
         return true;
     }
 
+    @Override
+    public boolean performCancel() {
+        hideServerView(view);
+        return super.performCancel();
+    }
+
+    private void hideServerView(IViewPart view) {
+        IWorkbenchPage page = commonViewer.getCommonNavigator().getSite().getPage();
+        if (page != null) {
+            page.hideView(view);
+        }
+    }
+
+    private void updateSelectedObjects() {
+        selectedObjects = treeViewer.getCheckNodes();
+    }
+
     private int isOveride(String name, String obTypeName) {
 
-        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.Confirm_Overwrite, null,
-                Messages.bind(Messages.Confirm_Overwrite_Info, obTypeName, name), MessageDialog.QUESTION, new String[] {
-                        IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL,
-                        IDialogConstants.CANCEL_LABEL }, 0);
+        final MessageDialog dialog = new MessageDialog(getShell(), Messages.Confirm_Overwrite, null, Messages.bind(
+                Messages.Confirm_Overwrite_Info, obTypeName, name), MessageDialog.QUESTION, new String[] {
+                IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL,
+                IDialogConstants.CANCEL_LABEL }, 0);
         dialog.open();
         int result = dialog.getReturnCode();
         if (result == 0) {
@@ -201,7 +221,6 @@ public class ImportServerObjectWizard extends Wizard {
                 String fileExtension = fileInfo[2];
 
                 String fileName = fileInfo[3];
-
 
                 WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
                 resource.setName(fileName);
@@ -344,9 +363,9 @@ public class ImportServerObjectWizard extends Wizard {
             UIJob job = new UIJob(Messages.Import_Objects) {
 
                 @Override
-                public IStatus runInUIThread(IProgressMonitor arg0) {
-                    isOverrideAll = btnOverwrite.getSelection();
-                    doImport(treeViewer.getCheckNodes(), arg0);
+                public IStatus runInUIThread(IProgressMonitor monitor) {
+                    // isOverrideAll = btnOverwrite.getSelection();
+                    doImport(selectedObjects, monitor);
                     commonViewer.refresh();
                     return Status.OK_STATUS;
                 }
@@ -362,10 +381,11 @@ public class ImportServerObjectWizard extends Wizard {
          * 
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
-        public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
+        public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
+
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
                     serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), view);
-            final IProgressMonitor monitor = arg0;
+            final IProgressMonitor monitor = m;
             retriever.setRetriveWSObject(true);
             retriever.run(monitor);
             serverRoot = retriever.getServerRoot();
@@ -374,6 +394,7 @@ public class ImportServerObjectWizard extends Wizard {
 
                 public void run() {
                     try {
+
                         treeViewer.setRoot((TreeParent) serverRoot);
                         treeViewer.getViewer().setInput(serverRoot);
                         treeViewer.getViewer().refresh();
@@ -406,18 +427,7 @@ public class ImportServerObjectWizard extends Wizard {
         }
     }
 
-    class PageListener implements Listener {
 
-        SelectItemsPage page;
-
-        PageListener(SelectItemsPage page) {
-            this.page = page;
-        }
-
-        public void handleEvent(Event event) {
-            page.checkCompleted();
-        }
-    };
 
     class SelectItemsPage extends WizardPage {
 
@@ -431,7 +441,8 @@ public class ImportServerObjectWizard extends Wizard {
         }
 
         public void checkCompleted() {
-            if (txtServer.getText().length() > 0) {
+            // && (selectedObjects != null && selectedObjects.length > 0)
+            if (txtServer.getText().length() > 0 && (selectedObjects != null && selectedObjects.length > 0)) {
                 setPageComplete(true);
             } else {
                 setPageComplete(false);
@@ -510,6 +521,15 @@ public class ImportServerObjectWizard extends Wizard {
             toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
             // create viewer
             treeViewer = new RepositoryCheckTreeViewer((TreeParent) serverRoot);
+            treeViewer.addButtonSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    updateSelectedObjects();
+                    checkCompleted();
+                }
+
+            });
             Composite itemcom = treeViewer.createItemList(composite);
             treeViewer.getViewer().setInput(null);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 5));
@@ -517,6 +537,7 @@ public class ImportServerObjectWizard extends Wizard {
             treeViewer.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 
                 public void selectionChanged(SelectionChangedEvent arg0) {
+                    updateSelectedObjects();
                     checkCompleted();
                 }
             });
@@ -533,6 +554,14 @@ public class ImportServerObjectWizard extends Wizard {
                 }
             });
             btnOverwrite = new Button(composite, SWT.CHECK);
+            btnOverwrite.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    isOverrideAll = btnOverwrite.getSelection();
+                }
+
+            });
             btnOverwrite.setText(Messages.Overwrite_Exists_Items);
             // btnOverwrite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
             btnOverwrite.setSelection(true);

@@ -284,6 +284,8 @@ public class RepositoryCheckTreeViewer {
 
     private ServerTreeContentProvider contentProvider;
 
+    private SelectionListener bunListener;
+
     public void setRoot(TreeParent root) {
         contentProvider.setRoot(root);
     }
@@ -395,6 +397,10 @@ public class RepositoryCheckTreeViewer {
                 ((CheckboxTreeViewer) viewer).setAllChecked(false);
             }
         });
+        if (bunListener != null) {
+            selectAll.addSelectionListener(bunListener);
+            deselectAll.addSelectionListener(bunListener);
+        }
 
         // setButtonLayoutData(deselectAll);
 
@@ -499,4 +505,8 @@ public class RepositoryCheckTreeViewer {
         }
     }
 
+    public void addButtonSelectionListener(SelectionListener listener) {
+        this.bunListener = listener;
+
+    }
 }
