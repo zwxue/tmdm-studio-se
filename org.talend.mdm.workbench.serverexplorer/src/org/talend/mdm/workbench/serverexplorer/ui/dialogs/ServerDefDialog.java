@@ -210,6 +210,10 @@ public class ServerDefDialog extends TitleAreaDialog {
     }
 
     private void updateUniverseValues() {
+
+        if (serverDef.getUser().equals("") || serverDef.getPasswd().equals("")) //$NON-NLS-1$ //$NON-NLS-2$
+            return;
+
         if (Util.IsEnterPrise()) {
 
             try {
