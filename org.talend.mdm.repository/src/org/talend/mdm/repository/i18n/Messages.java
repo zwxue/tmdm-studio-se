@@ -29,6 +29,9 @@ public class Messages extends NLS {
     public static String CreateFolderAction_newCategory;
 
 
+    public static String DataContainerInteractiveHandler_title;
+
+
     public static String DataModelInteractiveHandler_label;
 
 

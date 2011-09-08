@@ -59,8 +59,10 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             actions.add(renameAction);
+            actions.add(deployToAction);
+            addAction(actions, deployToLastServerAction, viewObj);
         }
-
+        actions.add(deployAllAction);
         return actions;
     }
 
