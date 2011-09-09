@@ -31,7 +31,6 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSUniverseItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSUniverseE;
-import org.talend.mdm.repository.model.mdmserverobject.WSUniverseItemsRevisionIDsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSUniverseXtentisObjectsRevisionIDsE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -76,14 +75,12 @@ public class NewUniverseAction extends AbstractSimpleAddAction {
             objectsId.add(objectIdE);
         }
 
-        WSUniverseItemsRevisionIDsE itemRId = MdmserverobjectFactory.eINSTANCE.createWSUniverseItemsRevisionIDsE();
         WSUniverseE universe = MdmserverobjectFactory.eINSTANCE.createWSUniverseE();
         universe.setName(key);
         universe.setDescription(""); //$NON-NLS-1$
         universe.getXtentisObjectsRevisionIDs().addAll(objectsId);
         universe.setDefaultItemsRevisionID(""); //$NON-NLS-1$
-        universe.getItemsRevisionIDs().add(itemRId);
-
+        
         return universe;
 
     }
