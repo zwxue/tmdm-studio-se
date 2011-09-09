@@ -31,9 +31,7 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanE;
-import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanItemsSynchronizationsE;
 import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsE;
-import org.talend.mdm.repository.model.mdmserverobject.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -43,11 +41,14 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  */
 public class NewSynchronizationPlanAction extends AbstractSimpleAddAction {
 
+    private String[] OBJECT_NAMES = { "Background Job", "Data Cluster", "Data Model", "Item", "Menu", "Role", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+            "Routing Engine V2", "Routing Order V2 Active", "Routing Order V2 Completed", "Routing Order V2 Failed", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            "Routing Rule", "Service", "Stored Procedure", "Synchronization Conflict", "Transformer Plugin V2", "Transformer V2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+            "Universe", "View" }; //$NON-NLS-1$ //$NON-NLS-2$
 
     public NewSynchronizationPlanAction() {
         super();
     }
-
 
     @Override
     protected String getDialogTitle() {
@@ -56,43 +57,14 @@ public class NewSynchronizationPlanAction extends AbstractSimpleAddAction {
 
     private WSSynchronizationPlanE newSynchronizationPlan(String key) {
 
-
         List<WSSynchronizationPlanXtentisObjectsSynchronizationsE> objectsId = new ArrayList<WSSynchronizationPlanXtentisObjectsSynchronizationsE>();
 
-        List<String> objects = new ArrayList<String>();
-        objects.add("Background Job"); //$NON-NLS-1$
-        objects.add("Data Cluster");//$NON-NLS-1$
-        objects.add("Data Model");//$NON-NLS-1$
-        objects.add("Item");//$NON-NLS-1$
-        objects.add("Menu");//$NON-NLS-1$
-        objects.add("Role");//$NON-NLS-1$
-        objects.add("Routing Engine V2");//$NON-NLS-1$
-        objects.add("Routing Order V2 Active"); //$NON-NLS-1$
-        objects.add("Routing Order V2 Completed");//$NON-NLS-1$
-        objects.add("Routing Order V2 Failed");//$NON-NLS-1$
-        objects.add("Routing Rule");//$NON-NLS-1$
-
-        objects.add("Service");//$NON-NLS-1$
-        objects.add("Stored Procedure");//$NON-NLS-1$
-        objects.add("Synchronization Conflict");//$NON-NLS-1$
-        objects.add("Transformer Plugin V2");//$NON-NLS-1$
-        objects.add("Transformer V2");//$NON-NLS-1$
-        objects.add("Universe");//$NON-NLS-1$
-        objects.add("View");//$NON-NLS-1$
-
-        for (String name : objects) {
-            WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE objectIdE = MdmserverobjectFactory.eINSTANCE
-                    .createWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE();
+        for (String name : OBJECT_NAMES) {
             WSSynchronizationPlanXtentisObjectsSynchronizationsE objectXc = MdmserverobjectFactory.eINSTANCE
                     .createWSSynchronizationPlanXtentisObjectsSynchronizationsE();
-            objectXc.getSynchronizations().add(objectIdE);
             objectXc.setXtentisObjectName(name);
-
             objectsId.add(objectXc);
         }
-
-        WSSynchronizationPlanItemsSynchronizationsE itemRId = MdmserverobjectFactory.eINSTANCE
-                .createWSSynchronizationPlanItemsSynchronizationsE();
 
         WSSynchronizationPlanE synchronizationplan = MdmserverobjectFactory.eINSTANCE.createWSSynchronizationPlanE();
 
@@ -107,11 +79,8 @@ public class NewSynchronizationPlanAction extends AbstractSimpleAddAction {
         synchronizationplan.setTisPassword(""); //$NON-NLS-1$
         synchronizationplan.setTisParameters(""); //$NON-NLS-1$
         synchronizationplan.getXtentisObjectsSynchronizations().addAll(objectsId);
-        synchronizationplan.getItemsSynchronizations().add(itemRId);
 
-
-
-         return synchronizationplan;
+        return synchronizationplan;
 
     }
 
@@ -131,6 +100,5 @@ public class NewSynchronizationPlanAction extends AbstractSimpleAddAction {
         }
         return true;
     }
-
 
 }
