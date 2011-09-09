@@ -30,7 +30,6 @@ import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -68,7 +67,8 @@ public class TISProcessNodeResourceProvider extends AbstractRepositoryNodeResour
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createWSJobModelItem();
+        // return MdmpropertiesFactory.eINSTANCE.createWSJobModelItem();
+        return null;
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {
