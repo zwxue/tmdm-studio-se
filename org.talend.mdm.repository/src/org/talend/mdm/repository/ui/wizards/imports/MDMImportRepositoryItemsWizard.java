@@ -37,6 +37,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
@@ -56,6 +59,7 @@ import org.talend.repository.imports.TreeBuilder;
 import org.talend.repository.imports.TreeBuilder.IContainerNode;
 
 import com.amalto.workbench.export.ImportItemsWizard;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.widgets.FilteredCheckboxTree;
 
 /**
@@ -311,4 +315,28 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }.schedule();
     }
 
+    public static void hideServerView() {
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        if (activePage != null) {
+            IViewReference ref = activePage.findViewReference(ServerView.VIEW_ID);
+            if (ref != null) {
+                activePage.hideView(ref);
+
+            }
+        }
+    }
+
+    @Override
+    public boolean performCancel() {
+        hideServerView();
+        return super.performCancel();
+    }
+
+    @Override
+    public boolean performFinish() {
+
+        boolean result = super.performFinish();
+        hideServerView();
+        return result;
+    }
 }

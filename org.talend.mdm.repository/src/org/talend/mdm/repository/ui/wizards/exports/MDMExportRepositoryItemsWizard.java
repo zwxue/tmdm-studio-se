@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.exports;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +21,9 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.RepositoryViewObject;
@@ -29,6 +31,7 @@ import org.talend.mdm.repository.ui.wizards.exports.viewers.RepositoryViewCheckT
 import org.talend.repository.local.ExportItemUtil;
 
 import com.amalto.workbench.export.ExportItemsWizard;
+import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hywang class global comment. this wizard is used to export the selected items from MDMRepositoryView
@@ -86,6 +89,30 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     @Override
     protected void createViewer() {
         treeViewer = new RepositoryViewCheckTreeViewer(sel);
+    }
+
+    @Override
+    public boolean performCancel() {
+        hideServerView();
+        return super.performCancel();
+    }
+
+    public static void hideServerView() {
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        if (activePage != null) {
+            IViewReference ref = activePage.findViewReference(ServerView.VIEW_ID);
+            if (ref != null) {
+                activePage.hideView(ref);
+            }
+        }
+    }
+
+    @Override
+    public boolean performFinish() {
+
+        boolean result = super.performFinish();
+        hideServerView();
+        return result;
     }
 
 }
