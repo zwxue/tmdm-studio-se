@@ -291,7 +291,8 @@ public class ImportServerObjectWizard extends Wizard {
                     item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);
                     item.setMDMServerObject(eobj);
                     ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
-                    itemState.setPath(treeObj.getPath());
+
+                    itemState.setPath(caculatePath(treeObj));
                     handlePath(itemState, type);
                     item.setState(itemState);
                     String version = getVersion(treeObj);
@@ -302,6 +303,33 @@ public class ImportServerObjectWizard extends Wizard {
             }
         }
         monitor.done();
+    }
+
+    /**
+     * DOC jsxie Comment method "caculatePath". if it is process or trigger ,cut the path prefix.
+     * 
+     * @param treeObj
+     * @return the tree object path.
+     */
+    private String caculatePath(TreeObject treeObj) {
+        if (treeObj.getType() == TreeObject.TRANSFORMER) {
+            if (treeObj.getPath().equals("Process"))//$NON-NLS-1$
+                return ""; //$NON-NLS-1$
+            else
+                return treeObj.getPath().substring(8);
+
+        }
+
+        if (treeObj.getType() == TreeObject.ROUTING_RULE) {
+            if (treeObj.getPath().equals("Trigger"))//$NON-NLS-1$
+                return "";//$NON-NLS-1$
+            else
+                return treeObj.getPath().substring(8);
+
+        }
+
+        return treeObj.getPath();
+
     }
 
     /**
