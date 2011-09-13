@@ -226,9 +226,15 @@ public class ServerExplorer extends ViewPart {
                 MDMServerDefItem mdmItem = getMDMItem(viewObject);
                 if (mdmItem != null) {
                     MDMServerDef serverDef = mdmItem.getServerDef();
-                    String msg = ServerDefService.checkMDMConnection(serverDef) ? Messages.ServerExplorer_ConnectSuccessful
+                    boolean success = ServerDefService.checkMDMConnection(serverDef);
+                    String msg = success ? Messages.ServerExplorer_ConnectSuccessful
                             : Messages.ServerExplorer_ConnectFailed;
-                    MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
+                    if (success) {
+                        MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
+                    } else {
+                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
+                    }
+
                 }
             }
         }

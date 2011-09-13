@@ -287,7 +287,7 @@ public class ServerDefDialog extends TitleAreaDialog {
             if (!validateInput())
                 return;
             boolean check = ServerDefService.checkMDMConnection(serverDef);
-            String msg = check ? Messages.ServerDefDialog_ConnectSuccessful : Messages.ServerDefDialog_ConnectFailed;
+            String msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
             if (check) {
                 setMessage(msg);
             } else {
