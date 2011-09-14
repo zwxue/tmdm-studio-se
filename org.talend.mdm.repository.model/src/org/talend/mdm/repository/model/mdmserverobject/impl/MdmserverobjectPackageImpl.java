@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
+import org.talend.mdm.repository.model.mdmserverobject.CustomForm;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmserverobject.EWSMenu;
 import org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry;
@@ -324,6 +325,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsResourceEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass customFormEClass = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -1645,6 +1653,24 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getCustomForm() {
+        return customFormEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getCustomForm_Filename() {
+        return (EAttribute)customFormEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
@@ -1843,6 +1869,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsResourceEEClass = createEClass(WS_RESOURCE_E);
         createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILE_EXTENSION);
         createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILE_CONTENT);
+
+        customFormEClass = createEClass(CUSTOM_FORM);
+        createEAttribute(customFormEClass, CUSTOM_FORM__FILENAME);
     }
 
     /**
@@ -1892,6 +1921,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsServiceConfigurationEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsWorkflowEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsResourceEEClass.getESuperTypes().add(this.getMDMServerObject());
+        customFormEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2071,6 +2101,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(wsResourceEEClass, WSResourceE.class, "WSResourceE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSResourceE_FileExtension(), ecorePackage.getEString(), "fileExtension", null, 0, 1, WSResourceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSResourceE_FileContent(), ecorePackage.getEByteArray(), "fileContent", null, 0, 1, WSResourceE.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(customFormEClass, CustomForm.class, "CustomForm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getCustomForm_Filename(), ecorePackage.getEString(), "filename", null, 0, 1, CustomForm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

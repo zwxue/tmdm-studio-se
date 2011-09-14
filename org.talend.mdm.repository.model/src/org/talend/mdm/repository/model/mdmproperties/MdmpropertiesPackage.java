@@ -1354,6 +1354,70 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_RESOURCE_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.CustomFormItemImpl <em>Custom Form Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.CustomFormItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getCustomFormItem()
+     * @generated
+     */
+    int CUSTOM_FORM_ITEM = 20;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM_ITEM__PROPERTY = MDM_SERVER_OBJECT_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM_ITEM__STATE = MDM_SERVER_OBJECT_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM_ITEM__PARENT = MDM_SERVER_OBJECT_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>Custom Form</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM_ITEM__CUSTOM_FORM = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Custom Form Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1361,7 +1425,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 20;
+    int EREPOSITORY_OBJECT_TYPE = 21;
 
 
     /**
@@ -1774,6 +1838,27 @@ public interface MdmpropertiesPackage extends EPackage {
     EReference getWSResourceItem_Resource();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.CustomFormItem <em>Custom Form Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Custom Form Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.CustomFormItem
+     * @generated
+     */
+    EClass getCustomFormItem();
+
+    /**
+     * Returns the meta object for the reference '{@link org.talend.mdm.repository.model.mdmproperties.CustomFormItem#getCustomForm <em>Custom Form</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Custom Form</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.CustomFormItem#getCustomForm()
+     * @see #getCustomFormItem()
+     * @generated
+     */
+    EReference getCustomFormItem_CustomForm();
+
+    /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2157,6 +2242,24 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_RESOURCE_ITEM__RESOURCE = eINSTANCE.getWSResourceItem_Resource();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.CustomFormItemImpl <em>Custom Form Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.CustomFormItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getCustomFormItem()
+         * @generated
+         */
+        EClass CUSTOM_FORM_ITEM = eINSTANCE.getCustomFormItem();
+
+        /**
+         * The meta object literal for the '<em><b>Custom Form</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference CUSTOM_FORM_ITEM__CUSTOM_FORM = eINSTANCE.getCustomFormItem_CustomForm();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

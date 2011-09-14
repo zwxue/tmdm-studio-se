@@ -2546,6 +2546,88 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_RESOURCE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.CustomFormImpl <em>Custom Form</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.CustomFormImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getCustomForm()
+     * @generated
+     */
+    int CUSTOM_FORM = 37;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Changed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__CHANGED = MDM_SERVER_OBJECT__CHANGED;
+
+    /**
+     * The feature id for the '<em><b>Filename</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__FILENAME = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Custom Form</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4038,6 +4120,27 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSResourceE_FileContent();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.CustomForm <em>Custom Form</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Custom Form</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.CustomForm
+     * @generated
+     */
+    EClass getCustomForm();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.CustomForm#getFilename <em>Filename</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Filename</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.CustomForm#getFilename()
+     * @see #getCustomForm()
+     * @generated
+     */
+    EAttribute getCustomForm_Filename();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5244,6 +5347,24 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_RESOURCE_E__FILE_CONTENT = eINSTANCE.getWSResourceE_FileContent();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.CustomFormImpl <em>Custom Form</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.CustomFormImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getCustomForm()
+         * @generated
+         */
+        EClass CUSTOM_FORM = eINSTANCE.getCustomForm();
+
+        /**
+         * The meta object literal for the '<em><b>Filename</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CUSTOM_FORM__FILENAME = eINSTANCE.getCustomForm_Filename();
 
     }
 

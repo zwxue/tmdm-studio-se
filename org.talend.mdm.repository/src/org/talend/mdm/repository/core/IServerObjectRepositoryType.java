@@ -81,4 +81,7 @@ public interface IServerObjectRepositoryType {
 
     public static ERepositoryObjectType TYPE_RESOURCE = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.Resource"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_CUSTOM_FORM = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.CustomForm"); //$NON-NLS-1$
 }

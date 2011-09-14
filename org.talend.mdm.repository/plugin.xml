@@ -162,6 +162,14 @@
             products="MDM"
             type="MDM.Resource">
       </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.CustomFormRepositoryNode"
+            folder="MDM/customForm"
+            isResouce="true"
+            label="Custom Form"
+            products="MDM"
+            type="MDM.CustomForm">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.core.repository.repository_content">
@@ -348,6 +356,10 @@
       <configuration
             class="org.talend.mdm.repository.core.impl.resource.ResourceNodeConfiguration"
             label="Resource">
+      </configuration>
+      <configuration
+            class="org.talend.mdm.repository.core.impl.customform.CustomFormNodeConfiguration"
+            label="Custom Form">
       </configuration>
    </extension>
    <extension

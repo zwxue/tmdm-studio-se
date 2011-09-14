@@ -359,6 +359,15 @@ public interface MdmserverobjectFactory extends EFactory {
     WSResourceE createWSResourceE();
 
     /**
+     * Returns a new object of class '<em>Custom Form</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Custom Form</em>'.
+     * @generated
+     */
+    CustomForm createCustomForm();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
