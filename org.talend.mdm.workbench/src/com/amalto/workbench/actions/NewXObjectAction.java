@@ -309,7 +309,7 @@ public class NewXObjectAction extends Action {
                             + (String) key + " already exists");
                     return;
                 }
-                WSDataModelPK[] dataModelPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();
+                WSDataModelPK[] dataModelPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs(); //$NON-NLS-1$
                 for (WSDataModelPK dataModel : dataModelPKs) {
                     String pk = dataModel.getPk();
                     if (pk.equalsIgnoreCase((String) key)) {
