@@ -67,6 +67,7 @@ import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataModel;
+import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
@@ -308,6 +309,16 @@ public class NewXObjectAction extends Action {
                             + (String) key + " already exists");
                     return;
                 }
+                WSDataModelPK[] dataModelPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();
+                for (WSDataModelPK dataModel : dataModelPKs) {
+                    String pk = dataModel.getPk();
+                    if (pk.equalsIgnoreCase((String) key)) {
+                        MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Data Model "
+                                + " already exists");
+                        return;
+                    }
+                }
+
                 // add
                 WSDataModel wsDataModel = new WSDataModel((String) key, "", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"//$NON-NLS-1$//$NON-NLS-2$
                         + "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"/>");//$NON-NLS-1$
