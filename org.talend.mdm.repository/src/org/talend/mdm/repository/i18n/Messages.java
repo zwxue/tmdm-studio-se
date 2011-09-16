@@ -55,6 +55,15 @@ public class Messages extends NLS {
 
     public static String DuplicateAction_duplicate;
 
+    public static String NewCustomFormDialog_selectEntity;
+
+
+    public static String NewCustomFormDialog_selectEntityFromDataModel;
+
+
+    public static String NewCustomFormDialog_selectOneEntity;
+
+
     public static String NewDataModelAction_newDataModel;
 
     public static String NewMenuAction_newMenu;

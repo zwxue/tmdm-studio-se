@@ -28,7 +28,7 @@ import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
-import org.talend.mdm.repository.ui.actions.resource.NewResourceAction;
+import org.talend.mdm.repository.ui.actions.customform.NewCustomFormAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -42,7 +42,7 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
-        addAction = new NewResourceAction();
+        addAction = new NewCustomFormAction();
 
         //
         addAction.initCommonViewer(commonViewer);
