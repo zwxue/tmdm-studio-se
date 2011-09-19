@@ -12,40 +12,39 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.customform;
 
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.mdm.repository.models.CustomFormElement;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public class NewCustomformWizard extends Wizard {
 
+    private CustomFormBaseInfoPage baseInfoPage;
+
+    private int columnCount;
+
+    private String dataModelName;
+
+    private CustomFormDiagramInfoPage diagramInfoPage;
+
+    private String entityName;
+
+    private String formName;
+
     private final IWorkbenchPartSite site;
 
     private final IInputValidator validator;
 
-    private CustomFormBaseInfoPage baseInfoPage;
+    private List<CustomFormElement> allElements;;
 
-    private CustomFormDiagramInfoPage diagramInfoPage;
-
-    private String formName;
-
-    public String getFormName() {
-        return this.formName;
+    public List<CustomFormElement> getAllElements() {
+        return this.allElements;
     }
-
-    public String getDataModelName() {
-        return this.dataModelName;
-    }
-
-    public String getEntityName() {
-        return this.entityName;
-    }
-
-    private String dataModelName;
-
-    private String entityName;
 
     public NewCustomformWizard(IWorkbenchPartSite site, String title, IInputValidator validator) {
         this.site = site;
@@ -70,13 +69,30 @@ public class NewCustomformWizard extends Wizard {
         return super.canFinish();
     }
 
+    public int getColumnCount() {
+        return this.columnCount;
+    }
+
+    public String getDataModelName() {
+        return this.dataModelName;
+    }
+
+    public String getEntityName() {
+        return this.entityName;
+    }
+
+    public String getFormName() {
+        return this.formName;
+    }
+
     @Override
     public boolean performFinish() {
         formName = baseInfoPage.getFormName();
         dataModelName = baseInfoPage.getDataModelName();
         entityName = baseInfoPage.getEntityName();
-
-        return false;
+        columnCount = diagramInfoPage.getColumnCount();
+        allElements = diagramInfoPage.getAllElements();
+        return true;
     }
 
 }

@@ -21,21 +21,28 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.customform;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.CustomFormItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmserverobject.CustomForm;
+import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
+import org.talend.mdm.repository.models.CustomFormElement;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.wizards.customform.NewCustomformWizard;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -56,7 +63,7 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
     }
 
     protected String getDialogTitle() {
-        return "New Custom Form";
+        return Messages.NewCustomFormAction_title;
     }
 
     public void run() {
@@ -91,31 +98,54 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         String formName = wizard.getFormName();
         String dataModelName = wizard.getDataModelName();
         String entityName = wizard.getEntityName();
-        // TODO wait aiming 1.create file 2.create object
-        createServerObject(null);
+        int columnCount = wizard.getColumnCount();
+        List<CustomFormElement> allElements = wizard.getAllElements();
+        IFolder folder = RepositoryResourceUtil.getFolder(IServerObjectRepositoryType.TYPE_CUSTOM_FORM, parentItem);
+        IFile formFile = createFormFile(folder,
+                formName + "_" + VersionUtils.DEFAULT_VERSION, dataModelName + "." + entityName, columnCount, allElements); //$NON-NLS-1$ //$NON-NLS-2$
+        createServerObject(formName, dataModelName, entityName, formFile);
         commonViewer.refresh(selectObj);
         commonViewer.expandToLevel(selectObj, 1);
 
     }
 
-    private CustomForm newCustomForm(String key) {
-
+    // TODO
+    private IFile createFormFile(IFolder folder, String formName, String title, int columnCount,
+            List<CustomFormElement> allElements) {
         return null;
     }
 
-    protected boolean createServerObject(String key) {
+    private CustomForm newCustomForm(String formName, String dataModelName, String entityName, String fileName) {
+        CustomForm form = MdmserverobjectFactory.eINSTANCE.createCustomForm();
+        form.setName(formName);
+        form.setFilename(fileName);
+        // TODO dataModel & entitiy
+        return form;
+    }
+
+    protected boolean createServerObject(String formName, String dataModelName, String entityName, IFile file) {
 
         CustomFormItem item = MdmpropertiesFactory.eINSTANCE.createCustomFormItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        CustomForm form = newCustomForm(key);
+        CustomForm form = newCustomForm(formName, dataModelName, entityName, file.getName());
         item.setCustomForm(form);
 
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
-            return RepositoryResourceUtil.createItem(item, key);
+            return RepositoryResourceUtil.createItem(item, formName);
         }
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction#createServerObject(java.lang.String)
+     */
+    @Override
+    protected boolean createServerObject(String key) {
         return false;
     }
 

@@ -70,8 +70,8 @@ public class CustomFormBaseInfoPage extends WizardPage {
         super(PAGE_ID);
         this.site = site;
         this.validator = validator;
-        setTitle("Wizard Page title");
-        setDescription("Wizard Page description");
+        setTitle(Messages.CustomFormBaseInfoPage_title);
+        setDescription(Messages.CustomFormBaseInfoPage_inputName);
     }
 
     /**

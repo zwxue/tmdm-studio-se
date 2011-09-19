@@ -39,6 +39,8 @@ import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.models.CustomFormElement;
 
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 /**
@@ -48,20 +50,21 @@ public class XSDSchemaComposite extends Composite {
 
     private static Logger log = Logger.getLogger(XSDSchemaComposite.class);
 
+    private static final Image IMG = ImageCache.getCreatedImage(EImage.SCHEMAELEMENT.getPath());
+
     private static class ViewerLabelProvider extends LabelProvider {
 
         public Image getImage(Object element) {
-            return super.getImage(element);
+            return IMG;
         }
 
         public String getText(Object element) {
             if (element instanceof CustomFormElement) {
                 CustomFormElement cfe = (CustomFormElement) element;
                 String name = cfe.getName();
-                String type = cfe.getType() == null ? "" : cfe.getType();
-                return name + " : " + type; //$NON-NLS-1$
+                return name + (cfe.getType() == null ? "" : " : " + cfe.getType()); //$NON-NLS-1$ //$NON-NLS-2$
             }
-            return "";
+            return ""; //$NON-NLS-1$
         }
     }
 

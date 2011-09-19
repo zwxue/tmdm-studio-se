@@ -55,6 +55,9 @@ public class Messages extends NLS {
 
     public static String DuplicateAction_duplicate;
 
+    public static String NewCustomFormAction_title;
+
+
     public static String NewCustomFormDialog_selectEntity;
 
 
@@ -174,6 +177,33 @@ public class Messages extends NLS {
     public static String Confirm_Overwrite;
 
     public static String Confirm_Overwrite_Info;
+
+    public static String CustomFormBaseInfoPage_inputName;
+
+
+    public static String CustomFormBaseInfoPage_title;
+
+
+    public static String CustomFormDiagramInfoPage_1column;
+
+
+    public static String CustomFormDiagramInfoPage_2columns;
+
+
+    public static String CustomFormDiagramInfoPage_3columns;
+
+
+    public static String CustomFormDiagramInfoPage_elementStructure;
+
+
+    public static String CustomFormDiagramInfoPage_layout;
+
+
+    public static String CustomFormDiagramInfoPage_selectLayout;
+
+
+    public static String CustomFormDiagramInfoPage_title;
+
 
     public static String ExportObjectAction_error;
 
