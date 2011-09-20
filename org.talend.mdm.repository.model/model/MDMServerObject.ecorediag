@@ -925,6 +925,14 @@
         <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//CustomForm/filename"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_TDRzcd3lEeCda44NsLz0ZQ"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_J6TtEeMlEeCIL_jugmtxwQ" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//CustomForm/dataModelName"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_J6TtEuMlEeCIL_jugmtxwQ"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_OZJ28OMlEeCIL_jugmtxwQ" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//CustomForm/entityName"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_OZJ28eMlEeCIL_jugmtxwQ"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_M3NSwd3lEeCda44NsLz0ZQ"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_M3NSwt3lEeCda44NsLz0ZQ"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_M3NSw93lEeCda44NsLz0ZQ"/>
@@ -936,7 +944,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_M26X0t3lEeCda44NsLz0ZQ" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="MDMServerObject.ecore#//CustomForm"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_M26X093lEeCda44NsLz0ZQ" x="706" y="-90"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_M26X093lEeCda44NsLz0ZQ" x="705" y="-95"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_6CYIMZrwEeCKWZ_HwFgILA"/>
   <element xmi:type="ecore:EPackage" href="MDMServerObject.ecore#/"/>

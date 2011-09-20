@@ -2619,13 +2619,31 @@ public interface MdmserverobjectPackage extends EPackage {
     int CUSTOM_FORM__FILENAME = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
+     * The feature id for the '<em><b>Data Model Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__DATA_MODEL_NAME = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
+     * The feature id for the '<em><b>Entity Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CUSTOM_FORM__ENTITY_NAME = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
+
+    /**
      * The number of structural features of the '<em>Custom Form</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CUSTOM_FORM_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+    int CUSTOM_FORM_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 3;
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
@@ -4141,6 +4159,28 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getCustomForm_Filename();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.CustomForm#getDataModelName <em>Data Model Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Data Model Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.CustomForm#getDataModelName()
+     * @see #getCustomForm()
+     * @generated
+     */
+    EAttribute getCustomForm_DataModelName();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.CustomForm#getEntityName <em>Entity Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Entity Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.CustomForm#getEntityName()
+     * @see #getCustomForm()
+     * @generated
+     */
+    EAttribute getCustomForm_EntityName();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5365,6 +5405,22 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute CUSTOM_FORM__FILENAME = eINSTANCE.getCustomForm_Filename();
+
+        /**
+         * The meta object literal for the '<em><b>Data Model Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CUSTOM_FORM__DATA_MODEL_NAME = eINSTANCE.getCustomForm_DataModelName();
+
+        /**
+         * The meta object literal for the '<em><b>Entity Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CUSTOM_FORM__ENTITY_NAME = eINSTANCE.getCustomForm_EntityName();
 
     }
 

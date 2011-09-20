@@ -13,63 +13,38 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IPersistableElement;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.talend.core.model.properties.Item;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.CustomFormItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-
 /**
- * DOC hbhong  class global comment. Detailled comment
+ * DOC hbhong class global comment. Detailled comment
  */
-public class CustomFormEditorInput implements IRepositoryViewEditorInput {
+public class CustomFormEditorInput extends DiagramEditorInput implements IRepositoryViewEditorInput {
+
+    /**
+     * DOC hbhong CustomFormEditorInput constructor comment.
+     * 
+     * @param diagramUri
+     * @param domain
+     * @param providerId
+     * @param disposeEditingDomain
+     */
+    public CustomFormEditorInput(URI diagramUri, TransactionalEditingDomain domain) {
+        super(diagramUri, domain, null, true);
+    }
 
     private Item item;
 
     private IFile file;
 
-    public boolean exists() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public ImageDescriptor getImageDescriptor() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public String getName() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public IPersistableElement getPersistable() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public String getToolTipText() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public Object getAdapter(Class adapter) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
     public String getEditorId() {
-        // TODO Auto-generated method stub
-        return null;
+        return "org.talend.mdm.form.editor.MDMCustomFormEditor"; //$NON-NLS-1$
     }
-
 
     public Item getInputItem() {
         return item;

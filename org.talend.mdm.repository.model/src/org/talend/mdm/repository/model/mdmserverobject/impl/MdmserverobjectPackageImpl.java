@@ -1671,6 +1671,24 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getCustomForm_DataModelName() {
+        return (EAttribute)customFormEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getCustomForm_EntityName() {
+        return (EAttribute)customFormEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
@@ -1872,6 +1890,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         customFormEClass = createEClass(CUSTOM_FORM);
         createEAttribute(customFormEClass, CUSTOM_FORM__FILENAME);
+        createEAttribute(customFormEClass, CUSTOM_FORM__DATA_MODEL_NAME);
+        createEAttribute(customFormEClass, CUSTOM_FORM__ENTITY_NAME);
     }
 
     /**
@@ -2104,6 +2124,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         initEClass(customFormEClass, CustomForm.class, "CustomForm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getCustomForm_Filename(), ecorePackage.getEString(), "filename", null, 0, 1, CustomForm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getCustomForm_DataModelName(), ecorePackage.getEString(), "dataModelName", null, 0, 1, CustomForm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getCustomForm_EntityName(), ecorePackage.getEString(), "entityName", null, 0, 1, CustomForm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

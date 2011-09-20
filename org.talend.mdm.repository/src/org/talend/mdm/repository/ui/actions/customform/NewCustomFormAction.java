@@ -119,7 +119,8 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         CustomForm form = MdmserverobjectFactory.eINSTANCE.createCustomForm();
         form.setName(formName);
         form.setFilename(fileName);
-        // TODO dataModel & entitiy
+        form.setDataModelName(dataModelName);
+        form.setEntityName(entityName);
         return form;
     }
 

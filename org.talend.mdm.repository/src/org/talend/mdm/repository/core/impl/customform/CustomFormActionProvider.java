@@ -23,12 +23,21 @@ package org.talend.mdm.repository.core.impl.customform;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.graphiti.ui.editor.DiagramEditorFactory;
+import org.eclipse.graphiti.ui.internal.services.GraphitiUiInternal;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderType;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.ui.actions.customform.NewCustomFormAction;
+import org.talend.mdm.repository.ui.editors.CustomFormEditorInput;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -66,10 +75,23 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
     }
 
     // @Override
-    // public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
-    // return new ResourceRepositoryFileEditorInput(item);
-    // }
+    public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
+        final IFile file = getReferenceFile(item);
+        final TransactionalEditingDomain domain = DiagramEditorFactory.createResourceSetAndEditingDomain();
+        URI diagramFileUri = GraphitiUiInternal.getEmfService().getFileURI(file, domain.getResourceSet());
+        if (diagramFileUri != null) {
+            // the file's first base node has to be a diagram
+            URI diagramUri = GraphitiUiInternal.getEmfService().mapDiagramFileUriToDiagramUri(diagramFileUri);
+            return new CustomFormEditorInput(diagramUri, domain);
+        }
+        return null;
+    }
 
-  
+    public IFile getReferenceFile(Item item) {
+        IFile file;
 
+        file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, "form");
+
+        return file;
+    }
 }
