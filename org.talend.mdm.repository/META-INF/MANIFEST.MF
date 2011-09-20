@@ -36,8 +36,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.mdm.workbench.enterprise,
  org.talend.mdm.workbench.serverexplorer,
  org.junit,
- org.eclipse.graphiti.ui;bundle-version="0.8.0",
- org.eclipse.emf.transaction;bundle-version="1.4.0"
+ org.eclipse.graphiti.ui,
+ org.eclipse.emf.transaction
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging

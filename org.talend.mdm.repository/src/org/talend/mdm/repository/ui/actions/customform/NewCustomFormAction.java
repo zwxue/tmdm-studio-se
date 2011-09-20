@@ -21,11 +21,16 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.customform;
 
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -52,6 +57,8 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  * 
  */
 public class NewCustomFormAction extends AbstractSimpleAddAction {
+
+    Logger log = Logger.getLogger(NewCustomFormAction.class);
 
     /**
      * DOC AddProcess constructor comment.
@@ -101,18 +108,30 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         int columnCount = wizard.getColumnCount();
         List<CustomFormElement> allElements = wizard.getAllElements();
         IFolder folder = RepositoryResourceUtil.getFolder(IServerObjectRepositoryType.TYPE_CUSTOM_FORM, parentItem);
-        IFile formFile = createFormFile(folder,
-                formName + "_" + VersionUtils.DEFAULT_VERSION, dataModelName + "." + entityName, columnCount, allElements); //$NON-NLS-1$ //$NON-NLS-2$
-        createServerObject(formName, dataModelName, entityName, formFile);
-        commonViewer.refresh(selectObj);
-        commonViewer.expandToLevel(selectObj, 1);
+        try {
+            IFile formFile = createFormFile(folder,
+                    formName + "_" + VersionUtils.DEFAULT_VERSION + ".form", dataModelName + "." + entityName, columnCount, allElements); //$NON-NLS-1$ //$NON-NLS-2$
+            createServerObject(formName, dataModelName, entityName, formFile);
+            commonViewer.refresh(selectObj);
+            commonViewer.expandToLevel(selectObj, 1);
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        }
 
     }
 
-    // TODO
     private IFile createFormFile(IFolder folder, String formName, String title, int columnCount,
-            List<CustomFormElement> allElements) {
-        return null;
+            List<CustomFormElement> allElements) throws UnsupportedEncodingException, CoreException {
+        IFile file = folder.getFile(formName);
+        String content = tmp1 + title + tmp2;
+        if (!file.exists())
+            file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+        else
+            file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+
+        return file;
     }
 
     private CustomForm newCustomForm(String formName, String dataModelName, String entityName, String fileName) {
@@ -149,5 +168,11 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
     protected boolean createServerObject(String key) {
         return false;
     }
+
+    String tmp1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            + "<pi:Diagram xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:al=\"http://eclipse.org/graphiti/mm/algorithms\" xmlns:pi=\"http://eclipse.org/graphiti/mm/pictograms\" visible=\"true\" gridUnit=\"10\" diagramTypeId=\"mdmform\" name=\"";
+
+    String tmp2 = "\" snapToGrid=\"true\" showGuides=\"true\">"
+            + "<graphicsAlgorithm xsi:type=\"al:Rectangle\" background=\"//@colors.1\" foreground=\"//@colors.0\" lineWidth=\"1\" transparency=\"0.0\" width=\"1000\" height=\"1000\"/><colors red=\"227\" green=\"238\" blue=\"249\"/><colors red=\"255\" green=\"255\" blue=\"255\"/></pi:Diagram>";
 
 }

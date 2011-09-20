@@ -84,7 +84,7 @@ public class CustomFormDiagramInfoPage extends WizardPage {
         group.setLayout(new FillLayout(SWT.HORIZONTAL));
         group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        // schemaComposite = new XSDSchemaComposite(group);
+        schemaComposite = new XSDSchemaComposite(group);
 
         Group columnGroup = new Group(container, SWT.NONE);
         columnGroup.setText(Messages.CustomFormDiagramInfoPage_layout);
@@ -104,7 +104,6 @@ public class CustomFormDiagramInfoPage extends WizardPage {
         OneColBun.setLayoutData(gd_OnecolBun);
         OneColBun.setSelection(true);
         OneColBun.setText(Messages.CustomFormDiagramInfoPage_1column);
-
 
         Button twoColsBun = new Button(columnGroup, SWT.RADIO);
         GridData gd_twoColsBun = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -152,8 +151,9 @@ public class CustomFormDiagramInfoPage extends WizardPage {
     }
 
     public void updateDataModel(String dataModel, String entityName) {
-        schemaComposite.updateModel(dataModel, entityName);
-        allElements = schemaComposite.getAllElements();
-
+        if (schemaComposite != null) {
+            schemaComposite.updateModel(dataModel, entityName);
+            allElements = schemaComposite.getAllElements();
+        }
     }
 }

@@ -90,7 +90,7 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
     public IFile getReferenceFile(Item item) {
         IFile file;
 
-        file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, "form");
+        file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_CUSTOM_FORM, item, "form"); //$NON-NLS-1$
 
         return file;
     }
