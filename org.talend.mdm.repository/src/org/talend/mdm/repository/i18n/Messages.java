@@ -43,6 +43,7 @@ public class Messages extends NLS {
 
     public static String DeployAllDialog_label;
 
+    public static String DeployAllDialog_label_selectserver;
 
     public static String DeployAllDialog_selectAll;
 

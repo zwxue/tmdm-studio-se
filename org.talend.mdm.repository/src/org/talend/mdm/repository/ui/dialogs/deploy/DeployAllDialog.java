@@ -12,11 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.dialogs.deploy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.swt.SWT;
@@ -26,13 +28,18 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.talend.core.model.repository.IRepositoryObject;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.ui.widgets.RepositoryViewObjectCheckedWidget;
+import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -42,6 +49,12 @@ public class DeployAllDialog extends Dialog {
     private final Set<IRepositoryViewObject> changedViewObjs;
 
     private final Object input;
+
+    private Combo combo;
+
+    private MDMServerDef theServerDef;
+
+    private String comboServerName;
 
     /**
      * Create the dialog.
@@ -55,6 +68,13 @@ public class DeployAllDialog extends Dialog {
         setShellStyle(getShellStyle() | SWT.RESIZE);
     }
 
+    public DeployAllDialog(Shell parentShell, Object input, Set<IRepositoryViewObject> changedViewObjs, String name) {
+        super(parentShell);
+        this.input = input;
+        this.changedViewObjs = changedViewObjs;
+        this.comboServerName = name;
+        setShellStyle(getShellStyle() | SWT.RESIZE);
+    }
     /**
      * Create contents of the dialog.
      * 
@@ -62,9 +82,61 @@ public class DeployAllDialog extends Dialog {
      */
     @Override
     protected Control createDialogArea(Composite parent) {
-        Composite container = (Composite) super.createDialogArea(parent);
-        GridLayout gridLayout = (GridLayout) container.getLayout();
-        gridLayout.numColumns = 2;
+
+
+        Composite container1 = (Composite) super.createDialogArea(parent);
+        GridLayout gridLayout = (GridLayout) container1.getLayout();
+        container1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        gridLayout.numColumns = 1;
+        
+        Label lblNewLabel_selserver = new Label(container1, SWT.NONE);
+        lblNewLabel_selserver.setText(Messages.DeployAllDialog_label_selectserver);
+
+        combo = new Combo(container1, SWT.DROP_DOWN | SWT.READ_ONLY);
+        GridData data = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 2);
+        data.widthHint = 400;
+        combo.setLayoutData(data);
+
+        final List<MDMServerDef> serverDefs = new ArrayList<MDMServerDef>();
+
+        List<IRepositoryViewObject> viewObjects = ServerDefService.getAllServerDefViewObjects();
+        List<String> itemsLabel = new ArrayList<String>();
+        for (IRepositoryViewObject object : viewObjects) {
+
+            if (object instanceof IRepositoryObject) {
+                MDMServerDefItem mdmItem = getMDMItem((IRepositoryViewObject) object);
+                if (mdmItem != null) {
+                    MDMServerDef serverDef = mdmItem.getServerDef();
+                    String label = serverDef.getName() + " (" + serverDef.getHost() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+                    itemsLabel.add(label);
+                    serverDefs.add(serverDef);
+                }
+            }
+        }
+        int size = itemsLabel.size();
+        combo.setItems((String[]) itemsLabel.toArray(new String[size]));
+
+        combo.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                theServerDef = serverDefs.get(combo.getSelectionIndex());
+            }
+        });
+
+
+        if (comboServerName != null) {
+            for (int index = 0; index < serverDefs.size(); index++) {
+                if (serverDefs.get(index).getName().equals(comboServerName)) {
+                    combo.select(index);
+                    theServerDef = serverDefs.get(index);
+                }
+            }
+        }
+
+
+        Composite container = new Composite(container1, SWT.BORDER);
+        container.setLayout(new GridLayout(2, false));
+        container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
         Label lblNewLabel = new Label(container, SWT.NONE);
         lblNewLabel.setText(Messages.DeployAllDialog_label);
@@ -136,10 +208,35 @@ public class DeployAllDialog extends Dialog {
     @Override
     protected void okPressed() {
         selectededViewObjs = treeViewer.getSelectededViewObjs();
+        if (!doCheck()) {
+            return;
+        }
         super.okPressed();
+    }
+
+    private boolean doCheck() {
+
+        if (combo.getSelectionIndex() == -1) {
+            MessageDialog.openWarning(getShell(), "Warning", "Please choose a server for deploy");
+            return false;
+        }
+
+        return true;
+
     }
 
     private void enableOkBun() {
         okBun.setEnabled(treeViewer.getSelectededViewObjs().size() > 0);
+    }
+
+    private MDMServerDefItem getMDMItem(IRepositoryViewObject viewObject) {
+        if (viewObject != null) {
+            return (MDMServerDefItem) (viewObject.getProperty().getItem());
+        }
+        return null;
+    }
+
+    public MDMServerDef getTheServerDef() {
+        return this.theServerDef;
     }
 }

@@ -25,8 +25,11 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
@@ -62,8 +65,15 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
     @Override
     protected String getServerObjectItemText(Item item) {
-        WSTransformerV2Item rransformeItem = (WSTransformerV2Item) item;
-        return rransformeItem.getWsTransformerV2().getName();
+        WSTransformerV2Item transformeItem = (WSTransformerV2Item) item;
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
+            return transformeItem.getWsTransformerV2().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
+                    serverObject.getLastServerDef().getPort();
+        }
+
+        return transformeItem.getWsTransformerV2().getName();
+
     }
 
 }

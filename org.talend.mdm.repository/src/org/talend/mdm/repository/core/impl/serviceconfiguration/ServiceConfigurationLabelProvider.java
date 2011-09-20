@@ -25,8 +25,11 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSServiceConfigurationItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
@@ -62,8 +65,15 @@ public class ServiceConfigurationLabelProvider extends AbstractLabelProvider {
 
     @Override
     protected String getServerObjectItemText(Item item) {
-        WSServiceConfigurationItem serconfigItem = (WSServiceConfigurationItem) item;
+        WSServiceConfigurationItem serconfigItem = (WSServiceConfigurationItem) item; 
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
+            return serconfigItem.getWsServiceConfiguration().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
+                    serverObject.getLastServerDef().getPort();
+        }
+
         return serconfigItem.getWsServiceConfiguration().getName();
+
     }
 
 }

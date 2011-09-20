@@ -25,9 +25,12 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
@@ -65,7 +68,16 @@ public class ResourceLabelProvider extends AbstractLabelProvider {
     protected String getServerObjectItemText(Item item) {
         WSResourceItem menuItem = (WSResourceItem) item;
         WSResourceE resource = menuItem.getResource();
+
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
+            return resource.getName()
+                    + "." + resource.getFileExtension() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+                    serverObject.getLastServerDef().getPort();
+        }
+
         return resource.getName() + "." + resource.getFileExtension(); //$NON-NLS-1$
+
     }
 
 }

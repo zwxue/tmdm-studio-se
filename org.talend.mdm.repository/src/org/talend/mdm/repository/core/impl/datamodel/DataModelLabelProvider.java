@@ -25,8 +25,11 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
@@ -60,11 +63,16 @@ public class DataModelLabelProvider extends AbstractLabelProvider {
         return img;
     }
 
-    // 这个根category的孩子
     @Override
     protected String getServerObjectItemText(Item item) {
         WSDataModelItem datamodelItem = (WSDataModelItem) item;
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
+            return datamodelItem.getWsDataModel().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
+                    serverObject.getLastServerDef().getPort();
+        }
         return datamodelItem.getWsDataModel().getName();
+
     }
 
 }
