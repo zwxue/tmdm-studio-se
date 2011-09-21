@@ -1252,7 +1252,7 @@ public class ImportItemsWizard extends Wizard {
             zipBtn = new Button(composite, SWT.RADIO);
             zipBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             zipBtn.setText("Select archive file:");
-            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);//$NON-NLS-1$//$NON-NLS-2$
+            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             // zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
             // false, 1, 1));
             ((GridData) zip.getText().getLayoutData()).widthHint = 200;
