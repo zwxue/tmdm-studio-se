@@ -112,7 +112,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
         super(name, null);
         this.mdmServer = mdmserver;
-        manager = JobScriptsManagerFactory.getInstance().createManagerInstance();
 
         RepositoryNode[] nodes = (RepositoryNode[]) selection.toList().toArray(new RepositoryNode[selection.size()]);
 
@@ -380,15 +379,18 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         if (!ensureTargetIsValid()) {
             return false;
         }
+
         String topFolder = getRootFolderName();
         // reset the manager
         if (exportTypeCombo.getSelectionIndex() == 0) {// war
-            manager = new JobJavaScriptsWSManager();
+            manager = new JobJavaScriptsWSManager(exportChoiceMap, contextCombo.getText(), "all", IProcessor.NO_STATISTICS, //$NON-NLS-1$
+                    IProcessor.NO_TRACES, ".war");
         }
         if (exportTypeCombo.getSelectionIndex() == 1) {// zip
-            manager = new JobJavaScriptsManager();
+            manager = new JobJavaScriptsManager(exportChoiceMap, contextCombo.getText(), "all", IProcessor.NO_STATISTICS, //$NON-NLS-1$
+                    IProcessor.NO_TRACES);
         }
-
+        
         List<ExportFileResource> resourcesToExport = null;
         try {
             resourcesToExport = getExportResources();
@@ -675,9 +677,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     protected List<ExportFileResource> getExportResources() throws ProcessorException {
         Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap();
-        return manager.getExportResources(process, exportChoiceMap, contextCombo.getText(), JobScriptsManager.ALL_ENVIRONMENTS,
-                IProcessor.NO_STATISTICS,
-                IProcessor.NO_TRACES);
+        return manager.getExportResources(process);
     }
 
     /**

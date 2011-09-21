@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
@@ -28,6 +29,11 @@ import org.talend.core.model.properties.ProcessItem;
  * 
  */
 public class JobJavaScriptsManager extends org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobJavaScriptsManager {
+
+    public JobJavaScriptsManager(Map<ExportChoice, Object> exportChoiceMap, String contextName, String launcher,
+            int statisticPort, int tracePort) {
+        super(exportChoiceMap, contextName, launcher, statisticPort, tracePort);
+    }
 
     protected List<URL> getLauncher(boolean needLauncher, ProcessItem process, String contextName, String environment,
             int statisticPort, int tracePort, String... codeOptions) {

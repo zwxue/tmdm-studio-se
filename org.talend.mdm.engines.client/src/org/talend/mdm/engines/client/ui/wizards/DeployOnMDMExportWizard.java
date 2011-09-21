@@ -26,9 +26,6 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.talend.core.CorePlugin;
-import org.talend.core.context.Context;
-import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.mdm.engines.client.i18n.Messages;
 
@@ -55,13 +52,6 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
         IDialogSettings section = workbenchSettings.getSection("DeployOnMDMExportWizard"); //$NON-NLS-1$
         if (section == null) {
             section = workbenchSettings.addNewSection("DeployOnMDMExportWizard"); //$NON-NLS-1$
-            section.put(PerlDeployOnMDMExportWizardPage.STORE_SHELL_LAUNCHER_ID, true);
-            section.put(PerlDeployOnMDMExportWizardPage.STORE_SYSTEM_ROUTINE_ID, true);
-            section.put(PerlDeployOnMDMExportWizardPage.STORE_USER_ROUTINE_ID, true);
-            section.put(PerlDeployOnMDMExportWizardPage.STORE_MODEL_ID, true);
-            section.put(PerlDeployOnMDMExportWizardPage.STORE_JOB_ID, true);
-            section.put(PerlDeployOnMDMExportWizardPage.STORE_CONTEXT_ID, true);
-
             section.put(JavaDeployOnMDMExportWizardPage.STORE_SHELL_LAUNCHER_ID, true);
             section.put(JavaDeployOnMDMExportWizardPage.STORE_SYSTEM_ROUTINE_ID, true);
             section.put(JavaDeployOnMDMExportWizardPage.STORE_USER_ROUTINE_ID, true);
@@ -79,17 +69,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
     public void addPages() {
         super.addPages();
 
-        switch (((RepositoryContext) CorePlugin.getContext().getProperty(Context.REPOSITORY_CONTEXT_KEY)).getProject()
-                .getLanguage()) {
-        case JAVA:
-            mainPage = new JavaDeployOnMDMExportWizardPage(selection, mdmServer);
-
-            break;
-        case PERL:
-            mainPage = new PerlDeployOnMDMExportWizardPage(selection);
-            break;
-        }
-
+        mainPage = new JavaDeployOnMDMExportWizardPage(selection, mdmServer);
         addPage(mainPage);
     }
 
