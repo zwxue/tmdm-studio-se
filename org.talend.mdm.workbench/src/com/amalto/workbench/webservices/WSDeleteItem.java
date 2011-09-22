@@ -8,12 +8,14 @@ package com.amalto.workbench.webservices;
 
 public class WSDeleteItem {
     protected com.amalto.workbench.webservices.WSItemPK wsItemPK;
+    protected java.lang.Boolean override;
     
     public WSDeleteItem() {
     }
     
-    public WSDeleteItem(com.amalto.workbench.webservices.WSItemPK wsItemPK) {
+    public WSDeleteItem(com.amalto.workbench.webservices.WSItemPK wsItemPK, java.lang.Boolean override) {
         this.wsItemPK = wsItemPK;
+        this.override = override;
     }
     
     public com.amalto.workbench.webservices.WSItemPK getWsItemPK() {
@@ -22,5 +24,13 @@ public class WSDeleteItem {
     
     public void setWsItemPK(com.amalto.workbench.webservices.WSItemPK wsItemPK) {
         this.wsItemPK = wsItemPK;
+    }
+    
+    public java.lang.Boolean getOverride() {
+        return override;
+    }
+    
+    public void setOverride(java.lang.Boolean override) {
+        this.override = override;
     }
 }

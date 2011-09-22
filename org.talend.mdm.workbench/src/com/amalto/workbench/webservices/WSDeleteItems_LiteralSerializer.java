@@ -31,6 +31,9 @@ public class WSDeleteItems_LiteralSerializer extends LiteralObjectSerializerBase
     private static final QName ns1_spellTreshold_QNAME = new QName("", "spellTreshold");
     private static final QName ns3_int_TYPE_QNAME = SchemaConstants.QNAME_TYPE_INT;
     private CombinedSerializer ns3_myns3__int__int_Int_Serializer;
+    private static final QName ns1_override_QNAME = new QName("", "override");
+    private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
+    private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
     
     public WSDeleteItems_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -45,6 +48,7 @@ public class WSDeleteItems_LiteralSerializer extends LiteralObjectSerializerBase
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
         ns2_myWSWhereItem_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSWhereItem.class, ns2_WSWhereItem_TYPE_QNAME);
         ns3_myns3__int__int_Int_Serializer = (CombinedSerializer)registry.getSerializer("", int.class, ns3_int_TYPE_QNAME);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Boolean.class, ns3_boolean_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -117,6 +121,14 @@ public class WSDeleteItems_LiteralSerializer extends LiteralObjectSerializerBase
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_override_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_override_QNAME, reader, context);
+                instance.setOverride((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -142,5 +154,6 @@ public class WSDeleteItems_LiteralSerializer extends LiteralObjectSerializerBase
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3__int__int_Int_Serializer.serialize(new Integer(instance.getSpellTreshold()), ns1_spellTreshold_QNAME, null, writer, context);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getOverride(), ns1_override_QNAME, null, writer, context);
     }
 }

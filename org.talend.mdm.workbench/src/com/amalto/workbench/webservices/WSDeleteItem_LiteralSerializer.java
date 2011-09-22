@@ -22,6 +22,9 @@ public class WSDeleteItem_LiteralSerializer extends LiteralObjectSerializerBase 
     private static final QName ns1_wsItemPK_QNAME = new QName("", "wsItemPK");
     private static final QName ns2_WSItemPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
     private CombinedSerializer ns2_myWSItemPK_LiteralSerializer;
+    private static final QName ns1_override_QNAME = new QName("", "override");
+    private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
+    private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
     
     public WSDeleteItem_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -33,6 +36,7 @@ public class WSDeleteItem_LiteralSerializer extends LiteralObjectSerializerBase 
     
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns2_myWSItemPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSItemPK.class, ns2_WSItemPK_TYPE_QNAME);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Boolean.class, ns3_boolean_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -60,6 +64,14 @@ public class WSDeleteItem_LiteralSerializer extends LiteralObjectSerializerBase 
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_override_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_override_QNAME, reader, context);
+                instance.setOverride((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -76,5 +88,6 @@ public class WSDeleteItem_LiteralSerializer extends LiteralObjectSerializerBase 
             throw new SerializationException("literal.unexpectedNull");
         }
         ns2_myWSItemPK_LiteralSerializer.serialize(instance.getWsItemPK(), ns1_wsItemPK_QNAME, null, writer, context);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getOverride(), ns1_override_QNAME, null, writer, context);
     }
 }

@@ -32,6 +32,7 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
     private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
     private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
     private static final QName ns1_pushToUpdateReport_QNAME = new QName("", "pushToUpdateReport");
+    private static final QName ns1_override_QNAME = new QName("", "override");
     
     public WSDeleteItemWithReport_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -120,6 +121,14 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
                 reader.nextElementContent();
             }
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_override_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_override_QNAME, reader, context);
+                instance.setOverride((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -142,5 +151,6 @@ public class WSDeleteItemWithReport_LiteralSerializer extends LiteralObjectSeria
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getUser(), ns1_user_QNAME, null, writer, context);
         ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getInvokeBeforeSaving(), ns1_invokeBeforeSaving_QNAME, null, writer, context);
         ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getPushToUpdateReport(), ns1_pushToUpdateReport_QNAME, null, writer, context);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getOverride(), ns1_override_QNAME, null, writer, context);
     }
 }

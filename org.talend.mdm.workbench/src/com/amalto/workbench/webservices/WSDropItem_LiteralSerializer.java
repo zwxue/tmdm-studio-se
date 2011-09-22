@@ -25,6 +25,9 @@ public class WSDropItem_LiteralSerializer extends LiteralObjectSerializerBase im
     private static final QName ns1_partPath_QNAME = new QName("", "partPath");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
+    private static final QName ns1_override_QNAME = new QName("", "override");
+    private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
+    private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
     
     public WSDropItem_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -37,6 +40,7 @@ public class WSDropItem_LiteralSerializer extends LiteralObjectSerializerBase im
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns2_myWSItemPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSItemPK.class, ns2_WSItemPK_TYPE_QNAME);
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Boolean.class, ns3_boolean_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -77,6 +81,14 @@ public class WSDropItem_LiteralSerializer extends LiteralObjectSerializerBase im
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_override_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_override_QNAME, reader, context);
+                instance.setOverride((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -94,5 +106,6 @@ public class WSDropItem_LiteralSerializer extends LiteralObjectSerializerBase im
         }
         ns2_myWSItemPK_LiteralSerializer.serialize(instance.getWsItemPK(), ns1_wsItemPK_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getPartPath(), ns1_partPath_QNAME, null, writer, context);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getOverride(), ns1_override_QNAME, null, writer, context);
     }
 }

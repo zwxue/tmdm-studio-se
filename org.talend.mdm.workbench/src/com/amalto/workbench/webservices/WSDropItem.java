@@ -9,13 +9,15 @@ package com.amalto.workbench.webservices;
 public class WSDropItem {
     protected com.amalto.workbench.webservices.WSItemPK wsItemPK;
     protected java.lang.String partPath;
+    protected java.lang.Boolean override;
     
     public WSDropItem() {
     }
     
-    public WSDropItem(com.amalto.workbench.webservices.WSItemPK wsItemPK, java.lang.String partPath) {
+    public WSDropItem(com.amalto.workbench.webservices.WSItemPK wsItemPK, java.lang.String partPath, java.lang.Boolean override) {
         this.wsItemPK = wsItemPK;
         this.partPath = partPath;
+        this.override = override;
     }
     
     public com.amalto.workbench.webservices.WSItemPK getWsItemPK() {
@@ -32,5 +34,13 @@ public class WSDropItem {
     
     public void setPartPath(java.lang.String partPath) {
         this.partPath = partPath;
+    }
+    
+    public java.lang.Boolean getOverride() {
+        return override;
+    }
+    
+    public void setOverride(java.lang.Boolean override) {
+        this.override = override;
     }
 }
