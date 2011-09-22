@@ -431,6 +431,7 @@ public class ImportServerObjectWizard extends Wizard {
 
                         treeViewer.setRoot((TreeParent) serverRoot);
                         treeViewer.getViewer().setInput(serverRoot);
+                        treeViewer.setServerRoot((TreeParent) serverRoot);
                         treeViewer.getViewer().refresh();
                     } catch (Exception e) {
                         log.error(e);
@@ -539,8 +540,8 @@ public class ImportServerObjectWizard extends Wizard {
                         }
 
                     }
+                    treeViewer.refresh();
 
-//                    ((CheckboxTreeViewer) treeViewer.getViewer()).setAllChecked(true);
                 }
             });
             comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
@@ -556,7 +557,7 @@ public class ImportServerObjectWizard extends Wizard {
             });
             toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
             // create viewer
-            treeViewer = new RepositoryCheckTreeViewer((TreeParent) serverRoot);
+            treeViewer = new RepositoryCheckTreeViewer((TreeParent) serverRoot, true);
             treeViewer.addButtonSelectionListener(new SelectionAdapter() {
 
                 @Override
