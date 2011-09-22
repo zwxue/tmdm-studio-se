@@ -1136,7 +1136,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
                                 lineItem.getIds());
                         port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername(),false,true));//$NON-NLS-1$ //$NON-NLS-2$
+                                "genericUI", "LOGIC_DELETE", partPath, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
 
                         // port.dropItem(new WSDropItem(new WSItemPK((WSDataClusterPK) xObject.getWsKey(),
                         // lineItem.getConcept(),
@@ -1249,7 +1249,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem.getConcept(),
                                 lineItem.getIds());
                         port.deleteItemWithReport(new WSDeleteItemWithReport(itempk,
-                                "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername(),false,true));//$NON-NLS-1$ //$NON-NLS-2$
+                                "genericUI", "PHYSICAL_DELETE", null, getXObject().getUsername(), false, true, false));//$NON-NLS-1$ //$NON-NLS-2$
                         monitor.worked(1);
                     }// for
 
