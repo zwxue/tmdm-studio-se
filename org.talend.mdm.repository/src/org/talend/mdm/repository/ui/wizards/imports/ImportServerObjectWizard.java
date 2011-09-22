@@ -124,7 +124,9 @@ public class ImportServerObjectWizard extends Wizard {
     public boolean performFinish() {
         try {
             doImport();
-            hideServerView(view);
+            // hideServerView(view);
+
+
         } catch (InvocationTargetException e) {
             log.error(e);
             return false;
@@ -137,11 +139,13 @@ public class ImportServerObjectWizard extends Wizard {
 
     @Override
     public boolean performCancel() {
-        hideServerView(view);
+        // hideServerView(view);
         return super.performCancel();
     }
 
     private void hideServerView(IViewPart view) {
+
+
         IWorkbenchPage page = commonViewer.getCommonNavigator().getSite().getPage();
         if (page != null) {
             page.hideView(view);
@@ -260,12 +264,14 @@ public class ImportServerObjectWizard extends Wizard {
                 monitor.subTask(treeObj.getDisplayName());
                 String treeObjName = treeObj.getName();
                 MDMServerObject eobj = handleSpecialTreeObject(treeObj);
+                
                 if (eobj == null) {
                     if (!types.contains(treeObj.getType()) || treeObj.getWsObject() == null
                             || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) //$NON-NLS-1$
                         continue;
                     eobj = (MDMServerObject) Bean2EObjUtil.getInstance().convertFromBean2EObj(treeObj.getWsObject(), null);
                 }
+                eobj.setLastServerDef(serverDef);
 
                 ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
                 String uniqueName = getUniqueName(treeObj, treeObjName);
@@ -533,6 +539,8 @@ public class ImportServerObjectWizard extends Wizard {
                         }
 
                     }
+
+//                    ((CheckboxTreeViewer) treeViewer.getViewer()).setAllChecked(true);
                 }
             });
             comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
