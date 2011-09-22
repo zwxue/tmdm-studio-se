@@ -220,6 +220,16 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray getObjectsForRoles(com.amalto.workbench.webservices.WSGetObjectsForRoles wsRoleDelete) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSCustomForm getCustomForm(com.amalto.workbench.webservices.WSGetCustomForm wsGetCustomForm) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean existsCustomForm(com.amalto.workbench.webservices.WSExistsCustomForm wsExistsCustomForm) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSCustomFormPKArray getCustomFormPKs(com.amalto.workbench.webservices.WSGetCustomFormPKs regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSCustomFormPK putCustomForm(com.amalto.workbench.webservices.WSPutCustomForm wsCustomForm) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSCustomFormPK deleteCustomForm(com.amalto.workbench.webservices.WSDeleteCustomForm wsCustomFormDelete) throws 
+         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSMenu getMenu(com.amalto.workbench.webservices.WSGetMenu wsGetMenu) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSBoolean existsMenu(com.amalto.workbench.webservices.WSExistsMenu wsExistsMenu) throws 

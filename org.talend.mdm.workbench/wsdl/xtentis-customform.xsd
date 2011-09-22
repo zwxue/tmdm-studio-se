@@ -1,0 +1,77 @@
+<xsd:schema 
+	elementFormDefault="unqualified"
+	targetNamespace="urn-com-amalto-xtentis-webservice"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="urn-com-amalto-xtentis-webservice"
+	>
+	
+	<!-- *****************************************************
+		CustomForm Objects
+		*******************************************************-->
+	
+	<xsd:complexType name="WSCustomForm">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="datamodel" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="entity" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="xml" type="xsd:string"/>				
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSCustomForm" type = "tns:WSCustomForm"/>		
+	
+	<xsd:complexType name="WSCustomFormPK">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="datamodel" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="entity" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSCustomFormPK" type="tns:WSCustomFormPK"/>		
+	
+	<xsd:complexType name="WSCustomFormPKArray">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="unbounded"  nillable="false" name="wsCustomFormPK" type="tns:WSCustomFormPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSCustomFormPKArray" type = "tns:WSCustomFormPKArray"/>
+	
+
+	<!-- *****************************************************
+		CustomForm Operations
+		*******************************************************-->
+	
+	<xsd:complexType name="WSGetCustomForm">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsCustomFormPK" type="tns:WSCustomFormPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSGetCustomForm" type="tns:WSGetCustomForm"/>
+	
+	<xsd:complexType name="WSExistsCustomForm">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsCustomFormPK" type="tns:WSCustomFormPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSExistsCustomForm" type="tns:WSExistsCustomForm"/>
+	
+	<xsd:complexType name="WSPutCustomForm">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsCustomForm" type="tns:WSCustomForm"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSPutCustomForm" type="tns:WSPutCustomForm"/>
+	
+	<xsd:complexType name="WSDeleteCustomForm">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsCustomFormPK" type="tns:WSCustomFormPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSDeleteCustomForm" type="tns:WSDeleteCustomForm"/>
+	
+	<xsd:complexType name="WSGetCustomFormPKs">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="regex" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSGetCustomFormPKs" type="tns:WSGetCustomFormPKs"/>	
+	
+	
+</xsd:schema>
