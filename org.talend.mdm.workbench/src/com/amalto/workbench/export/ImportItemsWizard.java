@@ -276,6 +276,7 @@ public class ImportItemsWizard extends Wizard {
                 tabEndpointAddress = ((XObjectEditor) part).getInitialXObject().getServerRoot().getEndpointAddress();
                 unserName = ((XObjectEditor) part).getInitialXObject().getServerRoot().getUsername();
             }
+            if (serverRoot != null) {
             if (serverRoot.getUniverse().equals(version) && serverRoot.getEndpointAddress().equals(tabEndpointAddress)
                     && serverRoot.getUsername().equals(unserName)) {
                 if (part.isDirty() && isSaveModifiedEditor(part.getTitle()))
@@ -283,6 +284,9 @@ public class ImportItemsWizard extends Wizard {
                 page.closeEditor(part, false);
                 j++;
             }
+
+            }
+
         }
 
     }
