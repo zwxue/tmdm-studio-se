@@ -206,13 +206,13 @@ public interface MdmpropertiesFactory extends EFactory {
     WSResourceItem createWSResourceItem();
 
     /**
-     * Returns a new object of class '<em>Custom Form Item</em>'.
+     * Returns a new object of class '<em>WS Custom Form Item</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return a new object of class '<em>Custom Form Item</em>'.
+     * @return a new object of class '<em>WS Custom Form Item</em>'.
      * @generated
      */
-    CustomFormItem createCustomFormItem();
+    WSCustomFormItem createWSCustomFormItem();
 
     /**
      * Returns the package supported by this factory.

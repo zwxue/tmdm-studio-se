@@ -18,7 +18,7 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.talend.core.model.properties.Item;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.model.mdmproperties.CustomFormItem;
+import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -52,7 +52,7 @@ public class CustomFormEditorInput extends DiagramEditorInput implements IReposi
 
     public IFile getReferenceFile() {
         if (file == null) {
-            String fileExtension = ((CustomFormItem) item).getCustomForm().getFilename();
+            String fileExtension = ((WSCustomFormItem) item).getCustomForm().getFilename();
             file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
         }
         return file;

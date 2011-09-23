@@ -18,12 +18,12 @@ import org.talend.core.model.properties.PropertiesPackage;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.CustomFormItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
+import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem;
@@ -194,7 +194,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
-    private EClass customFormItemEClass = null;
+    private EClass wsCustomFormItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -624,8 +624,8 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getCustomFormItem() {
-        return customFormItemEClass;
+    public EClass getWSCustomFormItem() {
+        return wsCustomFormItemEClass;
     }
 
     /**
@@ -633,8 +633,8 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getCustomFormItem_CustomForm() {
-        return (EReference)customFormItemEClass.getEStructuralFeatures().get(0);
+    public EReference getWSCustomFormItem_CustomForm() {
+        return (EReference)wsCustomFormItemEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -733,8 +733,8 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsResourceItemEClass = createEClass(WS_RESOURCE_ITEM);
         createEReference(wsResourceItemEClass, WS_RESOURCE_ITEM__RESOURCE);
 
-        customFormItemEClass = createEClass(CUSTOM_FORM_ITEM);
-        createEReference(customFormItemEClass, CUSTOM_FORM_ITEM__CUSTOM_FORM);
+        wsCustomFormItemEClass = createEClass(WS_CUSTOM_FORM_ITEM);
+        createEReference(wsCustomFormItemEClass, WS_CUSTOM_FORM_ITEM__CUSTOM_FORM);
 
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
@@ -795,7 +795,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsServiceConfigurationItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsWorkflowItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsResourceItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
-        customFormItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        wsCustomFormItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -862,8 +862,10 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         initEClass(wsResourceItemEClass, WSResourceItem.class, "WSResourceItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getWSResourceItem_Resource(), theMdmserverobjectPackage.getWSResourceE(), null, "resource", null, 0, 1, WSResourceItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(customFormItemEClass, CustomFormItem.class, "CustomFormItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getCustomFormItem_CustomForm(), theMdmserverobjectPackage.getCustomForm(), null, "customForm", null, 0, 1, CustomFormItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(wsCustomFormItemEClass, WSCustomFormItem.class, "WSCustomFormItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSCustomFormItem_CustomForm(), theMdmserverobjectPackage.getWSCustomFormE(), null, "customForm", null,
+                0, 1, WSCustomFormItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+                !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

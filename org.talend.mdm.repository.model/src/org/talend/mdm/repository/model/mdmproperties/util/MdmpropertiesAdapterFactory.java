@@ -154,8 +154,8 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
                 return createWSResourceItemAdapter();
             }
             @Override
-            public Adapter caseCustomFormItem(CustomFormItem object) {
-                return createCustomFormItemAdapter();
+            public Adapter caseWSCustomFormItem(WSCustomFormItem object) {
+                return createWSCustomFormItemAdapter();
             }
             @Override
             public Adapter caseItem(Item object) {
@@ -466,16 +466,16 @@ public class MdmpropertiesAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.CustomFormItem <em>Custom Form Item</em>}'.
+     * Creates a new adapter for an object of class '{@link org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem <em>WS Custom Form Item</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
      * <!-- end-user-doc -->
      * @return the new adapter.
-     * @see org.talend.mdm.repository.model.mdmproperties.CustomFormItem
+     * @see org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem
      * @generated
      */
-    public Adapter createCustomFormItemAdapter() {
+    public Adapter createWSCustomFormItemAdapter() {
         return null;
     }
 

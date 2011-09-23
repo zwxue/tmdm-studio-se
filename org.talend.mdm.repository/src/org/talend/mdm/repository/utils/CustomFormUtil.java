@@ -49,7 +49,7 @@ public class CustomFormUtil {
     public void createDomainModel(IFile diagramFile, String diagramName, final List<CustomFormElement> allElements,
             final int columnCount) {
         final TransactionalEditingDomain editingDomain = DiagramEditorFactory.createResourceSetAndEditingDomain();
-        URI diagramFileUri = URI.createFileURI(diagramFile.getFullPath().toOSString());
+        URI diagramFileUri = URI.createFileURI(diagramFile.getLocation().toOSString());
         final Resource resource = editingDomain.getResourceSet().createResource(diagramFileUri);
         final CommandStack commandStack = editingDomain.getCommandStack();
 

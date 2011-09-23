@@ -20,16 +20,16 @@ import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getHost <em>Host</em>}</li>
- * <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPasswd <em>Passwd</em>}</li>
- * <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPath <em>Path</em>}</li>
- * <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPort <em>Port</em>}</li>
- * <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getUniverse <em>Universe</em>}</li>
- * <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getUrl <em>Url</em>}</li>
- * <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getUser <em>User</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getHost <em>Host</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPasswd <em>Passwd</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPath <em>Path</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getUniverse <em>Universe</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getUrl <em>Url</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getUser <em>User</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMServerDef {
@@ -67,9 +67,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
     protected static final String PASSWD_EDEFAULT = ""; //$NON-NLS-1$
 
     /**
-     * The cached value of the '{@link #getPasswd() <em>Passwd</em>}' attribute. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #getPasswd() <em>Passwd</em>}' attribute.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getPasswd()
      * @generated
      * @ordered
@@ -127,9 +127,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
     protected static final String UNIVERSE_EDEFAULT = ""; //$NON-NLS-1$
 
     /**
-     * The cached value of the '{@link #getUniverse() <em>Universe</em>}' attribute. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #getUniverse() <em>Universe</em>}' attribute.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getUniverse()
      * @generated
      * @ordered
@@ -147,8 +147,8 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
     protected static final String URL_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getUrl() <em>Url</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getUrl() <em>Url</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getUrl()
      * @generated
      * @ordered
@@ -188,7 +188,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -198,7 +197,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getHost() {
@@ -207,7 +205,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setHost(String newHost) {
@@ -219,7 +216,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getPasswd() {
@@ -228,7 +224,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setPasswd(String newPasswd) {
@@ -240,7 +235,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getPath() {
@@ -249,7 +243,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setPath(String newPath) {
@@ -261,7 +254,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getPort() {
@@ -270,7 +262,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setPort(String newPort) {
@@ -282,7 +273,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getUniverse() {
@@ -291,15 +281,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setUniverse(String newUniverse) {
         String oldUniverse = universe;
         universe = newUniverse;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE, oldUniverse,
-                    universe));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE, oldUniverse, universe));
     }
 
     private static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
@@ -324,7 +312,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setUrl(String newUrl) {
@@ -336,7 +323,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public String getUser() {
@@ -345,7 +331,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setUser(String newUser) {
@@ -386,118 +371,114 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
-            return getHost();
-        case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
-            return getPasswd();
-        case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
-            return getPath();
-        case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
-            return getPort();
-        case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
-            return getUniverse();
-        case MdmmetadataPackage.MDM_SERVER_DEF__URL:
-            return getUrl();
-        case MdmmetadataPackage.MDM_SERVER_DEF__USER:
-            return getUser();
+            case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
+                return getHost();
+            case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
+                return getPasswd();
+            case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
+                return getPath();
+            case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
+                return getPort();
+            case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
+                return getUniverse();
+            case MdmmetadataPackage.MDM_SERVER_DEF__URL:
+                return getUrl();
+            case MdmmetadataPackage.MDM_SERVER_DEF__USER:
+                return getUser();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
-            setHost((String) newValue);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
-            setPasswd((String) newValue);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
-            setPath((String) newValue);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
-            setPort((String) newValue);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
-            setUniverse((String) newValue);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__URL:
-            setUrl((String) newValue);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__USER:
-            setUser((String) newValue);
-            return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
+                setHost((String)newValue);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
+                setPasswd((String)newValue);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
+                setPath((String)newValue);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
+                setPort((String)newValue);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
+                setUniverse((String)newValue);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__URL:
+                setUrl((String)newValue);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__USER:
+                setUser((String)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
-            setHost(HOST_EDEFAULT);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
-            setPasswd(PASSWD_EDEFAULT);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
-            setPath(PATH_EDEFAULT);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
-            setPort(PORT_EDEFAULT);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
-            setUniverse(UNIVERSE_EDEFAULT);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__URL:
-            setUrl(URL_EDEFAULT);
-            return;
-        case MdmmetadataPackage.MDM_SERVER_DEF__USER:
-            setUser(USER_EDEFAULT);
-            return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
+                setHost(HOST_EDEFAULT);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
+                setPasswd(PASSWD_EDEFAULT);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
+                setPath(PATH_EDEFAULT);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
+                setPort(PORT_EDEFAULT);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
+                setUniverse(UNIVERSE_EDEFAULT);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__URL:
+                setUrl(URL_EDEFAULT);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__USER:
+                setUser(USER_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
-            return HOST_EDEFAULT == null ? host != null : !HOST_EDEFAULT.equals(host);
-        case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
-            return PASSWD_EDEFAULT == null ? passwd != null : !PASSWD_EDEFAULT.equals(passwd);
-        case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
-            return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
-        case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
-            return PORT_EDEFAULT == null ? port != null : !PORT_EDEFAULT.equals(port);
-        case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
-            return UNIVERSE_EDEFAULT == null ? universe != null : !UNIVERSE_EDEFAULT.equals(universe);
-        case MdmmetadataPackage.MDM_SERVER_DEF__URL:
-            return URL_EDEFAULT == null ? url != null : !URL_EDEFAULT.equals(url);
-        case MdmmetadataPackage.MDM_SERVER_DEF__USER:
-            return USER_EDEFAULT == null ? user != null : !USER_EDEFAULT.equals(user);
+            case MdmmetadataPackage.MDM_SERVER_DEF__HOST:
+                return HOST_EDEFAULT == null ? host != null : !HOST_EDEFAULT.equals(host);
+            case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
+                return PASSWD_EDEFAULT == null ? passwd != null : !PASSWD_EDEFAULT.equals(passwd);
+            case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
+                return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
+            case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
+                return PORT_EDEFAULT == null ? port != null : !PORT_EDEFAULT.equals(port);
+            case MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE:
+                return UNIVERSE_EDEFAULT == null ? universe != null : !UNIVERSE_EDEFAULT.equals(universe);
+            case MdmmetadataPackage.MDM_SERVER_DEF__URL:
+                return URL_EDEFAULT == null ? url != null : !URL_EDEFAULT.equals(url);
+            case MdmmetadataPackage.MDM_SERVER_DEF__USER:
+                return USER_EDEFAULT == null ? user != null : !USER_EDEFAULT.equals(user);
         }
         return super.eIsSet(featureID);
     }
@@ -514,13 +495,11 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public String toString() {
-        if (eIsProxy())
-            return super.toString();
+        if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (host: ");

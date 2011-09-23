@@ -8,22 +8,16 @@ package org.talend.mdm.repository.model.mdmserverobject.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
-import org.talend.mdm.repository.model.mdmserverobject.CustomForm;
-import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmserverobject.EWSMenu;
-import org.talend.mdm.repository.model.mdmserverobject.EWSMenuEntry;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
 import org.talend.mdm.repository.model.mdmserverobject.WSByteArrayE;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSEventManagerE;
@@ -37,7 +31,6 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
-import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpression;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE;
 import org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE;
@@ -331,7 +324,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    private EClass customFormEClass = null;
+    private EClass wsCustomFormEEClass = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -1653,8 +1646,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getCustomForm() {
-        return customFormEClass;
+    public EClass getWSCustomFormE() {
+        return wsCustomFormEEClass;
     }
 
     /**
@@ -1662,8 +1655,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getCustomForm_Filename() {
-        return (EAttribute)customFormEClass.getEStructuralFeatures().get(0);
+    public EAttribute getWSCustomFormE_Filename() {
+        return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -1671,8 +1664,8 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getCustomForm_DataModelName() {
-        return (EAttribute)customFormEClass.getEStructuralFeatures().get(1);
+    public EAttribute getWSCustomFormE_Datamodel() {
+        return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -1680,8 +1673,17 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getCustomForm_EntityName() {
-        return (EAttribute)customFormEClass.getEStructuralFeatures().get(2);
+    public EAttribute getWSCustomFormE_Entity() {
+        return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSCustomFormE_Xml() {
+        return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
@@ -1888,10 +1890,11 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILE_EXTENSION);
         createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILE_CONTENT);
 
-        customFormEClass = createEClass(CUSTOM_FORM);
-        createEAttribute(customFormEClass, CUSTOM_FORM__FILENAME);
-        createEAttribute(customFormEClass, CUSTOM_FORM__DATA_MODEL_NAME);
-        createEAttribute(customFormEClass, CUSTOM_FORM__ENTITY_NAME);
+        wsCustomFormEEClass = createEClass(WS_CUSTOM_FORM_E);
+        createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__FILENAME);
+        createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__DATAMODEL);
+        createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__ENTITY);
+        createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__XML);
     }
 
     /**
@@ -1941,7 +1944,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsServiceConfigurationEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsWorkflowEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsResourceEEClass.getESuperTypes().add(this.getMDMServerObject());
-        customFormEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsCustomFormEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2122,10 +2125,11 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSResourceE_FileExtension(), ecorePackage.getEString(), "fileExtension", null, 0, 1, WSResourceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSResourceE_FileContent(), ecorePackage.getEByteArray(), "fileContent", null, 0, 1, WSResourceE.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(customFormEClass, CustomForm.class, "CustomForm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getCustomForm_Filename(), ecorePackage.getEString(), "filename", null, 0, 1, CustomForm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getCustomForm_DataModelName(), ecorePackage.getEString(), "dataModelName", null, 0, 1, CustomForm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getCustomForm_EntityName(), ecorePackage.getEString(), "entityName", null, 0, 1, CustomForm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(wsCustomFormEEClass, WSCustomFormE.class, "WSCustomFormE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSCustomFormE_Filename(), ecorePackage.getEString(), "filename", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSCustomFormE_Datamodel(), ecorePackage.getEString(), "datamodel", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSCustomFormE_Entity(), ecorePackage.getEString(), "entity", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSCustomFormE_Xml(), ecorePackage.getEString(), "xml", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

@@ -68,7 +68,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="WSResourceItem" eSuperTypes="#//MDMServerObjectItem">
     <eStructuralFeatures xsi:type="ecore:EReference" name="resource" eType="ecore:EClass MDMServerObject.ecore#//WSResourceE"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CustomFormItem" eSuperTypes="#//MDMServerObjectItem">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="customForm" eType="ecore:EClass MDMServerObject.ecore#//CustomForm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WSCustomFormItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customForm" eType="ecore:EClass MDMServerObject.ecore#//WSCustomFormE"/>
   </eClassifiers>
 </ecore:EPackage>

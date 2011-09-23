@@ -99,7 +99,7 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_SERVICE_PUT_CONFIGURATION_E: return createWSServicePutConfigurationE();
             case MdmserverobjectPackage.WS_WORKFLOW_E: return createWSWorkflowE();
             case MdmserverobjectPackage.WS_RESOURCE_E: return createWSResourceE();
-            case MdmserverobjectPackage.CUSTOM_FORM: return createCustomForm();
+            case MdmserverobjectPackage.WS_CUSTOM_FORM_E: return createWSCustomFormE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -480,9 +480,9 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
-    public CustomForm createCustomForm() {
-        CustomFormImpl customForm = new CustomFormImpl();
-        return customForm;
+    public WSCustomFormE createWSCustomFormE() {
+        WSCustomFormEImpl wsCustomFormE = new WSCustomFormEImpl();
+        return wsCustomFormE;
     }
 
     /**

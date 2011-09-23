@@ -41,10 +41,10 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.CustomFormItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.mdm.repository.model.mdmserverobject.CustomForm;
+import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.models.CustomFormElement;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.wizards.customform.NewCustomformWizard;
@@ -136,22 +136,22 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         return file;
     }
 
-    private CustomForm newCustomForm(String formName, String dataModelName, String entityName, String fileName) {
-        CustomForm form = MdmserverobjectFactory.eINSTANCE.createCustomForm();
+    private WSCustomFormE newCustomForm(String formName, String dataModelName, String entityName, String fileName) {
+        WSCustomFormE form = MdmserverobjectFactory.eINSTANCE.createWSCustomFormE();
         form.setName(formName);
         form.setFilename(fileName);
-        form.setDataModelName(dataModelName);
-        form.setEntityName(entityName);
+        form.setDatamodel(dataModelName);
+        form.setEntity(entityName);
         return form;
     }
 
     protected boolean createServerObject(String formName, String dataModelName, String entityName, IFile file) {
 
-        CustomFormItem item = MdmpropertiesFactory.eINSTANCE.createCustomFormItem();
+        WSCustomFormItem item = MdmpropertiesFactory.eINSTANCE.createWSCustomFormItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        CustomForm form = newCustomForm(formName, dataModelName, entityName, file.getName());
+        WSCustomFormE form = newCustomForm(formName, dataModelName, entityName, file.getName());
         item.setCustomForm(form);
 
         if (parentItem != null) {

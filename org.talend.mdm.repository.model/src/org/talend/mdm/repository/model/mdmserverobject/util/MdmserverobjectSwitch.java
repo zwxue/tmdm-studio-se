@@ -325,10 +325,10 @@ public class MdmserverobjectSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
-            case MdmserverobjectPackage.CUSTOM_FORM: {
-                CustomForm customForm = (CustomForm)theEObject;
-                T result = caseCustomForm(customForm);
-                if (result == null) result = caseMDMServerObject(customForm);
+            case MdmserverobjectPackage.WS_CUSTOM_FORM_E: {
+                WSCustomFormE wsCustomFormE = (WSCustomFormE)theEObject;
+                T result = caseWSCustomFormE(wsCustomFormE);
+                if (result == null) result = caseMDMServerObject(wsCustomFormE);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -892,17 +892,17 @@ public class MdmserverobjectSwitch<T> {
     }
 
     /**
-     * Returns the result of interpreting the object as an instance of '<em>Custom Form</em>'.
+     * Returns the result of interpreting the object as an instance of '<em>WS Custom Form E</em>'.
      * <!-- begin-user-doc -->
      * This implementation returns null;
      * returning a non-null result will terminate the switch.
      * <!-- end-user-doc -->
      * @param object the target of the switch.
-     * @return the result of interpreting the object as an instance of '<em>Custom Form</em>'.
+     * @return the result of interpreting the object as an instance of '<em>WS Custom Form E</em>'.
      * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
      * @generated
      */
-    public T caseCustomForm(CustomForm object) {
+    public T caseWSCustomFormE(WSCustomFormE object) {
         return null;
     }
 

@@ -358,7 +358,7 @@
       <styles xmi:type="notation:FilteringStyle" xmi:id="_AJyIe93mEeCda44NsLz0ZQ"/>
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_AJyIcd3mEeCda44NsLz0ZQ" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
-    <element xmi:type="ecore:EClass" href="MDMProperties.ecore#//CustomFormItem"/>
+    <element xmi:type="ecore:EClass" href="MDMProperties.ecore#//WSCustomFormItem"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_AJyIct3mEeCda44NsLz0ZQ" x="-30" y="428"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_OE5ZkZMVEeCcksxzfvS-Pw"/>

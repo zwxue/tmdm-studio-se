@@ -25,8 +25,8 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
-import org.talend.mdm.repository.model.mdmproperties.CustomFormItem;
-import org.talend.mdm.repository.model.mdmserverobject.CustomForm;
+import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -53,7 +53,7 @@ public class CustomFormLabelProvider extends AbstractLabelProvider {
         if (img == null) {
             Item item = getItem(element);
             if (item != null) {
-                if (item instanceof CustomFormItem) {
+                if (item instanceof WSCustomFormItem) {
                     img = IMG;
                 }
             }
@@ -63,8 +63,8 @@ public class CustomFormLabelProvider extends AbstractLabelProvider {
 
     @Override
     protected String getServerObjectItemText(Item item) {
-        CustomFormItem customFormItem = (CustomFormItem) item;
-        CustomForm form = customFormItem.getCustomForm();
+        WSCustomFormItem customFormItem = (WSCustomFormItem) item;
+        WSCustomFormE form = customFormItem.getCustomForm();
         return form.getName();
     }
 

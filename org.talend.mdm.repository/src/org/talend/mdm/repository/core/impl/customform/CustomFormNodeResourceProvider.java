@@ -35,8 +35,8 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.CustomFormItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -49,7 +49,7 @@ public class CustomFormNodeResourceProvider extends AbstractRepositoryNodeResour
     Logger log = Logger.getLogger(CustomFormNodeResourceProvider.class);
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof CustomFormItem || item instanceof ContainerItem) {
+        if (item instanceof WSCustomFormItem || item instanceof ContainerItem) {
             return IServerObjectRepositoryType.TYPE_CUSTOM_FORM;
         }
         return null;
@@ -60,24 +60,24 @@ public class CustomFormNodeResourceProvider extends AbstractRepositoryNodeResour
         if (repositoryType != null) {
             Resource itemResource = createCommonItemResource(project, item, repositoryType, path);
             EList<EObject> contents = itemResource.getContents();
-            contents.add(((CustomFormItem) item).getCustomForm());
+            contents.add(((WSCustomFormItem) item).getCustomForm());
             return itemResource;
         }
         return null;
     }
 
     public Resource save(Item item) throws PersistenceException {
-        if (item instanceof CustomFormItem) {
+        if (item instanceof WSCustomFormItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
             resource.getContents().clear();
-            resource.getContents().add(((CustomFormItem) item).getCustomForm());
+            resource.getContents().add(((WSCustomFormItem) item).getCustomForm());
             return resource;
         }
         return null;
     }
 
     public Item createNewItem(ERepositoryObjectType type) {
-        return MdmpropertiesFactory.eINSTANCE.createCustomFormItem();
+        return MdmpropertiesFactory.eINSTANCE.createWSCustomFormItem();
     }
 
     public boolean canHandleRepObjType(ERepositoryObjectType type) {
