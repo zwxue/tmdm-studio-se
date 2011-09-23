@@ -105,7 +105,9 @@ public class ImportServerObjectWizard extends Wizard {
 
     WidgetFactory toolkit = WidgetFactory.getWidgetFactory();
 
-    ServerView view = ServerView.show();
+    ServerView view = null;
+
+    boolean hideView = true;
 
     CommonViewer commonViewer;
 
@@ -116,8 +118,17 @@ public class ImportServerObjectWizard extends Wizard {
     private Object[] selectedObjects;
 
     public ImportServerObjectWizard(CommonViewer commonViewer) {
+
         setNeedsProgressMonitor(true);
         this.commonViewer = commonViewer;
+        IWorkbenchPage page = commonViewer.getCommonNavigator().getSite().getPage();
+
+        IViewPart viewPart = page.findView(ServerView.VIEW_ID);
+        if (viewPart != null) {
+            hideView = false;
+        }
+
+        view = ServerView.show();
     }
 
     /*
@@ -129,8 +140,9 @@ public class ImportServerObjectWizard extends Wizard {
     public boolean performFinish() {
         try {
             doImport();
+            if (hideView) {
             hideServerView(view);
-
+            }
         } catch (InvocationTargetException e) {
             log.error(e);
             return false;
@@ -143,7 +155,9 @@ public class ImportServerObjectWizard extends Wizard {
 
     @Override
     public boolean performCancel() {
+        if (hideView) {
         hideServerView(view);
+        }
         return super.performCancel();
     }
 
