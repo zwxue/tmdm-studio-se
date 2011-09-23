@@ -123,6 +123,9 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
             return ImageCache.getCreatedImage("icons/folder_source-jobs.png");//$NON-NLS-1$
         } else if (object.getType() == TreeObject._INVISIBLE)
             return ImageCache.getCreatedImage(EImage.SANDGLASS.getPath());
+        else if (object.getType() == TreeObject.CUSTOM_FORM) {
+            return ImageCache.getCreatedImage(EImage.CUSTOM_FORM.getPath());
+        }
 
         return ImageCache.getCreatedImage("icons/phased_out.gif");//$NON-NLS-1$
 

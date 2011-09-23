@@ -67,7 +67,7 @@ public enum EImage {
     CONSOLE_VIEW("icons/console_view.gif"), //$NON-NLS-1$
     COPY_EDIT("icons/copy_edit.gif"), //$NON-NLS-1$
     COPY("icons/copy.gif"), //$NON-NLS-1$
-    DUPLICATE("icons/duplicate.png"), //$NON-NLS-1$
+    CUSTOM_FORM("icons/customform.png"), //$NON-NLS-1$
     CUT_EDIT("icons/cut_edit.gif"), //$NON-NLS-1$
     DATA_CLUSTER("icons/datacluster.png"), //$NON-NLS-1$
     DATA_MODEL("icons/datamodel.png"), //$NON-NLS-1$
@@ -79,6 +79,7 @@ public enum EImage {
     DIRTY_OV("icons/dirty_ov.gif"), //$NON-NLS-1$
     DOCUMENTATION("icons/documentation.gif"), //$NON-NLS-1$
     DOCUMENTS("icons/documents.gif"), //$NON-NLS-1$
+    DUPLICATE("icons/duplicate.png"), //$NON-NLS-1$
     EDIT_OBJ("icons/edit_obj.gif"), //$NON-NLS-1$
     EDIT_TASKID("icons/default.gif"), //$NON-NLS-1$
     EDIT("icons/edit.gif"), //$NON-NLS-1$

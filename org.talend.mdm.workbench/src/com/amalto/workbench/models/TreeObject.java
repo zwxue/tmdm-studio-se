@@ -109,6 +109,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
     public final static int DATA_CLUSTER_CONTENTS = 23;
 
+    public final static int CUSTOM_FORM = 36;
     // export folder name
     public final static String DATACONTAINER = "datacontainer";//$NON-NLS-1$
 

@@ -15,6 +15,7 @@ package org.talend.mdm.repository.ui.wizards.imports;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -74,6 +75,10 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSCustomForm;
+import com.amalto.workbench.webservices.WSCustomFormPK;
+import com.amalto.workbench.webservices.WSGetCustomForm;
+import com.amalto.workbench.webservices.WSGetCustomFormPKs;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -126,7 +131,6 @@ public class ImportServerObjectWizard extends Wizard {
             doImport();
             hideServerView(view);
 
-
         } catch (InvocationTargetException e) {
             log.error(e);
             return false;
@@ -144,7 +148,6 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private void hideServerView(IViewPart view) {
-
 
         IWorkbenchPage page = commonViewer.getCommonNavigator().getSite().getPage();
         if (page != null) {
@@ -264,7 +267,7 @@ public class ImportServerObjectWizard extends Wizard {
                 monitor.subTask(treeObj.getDisplayName());
                 String treeObjName = treeObj.getName();
                 MDMServerObject eobj = handleSpecialTreeObject(treeObj);
-                
+
                 if (eobj == null) {
                     if (!types.contains(treeObj.getType()) || treeObj.getWsObject() == null
                             || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) //$NON-NLS-1$
@@ -410,6 +413,37 @@ public class ImportServerObjectWizard extends Wizard {
 
     class RetriveProcess implements IRunnableWithProgress {
 
+        private void retrieverCustomForms(TreeParent parent, IProgressMonitor monitor) {
+            try {
+                XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
+                        serverDef.getPasswd());
+                // Data Models
+                TreeParent models = new TreeParent("Custom Form", parent, TreeObject.DATA_MODEL, null, null);
+                WSCustomFormPK[] xdmPKs = null;
+
+                xdmPKs = port.getCustomFormPKs(new WSGetCustomFormPKs("")).getWsCustomFormPK(); //$NON-NLS-1$
+
+                if (xdmPKs != null) {
+                    monitor.subTask("Loading Custom Forms");
+                    for (int i = 0; i < xdmPKs.length; i++) {
+
+                        try {
+                            WSCustomForm wsobj = null;
+                            wsobj = port.getCustomForm(new WSGetCustomForm(xdmPKs[i]));
+                            TreeObject obj = new TreeObject(wsobj.getDatamodel() + "." + wsobj.getEntity(), parent,
+                                    TreeObject.CUSTOM_FORM, xdmPKs[i], wsobj);
+                            models.addChild(obj);
+                        } catch (RemoteException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+
+        }
+
         /*
          * (non-Javadoc)
          * 
@@ -423,7 +457,9 @@ public class ImportServerObjectWizard extends Wizard {
             retriever.setRetriveWSObject(true);
             retriever.run(monitor);
             serverRoot = retriever.getServerRoot();
-
+            //
+            retrieverCustomForms((TreeParent) serverRoot, m);
+            //
             Display.getDefault().asyncExec(new Runnable() {
 
                 public void run() {
@@ -461,8 +497,6 @@ public class ImportServerObjectWizard extends Wizard {
             }
         }
     }
-
-
 
     class SelectItemsPage extends WizardPage {
 
