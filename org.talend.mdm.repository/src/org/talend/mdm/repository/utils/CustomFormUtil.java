@@ -30,6 +30,7 @@ import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
+import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.graphiti.ui.editor.DiagramEditorFactory;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.talend.mdm.form.model.components.ComponentsFactory;
@@ -69,9 +70,14 @@ public class CustomFormUtil {
                 Panel containeModel = MdmformFactory.eINSTANCE.createPanel();
                 PictogramElement fistColumn = createColumn(featureProvider, columnCount, containeModel.getChildren(), diagram);
                 // element
+                Integer h = 5;
                 if (fistColumn != null) {
-                    createElements(featureProvider, allElements, fistColumn);
+                    h = createElements(featureProvider, allElements, fistColumn, h);
                 }
+                // reset first column's height
+                IGaService gaService = Graphiti.getGaService();
+
+                gaService.setHeight(fistColumn.getGraphicsAlgorithm(), Math.max(h, 200));
             }
         });
 
@@ -101,7 +107,8 @@ public class CustomFormUtil {
             context.setTargetContainer(diagram);
             //
             context.setX(x);
-            x += 310;
+            context.setY(20);
+            x += 320;
             IAddFeature feature = featureProvider.getAddFeature(context);
             if (feature != null && feature.canAdd(context)) {
                 PictogramElement columnPe = feature.add(context);
@@ -112,9 +119,12 @@ public class CustomFormUtil {
         return firstColumn;
     }
 
-    private void createElements(IFeatureProvider featureProvider, List<CustomFormElement> allElements,
-            PictogramElement columnElement) {
+    private int createElements(IFeatureProvider featureProvider, List<CustomFormElement> allElements,
+            PictogramElement columnElement, int h) {
         Panel columnModel = (Panel) columnElement.getLink().getBusinessObjects().get(0);
+        int x = 5;
+        int y = 5;
+        h += 5;
         for (CustomFormElement formE : allElements) {
             Component domainModel = null;
             if (formE.getType() == null) {
@@ -133,16 +143,31 @@ public class CustomFormUtil {
             domainModel.setParent(columnModel);
             // pe
             AddContext context = new AddContext();
+            context.setX(x);
+            context.setY(y);
             context.setNewObject(domainModel);
+            if (formE.getType() == null && formE.getChildren() != null) {
+                // set the child panel's size
+                int height = formE.getChildren().size() * 25 + 10;
+                height = Math.min(height, 200);
+                context.setHeight(height);
+                context.setWidth(300 - 10);
+                h += 5 + height;
+                y += 5 + height;
+            } else {
+                h += 20 + 5;
+                y += 20 + 5;
+            }
             context.setTargetContainer((ContainerShape) columnElement);
             IAddFeature feature = featureProvider.getAddFeature(context);
             if (feature != null && feature.canAdd(context)) {
                 PictogramElement childPanel = feature.add(context);
                 if (formE.getType() == null && formE.getChildren() != null) {
-                    createElements(featureProvider, formE.getChildren(), childPanel);
+                    createElements(featureProvider, formE.getChildren(), childPanel, h);
                 }
             }
         }
+        return h;
     }
 
 }
