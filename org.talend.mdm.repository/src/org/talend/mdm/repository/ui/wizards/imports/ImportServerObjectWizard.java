@@ -124,7 +124,7 @@ public class ImportServerObjectWizard extends Wizard {
     public boolean performFinish() {
         try {
             doImport();
-            // hideServerView(view);
+            hideServerView(view);
 
 
         } catch (InvocationTargetException e) {
@@ -139,7 +139,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     @Override
     public boolean performCancel() {
-        // hideServerView(view);
+        hideServerView(view);
         return super.performCancel();
     }
 
