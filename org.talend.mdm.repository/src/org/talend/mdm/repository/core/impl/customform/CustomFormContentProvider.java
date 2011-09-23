@@ -29,6 +29,8 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.webservices.WSCustomForm;
+
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
@@ -40,7 +42,7 @@ public class CustomFormContentProvider extends AbstractContentProvider {
     }
 
     public Class<?> getWSObjectClass() {
-        return null;
+        return WSCustomForm.class;
     }
 
 }

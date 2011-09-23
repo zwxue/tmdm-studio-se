@@ -35,6 +35,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.customform.NewCustomFormAction;
 import org.talend.mdm.repository.ui.editors.CustomFormEditorInput;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
@@ -65,12 +66,12 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
             actions.add(addAction);
 
         }
-        // if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-        // // deploy
-        // actions.add(deployToAction);
-        // addAction(actions, deployToLastServerAction, viewObj);
-        // }
-        // actions.add(deployAllAction);
+        if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            // deploy
+            actions.add(deployToAction);
+            addAction(actions, deployToLastServerAction, viewObj);
+        }
+        actions.add(deployAllAction);
         return actions;
     }
 
