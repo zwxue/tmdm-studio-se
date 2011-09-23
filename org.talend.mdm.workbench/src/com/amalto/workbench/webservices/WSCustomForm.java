@@ -9,14 +9,16 @@ package com.amalto.workbench.webservices;
 public class WSCustomForm {
     protected java.lang.String datamodel;
     protected java.lang.String entity;
+    protected java.lang.String name;
     protected java.lang.String xml;
     
     public WSCustomForm() {
     }
     
-    public WSCustomForm(java.lang.String datamodel, java.lang.String entity, java.lang.String xml) {
+    public WSCustomForm(java.lang.String datamodel, java.lang.String entity, java.lang.String name, java.lang.String xml) {
         this.datamodel = datamodel;
         this.entity = entity;
+        this.name = name;
         this.xml = xml;
     }
     
@@ -34,6 +36,14 @@ public class WSCustomForm {
     
     public void setEntity(java.lang.String entity) {
         this.entity = entity;
+    }
+    
+    public java.lang.String getName() {
+        return name;
+    }
+    
+    public void setName(java.lang.String name) {
+        this.name = name;
     }
     
     public java.lang.String getXml() {
