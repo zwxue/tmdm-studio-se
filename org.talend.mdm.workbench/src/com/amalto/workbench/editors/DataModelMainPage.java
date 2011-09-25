@@ -298,6 +298,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private XSDSetAnnotationForeignKeyInfoAction setAnnotationForeignKeyInfoAction = null;
 
+    private XSDSetAnnotationForeignKeyInfoAction setAnnotationFKIntegrity = null;
+
+    private XSDSetAnnotationForeignKeyInfoAction setAnnotationFKIntegrityOverride = null;
+
     private XSDSetAnnotationLabelAction setAnnotationLabelAction = null;
 
     private XSDSetAnnotationDescriptionsAction setAnnotationDescriptionsAction = null;
@@ -1203,6 +1207,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     return 119;
                 } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
                     return 120;
+                } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
+                    return 121;
+                } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
+                    return 122;
                 }
             }
 
@@ -2588,6 +2596,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 break;
             case 117:
                 defaultValueRuleAction.run();
+                break;
+            case 121:
+                setAnnotationFKIntegrity.run();
+                break;
+            case 122:
+                setAnnotationFKIntegrityOverride.run();
                 break;
             case -1:
                 if (drillDownAdapter.canGoInto() == true)

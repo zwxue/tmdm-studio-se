@@ -13,9 +13,11 @@
 package com.amalto.workbench.detailtabs.sections;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xsd.XSDComponent;
 
+import com.amalto.workbench.detailtabs.sections.composites.FKIntegrityComposite;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.util.FixDMNameBasePropertySectionDataModelExtractor;
@@ -30,9 +32,12 @@ public class ElementFKSection extends XSDComponentSection {
 
     private String xpath = "";//$NON-NLS-1$
 
+	private FKIntegrityComposite fkIntegrityConfig;
+
     @Override
     public void refresh() {
         compSimpleXPath.setXPath(xpath);
+        fkIntegrityConfig.setXSDComponent(curXSDComponent);
     }
 
     @Override
@@ -55,9 +60,11 @@ public class ElementFKSection extends XSDComponentSection {
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
+    	compSectionClient.setLayout(new GridLayout());
         dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
         compSimpleXPath = new SimpleXPathComposite(compSectionClient, SWT.NONE, SimpleXPathComposite.DEFAULTTITLE,
                 dataModelHolder, dataModelHolder.getDefaultDataModel(),this);//$NON-NLS-1$
+        fkIntegrityConfig = new FKIntegrityComposite(compSectionClient, SWT.NONE, curXSDComponent, this); 
     }
 
     @Override
