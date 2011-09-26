@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.Bundle;
 import org.talend.core.ui.branding.AbstractTalendBrandingService;
-import org.talend.core.ui.branding.DefaultBrandingConfiguration;
 import org.talend.core.ui.branding.IBrandingConfiguration;
 import org.talend.rcp.branding.tombundle.i18n.Messages;
 
@@ -33,12 +32,8 @@ public class TOMBundleBrandingService extends AbstractTalendBrandingService {
 
     protected IBrandingConfiguration brandingConfigure;
 
-    public String getFullProductName() {
-        return Messages.getString("productfullname"); //$NON-NLS-1$
-    }
-
     public String getShortProductName() {
-        return Messages.getString("productshortname"); //$NON-NLS-1$
+        return getProductName();
     }
 
     public String getCorporationName() {
@@ -72,7 +67,15 @@ public class TOMBundleBrandingService extends AbstractTalendBrandingService {
     }
 
     public String getAcronym() {
-        return "tmc";
+        return "tmc"; //$NON-NLS-1$
+    }
+
+    public String getProductName() {
+        return "Talend Open Studio"; //$NON-NLS-1$
+    }
+
+    public String getOptionName() {
+        return "for MDM"; //$NON-NLS-1$
     }
 
 }
