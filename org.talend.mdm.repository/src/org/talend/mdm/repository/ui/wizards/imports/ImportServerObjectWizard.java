@@ -265,6 +265,7 @@ public class ImportServerObjectWizard extends Wizard {
         monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
 
         List<Integer> types = new ArrayList<Integer>();
+        types.add(TreeObject.CUSTOM_FORM);
         types.add(TreeObject.DATA_CLUSTER);
         types.add(TreeObject.DATA_MODEL);
         types.add(TreeObject.TRANSFORMER);
@@ -432,7 +433,7 @@ public class ImportServerObjectWizard extends Wizard {
                 XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
                         serverDef.getPasswd());
                 // Data Models
-                TreeParent models = new TreeParent("Custom Form", parent, TreeObject.DATA_MODEL, null, null);
+                TreeParent models = new TreeParent("Custom Form", parent, TreeObject.CUSTOM_FORM, null, null);
                 WSCustomFormPK[] xdmPKs = null;
 
                 xdmPKs = port.getCustomFormPKs(new WSGetCustomFormPKs("")).getWsCustomFormPK(); //$NON-NLS-1$
@@ -444,7 +445,7 @@ public class ImportServerObjectWizard extends Wizard {
                         try {
                             WSCustomForm wsobj = null;
                             wsobj = port.getCustomForm(new WSGetCustomForm(xdmPKs[i]));
-                            TreeObject obj = new TreeObject(wsobj.getDatamodel() + "." + wsobj.getEntity(), parent,
+                            TreeObject obj = new TreeObject(wsobj.getName(), parent,
                                     TreeObject.CUSTOM_FORM, xdmPKs[i], wsobj);
                             models.addChild(obj);
                         } catch (RemoteException e) {
@@ -452,6 +453,8 @@ public class ImportServerObjectWizard extends Wizard {
                         }
                     }
                 }
+                parent.addChild(models);
+
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }

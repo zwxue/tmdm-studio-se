@@ -171,6 +171,7 @@ public class RepositoryQueryService {
     private static void initTypeMap() {
         if (typeMap == null) {
             typeMap = new DualHashBidiMap();
+            typeMap.put(TreeObject.CUSTOM_FORM, IServerObjectRepositoryType.TYPE_CUSTOM_FORM);
             typeMap.put(TreeObject.DATA_MODEL, IServerObjectRepositoryType.TYPE_DATAMODEL);
             typeMap.put(TreeObject.DATA_CLUSTER, IServerObjectRepositoryType.TYPE_DATACLUSTER);
             typeMap.put(TreeObject.TRANSFORMER, IServerObjectRepositoryType.TYPE_TRANSFORMERV2);

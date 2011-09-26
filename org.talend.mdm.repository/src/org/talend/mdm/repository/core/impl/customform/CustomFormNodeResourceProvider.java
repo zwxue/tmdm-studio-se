@@ -21,10 +21,15 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.customform;
 
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -37,6 +42,7 @@ import org.talend.mdm.repository.core.impl.AbstractRepositoryNodeResourceProvide
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -95,7 +101,7 @@ public class CustomFormNodeResourceProvider extends AbstractRepositoryNodeResour
         IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_CUSTOM_FORM, item, fileExtension);
 
         try {
-
+            createOrUpdateFile(item, file);
             linkReferenceFile(item, file);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
@@ -103,9 +109,24 @@ public class CustomFormNodeResourceProvider extends AbstractRepositoryNodeResour
 
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
         }
     }
 
-
+    private IFile createOrUpdateFile(Item item, IFile file) throws UnsupportedEncodingException, CoreException {
+        WSCustomFormE customForm = ((WSCustomFormItem) item).getCustomForm();
+        String content = customForm.getXml();
+        if (content != null) {
+            if (!file.exists()) {
+                file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+            } else {
+                file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+            }
+        }
+        return file;
+    }
 
 }
