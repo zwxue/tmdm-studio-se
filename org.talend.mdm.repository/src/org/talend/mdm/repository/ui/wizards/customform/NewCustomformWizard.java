@@ -42,6 +42,12 @@ public class NewCustomformWizard extends Wizard {
 
     private List<CustomFormElement> allElements;;
 
+    private CustomFormElement ancestor;
+
+    public CustomFormElement getAncestor() {
+        return ancestor;
+    }
+
     public List<CustomFormElement> getAllElements() {
         return this.allElements;
     }
@@ -92,6 +98,7 @@ public class NewCustomformWizard extends Wizard {
         entityName = baseInfoPage.getEntityName();
         columnCount = diagramInfoPage.getColumnCount();
         allElements = diagramInfoPage.getAllElements();
+        ancestor = diagramInfoPage.getAncestor();
         return true;
     }
 

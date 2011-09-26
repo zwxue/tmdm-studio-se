@@ -48,6 +48,7 @@ public class CustomFormUtil {
     private static final String DIAGRAM_PROVIDER_ID = "org.talend.mdm.form.editor.type.provider"; //$NON-NLS-1$
 
     public void createDomainModel(IFile diagramFile, String diagramName, final List<CustomFormElement> allElements,
+            final CustomFormElement ancestor,
             final int columnCount) {
         final TransactionalEditingDomain editingDomain = DiagramEditorFactory.createResourceSetAndEditingDomain();
         URI diagramFileUri = URI.createFileURI(diagramFile.getLocation().toOSString());
@@ -68,7 +69,8 @@ public class CustomFormUtil {
                 IFeatureProvider featureProvider = dtp.getFeatureProvider();
                 // create column
                 Panel containeModel = MdmformFactory.eINSTANCE.createPanel();
-                PictogramElement fistColumn = createColumn(featureProvider, columnCount, containeModel.getChildren(), diagram);
+                PictogramElement fistColumn = createColumn(featureProvider, columnCount, containeModel.getChildren(), diagram,
+                        ancestor);
                 // element
                 Integer h = 5;
                 if (fistColumn != null) {
@@ -94,12 +96,14 @@ public class CustomFormUtil {
         return diagram;
     }
 
-    private PictogramElement createColumn(IFeatureProvider featureProvider, int col, List<Component> columns, Diagram diagram) {
+    private PictogramElement createColumn(IFeatureProvider featureProvider, int col, List<Component> columns, Diagram diagram,
+            CustomFormElement ancestor) {
         PictogramElement firstColumn = null;
         int x = 10;
         for (int i = 0; i < col; i++) {
             // domain model
             Panel column = MdmformFactory.eINSTANCE.createPanel();
+            column.setLabel("");
             columns.add(column);
             // pe
             AddContext context = new AddContext();
@@ -112,8 +116,10 @@ public class CustomFormUtil {
             IAddFeature feature = featureProvider.getAddFeature(context);
             if (feature != null && feature.canAdd(context)) {
                 PictogramElement columnPe = feature.add(context);
-                if (firstColumn == null)
+                if (firstColumn == null) {
                     firstColumn = columnPe;
+                    column.setCanMove(ancestor.isCanMove());
+                }
             }
         }
         return firstColumn;
@@ -129,7 +135,7 @@ public class CustomFormUtil {
             Component domainModel = null;
             if (formE.getType() == null) {
                 Panel panel = MdmformFactory.eINSTANCE.createPanel();
-
+                panel.setCanMove(formE.isCanMove());
                 domainModel = panel;
             } else {
                 TextField textField = ComponentsFactory.eINSTANCE.createTextField();

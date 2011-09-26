@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -106,10 +106,12 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         String entityName = wizard.getEntityName();
         int columnCount = wizard.getColumnCount();
         List<CustomFormElement> allElements = wizard.getAllElements();
+        CustomFormElement ancestor = wizard.getAncestor();
+
         IFolder folder = RepositoryResourceUtil.getFolder(IServerObjectRepositoryType.TYPE_CUSTOM_FORM, parentItem);
         try {
             IFile formFile = createFormFile(folder,
-                    formName + "_" + VersionUtils.DEFAULT_VERSION + ".form", dataModelName + "." + entityName, columnCount, allElements); //$NON-NLS-1$ //$NON-NLS-2$
+                    formName + "_" + VersionUtils.DEFAULT_VERSION + ".form", dataModelName + "." + entityName, columnCount, allElements, ancestor); //$NON-NLS-1$ //$NON-NLS-2$
             createServerObject(formName, dataModelName, entityName, formFile);
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
@@ -123,7 +125,7 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
 
     CustomFormUtil customFormUtil = new CustomFormUtil();
     private IFile createFormFile(IFolder folder, String formName, String title, int columnCount,
-            List<CustomFormElement> allElements) throws UnsupportedEncodingException, CoreException {
+            List<CustomFormElement> allElements, CustomFormElement ancestor) throws UnsupportedEncodingException, CoreException {
         IFile file = folder.getFile(formName);
         // create blank diagram
         // String content = tmp1 + title + tmp2;
@@ -132,7 +134,7 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         // else
         //            file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
         // create diagram via init data
-        customFormUtil.createDomainModel(file, title, allElements, columnCount);
+        customFormUtil.createDomainModel(file, title, allElements, ancestor, columnCount);
         return file;
     }
 

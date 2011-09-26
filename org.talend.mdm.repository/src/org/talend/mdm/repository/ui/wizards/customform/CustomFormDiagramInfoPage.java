@@ -51,8 +51,14 @@ public class CustomFormDiagramInfoPage extends WizardPage {
 
     private List<CustomFormElement> allElements;
 
+    private CustomFormElement ancestor;
+
     public List<CustomFormElement> getAllElements() {
         return this.allElements;
+    }
+
+    public CustomFormElement getAncestor() {
+        return ancestor;
     }
 
     public int getColumnCount() {
@@ -154,6 +160,7 @@ public class CustomFormDiagramInfoPage extends WizardPage {
         if (schemaComposite != null) {
             schemaComposite.updateModel(dataModel, entityName);
             allElements = schemaComposite.getAllElements();
+            ancestor = schemaComposite.getAncestor();
         }
     }
 }

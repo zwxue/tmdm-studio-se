@@ -35,6 +35,8 @@ public class CustomFormElement {
 
     private String xpath;
 
+    private boolean canMove = true;
+
     public CustomFormElement(String name, String type) {
         this.name = name;
         this.type = type;
@@ -90,6 +92,14 @@ public class CustomFormElement {
         this.xpath = xpath;
     }
 
+    public boolean isCanMove() {
+        return canMove;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
+
     public void addChild(CustomFormElement child) {
         if (children == null) {
             children = new ArrayList<CustomFormElement>();
@@ -99,6 +109,6 @@ public class CustomFormElement {
     }
 
     public String toString() {
-        return "Name=" + name + "  type=" + type + "  XPath=" + getXpath(); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        return "Name=" + name + "  canMove=" + canMove + "  type=" + type + "  XPath=" + getXpath(); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
     }
 }

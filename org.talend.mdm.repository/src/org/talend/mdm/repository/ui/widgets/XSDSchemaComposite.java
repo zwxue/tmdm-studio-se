@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
@@ -151,6 +152,8 @@ public class XSDSchemaComposite extends Composite {
                         if (elemDecl.getName().equals(entityName)) {
                             ancestor = new CustomFormElement(entityName, null);
                             XSDTypeDefinition typeDefinition = elemDecl.getTypeDefinition();
+                            boolean isSequence = Util.isSequenceComplexType((XSDComplexTypeDefinition) typeDefinition);
+                            ancestor.setCanMove(!isSequence);
                             analyseTypeDefinition(typeDefinition, ancestor);
 
                         }
@@ -192,11 +195,20 @@ public class XSDSchemaComposite extends Composite {
             if (typeDefinition instanceof XSDComplexTypeDefinition) {
                 type = null;
                 child.setType(type);
+                if (ancestor != pElement) {
+                boolean isSequence = Util.isSequenceComplexType((XSDComplexTypeDefinition) typeDefinition);
+                pElement.setCanMove(!isSequence);
+                }
                 analyseComplexType((XSDComplexTypeDefinition) typeDefinition, child);
             }
 
         }
         if (term instanceof XSDModelGroup) {
+            XSDModelGroup group = (XSDModelGroup) term;
+            if (ancestor != pElement) {
+                boolean isSequence = XSDCompositor.SEQUENCE_LITERAL.equals(group.getCompositor());
+                pElement.setCanMove(!isSequence);
+            }
             for (XSDParticle child : ((XSDModelGroup) term).getContents()) {
                 analyseParticle(child, pElement);
             }
@@ -208,6 +220,10 @@ public class XSDSchemaComposite extends Composite {
             return ancestor.getChildren();
         }
         return null;
+    }
+
+    public CustomFormElement getAncestor() {
+        return ancestor;
     }
 
     @Override
