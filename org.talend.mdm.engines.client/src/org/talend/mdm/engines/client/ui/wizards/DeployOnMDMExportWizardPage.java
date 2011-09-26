@@ -112,7 +112,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
         super(name, null);
         this.mdmServer = mdmserver;
-
+        manager = new JobJavaScriptsWSManager(getExportChoiceMap(0), "", "all", IProcessor.NO_STATISTICS, //$NON-NLS-1$
+                IProcessor.NO_TRACES, ".war");
         RepositoryNode[] nodes = (RepositoryNode[]) selection.toList().toArray(new RepositoryNode[selection.size()]);
 
         List<ExportFileResource> list = new ArrayList<ExportFileResource>();
@@ -702,10 +703,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         }
     }
-
     private Map<ExportChoice, Object> getExportChoiceMap() {
+        return getExportChoiceMap(exportTypeCombo.getSelectionIndex());
+    }
+
+    private Map<ExportChoice, Object> getExportChoiceMap(int index) {
         Map<ExportChoice, Object> exportChoiceMap = new EnumMap<ExportChoice, Object>(ExportChoice.class);
-        if (exportTypeCombo.getSelectionIndex() == 0) {// war
+        if (index == 0) {// war
             exportChoiceMap.put(ExportChoice.needMetaInfo, true);
             exportChoiceMap.put(ExportChoice.needWEBXML, true);
             exportChoiceMap.put(ExportChoice.needCONFIGFILE, true);
@@ -734,7 +738,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             exportChoiceMap.put(ExportChoice.applyToChildren, true);
             exportChoiceMap.put(ExportChoice.needDependencies, true);
         }
-        exportChoiceMap.put(ExportChoice.needContext, contextButton.getSelection());
+        exportChoiceMap.put(ExportChoice.needContext, (contextButton != null) ? contextButton.getSelection() : true);
 
         return exportChoiceMap;
     }
