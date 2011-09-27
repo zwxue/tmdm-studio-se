@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.ui.wizards.workflow.GenerateWorkflowWizardR;
@@ -23,6 +24,7 @@ import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.workbench.enterprice.dialog.GenerateWorkflowWizard;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -59,17 +61,21 @@ public class DataModelMainPage2 extends DataModelMainPage {
     }
 
     @Override
-    public Object getAdapter(Class cls) {
-        if (cls == GenerateWorkflowWizard.class) {
+    public Object getAdapter(Class adapter) {
+        if (adapter == GenerateWorkflowWizard.class) {
             return new GenerateWorkflowWizardR(this);
         }
-        if (cls == AddBrowseItemsWizard.class) {
+        if (adapter == AddBrowseItemsWizard.class) {
             return new AddBrowseItemsWizardR(this);
         }
-        if (cls == XSDSetAnnotationWriteAction.class) {
+        if (adapter == XSDSetAnnotationWriteAction.class) {
             return new XSDSetAnnotationWriteActionR(this);
         }
-        return super.getAdapter(cls);
+
+        if (adapter == XSDSetAnnotationNoAction.class) {
+            return new XSDSetAnnotationNoActionR(this, dataModelName);
+        }
+        return super.getAdapter(adapter);
     }
 
 }

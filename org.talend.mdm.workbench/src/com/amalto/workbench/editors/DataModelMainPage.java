@@ -334,7 +334,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private MenuManager menuMgr;
 
-    private String dataModelName;
+    protected String dataModelName;
 
     private XSDSchema xsdSchema;
 
@@ -1078,7 +1078,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(this, dataModelName);
         this.setAnnotationWriteAction = (XSDSetAnnotationWriteAction) getAdapter(XSDSetAnnotationWriteAction.class);
         this.setAnnotationWrapWriteAction = new XSDSetAnnotationWrapWriteAction(this);
-        this.setAnnotationNoAction = new XSDSetAnnotationNoAction(this, dataModelName);
+        this.setAnnotationNoAction = (XSDSetAnnotationNoAction) getAdapter(XSDSetAnnotationNoAction.class);
         this.setAnnotationWrapNoAction = new XSDSetAnnotationWrapNoAction(this, dataModelName);
 
         this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
@@ -2850,6 +2850,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         if (adapter == XSDSetAnnotationWriteAction.class) {
             return new XSDSetAnnotationWriteAction(this);
+        }
+        if (adapter == XSDSetAnnotationNoAction.class) {
+            return new XSDSetAnnotationNoAction(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }

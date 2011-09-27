@@ -156,6 +156,18 @@ public class Messages extends NLS {
 
     public static String XSDEditor2_schemaSource;
 
+    public static String XSDSetAnnotationNoActionR_roles;
+
+
+    public static String XSDSetAnnotationNoActionR_title;
+
+
+    public static String XSDSetAnnotationWriteActionR_roles;
+
+
+    public static String XSDSetAnnotationWriteActionR_title;
+
+
     public static String ImportServerObject;
 
 

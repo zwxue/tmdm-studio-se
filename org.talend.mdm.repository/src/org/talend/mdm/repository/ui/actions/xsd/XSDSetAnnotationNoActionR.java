@@ -20,23 +20,23 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xsd.AnnotationOrderedListsDialogR;
 
-import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
+import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 
-
 /**
- * DOC hbhong  class global comment. Detailled comment
+ * DOC hbhong class global comment. Detailled comment
  */
-public class XSDSetAnnotationWriteActionR extends XSDSetAnnotationWriteAction {
+public class XSDSetAnnotationNoActionR extends XSDSetAnnotationNoAction {
 
     /**
-     * DOC hbhong XSDSetAnnotationWriteActionR constructor comment.
+     * DOC hbhong XSDSetAnnotationNoActionR constructor comment.
      * 
      * @param page
+     * @param dataModelName
      */
-    public XSDSetAnnotationWriteActionR(DataModelMainPage page) {
-        super(page);
+    public XSDSetAnnotationNoActionR(DataModelMainPage page, String dataModelName) {
+        super(page, dataModelName);
     }
 
     @Override
@@ -46,8 +46,8 @@ public class XSDSetAnnotationWriteActionR extends XSDSetAnnotationWriteAction {
             public void widgetSelected(SelectionEvent e) {
                 dlg.close();
             }
-        }, page.getSite().getShell(), Messages.XSDSetAnnotationWriteActionR_title, Messages.XSDSetAnnotationWriteActionR_roles, page,
-                AnnotationOrderedListsDialog.AnnotationWrite_ActionType, null);
+        }, page.getSite().getShell(), Messages.XSDSetAnnotationNoActionR_title, Messages.XSDSetAnnotationNoActionR_roles, page,
+                AnnotationOrderedListsDialog.AnnotationHidden_ActionType, dataModelName);
     }
 
 }
