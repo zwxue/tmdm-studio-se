@@ -94,7 +94,6 @@ import com.amalto.workbench.actions.RefreshAllServerAction;
 import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
 import com.amalto.workbench.actions.ServerEditAction;
-import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerLogoutAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.actions.ServerRefreshCacheAction;
@@ -137,8 +136,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     protected TreeViewer viewer;
 
     protected DrillDownAdapter drillDownAdapter;
-
-    protected Action loginAction;
 
     protected Action logoutAction;
 
@@ -664,13 +661,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     private void contributeToActionBars() {
         IActionBars bars = getViewSite().getActionBars();
-        fillLocalPullDown(bars.getMenuManager());
         fillLocalToolBar(bars.getToolBarManager());
     }
 
-    private void fillLocalPullDown(IMenuManager manager) {
-        manager.add(loginAction);
-    }
+
 
     protected void fillContextMenu(IMenuManager manager) {
         TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
@@ -684,7 +678,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         }
 
         if (xobject == null) {
-            manager.add(loginAction);
+            // manager.add(loginAction);
         } else {
             // available models
 
@@ -812,8 +806,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     private void fillLocalToolBar(IToolBarManager manager) {
-        manager.add(loginAction);
-        manager.add(new Separator());
+
         manager.add(refreshAllServerAction);
         manager.add(new Separator());
         manager.add(new Separator());
@@ -821,7 +814,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     private void makeActions() {
-        loginAction = new ServerLoginAction(this);
 
         logoutAction = new ServerLogoutAction(this, false);
         logoutAndRemoveAction = new ServerLogoutAction(this, true);
