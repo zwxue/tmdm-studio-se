@@ -55,6 +55,9 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.MDMServerHelper;
+import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -287,8 +290,29 @@ public class ServerExplorer extends ViewPart {
                     if (result) {
                         refreshServerDefs();
                     }
+
+                    deleteServerDefForSerView(serverDefItem.getServerDef().getName());
                 }
             }
         }
+
+        private void deleteServerDefForSerView(String nameToDel) {
+            List<com.amalto.workbench.utils.MDMServerDef> servers = MDMServerHelper.getServers();
+            for (com.amalto.workbench.utils.MDMServerDef server : servers) {
+                if (server.getName().equals(nameToDel)) {
+                    MDMServerHelper.deleteServer(server.getName());
+                }
+            }
+            ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
+            if (viewPart != null) {
+                for (TreeObject object : viewPart.getRoot().getChildren()) {
+                    if (object.getName().equals(nameToDel)) {
+                        viewPart.getRoot().removeChild(object);
+                    }
+                }
+                (viewPart).getViewer().refresh();
+            }
+        }
+
     }
 }
