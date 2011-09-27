@@ -486,6 +486,7 @@ public class ImportServerObjectWizard extends Wizard {
                         treeViewer.getViewer().setInput(serverRoot);
                         treeViewer.setServerRoot((TreeParent) serverRoot);
                         treeViewer.getViewer().refresh();
+
                     } catch (Exception e) {
                         log.error(e);
                     }
@@ -522,7 +523,7 @@ public class ImportServerObjectWizard extends Wizard {
             setTitle(Messages.ImportServerObject);
 
             // Page isn't complete until an e-mail address has been added
-            setPageComplete(false);
+            // setPageComplete(false);
 
         }
 
@@ -567,7 +568,7 @@ public class ImportServerObjectWizard extends Wizard {
                     if (dlg.open() == IDialogConstants.OK_ID) {
                         serverDef = dlg.getSelectedServerDef();
                         txtServer.setText(serverDef.getUrl());
-                        checkCompleted();
+
                         String url = serverDef.getUrl();
                         String user = serverDef.getUser();
                         String password = serverDef.getPasswd();
@@ -592,7 +593,8 @@ public class ImportServerObjectWizard extends Wizard {
 
                     }
                     treeViewer.refresh();
-
+                    updateSelectedObjects();
+                    checkCompleted();
                 }
             });
             comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
