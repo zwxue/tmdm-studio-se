@@ -439,8 +439,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             gLayout.verticalSpacing = 0;
             btnCmp.setLayout(gLayout);
 
-
-
             // Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
             // SWT.NULL);
             // xsdLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
@@ -693,7 +691,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         Color blue = new Color(compInfo.getDisplay(), 0, 0, 255);
         title.setForeground(blue);
         title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-
 
         ToolBar toolBarSchemaTree = createToolbarOnComposite(compSchemaTree);
 
@@ -1079,7 +1076,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         defaultValueRuleAction = new XSDDefaultValueRuleAction(this, dataModelName);
         this.setAnnotationFKFilterAction = new XSDSetAnnotationFKFilterAction(this, dataModelName);
         this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(this, dataModelName);
-        this.setAnnotationWriteAction = new XSDSetAnnotationWriteAction(this);
+        this.setAnnotationWriteAction = (XSDSetAnnotationWriteAction) getAdapter(XSDSetAnnotationWriteAction.class);
         this.setAnnotationWrapWriteAction = new XSDSetAnnotationWrapWriteAction(this);
         this.setAnnotationNoAction = new XSDSetAnnotationNoAction(this, dataModelName);
         this.setAnnotationWrapNoAction = new XSDSetAnnotationWrapNoAction(this, dataModelName);
@@ -2827,6 +2824,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         });
 
     }
+
     @Override
     public void setFocus() {
 
@@ -2849,6 +2847,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     public Object getAdapter(Class adapter) {
         if (adapter == TreeParent.class) {
             return Util.getServerTreeParent(getXObject());
+        }
+        if (adapter == XSDSetAnnotationWriteAction.class) {
+            return new XSDSetAnnotationWriteAction(this);
         }
         return super.getAdapter(adapter);
     }

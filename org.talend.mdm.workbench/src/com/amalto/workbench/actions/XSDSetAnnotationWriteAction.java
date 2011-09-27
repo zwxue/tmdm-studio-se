@@ -13,6 +13,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,8 +25,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
@@ -72,16 +73,7 @@ public class XSDSetAnnotationWriteAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
 
-            dlg = new AnnotationOrderedListsDialog(new ArrayList(struc.getWriteAccesses().values()), new SelectionListener() {
-
-                public void widgetDefaultSelected(SelectionEvent e) {
-                }
-
-                public void widgetSelected(SelectionEvent e) {
-                    dlg.close();
-                }
-            }, page.getSite().getShell(), "Set The Roles That Have Write Access", "Roles", page,//$NON-NLS-2$
-                    AnnotationOrderedListsDialog.AnnotationWrite_ActionType, null);
+            dlg = getNewAnnotaionOrderedListsDialog(struc.getWriteAccesses().values());
 
             dlg.setBlockOnOpen(true);
             int ret = dlg.open();
@@ -105,6 +97,15 @@ public class XSDSetAnnotationWriteAction extends UndoAction {
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
+    }
+
+    protected AnnotationOrderedListsDialog getNewAnnotaionOrderedListsDialog(Collection<String> values) {
+        return new AnnotationOrderedListsDialog(new ArrayList(values), new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent e) {
+                dlg.close();
+            }
+        }, page.getSite().getShell(), "Set The Roles That Have Write Access", "Roles", page,//$NON-NLS-2$
+                AnnotationOrderedListsDialog.AnnotationWrite_ActionType, null);
     }
 
     public void runWithEvent(Event event) {

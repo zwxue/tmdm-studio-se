@@ -165,6 +165,9 @@ public class AnnotationOrderedListsDialog extends Dialog {
         return childNames;
     }
 
+    protected List<String> getAllRolesStr() {
+        return Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
+    }
     protected Control createDialogArea(Composite parent) {
 
         // Should not really be here but well,....
@@ -182,7 +185,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
             textControl = new CCombo(composite, SWT.BORDER | SWT.READ_ONLY);
 
             // roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
-            roles = Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
+            roles = getAllRolesStr();
             ((CCombo) textControl).setItems(roles.toArray(new String[roles.size()]));
 
         } else if (actionType == AnnotationLookupField_ActionType || actionType == AnnotationPrimaKeyInfo_ActionType) {
