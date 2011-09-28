@@ -95,7 +95,7 @@
       <import plugin="org.eclipse.core.resources" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.text" version="3.1.0" match="compatible"/>
    </requires>
-         
+
    <plugin
          id="org.talend.mdm.commmon"
          download-size="0"
@@ -1132,13 +1132,6 @@
 
    <plugin
          id="org.eclipse.jdt.core.manipulation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.jdt.apt.pluggable.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
