@@ -92,6 +92,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.operations.UndoRedoActionGroup;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
@@ -1565,7 +1566,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
         }
         // available models
-        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
         for (int i = 0; i < availablemodels.size(); i++) {
             IAvailableModel model = availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
@@ -1617,7 +1618,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
         }
         // available models
-        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
         for (int i = 0; i < availablemodels.size(); i++) {
             IAvailableModel model = availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
@@ -1656,7 +1657,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
         }
         // available models
-        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
         for (int i = 0; i < availablemodels.size(); i++) {
             IAvailableModel model = availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
@@ -2478,7 +2479,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             int elem = getElementType(selection.getFirstElement());
             // available models
-            java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+            java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
             for (IAvailableModel model : availablemodels) {
                 model.doubleClickOnElement(elem, DataModelMainPage.this, dataModelName);
             }
@@ -2842,7 +2843,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         return datamodel;
     }
 
-    // Modified by hhb,to fix bug 21784
     @Override
     public Object getAdapter(Class adapter) {
         if (adapter == TreeParent.class) {
@@ -2856,6 +2856,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         return super.getAdapter(adapter);
     }
-    // The ending| bug:21784
 
+    public boolean isLocalInput() {
+        MultiPageEditorSite site = (MultiPageEditorSite) getEditorSite();
+        if (site.getMultiPageEditor() instanceof IServerObjectEditorState) {
+            return ((IServerObjectEditorState) site.getMultiPageEditor()).isLocalInput();
+        }
+        return false;
+    }
 }

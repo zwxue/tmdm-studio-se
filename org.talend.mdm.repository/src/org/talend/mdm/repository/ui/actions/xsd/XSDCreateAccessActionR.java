@@ -19,8 +19,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xsd.AnnotationOrderedListsDialogR;
+import org.talend.mdm.workbench.enterprice.actions.XSDCreateAccessAction;
 
-import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 
@@ -28,25 +28,25 @@ import com.amalto.workbench.editors.DataModelMainPage;
 /**
  * DOC hbhong  class global comment. Detailled comment
  */
-public class XSDSetAnnotationWriteActionR extends XSDSetAnnotationWriteAction {
+public class XSDCreateAccessActionR extends XSDCreateAccessAction {
 
     /**
-     * DOC hbhong XSDSetAnnotationWriteActionR constructor comment.
+     * DOC hbhong XSDCreateAccessActionR constructor comment.
      * 
      * @param page
+     * @param dataModelName
      */
-    public XSDSetAnnotationWriteActionR(DataModelMainPage page) {
-        super(page);
+    public XSDCreateAccessActionR(DataModelMainPage page, String dataModelName) {
+        super(page, dataModelName);
     }
 
     @Override
     protected AnnotationOrderedListsDialog getNewAnnotaionOrderedListsDialog(Collection<String> values) {
         return new AnnotationOrderedListsDialogR(new ArrayList(values), new SelectionAdapter() {
-
             public void widgetSelected(SelectionEvent e) {
                 dlg.close();
             }
-        }, page.getSite().getShell(), Messages.XSDSetAnnotationWriteActionR_title, Messages.XSDSetAnnotationRoles, page,
+        }, page.getSite().getShell(), Messages.XSDCreateAccessActionR_title, Messages.XSDSetAnnotationRoles, page,
                 AnnotationOrderedListsDialog.AnnotationWrite_ActionType, null);
     }
 

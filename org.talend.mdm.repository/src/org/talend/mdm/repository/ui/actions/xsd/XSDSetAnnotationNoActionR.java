@@ -46,7 +46,7 @@ public class XSDSetAnnotationNoActionR extends XSDSetAnnotationNoAction {
             public void widgetSelected(SelectionEvent e) {
                 dlg.close();
             }
-        }, page.getSite().getShell(), Messages.XSDSetAnnotationNoActionR_title, Messages.XSDSetAnnotationNoActionR_roles, page,
+        }, page.getSite().getShell(), Messages.XSDSetAnnotationNoActionR_title, Messages.XSDSetAnnotationRoles, page,
                 AnnotationOrderedListsDialog.AnnotationHidden_ActionType, dataModelName);
     }
 

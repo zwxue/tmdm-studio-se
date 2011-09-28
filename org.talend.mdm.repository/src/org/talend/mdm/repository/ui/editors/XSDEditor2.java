@@ -74,6 +74,10 @@ public class XSDEditor2 extends XSDEditor {
         return ((IFileEditorInput) getEditorInput()).getFile();
     }
 
+    @Override
+    public boolean isLocalInput() {
+        return true;
+    }
 
 
     // public void doSave(IProgressMonitor monitor) {

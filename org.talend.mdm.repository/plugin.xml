@@ -449,4 +449,11 @@
             sequence="Ctrl+V">
       </key>
    </extension>
+   <extension
+         point="org.talend.mdm.workbench.AvailableModel">
+      <model
+            class="org.talend.mdm.repository.core.availablemodel.ExtraAccessAvailableModelR"
+            modelType="Repository">
+      </model>
+   </extension>
 </plugin>

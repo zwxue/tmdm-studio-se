@@ -152,17 +152,17 @@ public class Messages extends NLS {
 
     public static String XObjectEditor2_unableOpenEditor;
 
+    public static String XSDCreateAccessActionR_title;
+
+
     public static String XSDEditor2_schemaDesign;
 
     public static String XSDEditor2_schemaSource;
 
-    public static String XSDSetAnnotationNoActionR_roles;
-
-
     public static String XSDSetAnnotationNoActionR_title;
 
 
-    public static String XSDSetAnnotationWriteActionR_roles;
+    public static String XSDSetAnnotationRoles;
 
 
     public static String XSDSetAnnotationWriteActionR_title;

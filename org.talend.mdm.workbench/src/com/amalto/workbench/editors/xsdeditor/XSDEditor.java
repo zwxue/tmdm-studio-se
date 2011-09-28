@@ -34,13 +34,14 @@ import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.editors.IServerObjectEditorState;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.MDMPerspective;
 import com.amalto.workbench.webservices.WSDataModel;
 
 @SuppressWarnings("restriction")
-public class XSDEditor extends InternalXSDMultiPageEditor {
+public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObjectEditorState {
 
     private static Log log = LogFactory.getLog(XSDEditor.class);
 
@@ -211,5 +212,14 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
         }
 
         page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.amalto.workbench.editors.IServerObjectEditorState#isLocalInput()
+     */
+    public boolean isLocalInput() {
+        return false;
     }
 }
