@@ -135,7 +135,7 @@ public class FKIntegrityComposite extends Composite {
 					.valueOf(textContent);
 			btnAllowFkIntegrity.setSelection(enabled);
 		} else {
-			btnAllowFkIntegrity.setSelection(true); // default is true
+			btnAllowFkIntegrity.setSelection(false); // default is false for override
 		}
 	}
 
