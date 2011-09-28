@@ -17,6 +17,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
+import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
@@ -26,6 +27,7 @@ import org.talend.mdm.workbench.enterprice.dialog.GenerateWorkflowWizard;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
+import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
@@ -79,6 +81,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
         if (adapter == XSDSetAnnotationWrapWriteAction.class) {
             return new XSDSetAnnotationWrapWriteActionR(this);
+        }
+        if (adapter == XSDSetAnnotationWrapNoAction.class) {
+            return new XSDSetAnnotationWrapNoActionR(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }

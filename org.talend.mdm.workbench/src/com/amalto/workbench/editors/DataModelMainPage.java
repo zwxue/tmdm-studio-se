@@ -1080,7 +1080,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.setAnnotationWriteAction = (XSDSetAnnotationWriteAction) getAdapter(XSDSetAnnotationWriteAction.class);
         this.setAnnotationWrapWriteAction = (XSDSetAnnotationWrapWriteAction) getAdapter(XSDSetAnnotationWrapWriteAction.class);
         this.setAnnotationNoAction = (XSDSetAnnotationNoAction) getAdapter(XSDSetAnnotationNoAction.class);
-        this.setAnnotationWrapNoAction = new XSDSetAnnotationWrapNoAction(this, dataModelName);
+        this.setAnnotationWrapNoAction = (XSDSetAnnotationWrapNoAction) getAdapter(XSDSetAnnotationWrapNoAction.class);
 
         this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
         this.setAnnotationLookupFieldsAction = new XSDAnnotationLookupFieldsAction(this);
@@ -2856,6 +2856,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         if (adapter == XSDSetAnnotationWrapWriteAction.class) {
             return new XSDSetAnnotationWrapWriteAction(this);
+        }
+        if (adapter == XSDSetAnnotationWrapNoAction.class) {
+            return new XSDSetAnnotationWrapNoAction(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }

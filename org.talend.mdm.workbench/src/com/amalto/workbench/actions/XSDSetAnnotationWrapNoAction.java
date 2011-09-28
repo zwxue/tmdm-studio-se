@@ -13,6 +13,8 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
@@ -25,8 +27,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
@@ -68,17 +70,7 @@ public class XSDSetAnnotationWrapNoAction extends UndoAction {
             IStructuredSelection selections = (TreeSelection) page.getTreeViewer().getSelection();
             XSDComponent xSDCom = null;
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
-            dlg = new AnnotationOrderedListsDialog(new ArrayList(), new SelectionListener() {
-
-                public void widgetDefaultSelected(SelectionEvent e) {
-                }
-
-                public void widgetSelected(SelectionEvent e) {
-                    dlg.close();
-                }
-            }, page.getSite().getShell(), "Set The Roles That Cannot Access This Field", "Roles", page,//$NON-NLS-2$
-                    AnnotationOrderedListsDialog.AnnotationHidden_ActionType, dataModelName);
-
+            dlg = getNewAnnotaionOrderedListsDialog(Collections.EMPTY_LIST);
             dlg.setBlockOnOpen(true);
             int ret = dlg.open();
             if (ret == Window.CANCEL) {
@@ -122,4 +114,13 @@ public class XSDSetAnnotationWrapNoAction extends UndoAction {
         return Status.OK_STATUS;
     }
 
+    protected AnnotationOrderedListsDialog getNewAnnotaionOrderedListsDialog(Collection<String> values) {
+        return new AnnotationOrderedListsDialog(new ArrayList(values), new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                dlg.close();
+            }
+        }, page.getSite().getShell(), "Set The Roles That Cannot Access This Field", "Roles", page,
+                AnnotationOrderedListsDialog.AnnotationHidden_ActionType, dataModelName);
+    }
 }
