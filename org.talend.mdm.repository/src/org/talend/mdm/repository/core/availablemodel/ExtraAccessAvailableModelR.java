@@ -15,7 +15,7 @@ package org.talend.mdm.repository.core.availablemodel;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.talend.mdm.repository.ui.actions.xsd.XSDCreateAccessActionR;
-import org.talend.mdm.workbench.enterprice.actions.XSDLogicalDeleteAccessAction;
+import org.talend.mdm.repository.ui.actions.xsd.XSDLogicalDeleteAccessActionR;
 import org.talend.mdm.workbench.enterprice.actions.XSDPhysicalDeleteAccessAction;
 import org.w3c.dom.Element;
 
@@ -34,7 +34,7 @@ public class ExtraAccessAvailableModelR extends AbstractAvailableModel {
                 manager.add(new XSDCreateAccessActionR(page, dataModelName));
             }
             if ("X_LogicalDelete".equals(e.getAttribute("source"))) {//$NON-NLS-1$//$NON-NLS-2$
-                manager.add(new XSDLogicalDeleteAccessAction(page, dataModelName));
+                manager.add(new XSDLogicalDeleteAccessActionR(page, dataModelName));
             }
             if ("X_PhysicalDelete".equals(e.getAttribute("source"))) {//$NON-NLS-1$//$NON-NLS-2$
                 manager.add(new XSDPhysicalDeleteAccessAction(page, dataModelName));
@@ -46,8 +46,8 @@ public class ExtraAccessAvailableModelR extends AbstractAvailableModel {
                     .getContentProvider()).getXsdSchema())) {
                 if (manager.find(XSDCreateAccessActionR.ActionID) == null)
                     manager.add(new XSDCreateAccessActionR(page, dataModelName));
-                if (manager.find(XSDLogicalDeleteAccessAction.ActionID) == null)
-                    manager.add(new XSDLogicalDeleteAccessAction(page, dataModelName));
+                if (manager.find(XSDLogicalDeleteAccessActionR.ActionID) == null)
+                    manager.add(new XSDLogicalDeleteAccessActionR(page, dataModelName));
                 if (manager.find(XSDPhysicalDeleteAccessAction.ActionID) == null)
                     manager.add(new XSDPhysicalDeleteAccessAction(page, dataModelName));
             }
@@ -64,7 +64,7 @@ public class ExtraAccessAvailableModelR extends AbstractAvailableModel {
             new XSDPhysicalDeleteAccessAction(page, dataModelName).run();
             break;
         case 120:
-            new XSDLogicalDeleteAccessAction(page, dataModelName).run();
+            new XSDLogicalDeleteAccessActionR(page, dataModelName).run();
             break;
         }
     }

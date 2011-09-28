@@ -159,6 +159,9 @@ public class Messages extends NLS {
 
     public static String XSDEditor2_schemaSource;
 
+
+    public static String XSDLogicalDeleteAccessActionR_title;
+
     public static String XSDSetAnnotationNoActionR_title;
 
 
