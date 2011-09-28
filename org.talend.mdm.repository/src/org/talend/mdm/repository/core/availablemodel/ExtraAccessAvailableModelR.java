@@ -16,7 +16,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.talend.mdm.repository.ui.actions.xsd.XSDCreateAccessActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDLogicalDeleteAccessActionR;
-import org.talend.mdm.workbench.enterprice.actions.XSDPhysicalDeleteAccessAction;
+import org.talend.mdm.repository.ui.actions.xsd.XSDPhysicalDeleteAccessActionR;
 import org.w3c.dom.Element;
 
 import com.amalto.workbench.availablemodel.AbstractAvailableModel;
@@ -37,7 +37,7 @@ public class ExtraAccessAvailableModelR extends AbstractAvailableModel {
                 manager.add(new XSDLogicalDeleteAccessActionR(page, dataModelName));
             }
             if ("X_PhysicalDelete".equals(e.getAttribute("source"))) {//$NON-NLS-1$//$NON-NLS-2$
-                manager.add(new XSDPhysicalDeleteAccessAction(page, dataModelName));
+                manager.add(new XSDPhysicalDeleteAccessActionR(page, dataModelName));
             }
         }
 
@@ -48,8 +48,8 @@ public class ExtraAccessAvailableModelR extends AbstractAvailableModel {
                     manager.add(new XSDCreateAccessActionR(page, dataModelName));
                 if (manager.find(XSDLogicalDeleteAccessActionR.ActionID) == null)
                     manager.add(new XSDLogicalDeleteAccessActionR(page, dataModelName));
-                if (manager.find(XSDPhysicalDeleteAccessAction.ActionID) == null)
-                    manager.add(new XSDPhysicalDeleteAccessAction(page, dataModelName));
+                if (manager.find(XSDPhysicalDeleteAccessActionR.ActionID) == null)
+                    manager.add(new XSDPhysicalDeleteAccessActionR(page, dataModelName));
             }
         }
 
@@ -61,7 +61,7 @@ public class ExtraAccessAvailableModelR extends AbstractAvailableModel {
             new XSDCreateAccessActionR(page, dataModelName).run();
             break;
         case 119:
-            new XSDPhysicalDeleteAccessAction(page, dataModelName).run();
+            new XSDPhysicalDeleteAccessActionR(page, dataModelName).run();
             break;
         case 120:
             new XSDLogicalDeleteAccessActionR(page, dataModelName).run();
