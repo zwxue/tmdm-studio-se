@@ -40,11 +40,14 @@ import org.eclipse.swt.widgets.Text;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewFilter;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+import org.talend.mdm.repository.core.impl.eventmanager.EventManagerNodeConfiguration;
+import org.talend.mdm.repository.core.impl.routingrule.RoutingRuleNodeConfiguration;
+import org.talend.mdm.repository.core.impl.transformerV2.TransformerV2NodeConfiguration;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.navigator.filter.NamePatternViewFilter;
 import org.talend.mdm.repository.ui.navigator.filter.ServerObjectViewFilter;
 import org.talend.mdm.repository.utils.PreferenceUtil;
-import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -140,8 +143,13 @@ public class RepositoryViewFilterDialog extends Dialog {
                 } else {
                     enabledConfigs.remove(config);
                 }
+
+                solveProcTriCase();
+
                 enableAllBun.setSelection(enabledConfigs.size() == allConfigs.size());
             }
+
+
         });
 
         enableAllBun = new Button(container, SWT.CHECK);
@@ -166,6 +174,31 @@ public class RepositoryViewFilterDialog extends Dialog {
         //
         initServerObjectFilter();
         return container;
+    }
+
+    private void solveProcTriCase() {
+        IRepositoryNodeConfiguration eventMgr = null;
+        boolean exist = false;
+
+        for (IRepositoryNodeConfiguration conf : enabledConfigs) {
+            if (conf instanceof EventManagerNodeConfiguration) {
+                exist = true;
+                break;
+            }
+
+            if (conf instanceof RoutingRuleNodeConfiguration || conf instanceof TransformerV2NodeConfiguration) {
+
+                for (IRepositoryNodeConfiguration confi : allConfigs) {
+                    if (confi instanceof EventManagerNodeConfiguration) {
+                        eventMgr = confi;
+                    }
+                }
+            }
+        }
+
+        if (eventMgr != null && !exist)
+            enabledConfigs.add(eventMgr);
+
     }
 
     /**
