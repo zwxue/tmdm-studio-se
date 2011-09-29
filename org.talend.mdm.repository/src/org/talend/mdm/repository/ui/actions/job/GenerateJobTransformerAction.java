@@ -181,7 +181,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
                         + "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</configuration>\n";//$NON-NLS-1$ 
             } else {
-                parameter = "<configuration>\n" + "<url>" + server + "/" + jobVersion + "/services/" + jobName + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                parameter = "<configuration>\n" + "<url>" + server + "/" + jobName + "_" + jobVersion + "/services/" + jobName + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
                         + "<contextParam>\n" + "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</contextParam>\n" + "</configuration>\n";//$NON-NLS-1$ //$NON-NLS-2$ 
             }
@@ -192,7 +192,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             steps3.setDisabled(false);
             // Generate the job call
 
-            transformer.setName(PREFIX + jobName);//$NON-NLS-1$
+            transformer.setName(PREFIX + jobName);
             transformer.setDescription("Process that calls the Talend Job: " + jobName);//$NON-NLS-1$ 
 
             list.add(steps1);
@@ -219,7 +219,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         item.setState(itemState);
         item.setWsTransformerV2(transformer);
         item.getState().setPath(""); //$NON-NLS-1$
-        RepositoryResourceUtil.createItem(item, PREFIX + filename); //$NON-NLS-1$
+        RepositoryResourceUtil.createItem(item, PREFIX + filename);
         refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
 
     }

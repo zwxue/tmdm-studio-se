@@ -103,7 +103,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
                         + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</configuration>\n";//$NON-NLS-1$ 
             } else {
-                parameter = "<configuration>\n" + "<url>" + server + "/" + jobVersion + "/services/" + jobName + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                parameter = "<configuration>\n" + "<url>" + server + "/" + jobName + "_" + jobVersion + "/services/" + jobName + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
                         + "<contextParam>\n" + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
                         + "</contextParam>\n" + "</configuration>\n";//$NON-NLS-1$ //$NON-NLS-2$ 
             }
@@ -171,7 +171,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         item.setState(itemState);
         item.setWsRoutingRule(trigger);
         item.getState().setPath(""); //$NON-NLS-1$
-        RepositoryResourceUtil.createItem(item, PREFIX + filename); //$NON-NLS-1$
+        RepositoryResourceUtil.createItem(item, PREFIX + filename);
         refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
 
     }
