@@ -61,6 +61,12 @@ public class TypeItemImageCreator extends SchemaItemImageCreator {
                     if (source.equals("X_ForeignKeyInfo"))//$NON-NLS-1$
                         return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
 
+                    if (source.equals("X_FKIntegrity"))//$NON-NLS-1$
+                        return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                    
+                    if (source.equals("X_FKIntegrity_Override"))//$NON-NLS-1$
+                        return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                    
                     if (source.equals("X_SourceSystem"))//$NON-NLS-1$
                         return ImageCache.getCreatedImage(EImage.SOURCESYSTEM.getPath());
 

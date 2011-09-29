@@ -215,7 +215,12 @@ public class XSDTreeLabelProvider extends LabelProvider {
                             // end
                         } else if (source.equals("X_Retrieve_FKinfos")) {//$NON-NLS-1$
                             return "Foreign Key resolution:  " + e.getChildNodes().item(0).getNodeValue();
-                        }
+                        } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
+                            return "Foreign Key integrity:  " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
+                            return "Foreign Key integrity override:  " + e.getChildNodes().item(0).getNodeValue();
+                        }                        
+                        
                         if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
                             return "Foreign Key Filter:  " + e.getChildNodes().item(0).getNodeValue();
                         } else {
@@ -401,6 +406,10 @@ public class XSDTreeLabelProvider extends LabelProvider {
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
                             // fix bug 0013194 by rhou.
+                        } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                        } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
                         } else if (source.equals("X_Retrieve_FKinfos")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
                         } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$

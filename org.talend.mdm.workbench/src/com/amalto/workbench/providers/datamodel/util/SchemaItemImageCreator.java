@@ -223,6 +223,12 @@ public class SchemaItemImageCreator {
 
                     if (source.equals("X_Retrieve_FKinfos"))//$NON-NLS-1$
                         return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                    
+                    if (source.equals("X_FKIntegrity"))//$NON-NLS-1$
+                        return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                    
+                    if (source.equals("X_FKIntegrity_Override"))//$NON-NLS-1$
+                        return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
 
                     if (source.equals("X_SourceSystem"))//$NON-NLS-1$
                         return ImageCache.getCreatedImage(EImage.SOURCESYSTEM.getPath());

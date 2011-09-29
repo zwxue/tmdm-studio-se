@@ -385,6 +385,10 @@ public class TypesLabelProvider extends LabelProvider {
                             return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                        } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
+                        } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
                         } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SOURCESYSTEM.getPath());
                         } else if (source.equals("X_TargetSystem")) {//$NON-NLS-1$
