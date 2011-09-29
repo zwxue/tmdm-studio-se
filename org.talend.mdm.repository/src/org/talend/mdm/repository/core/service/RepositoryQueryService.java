@@ -67,6 +67,9 @@ public class RepositoryQueryService {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
     }
 
+    public static List<String> findAllWorkflowNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_WORKFLOW);
+    }
     public static List<String> findAllStoredProcedureNames() {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_STOREPROCEDURE);
     }

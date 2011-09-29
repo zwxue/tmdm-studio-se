@@ -455,5 +455,9 @@
             class="org.talend.mdm.repository.core.availablemodel.ExtraAccessAvailableModelR"
             modelType="Repository">
       </model>
+      <model
+            class="org.talend.mdm.repository.core.availablemodel.WorkflowAvailableModelR"
+            modelType="Repository">
+      </model>
    </extension>
 </plugin>
