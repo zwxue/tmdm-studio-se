@@ -319,8 +319,9 @@ public class ServerDefDialog extends TitleAreaDialog {
         ServerView viewPart = (ServerView) page.findView(ServerView.VIEW_ID);
 
         if (viewPart != null) {
-            (viewPart).getViewer().refresh();
             ((ServerView) viewPart).initView();
+            (viewPart).getViewer().collapseAll();
+            (viewPart).getViewer().refresh();
         }
 
     }
