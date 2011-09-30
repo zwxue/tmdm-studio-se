@@ -39,17 +39,17 @@ public class StoredProcedureMainPage2 extends StoredProcedureMainPage {
 
     protected void initDataClusterCombo() {
         dataClusterCombo.removeAll();
-        List<String> dataModelNames = RepositoryQueryService.findAllDataModelNames();
-        if ((dataModelNames.size() == 0) || ((dataModelNames.size() == 1) && ("CACHE".equals(dataModelNames.get(0))))) {//$NON-NLS-1$
+        List<String> dataContainerNames = RepositoryQueryService.findAllDataContainerNames();
+        if ((dataContainerNames.size() == 0) || ((dataContainerNames.size() == 1) && ("CACHE".equals(dataContainerNames.get(0))))) {//$NON-NLS-1$
             MessageDialog.openError(this.getSite().getShell(), Messages.Common_Error,
                     Messages.StoredProcedureMainPage2_noDataContainer);
             return;
         }
         dataClusterCombo.add("[ALL]");//$NON-NLS-1$
 
-        for (String name : dataModelNames) {
-            if (!"CACHE".equals(name)) // FIXME: hardcoded CACHE//$NON-NLS-1$
-                dataClusterCombo.add(name);
+        for (String dataContainerName : dataContainerNames) {
+            if (!"CACHE".equals(dataContainerName)) // FIXME: hardcoded CACHE//$NON-NLS-1$
+                dataClusterCombo.add(dataContainerName);
         }
     }
 
