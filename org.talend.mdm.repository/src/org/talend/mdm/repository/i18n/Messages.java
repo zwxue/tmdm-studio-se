@@ -111,6 +111,10 @@ public class Messages extends NLS {
 
     public static String RefreshAction_Refresh;
 
+    public static String RefreshAction_Refresh_All;
+
+    public static String RefreshAction_Refresh_All_tooltip;
+
     public static String RemoveFromRepositoryAction_removeFromRepository;
 
     public static String RenameObjectAction_rename;
