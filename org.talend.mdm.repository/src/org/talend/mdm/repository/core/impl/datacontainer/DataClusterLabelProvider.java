@@ -68,8 +68,7 @@ public class DataClusterLabelProvider extends AbstractLabelProvider {
         WSDataClusterItem dataclusterItem = (WSDataClusterItem) item;
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
-            return dataclusterItem.getWsDataCluster().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
-                    serverObject.getLastServerDef().getPort();
+            return dataclusterItem.getWsDataCluster().getName() + " " + serverObject.getLastServerDef().getName(); //$NON-NLS-1$
         }
 
         return dataclusterItem.getWsDataCluster().getName();

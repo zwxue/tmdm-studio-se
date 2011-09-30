@@ -72,8 +72,7 @@ public class ResourceLabelProvider extends AbstractLabelProvider {
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
             return resource.getName()
-                    + "." + resource.getFileExtension() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-                    serverObject.getLastServerDef().getPort();
+ + "." + resource.getFileExtension() + " " + serverObject.getLastServerDef().getName(); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return resource.getName() + "." + resource.getFileExtension(); //$NON-NLS-1$

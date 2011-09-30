@@ -53,6 +53,7 @@ public class DeployAllAction extends AbstractDeployAction {
     @Override
     public void run() {
 
+
         Set<IRepositoryViewObject> allChangedObjects = findAllChangedObjects();
         String name = getSameServerName();
 
@@ -124,18 +125,34 @@ public class DeployAllAction extends AbstractDeployAction {
                     findFromContainer(child, viewObjs);
                 } else {
                     Item item = child.getProperty().getItem();
+
+                    List<Object> selectedObject = getSelectedObject();
+                    boolean exist = false;
+                    for (Object obj : selectedObject) {
+
+                        if (obj instanceof IRepositoryViewObject) {
+                            IRepositoryViewObject vobject = (IRepositoryViewObject) obj;
+                            if (child == vobject) {
+                                exist = true;
+                            }
+                        }
+                    }
+                    if (!exist)
+                        return;
+
+
                     if (item instanceof MDMServerObjectItem) {
                         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
 
                         if (serverObject.isChanged()) {
 
+
                             if (serverObject.getLastServerDef() != null) {
                                 defNames.add(serverObject.getLastServerDef().getName());
                             }
                             viewObjs.add(child);
+
                         }
-
-
                     }
                 }
 

@@ -68,8 +68,7 @@ public class UniverseLabelProvider extends AbstractLabelProvider {
         WSUniverseItem universeItem = (WSUniverseItem) item;
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
-            return universeItem.getWsUniverse().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
-                    serverObject.getLastServerDef().getPort();
+            return universeItem.getWsUniverse().getName() + " " + serverObject.getLastServerDef().getName();//$NON-NLS-1$
         }
 
         return universeItem.getWsUniverse().getName();

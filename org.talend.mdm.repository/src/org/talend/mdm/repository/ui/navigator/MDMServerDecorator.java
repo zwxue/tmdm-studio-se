@@ -26,11 +26,10 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
             MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
             MDMServerDef serverDef = serverObject.getLastServerDef();
             if (serverDef != null) {
-                String host = serverDef.getHost();
-                String port = serverDef.getPort();
 
                 decoration.addOverlay(IMG_SERVER, IDecoration.TOP_RIGHT);
-                decoration.addSuffix(" " + host + ":" + port); //$NON-NLS-1$ //$NON-NLS-2$
+
+                decoration.addSuffix(" " + serverDef.getName()); //$NON-NLS-1$
             }
         }
     }

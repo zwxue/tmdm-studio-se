@@ -68,8 +68,7 @@ public class RoleLabelProvider extends AbstractLabelProvider {
         WSRoleItem menuItem = (WSRoleItem) item;
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
-            return menuItem.getWsRole().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
-                    serverObject.getLastServerDef().getPort();
+            return menuItem.getWsRole().getName() + " " + serverObject.getLastServerDef().getName(); //$NON-NLS-1$
         }
 
         return menuItem.getWsRole().getName();

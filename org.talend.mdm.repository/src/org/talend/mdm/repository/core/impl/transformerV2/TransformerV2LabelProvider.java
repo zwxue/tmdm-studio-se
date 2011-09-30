@@ -68,8 +68,7 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
         WSTransformerV2Item transformeItem = (WSTransformerV2Item) item;
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
-            return transformeItem.getWsTransformerV2().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
-                    serverObject.getLastServerDef().getPort();
+            return transformeItem.getWsTransformerV2().getName() + " " + serverObject.getLastServerDef().getName();//$NON-NLS-1$
         }
 
         return transformeItem.getWsTransformerV2().getName();

@@ -69,8 +69,7 @@ public class MenuLabelProvider extends AbstractLabelProvider {
 
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
-            return menuItem.getWsMenu().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
-                    serverObject.getLastServerDef().getPort();
+            return menuItem.getWsMenu().getName() + " " + serverObject.getLastServerDef().getName();//$NON-NLS-1$
         }
 
         return menuItem.getWsMenu().getName();

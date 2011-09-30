@@ -68,8 +68,7 @@ public class ServiceConfigurationLabelProvider extends AbstractLabelProvider {
         WSServiceConfigurationItem serconfigItem = (WSServiceConfigurationItem) item; 
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
-            return serconfigItem.getWsServiceConfiguration().getName() + " " + serverObject.getLastServerDef().getHost() + ":" + //$NON-NLS-1$//$NON-NLS-2$
-                    serverObject.getLastServerDef().getPort();
+            return serconfigItem.getWsServiceConfiguration().getName() + " " + serverObject.getLastServerDef().getName();//$NON-NLS-1$
         }
 
         return serconfigItem.getWsServiceConfiguration().getName();

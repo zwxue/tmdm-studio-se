@@ -23,11 +23,16 @@ package org.talend.mdm.repository.ui.navigator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.ui.actions.DeployAllAction;
+import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.views.ServerView;
@@ -46,6 +51,23 @@ public class MDMRepositoryView extends CommonNavigator {
     public void createPartControl(Composite aParent) {
         super.createPartControl(aParent);
         initInput();
+        contributeToActionBars();
+    }
+
+    private void contributeToActionBars() {
+        IActionBars bars = getViewSite().getActionBars();
+        fillLocalToolBar(bars.getToolBarManager());
+    }
+
+    private void fillLocalToolBar(IToolBarManager manager) {
+        RefreshViewAction refreshViewAction = new RefreshViewAction();
+        refreshViewAction.initCommonViewer(((CommonNavigator) this).getCommonViewer());
+        manager.add(refreshViewAction);
+        manager.add(new Separator());
+        DeployAllAction deployAll = new DeployAllAction();
+        deployAll.initCommonViewer(((CommonNavigator) this).getCommonViewer());
+        manager.add(deployAll);
+        manager.add(new Separator());
     }
 
     /**
