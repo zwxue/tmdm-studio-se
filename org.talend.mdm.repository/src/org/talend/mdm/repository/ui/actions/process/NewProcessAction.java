@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -92,7 +92,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
                 }, true);
         vid.setBtnShow(false);
         vid.create();
-        vid.getShell().setSize(new Point(500, 300));
+        vid.getShell().setSize(new Point(500, 400));
         vid.setBlockOnOpen(true);
         if (vid.open() == Window.CANCEL)
             return;

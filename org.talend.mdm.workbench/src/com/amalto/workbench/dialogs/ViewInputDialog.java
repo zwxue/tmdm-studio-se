@@ -207,7 +207,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         // Set the error message text
         setErrorMessage(errorMessage);
         if (isTransfor) {
-            Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
+            Group radioGroup = new Group(composite, SWT.SHADOW_NONE);
             radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
             radioGroup.setLayout(new GridLayout(1, false));
             radioGroup.setText("Select one Type");
