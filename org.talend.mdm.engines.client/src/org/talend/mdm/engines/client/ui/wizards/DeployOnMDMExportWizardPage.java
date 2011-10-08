@@ -112,7 +112,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
         super(name, null);
         this.mdmServer = mdmserver;
-        manager = new JobJavaScriptsWSManager(getExportChoiceMap(0), "", "all", IProcessor.NO_STATISTICS, //$NON-NLS-1$
+        manager = new JobJavaScriptsWSManager(getExportChoiceMap(0),
+                "", JobScriptsManager.ALL_ENVIRONMENTS, IProcessor.NO_STATISTICS, //$NON-NLS-1$
                 IProcessor.NO_TRACES, ".war");
         RepositoryNode[] nodes = (RepositoryNode[]) selection.toList().toArray(new RepositoryNode[selection.size()]);
 
