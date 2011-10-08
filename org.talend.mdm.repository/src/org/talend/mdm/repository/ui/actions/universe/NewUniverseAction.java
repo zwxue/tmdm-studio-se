@@ -93,6 +93,8 @@ public class NewUniverseAction extends AbstractSimpleAddAction {
         item.setState(itemState);
 
         WSUniverseE universe = newWSUniverse(key);
+        universe.setCreated(true);
+
         item.setWsUniverse(universe);
 
         if (parentItem != null) {

@@ -68,6 +68,7 @@ public class NewDataContainerAction extends AbstractSimpleAddAction {
         item.setState(itemState);
         //
         WSDataClusterE datacontainer = newDataContainer(key);
+        datacontainer.setCreated(true);
         item.setWsDataCluster(datacontainer);
 
         if (parentItem != null) {

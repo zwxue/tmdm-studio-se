@@ -92,6 +92,7 @@ public class NewSynchronizationPlanAction extends AbstractSimpleAddAction {
         item.setState(itemState);
 
         WSSynchronizationPlanE synchronizationplan = newSynchronizationPlan(key);
+        synchronizationplan.setCreated(true);
         item.setWsSynchronizationPlan(synchronizationplan);
 
         if (parentItem != null) {

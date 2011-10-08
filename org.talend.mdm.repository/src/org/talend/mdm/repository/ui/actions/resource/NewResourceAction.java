@@ -152,6 +152,7 @@ public class NewResourceAction extends AbstractSimpleAddAction {
         item.setState(itemState);
         //
         WSResourceE resource = newResource(file);
+        resource.setCreated(true);
         item.setResource(resource);
         item.getState().setPath(parentItem != null ? parentItem.getState().getPath() : ""); //$NON-NLS-1$
 

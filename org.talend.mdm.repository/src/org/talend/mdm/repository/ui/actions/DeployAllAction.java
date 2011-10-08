@@ -138,14 +138,13 @@ public class DeployAllAction extends AbstractDeployAction {
                         }
                     }
                     if (!exist)
-                        return;
+                        continue;
 
 
                     if (item instanceof MDMServerObjectItem) {
                         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
 
-                        if (serverObject.isChanged()) {
-
+                        if (serverObject.isChanged() || serverObject.isCreated()) {
 
                             if (serverObject.getLastServerDef() != null) {
                                 defNames.add(serverObject.getLastServerDef().getName());
@@ -166,6 +165,8 @@ public class DeployAllAction extends AbstractDeployAction {
     private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
         MDMServerObject mdmServerObject = item.getMDMServerObject();
         mdmServerObject.setChanged(false);
+        mdmServerObject.setCreated(false);
+
         mdmServerObject.setLastServerDef(serverDef);
         try {
             factory.save(item);

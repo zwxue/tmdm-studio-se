@@ -69,6 +69,7 @@ public class NewStoredProcedureAction extends AbstractSimpleAddAction {
         item.setState(itemState);
 
         WSStoredProcedureE storedProcedure = newStoredProcedure(key);
+        storedProcedure.setCreated(true);
         item.setWsStoredProcedure(storedProcedure);
 
         if (parentItem != null) {

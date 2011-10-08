@@ -72,6 +72,7 @@ public class NewTriggerAction extends AbstractSimpleAddAction {
         item.setState(itemState);
 
         WSRoutingRuleE routingRule = newRoutingRule(key);
+        routingRule.setCreated(true);
         item.setWsRoutingRule(routingRule);
 
         if (parentItem != null) {

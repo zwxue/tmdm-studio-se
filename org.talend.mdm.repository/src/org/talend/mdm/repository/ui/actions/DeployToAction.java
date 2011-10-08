@@ -73,6 +73,7 @@ public class DeployToAction extends AbstractDeployAction {
     private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
         MDMServerObject mdmServerObject = item.getMDMServerObject();
         mdmServerObject.setChanged(false);
+        mdmServerObject.setCreated(false);
         mdmServerObject.setLastServerDef(serverDef);
         try {
             factory.save(item);

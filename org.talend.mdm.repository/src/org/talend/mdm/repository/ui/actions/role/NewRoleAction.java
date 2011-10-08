@@ -117,6 +117,7 @@ public class NewRoleAction extends AbstractSimpleAddAction {
         item.setState(itemState);
 
         WSRoleE role = newRole(key);
+        role.setCreated(true);
         item.setWsRole(role);
 
         if (parentItem != null) {

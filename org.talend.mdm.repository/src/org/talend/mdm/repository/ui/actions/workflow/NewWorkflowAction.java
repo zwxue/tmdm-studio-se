@@ -80,6 +80,7 @@ public class NewWorkflowAction extends AbstractSimpleAddAction {
         item.setState(itemState);
         //
         WSWorkflowE workflow = newWorkflow(workflowName);
+        workflow.setCreated(true);
         item.setWsWorkflow(workflow);
 
         item.getState().setPath(""); //$NON-NLS-1$

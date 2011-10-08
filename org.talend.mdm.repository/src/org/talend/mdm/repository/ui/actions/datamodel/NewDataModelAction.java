@@ -71,6 +71,7 @@ public class NewDataModelAction extends AbstractSimpleAddAction {
         item.setState(itemState);
         //
         WSDataModelE dataModel = newBlankDataModel(key);
+        dataModel.setCreated(true);
         item.setWsDataModel(dataModel);
 
         if (parentItem != null) {

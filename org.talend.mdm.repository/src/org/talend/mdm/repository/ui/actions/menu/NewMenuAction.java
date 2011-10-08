@@ -79,6 +79,7 @@ public class NewMenuAction extends AbstractSimpleAddAction {
         item.setState(itemState);
         //
         WSMenuE menu = newBlankMenu(key);
+        menu.setCreated(true);
         item.setWsMenu(menu);
 
         if (parentItem != null) {
