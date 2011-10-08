@@ -146,6 +146,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
      */
     protected boolean changed = CHANGED_EDEFAULT;
 
+    protected boolean isCreated = false;
+
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
@@ -432,6 +434,16 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return changed != CHANGED_EDEFAULT;
         }
         return super.eIsSet(featureID);
+    }
+
+
+    public boolean isCreated() {
+        return this.isCreated;
+    }
+
+
+    public void setCreated(boolean isCreated) {
+        this.isCreated = isCreated;
     }
 
     /**

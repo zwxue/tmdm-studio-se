@@ -195,4 +195,8 @@ public interface MDMServerObject extends EObject {
      */
     String getUniqueName();
 
+    boolean isCreated();
+
+    void setCreated(boolean value);
+
 } // MDMServerObject
