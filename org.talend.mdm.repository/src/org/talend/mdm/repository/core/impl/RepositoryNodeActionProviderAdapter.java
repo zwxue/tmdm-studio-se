@@ -124,6 +124,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 case FolderType.SYSTEM_FOLDER:
                     actions.add(createFolderAction);
                     addAction(actions, pasteAction, viewObj);
+
+                    actions.add(importServerObjectAction);
+                    actions.add(importObjectAction);
+
                     break;
                 case FolderType.STABLE_SYSTEM_FOLDER:
 
@@ -149,9 +153,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         //
         // actions.add(exportAction);
         actions.add(refreshAction);
-        actions.add(importServerObjectAction);
+        // actions.add(importServerObjectAction);
         actions.add(exportObjectAction);
-        actions.add(importObjectAction);
+        // actions.add(importObjectAction);
 
         //
         return actions;

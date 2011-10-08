@@ -28,9 +28,18 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
             if (serverDef != null) {
 
                 decoration.addOverlay(IMG_SERVER, IDecoration.TOP_RIGHT);
-
+                if (serverObject.isChanged()) {
+                    decoration.addSuffix(" " + serverDef.getName() + " (*)"); //$NON-NLS-1$ //$NON-NLS-2$ 
+                } else {
                 decoration.addSuffix(" " + serverDef.getName()); //$NON-NLS-1$
+                }
+            } else {
+                if (serverObject.isChanged()) {
+                    decoration.addSuffix(" (*)"); //$NON-NLS-1$
+                }
             }
+
+
         }
     }
     public void addListener(ILabelProviderListener listener) {

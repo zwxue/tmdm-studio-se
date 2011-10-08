@@ -32,6 +32,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
+import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -45,7 +46,7 @@ public class MDMRepositoryView extends CommonNavigator {
 
     private static final Log log = LogFactory.getLog(ServerView.class);
 
-    public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-N$
+    public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-1$
 
     @Override
     public void createPartControl(Composite aParent) {
@@ -62,12 +63,18 @@ public class MDMRepositoryView extends CommonNavigator {
     private void fillLocalToolBar(IToolBarManager manager) {
         RefreshViewAction refreshViewAction = new RefreshViewAction();
         refreshViewAction.initCommonViewer(((CommonNavigator) this).getCommonViewer());
+        manager.add(new Separator());
         manager.add(refreshViewAction);
         manager.add(new Separator());
         DeployAllAction deployAll = new DeployAllAction();
         deployAll.initCommonViewer(((CommonNavigator) this).getCommonViewer());
         manager.add(deployAll);
         manager.add(new Separator());
+        ImportObjectAction importObject = new ImportObjectAction();
+        importObject.initCommonViewer(((CommonNavigator) this).getCommonViewer());
+        manager.add(importObject);
+        manager.add(new Separator());
+
     }
 
     /**
