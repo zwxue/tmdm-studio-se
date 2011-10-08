@@ -384,11 +384,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         String topFolder = getRootFolderName();
         // reset the manager
         if (exportTypeCombo.getSelectionIndex() == 0) {// war
-            manager = new JobJavaScriptsWSManager(exportChoiceMap, contextCombo.getText(), "all", IProcessor.NO_STATISTICS, //$NON-NLS-1$
-                    IProcessor.NO_TRACES, ".war");
+            manager = new JobJavaScriptsWSManager(exportChoiceMap, contextCombo.getText(), JobScriptsManager.ALL_ENVIRONMENTS,
+                    IProcessor.NO_STATISTICS, IProcessor.NO_TRACES, ".war"); //$NON-NLS-1$
         }
         if (exportTypeCombo.getSelectionIndex() == 1) {// zip
-            manager = new JobJavaScriptsManager(exportChoiceMap, contextCombo.getText(), "all", IProcessor.NO_STATISTICS, //$NON-NLS-1$
+            manager = new JobJavaScriptsManager(exportChoiceMap, contextCombo.getText(), JobScriptsManager.ALL_ENVIRONMENTS,
+                    IProcessor.NO_STATISTICS,
                     IProcessor.NO_TRACES);
         }
         
