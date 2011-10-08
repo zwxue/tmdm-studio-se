@@ -16,6 +16,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
@@ -40,6 +42,8 @@ public class CustomFormBaseInfoPage extends WizardPage {
     private Text entityText;
 
     private Text nameTxt;
+
+    private CCombo roleCombo;
 
     private final IWorkbenchPartSite site;
 
@@ -72,6 +76,10 @@ public class CustomFormBaseInfoPage extends WizardPage {
         this.validator = validator;
         setTitle(Messages.CustomFormBaseInfoPage_title);
         setDescription(Messages.CustomFormBaseInfoPage_inputName);
+    }
+
+    public String getRole() {
+        return roleCombo.getText();
     }
 
     /**
@@ -109,6 +117,24 @@ public class CustomFormBaseInfoPage extends WizardPage {
         new Label(container, SWT.NONE);
         new Label(container, SWT.NONE);
 
+        // associate role
+        Label lblRoleEntity = new Label(container, SWT.NONE);
+        GridData gd_lblRoleEntity = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+        gd_lblRoleEntity.horizontalIndent = 10;
+        lblRoleEntity.setLayoutData(gd_lblRoleEntity);
+        lblRoleEntity.setText(Messages.NewCustomFormDialog_AssociateRole);
+        new Label(container, SWT.NONE);
+
+        roleCombo = new CCombo(container, SWT.BORDER | SWT.READ_ONLY);
+
+        GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+        gd.verticalIndent = 5;
+        gd.horizontalIndent = 10;
+        roleCombo.setLayoutData(gd);
+        new Label(container, SWT.NONE);
+        // TODO get all the roles from the repository view
+        roleCombo.setItems(RepositoryQueryService.findAllRoleNames().toArray(new String[0]));
+
         Label lblSelectAEntity = new Label(container, SWT.NONE);
         GridData gd_lblSelectAEntity = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
         gd_lblSelectAEntity.horizontalIndent = 10;
@@ -123,13 +149,13 @@ public class CustomFormBaseInfoPage extends WizardPage {
                 validate();
             }
         });
-        GridData gd_entityText = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-        gd_entityText.verticalIndent = 5;
-        gd_entityText.horizontalIndent = 10;
-        entityText.setLayoutData(gd_entityText);
+        GridData gd_entityText1 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+        gd_entityText1.verticalIndent = 5;
+        gd_entityText1.horizontalIndent = 10;
+        entityText.setLayoutData(gd_entityText1);
 
-        Button btnNewButton = new Button(container, SWT.NONE);
-        btnNewButton.addSelectionListener(new SelectionAdapter() {
+        Button btnNewButton1 = new Button(container, SWT.NONE);
+        btnNewButton1.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -147,7 +173,7 @@ public class CustomFormBaseInfoPage extends WizardPage {
                 }
             }
         });
-        btnNewButton.setText("..."); //$NON-NLS-1$
+        btnNewButton1.setText("..."); //$NON-NLS-1$
         validate();
     }
 

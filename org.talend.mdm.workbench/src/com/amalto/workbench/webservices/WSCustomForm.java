@@ -11,15 +11,17 @@ public class WSCustomForm {
     protected java.lang.String entity;
     protected java.lang.String name;
     protected java.lang.String xml;
+    protected java.lang.String role;
     
     public WSCustomForm() {
     }
     
-    public WSCustomForm(java.lang.String datamodel, java.lang.String entity, java.lang.String name, java.lang.String xml) {
+    public WSCustomForm(java.lang.String datamodel, java.lang.String entity, java.lang.String name, java.lang.String xml, java.lang.String role) {
         this.datamodel = datamodel;
         this.entity = entity;
         this.name = name;
         this.xml = xml;
+        this.role = role;
     }
     
     public java.lang.String getDatamodel() {
@@ -52,5 +54,13 @@ public class WSCustomForm {
     
     public void setXml(java.lang.String xml) {
         this.xml = xml;
+    }
+    
+    public java.lang.String getRole() {
+        return role;
+    }
+    
+    public void setRole(java.lang.String role) {
+        this.role = role;
     }
 }

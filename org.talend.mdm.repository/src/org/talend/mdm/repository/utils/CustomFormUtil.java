@@ -13,11 +13,14 @@
 package org.talend.mdm.repository.utils;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.transaction.RecordingCommand;
@@ -33,12 +36,22 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.graphiti.ui.editor.DiagramEditorFactory;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDXPathDefinition;
 import org.talend.mdm.form.model.components.ComponentsFactory;
 import org.talend.mdm.form.model.components.TextField;
 import org.talend.mdm.form.model.mdmform.Component;
 import org.talend.mdm.form.model.mdmform.MdmformFactory;
 import org.talend.mdm.form.model.mdmform.Panel;
+import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.models.CustomFormElement;
+
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -46,6 +59,8 @@ import org.talend.mdm.repository.models.CustomFormElement;
 public class CustomFormUtil {
 
     private static final String DIAGRAM_PROVIDER_ID = "org.talend.mdm.form.editor.type.provider"; //$NON-NLS-1$
+
+    private static Logger log = Logger.getLogger(CustomFormUtil.class);
 
     public void createDomainModel(IFile diagramFile, String diagramName, final List<CustomFormElement> allElements,
             final CustomFormElement ancestor,
@@ -91,6 +106,39 @@ public class CustomFormUtil {
         }
     }
 
+    public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws RemoteException,
+            XtentisException {
+        String pk = businessConcepKey.getWsDataModelPK().getPk();
+        String concept = businessConcepKey.getConcept();
+        WSDataModelE dataModel = RepositoryQueryService.findDataModelByName(pk);
+        if (dataModel != null) {
+            try {
+                XSDSchema xsdSchema = Util.getXSDSchema(dataModel.getXsdSchema());
+                for (XSDIdentityConstraintDefinition idDef : xsdSchema.getIdentityConstraintDefinitions()) {
+
+                    if (idDef.getName().equals(concept)) {
+                        WSConceptKey key = new WSConceptKey();
+                        //
+                        XSDXPathDefinition selector = idDef.getSelector();
+                        key.setSelector(selector.getValue());
+                        //
+                        EList<XSDXPathDefinition> fields = idDef.getFields();
+                        String[] keyFields = new String[fields.size()];
+                        int i = 0;
+                        for (XSDXPathDefinition pathDef : fields) {
+                            keyFields[i] = pathDef.getValue();
+                            i++;
+                        }
+                        key.setFields(keyFields);
+                        return key;
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return null;
+    }
     private Diagram createDiagram(String diagramName) {
         Diagram diagram = Graphiti.getPeCreateService().createDiagram("mdmform", diagramName, true); //$NON-NLS-1$
         return diagram;
@@ -144,7 +192,10 @@ public class CustomFormUtil {
             }
             // model
             domainModel.setLabel(formE.getName());
+            domainModel.setMinOccurs(formE.getMinOccurs());
+            domainModel.setMaxOccurs(formE.getMaxOccurs());
             domainModel.setXpath(formE.getXpath());
+            domainModel.setIsKey(formE.isKey());
             columnModel.getChildren().add(domainModel);
             domainModel.setParent(columnModel);
             // pe

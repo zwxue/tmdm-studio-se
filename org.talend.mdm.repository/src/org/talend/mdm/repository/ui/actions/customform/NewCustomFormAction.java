@@ -104,6 +104,7 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         String formName = wizard.getFormName();
         String dataModelName = wizard.getDataModelName();
         String entityName = wizard.getEntityName();
+        String role = wizard.getRole();
         int columnCount = wizard.getColumnCount();
         List<CustomFormElement> allElements = wizard.getAllElements();
         CustomFormElement ancestor = wizard.getAncestor();
@@ -112,7 +113,7 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         try {
             IFile formFile = createFormFile(folder,
                     formName + "_" + VersionUtils.DEFAULT_VERSION + ".form", dataModelName + "." + entityName, columnCount, allElements, ancestor); //$NON-NLS-1$ //$NON-NLS-2$
-            createServerObject(formName, dataModelName, entityName, formFile);
+            createServerObject(formName, dataModelName, entityName, role, formFile);
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
         } catch (UnsupportedEncodingException e) {
@@ -138,22 +139,23 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         return file;
     }
 
-    private WSCustomFormE newCustomForm(String formName, String dataModelName, String entityName, String fileName) {
+    private WSCustomFormE newCustomForm(String formName, String dataModelName, String entityName, String role, String fileName) {
         WSCustomFormE form = MdmserverobjectFactory.eINSTANCE.createWSCustomFormE();
         form.setName(formName);
         form.setFilename(fileName);
         form.setDatamodel(dataModelName);
         form.setEntity(entityName);
+        form.setRole(role);
         return form;
     }
 
-    protected boolean createServerObject(String formName, String dataModelName, String entityName, IFile file) {
+    protected boolean createServerObject(String formName, String dataModelName, String entityName, String role, IFile file) {
 
         WSCustomFormItem item = MdmpropertiesFactory.eINSTANCE.createWSCustomFormItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         item.setState(itemState);
         //
-        WSCustomFormE form = newCustomForm(formName, dataModelName, entityName, file.getName());
+        WSCustomFormE form = newCustomForm(formName, dataModelName, entityName, role, file.getName());
         item.setCustomForm(form);
 
         if (parentItem != null) {

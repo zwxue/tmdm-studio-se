@@ -23,6 +23,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSCustomFormEImpl#getDatamodel <em>Datamodel</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSCustomFormEImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSCustomFormEImpl#getXml <em>Xml</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSCustomFormEImpl#getRole <em>Role</em>}</li>
  * </ul>
  * </p>
  *
@@ -108,6 +109,26 @@ public class WSCustomFormEImpl extends MDMServerObjectImpl implements WSCustomFo
      * @ordered
      */
     protected String xml = XML_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRole() <em>Role</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRole()
+     * @generated
+     * @ordered
+     */
+    protected static final String ROLE_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRole() <em>Role</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRole()
+     * @generated
+     * @ordered
+     */
+    protected String role = ROLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -217,6 +238,27 @@ public class WSCustomFormEImpl extends MDMServerObjectImpl implements WSCustomFo
      * <!-- end-user-doc -->
      * @generated
      */
+    public String getRole() {
+        return role;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setRole(String newRole) {
+        String oldRole = role;
+        role = newRole;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_CUSTOM_FORM_E__ROLE, oldRole, role));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
@@ -228,6 +270,8 @@ public class WSCustomFormEImpl extends MDMServerObjectImpl implements WSCustomFo
                 return getEntity();
             case MdmserverobjectPackage.WS_CUSTOM_FORM_E__XML:
                 return getXml();
+            case MdmserverobjectPackage.WS_CUSTOM_FORM_E__ROLE:
+                return getRole();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -251,6 +295,9 @@ public class WSCustomFormEImpl extends MDMServerObjectImpl implements WSCustomFo
                 return;
             case MdmserverobjectPackage.WS_CUSTOM_FORM_E__XML:
                 setXml((String)newValue);
+                return;
+            case MdmserverobjectPackage.WS_CUSTOM_FORM_E__ROLE:
+                setRole((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -276,6 +323,9 @@ public class WSCustomFormEImpl extends MDMServerObjectImpl implements WSCustomFo
             case MdmserverobjectPackage.WS_CUSTOM_FORM_E__XML:
                 setXml(XML_EDEFAULT);
                 return;
+            case MdmserverobjectPackage.WS_CUSTOM_FORM_E__ROLE:
+                setRole(ROLE_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -296,6 +346,8 @@ public class WSCustomFormEImpl extends MDMServerObjectImpl implements WSCustomFo
                 return ENTITY_EDEFAULT == null ? entity != null : !ENTITY_EDEFAULT.equals(entity);
             case MdmserverobjectPackage.WS_CUSTOM_FORM_E__XML:
                 return XML_EDEFAULT == null ? xml != null : !XML_EDEFAULT.equals(xml);
+            case MdmserverobjectPackage.WS_CUSTOM_FORM_E__ROLE:
+                return ROLE_EDEFAULT == null ? role != null : !ROLE_EDEFAULT.equals(role);
         }
         return super.eIsSet(featureID);
     }
@@ -318,6 +370,8 @@ public class WSCustomFormEImpl extends MDMServerObjectImpl implements WSCustomFo
         result.append(entity);
         result.append(", xml: ");
         result.append(xml);
+        result.append(", role: ");
+        result.append(role);
         result.append(')');
         return result.toString();
     }

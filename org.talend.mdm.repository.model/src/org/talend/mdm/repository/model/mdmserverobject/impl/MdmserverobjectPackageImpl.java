@@ -1691,6 +1691,15 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getWSCustomFormE_Role() {
+        return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(4);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
@@ -1895,6 +1904,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__DATAMODEL);
         createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__ENTITY);
         createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__XML);
+        createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__ROLE);
     }
 
     /**
@@ -2130,6 +2140,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSCustomFormE_Datamodel(), ecorePackage.getEString(), "datamodel", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSCustomFormE_Entity(), ecorePackage.getEString(), "entity", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSCustomFormE_Xml(), ecorePackage.getEString(), "xml", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSCustomFormE_Role(), ecorePackage.getEString(), "role", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

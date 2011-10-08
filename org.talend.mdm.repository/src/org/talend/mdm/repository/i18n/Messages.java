@@ -64,6 +64,8 @@ public class Messages extends NLS {
 
     public static String NewCustomFormDialog_selectEntityFromDataModel;
 
+    public static String NewCustomFormDialog_AssociateRole;
+
 
     public static String NewCustomFormDialog_selectOneEntity;
 

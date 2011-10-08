@@ -25,6 +25,7 @@ public class WSCustomForm_LiteralSerializer extends LiteralObjectSerializerBase 
     private static final QName ns1_entity_QNAME = new QName("", "entity");
     private static final QName ns1_name_QNAME = new QName("", "name");
     private static final QName ns1_xml_QNAME = new QName("", "xml");
+    private static final QName ns1_role_QNAME = new QName("", "role");
     
     public WSCustomForm_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -100,6 +101,19 @@ public class WSCustomForm_LiteralSerializer extends LiteralObjectSerializerBase 
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_role_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_role_QNAME, reader, context);
+                instance.setRole((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_role_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -122,5 +136,6 @@ public class WSCustomForm_LiteralSerializer extends LiteralObjectSerializerBase 
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getEntity(), ns1_entity_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getName(), ns1_name_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getXml(), ns1_xml_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getRole(), ns1_role_QNAME, null, writer, context);
     }
 }

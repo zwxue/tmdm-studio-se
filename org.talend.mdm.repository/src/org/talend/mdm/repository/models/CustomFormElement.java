@@ -37,6 +37,12 @@ public class CustomFormElement {
 
     private boolean canMove = true;
 
+    private int minOccurs;
+
+    private int maxOccurs;
+
+    private boolean isKey;
+
     public CustomFormElement(String name, String type) {
         this.name = name;
         this.type = type;
@@ -56,6 +62,14 @@ public class CustomFormElement {
 
     public String getType() {
         return this.type;
+    }
+
+    public boolean isKey() {
+        return isKey;
+    }
+
+    public void setKey(boolean isKey) {
+        this.isKey = isKey;
     }
 
     public String getXpath() {
@@ -106,6 +120,22 @@ public class CustomFormElement {
         }
         children.add(child);
         child.setParent(this);
+    }
+
+    public int getMinOccurs() {
+        return minOccurs;
+    }
+
+    public void setMinOccurs(int minOccurs) {
+        this.minOccurs = minOccurs;
+    }
+
+    public int getMaxOccurs() {
+        return maxOccurs;
+    }
+
+    public void setMaxOccurs(int maxOccurs) {
+        this.maxOccurs = maxOccurs;
     }
 
     public String toString() {

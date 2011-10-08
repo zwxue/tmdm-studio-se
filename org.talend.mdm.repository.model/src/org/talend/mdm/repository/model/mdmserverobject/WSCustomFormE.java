@@ -19,6 +19,7 @@ package org.talend.mdm.repository.model.mdmserverobject;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE#getDatamodel <em>Datamodel</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE#getEntity <em>Entity</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE#getXml <em>Xml</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE#getRole <em>Role</em>}</li>
  * </ul>
  * </p>
  *
@@ -130,5 +131,31 @@ public interface WSCustomFormE extends MDMServerObject {
      * @generated
      */
     void setXml(String value);
+
+    /**
+     * Returns the value of the '<em><b>Role</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Role</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Role</em>' attribute.
+     * @see #setRole(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSCustomFormE_Role()
+     * @model
+     * @generated
+     */
+    String getRole();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE#getRole <em>Role</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Role</em>' attribute.
+     * @see #getRole()
+     * @generated
+     */
+    void setRole(String value);
 
 } // WSCustomForm

@@ -40,7 +40,7 @@ public class XSDCreateAccessActionR extends XSDCreateAccessAction {
         super(page, dataModelName);
     }
 
-    @Override
+
     protected AnnotationOrderedListsDialog getNewAnnotaionOrderedListsDialog(Collection<String> values) {
         return new AnnotationOrderedListsDialogR(new ArrayList(values), new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {

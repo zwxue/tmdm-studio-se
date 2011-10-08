@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.widgets;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,10 +40,14 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.models.CustomFormElement;
+import org.talend.mdm.repository.utils.CustomFormUtil;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -113,6 +118,8 @@ public class XSDSchemaComposite extends Composite {
 
     private TreeViewer viewer;
 
+    private WSConceptKey conceptKey;
+
     /**
      * Create the composite.
      * 
@@ -135,6 +142,14 @@ public class XSDSchemaComposite extends Composite {
     public void updateModel(String dataModel, String entityName) {
         this.dataModelName = dataModel;
         this.entityName = entityName;
+        WSGetBusinessConceptKey key = new WSGetBusinessConceptKey(new WSDataModelPK(dataModelName), entityName);
+        CustomFormUtil cUtil = new CustomFormUtil();
+        try {
+            conceptKey = cUtil.getBusinessConceptKey(key);
+
+        } catch (Exception e) {
+        }
+
         updateModel();
         viewer.setInput(getAllElements());
         viewer.expandAll();
@@ -154,6 +169,7 @@ public class XSDSchemaComposite extends Composite {
                             XSDTypeDefinition typeDefinition = elemDecl.getTypeDefinition();
                             boolean isSequence = Util.isSequenceComplexType((XSDComplexTypeDefinition) typeDefinition);
                             ancestor.setCanMove(!isSequence);
+
                             analyseTypeDefinition(typeDefinition, ancestor);
 
                         }
@@ -165,6 +181,7 @@ public class XSDSchemaComposite extends Composite {
             }
         }
     }
+
 
     private void analyseTypeDefinition(XSDTypeDefinition typeDefinition, CustomFormElement pElement) {
         if (typeDefinition instanceof XSDComplexTypeDefinition) {
@@ -190,7 +207,12 @@ public class XSDSchemaComposite extends Composite {
             XSDTypeDefinition typeDefinition = decl.getTypeDefinition();
             String type = typeDefinition.getName();
             CustomFormElement child = new CustomFormElement(name, type);
+            child.setMinOccurs(particle.getMinOccurs());
+            child.setMaxOccurs(particle.getMaxOccurs());
             pElement.addChild(child);
+            if (Arrays.asList(conceptKey.getFields()).contains(name)) {
+                child.setKey(true);
+            }
             // System.out.println(child);
             if (typeDefinition instanceof XSDComplexTypeDefinition) {
                 type = null;
@@ -214,6 +236,7 @@ public class XSDSchemaComposite extends Composite {
             }
         }
     }
+
 
     public List<CustomFormElement> getAllElements() {
         if (ancestor != null) {

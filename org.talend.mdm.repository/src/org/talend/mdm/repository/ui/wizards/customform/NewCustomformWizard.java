@@ -36,6 +36,8 @@ public class NewCustomformWizard extends Wizard {
 
     private String formName;
 
+    private String role;
+
     private final IWorkbenchPartSite site;
 
     private final IInputValidator validator;
@@ -91,6 +93,10 @@ public class NewCustomformWizard extends Wizard {
         return this.formName;
     }
 
+    public String getRole() {
+        return role;
+    }
+
     @Override
     public boolean performFinish() {
         formName = baseInfoPage.getFormName();
@@ -99,6 +105,7 @@ public class NewCustomformWizard extends Wizard {
         columnCount = diagramInfoPage.getColumnCount();
         allElements = diagramInfoPage.getAllElements();
         ancestor = diagramInfoPage.getAncestor();
+        role = baseInfoPage.getRole();
         return true;
     }
 

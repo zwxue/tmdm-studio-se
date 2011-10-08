@@ -2646,13 +2646,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_CUSTOM_FORM_E__XML = MDM_SERVER_OBJECT_FEATURE_COUNT + 3;
 
     /**
+     * The feature id for the '<em><b>Role</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_CUSTOM_FORM_E__ROLE = MDM_SERVER_OBJECT_FEATURE_COUNT + 4;
+
+    /**
      * The number of structural features of the '<em>WS Custom Form E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_CUSTOM_FORM_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 4;
+    int WS_CUSTOM_FORM_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 5;
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
@@ -4201,6 +4210,17 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSCustomFormE_Xml();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE#getRole <em>Role</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Role</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE#getRole()
+     * @see #getWSCustomFormE()
+     * @generated
+     */
+    EAttribute getWSCustomFormE_Role();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5449,6 +5469,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_CUSTOM_FORM_E__XML = eINSTANCE.getWSCustomFormE_Xml();
+
+        /**
+         * The meta object literal for the '<em><b>Role</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_CUSTOM_FORM_E__ROLE = eINSTANCE.getWSCustomFormE_Role();
 
     }
 
