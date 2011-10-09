@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TreeItem;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -94,6 +95,34 @@ public class SelectServerDefDialog extends TitleAreaDialog {
         return area;
     }
 
+    public void setSelectServer(MDMServerDef server) {
+        if (server == null) {
+            if (treeViewer.getTree().getItemCount() > 0) {
+                TreeItem item = treeViewer.getTree().getItem(0);
+                IRepositoryViewObject viewObject = (IRepositoryViewObject) item.getData();
+                MDMServerDefItem defitem = (MDMServerDefItem) viewObject.getProperty().getItem();
+                MDMServerDef defServer = defitem.getServerDef();
+                serverDef = defServer;
+                treeViewer.getTree().setSelection(item);
+                okBun.setEnabled(true);
+                return;
+            }
+        }
+        TreeItem[] items = treeViewer.getTree().getItems();
+        for (int i = 0; i < items.length; i++) {
+            TreeItem item = items[i];
+            IRepositoryViewObject viewObject = (IRepositoryViewObject) item.getData();
+            MDMServerDefItem defitem = (MDMServerDefItem) viewObject.getProperty().getItem();
+            MDMServerDef defServer = defitem.getServerDef();
+            if (server.getName().equals(defServer.getName()) && server.getHost().equals(defServer.getHost())
+                    && server.getPort().equals(defServer.getPort())) {
+                serverDef = defServer;
+                treeViewer.getTree().setSelection(item);
+                okBun.setEnabled(true);
+                break;
+            }
+        }
+    }
     private IRepositoryViewObject getCurSelectedViewObject() {
         ISelection selection = treeViewer.getSelection();
         if (!selection.isEmpty()) {

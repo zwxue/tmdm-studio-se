@@ -35,7 +35,6 @@ public class XSDSetAnnotationSchematronActionR extends XSDSetAnnotationSchematro
         super(page, dataModelName);
     }
 
-    @Override
     protected ValidationRuleDialog getNewValidationRuleDialog(String textContext, String conceptName,
             XSDAnnotationsStructure struc) {
         return new ValidationRuleDialogR(page.getSite().getShell(), Messages.XSDSetAnnotationSchematronActionR_title, textContext, page, conceptName,

@@ -465,6 +465,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         try {
             if (conceptCombo.isDisposed())
                 return;
+            if (getXObject().getEndpointAddress() == null)
+                return;
             XtentisPort port = Util.getPort(getXObject());
 
             WSDataCluster cluster = null;
@@ -693,7 +695,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             int start = pageToolBar.getStart();
             int limit = pageToolBar.getLimit();
             // see 0015909
-            String clusterName = URLEncoder.encode(((WSDataClusterPK) getXObject().getWsKey()).getPk(), "utf-8");//$NON-NLS-1$
+            String clusterName = URLEncoder.encode(getXObject().toString(), "utf-8");//$NON-NLS-1$
             WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName);
             // @temp yguo, get item with taskid or get taskid by specify wsitempk.
             WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByFullCriteria(

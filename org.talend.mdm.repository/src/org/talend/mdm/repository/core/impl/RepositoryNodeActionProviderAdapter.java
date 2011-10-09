@@ -36,6 +36,7 @@ import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.DeployToAction;
@@ -47,7 +48,10 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
+
+import com.amalto.workbench.models.TreeObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -173,6 +177,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
      * The child class can override this method, current implement is adapt to most of MDMServerobject
      */
     public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
+            return new XObjectBrowserInput2(item);
+        }
         return new XObjectEditorInput2(item);
     }
 

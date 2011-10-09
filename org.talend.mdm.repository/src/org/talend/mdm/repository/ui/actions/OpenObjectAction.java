@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
 package org.talend.mdm.repository.ui.actions;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.core.model.properties.Item;
@@ -32,8 +33,18 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
+
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.UserInfo;
+import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -72,6 +83,9 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                             if (editorInput != null) {
                                 if (page == null)
                                     this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                                // do extra action
+                                MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                                doSelectServer(serverObject, editorInput);
                                 try {
                                     this.page.openEditor(editorInput, editorInput.getEditorId());
                                 } catch (PartInitException e) {
@@ -93,6 +107,44 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     public String getGroupName() {
         // this action not be shown in context menu,so Nothing need to do in here
+        return null;
+    }
+
+    public void doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
+        if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
+            MDMServerDef serverDef = openServerDialog(serverObject.getLastServerDef());
+            if (serverDef != null) {
+                XObjectBrowserInput input = (XObjectBrowserInput) editorInput;
+                TreeObject xobject = (TreeObject) input.getModel();
+                String serverName = serverDef.getHost();
+                String universe = serverDef.getUniverse();
+                String username = serverDef.getUser();
+                String password = serverDef.getPasswd();
+                String endpointaddress = serverDef.getUrl();
+                TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress,
+                        ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
+                                : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                UserInfo user = new UserInfo();
+                user.setUsername(username);
+                user.setPassword(password);
+                user.setServerUrl(endpointaddress);
+                user.setUniverse(universe);
+
+                serverRoot.setUser(user);
+                xobject.setWsKey(new WSDataClusterPK(xobject.getWsKey().toString()));
+                xobject.setServerRoot(serverRoot);
+            }
+        }
+    }
+
+    public MDMServerDef openServerDialog(MDMServerDef serverObject) {
+        SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
+        dlg.create();
+        dlg.setSelectServer(serverObject);
+        if (dlg.open() == IDialogConstants.OK_ID) {
+            MDMServerDef serverDef = dlg.getSelectedServerDef();
+            return serverDef;
+        }
         return null;
     }
 

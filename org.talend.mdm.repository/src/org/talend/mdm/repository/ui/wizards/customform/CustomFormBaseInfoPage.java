@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.customform;
 
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.wizard.WizardPage;
@@ -133,7 +135,9 @@ public class CustomFormBaseInfoPage extends WizardPage {
         roleCombo.setLayoutData(gd);
         new Label(container, SWT.NONE);
         // TODO get all the roles from the repository view
-        roleCombo.setItems(RepositoryQueryService.findAllRoleNames().toArray(new String[0]));
+        List<String> roles = RepositoryQueryService.findAllRoleNames();
+        roles.add(0, ""); //$NON-NLS-1$
+        roleCombo.setItems(roles.toArray(new String[0]));
 
         Label lblSelectAEntity = new Label(container, SWT.NONE);
         GridData gd_lblSelectAEntity = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
