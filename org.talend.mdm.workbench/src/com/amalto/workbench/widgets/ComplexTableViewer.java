@@ -133,7 +133,10 @@ public class ComplexTableViewer {
     protected TreeParent getCurrentTreeParent() {
         if (treeParent != null)
             return treeParent;
-        return (TreeParent) ((IAdaptable) mainPage).getAdapter(TreeParent.class);
+        if (mainPage != null) {
+            return (TreeParent) ((IAdaptable) mainPage).getAdapter(TreeParent.class);
+        }
+        return null;
     }
 
     // The ending| bug:21784

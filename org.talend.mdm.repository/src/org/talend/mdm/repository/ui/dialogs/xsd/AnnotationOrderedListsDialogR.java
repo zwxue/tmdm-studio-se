@@ -18,8 +18,10 @@ import java.util.List;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
+import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 
 /**
@@ -47,6 +49,12 @@ public class AnnotationOrderedListsDialogR extends AnnotationOrderedListsDialog 
     @Override
     protected List<String> getAllRolesStr() {
         return RepositoryQueryService.findAllRoleNames();
+    }
+
+    @Override
+    protected XpathSelectDialog getNewXpathSelectDialog(DataModelMainPage parentPage, String dataModelName) {
+        return new XpathSelectDialog2(parentPage.getSite().getShell(), "Select Xpath ...", parentPage.getSite(), false,
+                dataModelName);
     }
 
 }

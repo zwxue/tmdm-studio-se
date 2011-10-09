@@ -18,6 +18,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -89,15 +90,12 @@ public class SimpleXpathInputDialog extends Dialog {
         xpathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
         xpathButton.setToolTipText("Select xpath");
-        xpathButton.addSelectionListener(new SelectionListener() {
-
-            public void widgetDefaultSelected(SelectionEvent e) {
-
-            }
+        xpathButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                XpathSelectDialog dlg = new XpathSelectDialog(parentPage.getSite().getShell(), parentPage.getXObject()
-                        .getParent(), "Select Xpath", parentPage.getSite(), false, dataModelName);
+                XpathSelectDialog dlg = getNewXpathSelectDialog(parentPage, dataModelName);
+                // new XpathSelectDialog(parentPage.getSite().getShell(), parentPage.getXObject()
+                // .getParent(), "Select Xpath", parentPage.getSite(), false, dataModelName);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
 
@@ -124,6 +122,10 @@ public class SimpleXpathInputDialog extends Dialog {
         getButton(IDialogConstants.CANCEL_ID).addSelectionListener(this.caller);
     }
 
+    protected XpathSelectDialog getNewXpathSelectDialog(DataModelMainPage parentPage, String dataModelName) {
+        return new XpathSelectDialog(parentPage.getSite().getShell(), parentPage.getXObject().getParent(), "Select Xpath",
+                parentPage.getSite(), false, dataModelName);
+    }
     @Override
     protected void okPressed() {
         setReturnCode(OK);

@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -114,7 +115,8 @@ public class ValidationRuleDialog extends Dialog {
         columns[1].setColumnWidth(130);
         columns[2].setColumnWidth(300);
         columns[3].setColumnWidth(300);
-        viewer = new TisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
+        viewer = getNewTisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
+
       //Modified by hhb,to fix bug 21784
         TreeParent treeParent=(TreeParent) page.getAdapter(TreeParent.class);
         viewer.setTreeParent(treeParent);
@@ -137,7 +139,9 @@ public class ValidationRuleDialog extends Dialog {
         return composite;
     }
 
-    
+    protected TisTableViewer getNewTisTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit, Composite parent) {
+        return new TisTableViewer(columns, toolkit, parent);
+    }
     private boolean doCheck() {
         
         

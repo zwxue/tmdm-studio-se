@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
@@ -89,7 +90,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
 
-            fkd = new FKFilterDialog(page.getSite().getShell(), "Set Foreign Key Filter", struc.getFKFilter(), page, conceptName);
+            fkd = getNewFKFilterDialog(page.getSite().getShell(), struc.getFKFilter(), page, conceptName);
 
             fkd.setBlockOnOpen(true);
             int ret = fkd.open();
@@ -113,6 +114,10 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
+    }
+
+    protected FKFilterDialog getNewFKFilterDialog(Shell shell, String filter, DataModelMainPage page, String conceptName) {
+        return new FKFilterDialog(shell, "Set Foreign Key Filter", filter, page, conceptName);
     }
 
     private String getConceptName(XSDConcreteComponent element) {

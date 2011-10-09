@@ -13,6 +13,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,8 +25,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
@@ -80,18 +81,8 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
 
-            dlg = new AnnotationOrderedListsDialog(new ArrayList(struc.getForeignKeyInfos().values()), new SelectionListener() {
+            dlg = getNewAnnotaionOrderedListsDialog(struc.getForeignKeyInfos().values());
 
-                public void widgetDefaultSelected(SelectionEvent e) {
-                }
-
-                public void widgetSelected(SelectionEvent e) {
-                    dlg.close();
-                }
-            }, page.getSite().getShell(), "Set the Foreign Key Infos", "xPaths", page,//$NON-NLS-2$
-                    AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType, dataModelName
-
-            );
             dlg.setRetrieveFKinfos(struc.getRetrieveFKinfos());
             dlg.setBlockOnOpen(true);
             int ret = dlg.open();
@@ -114,6 +105,16 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
+    }
+
+    protected AnnotationOrderedListsDialog getNewAnnotaionOrderedListsDialog(Collection<String> values) {
+        return new AnnotationOrderedListsDialog(new ArrayList(values), new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                dlg.close();
+            }
+        }, page.getSite().getShell(), "Set the Foreign Key Infos", "xPaths", page,//$NON-NLS-2$
+                AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType, dataModelName);
     }
 
     public void runWithEvent(Event event) {

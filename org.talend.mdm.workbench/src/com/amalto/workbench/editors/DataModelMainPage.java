@@ -1072,11 +1072,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.getXPathAction = new XSDGetXPathAction(this);
         this.setAnnotationLabelAction = new XSDSetAnnotationLabelAction(this);
         this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
-        this.setAnnotationForeignKeyAction = new XSDSetAnnotationForeignKeyAction(this, dataModelName);
+        this.setAnnotationForeignKeyAction = (XSDSetAnnotationForeignKeyAction) getAdapter(XSDSetAnnotationForeignKeyAction.class);
         visibleRuleAction = new XSDVisibleRuleAction(this, dataModelName);
         defaultValueRuleAction = new XSDDefaultValueRuleAction(this, dataModelName);
-        this.setAnnotationFKFilterAction = new XSDSetAnnotationFKFilterAction(this, dataModelName);
-        this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(this, dataModelName);
+        this.setAnnotationFKFilterAction = (XSDSetAnnotationFKFilterAction) getAdapter(XSDSetAnnotationFKFilterAction.class);
+        this.setAnnotationForeignKeyInfoAction = (XSDSetAnnotationForeignKeyInfoAction) getAdapter(XSDSetAnnotationForeignKeyInfoAction.class);
         this.setAnnotationWriteAction = (XSDSetAnnotationWriteAction) getAdapter(XSDSetAnnotationWriteAction.class);
         this.setAnnotationWrapWriteAction = (XSDSetAnnotationWrapWriteAction) getAdapter(XSDSetAnnotationWrapWriteAction.class);
         this.setAnnotationNoAction = (XSDSetAnnotationNoAction) getAdapter(XSDSetAnnotationNoAction.class);
@@ -2859,6 +2859,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         if (adapter == XSDSetAnnotationWrapNoAction.class) {
             return new XSDSetAnnotationWrapNoAction(this, dataModelName);
+        }
+        if (adapter == XSDSetAnnotationForeignKeyAction.class) {
+            return new XSDSetAnnotationForeignKeyAction(this, dataModelName);
+        }
+        if (adapter == XSDSetAnnotationForeignKeyInfoAction.class) {
+            return new XSDSetAnnotationForeignKeyInfoAction(this, dataModelName);
+        }
+        if (adapter == XSDSetAnnotationFKFilterAction.class) {
+            return new XSDSetAnnotationFKFilterAction(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }

@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.Line;
@@ -85,14 +86,14 @@ public class FKFilterDialog extends Dialog {
         columns[1].setColumnWidth(140);
         columns[2].setColumnWidth(200);
         columns[3].setColumnWidth(140);
-        viewer = new TisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
+        viewer = getNewTisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
         viewer.setXpath(true);
         // viewer.setMainPage(page);//TODO
         // viewer.setConceptName(conceptName);
         // viewer.setContext(true);
 
         // Modified by hbhong,to fix bug 21784
-        TreeParent treeParent=(TreeParent) page.getAdapter(TreeParent.class);
+        TreeParent treeParent = (TreeParent) page.getAdapter(TreeParent.class);
         viewer.setTreeParent(treeParent);
         // The ending| bug:21784
         viewer.create();
@@ -124,6 +125,10 @@ public class FKFilterDialog extends Dialog {
         parseRules();
 
         return composite;
+    }
+
+    protected TisTableViewer getNewTisTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit, Composite parent) {
+        return new TisTableViewer(columns, toolkit, parent);
     }
 
     @Override

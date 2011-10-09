@@ -239,8 +239,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                    XpathSelectDialog dlg = new XpathSelectDialog(parentPage.getSite().getShell(), xObject.getParent(),
-                            "Select Xpath ...", parentPage.getSite(), false, dataModelName);
+                    XpathSelectDialog dlg = getNewXpathSelectDialog(parentPage, dataModelName);
 
                     dlg.setBlockOnOpen(true);
                     dlg.open();
@@ -590,6 +589,10 @@ public class AnnotationOrderedListsDialog extends Dialog {
         getButton(IDialogConstants.CANCEL_ID).addSelectionListener(this.caller);
     }
 
+    protected XpathSelectDialog getNewXpathSelectDialog(DataModelMainPage parentPage, String dataModelName) {
+        return new XpathSelectDialog(parentPage.getSite().getShell(), xObject.getParent(), "Select Xpath ...",
+                parentPage.getSite(), false, dataModelName);
+    }
     @Override
     protected void okPressed() {
         setReturnCode(OK);

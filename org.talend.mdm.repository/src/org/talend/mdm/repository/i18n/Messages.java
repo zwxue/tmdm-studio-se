@@ -171,10 +171,28 @@ public class Messages extends NLS {
 
     public static String XSDPhysicalDeleteAccessActionR_title;
 
+    public static String XSDSetAnnotationFKFilterActionR_title;
+
+
+    public static String XSDSetAnnotationForeignKeyActionR_message;
+
+
+    public static String XSDSetAnnotationForeignKeyActionR_title;
+
+
+    public static String XSDSetAnnotationXPath;
+
+
+    public static String XSDSetAnnotationForeignKeyInfoActionR_title;
+
+
     public static String XSDSetAnnotationNoActionR_title;
 
 
     public static String XSDSetAnnotationRoles;
+
+
+    public static String XSDSetAnnotationSchematronActionR_title;
 
 
     public static String XSDSetAnnotationWriteActionR_title;
@@ -261,6 +279,9 @@ public class Messages extends NLS {
 
 
     public static String ServiceConfigurationInteractiveHandler_label;
+
+
+    public static String SimpleXpathInputDialogR_title;
 
 
     public static String SynchronizationPlanInteractiveHandler_label;

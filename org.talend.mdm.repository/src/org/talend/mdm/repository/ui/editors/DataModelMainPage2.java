@@ -16,6 +16,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
+import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
+import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyInfoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
@@ -26,6 +29,9 @@ import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.workbench.enterprice.dialog.GenerateWorkflowWizard;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
+import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
+import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
@@ -84,6 +90,15 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
         if (adapter == XSDSetAnnotationWrapNoAction.class) {
             return new XSDSetAnnotationWrapNoActionR(this, dataModelName);
+        }
+        if (adapter == XSDSetAnnotationForeignKeyAction.class) {
+            return new XSDSetAnnotationForeignKeyActionR(this, dataModelName);
+        }
+        if (adapter == XSDSetAnnotationForeignKeyInfoAction.class) {
+            return new XSDSetAnnotationForeignKeyInfoActionR(this, dataModelName);
+        }
+        if (adapter == XSDSetAnnotationFKFilterAction.class) {
+            return new XSDSetAnnotationFKFilterActionR(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }

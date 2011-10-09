@@ -459,5 +459,9 @@
             class="org.talend.mdm.repository.core.availablemodel.WorkflowAvailableModelR"
             modelType="Repository">
       </model>
+      <model
+            class="org.talend.mdm.repository.core.availablemodel.SchematronAvailableModelR"
+            modelType="Repository">
+      </model>
    </extension>
 </plugin>

@@ -22,8 +22,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
@@ -82,19 +82,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
 
-            sxid = new SimpleXpathInputDialog(page, "Set the Foreign Key",
-                    "Enter an xPath for the Foreign Key - Leave BLANK to delete the Foreign Key", struc.getForeignKey(),
-                    new SelectionListener() {
-
-                        public void widgetDefaultSelected(SelectionEvent e) {
-                        }
-
-                        public void widgetSelected(SelectionEvent e) {
-                            sxid.close();
-                        }
-                    }, dataModelName
-
-            );
+            sxid = getNewSimpleXpathInputDlg(struc.getForeignKey());
 
             sxid.setBlockOnOpen(true);
             int ret = sxid.open();
@@ -125,6 +113,17 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
         return Status.OK_STATUS;
     }
 
+    protected SimpleXpathInputDialog getNewSimpleXpathInputDlg(String foreignKey) {
+        return new SimpleXpathInputDialog(page, "Set the Foreign Key",
+                "Enter an xPath for the Foreign Key - Leave BLANK to delete the Foreign Key", foreignKey, new SelectionAdapter() {
+
+                    public void widgetSelected(SelectionEvent e) {
+                        sxid.close();
+                    }
+                }, dataModelName
+
+        );
+    }
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
