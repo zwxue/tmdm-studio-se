@@ -40,6 +40,7 @@ import org.talend.mdm.repository.ui.actions.bridge.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.bridge.DeleteAction;
 import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
 import org.talend.mdm.repository.ui.actions.job.CreateProcessAction;
+import org.talend.mdm.repository.ui.actions.job.EditJobPropertiesAction;
 import org.talend.mdm.repository.ui.actions.job.EditProcessAction;
 import org.talend.mdm.repository.ui.actions.job.GenerateJobTransformerAction;
 import org.talend.mdm.repository.ui.actions.job.GenerateJobTriggerAction;
@@ -74,8 +75,9 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction deleteAction;
 
-    AbstractRepositoryAction refreshAction;
+    AbstractRepositoryAction editPropAction;
 
+    AbstractRepositoryAction refreshAction;
     // AbstractRepositoryAction exportJobScriptAction;
 
     @Override
@@ -94,6 +96,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         generateTransformerAction = new GenerateJobTransformerAction();
         generateTriggerAction = new GenerateJobTriggerAction();
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
+        editPropAction = new EditJobPropertiesAction();
         // exportJobScriptAction = new ExportJobScriptAction();
         //
         importObjectAction.initCommonViewer(commonViewer);
@@ -108,6 +111,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         deleteAction.initCommonViewer(commonViewer);
         generateTransformerAction.initCommonViewer(commonViewer);
         generateTriggerAction.initCommonViewer(commonViewer);
+        editPropAction.initCommonViewer(commonViewer);
         // exportJobScriptAction.initCommonViewer(commonViewer);
 
     }
@@ -140,6 +144,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             actions.add(readProcessAction);
             actions.add(runProcessAction);
             actions.add(openExistVersionProcessAction);
+            actions.add(editPropAction);
             // actions.add(exportJobScriptAction);
             actions.add(deleteAction);
             actions.add(generateTransformerAction);
