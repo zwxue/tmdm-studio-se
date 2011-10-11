@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmi:id="_xra3AJMeEeCcksxzfvS-Pw" type="EcoreTools" name="MDMMetadata" measurementUnit="Pixel">
+  <children xmi:type="notation:Node" xmi:id="_B1tUUJMfEeCcksxzfvS-Pw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_B1tUU5MfEeCcksxzfvS-Pw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_B1tUVJMfEeCcksxzfvS-Pw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_VFWHEJMhEeCcksxzfvS-Pw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMMetadata.ecore#//MDMServerDef/host"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_VFWHEZMhEeCcksxzfvS-Pw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_YboGYJMhEeCcksxzfvS-Pw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMMetadata.ecore#//MDMServerDef/passwd"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_YboGYZMhEeCcksxzfvS-Pw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_Zdo9AJMhEeCcksxzfvS-Pw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMMetadata.ecore#//MDMServerDef/path"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_Zdo9AZMhEeCcksxzfvS-Pw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_aJJ_MJMhEeCcksxzfvS-Pw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMMetadata.ecore#//MDMServerDef/port"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_aJJ_MZMhEeCcksxzfvS-Pw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_a9514JMhEeCcksxzfvS-Pw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMMetadata.ecore#//MDMServerDef/universe"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_a9514ZMhEeCcksxzfvS-Pw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_b9YV4JMhEeCcksxzfvS-Pw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMMetadata.ecore#//MDMServerDef/url"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_b9YV4ZMhEeCcksxzfvS-Pw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_czoBYJMhEeCcksxzfvS-Pw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMMetadata.ecore#//MDMServerDef/user"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_czoBYZMhEeCcksxzfvS-Pw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_B1tUVZMfEeCcksxzfvS-Pw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_B1tUVpMfEeCcksxzfvS-Pw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_B1tUV5MfEeCcksxzfvS-Pw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_B1tUWJMfEeCcksxzfvS-Pw" type="5002">
+      <children xmi:type="notation:Node" xmi:id="_Cso08JMiEeCcksxzfvS-Pw" type="2002">
+        <element xmi:type="ecore:EOperation" href="MDMMetadata.ecore#//MDMServerDef/validate"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_Cso08ZMiEeCcksxzfvS-Pw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_O-ExYJMiEeCcksxzfvS-Pw" type="2002">
+        <element xmi:type="ecore:EOperation" href="MDMMetadata.ecore#//MDMServerDef/parse"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_O-ExYZMiEeCcksxzfvS-Pw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_B1tUWZMfEeCcksxzfvS-Pw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_B1tUWpMfEeCcksxzfvS-Pw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_B1tUW5MfEeCcksxzfvS-Pw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_B1tUUZMfEeCcksxzfvS-Pw" fontColor="4210752" fontName="宋体" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="MDMMetadata.ecore#//MDMServerDef"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_B1tUUpMfEeCcksxzfvS-Pw" x="272" y="102"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_xra3AZMeEeCcksxzfvS-Pw"/>
+  <element xmi:type="ecore:EPackage" href="MDMMetadata.ecore#/"/>
+</notation:Diagram>
