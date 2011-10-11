@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -38,9 +39,16 @@ import com.amalto.workbench.views.ServerView;
  */
 public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
+    boolean hideView = true;
+
     public MDMExportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
+        IViewPart viewPart = page.findView(ServerView.VIEW_ID);
+        if (viewPart != null) {
+            hideView = false;
+        }
     }
 
     // do export is need to override ,use the system of TOS to export EMF files
@@ -93,7 +101,9 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
     @Override
     public boolean performCancel() {
+        if (hideView) {
         hideServerView();
+        }
         return super.performCancel();
     }
 
@@ -111,7 +121,9 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     public boolean performFinish() {
 
         boolean result = super.performFinish();
+        if (hideView) {
         hideServerView();
+        }
         return result;
     }
 
