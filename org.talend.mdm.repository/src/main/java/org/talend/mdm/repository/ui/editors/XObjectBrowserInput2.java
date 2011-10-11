@@ -20,9 +20,8 @@ import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 
-
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class XObjectBrowserInput2 extends XObjectBrowserInput implements IRepositoryViewEditorInput {
 
@@ -55,7 +54,18 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
     public Item getInputItem() {
         return item;
     }
+
     public String getEditorId() {
         return XObjectBrowser2.EDITOR_ID;
+    }
+
+    private boolean readOnly;
+
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 }

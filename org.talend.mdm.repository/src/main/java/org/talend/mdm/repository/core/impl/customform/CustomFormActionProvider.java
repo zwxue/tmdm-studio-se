@@ -83,7 +83,7 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
         if (diagramFileUri != null) {
             // the file's first base node has to be a diagram
             URI diagramUri = GraphitiUiInternal.getEmfService().mapDiagramFileUriToDiagramUri(diagramFileUri);
-            return new CustomFormEditorInput(diagramUri, domain);
+            return new CustomFormEditorInput(diagramUri, domain, item);
         }
         return null;
     }

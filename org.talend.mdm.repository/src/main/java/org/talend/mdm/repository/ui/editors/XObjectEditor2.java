@@ -17,17 +17,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PartInitException;
-import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.properties.Item;
-import org.talend.core.model.properties.Property;
-import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -46,8 +40,6 @@ public class XObjectEditor2 extends XObjectEditor {
     static Logger log = Logger.getLogger(XObjectEditor2.class);
 
     public static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XObjectEditor2"; //$NON-NLS-1$
-
-    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     @Override
     public void doSave(IProgressMonitor monitor) {
@@ -197,22 +189,9 @@ public class XObjectEditor2 extends XObjectEditor {
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-        XObjectEditorInput2 editorInput = (XObjectEditorInput2) this.getEditorInput();
-        Item item = editorInput.getInputItem();
-        try {
-            factory.unlock(item);
-            Property property = item.getProperty();
-            IRepositoryViewObject viewObject = ContainerCacheService.get(property);
-            if (viewObject != null) {
-                MDMRepositoryView.show().getCommonViewer().refresh(viewObject);
-            }
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
-        } catch (LoginException e) {
-            log.error(e.getMessage(), e);
-        }
+    public boolean isReadOnly() {
+        IRepositoryViewEditorInput editorInput = (IRepositoryViewEditorInput) this.getEditorInput();
+        return editorInput.isReadOnly();
     }
 
 }

@@ -34,12 +34,19 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.talend.commons.exception.LoginException;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.views.ServerView;
 
@@ -99,6 +106,7 @@ public class MDMRepositoryView extends CommonNavigator {
         // getCommonViewer().addFilter(filter);
     }
 
+    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     public static MDMRepositoryView show() {
         IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(VIEW_ID);
@@ -124,7 +132,21 @@ public class MDMRepositoryView extends CommonNavigator {
             if (part instanceof IEditorPart) {
                 IEditorInput input = ((IEditorPart) part).getEditorInput();
                 if (input != null && input instanceof IRepositoryViewEditorInput) {
-
+                    Item item = ((IRepositoryViewEditorInput) input).getInputItem();
+                    if (item != null) {
+                        try {
+                            factory.unlock(item);
+                            Property property = item.getProperty();
+                            IRepositoryViewObject viewObject = ContainerCacheService.get(property);
+                            if (viewObject != null) {
+                                getCommonViewer().refresh(viewObject);
+                            }
+                        } catch (PersistenceException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (LoginException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
                 }
             }
         }
@@ -138,10 +160,11 @@ public class MDMRepositoryView extends CommonNavigator {
     };
 
     private void registerEditorListener() {
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(editorListener);
+
+        this.getSite().getPage().addPartListener(editorListener);
     }
 
     private void unRegisterEditorListener() {
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().removePartListener(editorListener);
+        this.getSite().getPage().removePartListener(editorListener);
     }
 }

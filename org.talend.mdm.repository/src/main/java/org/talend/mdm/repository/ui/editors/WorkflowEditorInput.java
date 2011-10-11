@@ -57,5 +57,14 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
         return item;
     }
 
+    private boolean readOnly;
+
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
 }

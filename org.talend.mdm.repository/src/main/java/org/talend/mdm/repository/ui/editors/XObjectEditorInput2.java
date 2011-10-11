@@ -56,4 +56,13 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
         return item;
     }
 
+    private boolean readOnly;
+
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 }

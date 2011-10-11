@@ -34,8 +34,9 @@ public class CustomFormEditorInput extends DiagramEditorInput implements IReposi
      * @param providerId
      * @param disposeEditingDomain
      */
-    public CustomFormEditorInput(URI diagramUri, TransactionalEditingDomain domain) {
+    public CustomFormEditorInput(URI diagramUri, TransactionalEditingDomain domain, Item item) {
         super(diagramUri, domain, null, true);
+        this.item = item;
     }
 
     private Item item;
@@ -56,6 +57,16 @@ public class CustomFormEditorInput extends DiagramEditorInput implements IReposi
             file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
         }
         return file;
+    }
+
+    private boolean readOnly;
+
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
 }

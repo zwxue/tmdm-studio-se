@@ -79,6 +79,11 @@ public class XSDEditor2 extends XSDEditor {
         return true;
     }
 
+    @Override
+    public boolean isReadOnly() {
+        IRepositoryViewEditorInput editorInput = (IRepositoryViewEditorInput) this.getEditorInput();
+        return editorInput.isReadOnly();
+    }
 
     // public void doSave(IProgressMonitor monitor) {
     //

@@ -34,7 +34,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.repository,
  org.talend.mdm.commmon,
  org.talend.mdm.engines.client,
- org.talend.mdm.form.model;bundle-version="1.0.0",
+ org.talend.mdm.form.model,
  org.talend.mdm.repository.model,
  org.talend.mdm.workbench,
  org.talend.mdm.workbench.enterprise,
@@ -45,3 +45,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging
 Bundle-ClassPath: .,
  swing2swt.jar
+Export-Package: org.talend.mdm.repository.ui.editors

@@ -59,4 +59,14 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
     public TreeObject getTreeObject() {
         return treeObject;
     }
+
+    private boolean readOnly;
+
+    public boolean isReadOnly() {
+        return this.readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 }

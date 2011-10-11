@@ -23,5 +23,8 @@ public interface IRepositoryViewEditorInput extends IEditorInput {
     public String getEditorId();
 
     public Item getInputItem();
-    // public boolean isReadOnly();
+
+    public boolean isReadOnly();
+
+    public void setReadOnly(boolean readOnly);
 }
