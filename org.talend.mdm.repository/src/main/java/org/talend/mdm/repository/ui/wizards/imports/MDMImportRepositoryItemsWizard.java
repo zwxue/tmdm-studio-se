@@ -37,6 +37,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -73,8 +74,16 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     private ResourcesManager manager;
 
+    boolean hideView = true;
+
     public MDMImportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+        IViewPart viewPart = page.findView(ServerView.VIEW_ID);
+        if (viewPart != null) {
+            hideView = false;
+        }
     }
 
     @Override
@@ -328,7 +337,9 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     @Override
     public boolean performCancel() {
+        if (hideView) {
         hideServerView();
+        }
         return super.performCancel();
     }
 
@@ -336,7 +347,9 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     public boolean performFinish() {
 
         boolean result = super.performFinish();
+        if (hideView) {
         hideServerView();
+        }
         return result;
     }
 }
