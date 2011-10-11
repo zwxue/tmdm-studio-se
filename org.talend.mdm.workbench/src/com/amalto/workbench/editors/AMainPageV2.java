@@ -151,15 +151,17 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
             getManagedForm().addPart(topFormPart);
             // initCoditionsColumns();
             createCharacteristicsContent(toolkit, topFormPart.getComposite());
-
             // adapt body add mouse/focus listener for child
             // WidgetFactory factory=WidgetFactory.getWidgetFactory();
             toolkit.adapt(form.getBody());
+            initReadOnly(form);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 
     }// createFormContent
+
+
 
     protected void initCoditionsColumns() {
         ComplexTableViewerColumn operatorColumn;

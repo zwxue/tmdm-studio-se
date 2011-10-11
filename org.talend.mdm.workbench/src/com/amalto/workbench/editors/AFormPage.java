@@ -15,11 +15,15 @@ package com.amalto.workbench.editors;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import com.amalto.workbench.actions.RefreshCurrentEditorAction;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -62,6 +66,21 @@ public abstract class AFormPage extends FormPage {
         }
     }
 
+    protected void initReadOnly(ScrolledForm form) {
+        Composite parent = form.getBody();
+        FormEditor editor = getEditor();
+        if (editor instanceof IServerObjectEditorState) {
+            if (((IServerObjectEditorState) editor).isReadOnly()) {
+                form.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+                form.setText(form.getText() + " (Read Only)");
+                if (parent != null) {
+                    for (Control control : parent.getChildren()) {
+                        control.setEnabled(false);
+                    }
+                }
+            }
+        }
+    }
     /**
      * Called by The main Editor
      * 

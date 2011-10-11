@@ -512,7 +512,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     //
 
     public boolean isReadOnly() {
-        return false;
+        return true;
     }
 
     public boolean isLocalInput() {

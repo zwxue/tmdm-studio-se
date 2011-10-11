@@ -21,6 +21,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
@@ -29,6 +31,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
 import org.eclipse.xsd.XSDSchema;
@@ -65,7 +68,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     public String getPartName() {
-        
+
         String part = super.getPartName();
         if (part.endsWith(".xsd")) {//$NON-NLS-1$
             return part.substring(0, part.length() - 4);
@@ -76,9 +79,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     protected void superDoSave(IProgressMonitor monitor) {
         super.doSave(monitor);
     }
+
     @Override
     public void doSave(IProgressMonitor monitor) {
-        
+
         super.doSave(monitor);
         try {
             if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
@@ -110,9 +114,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     protected IFile getXSDFile(TreeObject xobject) throws Exception {
         return XSDEditorUtil.createFile(xobject);
     }
+
     @Override
     protected void createPages() {
-        
+
         super.createPages();
         addPageChangedListener(new IPageChangedListener() {
 
@@ -161,7 +166,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                             }
 
                         }
-
+                        updatePageReadOnly(getSelectedPage());
                         refreshPropertyView();
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
@@ -169,6 +174,24 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 }
             }
         });
+    }
+
+    private void updatePageReadOnly(Object pageObj) {
+        if (isReadOnly()) {
+            if (pageObj instanceof DataModelMainPage) {
+                DataModelMainPage page = (DataModelMainPage) getSelectedPage();
+                page.getMainControl().setEnabled(false);
+                Control[] children = ((Composite) page.getMainControl()).getChildren();
+                for (Control control : children) {
+                    control.setEnabled(false);
+                }
+            } else if (pageObj instanceof StructuredTextEditor) {
+                StructuredTextEditor textEditor = (StructuredTextEditor) pageObj;
+                textEditor.getTextViewer().getTextWidget().setEnabled(false);
+            } else if (pageObj instanceof Composite) {
+                ((Composite) pageObj).setEnabled(false);
+            }
+        }
     }
 
     @Override
@@ -222,4 +245,5 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     public boolean isLocalInput() {
         return false;
     }
+
 }

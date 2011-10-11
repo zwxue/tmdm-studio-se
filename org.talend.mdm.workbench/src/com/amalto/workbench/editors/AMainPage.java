@@ -94,12 +94,15 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
             // adapt body add mouse/focus listener for child
             // WidgetFactory factory=WidgetFactory.getWidgetFactory();
             toolkit.adapt(form.getBody());
+            initReadOnly(form);
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 
     }// createFormContent
+
+
 
     /**
      * The composite containing the actual characteristics form By default its layout is GridLayout of 2 columns
