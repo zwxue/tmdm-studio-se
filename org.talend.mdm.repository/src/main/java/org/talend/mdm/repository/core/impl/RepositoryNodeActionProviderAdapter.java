@@ -98,7 +98,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         duplicateAction = new DuplicateAction();
         deployToAction = new DeployToAction();
         deployToLastServerAction = new DeployToLastServerAction();
-        deployAllAction = new DeployAllAction();
+        deployAllAction = new DeployAllAction(false);
         importServerObjectAction = new ImportServerObjectAction();
         //
         importObjectAction.initCommonViewer(commonViewer);

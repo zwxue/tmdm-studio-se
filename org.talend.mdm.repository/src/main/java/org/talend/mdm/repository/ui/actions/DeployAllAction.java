@@ -43,8 +43,16 @@ public class DeployAllAction extends AbstractDeployAction {
 
     private static Logger log = Logger.getLogger(DeployAllAction.class);
 
+    private boolean isButton = false;
+
     public DeployAllAction() {
         super(Messages.DeployAllAction_label);
+
+    }
+
+    public DeployAllAction(boolean isButn) {
+        super(Messages.DeployAllAction_label);
+        this.isButton = isButn;
 
     }
 
@@ -126,6 +134,7 @@ public class DeployAllAction extends AbstractDeployAction {
                 } else {
                     Item item = child.getProperty().getItem();
 
+                    if (!isButton) {
                     List<Object> selectedObject = getSelectedObject();
                     boolean exist = false;
                     for (Object obj : selectedObject) {
@@ -139,7 +148,7 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                     if (!exist)
                         continue;
-
+                    }
 
                     if (item instanceof MDMServerObjectItem) {
                         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();

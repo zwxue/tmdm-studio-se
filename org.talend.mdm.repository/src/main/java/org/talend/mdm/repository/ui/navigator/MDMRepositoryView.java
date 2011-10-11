@@ -78,7 +78,7 @@ public class MDMRepositoryView extends CommonNavigator {
         manager.add(new Separator());
         manager.add(refreshViewAction);
         manager.add(new Separator());
-        DeployAllAction deployAll = new DeployAllAction();
+        DeployAllAction deployAll = new DeployAllAction(true);
         deployAll.initCommonViewer(((CommonNavigator) this).getCommonViewer());
         manager.add(deployAll);
         manager.add(new Separator());
