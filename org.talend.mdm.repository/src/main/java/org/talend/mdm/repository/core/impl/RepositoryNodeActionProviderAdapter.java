@@ -45,6 +45,7 @@ import org.talend.mdm.repository.ui.actions.DuplicateAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
+import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
@@ -83,6 +84,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction importServerObjectAction;
 
+    protected MDMEditPropertyAction mdmEditPropertyAction;
+
     protected AbstractRepositoryAction pasteAction;
 
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
@@ -100,6 +103,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         deployToLastServerAction = new DeployToLastServerAction();
         deployAllAction = new DeployAllAction(false);
         importServerObjectAction = new ImportServerObjectAction();
+        mdmEditPropertyAction = new MDMEditPropertyAction();
+
         //
         importObjectAction.initCommonViewer(commonViewer);
         exportObjectAction.initCommonViewer(commonViewer);
@@ -112,6 +117,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
         importServerObjectAction.initCommonViewer(commonViewer);
+        mdmEditPropertyAction.initCommonViewer(commonViewer);
         deployToAction.initCommonViewer(commonViewer);
         deployToLastServerAction.initCommonViewer(commonViewer);
         deployAllAction.initCommonViewer(commonViewer);
@@ -146,7 +152,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
             } else if (item instanceof MDMServerObjectItem) {
                 actions.add(removeFromRepositoryAction);
-
+                actions.add(mdmEditPropertyAction);
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
