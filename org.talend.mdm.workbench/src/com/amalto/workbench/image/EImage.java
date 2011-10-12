@@ -124,6 +124,7 @@ public enum EImage {
     IGNOREFILES("icons/ignorefiles.gif"), //$NON-NLS-1$
     IGNOREWS_EDIT("icons/ignorews_edit.gif"), //$NON-NLS-1$
     IMPORT("icons/import.gif"), //$NON-NLS-1$
+    EDIT_PROPERTY("icons/write_obj.gif"), //$NON-NLS-1$
     IMPORT_PROJECTSET("icons/import_projectset.gif"), //$NON-NLS-1$
     IMPORT_WIZ("icons/import_wiz.gif"), //$NON-NLS-1$
     IMPORTDIR_WIZ("icons/importdir_wiz.gif"), //$NON-NLS-1$
