@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -137,9 +138,15 @@ public class MDMRepositoryView extends CommonNavigator {
                         try {
                             factory.unlock(item);
                             Property property = item.getProperty();
-                            IRepositoryViewObject viewObject = ContainerCacheService.get(property);
+                            final IRepositoryViewObject viewObject = ContainerCacheService.get(property);
                             if (viewObject != null) {
-                                getCommonViewer().refresh(viewObject);
+                                Display.getDefault().asyncExec(new Runnable() {
+
+                                    public void run() {
+                                        getCommonViewer().refresh(viewObject);
+                                    }
+                                });
+
                             }
                         } catch (PersistenceException e) {
                             log.error(e.getMessage(), e);

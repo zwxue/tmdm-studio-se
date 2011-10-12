@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
@@ -55,6 +62,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -70,6 +78,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
@@ -677,4 +686,51 @@ public class RepositoryResourceUtil {
         node.setProperties(EProperties.CONTENT_TYPE, repObjType);
         return node;
     }
+
+    public static boolean isOpenedInEditor(IRepositoryViewObject viewObj) {
+        IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                .getEditorReferences();
+        for (IEditorReference ref : editorReferences) {
+            if (ref != null) {
+                try {
+                    IEditorInput editorInput = ref.getEditorInput();
+                    if (editorInput instanceof IRepositoryViewEditorInput) {
+                        Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
+                        IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
+                        if (vObj.equals(viewObj)) {
+                            return true;
+                        }
+                    }
+                } catch (PartInitException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void initialize() {
+        IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+        try {
+            progressService.run(true, true, initializeProcess);
+        } catch (InvocationTargetException e) {
+            log.error(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
+
+    }
+
+    private static IRunnableWithProgress initializeProcess = new IRunnableWithProgress() {
+
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+            try {
+                final ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+                factory.initialize();
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+
+        }
+    };
 }

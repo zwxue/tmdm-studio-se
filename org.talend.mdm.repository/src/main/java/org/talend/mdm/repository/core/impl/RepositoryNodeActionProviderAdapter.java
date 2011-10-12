@@ -48,6 +48,8 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
+import org.talend.mdm.repository.ui.actions.SVNLockAction;
+import org.talend.mdm.repository.ui.actions.SVNUnlockAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
@@ -84,9 +86,13 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction importServerObjectAction;
 
-    protected MDMEditPropertyAction mdmEditPropertyAction;
+    protected AbstractRepositoryAction mdmEditPropertyAction;
 
     protected AbstractRepositoryAction pasteAction;
+
+    protected AbstractRepositoryAction lockAction;
+
+    protected AbstractRepositoryAction unlockAction;
 
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
@@ -103,6 +109,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         deployToLastServerAction = new DeployToLastServerAction();
         deployAllAction = new DeployAllAction(false);
         importServerObjectAction = new ImportServerObjectAction();
+        lockAction = new SVNLockAction();
+        unlockAction = new SVNUnlockAction();
         mdmEditPropertyAction = new MDMEditPropertyAction();
 
         //
@@ -117,10 +125,12 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
         importServerObjectAction.initCommonViewer(commonViewer);
-        mdmEditPropertyAction.initCommonViewer(commonViewer);
         deployToAction.initCommonViewer(commonViewer);
         deployToLastServerAction.initCommonViewer(commonViewer);
         deployAllAction.initCommonViewer(commonViewer);
+
+        lockAction.initCommonViewer(commonViewer);
+        unlockAction.initCommonViewer(commonViewer);
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -156,6 +166,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
+                addAction(actions, lockAction, viewObj);
+                addAction(actions, unlockAction, viewObj);
 
             }
         }

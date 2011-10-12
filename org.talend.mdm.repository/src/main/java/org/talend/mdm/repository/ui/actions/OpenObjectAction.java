@@ -41,6 +41,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -94,11 +95,13 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                                 MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
                                 doSelectServer(serverObject, editorInput);
                                 try { // svn lock
+                                    RepositoryResourceUtil.initialize();
                                     ERepositoryStatus status = factory.getStatus(item);
                                     if (status.isPotentiallyEditable()) {
                                         factory.lock(item);
-                                        commonViewer.refresh(obj);
+
                                     }
+                                    commonViewer.refresh(obj);
                                     //
                                     editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER);
 
