@@ -21,10 +21,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 
 public class CompositeSelectionProvider implements ISelectionProvider, ISelectionChangedListener {
 
     private ISelection selection;
+
+    private Object repositoryViewObj;
 
     private List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
@@ -33,6 +36,10 @@ public class CompositeSelectionProvider implements ISelectionProvider, ISelectio
     }
 
     public ISelection getSelection() {
+        if (selection == null && repositoryViewObj != null) {
+            StructuredSelection sel = new StructuredSelection(repositoryViewObj);
+            selection = sel;
+        }
         return selection;
     }
 
@@ -41,6 +48,7 @@ public class CompositeSelectionProvider implements ISelectionProvider, ISelectio
     }
 
     public void setSelection(ISelection selection) {
+
         this.selection = selection;
         final SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
 
@@ -56,6 +64,14 @@ public class CompositeSelectionProvider implements ISelectionProvider, ISelectio
 
     public void selectionChanged(SelectionChangedEvent event) {
         setSelection(event.getSelection());
+    }
+
+    public Object getRepositoryViewObj() {
+        return repositoryViewObj;
+    }
+
+    public void setRepositoryViewObj(Object repositoryViewObj) {
+        this.repositoryViewObj = repositoryViewObj;
     }
 
 }
