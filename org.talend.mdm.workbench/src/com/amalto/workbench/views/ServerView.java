@@ -181,6 +181,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     private BrowseRevisionAction browseRevisionAction;
 
+    private java.util.List<MDMServerDef> serversListFromSerExp = new ArrayList<MDMServerDef>();
+
     /**********************************************************************************
      * The VIEW
      * 
@@ -639,7 +641,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     public void initView() {
-        java.util.List<MDMServerDef> servers = MDMServerHelper.getServers();
+        // java.util.List<MDMServerDef> servers = MDMServerHelper.getServers();
+        java.util.List<MDMServerDef> servers = serversListFromSerExp;
         for (MDMServerDef server : servers) {
             initServerTreeParent(server);
         }
@@ -1154,5 +1157,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
         }
 
+    }
+
+    public java.util.List<MDMServerDef> getServersListFromSerExp() {
+        return this.serversListFromSerExp;
     }
 }
