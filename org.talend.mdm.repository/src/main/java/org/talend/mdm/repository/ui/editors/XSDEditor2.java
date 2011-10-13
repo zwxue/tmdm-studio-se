@@ -18,17 +18,22 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.editors.xsdeditor.XSDSelectionListener;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.CompositeViewersSelectionProvider;
 import com.amalto.workbench.utils.Util;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class XSDEditor2 extends XSDEditor {
+public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     public static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XSDEditor2"; //$NON-NLS-1$
 
@@ -49,6 +54,11 @@ public class XSDEditor2 extends XSDEditor {
         } catch (PartInitException e) {
             log.error(e.getMessage(), e);
         }
+        // add repository view object in selectionprovider
+        IRepositoryViewObject repositoryViewObj = ContainerCacheService.get(editorInput.getInputItem().getProperty());
+        CompositeViewersSelectionProvider selectionProvider = (CompositeViewersSelectionProvider) dMainPage
+                .getSelectionProvider();
+        selectionProvider.setRepositoryViewObj(repositoryViewObj);
         //
         getSite().setSelectionProvider(dMainPage.getSelectionProvider());
 
@@ -67,6 +77,12 @@ public class XSDEditor2 extends XSDEditor {
         folder.getItem(1).setText(Messages.XSDEditor2_schemaSource);
         //
         setActiveEditor(dMainPage);
+        // default use
+
+        if (hasSvnHistory()) {
+            curContributionID = CONTRUIBUTIONID_SVNHISTORY;
+        }
+
     }
 
     @Override
@@ -85,32 +101,21 @@ public class XSDEditor2 extends XSDEditor {
         return editorInput.isReadOnly();
     }
 
-    // public void doSave(IProgressMonitor monitor) {
-    //
-    // super.superDoSave(monitor);
-    // try {
-    // if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
-    // DataModelMainPage mainPage = (DataModelMainPage) getSelectedPage();
-    // String xsd = mainPage.getXSDSchemaString();
-    // WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
-    // wsDataModel.setXsdSchema(xsd);
-    // IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-    //                file.setCharset("utf-8", null);//$NON-NLS-1$
-    //                file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
-    // } // save the file's contents to DataModelMainPage
-    //
-    // IDocument doc = getTextEditor().getTextViewer().getDocument();
-    // String xsd = doc.get();
-    // // DataModelMainPage
-    // IEditorPart[] editors = findEditors(xobjectEditorinput);
-    // if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {
-    // DataModelMainPage mainPage = (DataModelMainPage) editors[0];
-    // mainPage.save(xsd);
-    // }
-    //
-    // } catch (Exception e) {
-    // log.error(e.getMessage(), e);
-    // }
-    // }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.editors.ISvnHistory#hasSvnHistory()
+     */
+    public boolean hasSvnHistory() {
+        try {
+            if (ProxyRepositoryFactory.getInstance().isLocalConnectionProvider()) {
+                return false;
+            }
+        } catch (PersistenceException e) {
+            log.error(e);
+            return false;
+        }
+        return true;
+    }
 
 }

@@ -471,4 +471,37 @@
             modelType="Repository">
       </model>
    </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+      <propertyContributor
+            contributorId="org.talend.mdm.repository.svn.history.propertycontributer">
+         <propertyCategory
+               category="SvnRepositoryObject"></propertyCategory>
+      </propertyContributor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+      <propertyTabs
+            contributorId="org.talend.mdm.repository.svn.history.propertycontributer">
+         <propertyTab
+               category="SvnRepositoryObject"
+               id="tab.svnhistory"
+               label="SVN History">
+         </propertyTab>
+      </propertyTabs>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views.properties.tabbed.propertySections">
+      <propertySections
+            contributorId="org.talend.mdm.repository.svn.history.propertycontributer">
+         <propertySection
+               class="org.talend.mdm.repository.ui.contributor.SvnHistoryPropertySection"
+               id="section.SvnHistory"
+               tab="tab.svnhistory">
+            <input
+                  type="org.talend.core.model.repository.IRepositoryViewObject">
+            </input>
+         </propertySection>
+      </propertySections>
+   </extension>
 </plugin>

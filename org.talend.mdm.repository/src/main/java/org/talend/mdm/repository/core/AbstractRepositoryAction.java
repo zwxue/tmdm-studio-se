@@ -121,7 +121,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
         }
     }
 
-    private CommonViewer getCommonViewer() {
+    public CommonViewer getCommonViewer() {
         if (commonViewer == null) {
             commonViewer = MDMRepositoryView.show().getCommonViewer();
         }
