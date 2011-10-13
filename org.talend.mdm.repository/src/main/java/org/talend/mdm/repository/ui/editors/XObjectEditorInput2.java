@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -22,12 +23,17 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 
 public class XObjectEditorInput2 extends XObjectEditorInput implements IRepositoryViewEditorInput {
 
-    private Item item;
+    private final IRepositoryViewObject viewObject;
 
-    public XObjectEditorInput2(Item item) {
+    public XObjectEditorInput2(IRepositoryViewObject viewObject) {
         super(new TreeObject(), null);
-        this.item = item;
-        init(item);
+        this.viewObject = viewObject;
+
+        init(getInputItem());
+    }
+
+    public IRepositoryViewObject getViewObject() {
+        return viewObject;
     }
 
     protected void init(Item item) {
@@ -37,9 +43,9 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
         setName(serverObject.getName());
     }
 
-    public XObjectEditorInput2(Item item, Object model, String name) {
+    public XObjectEditorInput2(IRepositoryViewObject viewObject, Object model, String name) {
         super(model, name);
-        this.item = item;
+        this.viewObject = viewObject;
     }
 
     public String getToolTipText() {
@@ -53,7 +59,7 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
     }
 
     public Item getInputItem() {
-        return item;
+        return viewObject.getProperty().getItem();
     }
 
     private boolean readOnly;

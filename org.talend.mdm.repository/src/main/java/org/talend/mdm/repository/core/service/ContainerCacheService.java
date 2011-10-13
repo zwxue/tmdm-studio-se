@@ -35,7 +35,7 @@ public class ContainerCacheService {
 
     private static Map<ERepositoryObjectType, Map<String, IRepositoryViewObject>> containerMap = new HashMap<ERepositoryObjectType, Map<String, IRepositoryViewObject>>();
 
-    private static Map<Property, IRepositoryViewObject> viewObjMap = new HashMap<Property, IRepositoryViewObject>();
+    private static Map<String, IRepositoryViewObject> viewObjMap = new HashMap<String, IRepositoryViewObject>();
 
     public static void put(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
@@ -55,12 +55,12 @@ public class ContainerCacheService {
     public static void put(Property prop, IRepositoryViewObject viewObj) {
         if (prop == null || viewObj == null)
             throw new IllegalArgumentException();
-        viewObjMap.put(prop, viewObj);
+        viewObjMap.put(prop.getId(), viewObj);
     }
 
     public static void remove(Property prop) {
         if (prop != null)
-            viewObjMap.remove(prop);
+            viewObjMap.remove(prop.getId());
     }
 
     public static void remove(ERepositoryObjectType repObjType, String path) {
@@ -103,7 +103,7 @@ public class ContainerCacheService {
     public static IRepositoryViewObject get(Property prop) {
         if (prop == null)
             throw new IllegalArgumentException();
-        return viewObjMap.get(prop);
+        return viewObjMap.get(prop.getId());
     }
 
     public static IRepositoryViewObject getParent(IRepositoryViewObject obj) {

@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
@@ -28,16 +29,13 @@ import com.amalto.workbench.models.TreeObject;
  */
 // public class ResourceRepositoryFileEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
 public class ResourceRepositoryFileEditorInput extends XObjectEditorInput2 {
-    private Item item;
 
     private IFile file;
+
    
 
-    public ResourceRepositoryFileEditorInput(Item item) {
-
-        super(item);
-        this.item = item;
-
+    public ResourceRepositoryFileEditorInput(IRepositoryViewObject viewObject) {
+        super(viewObject);
     }
 
     protected void init(Item item) {
@@ -54,19 +52,12 @@ public class ResourceRepositoryFileEditorInput extends XObjectEditorInput2 {
     }
 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput#getInputItem()
-     */
-    public Item getInputItem() {
-        return item;
-    }
 
 
 
     public IFile getReferenceFile() {
         if (file == null) {
+            Item item = getInputItem();
         String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
             file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
         }

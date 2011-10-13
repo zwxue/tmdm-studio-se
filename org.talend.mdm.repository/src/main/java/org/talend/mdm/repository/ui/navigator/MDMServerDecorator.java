@@ -69,7 +69,7 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
             break;
         }
 
-        System.out.println(status);
+        // System.out.println(status);
     }
 
     public void addListener(ILabelProviderListener listener) {

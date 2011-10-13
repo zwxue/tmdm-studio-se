@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -25,12 +26,12 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
  */
 public class XObjectBrowserInput2 extends XObjectBrowserInput implements IRepositoryViewEditorInput {
 
-    private Item item;
+    private final IRepositoryViewObject viewObject;
 
-    public XObjectBrowserInput2(Item item) {
+    public XObjectBrowserInput2(IRepositoryViewObject viewObject) {
         super(new TreeObject(), null);
-        this.item = item;
-        init(item);
+        this.viewObject = viewObject;
+        init(getInputItem());
     }
 
     protected void init(Item item) {
@@ -40,9 +41,9 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
         setName(serverObject.getName());
     }
 
-    public XObjectBrowserInput2(Item item, Object model, String name) {
+    public XObjectBrowserInput2(IRepositoryViewObject viewObject, Object model, String name) {
         super(model, name);
-        this.item = item;
+        this.viewObject = viewObject;
     }
 
     public String getToolTipText() {
@@ -52,7 +53,11 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
     }
 
     public Item getInputItem() {
-        return item;
+        return viewObject.getProperty().getItem();
+    }
+
+    public IRepositoryViewObject getViewObject() {
+        return viewObject;
     }
 
     public String getEditorId() {

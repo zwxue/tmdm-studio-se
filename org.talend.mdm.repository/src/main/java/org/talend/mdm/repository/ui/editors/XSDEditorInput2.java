@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
@@ -29,18 +30,20 @@ import com.amalto.workbench.models.TreeObject;
  */
 public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEditorInput {
 
-    private final Item item;
 
     private TreeObject treeObject;
+
+    private final IRepositoryViewObject viewObject;
 
     /**
      * DOC hbhong XSDEditorInput constructor comment.
      * 
      * @param item
      */
-    public XSDEditorInput2(Item item, IFile file) {
+    public XSDEditorInput2(IRepositoryViewObject viewObject, IFile file) {
         super(file);
-        this.item = item;
+        this.viewObject = viewObject;
+        Item item = getInputItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         IInteractiveHandler handler = InteractiveService.findHandler(IServerObjectRepositoryType.TYPE_DATAMODEL);
         Object wsObj = handler.convert(item, serverObject);
@@ -53,7 +56,11 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
     }
 
     public Item getInputItem() {
-        return item;
+        return viewObject.getProperty().getItem();
+    }
+
+    public IRepositoryViewObject getViewObject() {
+        return viewObject;
     }
 
     public TreeObject getTreeObject() {

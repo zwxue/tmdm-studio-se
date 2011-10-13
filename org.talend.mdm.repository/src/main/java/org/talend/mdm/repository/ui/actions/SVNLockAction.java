@@ -19,6 +19,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -44,7 +45,7 @@ public class SVNLockAction extends AbstractRepositoryAction {
      * @param text
      */
     public SVNLockAction() {
-        super("Lock");
+        super(Messages.SVNLockAction_title);
         setImageDescriptor(ICON);
     }
 
@@ -81,6 +82,12 @@ public class SVNLockAction extends AbstractRepositoryAction {
         ERepositoryStatus status = factory.getStatus(viewObj);
         if (viewObj instanceof ContainerRepositoryObject)
             return false;
+        try {
+            if (factory.isLocalConnectionProvider())
+                return false;
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
         if (status == ERepositoryStatus.DELETED)
             return false;
         if (RepositoryResourceUtil.isOpenedInEditor(viewObj))

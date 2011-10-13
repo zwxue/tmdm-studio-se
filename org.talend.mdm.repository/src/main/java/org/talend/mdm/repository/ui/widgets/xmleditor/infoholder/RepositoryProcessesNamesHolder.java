@@ -40,7 +40,7 @@ class RepositoryProcessesNamesHolder extends RepositoryExternalInfoHolder<String
         String[] names = new String[viewObjs.size()];
         int i = 0;
         for (IRepositoryViewObject viewObj : viewObjs) {
-            Property prop = viewObj.getProperty().getItem().getProperty();
+            Property prop = viewObj.getProperty();
             names[i] = prop.getLabel();
             i++;
         }

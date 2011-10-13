@@ -37,7 +37,7 @@ public class RepositoryJobInfoHolder extends RepositoryExternalInfoHolder<JobInf
         List<IRepositoryViewObject> viewObjs = RepositoryResourceUtil.findAllViewObjects(ERepositoryObjectType.PROCESS);
 
         for (IRepositoryViewObject viewObj : viewObjs) {
-            Property prop = viewObj.getProperty().getItem().getProperty();
+            Property prop = viewObj.getProperty();
             // the suffix should be "war" or "zip", now use "" to replace
             JobInfo jobInfo = new JobInfo(prop.getLabel(), prop.getVersion(), "");
             results.add(jobInfo);

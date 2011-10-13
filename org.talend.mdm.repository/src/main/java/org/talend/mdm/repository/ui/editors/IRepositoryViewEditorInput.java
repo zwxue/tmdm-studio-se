@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.ui.IEditorInput;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -23,6 +24,8 @@ public interface IRepositoryViewEditorInput extends IEditorInput {
     public String getEditorId();
 
     public Item getInputItem();
+
+    public IRepositoryViewObject getViewObject();
 
     public boolean isReadOnly();
 

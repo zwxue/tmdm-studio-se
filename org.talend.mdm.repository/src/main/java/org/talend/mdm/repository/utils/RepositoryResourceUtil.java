@@ -697,7 +697,7 @@ public class RepositoryResourceUtil {
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
                         IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
-                        if (vObj.equals(viewObj)) {
+                        if (vObj != null && vObj.equals(viewObj)) {
                             return true;
                         }
                     }

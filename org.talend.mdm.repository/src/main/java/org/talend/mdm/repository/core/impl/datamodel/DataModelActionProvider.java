@@ -75,12 +75,13 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
     }
 
     @Override
-    public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
+    public IRepositoryViewEditorInput getOpenEditorInput(IRepositoryViewObject viewObj) {
         // MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         try {
+            Item item = viewObj.getProperty().getItem();
             // IFile file = createFile((WSDataModelE) serverObject);
             IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
-            return new XSDEditorInput2(item, file);
+            return new XSDEditorInput2(viewObj, file);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

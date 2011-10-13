@@ -15,26 +15,28 @@ package org.talend.mdm.repository.ui.editors;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.part.FileEditorInput;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public class WorkflowEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
 
-    private Item item;
 
     private IFile procFile;
 
     public static String EDITOR_ID = "org.bonitasoft.studio.model.process.diagram.part.ProcessDiagramEditorID"; //$NON-NLS-1$
+
+    private final IRepositoryViewObject viewObject;
 
     /**
      * DOC hbhong WorkflowEditorInput constructor comment.
      * 
      * @param file
      */
-    public WorkflowEditorInput(Item item, IFile file) {
+    public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
         super(file);
-        this.item = item;
+        this.viewObject = viewObject;
     }
 
 
@@ -48,13 +50,12 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
         return EDITOR_ID;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput#getInputItem()
-     */
     public Item getInputItem() {
-        return item;
+        return viewObject.getProperty().getItem();
+    }
+
+    public IRepositoryViewObject getViewObject() {
+        return viewObject;
     }
 
     private boolean readOnly;

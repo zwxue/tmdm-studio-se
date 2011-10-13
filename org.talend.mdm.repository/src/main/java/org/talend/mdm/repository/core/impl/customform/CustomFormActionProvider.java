@@ -76,14 +76,15 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
     }
 
     // @Override
-    public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
+    public IRepositoryViewEditorInput getOpenEditorInput(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
         final IFile file = getReferenceFile(item);
         final TransactionalEditingDomain domain = DiagramEditorFactory.createResourceSetAndEditingDomain();
         URI diagramFileUri = GraphitiUiInternal.getEmfService().getFileURI(file, domain.getResourceSet());
         if (diagramFileUri != null) {
             // the file's first base node has to be a diagram
             URI diagramUri = GraphitiUiInternal.getEmfService().mapDiagramFileUriToDiagramUri(diagramFileUri);
-            return new CustomFormEditorInput(diagramUri, domain, item);
+            return new CustomFormEditorInput(diagramUri, domain, viewObj);
         }
         return null;
     }

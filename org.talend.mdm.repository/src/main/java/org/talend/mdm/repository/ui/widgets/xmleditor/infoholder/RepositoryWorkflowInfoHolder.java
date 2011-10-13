@@ -38,7 +38,7 @@ public class RepositoryWorkflowInfoHolder extends RepositoryExternalInfoHolder<W
                 .findAllViewObjects(IServerObjectRepositoryType.TYPE_WORKFLOW);
 
         for (IRepositoryViewObject viewObj : viewObjs) {
-            Property prop = viewObj.getProperty().getItem().getProperty();
+            Property prop = viewObj.getProperty();
             WorkflowInfo workflowInfo = new WorkflowInfo(prop.getLabel(), prop.getVersion());
             results.add(workflowInfo);
         }

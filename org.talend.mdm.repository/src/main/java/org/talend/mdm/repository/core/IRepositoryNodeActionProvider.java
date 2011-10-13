@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
@@ -39,7 +38,7 @@ public interface IRepositoryNodeActionProvider {
 
     public void initCommonViewer(CommonViewer commonViewer);
 
-    public IRepositoryViewEditorInput getOpenEditorInput(Item item);
+    public IRepositoryViewEditorInput getOpenEditorInput(IRepositoryViewObject viewObj);
 
     public AbstractRepositoryAction getOpenAction(IRepositoryViewObject viewObj);
 

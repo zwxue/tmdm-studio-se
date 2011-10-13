@@ -47,7 +47,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         super.createPages();
         XSDEditorInput2 editorInput = (XSDEditorInput2) getEditorInput();
         TreeObject treeObject = editorInput.getTreeObject();
-        xobjectEditorinput = new XObjectEditorInput2(editorInput.getInputItem(), treeObject, treeObject.getDisplayName());
+        xobjectEditorinput = new XObjectEditorInput2(editorInput.getViewObject(), treeObject, treeObject.getDisplayName());
         DataModelMainPage2 dMainPage = new DataModelMainPage2(treeObject);
         try {
             addPage(dMainPage, xobjectEditorinput);

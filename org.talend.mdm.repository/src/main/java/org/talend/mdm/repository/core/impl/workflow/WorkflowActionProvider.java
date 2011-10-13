@@ -26,7 +26,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -64,11 +63,13 @@ public class WorkflowActionProvider extends RepositoryNodeActionProviderAdapter 
     }
 
     @Override
-    public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
-        return new WorkflowEditorInput(item, getProcFile((MDMServerObjectItem) item));
+    public IRepositoryViewEditorInput getOpenEditorInput(IRepositoryViewObject viewObj) {
+
+        return new WorkflowEditorInput(viewObj, getProcFile(viewObj));
     }
 
-    private IFile getProcFile(MDMServerObjectItem item) {
+    private IFile getProcFile(IRepositoryViewObject viewObj) {
+        MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
         String version = item.getProperty().getVersion();
         MDMServerObject mdmServerObject = item.getMDMServerObject();
         String name = mdmServerObject.getName();

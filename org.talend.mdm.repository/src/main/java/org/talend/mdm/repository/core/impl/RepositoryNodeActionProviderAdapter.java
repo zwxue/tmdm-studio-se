@@ -194,12 +194,13 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     /**
      * The child class can override this method, current implement is adapt to most of MDMServerobject
      */
-    public IRepositoryViewEditorInput getOpenEditorInput(Item item) {
+    public IRepositoryViewEditorInput getOpenEditorInput(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
-            return new XObjectBrowserInput2(item);
+            return new XObjectBrowserInput2(viewObj);
         }
-        return new XObjectEditorInput2(item);
+        return new XObjectEditorInput2(viewObj);
     }
 
     public AbstractRepositoryAction getOpenAction(IRepositoryViewObject viewObj) {
