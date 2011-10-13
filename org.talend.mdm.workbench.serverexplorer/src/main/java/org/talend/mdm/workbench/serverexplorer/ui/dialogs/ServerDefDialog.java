@@ -17,7 +17,6 @@ import java.net.URL;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -34,16 +33,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 
-import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -287,7 +282,6 @@ public class ServerDefDialog extends TitleAreaDialog {
             serverDef.parse(serverDef.getUrl());
             serverDef.setName(newName);
 
-            createMDMServerViewDef(serverDef);
         }
         if (buttonId == CHECK_CONNECTION_ID) {
             if (!validateInput())
@@ -303,28 +297,6 @@ public class ServerDefDialog extends TitleAreaDialog {
         super.buttonPressed(buttonId);
     }
 
-    private void createMDMServerViewDef(MDMServerDef serverDef) {
-        com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
-                serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
-
-        boolean saved = MDMServerHelper.saveServer(serDef);
-
-
-        if (!saved) {
-            MessageDialog.openError(null, "Error", "Unable to store server definition");
-        }
-         
-        IWorkbenchPage page =PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        
-        ServerView viewPart = (ServerView) page.findView(ServerView.VIEW_ID);
-
-        if (viewPart != null) {
-            ((ServerView) viewPart).initView();
-            (viewPart).getViewer().collapseAll();
-            (viewPart).getViewer().refresh();
-        }
-
-    }
 
     private void initValue() {
         nameText.setText(serverDef.getName());

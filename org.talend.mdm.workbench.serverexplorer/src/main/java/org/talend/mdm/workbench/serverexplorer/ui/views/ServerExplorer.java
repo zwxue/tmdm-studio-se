@@ -23,6 +23,8 @@ package org.talend.mdm.workbench.serverexplorer.ui.views;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -40,6 +42,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -56,7 +60,6 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.views.ServerView;
 
 /**
@@ -75,6 +78,8 @@ public class ServerExplorer extends ViewPart {
     private TreeViewer treeViewer;
 
     private Tree tree;
+
+    private static final Log log = LogFactory.getLog(ServerExplorer.class);
 
     private AddServerDefAction addServerDefAction;
 
@@ -125,6 +130,7 @@ public class ServerExplorer extends ViewPart {
         // }
         // });
         refreshServerDefs();
+        synchronizeMDMServerView();
 
     }
 
@@ -181,6 +187,41 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
+    private void synchronizeMDMServerView() {
+
+        IWorkbenchPage page = getViewSite().getPage();
+        ServerView serverView = (ServerView) page.findView(ServerView.VIEW_ID);
+
+        if (serverView == null)
+            try {
+                serverView = (ServerView) page.showView(ServerView.VIEW_ID);
+            } catch (PartInitException e) {
+                log.error(e.getMessage(), e);
+            }
+        serverView.getServersListFromSerExp().clear();
+
+        List<MDMServerDef> servers = ServerDefService.getAllServerDefs();
+
+        for (MDMServerDef server : servers) {
+            addMDMServerViewDef(server, serverView);
+        }
+
+        if (serverView != null) {
+            serverView.initView();
+            (serverView).getViewer().collapseAll();
+            (serverView).getViewer().refresh();
+        }
+
+    }
+
+    private void addMDMServerViewDef(MDMServerDef serverDef, ServerView serverView) {
+        com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
+                serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
+
+        serverView.getServersListFromSerExp().add(serDef);
+
+    }
+
     private MDMServerDefItem getMDMItem(IRepositoryViewObject viewObject) {
         if (viewObject != null) {
             return (MDMServerDefItem) (viewObject.getProperty().getItem());
@@ -211,6 +252,8 @@ public class ServerExplorer extends ViewPart {
                 if (result) {
                     refreshServerDefs();
                 }
+
+                synchronizeMDMServerView();
             }
         }
     }
@@ -292,17 +335,14 @@ public class ServerExplorer extends ViewPart {
                     }
 
                     deleteServerDefForSerView(serverDefItem.getServerDef().getName());
+                    // synchronizeMDMServerView();
                 }
             }
         }
 
         private void deleteServerDefForSerView(String nameToDel) {
-            List<com.amalto.workbench.utils.MDMServerDef> servers = MDMServerHelper.getServers();
-            for (com.amalto.workbench.utils.MDMServerDef server : servers) {
-                if (server.getName().equals(nameToDel)) {
-                    MDMServerHelper.deleteServer(server.getName());
-                }
-            }
+
+            synchronizeMDMServerView();
             ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
             if (viewPart != null) {
                 for (TreeObject object : viewPart.getRoot().getChildren()) {
@@ -313,6 +353,26 @@ public class ServerExplorer extends ViewPart {
                 (viewPart).getViewer().refresh();
             }
         }
+
+        // private void deleteServerDefForSerView(String nameToDel) {
+        // List<com.amalto.workbench.utils.MDMServerDef> servers = MDMServerHelper.getServers();
+        // for (com.amalto.workbench.utils.MDMServerDef server : servers) {
+        // if (server.getName().equals(nameToDel)) {
+        // MDMServerHelper.deleteServer(server.getName());
+        // }
+        // }
+        //
+        // java.util.List<com.amalto.workbench.utils.MDMServerDef> servers2 = MDMServerHelper.getServers();
+        // ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
+        // if (viewPart != null) {
+        // for (TreeObject object : viewPart.getRoot().getChildren()) {
+        // if (object.getName().equals(nameToDel)) {
+        // viewPart.getRoot().removeChild(object);
+        // }
+        // }
+        // (viewPart).getViewer().refresh();
+        // }
+        // }
 
     }
 }
