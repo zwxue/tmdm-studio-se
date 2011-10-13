@@ -67,6 +67,8 @@ public class CustomFormBaseInfoPage extends WizardPage {
 
     private String entityName;
 
+    private String role;
+
     private final IInputValidator validator;
 
     /**
@@ -82,6 +84,22 @@ public class CustomFormBaseInfoPage extends WizardPage {
 
     public String getRole() {
         return roleCombo.getText();
+    }
+
+    public void setDataModelName(String dataModelName) {
+        this.dataModelName = dataModelName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setFormName(String formName) {
+        this.formName = formName;
     }
 
     /**
@@ -104,6 +122,10 @@ public class CustomFormBaseInfoPage extends WizardPage {
         new Label(container, SWT.NONE);
 
         nameTxt = new Text(container, SWT.BORDER);
+        if (formName != null) {
+            nameTxt.setText(formName);
+            nameTxt.setEnabled(false);
+        }
         nameTxt.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
@@ -116,8 +138,7 @@ public class CustomFormBaseInfoPage extends WizardPage {
         gd_nameTxt.horizontalIndent = 10;
         nameTxt.setLayoutData(gd_nameTxt);
         new Label(container, SWT.NONE);
-        new Label(container, SWT.NONE);
-        new Label(container, SWT.NONE);
+
 
         // associate role
         Label lblRoleEntity = new Label(container, SWT.NONE);
@@ -128,7 +149,6 @@ public class CustomFormBaseInfoPage extends WizardPage {
         new Label(container, SWT.NONE);
 
         roleCombo = new CCombo(container, SWT.BORDER | SWT.READ_ONLY);
-
         GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
         gd.verticalIndent = 5;
         gd.horizontalIndent = 10;
@@ -138,7 +158,9 @@ public class CustomFormBaseInfoPage extends WizardPage {
         List<String> roles = RepositoryQueryService.findAllRoleNames();
         roles.add(0, ""); //$NON-NLS-1$
         roleCombo.setItems(roles.toArray(new String[0]));
-
+        if (role != null) {
+            roleCombo.setText(role);
+        }
         Label lblSelectAEntity = new Label(container, SWT.NONE);
         GridData gd_lblSelectAEntity = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
         gd_lblSelectAEntity.horizontalIndent = 10;
@@ -147,6 +169,10 @@ public class CustomFormBaseInfoPage extends WizardPage {
         new Label(container, SWT.NONE);
 
         entityText = new Text(container, SWT.BORDER | SWT.READ_ONLY);
+        if (entityName != null && dataModelName != null) {
+            entityText.setText(dataModelName + "." + entityName); //$NON-NLS-1$
+            entityText.setEnabled(false);
+        }
         entityText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
@@ -157,7 +183,6 @@ public class CustomFormBaseInfoPage extends WizardPage {
         gd_entityText1.verticalIndent = 5;
         gd_entityText1.horizontalIndent = 10;
         entityText.setLayoutData(gd_entityText1);
-
         Button btnNewButton1 = new Button(container, SWT.NONE);
         btnNewButton1.addSelectionListener(new SelectionAdapter() {
 

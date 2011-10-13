@@ -21,7 +21,6 @@ import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
@@ -55,7 +54,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
             log.error(e.getMessage(), e);
         }
         // add repository view object in selectionprovider
-        IRepositoryViewObject repositoryViewObj = ContainerCacheService.get(editorInput.getInputItem().getProperty());
+        IRepositoryViewObject repositoryViewObj = editorInput.getViewObject();// ContainerCacheService.get(editorInput.getInputItem().getProperty());
         CompositeViewersSelectionProvider selectionProvider = (CompositeViewersSelectionProvider) dMainPage
                 .getSelectionProvider();
         selectionProvider.setRepositoryViewObj(repositoryViewObj);

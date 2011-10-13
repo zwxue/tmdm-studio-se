@@ -36,6 +36,10 @@ import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.graphiti.services.IGaService;
 import org.eclipse.graphiti.ui.editor.DiagramEditorFactory;
 import org.eclipse.graphiti.ui.services.GraphitiUi;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -101,11 +105,23 @@ public class CustomFormUtil {
         // resource.getContents().addAll(containeModel.getChildren());
         try {
             resource.save(new HashMap());
+            // open the diagram
+            openDiagram(diagramFile);
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
     }
 
+    private static void openDiagram(IFile diagramFile) {
+        String editorId = "org.talend.mdm.form.editor.MDMCustomFormEditor"; //$NON-NLS-1$
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        FileEditorInput input = new FileEditorInput(diagramFile);
+        try {
+            page.openEditor(input, editorId);
+        } catch (PartInitException e) {
+
+        }
+    }
     public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws RemoteException,
             XtentisException {
         String pk = businessConcepKey.getWsDataModelPK().getPk();

@@ -17,7 +17,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 
@@ -50,7 +49,7 @@ public class SvnHistorySelectionProvider implements ISelectionProvider {
      */
     public ISelection getSelection() {
         // TODO
-        IRepositoryViewObject obj = ContainerCacheService.get(input.getInputItem().getProperty());
+        IRepositoryViewObject obj = input.getViewObject();// ContainerCacheService.get(input.getInputItem().getProperty());
         // RepositoryNode node = RepositoryResourceUtil.convertToNode(obj);
         if (obj != null)
             return new StructuredSelection(obj);

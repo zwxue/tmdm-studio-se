@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.ui.actions.customform.EditCustomFormAction;
 import org.talend.mdm.repository.ui.actions.customform.NewCustomFormAction;
 import org.talend.mdm.repository.ui.editors.CustomFormEditorInput;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
@@ -49,13 +50,18 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction addAction;
 
+    AbstractRepositoryAction editAction;
+
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
         addAction = new NewCustomFormAction();
-
         //
         addAction.initCommonViewer(commonViewer);
+
+        editAction = new EditCustomFormAction();
+        //
+        editAction.initCommonViewer(commonViewer);
 
     }
 
@@ -67,6 +73,8 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
 
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            // edit
+            actions.add(editAction);
             // deploy
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);

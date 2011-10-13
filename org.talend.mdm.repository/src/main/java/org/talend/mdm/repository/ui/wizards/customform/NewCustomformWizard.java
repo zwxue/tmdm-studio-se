@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.CustomFormElement;
 
 /**
@@ -63,14 +64,25 @@ public class NewCustomformWizard extends Wizard {
     @Override
     public void addPages() {
         baseInfoPage = new CustomFormBaseInfoPage(site, validator);
+        baseInfoPage.setDataModelName(dataModelName);
+        baseInfoPage.setEntityName(entityName);
+        baseInfoPage.setRole(role);
+        baseInfoPage.setFormName(formName);
         diagramInfoPage = new CustomFormDiagramInfoPage();
         addPage(baseInfoPage);
-        addPage(diagramInfoPage);
+        if (formName == null) {// edit
+            addPage(diagramInfoPage);
+        } else {
+            baseInfoPage.setTitle(""); //$NON-NLS-1$
+            baseInfoPage.setDescription(Messages.CustomFormBaseInfoPage_changeRole);
+        }
 
     }
 
     @Override
     public boolean canFinish() {
+        if (formName != null)
+            return true;
         if (getContainer().getCurrentPage() == baseInfoPage) {
             return false;
         }
@@ -95,6 +107,22 @@ public class NewCustomformWizard extends Wizard {
 
     public String getRole() {
         return role;
+    }
+
+    public void setDataModelName(String dataModelName) {
+        this.dataModelName = dataModelName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public void setFormName(String formName) {
+        this.formName = formName;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

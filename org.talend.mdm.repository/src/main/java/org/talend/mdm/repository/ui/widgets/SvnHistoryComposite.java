@@ -334,7 +334,7 @@ public class SvnHistoryComposite extends Composite {
                             repositoryNode.setProperties(EProperties.LABEL, currentObject.getLabel());
                             repositoryObject.setRepositoryNode(repositoryNode);
                             // svnHistoryUtils.refreshEditor(repositoryNode);
-                            // refreshEditor(repositoryObject);
+                            refreshEditor(repositoryObject);
                         }
                     }
                 } catch (RuntimeException e) {

@@ -45,6 +45,7 @@ import org.talend.mdm.repository.utils.CustomFormUtil;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSConceptKey;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
@@ -202,14 +203,22 @@ public class XSDSchemaComposite extends Composite {
     private void analyseParticle(XSDParticle particle, CustomFormElement pElement) {
         XSDTerm term = particle.getTerm();
         if (term instanceof XSDElementDeclaration) {
+
             XSDElementDeclaration decl = (XSDElementDeclaration) term;
             String name = decl.getName();
             XSDTypeDefinition typeDefinition = decl.getTypeDefinition();
             String type = typeDefinition.getName();
+            if (type == null) {
+                type = typeDefinition.getBaseType().getName();
+            }
             CustomFormElement child = new CustomFormElement(name, type);
             child.setMinOccurs(particle.getMinOccurs());
             child.setMaxOccurs(particle.getMaxOccurs());
-            pElement.addChild(child);
+            // ignore foreign key
+            XSDAnnotationsStructure struct = new XSDAnnotationsStructure(particle);
+            if (struct.getForeignKey() == null) {
+                pElement.addChild(child);
+            }
             if (Arrays.asList(conceptKey.getFields()).contains(name)) {
                 child.setKey(true);
             }

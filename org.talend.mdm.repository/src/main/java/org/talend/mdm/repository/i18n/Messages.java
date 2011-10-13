@@ -59,6 +59,11 @@ public class Messages extends NLS {
 
     public static String NewCustomFormAction_title;
 
+    public static String EditCustomFormAction_title;
+
+    public static String EditAction;
+
+    public static String CustomFormBaseInfoPage_changeRole;
 
     public static String NewCustomFormDialog_selectEntity;
 

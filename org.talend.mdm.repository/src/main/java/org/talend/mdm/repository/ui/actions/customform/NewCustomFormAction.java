@@ -111,8 +111,9 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
 
         IFolder folder = RepositoryResourceUtil.getFolder(IServerObjectRepositoryType.TYPE_CUSTOM_FORM, parentItem);
         try {
+            String diagramName = dataModelName + "." + entityName; //$NON-NLS-1$
             IFile formFile = createFormFile(folder,
-                    formName + "_" + VersionUtils.DEFAULT_VERSION + ".form", dataModelName + "." + entityName, columnCount, allElements, ancestor); //$NON-NLS-1$ //$NON-NLS-2$
+                    diagramName + "_" + VersionUtils.DEFAULT_VERSION + ".form", diagramName, columnCount, allElements, ancestor); //$NON-NLS-1$ //$NON-NLS-2$
             createServerObject(formName, dataModelName, entityName, role, formFile);
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
