@@ -21,6 +21,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
@@ -29,6 +31,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
 import org.eclipse.xsd.XSDSchema;
@@ -155,10 +158,28 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     }
 
                 }
-
+                updatePageReadOnly(getSelectedPage());
                 refreshPropertyView();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    private void updatePageReadOnly(Object pageObj) {
+        if (isReadOnly()) {
+            if (pageObj instanceof DataModelMainPage) {
+                DataModelMainPage page = (DataModelMainPage) getSelectedPage();
+                page.getMainControl().setEnabled(false);
+                Control[] children = ((Composite) page.getMainControl()).getChildren();
+                for (Control control : children) {
+                    control.setEnabled(false);
+                }
+            } else if (pageObj instanceof StructuredTextEditor) {
+                StructuredTextEditor textEditor = (StructuredTextEditor) pageObj;
+                textEditor.getTextViewer().getTextWidget().setEnabled(false);
+            } else if (pageObj instanceof Composite) {
+                ((Composite) pageObj).setEnabled(false);
             }
         }
     }
