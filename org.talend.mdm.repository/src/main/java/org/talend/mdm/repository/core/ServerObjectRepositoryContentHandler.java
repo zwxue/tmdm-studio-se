@@ -95,4 +95,9 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
         // TODO Auto-generated method stub
     }
 
+    public IImage getIcon(Item item) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
