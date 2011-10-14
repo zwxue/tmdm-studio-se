@@ -21,4 +21,6 @@ public interface ISvnHistory {
     public static final String CONTRUIBUTIONID_SVNHISTORY = "org.talend.mdm.repository.svn.history.propertycontributer";//$NON-NLS-1$
 
     boolean hasSvnHistory();
+
+    void setName(String name);
 }

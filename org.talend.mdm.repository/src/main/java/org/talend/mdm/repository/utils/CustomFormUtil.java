@@ -39,18 +39,22 @@ import org.eclipse.graphiti.ui.services.GraphitiUi;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDXPathDefinition;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.form.model.components.ComponentsFactory;
 import org.talend.mdm.form.model.components.TextField;
 import org.talend.mdm.form.model.mdmform.Component;
 import org.talend.mdm.form.model.mdmform.MdmformFactory;
 import org.talend.mdm.form.model.mdmform.Panel;
+import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
+import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.models.CustomFormElement;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -105,22 +109,27 @@ public class CustomFormUtil {
         // resource.getContents().addAll(containeModel.getChildren());
         try {
             resource.save(new HashMap());
-            // open the diagram
-            openDiagram(diagramFile);
         } catch (IOException e) {
 
         }
     }
 
-    private static void openDiagram(IFile diagramFile) {
-        String editorId = "org.talend.mdm.form.editor.MDMCustomFormEditor"; //$NON-NLS-1$
-        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        FileEditorInput input = new FileEditorInput(diagramFile);
-        try {
-            page.openEditor(input, editorId);
-        } catch (PartInitException e) {
-
+    public static void openCustomForm(IRepositoryViewObject viewObject) {
+        if (viewObject == null)
+            return;
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(viewObject);
+        if (configuration != null) {
+            IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
+            if (actionProvider != null) {
+                IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
+                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                try {
+                    page.openEditor(editorInput, editorInput.getEditorId());
+                } catch (PartInitException e) {
+                }
+            }
         }
+
     }
     public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws RemoteException,
             XtentisException {

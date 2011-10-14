@@ -21,8 +21,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.IWorkbenchPage;
@@ -62,8 +60,6 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     private static Logger log = Logger.getLogger(OpenObjectAction.class);
 
-    private List<Object> selObjs;
-
     /**
      * DOC hbhong OpenObjectAction constructor comment.
      * 
@@ -80,16 +76,12 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     public void run() {
-        List<Object> sels = selObjs;
-        if (sels == null) {
-            sels = getSelectedObject();
-        }
-        for (Object obj : sels) {
+        for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
                 Item item = viewObject.getProperty().getItem();
                 if (item instanceof ContainerItem) {
-                    getCommonViewer().expandToLevel(obj, 1);
+                    commonViewer.expandToLevel(obj, 1);
                 } else {
                     IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
                     if (configuration != null) {
@@ -98,13 +90,10 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                             IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
                             if (editorInput != null) {
                                 if (page == null)
-                                    this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow()
-                                            .getActivePage();
+                                    this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
                                 // do extra action
-                                if (selObjs == null) {
                                 MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
                                 doSelectServer(serverObject, editorInput);
-                                }
                                 try { // svn lock
                                     if (!factory.isLocalConnectionProvider()) {
                                         RepositoryResourceUtil.initialize();
@@ -113,7 +102,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                                             factory.lock(item);
 
                                         }
-                                        getCommonViewer().refresh(obj);
+                                        commonViewer.refresh(obj);
                                         //
                                         editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER);
                                     }
@@ -182,7 +171,4 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         return null;
     }
 
-    public void setSelectObject(List<Object> selObjs) {
-        this.selObjs = selObjs;
-    }
 }

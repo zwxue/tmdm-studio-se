@@ -39,6 +39,7 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -113,10 +114,15 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         try {
             String diagramName = dataModelName + "." + entityName; //$NON-NLS-1$
             IFile formFile = createFormFile(folder,
-                    diagramName + "_" + VersionUtils.DEFAULT_VERSION + ".form", diagramName, columnCount, allElements, ancestor); //$NON-NLS-1$ //$NON-NLS-2$
-            createServerObject(formName, dataModelName, entityName, role, formFile);
+                    formName + "_" + VersionUtils.DEFAULT_VERSION + ".form", diagramName, columnCount, allElements, ancestor); //$NON-NLS-1$ //$NON-NLS-2$
+            WSCustomFormItem item = createServerObject(formName, dataModelName, entityName, role, formFile);
+
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
+            // open the editor
+            IRepositoryViewObject viewObj = ContainerCacheService.get(item.getProperty());
+
+            customFormUtil.openCustomForm(viewObj);
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);
         } catch (CoreException e) {
@@ -150,7 +156,8 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
         return form;
     }
 
-    protected boolean createServerObject(String formName, String dataModelName, String entityName, String role, IFile file) {
+    protected WSCustomFormItem createServerObject(String formName, String dataModelName, String entityName, String role,
+            IFile file) {
 
         WSCustomFormItem item = MdmpropertiesFactory.eINSTANCE.createWSCustomFormItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
@@ -161,9 +168,9 @@ public class NewCustomFormAction extends AbstractSimpleAddAction {
 
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
-            return RepositoryResourceUtil.createItem(item, formName);
+            RepositoryResourceUtil.createItem(item, formName);
         }
-        return false;
+        return item;
     }
 
     /*

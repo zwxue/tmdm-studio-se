@@ -63,19 +63,12 @@ import org.talend.commons.ui.swt.actions.ITreeContextualAction;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Property;
-import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryObject;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.model.repository.RepositoryObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.mdm.repository.ui.actions.OpenObjectAction;
+import org.talend.mdm.repository.utils.MDMSVNHistoryUtils;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
-import org.talend.repository.model.IRepositoryNode.ENodeType;
-import org.talend.repository.model.IRepositoryNode.EProperties;
-import org.talend.repository.model.RepositoryNode;
-import org.talend.repository.model.RepositoryNodeUtilities;
-import org.talend.repository.svnprovider.utils.SVNHistoryUtils;
 import org.talend.repository.ui.actions.ActionsHelper;
 import org.tigris.subversion.javahl.LogMessage;
 import org.tigris.subversion.javahl.Revision.Number;
@@ -101,7 +94,7 @@ public class SvnHistoryComposite extends Composite {
 
     boolean canWork = true;
 
-    SVNHistoryUtils svnHistoryUtils = null;
+    MDMSVNHistoryUtils svnHistoryUtils = null;
 
     /**
      * nma VersionComposite class global comment. Detailled comment
@@ -132,7 +125,7 @@ public class SvnHistoryComposite extends Composite {
         super(parent, style);
         this.widgetFactory = new TabbedPropertySheetWidgetFactory();
 
-        svnHistoryUtils = new SVNHistoryUtils();
+        svnHistoryUtils = new MDMSVNHistoryUtils();
         FormLayout layout = new FormLayout();
         setLayout(layout);
 
@@ -180,7 +173,14 @@ public class SvnHistoryComposite extends Composite {
         tableViewer.setContentProvider(new IStructuredContentProvider() {
 
             public Object[] getElements(Object inputElement) {
-                return svnHistoryUtils.getContentElements(repositoryObject.getProperty());
+                LogMessage[] msgs = svnHistoryUtils.getContentElements(repositoryObject.getProperty());
+                List<LogMessage> list = new ArrayList<LogMessage>();
+                for (LogMessage msg : msgs) {
+                    if (msg.getMessage().indexOf("Create") != -1 || msg.getMessage().indexOf("Save") != -1) { //$NON-NLS-1$//$NON-NLS-2$
+                        list.add(msg);
+                    }
+                }
+                return list.toArray(new LogMessage[0]);
             }
 
             public void dispose() {
@@ -196,8 +196,9 @@ public class SvnHistoryComposite extends Composite {
                 return null;
             }
 
-            public String getColumnText(Object element, int columnIndex) {
+            public String getColumnText(Object element, int columnIndex) {                
                 LogMessage logMessageNode = (LogMessage) element;
+
                 switch (columnIndex) {
                 case 0:
                     return logMessageNode.getRevision().toString();
@@ -226,6 +227,7 @@ public class SvnHistoryComposite extends Composite {
                     return null;
                 }
             }
+
 
             public void addListener(ILabelProviderListener listener) {
             }
@@ -322,19 +324,20 @@ public class SvnHistoryComposite extends Composite {
                         svnHistoryUtils.rewriteJobPropertyFile(object, obj, repositoryObject, true);
                         IRepositoryObject currentObject = null;
                         if (property != null) {
-                            currentObject = new RepositoryObject(property);
-                            RepositoryNode parentRepositoryNode = RepositoryNodeUtilities
-                                    .getParentRepositoryNodeFromSelection(repositoryObject);
-                            ERepositoryObjectType itemType = ERepositoryObjectType.getItemType(currentObject.getProperty()
-                                    .getItem());
-
-                            RepositoryNode repositoryNode = new RepositoryNode(currentObject, parentRepositoryNode,
-                                    ENodeType.REPOSITORY_ELEMENT);
-                            repositoryNode.setProperties(EProperties.CONTENT_TYPE, itemType);
-                            repositoryNode.setProperties(EProperties.LABEL, currentObject.getLabel());
-                            repositoryObject.setRepositoryNode(repositoryNode);
+                            // currentObject = new RepositoryObject(property);
+                            // RepositoryNode parentRepositoryNode = RepositoryNodeUtilities
+                            // .getParentRepositoryNodeFromSelection(repositoryObject);
+                            // ERepositoryObjectType itemType =
+                            // ERepositoryObjectType.getItemType(currentObject.getProperty()
+                            // .getItem());
+                            //
+                            // RepositoryNode repositoryNode = new RepositoryNode(currentObject, parentRepositoryNode,
+                            // ENodeType.REPOSITORY_ELEMENT);
+                            // repositoryNode.setProperties(EProperties.CONTENT_TYPE, itemType);
+                            // repositoryNode.setProperties(EProperties.LABEL, currentObject.getLabel());
+                            // repositoryObject.setRepositoryNode(repositoryNode);
                             // svnHistoryUtils.refreshEditor(repositoryNode);
-                            refreshEditor(repositoryObject);
+                            svnHistoryUtils.refreshEditor(repositoryObject);
                         }
                     }
                 } catch (RuntimeException e) {
@@ -346,14 +349,7 @@ public class SvnHistoryComposite extends Composite {
         }
     }
 
-    private void refreshEditor(IRepositoryViewObject obj) {
-        OpenObjectAction action = new OpenObjectAction();
-        List<Object> list = new ArrayList<Object>();
-        list.add(obj);
-        // TODO
-        action.setSelectObject(list);
-        action.run();
-    }
+
     /**
      * nma Comment method "addPoppuMenu".
      */

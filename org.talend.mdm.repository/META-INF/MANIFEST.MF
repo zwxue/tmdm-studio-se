@@ -41,7 +41,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.mdm.workbench.serverexplorer,
  org.junit,
  org.talend.repository.svnprovider,
- org.talend.libraries.svn
+ org.talend.libraries.svn,
+ org.talend.repository.remoteprovider
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging
@@ -50,4 +51,5 @@ Bundle-ClassPath: .,
 Export-Package: org.talend.mdm.repository.core.service,
  org.talend.mdm.repository.ui.contributor,
  org.talend.mdm.repository.ui.editors,
- org.talend.mdm.repository.ui.widgets
+ org.talend.mdm.repository.ui.widgets,
+ org.talend.mdm.repository.utils
