@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src"
+    modelPluginID="org.talend.mdm.repository.model" modelName="MDMMetadata" modelPluginClass=""
+    editPluginClass="org.talend.mdm.repository.model.mdmmetadata.provider.MDMMetadataEditPlugin"
+    editorPluginClass="org.talend.mdm.repository.model.mdmmetadata.presentation.MDMMetadataEditorPlugin"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg ../../org.talend.model/model/metadata.genmodel#//connection">
+  <foreignModel>MDMMetadata.ecore</foreignModel>
+  <genPackages prefix="Mdmmetadata" basePackage="org.talend.mdm.repository.model"
+      disposableProviderFactory="true" ecorePackage="MDMMetadata.ecore#/">
+    <genClasses ecoreClass="MDMMetadata.ecore#//MDMServDef">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServDef/host"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServDef/passwd"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServDef/path"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServDef/port"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServDef/universe"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServDef/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMMetadata.ecore#//MDMServDef/user"/>
+      <genOperations ecoreOperation="MDMMetadata.ecore#//MDMServDef/validate">
+        <genParameters ecoreParameter="MDMMetadata.ecore#//MDMServDef/validate/url"/>
+      </genOperations>
+      <genOperations ecoreOperation="MDMMetadata.ecore#//MDMServDef/parse">
+        <genParameters ecoreParameter="MDMMetadata.ecore#//MDMServDef/parse/url"/>
+        <genParameters ecoreParameter="MDMMetadata.ecore#//MDMServDef/parse/user"/>
+        <genParameters ecoreParameter="MDMMetadata.ecore#//MDMServDef/parse/passwd"/>
+        <genParameters ecoreParameter="MDMMetadata.ecore#//MDMServDef/parse/universe"/>
+        <genParameters ecoreParameter="MDMMetadata.ecore#//MDMServDef/parse/name"/>
+      </genOperations>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
