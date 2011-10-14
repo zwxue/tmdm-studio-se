@@ -102,4 +102,9 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
     public void addContents(Collection<EObject> collection, Resource resource) {
         // TODO Auto-generated method stub
     }
+
+    public IImage getIcon(Item item) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
