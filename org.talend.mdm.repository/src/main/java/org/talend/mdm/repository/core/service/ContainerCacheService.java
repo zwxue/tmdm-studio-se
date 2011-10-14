@@ -37,6 +37,10 @@ public class ContainerCacheService {
 
     private static Map<String, IRepositoryViewObject> viewObjMap = new HashMap<String, IRepositoryViewObject>();
 
+    public static void clearCache() {
+        viewObjMap.clear();
+        containerMap.clear();
+    }
     public static void put(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
         if (item instanceof ContainerItem) {
@@ -60,7 +64,13 @@ public class ContainerCacheService {
 
     public static void remove(Property prop) {
         if (prop != null)
-            viewObjMap.remove(prop.getId());
+            remove(prop.getId());
+    }
+
+    public static void remove(String propId) {
+        if (propId != null) {
+            viewObjMap.remove(propId);
+        }
     }
 
     public static void remove(ERepositoryObjectType repObjType, String path) {

@@ -279,6 +279,10 @@
                   name="group.deploy"
                   separator="true">
             </insertionPoint>
+            <insertionPoint
+                  name="group.svn"
+                  separator="true">
+            </insertionPoint>
          </popupMenu>
       </viewer>
       <viewerContentBinding

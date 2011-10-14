@@ -48,8 +48,9 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
-import org.talend.mdm.repository.ui.actions.SVNLockAction;
-import org.talend.mdm.repository.ui.actions.SVNUnlockAction;
+import org.talend.mdm.repository.ui.actions.svn.SVNLockAction;
+import org.talend.mdm.repository.ui.actions.svn.SVNSwitchBranchAction;
+import org.talend.mdm.repository.ui.actions.svn.SVNUnlockAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
@@ -94,6 +95,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction unlockAction;
 
+    protected AbstractRepositoryAction switchBranchAction;
+
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
     private IStructuredSelection selection;
@@ -112,7 +115,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         lockAction = new SVNLockAction();
         unlockAction = new SVNUnlockAction();
         mdmEditPropertyAction = new MDMEditPropertyAction();
-
+        switchBranchAction = new SVNSwitchBranchAction();
         //
         importObjectAction.initCommonViewer(commonViewer);
         exportObjectAction.initCommonViewer(commonViewer);
@@ -131,6 +134,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
         lockAction.initCommonViewer(commonViewer);
         unlockAction.initCommonViewer(commonViewer);
+        switchBranchAction.initCommonViewer(commonViewer);
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -178,7 +182,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         // actions.add(importServerObjectAction);
         actions.add(exportObjectAction);
         // actions.add(importObjectAction);
-
+        addAction(actions, switchBranchAction, viewObj);
         //
         return actions;
     }

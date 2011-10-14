@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.actions;
+package org.talend.mdm.repository.ui.actions.svn;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -57,7 +57,7 @@ public class SVNLockAction extends AbstractRepositoryAction {
     @Override
     public String getGroupName() {
 
-        return GROUP_EDIT;
+        return GROUP_SVN;
     }
 
     @Override

@@ -97,6 +97,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
             ERepositoryObjectType repObjType = containerItem.getRepObjType();
 
             ContainerCacheService.remove(repObjType, path);
+
             factory.deleteFolder(project, repObjType, new Path(path), true);
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);

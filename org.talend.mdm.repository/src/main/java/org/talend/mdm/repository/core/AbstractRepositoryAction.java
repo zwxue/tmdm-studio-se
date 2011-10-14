@@ -52,6 +52,8 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     public static final String GROUP_DEPLOY = "group.deploy"; //$NON-NLS-1$
 
+    public static final String GROUP_SVN = "group.svn"; //$NON-NLS-1$
+
     protected CommonViewer commonViewer;
 
     /**
