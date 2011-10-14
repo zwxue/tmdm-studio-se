@@ -245,4 +245,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     public boolean isLocalInput() {
         return false;
     }
+
+    public void setName(String name) {
+        setPartName(name);
+    }
 }

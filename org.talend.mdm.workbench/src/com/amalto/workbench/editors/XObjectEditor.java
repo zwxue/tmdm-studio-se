@@ -93,6 +93,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     }
 
+    public void setName(String name) {
+        setPartName(name);
+    }
     /**
      * DOC hbhong Comment method "addPageForXObject".
      * 

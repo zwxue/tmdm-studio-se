@@ -56,6 +56,10 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
 
     private TdEditorToolBar toolBar;
 
+    public void setName(String name) {
+        setPartName(name);
+    }
+
     /*
      * (non-Javadoc)
      * 
