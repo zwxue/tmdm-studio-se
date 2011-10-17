@@ -43,7 +43,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -60,6 +59,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.views.ServerView;
 
 /**
@@ -192,34 +192,35 @@ public class ServerExplorer extends ViewPart {
         IWorkbenchPage page = getViewSite().getPage();
         ServerView serverView = (ServerView) page.findView(ServerView.VIEW_ID);
 
-        if (serverView == null)
-            try {
-                serverView = (ServerView) page.showView(ServerView.VIEW_ID);
-            } catch (PartInitException e) {
-                log.error(e.getMessage(), e);
-            }
-        serverView.getServersListFromSerExp().clear();
+        MDMServerHelper.getServersListFromSerExp().clear();
 
         List<MDMServerDef> servers = ServerDefService.getAllServerDefs();
 
         for (MDMServerDef server : servers) {
-            addMDMServerViewDef(server, serverView);
+            addMDMServerViewDef(server);
         }
+        if (serverView == null)
+            return;
 
         if (serverView != null) {
             serverView.initView();
-            (serverView).getViewer().collapseAll();
-            (serverView).getViewer().refresh();
+            serverView.getViewer().collapseAll();
+            serverView.getViewer().refresh();
         }
 
     }
 
-    private void addMDMServerViewDef(MDMServerDef serverDef, ServerView serverView) {
+    private void addMDMServerViewDef(MDMServerDef serverDef) {
         com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
                 serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
+        MDMServerHelper.getServersListFromSerExp().add(serDef);
+        addServerDefInConfigXML(serverDef);
+    }
 
-        serverView.getServersListFromSerExp().add(serDef);
-
+    private void addServerDefInConfigXML(MDMServerDef serverDef) {
+        com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
+                serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
+        MDMServerHelper.saveServer(serDef);
     }
 
     private MDMServerDefItem getMDMItem(IRepositoryViewObject viewObject) {
@@ -335,7 +336,9 @@ public class ServerExplorer extends ViewPart {
                     }
 
                     deleteServerDefForSerView(serverDefItem.getServerDef().getName());
+                    deleteServerDefInConfigXML(serverDefItem.getServerDef().getName());
                     // synchronizeMDMServerView();
+
                 }
             }
         }
@@ -354,13 +357,18 @@ public class ServerExplorer extends ViewPart {
             }
         }
 
-        // private void deleteServerDefForSerView(String nameToDel) {
-        // List<com.amalto.workbench.utils.MDMServerDef> servers = MDMServerHelper.getServers();
-        // for (com.amalto.workbench.utils.MDMServerDef server : servers) {
-        // if (server.getName().equals(nameToDel)) {
-        // MDMServerHelper.deleteServer(server.getName());
-        // }
-        // }
+        private void deleteServerDefInConfigXML(String nameToDel) {
+            List<com.amalto.workbench.utils.MDMServerDef> servers = MDMServerHelper.getServers();
+            for (com.amalto.workbench.utils.MDMServerDef server : servers) {
+                if (server.getName().equals(nameToDel)) {
+                    MDMServerHelper.deleteServer(server.getName());
+                }
+            }
+
+        }
+
+
+
         //
         // java.util.List<com.amalto.workbench.utils.MDMServerDef> servers2 = MDMServerHelper.getServers();
         // ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
