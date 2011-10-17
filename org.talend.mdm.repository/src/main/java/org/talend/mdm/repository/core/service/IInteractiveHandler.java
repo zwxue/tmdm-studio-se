@@ -37,6 +37,9 @@ public interface IInteractiveHandler {
 
     public boolean deployMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException;
 
+    public boolean removeMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj)
+            throws RemoteException;
+
     public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException;
 
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException;

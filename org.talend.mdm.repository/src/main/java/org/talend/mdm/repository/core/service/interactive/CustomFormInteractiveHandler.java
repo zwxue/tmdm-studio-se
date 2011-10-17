@@ -24,6 +24,8 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.webservices.WSCustomForm;
+import com.amalto.workbench.webservices.WSCustomFormPK;
+import com.amalto.workbench.webservices.WSDeleteCustomForm;
 import com.amalto.workbench.webservices.WSPutCustomForm;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -60,6 +62,14 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        if (wsObj != null) {
+            WSCustomForm wsForm = (WSCustomForm) wsObj;
+            port.deleteCustomForm(new WSDeleteCustomForm(new WSCustomFormPK(wsForm.getDatamodel(), wsForm.getEntity())));
+            return true;
+        }
+        return false;
+    }
     @Override
     public Object convert(Item item, MDMServerObject serverObj) {
         WSCustomForm customForm = (WSCustomForm) super.convert(item, serverObj);

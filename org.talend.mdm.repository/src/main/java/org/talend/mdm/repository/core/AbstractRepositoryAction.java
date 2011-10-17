@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
@@ -33,7 +34,9 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 
 /**
@@ -139,5 +142,17 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
             }
         }
         return false;
+    }
+
+    protected void showDeployStatus(IStatus status) {
+        MutliStatusDialog dialog = new MutliStatusDialog(getShell(), status.getChildren().length
+                + Messages.AbstractDeployAction_deployMessage, status);
+        dialog.open();
+    }
+
+    protected void showRemoveStatus(IStatus status) {
+        MutliStatusDialog dialog = new MutliStatusDialog(getShell(), status.getChildren().length
+                + Messages.AbstractDeployAction_removeMessage, status);
+        dialog.open();
     }
 }

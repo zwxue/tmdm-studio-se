@@ -46,6 +46,10 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         // do nothing
     }
 
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        return false;
+        // do nothing
+    }
     /*
      * (non-Javadoc)
      * 
@@ -56,6 +60,19 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
     public boolean deployMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException {
         Object wsObj = convert(item, serverObj);
         return doDeploy(port, wsObj);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.talend.mdm.repository.core.service.IInteractiveHandler#deploy(com.amalto.workbench.webservices.XtentisPort,
+     * org.talend.core.model.properties.Item, org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)
+     */
+    public boolean removeMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj)
+            throws RemoteException {
+        Object wsObj = convert(item, serverObj);
+        return doRemove(port, wsObj);
     }
 
     public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {

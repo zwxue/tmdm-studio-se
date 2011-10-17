@@ -9,6 +9,7 @@ public class Messages extends NLS {
 
     public static String AbstractDeployAction_deployMessage;
 
+    public static String AbstractDeployAction_removeMessage;
 
     public static String Common_inputName;
 
@@ -124,6 +125,8 @@ public class Messages extends NLS {
     public static String RefreshAction_Refresh_All_tooltip;
 
     public static String RemoveFromRepositoryAction_removeFromRepository;
+
+    public static String RemoveFromServerAction_removeFromServer;
 
     public static String RenameObjectAction_rename;
 

@@ -36,6 +36,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.ui.actions.RemoveFromServerAction;
 import org.talend.mdm.repository.ui.actions.customform.EditCustomFormAction;
 import org.talend.mdm.repository.ui.actions.customform.NewCustomFormAction;
 import org.talend.mdm.repository.ui.editors.CustomFormEditorInput;
@@ -52,6 +53,7 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction editAction;
 
+    AbstractRepositoryAction removeFromServerAction;
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
@@ -63,6 +65,9 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
         //
         editAction.initCommonViewer(commonViewer);
 
+        removeFromServerAction = new RemoveFromServerAction();
+
+        removeFromServerAction.initCommonViewer(commonViewer);
     }
 
     @Override
@@ -73,6 +78,8 @@ public class CustomFormActionProvider extends RepositoryNodeActionProviderAdapte
 
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            // remove
+            actions.add(removeFromServerAction);
             // edit
             actions.add(editAction);
             // deploy
