@@ -53,18 +53,7 @@ public class MDMServerHelper {
     private static final Log log = LogFactory.getLog(MDMServerHelper.class);
 
     public static List<MDMServerDef> getServers() {
-        List<MDMServerDef> defs = new ArrayList<MDMServerDef>();
-        Element rootElement = getRootElement();
-        if (rootElement == null)
-            return defs;
-
-        List<?> properties = rootElement.elements(PROPERTIES);
-        for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
-            Element serverElement = (Element) iterator.next();
-            MDMServerDef def = getServer(serverElement);
-            defs.add(def);
-        }
-        return defs;
+        return getServersListFromSerExp();
     }
 
     public static java.util.List<MDMServerDef> getServersListFromSerExp() {
