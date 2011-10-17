@@ -48,6 +48,8 @@ public class MDMServerHelper {
     public static final String workbenchConfigFile = Platform.getInstanceLocation().getURL().getPath()
             + "/mdm_workbench_config.xml"; //$NON-NLS-1$
 
+    private static java.util.List<MDMServerDef> serversListFromSerExp = new ArrayList<MDMServerDef>();
+
     private static final Log log = LogFactory.getLog(MDMServerHelper.class);
 
     public static List<MDMServerDef> getServers() {
@@ -63,6 +65,10 @@ public class MDMServerHelper {
             defs.add(def);
         }
         return defs;
+    }
+
+    public static java.util.List<MDMServerDef> getServersListFromSerExp() {
+        return serversListFromSerExp;
     }
 
     public static MDMServerDef getServer(String name) {
