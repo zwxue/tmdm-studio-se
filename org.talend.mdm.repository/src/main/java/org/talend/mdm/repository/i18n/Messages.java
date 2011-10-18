@@ -289,15 +289,7 @@ public class Messages extends NLS {
 
     public static String ServiceConfigurationInteractiveHandler_label;
 
-
     public static String SimpleXpathInputDialogR_title;
-
-
-    public static String SVNLockAction_title;
-
-
-    public static String SVNUnlockAction_title;
-
 
     public static String SynchronizationPlanInteractiveHandler_label;
 
