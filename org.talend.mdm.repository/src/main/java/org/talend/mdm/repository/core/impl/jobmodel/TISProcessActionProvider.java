@@ -140,8 +140,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             }
 
         } else if (item instanceof ProcessItem) {
-            addAction(actions, lockAction, viewObj);
-            addAction(actions, unlockAction, viewObj);
+
             actions.add(editProcessAction);
             actions.add(readProcessAction);
             actions.add(runProcessAction);

@@ -33,6 +33,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
+import org.talend.mdm.repository.extension.ActionProviderManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -48,9 +49,6 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
-import org.talend.mdm.repository.ui.actions.svn.SVNLockAction;
-import org.talend.mdm.repository.ui.actions.svn.SVNSwitchBranchAction;
-import org.talend.mdm.repository.ui.actions.svn.SVNUnlockAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
@@ -91,50 +89,37 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction pasteAction;
 
-    protected AbstractRepositoryAction lockAction;
-
-    protected AbstractRepositoryAction unlockAction;
-
-    protected AbstractRepositoryAction switchBranchAction;
-
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
     private IStructuredSelection selection;
 
     public void initCommonViewer(CommonViewer commonViewer) {
-        importObjectAction = new ImportObjectAction();
-        exportObjectAction = new ExportObjectAction();
-        createFolderAction = new CreateFolderAction();
-        removeFromRepositoryAction = new RemoveFromRepositoryAction();
-        renameAction = new RenameObjectAction();
-        duplicateAction = new DuplicateAction();
-        deployToAction = new DeployToAction();
-        deployToLastServerAction = new DeployToLastServerAction();
-        deployAllAction = new DeployAllAction(false);
-        importServerObjectAction = new ImportServerObjectAction();
-        lockAction = new SVNLockAction();
-        unlockAction = new SVNUnlockAction();
-        mdmEditPropertyAction = new MDMEditPropertyAction();
-        switchBranchAction = new SVNSwitchBranchAction();
+        importObjectAction = initRepositoryAction(new ImportObjectAction(), commonViewer);
+
+        exportObjectAction = initRepositoryAction(new ExportObjectAction(), commonViewer);
+        createFolderAction = initRepositoryAction(new CreateFolderAction(), commonViewer);
+        removeFromRepositoryAction = initRepositoryAction(new RemoveFromRepositoryAction(), commonViewer);
+        renameAction = initRepositoryAction(new RenameObjectAction(), commonViewer);
+        duplicateAction = initRepositoryAction(new DuplicateAction(), commonViewer);
+        deployToAction = initRepositoryAction(new DeployToAction(), commonViewer);
+        deployToLastServerAction = initRepositoryAction(new DeployToLastServerAction(), commonViewer);
+        deployAllAction = initRepositoryAction(new DeployAllAction(false), commonViewer);
+        importServerObjectAction = initRepositoryAction(new ImportServerObjectAction(), commonViewer);
+        mdmEditPropertyAction = initRepositoryAction(new MDMEditPropertyAction(), commonViewer);
         //
-        importObjectAction.initCommonViewer(commonViewer);
-        exportObjectAction.initCommonViewer(commonViewer);
-        createFolderAction.initCommonViewer(commonViewer);
-        removeFromRepositoryAction.initCommonViewer(commonViewer);
-        renameAction.initCommonViewer(commonViewer);
-        duplicateAction.initCommonViewer(commonViewer);
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
 
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
-        importServerObjectAction.initCommonViewer(commonViewer);
-        deployToAction.initCommonViewer(commonViewer);
-        deployToLastServerAction.initCommonViewer(commonViewer);
-        deployAllAction.initCommonViewer(commonViewer);
+        // action provider
+        for (IRepositoryNodeActionProvider provider : getExtendActionProviders()) {
+            provider.initCommonViewer(commonViewer);
+        }
+    }
 
-        lockAction.initCommonViewer(commonViewer);
-        unlockAction.initCommonViewer(commonViewer);
-        switchBranchAction.initCommonViewer(commonViewer);
+    protected AbstractRepositoryAction initRepositoryAction(AbstractRepositoryAction action, CommonViewer commonViewer) {
+        action.initCommonViewer(commonViewer);
+        return action;
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -170,9 +155,6 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
-                addAction(actions, lockAction, viewObj);
-                addAction(actions, unlockAction, viewObj);
-
             }
         }
 
@@ -182,7 +164,13 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         // actions.add(importServerObjectAction);
         actions.add(exportObjectAction);
         // actions.add(importObjectAction);
-        addAction(actions, switchBranchAction, viewObj);
+        // action provider
+        for (IRepositoryNodeActionProvider provider : getExtendActionProviders()) {
+            List<AbstractRepositoryAction> providerActions = provider.getActions(viewObj);
+            if (providerActions != null) {
+                actions.addAll(providerActions);
+            }
+        }
         //
         return actions;
     }
@@ -217,6 +205,23 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     public void updateSelection(IStructuredSelection selection) {
         this.selection = selection;
+        for (IRepositoryNodeActionProvider provider : getExtendActionProviders()) {
+            provider.updateSelection(selection);
+        }
     }
 
+    private static final String SVN_ACTION_PROVIDER_ID = "mdm.svn"; //$NON-NLS-1$
+
+    IRepositoryNodeActionProvider[] extendActionProviders;
+
+    private IRepositoryNodeActionProvider[] getExtendActionProviders() {
+        if (extendActionProviders == null) {
+            IRepositoryNodeActionProvider svnProvider = ActionProviderManager.getActionProvider(SVN_ACTION_PROVIDER_ID);
+            if (svnProvider != null)
+                extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider };
+            else
+                extendActionProviders = new IRepositoryNodeActionProvider[0];
+        }
+        return extendActionProviders;
+    }
 }
