@@ -802,13 +802,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                         WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem(
                                                 (WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
-                                                true), "genericUI", d.isTriggerProcess());//$NON-NLS-1$
+                                                false), "genericUI", d.isTriggerProcess());//$NON-NLS-1$
                                         Util.getPort(getXObject()).putItemWithReport(item);
                                     }
                                 } else {
                                     WSPutItemWithReport item = new WSPutItemWithReport(
                                             new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                                    .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), true),
+                                                    .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
                                             "genericUI", d.isTriggerProcess());//$NON-NLS-1$
                                     Util.getPort(getXObject()).putItemWithReport(item);
                                 }
