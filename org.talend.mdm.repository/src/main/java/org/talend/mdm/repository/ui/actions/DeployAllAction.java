@@ -24,6 +24,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
@@ -84,7 +85,7 @@ public class DeployAllAction extends AbstractDeployAction {
                         DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
                         if (deployStatus.isOK()) {
                             if (deployStatus.getItem() instanceof MDMServerObjectItem)
-                                saveLastServer((MDMServerObjectItem) deployStatus.getItem(), def);
+                                saveLastServer((MDMServerObjectItem) deployStatus.getItem(), def, selectededViewObjs);
                         }
                     }
                 }
@@ -152,8 +153,8 @@ public class DeployAllAction extends AbstractDeployAction {
 
                     if (item instanceof MDMServerObjectItem) {
                         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-
-                        if (serverObject.isChanged() || serverObject.isCreated()) {
+                        
+                        if (serverObject.getLastServerDef()==null || serverObject.isChanged() || serverObject.isCreated()) {
 
                             if (serverObject.getLastServerDef() != null) {
                                 defNames.add(serverObject.getLastServerDef().getName());
@@ -171,7 +172,8 @@ public class DeployAllAction extends AbstractDeployAction {
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-    private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
+
+    private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef, List<IRepositoryViewObject> selectededViewObjs) {
         MDMServerObject mdmServerObject = item.getMDMServerObject();
         mdmServerObject.setChanged(false);
         mdmServerObject.setCreated(false);
@@ -179,10 +181,20 @@ public class DeployAllAction extends AbstractDeployAction {
         mdmServerObject.setLastServerDef(serverDef);
         try {
             factory.save(item);
-            refreshParent();
+            for (IRepositoryViewObject obj : selectededViewObjs) {
+                refreshParent(obj);
+            }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
     }
 
+    protected void refreshParent(Object object) {
+        if (object instanceof IRepositoryViewObject) {
+            IRepositoryViewObject parent = ContainerCacheService.getParent((IRepositoryViewObject) object);
+            if (parent != null) {
+                commonViewer.refresh(parent);
+            }
+        }
+    }
 }

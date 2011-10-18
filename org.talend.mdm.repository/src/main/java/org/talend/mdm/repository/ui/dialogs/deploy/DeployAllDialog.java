@@ -124,12 +124,17 @@ public class DeployAllDialog extends Dialog {
         });
 
 
-        if (comboServerName != null) {
+        if (comboServerName != null && comboServerName.trim().length() > 0) {
             for (int index = 0; index < serverDefs.size(); index++) {
                 if (serverDefs.get(index).getName().equals(comboServerName)) {
                     combo.select(index);
                     theServerDef = serverDefs.get(index);
                 }
+            }
+        } else {
+            if (serverDefs.size() > 0) {
+                combo.select(0);
+                theServerDef = serverDefs.get(0);
             }
         }
 
