@@ -19,7 +19,6 @@ import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -28,6 +27,8 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 public class CustomFormEditorInput extends DiagramEditorInput implements IRepositoryViewEditorInput {
 
     private final IRepositoryViewObject viewObject;
+
+    private static final String fileExtension = "form"; //$NON-NLS-1$
 
     /**
      * DOC hbhong CustomFormEditorInput constructor comment.
@@ -41,7 +42,6 @@ public class CustomFormEditorInput extends DiagramEditorInput implements IReposi
         super(diagramUri, domain, null, true);
         this.viewObject = viewObject;
     }
-
 
     private IFile file;
 
@@ -60,8 +60,8 @@ public class CustomFormEditorInput extends DiagramEditorInput implements IReposi
     public IFile getReferenceFile() {
         if (file == null) {
             Item item = getInputItem();
-            String fileExtension = ((WSCustomFormItem) item).getCustomForm().getFilename();
-            file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
+
+            file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_CUSTOM_FORM, item, fileExtension);
         }
         return file;
     }
@@ -74,6 +74,25 @@ public class CustomFormEditorInput extends DiagramEditorInput implements IReposi
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CustomFormEditorInput otherInput = (CustomFormEditorInput) obj;
+        IFile refFile = getReferenceFile();
+        IFile otherRefFile = otherInput.getReferenceFile();
+        // System.out.println(refFile.getLocation());
+        // System.out.println(otherRefFile.getLocation() + "\n");
+        return refFile.equals(otherRefFile);
     }
 
 }

@@ -282,7 +282,8 @@ public class RepositoryResourceUtil {
         String name = null;
         Property property = item.getProperty();
         if (item instanceof MDMServerObjectItem) {
-            name = ((MDMServerObjectItem) item).getMDMServerObject().getName();
+            MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
+            name = mdmServerObject.getName();
         } else {
             name = property.getLabel();
         }
