@@ -1,22 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src/main/java"
     modelPluginID="org.talend.mdm.repository.model" modelName="MDMProperties" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="6.0" copyrightFields="false" language="" usedGenPackages="../../org.talend.model/model/Business.genmodel#//business ../../org.talend.model/model/Component.genmodel#//component ../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.talend.model/model/joblet.genmodel#//model MDMMetadata.genmodel#//mdmmetadata MDMServerObject.genmodel#//mdmserverobject ../../org.talend.model/model/metadata.genmodel#//connection platform:/plugin/org.eclipse.gmf.runtime.notation/model/notation.genmodel#//notation ../../org.talend.model/model/properties.genmodel#//properties ../../org.talend.model/model/TalendFile.genmodel#//talendfile">
   <foreignModel>MDMProperties.ecore</foreignModel>
   <genPackages prefix="Mdmproperties" basePackage="org.talend.mdm.repository.model"
       resource="XML" disposableProviderFactory="true" ecorePackage="MDMProperties.ecore#/">
+    <genDataTypes ecoreDataType="MDMProperties.ecore#//ERepositoryObjectType"/>
     <genClasses ecoreClass="MDMProperties.ecore#//MDMItem"/>
     <genClasses ecoreClass="MDMProperties.ecore#//MDMServerDefItem">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//MDMServerDefItem/serverDef"/>
     </genClasses>
-    <genClasses ecoreClass="MDMProperties.ecore#//MDMServerObjectItem"/>
+    <genClasses ecoreClass="MDMProperties.ecore#//MDMServerObjectItem">
+      <genOperations ecoreOperation="MDMProperties.ecore#//MDMServerObjectItem/getMDMServerObject"/>
+      <genOperations ecoreOperation="MDMProperties.ecore#//MDMServerObjectItem/setMDMServerObject">
+        <genParameters ecoreParameter="MDMProperties.ecore#//MDMServerObjectItem/setMDMServerObject/serverObj"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="MDMProperties.ecore#//WSMenuItem">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSMenuItem/wsMenu"/>
     </genClasses>
     <genClasses ecoreClass="MDMProperties.ecore#//WSRoleItem">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSRoleItem/wsRole"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//ContainerItem">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMProperties.ecore#//ContainerItem/label"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMProperties.ecore#//ContainerItem/repObjType"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSDataModelItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSDataModelItem/wsDataModel"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSDataClusterItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSDataClusterItem/wsDataCluster"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSStoredProcedureItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSStoredProcedureItem/wsStoredProcedure"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSUniverseItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSUniverseItem/wsUniverse"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSSynchronizationPlanItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSSynchronizationPlanItem/wsSynchronizationPlan"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSViewItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSViewItem/wsView"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSWorkflowDeployItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSWorkflowDeployItem/wsWorkflowDeploy"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSTransformerV2Item">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSTransformerV2Item/wsTransformerV2"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSRoutingRuleItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSRoutingRuleItem/wsRoutingRule"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSJobModelItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSJobModelItem/wsJobModelItem"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSEventManagerItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSEventManagerItem/wsEventManager"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSServiceConfigurationItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSServiceConfigurationItem/wsServiceConfiguration"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSWorkflowItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSWorkflowItem/wsWorkflow"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSResourceItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSResourceItem/resource"/>
+    </genClasses>
+    <genClasses ecoreClass="MDMProperties.ecore#//WSCustomFormItem">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMProperties.ecore#//WSCustomFormItem/customForm"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
