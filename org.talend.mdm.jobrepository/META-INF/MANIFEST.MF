@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.talend.designer.core,
  org.talend.mdm.workbench,
  org.talend.mdm.engines.client,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ talend.mdm.libraries
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.
