@@ -26,6 +26,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
@@ -57,6 +58,10 @@ public class RepositoryQueryService {
 
     public static WSDataModelE findDataModelByName(String name) {
         return (WSDataModelE) findServerObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL, name);
+    }
+
+    public static WSRoleE findRoleByName(String name) {
+        return (WSRoleE) findServerObjectByName(IServerObjectRepositoryType.TYPE_ROLE, name);
     }
 
     public static List<String> findAllMenuNames() {

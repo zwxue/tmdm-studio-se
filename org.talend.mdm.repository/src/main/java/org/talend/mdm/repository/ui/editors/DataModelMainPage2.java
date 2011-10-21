@@ -24,9 +24,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
-import org.talend.mdm.repository.ui.wizards.workflow.GenerateWorkflowWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
-import org.talend.mdm.workbench.enterprice.dialog.GenerateWorkflowWizard;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
@@ -72,9 +70,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
     @Override
     public Object getAdapter(Class adapter) {
-        if (adapter == GenerateWorkflowWizard.class) {
-            return new GenerateWorkflowWizardR(this);
-        }
+
         if (adapter == AddBrowseItemsWizard.class) {
             return new AddBrowseItemsWizardR(this);
         }

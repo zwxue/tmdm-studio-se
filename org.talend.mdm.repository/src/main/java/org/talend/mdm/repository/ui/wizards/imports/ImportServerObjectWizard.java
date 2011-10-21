@@ -141,7 +141,7 @@ public class ImportServerObjectWizard extends Wizard {
         try {
             doImport();
             if (hideView) {
-            hideServerView(view);
+                hideServerView(view);
             }
         } catch (InvocationTargetException e) {
             log.error(e);
@@ -156,7 +156,7 @@ public class ImportServerObjectWizard extends Wizard {
     @Override
     public boolean performCancel() {
         if (hideView) {
-        hideServerView(view);
+            hideServerView(view);
         }
         return super.performCancel();
     }
@@ -445,8 +445,7 @@ public class ImportServerObjectWizard extends Wizard {
                         try {
                             WSCustomForm wsobj = null;
                             wsobj = port.getCustomForm(new WSGetCustomForm(xdmPKs[i]));
-                            TreeObject obj = new TreeObject(wsobj.getName(), parent,
-                                    TreeObject.CUSTOM_FORM, xdmPKs[i], wsobj);
+                            TreeObject obj = new TreeObject(wsobj.getName(), parent, TreeObject.CUSTOM_FORM, xdmPKs[i], wsobj);
                             models.addChild(obj);
                         } catch (RemoteException e) {
                             log.error(e.getMessage(), e);
@@ -572,43 +571,50 @@ public class ImportServerObjectWizard extends Wizard {
                         String url = serverDef.getUrl();
                         String user = serverDef.getUser();
                         String password = serverDef.getPasswd();
-                        try {
-                            // get Version
-                            XtentisPort port;
-                            port = Util.getPort(new URL(url), null, user, password);
-                            WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
-                            CCombo universeCombo = comboVersion.getCombo();
-                            universeCombo.removeAll();
-                            universeCombo.add(""); //$NON-NLS-1$
-                            if (universePKs != null && universePKs.length > 0) {
-                                for (int i = 0; i < universePKs.length; i++) {
-                                    String universe = universePKs[i].getPk();
-                                    universeCombo.add(universe);
-                                }
-                            }
-                            retriveServerRoot();
-                        } catch (Exception e1) {
-                            comboVersion.getCombo().removeAll();
-                        }
+                        if (Util.IsEnterPrise()) {
+                            try {
+                                // get Version
+                                XtentisPort port;
+                                port = Util.getPort(new URL(url), null, user, password);
+                                WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
 
+                                CCombo universeCombo = comboVersion.getCombo();
+                                universeCombo.removeAll();
+                                universeCombo.add(""); //$NON-NLS-1$
+                                if (universePKs != null && universePKs.length > 0) {
+                                    for (int i = 0; i < universePKs.length; i++) {
+                                        String universe = universePKs[i].getPk();
+                                        universeCombo.add(universe);
+                                    }
+                                }
+
+
+                            } catch (Exception e1) {
+                                comboVersion.getCombo().removeAll();
+                            }
+                        }
                     }
+                    retriveServerRoot();
                     treeViewer.refresh();
                     updateSelectedObjects();
                     checkCompleted();
                 }
             });
-            comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
-            comboVersion.getCombo().setEditable(false);
+            if (Util.IsEnterPrise()) {
+                comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
+                comboVersion.getCombo().setEditable(false);
 
-            comboVersion.getCombo().addModifyListener(new ModifyListener() {
+                comboVersion.getCombo().addModifyListener(new ModifyListener() {
 
-                public void modifyText(ModifyEvent e) {
-                    serverDef.setUniverse(comboVersion.getCombo().getText());
-                    retriveServerRoot();
+                    public void modifyText(ModifyEvent e) {
+                        serverDef.setUniverse(comboVersion.getCombo().getText());
+                        retriveServerRoot();
 
-                }
-            });
-            toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
+                    }
+                });
+
+                toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
+            }
             // create viewer
             treeViewer = new RepositoryCheckTreeViewer((TreeParent) serverRoot, true);
             treeViewer.addButtonSelectionListener(new SelectionAdapter() {

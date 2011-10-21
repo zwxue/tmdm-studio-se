@@ -21,14 +21,22 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSBooleanE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE;
+import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstanceE;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.ui.actions.view.NewViewAction;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -54,6 +62,31 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     @Override
     protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) throws RemoteException {
+        for (Line line : roles) {
+            List<KeyValue> keyValues = line.keyValues;
+            String roleName = keyValues.get(0).value;
+            MDMServerObjectItem roleItem = RepositoryQueryService.findServerObjectItemByName(
+                    IServerObjectRepositoryType.TYPE_ROLE, roleName);
+
+            if (roleItem != null) {
+                WSRoleE role = ((WSRoleItem) roleItem).getWsRole();
+                for (WSRoleSpecificationE spec : role.getSpecification()) {
+                    if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
+                        EList<WSRoleSpecificationInstanceE> specInstance = spec.getInstance();
+                        //
+                        WSRoleSpecificationInstanceE newInstance = MdmserverobjectFactory.eINSTANCE
+                                .createWSRoleSpecificationInstanceE();
+                        newInstance.setInstanceName(browseItem);
+                        newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
+                        //
+                        specInstance.add(newInstance);
+                        //
+                        break;
+                    }
+                }
+                RepositoryResourceUtil.saveItem(roleItem);
+            }
+        }
     }
 
     NewViewAction newViewAction = new NewViewAction() {

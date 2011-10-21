@@ -117,7 +117,7 @@ public class RepositoryResourceUtil {
             if (resourceProvider.needSaveReferenceFile()) {
                 resourceProvider.handleReferenceFile(item);
             }
-        } else {
+
             // save
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {

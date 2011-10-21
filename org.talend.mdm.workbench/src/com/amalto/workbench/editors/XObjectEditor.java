@@ -84,7 +84,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         // register model listener
         xobject.addListener(this);
         // available models
-        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+        java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
         for (IAvailableModel model : availablemodels) {
             model.addPage(xobject, this);
         }
