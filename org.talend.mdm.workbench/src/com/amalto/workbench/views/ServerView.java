@@ -139,7 +139,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     protected Action logoutAction;
 
-    protected Action logoutAndRemoveAction;
 
     protected Action editServerAction;
 
@@ -693,7 +692,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 manager.add(exportAction);
                 manager.add(new Separator());
                 manager.add(logoutAction);
-                manager.add(logoutAndRemoveAction);
                 manager.add(editServerAction);
 
                 if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
@@ -818,7 +816,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     private void makeActions() {
 
         logoutAction = new ServerLogoutAction(this, false);
-        logoutAndRemoveAction = new ServerLogoutAction(this, true);
         editServerAction = new ServerEditAction(this);
 
         editXObjectAction = new EditXObjectAction(this);
@@ -899,9 +896,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
                     case TreeObject.JOB:
                         new DeleteJobAction().run();
-                        break;
-                    case TreeObject._SERVER_:
-                        logoutAndRemoveAction.run();
                         break;
                     default:
                         // MessageDialog.openError(getSite().getShell(),
