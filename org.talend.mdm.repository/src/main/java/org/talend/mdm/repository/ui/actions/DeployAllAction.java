@@ -20,6 +20,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.ui.PlatformUI;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -62,7 +63,7 @@ public class DeployAllAction extends AbstractDeployAction {
     @Override
     public void run() {
 
-
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
         Set<IRepositoryViewObject> allChangedObjects = findAllChangedObjects();
         String name = getSameServerName();
 
