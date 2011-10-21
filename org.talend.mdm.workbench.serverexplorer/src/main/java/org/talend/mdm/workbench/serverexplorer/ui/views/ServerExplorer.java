@@ -214,14 +214,10 @@ public class ServerExplorer extends ViewPart {
         com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
                 serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
         MDMServerHelper.getServersListFromSerExp().add(serDef);
-        addServerDefInConfigXML(serverDef);
+
     }
 
-    private void addServerDefInConfigXML(MDMServerDef serverDef) {
-        com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
-                serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
-        MDMServerHelper.saveServer(serDef);
-    }
+
 
     private MDMServerDefItem getMDMItem(IRepositoryViewObject viewObject) {
         if (viewObject != null) {
@@ -336,7 +332,6 @@ public class ServerExplorer extends ViewPart {
                     }
 
                     deleteServerDefForSerView(serverDefItem.getServerDef().getName());
-                    deleteServerDefInConfigXML(serverDefItem.getServerDef().getName());
                     // synchronizeMDMServerView();
 
                 }
@@ -356,31 +351,6 @@ public class ServerExplorer extends ViewPart {
                 (viewPart).getViewer().refresh();
             }
         }
-
-        private void deleteServerDefInConfigXML(String nameToDel) {
-            List<com.amalto.workbench.utils.MDMServerDef> servers = MDMServerHelper.getServers();
-            for (com.amalto.workbench.utils.MDMServerDef server : servers) {
-                if (server.getName().equals(nameToDel)) {
-                    MDMServerHelper.deleteServer(server.getName());
-                }
-            }
-
-        }
-
-
-
-        //
-        // java.util.List<com.amalto.workbench.utils.MDMServerDef> servers2 = MDMServerHelper.getServers();
-        // ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
-        // if (viewPart != null) {
-        // for (TreeObject object : viewPart.getRoot().getChildren()) {
-        // if (object.getName().equals(nameToDel)) {
-        // viewPart.getRoot().removeChild(object);
-        // }
-        // }
-        // (viewPart).getViewer().refresh();
-        // }
-        // }
-
+ 
     }
 }
