@@ -356,12 +356,6 @@
       <import plugin="javax.xml.rpc" version="1.1.0" match="compatible"/>
       <import plugin="org.apache.commons.codec" version="1.2.0" match="compatible"/>
       <import plugin="org.apache.xerces" version="2.8.0" match="compatible"/>
-      <import plugin="org.talend.core.runtime"/>
-      <import plugin="org.talend.cwm.mip"/>
-      <import plugin="org.talend.model"/>
-      <import plugin="org.talend.core.repository"/>
-      <import plugin="org.talend.commons.runtime"/>
-      <import plugin="org.talend.common.ui.runtime"/>
    </requires>
 
    <plugin
@@ -1831,12 +1825,27 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-         
+
+   <plugin
+         id="org.talend.mdm.repository"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
    <plugin
          id="org.talend.mdm.repository.model"
          download-size="0"
          install-size="0"
          version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.talend.mdm.repository.nl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
    <plugin
@@ -1853,5 +1862,5 @@
          version="0.0.0"
          fragment="true"
          unpack="false"/>
-         
+  
 </feature>
