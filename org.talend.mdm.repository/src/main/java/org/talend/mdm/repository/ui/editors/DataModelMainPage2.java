@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyInfoActionR;
@@ -27,6 +28,7 @@ import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
@@ -95,6 +97,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
         if (adapter == XSDSetAnnotationFKFilterAction.class) {
             return new XSDSetAnnotationFKFilterActionR(this, dataModelName);
+        }
+        if (adapter == XSDDeleteConceptAction.class) {
+            return new XSDDeleteConceptActionR(this);
         }
         return super.getAdapter(adapter);
     }

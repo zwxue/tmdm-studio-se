@@ -1045,7 +1045,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected void createActions() {
         this.newConceptAction = new XSDNewConceptAction(this);
-        this.deleteConceptAction = new XSDDeleteConceptAction(this);
+        this.deleteConceptAction = (XSDDeleteConceptAction) getAdapter(XSDDeleteConceptAction.class);
         this.newBrowseItemAction = new XSDNewBrowseItemViewAction(this);
         this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
         this.newElementAction = new XSDNewElementAction(this);
@@ -2868,6 +2868,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         if (adapter == XSDSetAnnotationFKFilterAction.class) {
             return new XSDSetAnnotationFKFilterAction(this, dataModelName);
+        }
+        if (adapter == XSDDeleteConceptAction.class) {
+            return new XSDDeleteConceptAction(this);
         }
         return super.getAdapter(adapter);
     }

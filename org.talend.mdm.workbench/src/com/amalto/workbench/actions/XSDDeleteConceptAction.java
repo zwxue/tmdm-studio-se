@@ -67,21 +67,8 @@ public class XSDDeleteConceptAction extends UndoAction {
                 ISelection selection = page.getTreeViewer().getSelection();
                 decl = (XSDElementDeclaration) ((IStructuredSelection) selection).getFirstElement();
             }
-            // add by ymli. fix buy 0010029
-            Set<String> list = Util.getForeignKeys();
-            if (list == null) {
-                XtentisPort port = null;
-                try {
-                    port = Util.getPort(page.getXObject());
-                } catch (XtentisException e) {
-                    log.error(e.getMessage(), e);
-                    ;
-                }
-                list = new HashSet<String>();
-                Util.getForeingKeyInDataModel(list, page.getXObject().getParent(), port);
-                Util.setForeignKeys(list);
-            }
-            if (list.contains(decl.getName())) {
+
+            if (checkContainFK(decl.getName())) {
                 boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), "Confirm Delete",
                         "The \"" + decl.getName()
                                 + "\" Entity is referred to by at least one foreign key. Are you sure you want to proceed?\n"
@@ -111,6 +98,23 @@ public class XSDDeleteConceptAction extends UndoAction {
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
+    }
+
+    protected boolean checkContainFK(String fkName) throws Exception {
+        // add by ymli. fix buy 0010029
+        Set<String> list = Util.getForeignKeys();
+        if (list == null) {
+            XtentisPort port = null;
+            try {
+                port = Util.getPort(page.getXObject());
+            } catch (XtentisException e) {
+                log.error(e.getMessage(), e);
+            }
+            list = new HashSet<String>();
+            Util.getForeingKeyInDataModel(list, page.getXObject().getParent(), port);
+            Util.setForeignKeys(list);
+        }
+        return list.contains(fkName);
     }
 
     public void setXSDTODel(XSDElementDeclaration elem) {
