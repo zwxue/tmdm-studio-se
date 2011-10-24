@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.FolderType;
@@ -59,10 +60,18 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     @Override
     public void run() {
+        int size = getSelectedObject().size();
+        if (size > 0) {
+            if (!MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
+                    Messages.RemoveFromRepositoryAction_confirm, size, size > 1 ? Messages.RemoveFromRepositoryAction_instances
+                            : Messages.RemoveFromRepositoryAction_instance))) {
+                return;
+            }
+
+        }
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
-                // TODO a message confirm to delete
                 if (isServerObject(viewObj)) {
                     removeServerObject(viewObj);
                 } else if (RepositoryResourceUtil.hasContainerItem(obj, FolderType.FOLDER_LITERAL)) {

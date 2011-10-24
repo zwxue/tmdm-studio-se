@@ -88,7 +88,15 @@ public class Messages extends NLS {
 
     public static String RefreshAction_Refresh_All_tooltip;
 
+    public static String RemoveFromRepositoryAction_confirm;
+
+    public static String RemoveFromRepositoryAction_instance;
+
+    public static String RemoveFromRepositoryAction_instances;
+
     public static String RemoveFromRepositoryAction_removeFromRepository;
+
+    public static String RemoveFromRepositoryAction_Title;
 
     public static String RemoveFromServerAction_removeFromServer;
 
