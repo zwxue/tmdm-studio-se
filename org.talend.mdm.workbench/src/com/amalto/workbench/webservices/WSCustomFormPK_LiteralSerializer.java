@@ -23,6 +23,7 @@ public class WSCustomFormPK_LiteralSerializer extends LiteralObjectSerializerBas
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
     private static final QName ns1_entity_QNAME = new QName("", "entity");
+    private static final QName ns1_name_QNAME = new QName("", "name");
     
     public WSCustomFormPK_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -77,6 +78,14 @@ public class WSCustomFormPK_LiteralSerializer extends LiteralObjectSerializerBas
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_name_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_name_QNAME, reader, context);
+                instance.setName((java.lang.String)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -97,5 +106,6 @@ public class WSCustomFormPK_LiteralSerializer extends LiteralObjectSerializerBas
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getEntity(), ns1_entity_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getName(), ns1_name_QNAME, null, writer, context);
     }
 }

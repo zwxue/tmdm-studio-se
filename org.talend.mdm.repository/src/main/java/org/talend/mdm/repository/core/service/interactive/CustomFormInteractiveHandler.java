@@ -65,7 +65,8 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
     public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             WSCustomForm wsForm = (WSCustomForm) wsObj;
-            port.deleteCustomForm(new WSDeleteCustomForm(new WSCustomFormPK(wsForm.getDatamodel(), wsForm.getEntity())));
+            port.deleteCustomForm(new WSDeleteCustomForm(new WSCustomFormPK(wsForm.getDatamodel(), wsForm.getEntity(), wsForm
+                    .getName())));
             return true;
         }
         return false;

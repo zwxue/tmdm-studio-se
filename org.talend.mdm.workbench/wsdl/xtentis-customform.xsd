@@ -24,6 +24,7 @@
 		<xsd:sequence>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="datamodel" type="xsd:string"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="entity" type="xsd:string"/>
+			<xsd:element minOccurs="0" maxOccurs="1"  nillable="true" name="name" type="xsd:string"/>
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSCustomFormPK" type="tns:WSCustomFormPK"/>		
