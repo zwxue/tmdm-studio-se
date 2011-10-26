@@ -371,16 +371,21 @@ public class RepositoryResourceUtil {
         return containerRepositoryObject;
     }
 
+    private static IRepositoryViewObject[] categoryViewObjects = null;
+
     public static IRepositoryViewObject[] getCategoryViewObjects() {
-        List<IRepositoryNodeConfiguration> configurations = RepositoryNodeConfigurationManager.getConfigurations();
-        List<IRepositoryViewObject> results = new LinkedList<IRepositoryViewObject>();
-        for (IRepositoryNodeConfiguration conf : configurations) {
-            if (conf.getContentProvider().isShownInRoot()) {
-                IRepositoryViewObject categoryViewObject = getCategoryViewObject(conf);
-                results.add(categoryViewObject);
+        if (categoryViewObjects == null) {
+            List<IRepositoryNodeConfiguration> configurations = RepositoryNodeConfigurationManager.getConfigurations();
+            List<IRepositoryViewObject> results = new LinkedList<IRepositoryViewObject>();
+            for (IRepositoryNodeConfiguration conf : configurations) {
+                if (conf.getContentProvider().isShownInRoot()) {
+                    IRepositoryViewObject categoryViewObject = getCategoryViewObject(conf);
+                    results.add(categoryViewObject);
+                }
             }
+            categoryViewObjects = results.toArray(new IRepositoryViewObject[0]);
         }
-        return results.toArray(new IRepositoryViewObject[0]);
+        return categoryViewObjects;
     }
 
     public static IRepositoryViewObject getCategoryViewObject(IRepositoryNodeConfiguration conf) {

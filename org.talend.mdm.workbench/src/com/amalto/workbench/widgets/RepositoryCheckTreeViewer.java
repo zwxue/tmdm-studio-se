@@ -93,8 +93,6 @@ public class RepositoryCheckTreeViewer {
 
     private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
 
-    private boolean isMDMView = false;
-
     public RepositoryCheckTreeViewer(IStructuredSelection selection, String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
         Object firstElement = selection.getFirstElement();
@@ -115,9 +113,8 @@ public class RepositoryCheckTreeViewer {
         checkItems = selection.toList();
     }
 
-    public RepositoryCheckTreeViewer(TreeParent serverRoot, boolean isMDM) {
+    public RepositoryCheckTreeViewer(TreeParent serverRoot) {
         this.serverRoot = serverRoot;
-        isMDMView = isMDM;
     }
 
     public void setCheckItems(List<TreeObject> list) {
@@ -224,7 +221,9 @@ public class RepositoryCheckTreeViewer {
         viewer = exportItemsTreeView.getViewer();
     }
 
-    private void setTheCheckNodes() {
+    public void refresh() {
+
+        // if user has select some items in repository view, mark them as checked
         for (TreeObject obj : checkItems) {
             if (obj instanceof TreeParent) {
 
@@ -234,18 +233,6 @@ public class RepositoryCheckTreeViewer {
                 repositoryNodes.add(obj);
 
             }
-        }
-
-    }
-
-    public void refresh() {
-
-        // if user has select some items in repository view, mark them as checked
-        setTheCheckNodes();
-        // solve the the MDM view situation
-        if (isMDMView && serverRoot != null) {
-            checkItems.add(serverRoot);
-            setTheCheckNodes();
         }
 
         ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
@@ -295,7 +282,7 @@ public class RepositoryCheckTreeViewer {
 
     }
 
-    private ServerTreeContentProvider contentProvider;
+    protected ServerTreeContentProvider contentProvider;
 
     private SelectionListener bunListener;
 

@@ -56,6 +56,35 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
             return ServerObjectImage.MENU_ICON;
         if (type == TYPE_ROLE)
             return ServerObjectImage.ROLE_ICON;
+        if (type == TYPE_DATACLUSTER)
+            return ServerObjectImage.DATACLUSTER_ICON;
+        if (type == TYPE_DATAMODEL)
+            return ServerObjectImage.DATAMODEL_ICON;
+        if (type == TYPE_EVENTMANAGER)
+            return ServerObjectImage.EVENTMANAGER_ICON;
+        if (type == TYPE_JOBMODEL)
+            return ServerObjectImage.JOBMODEL_ICON;
+        if (type == TYPE_RESOURCE)
+            return ServerObjectImage.RESOURCE_ICON;
+        if (type == TYPE_ROUTINGRULE)
+            return ServerObjectImage.ROUTINGRULE_ICON;
+        if (type == TYPE_SERVICECONFIGURATION)
+            return ServerObjectImage.SERVICECONFIGURATION_ICON;
+        if (type == TYPE_STOREPROCEDURE)
+            return ServerObjectImage.STOREPROCEDURE_ICON;
+        if (type == TYPE_SYNCHRONIZATIONPLAN)
+            return ServerObjectImage.SYNCHRONIZATIONPLAN_ICON;
+        if (type == TYPE_TRANSFORMERV2)
+            return ServerObjectImage.TRANSFORMERV2_ICON;
+        if (type == TYPE_UNIVERSE)
+            return ServerObjectImage.UNIVERSE_ICON;
+        if (type == TYPE_VIEW)
+            return ServerObjectImage.VIEW_ICON;
+        if (type == TYPE_WORKFLOW)
+            return ServerObjectImage.WORKFLOW_ICON;
+        if (type == TYPE_CUSTOM_FORM)
+            return ServerObjectImage.CUSTOMFORM_ICON;
+
         return null;
     }
 

@@ -448,8 +448,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
             synchronizeWithElem(treeObj, root, true);
         }
-
-        view.getViewer().refresh(false);
+        if (view != null)
+            view.getViewer().refresh(false);
 
     }
 
@@ -1001,6 +1001,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     private void setTreeNodeImage(TreeExpansionEvent event, boolean expand) {
         Object elem = event.getElement();
         Widget item = view.getViewer().testFindItem(event.getElement());
+        if (view == null)
+            return;
         if (item == null || (item != itemFocus && itemFocus != null))
             item = itemFocus;
         if (elem instanceof TreeParent && item != null) {

@@ -152,6 +152,10 @@ public class Messages extends NLS {
 
     public static String ImportServerObjectAction_importServerObject;
 
+    public static String ImportServerObjectWizard_customForm;
+
+    public static String ImportServerObjectWizard_loadCustomForm;
+
     public static String Import_Objects;
 
     public static String ImportObjectAction_error;
@@ -177,6 +181,8 @@ public class Messages extends NLS {
     public static String ExportObjectAction_hasError;
 
     public static String ExportObjectAction_label;
+
+    public static String MDMExportRepositoryItemsWizard_exportItem;
 
     public static String MenuInteractiveHandler_label;
 

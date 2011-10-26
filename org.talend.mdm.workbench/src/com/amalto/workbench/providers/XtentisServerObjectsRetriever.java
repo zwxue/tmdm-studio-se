@@ -125,7 +125,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             // init load category
             monitor.subTask("load category...");
-
             LocalTreeObjectRepository.getInstance().startUp(view, endpointaddress, username, password);
             LocalTreeObjectRepository.getInstance().switchOnListening();
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);

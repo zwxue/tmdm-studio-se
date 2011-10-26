@@ -120,6 +120,9 @@ public class ExportItemsWizard extends Wizard {
         this.sel = sel;
     }
 
+    protected Object[] getCheckedObjects() {
+        return treeViewer.getCheckNodes();
+    }
     @Override
     public boolean performFinish() {
 
@@ -139,7 +142,7 @@ public class ExportItemsWizard extends Wizard {
             exportFolder = folder.getText().getText();
         }
 
-        final Object[] objs = treeViewer.getCheckNodes();
+        final Object[] objs = getCheckedObjects();
         Job job = new Job("Export ...") {
 
             @Override
@@ -621,9 +624,8 @@ public class ExportItemsWizard extends Wizard {
             folder.getButton().addListener(SWT.Selection, new PageListener(this));
             // create viewer
             createViewer();
-            Composite itemcom = treeViewer.createItemList(composite);
+            Composite itemcom = initItemTreeViewer(composite);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 5));
-            treeViewer.setItemText("Select items to export:");
 
             folder.setEnabled(folderBtn.getSelection());
             zip.setEnabled(zipBtn.getSelection());
@@ -632,6 +634,11 @@ public class ExportItemsWizard extends Wizard {
 
     }
 
+    protected Composite initItemTreeViewer(Composite composite) {
+        Composite returnComposite = treeViewer.createItemList(composite);
+        treeViewer.setItemText("Select items to export:");
+        return returnComposite;
+    }
     private void exportCluster(List<TreeObject> exports, WSDataClusterPK pk, XtentisPort port) {
         String encodedID = null;
         try {

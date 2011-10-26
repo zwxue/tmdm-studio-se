@@ -38,6 +38,8 @@ import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 /**
  * DOC hywang class global comment. Detailled comment
  */
+// HHB: can be remove after successfully test import and export item wizard
+@Deprecated
 public class RepositoryViewCheckTreeViewer extends RepositoryCheckTreeViewer {
 
     private MDMRepositoryView repositoryView = MDMRepositoryView.show();

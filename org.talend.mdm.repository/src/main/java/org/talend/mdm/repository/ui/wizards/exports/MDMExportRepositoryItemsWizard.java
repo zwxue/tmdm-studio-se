@@ -14,49 +14,44 @@ package org.talend.mdm.repository.ui.wizards.exports;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Composite;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.RepositoryViewObject;
-import org.talend.mdm.repository.ui.wizards.exports.viewers.RepositoryViewCheckTreeViewer;
+import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
 import org.talend.repository.local.ExportItemUtil;
 
 import com.amalto.workbench.export.ExportItemsWizard;
-import com.amalto.workbench.views.ServerView;
-
 /**
  * DOC hywang class global comment. this wizard is used to export the selected items from MDMRepositoryView
  */
 public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
-    boolean hideView = true;
+    ExportRepositoryObjectCheckTreeViewer checkTreeViewer;
 
     public MDMExportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
-        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+    }
 
-        IViewPart viewPart = page.findView(ServerView.VIEW_ID);
-        if (viewPart != null) {
-            hideView = false;
-        }
+    // create a check box viewer
+    @Override
+    protected void createViewer() {
+        checkTreeViewer = new ExportRepositoryObjectCheckTreeViewer(sel);
     }
 
     // do export is need to override ,use the system of TOS to export EMF files
     @Override
     protected void doexport(Object[] selectedNodes, IProgressMonitor monitor) {
-        List selected = Arrays.asList(selectedNodes);
-        List<RepositoryViewObject> objs = new ArrayList<RepositoryViewObject>();
-        for (Object obj : selected) {
+        List<RepositoryViewObject> objs = new LinkedList<RepositoryViewObject>();
+        for (Object obj : selectedNodes) {
             if (obj instanceof RepositoryViewObject) {
                 objs.add((RepositoryViewObject) obj);
             }
@@ -77,6 +72,11 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
         }
     }
 
+    @Override
+    protected Object[] getCheckedObjects() {
+        return checkTreeViewer.getCheckNodes();
+    }
+
     /**
      * DOC hywang Comment method "getItemsToExport".
      * 
@@ -93,38 +93,10 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
         return toReturn;
     }
 
-    // create a check box viewer
-    @Override
-    protected void createViewer() {
-        treeViewer = new RepositoryViewCheckTreeViewer(sel);
-    }
-
-    @Override
-    public boolean performCancel() {
-        if (hideView) {
-        hideServerView();
-        }
-        return super.performCancel();
-    }
-
-    public static void hideServerView() {
-        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        if (activePage != null) {
-            IViewReference ref = activePage.findViewReference(ServerView.VIEW_ID);
-            if (ref != null) {
-                activePage.hideView(ref);
-            }
-        }
-    }
-
-    @Override
-    public boolean performFinish() {
-
-        boolean result = super.performFinish();
-        if (hideView) {
-        hideServerView();
-        }
-        return result;
+    protected Composite initItemTreeViewer(Composite composite) {
+        Composite returnComposite = checkTreeViewer.createItemList(composite);
+        checkTreeViewer.setItemText(Messages.MDMExportRepositoryItemsWizard_exportItem);
+        return returnComposite;
     }
 
 }

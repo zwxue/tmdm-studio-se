@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -28,6 +27,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.ui.navigator.CommonMDMRepositoryContentProvider;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 
 /**
@@ -39,35 +39,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     private final Set<IRepositoryViewObject> changedViewObjs;
 
-    private static class TreeContentProvider implements ITreeContentProvider {
 
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        }
-
-        public void dispose() {
-        }
-
-        public Object[] getElements(Object inputElement) {
-            return getChildren(inputElement);
-        }
-
-        public Object[] getChildren(Object parentElement) {
-            if (parentElement instanceof IRepositoryViewObject[]) {
-                return (IRepositoryViewObject[]) parentElement;
-            } else if (parentElement instanceof ContainerRepositoryObject) {
-                return ((ContainerRepositoryObject) parentElement).getChildren().toArray();
-            }
-            return new Object[0];
-        }
-
-        public Object getParent(Object element) {
-            return null;
-        }
-
-        public boolean hasChildren(Object element) {
-            return getChildren(element).length > 0;
-        }
-    }
 
     /**
      * Create the composite.
@@ -84,7 +56,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         treeViewer = new ContainerCheckedTreeViewer(this, SWT.BORDER);
 
         treeViewer.setLabelProvider(new MDMRepositoryLabelProvider());
-        treeViewer.setContentProvider(new TreeContentProvider());
+        treeViewer.setContentProvider(new CommonMDMRepositoryContentProvider());
         // treeViewer.setContentProvider(new MDMRepositoryContentProvider());
         treeViewer.addFilter(new ViewerFilter() {
 

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -24,23 +25,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
@@ -50,18 +40,13 @@ import org.eclipse.ui.internal.wizards.datatransfer.TarLeveledStructureProvider;
 import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
-import org.talend.mdm.repository.ui.wizards.exports.viewers.CheckboxMDMRepositoryTreeViewer;
-import org.talend.mdm.repository.ui.wizards.exports.viewers.RepositoryViewCheckTreeViewer;
+import org.talend.mdm.repository.ui.wizards.imports.viewer.ImportRepositoryObjectCheckTreeViewer;
 import org.talend.repository.imports.ImportItemUtil;
 import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
 import org.talend.repository.imports.ResourcesManagerFactory;
-import org.talend.repository.imports.TreeBuilder;
-import org.talend.repository.imports.TreeBuilder.IContainerNode;
 
 import com.amalto.workbench.export.ImportItemsWizard;
-import com.amalto.workbench.views.ServerView;
-import com.amalto.workbench.widgets.FilteredCheckboxTree;
 
 /**
  * DOC hywang class global comment. Detailled comment
@@ -74,21 +59,21 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     private ResourcesManager manager;
 
-    boolean hideView = true;
+    ImportRepositoryObjectCheckTreeViewer checkTreeViewer;
 
     public MDMImportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
-        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
-        IViewPart viewPart = page.findView(ServerView.VIEW_ID);
-        if (viewPart != null) {
-            hideView = false;
-        }
     }
 
     @Override
     public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
-        repositoryUtil.importItemRecords(manager, selectedItems, monitor, isOverride, null, "");
+        List<ItemRecord> itemRecords = new LinkedList<ItemRecord>();
+        for (Object obj : selectedObjs) {
+            if (obj instanceof ItemRecord) {
+                itemRecords.add((ItemRecord) obj);
+            }
+        }
+        repositoryUtil.importItemRecords(manager, itemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
     }
 
     protected void createOverwriteBtn(Composite composite) {
@@ -107,108 +92,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     @Override
     protected void createViewer() {
-        treeViewer = new RepositoryViewCheckTreeViewer(sel) {
-
-            @Override
-            protected void createTreeViewer(Composite itemComposite) {
-                filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL
-                        | SWT.MULTI) {
-
-                    @Override
-                    protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
-                        checkboxViewer = new CheckboxMDMRepositoryTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-                        checkboxViewer.setContentProvider(new ITreeContentProvider() {
-
-                            public Object[] getChildren(Object parentElement) {
-                                if (parentElement instanceof IContainerNode) {
-                                    return ((IContainerNode) parentElement).getChildren().toArray();
-                                }
-                                return null;
-                            }
-
-                            public Object[] getElements(Object inputElement) {
-                                // return getValidItems();
-                                return repositoryUtil.getTreeViewInput().toArray();
-                            }
-
-                            public boolean hasChildren(Object element) {
-                                if (element instanceof IContainerNode) {
-                                    return ((IContainerNode) element).hasChildren();
-                                }
-                                return false;
-                            }
-
-                            public Object getParent(Object element) {
-                                return null;
-                            }
-
-                            public void dispose() {
-
-                            }
-
-                            public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-                            }
-
-                        });
-
-                        checkboxViewer.setLabelProvider(new LabelProvider() {
-
-                            @Override
-                            public String getText(Object element) {
-                                if (element instanceof IContainerNode) {
-                                    return ((IContainerNode) element).getLabel();
-                                }
-                                return ((ItemRecord) element).getLabel();
-                            }
-
-                            @Override
-                            public Image getImage(Object element) {
-                                if (element instanceof IContainerNode) {
-                                    return ((IContainerNode) element).getImage();
-                                } else if (element instanceof ItemRecord) {
-                                    return ((ItemRecord) element).getImage();
-                                }
-
-                                return super.getImage(element);
-                            }
-
-                        });
-
-                        checkboxViewer.setSorter(TreeBuilder.createSorter());
-                        checkboxViewer.setInput(this);
-                        return checkboxViewer;
-                    }
-
-                    @Override
-                    protected void refreshCompleted() {
-                        getViewer().expandToLevel(3);
-                        restoreCheckedElements();
-                    }
-
-                    @Override
-                    protected boolean isNodeCollectable(TreeItem item) {
-                        // Object obj = item.getData();
-                        // if (obj instanceof RepositoryNode) {
-                        // RepositoryNode node = (RepositoryNode) obj;
-                        // if (node.getObjectType() == ERepositoryObjectType.METADATA_CONNECTIONS) {
-                        // return true;
-                        // }
-                        // }
-                        return false;
-                    }
-                };
-                if (checkboxViewer != null) {
-                    checkboxViewer.addFilter(new ViewerFilter() {
-
-                        @Override
-                        public boolean select(Viewer viewer, Object parentElement, Object element) {
-                            return true;
-                        }
-                    });
-                }
-            }
-
-        };
+        checkTreeViewer = new ImportRepositoryObjectCheckTreeViewer(repositoryUtil);
     }
 
     /** need to override this method to list all the import items to the viewer **/
@@ -254,19 +138,25 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             monitor.worked(60);
         }
         repositoryUtil.clearAllData();
-        items.addAll(repositoryUtil.populateItems(manager, isOverride, monitor));
+        if (manager != null)
+            items.addAll(repositoryUtil.populateItems(manager, isOverride, monitor));
 
         selectedItems.addAll(items);
 
         this.getShell().getDisplay().syncExec(new Runnable() {
 
             public void run() {
-                treeViewer.getViewer().setInput(repositoryUtil.getTreeViewInput());
+                checkTreeViewer.getViewer().setInput(repositoryUtil.getTreeViewInput());
             }
         });
 
         monitor.done();
 
+    }
+
+    @Override
+    protected Object[] getCheckedObjects() {
+        return checkTreeViewer.getCheckNodes();
     }
 
     private ZipFile getSpecifiedZipSourceFile(String fileName) {
@@ -324,32 +214,12 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }.schedule();
     }
 
-    public static void hideServerView() {
-        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        if (activePage != null) {
-            IViewReference ref = activePage.findViewReference(ServerView.VIEW_ID);
-            if (ref != null) {
-                activePage.hideView(ref);
 
-            }
-        }
+    protected Composite initItemTreeViewer(Composite composite) {
+        Composite returnComposite = checkTreeViewer.createItemList(composite);
+        checkTreeViewer.getViewer().setInput(null);
+        checkTreeViewer.setItemText("Select items to import:");
+        return returnComposite;
     }
 
-    @Override
-    public boolean performCancel() {
-        if (hideView) {
-        hideServerView();
-        }
-        return super.performCancel();
-    }
-
-    @Override
-    public boolean performFinish() {
-
-        boolean result = super.performFinish();
-        if (hideView) {
-        hideServerView();
-        }
-        return result;
-    }
 }

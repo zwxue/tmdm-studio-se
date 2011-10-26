@@ -48,7 +48,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.progress.UIJob;
@@ -66,6 +65,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
+import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
@@ -74,7 +74,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSCustomForm;
 import com.amalto.workbench.webservices.WSCustomFormPK;
 import com.amalto.workbench.webservices.WSGetCustomForm;
@@ -83,7 +82,6 @@ import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.LabelCombo;
-import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 /**
@@ -93,7 +91,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     static Logger log = Logger.getLogger(ImportServerObjectWizard.class);
 
-    private RepositoryCheckTreeViewer treeViewer;
+    private TreeObjectCheckTreeViewer treeViewer;
 
     private TreeObject serverRoot;
 
@@ -105,9 +103,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     WidgetFactory toolkit = WidgetFactory.getWidgetFactory();
 
-    ServerView view = null;
 
-    boolean hideView = true;
 
     CommonViewer commonViewer;
 
@@ -122,13 +118,6 @@ public class ImportServerObjectWizard extends Wizard {
         setNeedsProgressMonitor(true);
         this.commonViewer = commonViewer;
         IWorkbenchPage page = commonViewer.getCommonNavigator().getSite().getPage();
-
-        IViewPart viewPart = page.findView(ServerView.VIEW_ID);
-        if (viewPart != null) {
-            hideView = false;
-        }
-
-        view = ServerView.show();
     }
 
     /*
@@ -140,9 +129,6 @@ public class ImportServerObjectWizard extends Wizard {
     public boolean performFinish() {
         try {
             doImport();
-            if (hideView) {
-                hideServerView(view);
-            }
         } catch (InvocationTargetException e) {
             log.error(e);
             return false;
@@ -153,21 +139,7 @@ public class ImportServerObjectWizard extends Wizard {
         return true;
     }
 
-    @Override
-    public boolean performCancel() {
-        if (hideView) {
-            hideServerView(view);
-        }
-        return super.performCancel();
-    }
 
-    private void hideServerView(IViewPart view) {
-
-        IWorkbenchPage page = commonViewer.getCommonNavigator().getSite().getPage();
-        if (page != null) {
-            page.hideView(view);
-        }
-    }
 
     private void updateSelectedObjects() {
         selectedObjects = treeViewer.getCheckNodes();
@@ -248,7 +220,7 @@ public class ImportServerObjectWizard extends Wizard {
                 resource.setFileExtension(fileExtension);
                 StringBuffer strBuf = new StringBuffer();
                 strBuf.append("http://").append(serverDef.getHost()).append(":").append(serverDef.getPort()) //$NON-NLS-1$ //$NON-NLS-2$
-                        .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$
+                        .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 String url = strBuf.toString();
                 byte[] bytes = Util.downloadFile(url);
                 resource.setFileContent(bytes);
@@ -433,13 +405,13 @@ public class ImportServerObjectWizard extends Wizard {
                 XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
                         serverDef.getPasswd());
                 // Data Models
-                TreeParent models = new TreeParent("Custom Form", parent, TreeObject.CUSTOM_FORM, null, null);
+                TreeParent models = new TreeParent(Messages.ImportServerObjectWizard_customForm, parent, TreeObject.CUSTOM_FORM, null, null);
                 WSCustomFormPK[] xdmPKs = null;
 
                 xdmPKs = port.getCustomFormPKs(new WSGetCustomFormPKs("")).getWsCustomFormPK(); //$NON-NLS-1$
 
                 if (xdmPKs != null) {
-                    monitor.subTask("Loading Custom Forms");
+                    monitor.subTask(Messages.ImportServerObjectWizard_loadCustomForm);
                     for (int i = 0; i < xdmPKs.length; i++) {
 
                         try {
@@ -468,7 +440,7 @@ public class ImportServerObjectWizard extends Wizard {
         public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
 
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
-                    serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), view);
+                    serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), null);
             final IProgressMonitor monitor = m;
             retriever.setRetriveWSObject(true);
             retriever.run(monitor);
@@ -616,7 +588,7 @@ public class ImportServerObjectWizard extends Wizard {
                 toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
             }
             // create viewer
-            treeViewer = new RepositoryCheckTreeViewer((TreeParent) serverRoot, true);
+            treeViewer = new TreeObjectCheckTreeViewer((TreeParent) serverRoot);
             treeViewer.addButtonSelectionListener(new SelectionAdapter() {
 
                 @Override

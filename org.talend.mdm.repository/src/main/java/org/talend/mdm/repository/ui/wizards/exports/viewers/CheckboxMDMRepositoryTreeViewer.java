@@ -21,6 +21,8 @@ import com.amalto.workbench.providers.CheckboxRepositoryTreeViewer;
 /**
  * DOC hywang class global comment. Detailled comment
  */
+// HHB: can be remove after successfully test import and export item wizard
+@Deprecated
 public class CheckboxMDMRepositoryTreeViewer extends CheckboxRepositoryTreeViewer {
 
     public CheckboxMDMRepositoryTreeViewer(Composite parent, int style) {
