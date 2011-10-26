@@ -29,6 +29,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -43,19 +47,46 @@ public class MutliStatusDialog extends Dialog {
 
     private static final Image IMG_INFO = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "/icons/info_obj.gif"); //$NON-NLS-1$
 
+    private static final Image IMG_ADD = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID, "/icons/add.png"); //$NON-NLS-1$
+
+    private static final Image IMG_DELETE = EclipseResourceManager.getImage(RepositoryPlugin.PLUGIN_ID,
+ "/icons/delete.png"); //$NON-NLS-1$
+
     private class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
 
         public Image getColumnImage(Object element, int columnIndex) {
-            if (element instanceof IStatus) {
-                switch (((IStatus) element).getSeverity()) {
-                case IStatus.OK:
-                    return IMG_OK;
-                case IStatus.INFO:
-                    return IMG_INFO;
-                case IStatus.ERROR:
-                    return IMG_ERR;
+            // if (element instanceof IStatus) {
+            // switch (((IStatus) element).getSeverity()) {
+            // case IStatus.OK:
+            // return IMG_OK;
+            // case IStatus.INFO:
+            // return IMG_INFO;
+            // case IStatus.ERROR:
+            // return IMG_ERR;
+            // }
+            // }
+
+            if (element instanceof DeployStatus) {
+                DeployStatus deployStatus = (DeployStatus) element;
+                Item item = deployStatus.getItem();
+                MDMServerObject serverObj =null;
+                if (item != null)
+                 serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                if (deployStatus.getSeverity() == IStatus.OK) {
+                    if(serverObj == null)
+                        return IMG_DELETE;    
+                    if (serverObj.getLastServerDef() != null) {
+                        return IMG_OK;
+                    }
+                    return IMG_ADD;
+
                 }
+                if (deployStatus.getSeverity() == IStatus.INFO)
+                    return IMG_INFO;
+                if (deployStatus.getSeverity() == IStatus.ERROR)
+                    return IMG_ERR;
             }
+
             return null;
         }
 
