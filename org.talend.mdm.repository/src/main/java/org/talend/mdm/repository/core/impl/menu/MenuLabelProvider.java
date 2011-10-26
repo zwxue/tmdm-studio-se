@@ -24,12 +24,14 @@ package org.talend.mdm.repository.core.impl.menu;
 import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
+import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
@@ -68,10 +70,19 @@ public class MenuLabelProvider extends AbstractLabelProvider {
         WSMenuItem menuItem = (WSMenuItem) item;
 
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        if (serverObject.getLastServerDef() != null && DeployAllAction.IS_DEPLOYALL_FLAG) {
-            return menuItem.getWsMenu().getName() + " " + serverObject.getLastServerDef().getName();//$NON-NLS-1$
-        }
+        if (DeployAllAction.IS_DEPLOYALL_FLAG) {
 
+            for (IRepositoryViewObject viewObj : RemoveFromRepositoryAction.getViewObjectsRemovedList()) {
+                Item theItem = viewObj.getProperty().getItem();
+                MDMServerObject serverObj = ((MDMServerObjectItem) theItem).getMDMServerObject();
+                if (serverObj == serverObject)
+                    return menuItem.getWsMenu().getName() + "  (delete)"; //$NON-NLS-1$
+            }
+
+            if (serverObject.getLastServerDef() != null)
+                return menuItem.getWsMenu().getName() + " " + serverObject.getLastServerDef().getName() + "  (Modified)"; //$NON-NLS-1$ //$NON-NLS-2$     
+            return menuItem.getWsMenu().getName() + "  (New)"; //$NON-NLS-1$ 
+        }
         return menuItem.getWsMenu().getName();
 
     }
