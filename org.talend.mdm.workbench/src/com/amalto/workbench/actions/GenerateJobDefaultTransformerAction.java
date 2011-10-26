@@ -160,10 +160,9 @@ public class GenerateJobDefaultTransformerAction extends Action {
 				input = new WSTransformerVariablesMapping[1];
 				input[0] = new WSTransformerVariablesMapping("_DEFAULT_", "xml", null);//$NON-NLS-1$ //$NON-NLS-2$ 
 				output = new WSTransformerVariablesMapping[1];
-				output[0] = new WSTransformerVariablesMapping("item_xml", "text", null);//$NON-NLS-1$ //$NON-NLS-2$ 
-				parameter = "<configuration>\n" + "<url>" + url +"</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-						+ "<name>xmlInput</name>\n" + "<value>{decode_xml}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-						+ "</configuration>\n";//$NON-NLS-1$ 
+				output[0] = new WSTransformerVariablesMapping("item_xml", "result", null);//$NON-NLS-1$ //$NON-NLS-2$ 
+				parameter = "<configuration>\n" + "<url>" + url +"</url>\n"  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+						+ "</configuration>\n"; //$NON-NLS-1$ 
 				steps[0] = new WSTransformerProcessStep(
 						"amalto/local/transformer/plugin/callJob",//$NON-NLS-1$ 
 						"Invoke the job", parameter, input, output, false); //$NON-NLS-1$  //$NON-NLS-2$

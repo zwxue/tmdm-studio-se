@@ -57,7 +57,6 @@ public class JobProcesssOptionsDialog extends Dialog {
 	
 	public JobProcesssOptionsDialog(Shell parentShell, Execution execution) {
 		super(parentShell);
-		parentShell.setText("Generation options");
 		this.execution = execution; 
 	}
 
@@ -107,7 +106,7 @@ public class JobProcesssOptionsDialog extends Dialog {
 				doUpdate();
 			}
 		});
-		btnEmbedded.setText("Embedded (always on, no lantecy)");
+		btnEmbedded.setText("Embedded (always on, no latency)");
 
 		btnWebService = new Button(grpExecution, SWT.RADIO);
 		btnWebService.setSize(217, 24);
