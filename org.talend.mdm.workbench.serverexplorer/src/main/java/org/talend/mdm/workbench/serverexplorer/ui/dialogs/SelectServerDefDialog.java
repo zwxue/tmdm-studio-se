@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -88,6 +90,11 @@ public class SelectServerDefDialog extends TitleAreaDialog {
                 MDMServerDefItem item = (MDMServerDefItem) viewObject.getProperty().getItem();
                 serverDef = item.getServerDef();
                 okBun.setEnabled(serverDef != null);
+            }
+        });
+        treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+            public void doubleClick(DoubleClickEvent event) {
+                okPressed();
             }
         });
         //
