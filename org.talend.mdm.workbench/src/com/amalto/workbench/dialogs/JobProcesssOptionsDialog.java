@@ -131,6 +131,9 @@ public class JobProcesssOptionsDialog extends Dialog {
 			btnIntegrated.setEnabled(false);
 			btnIntegrated.setSelection(false);
 			btnContext.setSelection(true);
+			
+			// When web service is selected, only allowed value for execution is "context"
+			parameter = Parameter.CONTEXT_VARIABLE;
 		}
 		
 		if(execution == Execution.EMBEDDED) {
