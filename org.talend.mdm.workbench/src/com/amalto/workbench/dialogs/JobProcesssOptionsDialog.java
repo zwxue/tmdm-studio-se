@@ -55,29 +55,24 @@ public class JobProcesssOptionsDialog extends Dialog {
 		WEB_SERVICE
 	}
 	
-	public JobProcesssOptionsDialog(Shell parentShell, String dialogTitle) {
+	public JobProcesssOptionsDialog(Shell parentShell, Execution execution) {
 		super(parentShell);
-		this.title = dialogTitle;
+		parentShell.setText("Generation options");
+		this.execution = execution; 
 	}
 
 	protected Control createDialogArea(Composite parent) {
-		// Should not really be here but well,....
-		parent.getShell().setText(this.title);
-
 		Composite composite = (Composite) super.createDialogArea(parent);
-
-		GridLayout layout = (GridLayout) composite.getLayout();
 
 		grpRecord = new Group(composite, SWT.NONE);
 		grpRecord.setLayout(new GridLayout(1, false));
 		grpRecord.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				true, 1, 1));
 		grpRecord
-				.setText("Select how the MDM record will be passed in the job");
+				.setText("Select how the MDM record will be passed to the job");
 
 		btnIntegrated = new Button(grpRecord, SWT.RADIO);
 		btnIntegrated.setSize(78, 24);
-		btnIntegrated.setSelection(true);
 		btnIntegrated.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -102,15 +97,14 @@ public class JobProcesssOptionsDialog extends Dialog {
 				true, true, 1, 1));
 		grpExecution.setText("Select the execution style of the job");
 		grpExecution.setLayout(new GridLayout(1, false));
-
 		btnEmbedded = new Button(grpExecution, SWT.RADIO);
 		btnEmbedded.setSize(191, 24);
-		btnEmbedded.setSelection(true);
+		
 		btnEmbedded.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				execution = Execution.EMBEDDED;
-				btnIntegrated.setEnabled(true);
+				doUpdate();
 			}
 		});
 		btnEmbedded.setText("Embedded (always on, no lantecy)");
@@ -121,17 +115,35 @@ public class JobProcesssOptionsDialog extends Dialog {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				execution = Execution.WEB_SERVICE;
-				
-				btnIntegrated.setEnabled(false);
-				btnIntegrated.setSelection(false);
-				btnContext.setSelection(true);
+				doUpdate();
 			}
 		});
 		btnWebService.setText("Web Service (allows remote invocation)");
 
+		// Initial value display
+		doUpdate();
+		
 		return composite;
 	}
 
+	private void doUpdate() {
+		if(execution == Execution.WEB_SERVICE) {
+			btnIntegrated.setEnabled(false);
+			btnIntegrated.setSelection(false);
+			btnContext.setSelection(true);
+		}
+		
+		if(execution == Execution.EMBEDDED) {
+			btnIntegrated.setEnabled(true);
+		}
+		
+		btnIntegrated.setSelection(parameter == Parameter.INTEGRATED);
+		btnContext.setSelection(parameter == Parameter.CONTEXT_VARIABLE);
+		
+		btnEmbedded.setSelection(execution == Execution.EMBEDDED);
+		btnWebService.setSelection(execution == Execution.WEB_SERVICE);
+	}
+	
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		if (title != null) {

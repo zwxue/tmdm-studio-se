@@ -12,8 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
-import java.rmi.RemoteException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
@@ -29,7 +27,6 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerProcessStep;
@@ -54,15 +51,6 @@ public class GenerateJobDefaultTransformerAction extends Action {
 	}
 
 	public void run() {
-		JobProcesssOptionsDialog dialog = new JobProcesssOptionsDialog(server
-				.getSite().getShell(), "Which schema do you want?");
-		dialog.setBlockOnOpen(true);
-		int ret = dialog.open();
-		if (ret == Dialog.CANCEL) {
-			return;
-		}
-
-		WSTransformerV2 transformer = new WSTransformerV2();
 		if (this.server != null) { // called from ServerView
 			ISelection selection = server.getViewer().getSelection();
 			xobject = (TreeObject) ((IStructuredSelection) selection)
@@ -74,6 +62,17 @@ public class GenerateJobDefaultTransformerAction extends Action {
 		}
 
 		String filename = xobject.getDisplayName();
+		Execution defaultExecutionType = filename.endsWith("zip") ? Execution.EMBEDDED : Execution.WEB_SERVICE;
+		
+		JobProcesssOptionsDialog dialog = new JobProcesssOptionsDialog(server
+				.getSite().getShell(), defaultExecutionType);
+		dialog.setBlockOnOpen(true);
+		int ret = dialog.open();
+		if (ret == Dialog.CANCEL) {
+			return;
+		}
+
+		WSTransformerV2 transformer = new WSTransformerV2();
 		String jobname = null;
 		String jobversion = null;
 		if (filename.lastIndexOf("_") > 0 && filename.lastIndexOf(".") > 0) {//$NON-NLS-1$ //$NON-NLS-2$ 
