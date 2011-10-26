@@ -241,6 +241,10 @@ public class RepositoryResourceUtil {
     }
 
     public static String getTextFileContent(IFile file, String encode) {
+        String filePath = file.getLocation().toOSString();
+        File osfile = new File(filePath);
+        if (!osfile.exists())
+            return null;
         InputStream inputStream = null;
 
         ByteArrayOutputStream os = null;
@@ -270,6 +274,7 @@ public class RepositoryResourceUtil {
                 }
             }
         }
+
         return null;
     }
 
@@ -281,12 +286,12 @@ public class RepositoryResourceUtil {
         }
         String name = null;
         Property property = item.getProperty();
-        if (item instanceof MDMServerObjectItem) {
-            MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
-            name = mdmServerObject.getName();
-        } else {
-            name = property.getLabel();
-        }
+        // if (item instanceof MDMServerObjectItem) {
+        // MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        // name = mdmServerObject.getName();
+        // } else {
+        name = property.getLabel();
+        // }
 
         String fileName = name + UNDERLINE + property.getVersion() + DOT + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$ 
         IFile file = folder.getFile(fileName);
@@ -458,14 +463,18 @@ public class RepositoryResourceUtil {
                 Item item = viewObj.getProperty().getItem();
                 ItemState state = item.getState();
                 if (!state.isDeleted()) {
-                    IInteractiveHandler handler = InteractiveService.findHandler(viewObj.getRepositoryObjectType());
-                    if (handler != null) {
-                        handler.assertPropertyIsInited(item);
-                    }
-                    if (useRepositoryViewObject) {
-                        viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
-                    } else {
-                        viewObjects.add(viewObj);
+                    try {
+                        IInteractiveHandler handler = InteractiveService.findHandler(viewObj.getRepositoryObjectType());
+                        if (handler != null) {
+                            handler.assertPropertyIsInited(item);
+                        }
+                        if (useRepositoryViewObject) {
+                            viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
+                        } else {
+                            viewObjects.add(viewObj);
+                        }
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
                     }
                 }
             }
