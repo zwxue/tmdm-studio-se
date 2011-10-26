@@ -15,73 +15,145 @@ package com.amalto.workbench.dialogs;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 
 public class JobProcesssOptionsDialog extends Dialog {
 
-    private String title;
+	private String title;
 
-    private boolean isExchange = true;
+	private Button btnIntegrated;
 
-    private Button btnExchange;
+	private Button btnContext;
+	
+	private Button btnEmbedded;
+	
+	private Button btnWebService;
+	
+	private Group grpRecord;
+	
+	private Group grpExecution;
 
-    private Button btnItem;
+	private Parameter parameter = Parameter.INTEGRATED;
 
-    public JobProcesssOptionsDialog(Shell parentShell, String dialogTitle) {
-        super(parentShell);
-        this.title = dialogTitle;
-    }
+	private Execution execution = Execution.EMBEDDED;
+	
+	public static enum Parameter {
+		INTEGRATED,
+		CONTEXT_VARIABLE
+	}
+	
+	public static enum Execution {
+		EMBEDDED,
+		WEB_SERVICE
+	}
+	
+	public JobProcesssOptionsDialog(Shell parentShell, String dialogTitle) {
+		super(parentShell);
+		this.title = dialogTitle;
+	}
 
-    protected Control createDialogArea(Composite parent) {
-        // Should not really be here but well,....
-        parent.getShell().setText(this.title);
+	protected Control createDialogArea(Composite parent) {
+		// Should not really be here but well,....
+		parent.getShell().setText(this.title);
 
-        Composite composite = (Composite) super.createDialogArea(parent);
+		Composite composite = (Composite) super.createDialogArea(parent);
 
-        GridLayout layout = (GridLayout) composite.getLayout();
-        layout.numColumns = 1;
+		GridLayout layout = (GridLayout) composite.getLayout();
 
-        btnExchange = new Button(composite, SWT.RADIO);
-        btnExchange.setSelection(true);
-        btnExchange.setText("Send a complete \"exchange\" document");
+		grpRecord = new Group(composite, SWT.NONE);
+		grpRecord.setLayout(new GridLayout(1, false));
+		grpRecord.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				true, 1, 1));
+		grpRecord
+				.setText("Select how the MDM record will be passed in the job");
 
-        btnItem = new Button(composite, SWT.RADIO);
-        btnItem.setText("Only send an \"item\" document (backward compatibility)");
+		btnIntegrated = new Button(grpRecord, SWT.RADIO);
+		btnIntegrated.setSize(78, 24);
+		btnIntegrated.setSelection(true);
+		btnIntegrated.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				parameter = Parameter.INTEGRATED;
+			}
+		});
+		btnIntegrated.setText("Integrated");
 
-        return composite;
-    }
+		btnContext = new Button(grpRecord, SWT.RADIO);
+		btnContext.setSize(278, 24);
+		btnContext
+				.setText("Through a context variable (backward compatibility)");
+		btnContext.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				parameter = Parameter.CONTEXT_VARIABLE;
+			}
+		});
+		
+		grpExecution = new Group(composite, SWT.NONE);
+		grpExecution.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+				true, true, 1, 1));
+		grpExecution.setText("Select the execution style of the job");
+		grpExecution.setLayout(new GridLayout(1, false));
 
-    protected void buttonPressed(int buttonId) {
+		btnEmbedded = new Button(grpExecution, SWT.RADIO);
+		btnEmbedded.setSize(191, 24);
+		btnEmbedded.setSelection(true);
+		btnEmbedded.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				execution = Execution.EMBEDDED;
+				btnIntegrated.setEnabled(true);
+			}
+		});
+		btnEmbedded.setText("Embedded (always on, no lantecy)");
 
-        isExchange = btnExchange.getSelection();
+		btnWebService = new Button(grpExecution, SWT.RADIO);
+		btnWebService.setSize(217, 24);
+		btnWebService.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				execution = Execution.WEB_SERVICE;
+				
+				btnIntegrated.setEnabled(false);
+				btnIntegrated.setSelection(false);
+				btnContext.setSelection(true);
+			}
+		});
+		btnWebService.setText("Web Service (allows remote invocation)");
 
-        super.buttonPressed(buttonId);
-    }
+		return composite;
+	}
 
-    protected void configureShell(Shell shell) {
-        super.configureShell(shell);
-        if (title != null) {
-            shell.setText(title);
-        }
-    }
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		if (title != null) {
+			shell.setText(title);
+		}
+	}
 
-    protected void createButtonsForButtonBar(Composite parent) {
-        // create OK and Cancel buttons by default
-        createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+	protected void createButtonsForButtonBar(Composite parent) {
+		// create Generate and Cancel buttons by default
+		Button button = createButton(parent, IDialogConstants.OK_ID,
+				IDialogConstants.OK_LABEL, true);
+		button.setText("Generate");
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
+	}
 
-    }
-
-    public boolean isExchange() {
-        return isExchange;
-    }
-
-    public void setExchange(boolean isExchange) {
-        this.isExchange = isExchange;
-    }
+	public Parameter getParameter() {
+		return parameter;
+	}
+	
+	public Execution getExecution() {
+		return execution;
+	}
 
 }
