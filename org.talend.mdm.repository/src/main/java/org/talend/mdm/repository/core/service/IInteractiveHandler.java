@@ -22,6 +22,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -45,4 +46,9 @@ public interface IInteractiveHandler {
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException;
 
     public void assertPropertyIsInited(Item item);
+
+    public boolean deleteMDM(MDMServerDef serverDef, XtentisPort port, TreeObject serverObj) throws RemoteException;
+
+    public boolean doDelete(XtentisPort port, TreeObject wsObj) throws RemoteException;
+
 }

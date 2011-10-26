@@ -18,8 +18,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
 import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -39,6 +42,21 @@ public class SynchronizationPlanInteractiveHandler extends AbstractInteractiveHa
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putSynchronizationPlan(new WSPutSynchronizationPlan((WSSynchronizationPlan) wsObj));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
+        // port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK) xobject.getWsKey()));
+        if (xobject != null) {
+            if (xobject.getWsKey() instanceof String) {
+                WSSynchronizationPlanPK pk = new WSSynchronizationPlanPK();
+                pk.setPk((String) xobject.getWsKey());
+                port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan(pk));
+            } else
+                port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan((WSSynchronizationPlanPK) xobject.getWsKey()));
+
             return true;
         }
         return false;

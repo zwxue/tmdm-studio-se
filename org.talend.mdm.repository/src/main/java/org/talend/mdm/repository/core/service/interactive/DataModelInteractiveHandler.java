@@ -24,7 +24,10 @@ import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSDeleteDataModel;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -75,6 +78,21 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
         IFile file = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, FILE_EXTENSION);
         String schema = RepositoryResourceUtil.getTextFileContent(file, ENCODE);
         ((WSDataModelItem) item).getWsDataModel().setXsdSchema(schema);
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
+        if (xobject != null) {
+            // port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK) wsObj.getWsKey()));
+            if (xobject.getWsKey() instanceof String) {
+                WSDataModelPK pk = new WSDataModelPK();
+                pk.setPk((String) xobject.getWsKey());
+                port.deleteDataModel(new WSDeleteDataModel(pk));
+            } else
+                port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK) xobject.getWsKey()));
+
+            return true;
+        }
+        return false;
     }
 
 }

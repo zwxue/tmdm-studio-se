@@ -14,6 +14,7 @@ package org.talend.mdm.repository.core.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +33,10 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
+import org.talend.mdm.repository.utils.Bean2EObjUtil;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -109,8 +113,15 @@ public class DeployService {
                     deployPort = RepositoryWebServiceAdapter.getXtentisPort(lastServerDef);
                 }
 
-                if (handler.deployMDM(lastServerDef, deployPort, item, serverObj))
-                    return DeployStatus.getOKStatus(item, "Success to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
+                if (handler.deployMDM(lastServerDef, deployPort, item, serverObj)) {
+                    if (((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef() != null)
+                        return DeployStatus.getOKStatus(item, typeLabel + " \"" + serverObj.getName() + "\""
+                                + " was updated successfully");
+                    return DeployStatus.getOKStatus(item, typeLabel + " \"" + serverObj.getName() + "\""
+                            + " was created successfully");
+                }
+                // return DeployStatus.getOKStatus(item, "Success to deploy " + typeLabel + " \"" + serverObj.getName()
+                // + "\"");
                 else
                     return DeployStatus.getInfoStatus(item, "Skip to deploy " + typeLabel + " \"" + serverObj.getName() + "\"");
             } catch (RemoteException e) {
@@ -124,6 +135,29 @@ public class DeployService {
             log.error("Not found IInteractiveHandler for type:" + type);
             return DeployStatus.getErrorStatus(item, "Not support for deploying \"" + serverObj.getName() + "\"");
         }
+
+    }
+
+    private DeployStatus deleteMDM(MDMServerDef serverDef, XtentisPort port, TreeObject treeObject, IProgressMonitor monitor) {
+        XtentisPort deployPort = port;
+        MDMServerDef lastServerDef = serverDef;
+        IInteractiveHandler handler = InteractiveService.findHandlerForTreeObject(treeObject);
+
+        if (handler != null) {
+            String typeLabel = handler.getLabel();
+            monitor.subTask("Deleting " + typeLabel + "...");
+            try {
+                handler.deleteMDM(lastServerDef, port, treeObject);
+                return DeployStatus.getOKStatus(null, typeLabel + " \"" + treeObject.getName() + "\""
+                        + " was deleted successfully");
+
+            } catch (RemoteException e) {
+                return DeployStatus.getErrorStatus(null, "Fail to delete " + typeLabel + " \"" + treeObject.getName()
+                        + "\",Cause is:" + e.getMessage(), e);
+            }
+        }
+        log.error("Not found IInteractiveHandler for type:" + TreeObject.getTypeName(treeObject.getType()));
+        return DeployStatus.getErrorStatus(null, "Not support for deploying \"" + treeObject.getName() + "\"");
 
     }
 
@@ -159,16 +193,41 @@ public class DeployService {
         return Status.CANCEL_STATUS;
     }
 
+    public IStatus updateServer(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs,
+            List<IRepositoryViewObject> deletedViewObjects) {
+        try {
+            IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+            DeployProcess runnable = new DeployProcess(serverDef, viewObjs, deletedViewObjects);
+            progressService.run(true, true, runnable);
+            return runnable.getStatus();
+        } catch (InvocationTargetException e) {
+            log.error(e.getMessage(), e);
+        } catch (InterruptedException e) {
+
+        }
+        return Status.CANCEL_STATUS;
+    }
+
     class DeployProcess implements IRunnableWithProgress {
 
         private final List<IRepositoryViewObject> viewObjs;
 
         private final MDMServerDef serverDef;
 
+        private List<IRepositoryViewObject> deletedObjects = new ArrayList<IRepositoryViewObject>();
+
         public DeployProcess(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
             this.serverDef = serverDef;
 
             this.viewObjs = viewObjs;
+        }
+
+        public DeployProcess(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs,
+                List<IRepositoryViewObject> deletedObjects) {
+            this.serverDef = serverDef;
+
+            this.viewObjs = viewObjs;
+            this.deletedObjects = deletedObjects;
         }
 
         MultiStatus mStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, "", null); //$NON-NLS-1$
@@ -191,6 +250,24 @@ public class DeployService {
                     mStatus.add(deployStatus);
                     monitor.worked(1);
                 }
+                List<IRepositoryViewObject> deletedViewObjs = new ArrayList<IRepositoryViewObject>();
+
+                for (IRepositoryViewObject viewObject : deletedObjects) {
+
+                    Item item = viewObject.getProperty().getItem();
+                    MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+
+                    TreeObject treeObject = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
+                    DeployStatus deployStatus = deleteMDM(serverDef, port, treeObject, monitor);
+
+                    deletedViewObjs.add(viewObject);
+                    mStatus.add(deployStatus);
+                }
+
+                for (IRepositoryViewObject viewObject : deletedViewObjs) {
+                    RemoveFromRepositoryAction.getViewObjectsRemovedList().remove(viewObject);
+                }
+
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
             }

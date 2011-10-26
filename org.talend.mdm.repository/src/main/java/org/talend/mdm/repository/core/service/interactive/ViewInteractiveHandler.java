@@ -18,8 +18,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -39,6 +42,21 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putView(new WSPutView((WSView) wsObj));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
+
+        if (xobject != null) {
+            if (xobject.getWsKey() instanceof String) {
+                WSViewPK pk = new WSViewPK();
+                pk.setPk((String) xobject.getWsKey());
+                port.deleteView(new WSDeleteView(pk));
+            } else
+                port.deleteView(new WSDeleteView((WSViewPK) xobject.getWsKey()));
+
             return true;
         }
         return false;

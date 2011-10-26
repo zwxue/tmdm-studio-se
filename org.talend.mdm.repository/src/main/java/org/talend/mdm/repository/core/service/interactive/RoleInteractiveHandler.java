@@ -18,8 +18,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSDeleteRole;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSRole;
+import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -39,6 +42,21 @@ public class RoleInteractiveHandler extends AbstractInteractiveHandler {
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putRole(new WSPutRole((WSRole) wsObj));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
+
+        if (xobject != null) {
+            if (xobject.getWsKey() instanceof String) {
+                WSRolePK pk = new WSRolePK();
+                pk.setPk((String) xobject.getWsKey());
+                port.deleteRole(new WSDeleteRole(pk));
+            } else
+                port.deleteRole(new WSDeleteRole((WSRolePK) xobject.getWsKey()));
+
             return true;
         }
         return false;

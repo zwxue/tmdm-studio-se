@@ -18,7 +18,10 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDeleteDataCluster;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -40,6 +43,22 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
         if (wsObj != null) {
             WSPutDataCluster wsPutDataCluster = new WSPutDataCluster((WSDataCluster) wsObj);
             port.putDataCluster(wsPutDataCluster);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
+        // port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK) xobject.getWsKey()));
+
+        if (xobject != null) {
+            if (xobject.getWsKey() instanceof String) {
+                WSDataClusterPK pk = new WSDataClusterPK();
+                pk.setPk((String) xobject.getWsKey());
+                port.deleteDataCluster(new WSDeleteDataCluster(pk));
+            } else
+                port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK) xobject.getWsKey()));
+
             return true;
         }
         return false;

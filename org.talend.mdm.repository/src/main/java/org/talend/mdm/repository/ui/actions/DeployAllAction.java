@@ -34,7 +34,10 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployAllDialog;
+import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
+
+import com.amalto.workbench.models.TreeObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -63,23 +66,51 @@ public class DeployAllAction extends AbstractDeployAction {
     @Override
     public void run() {
 
+
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+
         Set<IRepositoryViewObject> allChangedObjects = findAllChangedObjects();
         String name = getSameServerName();
 
-
+        allChangedObjects.addAll(RemoveFromRepositoryAction.getViewObjectsRemovedList());
         DeployAllDialog dialog = new DeployAllDialog(getShell(), commonViewer.getInput(), allChangedObjects, name);
+
 
         int retCode = dialog.open();
         IS_DEPLOYALL_FLAG = false;
+        IRepositoryViewObject[] theInput = (IRepositoryViewObject[]) commonViewer.getInput();
+        backDeleteObjectsTreeView(theInput);
 
         if (retCode == IDialogConstants.OK_ID) {
 
             List<IRepositoryViewObject> selectededViewObjs = dialog.getSelectededViewObjs();
+            for (IRepositoryViewObject viewObj : selectededViewObjs) {
+                Item item = viewObj.getProperty().getItem();
+                MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                serverObj.getLastServerDef();
+            }
             MDMServerDef def = dialog.getTheServerDef();
-            if (selectededViewObjs.size() > 0) {
+
+
+            List<IRepositoryViewObject> viewObjectsRemoved = new ArrayList<IRepositoryViewObject>();
+            for (IRepositoryViewObject viewObj : selectededViewObjs) {
+                if (RemoveFromRepositoryAction.getViewObjectsRemovedList().contains(viewObj)) {
+                    viewObjectsRemoved.add(viewObj);
+                }
+            }
+
+            for (IRepositoryViewObject viewObj : viewObjectsRemoved) {
+                selectededViewObjs.remove(viewObj);
+            }
+
+            if (selectededViewObjs.size() >= 0) {
                 // IStatus status = deploy(null, selectededViewObjs);
-                IStatus status = deploy(def, selectededViewObjs);
+                IStatus status = updateServer(def, selectededViewObjs, viewObjectsRemoved);
+
+                updateChangedStatus(status);
+                if (status.isMultiStatus()) {
+                    showDeployStatus(status);
+                }
 
                 if (status.isMultiStatus()) {
                     for (IStatus childStatus : status.getChildren()) {
@@ -91,13 +122,63 @@ public class DeployAllAction extends AbstractDeployAction {
                     }
                 }
 
-                updateChangedStatus(status);
-                if (status.isMultiStatus()) {
-                    showDeployStatus(status);
-                }
+                // updateChangedStatus(status);
+                // if (status.isMultiStatus()) {
+                // showDeployStatus(status);
+                // }
             }
         }
         defNames.clear();
+    }
+
+    private void backDeleteObjectsTreeView(IRepositoryViewObject[] theInput) {
+
+        for (IRepositoryViewObject viewObj : RemoveFromRepositoryAction.getViewObjectsRemovedList()) {
+            Item item = viewObj.getProperty().getItem();
+            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+            TreeObject treeObj = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
+
+            switch (treeObj.getType()) {
+            case TreeObject.DATA_MODEL:
+                theInput[1].getChildren().remove(viewObj);
+                break;
+            case TreeObject.DATA_CLUSTER:
+                theInput[0].getChildren().remove(viewObj);
+                break;
+            case TreeObject.MENU:
+                theInput[2].getChildren().remove(viewObj);
+                break;
+            case TreeObject.ROUTING_RULE:
+                theInput[6].getChildren().get(1).getChildren().remove(viewObj);
+                break;
+            case TreeObject.ROLE:
+                theInput[10].getChildren().remove(viewObj);
+                break;
+            case TreeObject.SERVICE_CONFIGURATION:
+                theInput[7].getChildren().remove(viewObj);
+                break;
+            case TreeObject.STORED_PROCEDURE:
+                theInput[3].getChildren().remove(viewObj);
+                break;
+            case TreeObject.TRANSFORMER:
+                theInput[6].getChildren().get(0).getChildren().remove(viewObj);
+                break;
+            case TreeObject.UNIVERSE:
+                theInput[12].getChildren().remove(viewObj);
+                break;
+            case TreeObject.VIEW:
+                theInput[4].getChildren().remove(viewObj);
+                break;
+            case TreeObject.SYNCHRONIZATIONPLAN:
+                theInput[11].getChildren().remove(viewObj);
+                break;
+            default:
+                ;
+            }
+
+
+        }
+
     }
 
     private String getSameServerName() {

@@ -31,6 +31,8 @@ import org.talend.mdm.repository.core.service.interactive.TransformerInteractive
 import org.talend.mdm.repository.core.service.interactive.VersionInteractiveHandler;
 import org.talend.mdm.repository.core.service.interactive.ViewInteractiveHandler;
 
+import com.amalto.workbench.models.TreeObject;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -52,6 +54,39 @@ public class InteractiveService {
             }
         }
         return null;
+    }
+
+    public static IInteractiveHandler findHandlerForTreeObject(TreeObject treeObject) {
+
+        switch (treeObject.getType()) {
+        case TreeObject.DATA_MODEL:
+            return new DataModelInteractiveHandler();
+        case TreeObject.DATA_CLUSTER:
+            return new DataContainerInteractiveHandler();
+        case TreeObject.MENU:
+            return new MenuInteractiveHandler();
+        case TreeObject.RESOURCES:
+            return new ResourceInteractiveHandler();
+        case TreeObject.ROUTING_RULE:
+            return new RoutingRuleInteractiveHandler();
+        case TreeObject.ROLE:
+            return new RoleInteractiveHandler();
+        case TreeObject.SERVICE_CONFIGURATION:
+            return new ServiceConfigurationInteractiveHandler();
+        case TreeObject.STORED_PROCEDURE:
+            return new StoredProcedureInteractiveHandler();
+        case TreeObject.TRANSFORMER:
+            return new TransformerInteractiveHandler();
+        case TreeObject.UNIVERSE:
+            return new VersionInteractiveHandler();
+        case TreeObject.VIEW:
+            return new ViewInteractiveHandler();
+        case TreeObject.SYNCHRONIZATIONPLAN:
+            return new SynchronizationPlanInteractiveHandler();
+        default:
+            return null;
+        }
+
     }
 
     private static void initHandler() {

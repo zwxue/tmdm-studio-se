@@ -46,6 +46,11 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         return DeployService.getInstance().deploy(serverDef, viewObjs);
     }
 
+    protected IStatus updateServer(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs,
+            List<IRepositoryViewObject> deletedViewObjects) {
+        return DeployService.getInstance().updateServer(serverDef, viewObjs, deletedViewObjects);
+    }
+
     protected void showDeployStatus(IStatus status) {
         MutliStatusDialog dialog = new MutliStatusDialog(getShell(), status.getChildren().length
                 + Messages.AbstractDeployAction_deployMessage, status);

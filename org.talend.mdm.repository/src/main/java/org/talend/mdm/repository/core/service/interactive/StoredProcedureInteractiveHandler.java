@@ -18,8 +18,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -39,6 +42,21 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure) wsObj));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
+        // port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK) xobject.getWsKey()));
+        if (xobject != null) {
+            if (xobject.getWsKey() instanceof String) {
+                WSStoredProcedurePK pk = new WSStoredProcedurePK();
+                pk.setPk((String) xobject.getWsKey());
+                port.deleteStoredProcedure(new WSDeleteStoredProcedure(pk));
+            } else
+                port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK) xobject.getWsKey()));
+
             return true;
         }
         return false;

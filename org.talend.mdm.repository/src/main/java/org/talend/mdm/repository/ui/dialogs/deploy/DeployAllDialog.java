@@ -33,13 +33,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryObject;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.widgets.RepositoryViewObjectCheckedWidget;
+import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
+
+import com.amalto.workbench.models.TreeObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -55,6 +62,7 @@ public class DeployAllDialog extends Dialog {
     private MDMServerDef theServerDef;
 
     private String comboServerName;
+
 
     /**
      * Create the dialog.
@@ -146,6 +154,14 @@ public class DeployAllDialog extends Dialog {
         Label lblNewLabel = new Label(container, SWT.NONE);
         lblNewLabel.setText(Messages.DeployAllDialog_label);
         new Label(container, SWT.NONE);
+
+        // if (input instanceof ContainerRepositoryObject[]) {
+        IRepositoryViewObject[] theInput = (IRepositoryViewObject[]) input;
+        // theInput[1].getChildren().addAll(RemoveFromRepositoryAction.viewObjectsListRemoved);
+        // }
+
+        restoreDeleteObjectsTreeView(theInput);
+
         treeViewer = new RepositoryViewObjectCheckedWidget(container, input, changedViewObjs);
         //
         treeViewer.addCheckStateListener(new ICheckStateListener() {
@@ -181,6 +197,55 @@ public class DeployAllDialog extends Dialog {
         return container;
     }
 
+    private void restoreDeleteObjectsTreeView(IRepositoryViewObject[] theInput) {
+
+        for (IRepositoryViewObject viewObj : RemoveFromRepositoryAction.getViewObjectsRemovedList()) {
+            Item item = viewObj.getProperty().getItem();
+            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+            TreeObject treeObj = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
+
+            switch (treeObj.getType()) {
+            case TreeObject.DATA_MODEL:
+                theInput[1].getChildren().add(viewObj);
+                break;
+            case TreeObject.DATA_CLUSTER:
+                theInput[0].getChildren().add(viewObj);
+                break;
+            case TreeObject.MENU:
+                theInput[2].getChildren().add(viewObj);
+                break;
+            case TreeObject.ROUTING_RULE:
+                theInput[6].getChildren().get(1).getChildren().add(viewObj);
+                break;
+            case TreeObject.ROLE:
+                theInput[10].getChildren().add(viewObj);
+                break;
+            case TreeObject.SERVICE_CONFIGURATION:
+                theInput[7].getChildren().add(viewObj);
+                break;
+            case TreeObject.STORED_PROCEDURE:
+                theInput[3].getChildren().add(viewObj);
+                break;
+            case TreeObject.TRANSFORMER:
+                theInput[6].getChildren().get(0).getChildren().add(viewObj);
+                break;
+            case TreeObject.UNIVERSE:
+                theInput[12].getChildren().add(viewObj);
+                break;
+            case TreeObject.VIEW:
+                theInput[4].getChildren().add(viewObj);
+                break;
+            case TreeObject.SYNCHRONIZATIONPLAN:
+                theInput[11].getChildren().add(viewObj);
+                break;
+            default:
+                ;
+            }
+
+        }
+
+    }
+
     /**
      * Create contents of the button bar.
      * 
@@ -197,7 +262,8 @@ public class DeployAllDialog extends Dialog {
      */
     @Override
     protected Point getInitialSize() {
-        return new Point(450, 300);
+        // return new Point(450, 300);
+        return new Point(450, 500);
     }
 
     List<IRepositoryViewObject> selectededViewObjs;
@@ -218,6 +284,7 @@ public class DeployAllDialog extends Dialog {
         }
         super.okPressed();
     }
+
 
     private boolean doCheck() {
 
@@ -244,4 +311,5 @@ public class DeployAllDialog extends Dialog {
     public MDMServerDef getTheServerDef() {
         return this.theServerDef;
     }
+
 }

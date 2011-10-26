@@ -23,6 +23,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -60,6 +61,17 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
     public boolean deployMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException {
         Object wsObj = convert(item, serverObj);
         return doDeploy(port, wsObj);
+    }
+
+    public boolean deleteMDM(MDMServerDef serverDef, XtentisPort port, TreeObject treeObject) throws RemoteException {
+        // TreeObject treeObject = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
+
+        return doDelete(port, treeObject);
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject wsObj) throws RemoteException {
+        return false;
+        // do nothing
     }
 
     /*

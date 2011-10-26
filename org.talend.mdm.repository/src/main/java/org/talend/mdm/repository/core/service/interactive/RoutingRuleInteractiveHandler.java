@@ -18,8 +18,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSDeleteRoutingRule;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -39,6 +42,21 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
     public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putRoutingRule(new WSPutRoutingRule((WSRoutingRule) wsObj));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
+        // port.deleteRoutingRule(new WSDeleteRoutingRule((WSRoutingRulePK) xobject.getWsKey()));
+        if (xobject != null) {
+            if (xobject.getWsKey() instanceof String) {
+                WSRoutingRulePK pk = new WSRoutingRulePK();
+                pk.setPk((String) xobject.getWsKey());
+                port.deleteRoutingRule(new WSDeleteRoutingRule(pk));
+            } else
+                port.deleteRoutingRule(new WSDeleteRoutingRule((WSRoutingRulePK) xobject.getWsKey()));
+
             return true;
         }
         return false;
