@@ -13,6 +13,9 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -24,6 +27,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -68,6 +72,21 @@ public class DataModelMainPage2 extends DataModelMainPage {
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             factory.save(serverObjectItem);
         }
+
+        refreshDirtyCue();
+
+    }
+
+    private void refreshDirtyCue() {
+        IEditorInput input = getEditorInput();
+        XObjectEditorInput2 theInput = null;
+        if (input instanceof XObjectEditorInput2) {
+            theInput = (XObjectEditorInput2) input;
+        }
+        IRepositoryViewObject viewObj = theInput.getViewObject();
+        CommonViewer viewer = MDMRepositoryView.show().getCommonViewer();
+        viewer.refresh(viewObj);
+
     }
 
     @Override
