@@ -41,6 +41,8 @@ public final class PerspectiveReviewUtil {
 
     private static final String PERSPECTIVE_MDM_ID = "org.talend.mdm.perspective"; //$NON-NLS-1$
 
+    private static String WORKFLOW_PERSPECTIVE_ID = "org.bonitasoft.studio.application.perspective"; //$NON-NLS-1$
+
     private static String isfirst = "";
 
     static List<String> diViewList = new ArrayList<String>();
@@ -156,6 +158,18 @@ public final class PerspectiveReviewUtil {
                             activeWorkbenchWindow.getActivePage());
                     if (null != mdmItem && (mdmItem instanceof PerspectiveBarContributionItem)) {
                         barManager.addItem(mdmItem);
+                    }
+                }
+            }
+            iconItem = barManager.find(WORKFLOW_PERSPECTIVE_ID);
+            if (null == iconItem) {
+                IPerspectiveDescriptor workflowPerspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
+                        .findPerspectiveWithId(WORKFLOW_PERSPECTIVE_ID);
+                if (null != workflowPerspective && (workflowPerspective instanceof IPerspectiveDescriptor)) {
+                    PerspectiveBarContributionItem workflowItem = new PerspectiveBarContributionItem(workflowPerspective,
+                            activeWorkbenchWindow.getActivePage());
+                    if (null != workflowItem && (workflowItem instanceof PerspectiveBarContributionItem)) {
+                        barManager.addItem(workflowItem);
                     }
                 }
             }
