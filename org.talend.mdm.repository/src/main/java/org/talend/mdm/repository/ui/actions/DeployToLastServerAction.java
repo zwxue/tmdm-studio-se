@@ -52,6 +52,11 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         if (status.isMultiStatus()) {
             showDeployStatus(status);
         }
+
+        for (IRepositoryViewObject viewObject : viewObjs) {
+            commonViewer.refresh(viewObject);
+        }
+
     }
 
     @Override

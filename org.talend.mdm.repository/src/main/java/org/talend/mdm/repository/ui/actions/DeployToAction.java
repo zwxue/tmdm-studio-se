@@ -64,6 +64,10 @@ public class DeployToAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
 
+            for (IRepositoryViewObject viewObj : viewObjs) {
+                commonViewer.refresh(viewObj);
+            }
+
         }
 
     }
