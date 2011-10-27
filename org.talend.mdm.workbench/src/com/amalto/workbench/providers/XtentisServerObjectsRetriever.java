@@ -193,7 +193,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
             } catch (Exception e) {
-
                 log.error(e.getMessage(), e);
             }
             if (xdcPKs != null) {
@@ -202,10 +201,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     String name = xdcPKs[i].getPk();
                     if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE//$NON-NLS-1$
                         WSDataCluster wsObject = null;
-                        if (retriveWSObject)
-                            wsObject = port.getDataCluster(new WSGetDataCluster(xdcPKs[i]));
-                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], wsObject);
-                        dataClusters.addChild(obj);
+                        try {
+                            if (retriveWSObject)
+                                wsObject = port.getDataCluster(new WSGetDataCluster(xdcPKs[i]));
+                            TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], wsObject);
+                            dataClusters.addChild(obj);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
                     }
                 }
             }
@@ -347,10 +350,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     for (int i = 0; i < menuPKs.length; i++) {
                         String id = menuPKs[i].getPk();
                         WSMenu wsobject = null;
-                        if (retriveWSObject)
-                            wsobject = port.getMenu(new WSGetMenu(menuPKs[i]));
-                        TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), wsobject);
-                        menus.addChild(obj);
+                        try {
+                            if (retriveWSObject)
+                                wsobject = port.getMenu(new WSGetMenu(menuPKs[i]));
+                            TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), wsobject);
+                            menus.addChild(obj);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
                     }
                 }
                 monitor.worked(1);
