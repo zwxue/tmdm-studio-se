@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.ui.PlatformUI;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -44,6 +45,9 @@ public class DeployToAction extends AbstractDeployAction {
 
     @Override
     public void run() {
+
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
             MDMServerDef serverDef = dialog.getSelectedServerDef();

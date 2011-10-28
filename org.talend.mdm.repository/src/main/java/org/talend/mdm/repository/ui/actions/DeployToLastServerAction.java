@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
@@ -38,6 +39,9 @@ public class DeployToLastServerAction extends AbstractDeployAction {
 
     @Override
     public void run() {
+
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : getSelectedObject()) {
             viewObjs.add((IRepositoryViewObject) obj);
