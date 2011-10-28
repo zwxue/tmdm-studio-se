@@ -271,6 +271,7 @@
             products="MDM"
             type="MDM.Role">
       </repositoryNode>
+      <!--
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.CategoryRepositoryNode"
             folder="/"
@@ -279,6 +280,7 @@
             products="MDM"
             type="MDM.Category">
       </repositoryNode>
+      -->
       <repositoryNode
             class="org.talend.mdm.repository.core.nodes.DataModelRepositoryNode"
             folder="MDM/datamodel"
