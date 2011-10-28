@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -50,6 +51,8 @@ public class SelectServerDefDialog extends TitleAreaDialog {
     private Button okBun;
 
     private MDMServerDef serverDef;
+
+
 
     public MDMServerDef getSelectedServerDef() {
         return this.serverDef;
@@ -93,6 +96,7 @@ public class SelectServerDefDialog extends TitleAreaDialog {
             }
         });
         treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+
             public void doubleClick(DoubleClickEvent event) {
                 okPressed();
             }
@@ -116,20 +120,19 @@ public class SelectServerDefDialog extends TitleAreaDialog {
             }
         }
         TreeItem[] items = treeViewer.getTree().getItems();
-        for (int i = 0; i < items.length; i++) {
-            TreeItem item = items[i];
-            IRepositoryViewObject viewObject = (IRepositoryViewObject) item.getData();
+        for (IRepositoryViewObject viewObject : (List<IRepositoryViewObject>) treeViewer.getInput()) {
             MDMServerDefItem defitem = (MDMServerDefItem) viewObject.getProperty().getItem();
             MDMServerDef defServer = defitem.getServerDef();
             if (server.getName().equals(defServer.getName()) && server.getHost().equals(defServer.getHost())
                     && server.getPort().equals(defServer.getPort())) {
                 serverDef = defServer;
-                treeViewer.getTree().setSelection(item);
+                treeViewer.setSelection(new StructuredSelection(viewObject));
                 okBun.setEnabled(true);
                 break;
             }
         }
     }
+
     private IRepositoryViewObject getCurSelectedViewObject() {
         ISelection selection = treeViewer.getSelection();
         if (!selection.isEmpty()) {

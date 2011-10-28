@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -27,6 +28,16 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 public class XObjectBrowserInput2 extends XObjectBrowserInput implements IRepositoryViewEditorInput {
 
     private final IRepositoryViewObject viewObject;
+
+    private MDMServerDef serverDef;
+
+    public MDMServerDef getServerDef() {
+        return this.serverDef;
+    }
+
+    public void setServerDef(MDMServerDef serverDef) {
+        this.serverDef = serverDef;
+    }
 
     public XObjectBrowserInput2(IRepositoryViewObject viewObject) {
         super(new TreeObject(), null);

@@ -24,9 +24,14 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.repository.ui.contributor.SvnHistorySelectionProvider;
 
+import com.amalto.workbench.editors.DataClusterBrowserMainPage;
+import com.amalto.workbench.editors.ItemsTrashBrowserMainPage;
+import com.amalto.workbench.editors.RoutingEngineV2BrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.views.MDMPerspective;
 
 /**
@@ -90,13 +95,36 @@ public class XObjectBrowser2 extends XObjectBrowser implements ITabbedPropertySh
      */
     @Override
     protected void addPages() {
-        // TODO Auto-generated method stub
         super.addPages();
         try {
             refreshPropertyView();
         } catch (PartInitException e) {
 
         }
+    }
+
+    @Override
+    protected void addPageForXObject(TreeObject xobject) throws PartInitException {
+        switch (xobject.getType()) {
+        case TreeObject.VIEW:
+            addPage(new ViewBrowserMainPage2(this));
+            break;
+        case TreeObject.DATA_CLUSTER:
+            if (xobject.getDisplayName() != null && xobject.getDisplayName().equals(XSystemObjects.DC_MDMITEMSTRASH.getName())) {
+                addPage(new ItemsTrashBrowserMainPage(this));
+                break;
+            }
+            addPage(new DataClusterBrowserMainPage(this));
+            break;
+        case TreeObject.SUBSCRIPTION_ENGINE:
+            try {
+                addPage(new RoutingEngineV2BrowserMainPage(this));
+            } catch (PartInitException e) {
+                log.error(e.getMessage(), e);
+            }
+            break;
+
+        }// switch
     }
 
     /*

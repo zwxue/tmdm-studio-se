@@ -82,32 +82,33 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
             for (IAvailableModel model : availablemodels) {
                 model.addPage(xobject, this);
             }
-
-            switch (xobject.getType()) {
-            case TreeObject.VIEW:
-                addPage(new ViewBrowserMainPage(this));
-                break;
-            case TreeObject.DATA_CLUSTER:
-                if (xobject.getDisplayName() != null
-                        && xobject.getDisplayName().equals(XSystemObjects.DC_MDMITEMSTRASH.getName())) {
-                    addPage(new ItemsTrashBrowserMainPage(this));
-                    break;
-                }
-                addPage(new DataClusterBrowserMainPage(this));
-                break;
-            case TreeObject.SUBSCRIPTION_ENGINE:
-                try {
-                    addPage(new RoutingEngineV2BrowserMainPage(this));
-                } catch (PartInitException e) {
-                    // TODO Auto-generated catch block
-                    log.error(e.getMessage(), e);
-                }
-                break;
-
-            }// switch
+            addPageForXObject(xobject);
         } catch (PartInitException e) {
             MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :" + e.getLocalizedMessage());
         }
+    }
+
+    protected void addPageForXObject(TreeObject xobject) throws PartInitException {
+        switch (xobject.getType()) {
+        case TreeObject.VIEW:
+            addPage(new ViewBrowserMainPage(this));
+            break;
+        case TreeObject.DATA_CLUSTER:
+            if (xobject.getDisplayName() != null && xobject.getDisplayName().equals(XSystemObjects.DC_MDMITEMSTRASH.getName())) {
+                addPage(new ItemsTrashBrowserMainPage(this));
+                break;
+            }
+            addPage(new DataClusterBrowserMainPage(this));
+            break;
+        case TreeObject.SUBSCRIPTION_ENGINE:
+            try {
+                addPage(new RoutingEngineV2BrowserMainPage(this));
+            } catch (PartInitException e) {
+                log.error(e.getMessage(), e);
+            }
+            break;
+
+        }// switch
     }
 
     protected void createToolbar(final Composite parent, List<Action> actions) {

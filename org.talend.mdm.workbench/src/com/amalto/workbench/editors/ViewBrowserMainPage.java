@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
@@ -60,6 +61,7 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSQuickSearch;
@@ -281,7 +283,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             WSView view = null;
             if (getXObject().getWsObject() == null) { // then fetch from server
-                XtentisPort port = Util.getPort(getXObject());
+                XtentisPort port = getPort();
                 view = port.getView(new WSGetView((WSViewPK) getXObject().getWsKey()));
                 getXObject().setWsObject(view);
             } else { // it has been opened by an editor - use the object there
@@ -307,8 +309,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             wcListViewer.refresh();
 
             dataClusterCombo.removeAll();
-            WSDataClusterPK[] dataClusterPKs = Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject()
-                    .getUniverse(), getXObject().getUsername(), getXObject().getPassword());
+            WSDataClusterPK[] dataClusterPKs = getDataClusterPKs();
             if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)) {
                 MessageDialog
                         .openError(this.getSite().getShell(), "Error", "Please create Data Containers before browsing views");
@@ -328,6 +329,11 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
+    }
+
+    protected WSDataClusterPK[] getDataClusterPKs() throws MalformedURLException, XtentisException {
+        return Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(), getXObject()
+                .getUsername(), getXObject().getPassword());
     }
 
     protected void commit() {
@@ -366,6 +372,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         return;
     }
 
+    protected WSViewPK getViewPK() {
+        return (WSViewPK) getXObject().getWsKey();
+    }
+
     public String[] getResults() {
 
         Cursor waitCursor = null;
@@ -376,10 +386,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             waitCursor = new Cursor(display, SWT.CURSOR_WAIT);
             this.getSite().getShell().setCursor(waitCursor);
 
-            XtentisPort port = Util.getPort(getXObject());
+            XtentisPort port = getPort();
 
             String[] results = port.quickSearch(
-                    new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), (WSViewPK) getXObject().getWsKey(), (""//$NON-NLS-1$
+                    new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), (""//$NON-NLS-1$
                             .equals(searchText.getText()) ? "*" : searchText.getText()), 10, // max Items//$NON-NLS-1$
                             0, // skip
                             Integer.MAX_VALUE, // spell threshold
