@@ -18,14 +18,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.xsd.XSDElementDeclaration;
 
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
-import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite;
 import com.amalto.workbench.detailtabs.sections.composites.EntityKeyConfigComposite;
-import com.amalto.workbench.detailtabs.sections.composites.FKIntegrityComposite;
 import com.amalto.workbench.detailtabs.sections.composites.NameConfigComposite;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
@@ -87,7 +84,7 @@ public class EntityMainSection extends
 	// }
 
 	@Override
-	protected XSDElementDeclaration getEditedObj() {
+    public XSDElementDeclaration getEditedObj() {
 		// return entityWrapper.getSourceEntity();
 		return xsdElementDeclaration;
 	}

@@ -126,7 +126,7 @@ public abstract class CommitBarListenerSection<T> extends BasePropertySection im
 
     protected abstract ISubmittable getSubmittedObj();
 
-    protected abstract T getEditedObj();
+    public abstract T getEditedObj();
 
     protected abstract void initUIContents(T editedObj);
 

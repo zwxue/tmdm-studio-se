@@ -33,7 +33,7 @@ public class ComplexTypeMainSection extends CommitBarListenerSection<XSDComplexT
     }
 
     @Override
-    protected XSDComplexTypeDefinition getEditedObj() {
+    public XSDComplexTypeDefinition getEditedObj() {
         return complexType;
     }
 

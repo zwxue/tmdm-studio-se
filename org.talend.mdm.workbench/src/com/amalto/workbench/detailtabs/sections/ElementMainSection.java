@@ -33,7 +33,7 @@ public class ElementMainSection extends CommitBarListenerSection<XSDParticle> {
     private ElementWrapper elementWrapper;
 
     @Override
-    protected XSDParticle getEditedObj() {
+    public XSDParticle getEditedObj() {
         return curXSDParticle;
     }
 

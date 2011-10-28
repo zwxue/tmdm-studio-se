@@ -22,7 +22,7 @@ public abstract class XSDComponentSection extends CommitBarListenerSection<XSDCo
     protected XSDComponent curXSDComponent;
 
     @Override
-    protected XSDComponent getEditedObj() {
+    public XSDComponent getEditedObj() {
         return curXSDComponent;
     }
 

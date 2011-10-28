@@ -15,6 +15,7 @@ package com.amalto.workbench.detailtabs.sections.util;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.detailtabs.sections.XSDComponentSection;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.utils.Util;
@@ -22,7 +23,9 @@ import com.amalto.workbench.utils.Util;
 public class BasePropertySectionDataModelExtractor extends BasePropertySectionGlobalInfoExtractor implements IAllDataModelHolder {
 
     protected String defaultDataModel = "";//$NON-NLS-1$
+
     protected String defaultEntity = "";//$NON-NLS-1$
+
     public BasePropertySectionDataModelExtractor(BasePropertySection propSection) {
         this(propSection, "");//$NON-NLS-1$
     }
@@ -42,6 +45,9 @@ public class BasePropertySectionDataModelExtractor extends BasePropertySectionGl
     }
 
     public XSDSchema getDataModel(String dataModelName) {
+        if (propSection instanceof XSDComponentSection) {
+            return ((XSDComponentSection) propSection).getEditedObj().getSchema();
+        }
         return Util.getXSDSchema(propSection.getTreeObject(), dataModelName);
     }
 
@@ -53,12 +59,12 @@ public class BasePropertySectionDataModelExtractor extends BasePropertySectionGl
         this.defaultDataModel = defaultDataModel;
     }
 
-	public String getDefaultEntity() {
-		return defaultEntity;
-	}
+    public String getDefaultEntity() {
+        return defaultEntity;
+    }
 
-	public void setDefaultEntity(String defaultEntity) {
-		this.defaultEntity = defaultEntity;
-	}
-    
+    public void setDefaultEntity(String defaultEntity) {
+        this.defaultEntity = defaultEntity;
+    }
+
 }

@@ -35,7 +35,7 @@ public class SimpleTypeMainSection extends CommitBarListenerSection<XSDSimpleTyp
     }
 
     @Override
-    protected XSDSimpleTypeDefinition getEditedObj() {
+    public XSDSimpleTypeDefinition getEditedObj() {
         return xsdSimpleType;
     }
 
