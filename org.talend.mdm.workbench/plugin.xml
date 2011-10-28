@@ -17,7 +17,7 @@
             class="com.amalto.workbench.views.ServerView"
             icon="icons/appli_16x16.gif"
             id="org.talend.mdm.workbench.views.ServerView"
-            name="MDM Server">
+            name="MDM Server [deprecated]">
             <!--name="Talend MDM Server View"-->
       </view>
    </extension>
