@@ -16,6 +16,18 @@
       <viewContribution
             id="org.talend.mdm.workbench.serverexplorer.viewContribution"
             targetID="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer">
+        
+         
+         <action
+               class="org.talend.mdm.workbench.serverexplorer.ui.actions.EventManagerAction"
+               icon="icons/sub_engine.png"
+               id="org.talend.mdm.workbench.serverexplorer.ui.actions.EventManagerAction"
+               label="Event Manager"
+               style="push"
+               toolbarPath="ServerExplorerToolBar"
+               tooltip="open Event Manager Editor">
+         </action>
+        
          <action
                class="org.talend.mdm.workbench.serverexplorer.ui.actions.RefreshServerDefAction"
                icon="icons/refresh.gif"
@@ -33,6 +45,8 @@
                toolbarPath="ServerExplorerToolBar"
                tooltip="Add Server Location">
          </action>
+        
+         
       </viewContribution>
    </extension>
    <extension

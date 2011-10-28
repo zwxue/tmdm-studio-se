@@ -78,4 +78,6 @@ public class Messages extends NLS {
     public static String ServerExplorer_RemoveConfirm;
 
     public static String ServerExplorer_RemoveServer;
+
+    public static String ServerExplorer_EventManager;
 }

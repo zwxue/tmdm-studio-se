@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -56,9 +57,12 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.TreeContentProvider;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 
+import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.views.ServerView;
 
@@ -70,6 +74,9 @@ public class ServerExplorer extends ViewPart {
 
     static final ImageDescriptor IMG_CHECK_CONNECT = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
             MDMServerExplorerPlugin.PLUGIN_ID, "icons/client_network.png"); //$NON-NLS-1$
+
+    static final ImageDescriptor IMG_EVENTMANAGER = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
+            MDMServerExplorerPlugin.PLUGIN_ID, "icons/sub_engine.png"); //$NON-NLS-1$
 
     public static final String ID = "org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"; //$NON-NLS-1$
 
@@ -85,6 +92,12 @@ public class ServerExplorer extends ViewPart {
 
     public AddServerDefAction getAddServerDefAction() {
         return this.addServerDefAction;
+    }
+
+    private EventManageAction eventManagerAction;
+
+    public EventManageAction getEventManageAction() {
+        return this.eventManagerAction;
     }
 
     public ServerExplorer() {
@@ -165,6 +178,8 @@ public class ServerExplorer extends ViewPart {
         menuManager.add(new DeleteServerDefAction());
         menuManager.add(new EditServerDefAction());
         menuManager.add(new CheckConnectionAction());
+        eventManagerAction = new EventManageAction();
+        menuManager.add(eventManagerAction);
 
         // Context
         Menu contextMenu = menuManager.createContextMenu(tree);
@@ -280,6 +295,47 @@ public class ServerExplorer extends ViewPart {
 
                 }
             }
+        }
+    }
+
+    public class EventManageAction extends Action {
+
+        TreeObject eventManger = null;
+
+        public EventManageAction() {
+
+            setImageDescriptor(IMG_EVENTMANAGER);
+            setText(Messages.ServerExplorer_EventManager);
+        }
+
+        public void run() {
+
+            TreeParent root = ServerView.show().getRoot();
+            findEventManager(root);
+
+            try {
+                ServerView.show().getSite().getWorkbenchWindow().getActivePage().openEditor(
+                        new XObjectBrowserInput(eventManger, eventManger.getDisplayName()), XObjectBrowser.ID);
+            } catch (PartInitException e) {
+                log.error(e.getMessage(), e);
+                e.printStackTrace();
+            }
+
+        }
+
+        private void findEventManager(TreeParent treeParent) {
+
+            for (TreeObject treeObject : treeParent.getChildren()) {
+                if (treeObject instanceof TreeParent) {
+                    findEventManager((TreeParent) treeObject);
+                } else {
+                    if (treeObject.getType() == TreeObject.SUBSCRIPTION_ENGINE)
+                        eventManger = treeObject;
+
+                }
+
+            }
+
         }
     }
 
