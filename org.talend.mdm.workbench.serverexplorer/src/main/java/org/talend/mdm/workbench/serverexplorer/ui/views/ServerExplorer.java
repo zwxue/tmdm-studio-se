@@ -57,6 +57,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.TreeContentProvider;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 
+import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -310,7 +311,32 @@ public class ServerExplorer extends ViewPart {
 
         public void run() {
 
-            TreeParent root = ServerView.show().getRoot();
+            // TreeParent root = ServerView.show().getRoot();
+
+            int index = 0;
+            IRepositoryViewObject viewObject = getCurSelectedViewObject();
+            if (viewObject != null) {
+                MDMServerDefItem mdmItem = getMDMItem(viewObject);
+                if (mdmItem != null) {
+                    MDMServerDef serverDef = mdmItem.getServerDef();
+                    List<MDMServerDef> servers = ServerDefService.getAllServerDefs();
+                    for (int i = 0; i < servers.size(); i++) {
+                        MDMServerDef server = servers.get(i);
+                        if (serverDef.getName().equals(server.getName())) {
+                            index = i;
+                        }
+                    }
+                }
+            }
+            TreeParent root = (TreeParent) ServerView.show().getRoot().getChildren()[index];
+            findEventManager(root);
+            if (eventManger == null)
+                try {
+                    new ServerRefreshAction(ServerView.show(), root).doRun();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+
             findEventManager(root);
 
             try {
@@ -318,7 +344,6 @@ public class ServerExplorer extends ViewPart {
                         new XObjectBrowserInput(eventManger, eventManger.getDisplayName()), XObjectBrowser.ID);
             } catch (PartInitException e) {
                 log.error(e.getMessage(), e);
-                e.printStackTrace();
             }
 
         }
