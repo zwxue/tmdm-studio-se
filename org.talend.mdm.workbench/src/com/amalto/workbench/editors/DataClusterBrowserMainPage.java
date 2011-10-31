@@ -14,6 +14,7 @@ package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
+import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -497,7 +498,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 // if (false) {
                 // Modified by hbhong,to fix bug 21784|
                 TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
-                DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell(),treeParent);
+                DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell(), treeParent);
                 // The ending| bug:21784
                 dialog.setBlockOnOpen(true);
                 dialog.open();
@@ -747,6 +748,23 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         refreshData();
     }
 
+    private String validateXML(XtentisPort port, String dataModelName, String xml) throws RemoteException {
+
+        WSDataModel dataModel = port.getDataModel(new WSGetDataModel((new WSDataModelPK(dataModelName))));
+        if (dataModel != null) {
+
+            String schema = dataModel.getXsdSchema();
+            if (xml != null && schema != null) {
+                try {
+                    Util.parse(xml, schema);
+                } catch (Exception e) {
+                    return e.getMessage();
+                }
+            }
+        }
+        return null;
+    }
+
     class EditItemAction extends Action {
 
         protected Shell shell = null;
@@ -791,6 +809,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (event.button == DOMViewDialog.BUTTON_SAVE) {
                             // attempt to save
                             try {
+                                String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
+                                if (validateXML != null) {
+                                    MessageDialog.openError(shell, "Error saving the Record",
+                                            "An error occured trying save the Record:\n\n " + validateXML);
+                                    return;
+                                }
                                 // check the item is modified by others?
                                 boolean isModified = port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).is_true();
                                 if (isModified) {
@@ -1313,11 +1337,18 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (event.button == DOMViewDialog.BUTTON_SAVE) {
                             // attempt to save
                             try {
+                                final XtentisPort port = Util.getPort(getXObject());
+                                String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
+                                if (validateXML != null) {
+                                    MessageDialog.openError(shell, "Error saving the Record",
+                                            "An error occured trying save the Record:\n\n " + validateXML);
+                                    return;
+                                }
                                 WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject()
                                         .getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
                                         "genericUI", d.isTriggerProcess());//$NON-NLS-1$
-                                Util.getPort(getXObject()).putItemWithReport(item);
+                                port.putItemWithReport(item);
                             } catch (Exception e) {
                                 MessageDialog.openError(shell, "Error saving the Record",
                                         "An error occured trying save the Record:\n\n " + e.getLocalizedMessage());
@@ -1435,7 +1466,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 int i = 0;
                 for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext();) {
                     LineItem lineItem = iter.next();
-                    String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."  //$NON-NLS-1$  //$NON-NLS-2$
+                    String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "." //$NON-NLS-1$  //$NON-NLS-2$
                             + Util.joinStrings(lineItem.getIds(), ".");
                     monitor.subTask("Processing Record " + (i++) + " - " + itemID);
                     if (monitor.isCanceled()) {
@@ -1550,13 +1581,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
 
     }
-    //Modified by hbhong,to fix bug 21784
+
+    // Modified by hbhong,to fix bug 21784
     @Override
     public Object getAdapter(Class adapter) {
-        if(adapter==TreeParent.class){
-            return Util.getServerTreeParent( getXObject());
+        if (adapter == TreeParent.class) {
+            return Util.getServerTreeParent(getXObject());
         }
         return super.getAdapter(adapter);
     }
-    //The ending| bug:21784
+    // The ending| bug:21784
 }

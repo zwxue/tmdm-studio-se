@@ -632,7 +632,7 @@ public class Util {
             if (schema != null) {
                 String errors = seh.getErrors();
                 if (!errors.equals("")) {//$NON-NLS-1$
-                    String err = "Document  did not parse against schema: \n" + errors + "\n" + xmlString;
+                    String err = "Document  did not parse against schema: \n" + errors + "\n";
                     throw new Exception(err);
                 }
             }
