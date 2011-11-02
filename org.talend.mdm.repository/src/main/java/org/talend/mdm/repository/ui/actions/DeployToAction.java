@@ -58,6 +58,8 @@ public class DeployToAction extends AbstractDeployAction {
             //
             IStatus status = deploy(serverDef, viewObjs);
             if (status.isMultiStatus()) {
+                showDeployStatus(status);
+
                 for (IStatus childStatus : status.getChildren()) {
                     DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
                     if (deployStatus.isOK()) {
@@ -65,7 +67,6 @@ public class DeployToAction extends AbstractDeployAction {
                             saveLastServer((MDMServerObjectItem) deployStatus.getItem(), serverDef);
                     }
                 }
-                showDeployStatus(status);
             }
 
             for (IRepositoryViewObject viewObj : viewObjs) {
