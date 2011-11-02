@@ -79,6 +79,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                         String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem());
                         if (newName != null) {
                             serverObject.setName(newName);
+                            newName = RepositoryResourceUtil.escapeSpecialCharacters(newName);
                             viewObj.getProperty().setLabel(newName);
                             factory.save(viewObj.getProperty().getItem(), false);
                         }

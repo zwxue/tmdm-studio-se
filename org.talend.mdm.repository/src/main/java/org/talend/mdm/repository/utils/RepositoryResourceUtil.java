@@ -110,6 +110,9 @@ public class RepositoryResourceUtil {
         return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
     }
 
+    public static String escapeSpecialCharacters(String input) {
+        return input.replace('#', '$');
+    }
     public static void saveItem(Item item) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
@@ -129,7 +132,7 @@ public class RepositoryResourceUtil {
     }
 
     public static boolean createItem(Item item, String propLabel, String version) {
-
+        propLabel = escapeSpecialCharacters(propLabel);
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
 
