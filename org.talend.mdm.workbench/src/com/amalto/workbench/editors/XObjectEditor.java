@@ -194,35 +194,40 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     public void doSave(IProgressMonitor monitor) {
 
         this.saveInProgress = true;
-        // For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data
-        // model page and do nothing else if there are some changes.
-        if (xmlEditor != null && this.getCurrentPage() == 1) {
-            xmlEditor.doSave(monitor);
-            ((AFormPage) (formPages.get(0))).refreshPage();
-            return;
-        }
-        int numPages = formPages.size();
-        monitor.beginTask("Saving " + this.getEditorInput().getName(), numPages + 1);
-        for (int i = 0; i < numPages; i++) {
-            if ((formPages.get(i)) instanceof AFormPage) {
-                if (!((AFormPage) (formPages.get(i))).beforeDoSave())
-                    return;
-            }
-            (formPages.get(i)).doSave(monitor);
-            monitor.worked(1);
-            if (monitor.isCanceled()) {
-                this.saveInProgress = false;
+        try {
+            // For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data
+            // model page and do nothing else if there are some changes.
+            if (xmlEditor != null && this.getCurrentPage() == 1) {
+                xmlEditor.doSave(monitor);
+                ((AFormPage) (formPages.get(0))).refreshPage();
                 return;
             }
+            int numPages = formPages.size();
+            monitor.beginTask("Saving " + this.getEditorInput().getName(), numPages + 1);
+            for (int i = 0; i < numPages; i++) {
+                if ((formPages.get(i)) instanceof AFormPage) {
+                    if (!((AFormPage) (formPages.get(i))).beforeDoSave())
+                        return;
+                }
+                (formPages.get(i)).doSave(monitor);
+                monitor.worked(1);
+                if (monitor.isCanceled()) {
+                    this.saveInProgress = false;
+                    return;
+                }
+            }
+            // if(xmlEditor!=null)xmlEditor.doSave(monitor);
+            // perform the actual save
+            SaveXObjectAction action = new SaveXObjectAction(this);
+            action.run();
+            if (xmlEditor != null && action.getState() == 0) {
+                xmlEditor.refresh();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            monitor.done();
         }
-        // if(xmlEditor!=null)xmlEditor.doSave(monitor);
-        // perform the actual save
-        SaveXObjectAction action = new SaveXObjectAction(this);
-        action.run();
-        if (xmlEditor != null && action.getState() == 0) {
-            xmlEditor.refresh();
-        }
-        monitor.done();
     }
 
     /*

@@ -107,6 +107,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        } finally {
+            monitor.done();
         }
     }
 

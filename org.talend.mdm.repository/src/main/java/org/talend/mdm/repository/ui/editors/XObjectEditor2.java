@@ -59,35 +59,40 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
     public void doSave(IProgressMonitor monitor) {
 
         this.saveInProgress = true;
-        // For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data
-        // model page and do nothing else if there are some changes.
-        if (xmlEditor != null && this.getCurrentPage() == 1) {
-            xmlEditor.doSave(monitor);
-            ((AFormPage) (formPages.get(0))).refreshPage();
-            return;
-        }
-        int numPages = formPages.size();
-        monitor.beginTask(Messages.bind(Messages.XObjectEditor2_saving, this.getEditorInput().getName()), numPages + 1);
-        for (int i = 0; i < numPages; i++) {
-            if ((formPages.get(i)) instanceof AFormPage) {
-                if (!((AFormPage) (formPages.get(i))).beforeDoSave())
-                    return;
-            }
-            (formPages.get(i)).doSave(monitor);
-            monitor.worked(1);
-            if (monitor.isCanceled()) {
-                this.saveInProgress = false;
+        try {
+            // For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data
+            // model page and do nothing else if there are some changes.
+            if (xmlEditor != null && this.getCurrentPage() == 1) {
+                xmlEditor.doSave(monitor);
+                ((AFormPage) (formPages.get(0))).refreshPage();
                 return;
             }
-        }
-        // if(xmlEditor!=null)xmlEditor.doSave(monitor);
-        // perform the actual save
+            int numPages = formPages.size();
+            monitor.beginTask(Messages.bind(Messages.XObjectEditor2_saving, this.getEditorInput().getName()), numPages + 1);
+            for (int i = 0; i < numPages; i++) {
+                if ((formPages.get(i)) instanceof AFormPage) {
+                    if (!((AFormPage) (formPages.get(i))).beforeDoSave())
+                        return;
+                }
+                (formPages.get(i)).doSave(monitor);
+                monitor.worked(1);
+                if (monitor.isCanceled()) {
+                    this.saveInProgress = false;
+                    return;
+                }
+            }
+            // if(xmlEditor!=null)xmlEditor.doSave(monitor);
+            // perform the actual save
 
-        boolean saved = saveResourceToRepository();
-        if (xmlEditor != null && saved) {
-            xmlEditor.refresh();
+            boolean saved = saveResourceToRepository();
+            if (xmlEditor != null && saved) {
+                xmlEditor.refresh();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            monitor.done();
         }
-        monitor.done();
     }
 
     private boolean saveResourceToRepository() {
@@ -115,7 +120,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
         }
         return false;
     }
-
 
     private void refreshDirtyCue() {
         IEditorInput input = getEditorInput();
