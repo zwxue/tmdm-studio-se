@@ -20,6 +20,9 @@ public class RepositoryWorkflowUtil {
     private static final String PROCESS_EXTENSION = ".proc"; //$NON-NLS-1$
 
     public static String getProcFileName(String procName, String version) {
-        return procName + "_" + version + PROCESS_EXTENSION;
+        if (version != null)
+            return procName + "_" + version + PROCESS_EXTENSION; //$NON-NLS-1$
+        else
+            return procName + PROCESS_EXTENSION;
     }
 }
