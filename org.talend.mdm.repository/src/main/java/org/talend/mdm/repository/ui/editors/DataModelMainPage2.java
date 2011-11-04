@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2010 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,11 +12,19 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
@@ -27,6 +35,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
+import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -74,7 +83,50 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
 
         refreshDirtyCue();
+        autoDeploy(serverObject);
+    }
 
+    private void autoDeploy(MDMServerObject serverObject) {
+        IEditorInput input = getEditorInput();
+        XObjectEditorInput2 theInput = null;
+        if (input instanceof XObjectEditorInput2) {
+            theInput = (XObjectEditorInput2) input;
+        }
+        IRepositoryViewObject viewObj = theInput.getViewObject();
+        if (serverObject.getLastServerDef() != null) {
+            List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+            viewObjs.add(viewObj);
+            IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs);
+
+            updateChangedStatus(status);
+            if (status.isMultiStatus()) {
+                showDeployStatus(status);
+            }
+        } else {
+            MessageDialog.openWarning(getSite().getShell(), "Warning", "the object " + viewObj.getLabel()
+                    + " was never deployed before ,can not deploy it to last server automatically");
+        }
+    }
+
+    protected void updateChangedStatus(IStatus status) {
+        if (status.isMultiStatus()) {
+            for (IStatus childStatus : status.getChildren()) {
+                DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
+                if (deployStatus.isOK()) {
+                    if (deployStatus.getItem() instanceof MDMServerObjectItem) {
+                        MDMServerObjectItem item = (MDMServerObjectItem) deployStatus.getItem();
+                        MDMServerObject mdmServerObject = item.getMDMServerObject();
+                        mdmServerObject.setChanged(false);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void showDeployStatus(IStatus status) {
+        MutliStatusDialog dialog = new MutliStatusDialog(getSite().getShell(), status.getChildren().length
+                + Messages.AbstractDeployAction_deployMessage, status);
+        dialog.open();
     }
 
     private void refreshDirtyCue() {
@@ -86,7 +138,6 @@ public class DataModelMainPage2 extends DataModelMainPage {
         IRepositoryViewObject viewObj = theInput.getViewObject();
         CommonViewer viewer = MDMRepositoryView.show().getCommonViewer();
         viewer.refresh(viewObj);
-
     }
 
     @Override
