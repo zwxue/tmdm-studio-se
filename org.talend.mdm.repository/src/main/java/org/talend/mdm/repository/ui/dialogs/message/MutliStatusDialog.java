@@ -68,6 +68,9 @@ public class MutliStatusDialog extends Dialog {
 
             if (element instanceof DeployStatus) {
                 DeployStatus deployStatus = (DeployStatus) element;
+                if (deployStatus.getMessage().toLowerCase().contains("job")) { //$NON-NLS-1$
+                    return IMG_OK;
+                }
                 Item item = deployStatus.getItem();
                 MDMServerObject serverObj =null;
                 if (item != null)
@@ -79,14 +82,12 @@ public class MutliStatusDialog extends Dialog {
                         return IMG_OK;
                     }
                     return IMG_ADD;
-
                 }
                 if (deployStatus.getSeverity() == IStatus.INFO)
                     return IMG_INFO;
                 if (deployStatus.getSeverity() == IStatus.ERROR)
                     return IMG_ERR;
             }
-
             return null;
         }
 
