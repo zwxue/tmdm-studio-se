@@ -33,9 +33,8 @@ import org.talend.designer.core.model.utils.emf.talendfile.NodeType;
 import org.talend.designer.core.ui.MultiPageTalendEditor;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.repository.editor.JobEditorInput;
-import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
-import org.talend.repository.ui.views.RepositoryView;
+import org.talend.repository.model.RepositoryNode;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.views.ServerView;
@@ -73,7 +72,6 @@ public class OpenJobAction extends Action {
             IEditorPart editorPart = page.findEditor(fileEditorInput);
 
             if (editorPart == null) {
-                fileEditorInput.setView(RepositoryView.show());
                 RepositoryNode node1 = new RepositoryNode(node, null, ENodeType.REPOSITORY_ELEMENT);
                 fileEditorInput.setRepositoryNode(node1);
                 editorPart = page.openEditor(fileEditorInput, MultiPageTalendEditor.ID, true);
