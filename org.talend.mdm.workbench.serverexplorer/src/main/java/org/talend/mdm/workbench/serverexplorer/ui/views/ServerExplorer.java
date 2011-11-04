@@ -207,30 +207,24 @@ public class ServerExplorer extends ViewPart {
 
         IWorkbenchPage page = getViewSite().getPage();
         ServerView serverView = (ServerView) page.findView(ServerView.VIEW_ID);
-
         MDMServerHelper.getServersListFromSerExp().clear();
-
         List<MDMServerDef> servers = ServerDefService.getAllServerDefs();
-
         for (MDMServerDef server : servers) {
             addMDMServerViewDef(server);
         }
         if (serverView == null)
             return;
-
         if (serverView != null) {
             serverView.initView();
             serverView.getViewer().collapseAll();
             serverView.getViewer().refresh();
         }
-
     }
 
     private void addMDMServerViewDef(MDMServerDef serverDef) {
         com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
                 serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
         MDMServerHelper.getServersListFromSerExp().add(serDef);
-
     }
 
 
@@ -265,7 +259,6 @@ public class ServerExplorer extends ViewPart {
                 if (result) {
                     refreshServerDefs();
                 }
-
                 synchronizeMDMServerView();
             }
         }
@@ -274,7 +267,6 @@ public class ServerExplorer extends ViewPart {
     class CheckConnectionAction extends Action {
 
         public CheckConnectionAction() {
-
             setImageDescriptor(IMG_CHECK_CONNECT);
             setText(Messages.ServerExplorer_CheckConnection);
         }
@@ -310,9 +302,7 @@ public class ServerExplorer extends ViewPart {
         }
 
         public void run() {
-
             // TreeParent root = ServerView.show().getRoot();
-
             int index = 0;
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
             if (viewObject != null) {
@@ -330,15 +320,16 @@ public class ServerExplorer extends ViewPart {
             }
             TreeParent root = (TreeParent) ServerView.show().getRoot().getChildren()[index];
             findEventManager(root);
-            if (eventManger == null)
+            // if (eventManger == null)
+            if (eventManger == null || !(eventManger.getServerRoot().getName().equals(root.getName())))
                 try {
                     new ServerRefreshAction(ServerView.show(), root).doRun();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
+                    MessageDialog.openError(getSite().getShell(), "Error", e.getLocalizedMessage());
+                    return;
                 }
-
             findEventManager(root);
-
             try {
                 ServerView.show().getSite().getWorkbenchWindow().getActivePage().openEditor(
                         new XObjectBrowserInput(eventManger, eventManger.getDisplayName()), XObjectBrowser.ID);
@@ -356,9 +347,7 @@ public class ServerExplorer extends ViewPart {
                 } else {
                     if (treeObject.getType() == TreeObject.SUBSCRIPTION_ENGINE)
                         eventManger = treeObject;
-
                 }
-
             }
 
         }
@@ -372,7 +361,15 @@ public class ServerExplorer extends ViewPart {
         }
 
         public void run() {
+            IRepositoryViewObject viewObject = getCurSelectedViewObject();
+            String name = ""; //$NON-NLS-1$
+            if (viewObject != null) {
+                MDMServerDefItem serverDefItem = getMDMItem(viewObject);
+                name = serverDefItem.getServerDef().getName();
+            }
             editServerDef();
+            deleteServerDefForSerView(name);
+            synchronizeMDMServerView();
         }
 
     }
@@ -411,27 +408,27 @@ public class ServerExplorer extends ViewPart {
                     if (result) {
                         refreshServerDefs();
                     }
-
                     deleteServerDefForSerView(serverDefItem.getServerDef().getName());
                     // synchronizeMDMServerView();
-
                 }
             }
         }
 
-        private void deleteServerDefForSerView(String nameToDel) {
+        
 
-            synchronizeMDMServerView();
-            ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
-            if (viewPart != null) {
-                for (TreeObject object : viewPart.getRoot().getChildren()) {
-                    if (object.getName().equals(nameToDel)) {
-                        viewPart.getRoot().removeChild(object);
-                    }
+    }
+
+    private void deleteServerDefForSerView(String nameToDel) {
+
+        synchronizeMDMServerView();
+        ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
+        if (viewPart != null) {
+            for (TreeObject object : viewPart.getRoot().getChildren()) {
+                if (object.getName().equals(nameToDel)) {
+                    viewPart.getRoot().removeChild(object);
                 }
-                (viewPart).getViewer().refresh();
             }
+            (viewPart).getViewer().refresh();
         }
- 
     }
 }
