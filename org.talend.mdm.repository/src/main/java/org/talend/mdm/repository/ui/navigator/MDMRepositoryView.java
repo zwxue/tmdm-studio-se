@@ -101,7 +101,7 @@ public class MDMRepositoryView extends CommonNavigator {
      * DOC hbhong Comment method "initInput".
      */
     private void initInput() {
-        IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
+        IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjectsWithRecycle();
 
         getCommonViewer().setInput(categoryViewObjects);
         // getCommonViewer().addFilter(filter);

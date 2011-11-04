@@ -29,8 +29,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -68,6 +70,7 @@ import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.bridge.MDMRepositoryNode;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
@@ -113,6 +116,7 @@ public class RepositoryResourceUtil {
     public static String escapeSpecialCharacters(String input) {
         return input.replace('#', '$');
     }
+
     public static void saveItem(Item item) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
@@ -374,12 +378,41 @@ public class RepositoryResourceUtil {
         }
         ContainerRepositoryObject containerRepositoryObject = new ContainerRepositoryObject(prop);
         //
-        ContainerCacheService.put(containerRepositoryObject);
+        ContainerCacheService.putContainer(containerRepositoryObject);
         //
         return containerRepositoryObject;
     }
 
+    public static ContainerRepositoryObject createDeletedFolderViewObject(ERepositoryObjectType type, String path,
+            String folderName,
+            ContainerRepositoryObject parentConObj) {
+        Property prop = PropertiesFactory.eINSTANCE.createProperty();
+        prop.setId(EcoreUtil.generateUUID());
+        //
+
+        ContainerItem item = MdmpropertiesFactory.eINSTANCE.createContainerItem();
+
+        item.setType(FolderType.FOLDER_LITERAL);
+
+        item.setLabel(folderName);
+        item.setRepObjType(type);
+        ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
+
+        itemState.setPath(path);
+        item.setState(itemState);
+        //
+
+        prop.setItem(item);
+        prop.setLabel(folderName);
+        itemState.setDeleted(true);
+        ContainerRepositoryObject containerRepositoryObject = new ContainerRepositoryObject(prop);
+        parentConObj.getChildren().add(containerRepositoryObject);
+        return containerRepositoryObject;
+    }
+
     private static IRepositoryViewObject[] categoryViewObjects = null;
+
+    private static IRepositoryViewObject[] categoryViewObjectsWithRecycle = null;
 
     public static IRepositoryViewObject[] getCategoryViewObjects() {
         if (categoryViewObjects == null) {
@@ -394,6 +427,20 @@ public class RepositoryResourceUtil {
             categoryViewObjects = results.toArray(new IRepositoryViewObject[0]);
         }
         return categoryViewObjects;
+    }
+
+    public static IRepositoryViewObject[] getCategoryViewObjectsWithRecycle() {
+        if (categoryViewObjectsWithRecycle == null) {
+            IRepositoryViewObject[] cvos = getCategoryViewObjects();
+            int len = cvos.length + 1;
+            categoryViewObjectsWithRecycle = new IRepositoryViewObject[len];
+            System.arraycopy(cvos, 0, categoryViewObjectsWithRecycle, 0, len - 1);
+            //
+
+            categoryViewObjectsWithRecycle[len - 1] = getCategoryViewObject(RepositoryNodeConfigurationManager
+                    .getRecycleBinNodeConfiguration());
+        }
+        return categoryViewObjectsWithRecycle;
     }
 
     public static IRepositoryViewObject getCategoryViewObject(IRepositoryNodeConfiguration conf) {
@@ -413,7 +460,7 @@ public class RepositoryResourceUtil {
         prop.setItem(item);
         //
         ContainerRepositoryObject containerObject = new ContainerRepositoryObject(prop);
-        ContainerCacheService.put(containerObject);
+        ContainerCacheService.putContainer(containerObject);
         return containerObject;
     }
 
@@ -504,6 +551,22 @@ public class RepositoryResourceUtil {
         return findViewObjects(type, parentItem, false);
     }
 
+    public static boolean isDeletedFolder(Item item, ERepositoryObjectType type) {
+        ItemState state = item.getState();
+        if (item instanceof FolderItem) {
+
+            String path = ERepositoryObjectType.getFolderName(type);
+            if (!path.isEmpty()) {
+                path += state.getPath();
+            }
+            List<String> deletedFolderPaths = ProjectManager.getInstance().getCurrentProject().getEmfProject()
+                    .getDeletedFolders();
+            return deletedFolderPaths.contains(path);
+        } else {
+            return state.isDeleted();
+        }
+    }
+
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject) {
         try {
@@ -531,8 +594,9 @@ public class RepositoryResourceUtil {
         try {
             for (IResource res : folder.members()) {
                 if (res instanceof IFolder) {
-                    IRepositoryViewObject folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
+
                     if (!isDeletedFolder((IFolder) res) && !isSVNFolder((IFolder) res)) {
+                        IRepositoryViewObject folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
                         viewObjects.add(folderObject);
                     }
                 }
@@ -751,4 +815,16 @@ public class RepositoryResourceUtil {
 
         }
     };
+
+    private static Map<String, ERepositoryObjectType> typePathMap = null;
+
+    public static ERepositoryObjectType getTypeByPath(String path) {
+        if (typePathMap == null) {
+            typePathMap = new HashMap<String, ERepositoryObjectType>();
+            for (ERepositoryObjectType type : IServerObjectRepositoryType.ALL_TYPES) {
+                typePathMap.put(type.getFolder(), type);
+            }
+        }
+        return typePathMap.get(path);
+    }
 }

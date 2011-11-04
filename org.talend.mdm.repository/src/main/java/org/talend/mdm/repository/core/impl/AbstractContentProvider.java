@@ -27,6 +27,7 @@ import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeContentProvider;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -40,7 +41,15 @@ public abstract class AbstractContentProvider implements IRepositoryNodeContentP
     public Object[] getChildren(Object element) {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null && item instanceof ContainerItem) {
+
             ContainerItem containerItem = (ContainerItem) item;
+            // recycle
+            if (RepositoryResourceUtil.isDeletedFolder(item, ((IRepositoryViewObject) element).getRepositoryObjectType())) {
+                AbstractContentProvider recycleContentProvider = (AbstractContentProvider) RepositoryNodeConfigurationManager
+                        .getRecycleBinNodeConfiguration().getContentProvider();
+                return recycleContentProvider.getChildren(element);
+            }
+            //
             FolderType containerType = containerItem.getType();
             List<IRepositoryViewObject> children = ((ContainerRepositoryObject) element).getChildren();
             if (containerType == FolderType.SYSTEM_FOLDER_LITERAL) {

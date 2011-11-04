@@ -19,9 +19,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.general.Project;
+import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
-import org.talend.core.model.properties.Property;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -30,6 +30,8 @@ import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -77,15 +79,6 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
-
-                // Item item = viewObj.getProperty().getItem();
-                // if (item instanceof MDMServerObjectItem) {
-                // MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-                // if (serverObj.getLastServerDef() != null) {
-                // viewObjectsListRemoved.add(viewObj);
-                // }
-                // }
-
                 if (isServerObject(viewObj)) {
                     removeServerObject(viewObj);
                 } else if (RepositoryResourceUtil.hasContainerItem(obj, FolderType.FOLDER_LITERAL)) {
@@ -94,7 +87,15 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
             }
         }
+
+        try {
+            factory.saveProject(ProjectManager.getInstance().getCurrentProject());
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+
         commonViewer.refresh();
+
     }
 
     private boolean isServerObject(IRepositoryViewObject viewObj) {
@@ -103,29 +104,42 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     private void removeServerObject(IRepositoryViewObject viewObj) {
         try {
+            Item item = viewObj.getProperty().getItem();
+            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+            if (serverObj.getLastServerDef() != null) {
+                viewObjectsListRemoved.add(viewObj);
+            }
 
-            Property property = viewObj.getProperty();
-            ContainerCacheService.remove(property);
-            // factory.deleteObjectLogical(viewObj);
-            factory.deleteObjectPhysical(viewObj);
+            // Property property = viewObj.getProperty();
+            // ContainerCacheService.remove(property);
+            factory.deleteObjectLogical(viewObj);
+            // factory.deleteObjectPhysical(viewObj);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }
 
     private void removeFolderObject(IRepositoryViewObject viewObj) {
-        try {
-            ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
-            Project project = ProjectManager.getInstance().getCurrentProject();
-            String path = containerItem.getState().getPath();
-            ERepositoryObjectType repObjType = containerItem.getRepObjType();
-
-            ContainerCacheService.remove(repObjType, path);
-
-            factory.deleteFolder(project, repObjType, new Path(path), true);
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+        for (IRepositoryViewObject childObj : viewObj.getChildren()) {
+            if (childObj instanceof ContainerRepositoryObject) {
+                removeFolderObject(childObj);
+            } else {
+                removeServerObject(childObj);
+            }
         }
+        //
+        ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
+        // Project project = ProjectManager.getInstance().getCurrentProject();
+        String path = containerItem.getState().getPath();
+        ERepositoryObjectType repObjType = containerItem.getRepObjType();
+
+        ContainerCacheService.removeContainer(repObjType, path);
+
+        // factory.deleteFolder(project, repObjType, new Path(path), false);
+        FolderItem folderItem = factory.getFolderItem(ProjectManager.getInstance().getCurrentProject(), repObjType,
+                new Path(path));
+        folderItem.getState().setDeleted(true);
+
     }
 
     public static List<IRepositoryViewObject> getViewObjectsRemovedList() {

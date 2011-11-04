@@ -39,9 +39,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
+import org.talend.mdm.repository.core.impl.recyclebin.RecycleBinNodeConfiguration;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -64,6 +66,12 @@ public class RepositoryNodeConfigurationManager {
     private static List<IRepositoryNodeConfiguration> configurations = new LinkedList<IRepositoryNodeConfiguration>();
 
     private static boolean initedBean = false;
+
+    private static IRepositoryNodeConfiguration recycleBinNodeConfiguration = new RecycleBinNodeConfiguration();
+
+    public static IRepositoryNodeConfiguration getRecycleBinNodeConfiguration() {
+        return recycleBinNodeConfiguration;
+    }
 
     public static List<IRepositoryNodeConfiguration> getConfigurations() {
         if (!inited) {
@@ -91,16 +99,25 @@ public class RepositoryNodeConfigurationManager {
                 }
             }
         }
+        if (recycleBinNodeConfiguration.getResourceProvider().canHandleItem(item)) {
+            return recycleBinNodeConfiguration;
+        }
         return null;
     }
 
     public static IRepositoryNodeConfiguration getConfiguration(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
         if (item != null) {
-            return getConfiguration(item);
+            if (RepositoryResourceUtil.isDeletedFolder(item, viewObj.getRepositoryObjectType())) {
+                return getRecycleBinNodeConfiguration();
+            } else {
+                return getConfiguration(item);
+            }
         }
         return null;
     }
+
+
 
     public static IRepositoryNodeConfiguration getConfiguration(ERepositoryObjectType type) {
 

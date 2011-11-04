@@ -41,7 +41,7 @@ public class ContainerCacheService {
         viewObjMap.clear();
         containerMap.clear();
     }
-    public static void put(IRepositoryViewObject viewObj) {
+    public static void putContainer(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
         if (item instanceof ContainerItem) {
             ERepositoryObjectType repObjType = ((ContainerItem) item).getRepObjType();
@@ -55,6 +55,7 @@ public class ContainerCacheService {
             map.put(path, viewObj);
         }
     }
+
 
     public static void put(Property prop, IRepositoryViewObject viewObj) {
         if (prop == null || viewObj == null)
@@ -73,7 +74,7 @@ public class ContainerCacheService {
         }
     }
 
-    public static void remove(ERepositoryObjectType repObjType, String path) {
+    public static void removeContainer(ERepositoryObjectType repObjType, String path) {
         Map<String, IRepositoryViewObject> map = containerMap.get(repObjType);
         if (map != null) {
             for (Iterator<String> il = map.keySet().iterator(); il.hasNext();) {

@@ -28,6 +28,8 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
@@ -98,12 +100,23 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     protected void refreshParent() {
         Object object = getSelectedObject().get(0);
+        commonViewer.setSelection(new StructuredSelection());
         if (object instanceof IRepositoryViewObject) {
-            IRepositoryViewObject parent = ContainerCacheService.getParent((IRepositoryViewObject) object);
+            final IRepositoryViewObject parent = ContainerCacheService.getParent((IRepositoryViewObject) object);
             if (parent != null) {
+                Display.getDefault().syncExec(new Runnable() {
+
+                    public void run() {
+
+                        if (parent != null) {
+                            commonViewer.refresh(parent);
+                        }
+                    }
+                });
                 commonViewer.refresh(parent);
             }
         }
+
     }
 
     protected void refreshRepositoryRoot(ERepositoryObjectType type) {

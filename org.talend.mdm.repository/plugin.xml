@@ -395,6 +395,14 @@
             products="MDM"
             type="MDM.CustomForm">
       </repositoryNode>
+      <repositoryNode
+            class="org.talend.mdm.repository.core.nodes.RecycleBinRepositoryNode"
+            folder="MDM/RecycleBin"
+            isResouce="false"
+            label="Recycle bin"
+            products="MDM"
+            type="MDM.RecycleBin">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.mdm.repository.repositoryConfiguration">

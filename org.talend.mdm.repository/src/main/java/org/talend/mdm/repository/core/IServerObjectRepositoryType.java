@@ -84,4 +84,12 @@ public interface IServerObjectRepositoryType {
 
     public static ERepositoryObjectType TYPE_CUSTOM_FORM = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
             ERepositoryObjectType.class, "MDM.CustomForm"); //$NON-NLS-1$
+
+    public static ERepositoryObjectType TYPE_RECYCLE_BIN = (ERepositoryObjectType) ERepositoryObjectType.valueOf(
+            ERepositoryObjectType.class, "MDM.RecycleBin"); //$NON-NLS-1$
+
+    public ERepositoryObjectType[] ALL_TYPES = new ERepositoryObjectType[] { TYPE_CUSTOM_FORM, TYPE_DATACLUSTER, TYPE_DATAMODEL,
+            TYPE_EVENTMANAGER, ERepositoryObjectType.PROCESS, TYPE_MENU, TYPE_RESOURCE, TYPE_ROLE, TYPE_ROUTINGRULE,
+            TYPE_SERVICECONFIGURATION,
+            TYPE_STOREPROCEDURE, TYPE_SYNCHRONIZATIONPLAN, TYPE_TRANSFORMERV2, TYPE_UNIVERSE, TYPE_VIEW, TYPE_WORKFLOW };
 }
