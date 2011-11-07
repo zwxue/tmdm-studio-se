@@ -149,11 +149,11 @@ public class TisTableViewer extends ComplexTableViewer {
 
                     xpathDialog = getNewXpathDlgInstance();
                     xpathDialog.setConceptName(conceptName);
-
                     xpathDialog.setBlockOnOpen(true);
                     xpathDialog.open();
 
                     if (xpathDialog.getReturnCode() == Window.OK) {
+                        datamodelName = xpathDialog.getDataModelName();
                         String[] xpaths = xpathDialog.getXpath().split("&");//$NON-NLS-1$
                         for (String xpath : xpaths) {
                             // check uniqueness by concatenating all the values
