@@ -400,6 +400,7 @@
 			<xsd:documentation>
 				Get a list of data model PKs using a regular expression
 			</xsd:documentation>
+
 		</xsd:annotation>						
 		<xsd:sequence>
 			<xsd:element maxOccurs="1" minOccurs="1" name="regex" nillable="false" type="xsd:string"/>
@@ -1012,6 +1013,7 @@
 			<xsd:element maxOccurs="1" minOccurs="1" name="maxItems" nillable="false" type="xsd:int"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="orderBy" nillable="true" type="xsd:string"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="direction" nillable="true" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="returnCount" nillable="true" type="xsd:boolean"/>
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSXPathsSearch" type="tns:WSXPathsSearch"/>
@@ -1263,6 +1265,7 @@
 			<xsd:element maxOccurs="1" minOccurs="1" name="wsItemPK" nillable="false" type="tns:WSItemPK"/>		
 			<xsd:element maxOccurs="1" minOccurs="0" name="source" nillable="true" type="xsd:string"/>	
 			<xsd:element maxOccurs="1" minOccurs="0" name="operateType" nillable="true" type="xsd:string"/>	
+
 			<xsd:element maxOccurs="1" minOccurs="0" name="updatePath" nillable="true" type="xsd:string"/>	
 			<xsd:element maxOccurs="1" minOccurs="0" name="user" nillable="true" type="xsd:string"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="invokeBeforeSaving" nillable="true" type="xsd:boolean"/>
