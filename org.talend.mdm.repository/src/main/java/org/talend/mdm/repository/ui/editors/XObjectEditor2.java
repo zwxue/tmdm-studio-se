@@ -119,7 +119,7 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
                 editorDirtyStateChanged();
 
                 refreshDirtyCue();
-                autoDeploy(serverObject);
+                // autoDeploy(serverObject);
                 return true;
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);

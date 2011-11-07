@@ -83,7 +83,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
 
         refreshDirtyCue();
-        autoDeploy(serverObject);
+        // autoDeploy(serverObject);
     }
 
     private void autoDeploy(MDMServerObject serverObject) {
