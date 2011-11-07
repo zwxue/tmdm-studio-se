@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -37,6 +38,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
 import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -83,7 +85,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
 
         refreshDirtyCue();
-        // autoDeploy(serverObject);
+        if (PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_AUTO_DEPLOY)) {
+            autoDeploy(serverObject);
+        }
     }
 
     private void autoDeploy(MDMServerObject serverObject) {
@@ -103,8 +107,8 @@ public class DataModelMainPage2 extends DataModelMainPage {
                 showDeployStatus(status);
             }
         } else {
-            MessageDialog.openWarning(getSite().getShell(), "Warning", "the object " + viewObj.getLabel()
-                    + " was never deployed before ,can not deploy it to last server automatically");
+            MessageDialog.openWarning(getSite().getShell(), Messages.Warning_text, Messages.TheObject_text + " " //$NON-NLS-1$
+                    + viewObj.getLabel() + " " + Messages.NeverDeploy_text);//$NON-NLS-1$
         }
     }
 

@@ -208,6 +208,14 @@ public class Messages extends NLS {
 
     public static String TransformerInteractiveHandler_label;
 
+    public static String AutoDeploy_saving_text;
+
+    public static String Warning_text;
+
+    public static String TheObject_text;
+
+    public static String NeverDeploy_text;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

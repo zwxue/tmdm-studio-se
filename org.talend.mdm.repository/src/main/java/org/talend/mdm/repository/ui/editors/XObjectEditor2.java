@@ -42,6 +42,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.contributor.SvnHistorySelectionProvider;
 import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -119,7 +120,9 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
                 editorDirtyStateChanged();
 
                 refreshDirtyCue();
-                // autoDeploy(serverObject);
+                if (PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_AUTO_DEPLOY)) {
+                    autoDeploy(serverObject);
+                }
                 return true;
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
@@ -145,8 +148,8 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
                 showDeployStatus(status);
             }
         } else {
-            MessageDialog.openWarning(getSite().getShell(), "Warning", "the Object" + serverObject.getName()
-                    + " was never deployed before");
+            MessageDialog.openWarning(getSite().getShell(), Messages.Warning_text, Messages.TheObject_text + " " //$NON-NLS-1$
+                    + serverObject.getName() + " " + Messages.NeverDeploy_text);//$NON-NLS-1$
         }
     }
 
