@@ -30,8 +30,8 @@ import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
-import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -51,11 +51,7 @@ public class RecycleBinLabelProvider extends AbstractLabelProvider {
         return "Recycle bin"; //$NON-NLS-1$
     }
 
-    @Override
     public Image getCategoryImage(Item item) {
-        if (item instanceof ContainerItem) {
-            return ((ContainerItem) item).getChildren().isEmpty() ? EMPTY_IMG : FULL_IMG;
-        }
         return null;
     }
 
@@ -63,11 +59,12 @@ public class RecycleBinLabelProvider extends AbstractLabelProvider {
     public Image getImage(Object element) {
         if (element instanceof IRepositoryViewObject) {
 
-            IRepositoryViewObject viwObj = (IRepositoryViewObject) element;
-            ERepositoryObjectType type = viwObj.getRepositoryObjectType();
+            IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+            ERepositoryObjectType type = viewObj.getRepositoryObjectType();
             if (type == IServerObjectRepositoryType.TYPE_RECYCLE_BIN) {
-                Item item = viwObj.getProperty().getItem();
-                return getCategoryImage(item);
+                if (viewObj instanceof ContainerRepositoryObject) {
+                    return ((ContainerRepositoryObject) viewObj).getChildren().isEmpty() ? EMPTY_IMG : FULL_IMG;
+                }
             }
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
             if (configuration != null) {

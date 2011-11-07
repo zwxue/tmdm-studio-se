@@ -30,6 +30,10 @@ public class Messages extends NLS {
 
     public static String EditPropertiesAction_action_title;
 
+    public static String EmptyRecycleBinAction_confirmEmpty;
+
+    public static String EmptyRecycleBinAction_title;
+
     public static String DataContainerInteractiveHandler_title;
 
     public static String DataModelInteractiveHandler_label;
@@ -99,6 +103,8 @@ public class Messages extends NLS {
     public static String RemoveFromRepositoryAction_Title;
 
     public static String RemoveFromServerAction_removeFromServer;
+
+    public static String RemovePhysicallyFromRepositoryAction_title;
 
     public static String RenameObjectAction_rename;
 

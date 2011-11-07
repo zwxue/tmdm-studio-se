@@ -10,28 +10,23 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.actions;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.talend.mdm.repository.ui.actions.recyclebin;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.properties.FolderItem;
+import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -42,21 +37,19 @@ import com.amalto.workbench.image.ImageCache;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
+public class RemovePhysicallyFromRepositoryAction extends AbstractRepositoryAction {
 
-    static Logger log = Logger.getLogger(RemoveFromRepositoryAction.class);
+    static Logger log = Logger.getLogger(RemovePhysicallyFromRepositoryAction.class);
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-
-    private static List<IRepositoryViewObject> viewObjectsListRemoved = new ArrayList<IRepositoryViewObject>();
 
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
      * 
      * @param text
      */
-    public RemoveFromRepositoryAction() {
-        super(Messages.RemoveFromRepositoryAction_removeFromRepository);
+    public RemovePhysicallyFromRepositoryAction() {
+        super(Messages.RemovePhysicallyFromRepositoryAction_title);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
     }
 
@@ -95,54 +88,34 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         }
 
         commonViewer.refresh();
+
     }
 
     private boolean isServerObject(IRepositoryViewObject viewObj) {
-        return viewObj.getProperty().getItem() instanceof MDMServerObjectItem;
+        Item item = viewObj.getProperty().getItem();
+        return item instanceof MDMServerObjectItem || item instanceof ProcessItem;
     }
 
     private void removeServerObject(IRepositoryViewObject viewObj) {
         try {
-            Item item = viewObj.getProperty().getItem();
-            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-            if (serverObj.getLastServerDef() != null) {
-                viewObjectsListRemoved.add(viewObj);
-            }
-
-            // Property property = viewObj.getProperty();
-            // ContainerCacheService.remove(property);
-            factory.deleteObjectLogical(viewObj);
-            // factory.deleteObjectPhysical(viewObj);
-        } catch (Exception e) {
+            factory.deleteObjectPhysical(viewObj);
+        } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
     }
 
     private void removeFolderObject(IRepositoryViewObject viewObj) {
-        for (IRepositoryViewObject childObj : viewObj.getChildren()) {
-            if (childObj instanceof ContainerRepositoryObject) {
-                removeFolderObject(childObj);
-            } else {
-                removeServerObject(childObj);
-            }
-        }
-        //
+        Project project = ProjectManager.getInstance().getCurrentProject();
         ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
-        // Project project = ProjectManager.getInstance().getCurrentProject();
         String path = containerItem.getState().getPath();
         ERepositoryObjectType repObjType = containerItem.getRepObjType();
+        // ContainerCacheService.removeContainer(repObjType, path);
+        try {
+            factory.deleteFolder(project, repObjType, new Path(path), false);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
 
-        ContainerCacheService.removeContainer(repObjType, path);
-
-        // factory.deleteFolder(project, repObjType, new Path(path), false);
-        FolderItem folderItem = factory.getFolderItem(ProjectManager.getInstance().getCurrentProject(), repObjType,
-                new Path(path));
-        folderItem.getState().setDeleted(true);
-
-    }
-
-    public static List<IRepositoryViewObject> getViewObjectsRemovedList() {
-        return viewObjectsListRemoved;
     }
 
 }

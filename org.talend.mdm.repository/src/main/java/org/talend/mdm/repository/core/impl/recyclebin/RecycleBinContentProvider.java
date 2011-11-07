@@ -133,7 +133,6 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
     @Override
     public Object[] getChildren(Object element) {
         IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
-        Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         ERepositoryObjectType type = viewObj.getRepositoryObjectType();
         if (viewObj instanceof ContainerRepositoryObject) {
             ContainerRepositoryObject containerObj = (ContainerRepositoryObject) viewObj;

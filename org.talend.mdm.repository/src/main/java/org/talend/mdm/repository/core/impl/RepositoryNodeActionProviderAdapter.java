@@ -34,6 +34,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.extension.ActionProviderManager;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -115,6 +116,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         for (IRepositoryNodeActionProvider provider : getExtendActionProviders()) {
             provider.initCommonViewer(commonViewer);
         }
+        // recycle
+        RepositoryNodeConfigurationManager.getRecycleBinNodeConfiguration().getActionProvider().initCommonViewer(commonViewer);
     }
 
     protected AbstractRepositoryAction initRepositoryAction(AbstractRepositoryAction action, CommonViewer commonViewer) {

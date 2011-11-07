@@ -21,14 +21,17 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.recyclebin;
 
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
-import org.talend.mdm.repository.ui.actions.menu.NewMenuAction;
+import org.talend.mdm.repository.ui.actions.recyclebin.EmptyRecycleBinAction;
+import org.talend.mdm.repository.ui.actions.recyclebin.RemovePhysicallyFromRepositoryAction;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -36,35 +39,25 @@ import org.talend.mdm.repository.ui.actions.menu.NewMenuAction;
  */
 public class RecycleBinActionProvider extends RepositoryNodeActionProviderAdapter {
 
-    AbstractRepositoryAction addAction;
+    AbstractRepositoryAction removeAction;
+
+    AbstractRepositoryAction emptyRecycleBinAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
-        super.initCommonViewer(commonViewer);
-        addAction = new NewMenuAction();
-
-        //
-        addAction.initCommonViewer(commonViewer);
-
+        removeAction = initRepositoryAction(new RemovePhysicallyFromRepositoryAction(), commonViewer);
+        emptyRecycleBinAction = initRepositoryAction(new EmptyRecycleBinAction(), commonViewer);
     }
 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
-        // List<AbstractRepositoryAction> actions = super.getActions(viewObj);
-        // if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL,
-        // FolderType.FOLDER_LITERAL)) {
-        // actions.add(addAction);
-        //
-        // }
-        // if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-        // actions.add(renameAction);
-        // // deploy
-        // actions.add(deployToAction);
-        // addAction(actions, deployToLastServerAction, viewObj);
-        // }
-        // actions.add(deployAllAction);
-        // return actions;
-        return Collections.EMPTY_LIST;
+        List<AbstractRepositoryAction> actions = new LinkedList<AbstractRepositoryAction>();
+        if (!RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL)) {
+            actions.add(removeAction);
+        } else {
+            addAction(actions, emptyRecycleBinAction, viewObj);
+        }
+        return actions;
     }
 
 }
