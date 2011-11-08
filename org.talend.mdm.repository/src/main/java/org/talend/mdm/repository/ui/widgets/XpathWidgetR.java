@@ -17,6 +17,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.widgets.XpathWidget;
@@ -66,7 +67,9 @@ public class XpathWidgetR extends XpathWidget {
             }
         } else {
             if (dlg == null) {
-                dlg = new XpathSelectDialog2(parent.getShell(), dlgTitle, site, false, dataModelName);
+                // dlg = new XpathSelectDialog2(parent.getShell(), dlgTitle, site, false, dataModelName);
+                dlg = new XpathSelectDialog2(parent.getShell(), dlgTitle, MDMRepositoryView.show().getSite(), false,
+                        dataModelName);
                 dlg.setConceptName(conceptName);
             }
         }
