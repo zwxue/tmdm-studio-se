@@ -673,13 +673,17 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             ws.setCondition(conditionText.getText());
             this.comitting = false;
             // refresh serverview
-            ServerView view = ServerView.show();
-            view.getViewer().refresh();
+            refreshServerView();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }
+    }
+
+    protected void refreshServerView() {
+        ServerView view = ServerView.show();
+        view.getViewer().refresh();
     }
 
     public void textChanged(TextEvent event) {
