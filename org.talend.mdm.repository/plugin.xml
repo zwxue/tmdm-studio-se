@@ -252,13 +252,13 @@
          point="org.eclipse.ui.bindings">
       <key
             commandId="com.talend.mdm.repository.copy"
-            contextId="org.eclipse.ui.contexts.window"
+            contextId="org.talend.mdm.repository.context"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="Ctrl+C">
       </key>
       <key
             commandId="com.talend.mdm.repository.paste"
-            contextId="org.eclipse.ui.contexts.window"
+            contextId="org.talend.mdm.repository.context"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="Ctrl+V">
       </key>

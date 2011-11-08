@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -34,6 +34,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
@@ -57,6 +58,8 @@ import com.amalto.workbench.views.ServerView;
  */
 public class MDMRepositoryView extends CommonNavigator {
 
+    private static final String VIEW_CONTEXT_ID = "org.talend.mdm.repository.context"; //$NON-NLS-1$
+
     private static final Log log = LogFactory.getLog(ServerView.class);
 
     public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-1$
@@ -67,6 +70,16 @@ public class MDMRepositoryView extends CommonNavigator {
         initInput();
         registerEditorListener();
         contributeToActionBars();
+        activateContext();
+    }
+
+    /**
+     * Activate a context that this view uses. It will be tied to this view activation events and will be removed when
+     * the view is disposed.
+     */
+    private void activateContext() {
+        IContextService contextService = (IContextService) getSite().getService(IContextService.class);
+        contextService.activateContext(VIEW_CONTEXT_ID);
     }
 
     @Override
