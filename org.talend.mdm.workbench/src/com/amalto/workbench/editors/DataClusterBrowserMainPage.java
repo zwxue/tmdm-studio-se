@@ -517,13 +517,20 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             break;
                     }
                     String revision = "";//$NON-NLS-1$
-                    if (object != null)
-                        revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
-                                object.getDisplayName().indexOf("]"));//$NON-NLS-1$
+                    if (object != null) {
+                    	// TMDM-2606: Don't expect data model to contain revision name (CE edition doesn't support revisions).
+						if (object.getDisplayName().contains("[") && object.getDisplayName().contains("]")) {
+							revision = object.getDisplayName().substring(
+									object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
+									object.getDisplayName().indexOf("]"));//$NON-NLS-1$
+						}
+                    }
+                    
                     for (int i = 0; i < concepts.length; i++) {
                         String concept = concepts[i];
-                        if (revision == null || revision.equals(""))//$NON-NLS-1$
+                        if (revision == null || revision.equals("")) { //$NON-NLS-1$
                             revision = "HEAD";//$NON-NLS-1$
+                        }
                         concepts[i] = concept + " " + "[" + revision + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     }
                     conceptCombo.removeAll();
@@ -541,8 +548,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     WSConceptRevisionMapMapEntry entry = wsConceptRevisionMapMapEntries[i];
                     String concept = entry.getConcept();
                     String revision = entry.getRevision();
-                    if (revision == null || revision.equals(""))//$NON-NLS-1$
+                    if (revision == null || revision.equals("")) { //$NON-NLS-1$
                         revision = "HEAD";//$NON-NLS-1$
+                    }
                     concepts[i] = concept + " " + "[" + revision + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 }
                 conceptCombo.removeAll();
