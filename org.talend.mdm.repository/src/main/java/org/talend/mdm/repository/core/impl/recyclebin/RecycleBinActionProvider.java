@@ -31,6 +31,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.ui.actions.recyclebin.EmptyRecycleBinAction;
 import org.talend.mdm.repository.ui.actions.recyclebin.RemovePhysicallyFromRepositoryAction;
+import org.talend.mdm.repository.ui.actions.recyclebin.RestoreAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -43,10 +44,13 @@ public class RecycleBinActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction emptyRecycleBinAction;
 
+    AbstractRepositoryAction restoreAction;
+
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         removeAction = initRepositoryAction(new RemovePhysicallyFromRepositoryAction(), commonViewer);
         emptyRecycleBinAction = initRepositoryAction(new EmptyRecycleBinAction(), commonViewer);
+        restoreAction = initRepositoryAction(new RestoreAction(), commonViewer);
     }
 
     @Override
@@ -54,6 +58,7 @@ public class RecycleBinActionProvider extends RepositoryNodeActionProviderAdapte
         List<AbstractRepositoryAction> actions = new LinkedList<AbstractRepositoryAction>();
         if (!RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL)) {
             actions.add(removeAction);
+            actions.add(restoreAction);
         } else {
             addAction(actions, emptyRecycleBinAction, viewObj);
         }

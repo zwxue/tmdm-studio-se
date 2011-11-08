@@ -72,6 +72,7 @@ public class RemovePhysicallyFromRepositoryAction extends AbstractRepositoryActi
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+                RepositoryResourceUtil.closeEditor(viewObj, false);
                 if (isServerObject(viewObj)) {
                     removeServerObject(viewObj);
                 } else if (RepositoryResourceUtil.hasContainerItem(obj, FolderType.FOLDER_LITERAL)) {

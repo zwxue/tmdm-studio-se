@@ -47,6 +47,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
@@ -384,8 +385,7 @@ public class RepositoryResourceUtil {
     }
 
     public static ContainerRepositoryObject createDeletedFolderViewObject(ERepositoryObjectType type, String path,
-            String folderName,
-            ContainerRepositoryObject parentConObj) {
+            String folderName, ContainerRepositoryObject parentConObj) {
         Property prop = PropertiesFactory.eINSTANCE.createProperty();
         prop.setId(EcoreUtil.generateUUID());
         //
@@ -406,6 +406,9 @@ public class RepositoryResourceUtil {
         prop.setLabel(folderName);
         itemState.setDeleted(true);
         ContainerRepositoryObject containerRepositoryObject = new ContainerRepositoryObject(prop);
+        // update cache
+        ContainerCacheService.putContainer(containerRepositoryObject);
+        //
         parentConObj.getChildren().add(containerRepositoryObject);
         return containerRepositoryObject;
     }
@@ -789,6 +792,27 @@ public class RepositoryResourceUtil {
             }
         }
         return false;
+    }
+
+    public static void closeEditor(IRepositoryViewObject viewObj, boolean save) {
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IEditorReference[] editorReferences = activePage.getEditorReferences();
+        for (IEditorReference ref : editorReferences) {
+            if (ref != null) {
+                try {
+                    IEditorInput editorInput = ref.getEditorInput();
+                    if (editorInput instanceof IRepositoryViewEditorInput) {
+                        Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
+                        IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
+                        if (vObj != null && vObj.equals(viewObj)) {
+                            activePage.closeEditors(new IEditorReference[] { ref }, save);
+                        }
+                    }
+                } catch (PartInitException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
     }
 
     public static void initialize() {
