@@ -121,7 +121,15 @@ public class ServerExplorer extends ViewPart {
 
             @Override
             public void mouseDoubleClick(MouseEvent e) {
+                IRepositoryViewObject viewObject = getCurSelectedViewObject();
+                String name = ""; //$NON-NLS-1$
+                if (viewObject != null) {
+                    MDMServerDefItem serverDefItem = getMDMItem(viewObject);
+                    name = serverDefItem.getServerDef().getName();
+                }
                 editServerDef();
+                deleteServerDefForSerView(name);
+                synchronizeMDMServerView();
             }
         });
         toolkit.paintBordersFor(tree);
