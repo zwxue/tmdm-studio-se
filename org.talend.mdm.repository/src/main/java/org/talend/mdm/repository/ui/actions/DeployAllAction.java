@@ -23,8 +23,10 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.PlatformUI;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
@@ -50,6 +52,8 @@ public class DeployAllAction extends AbstractDeployAction {
 
     private boolean isButton = false;
 
+    List<String> defNames = new ArrayList<String>();
+
     public DeployAllAction() {
         super(Messages.DeployAllAction_label);
 
@@ -60,58 +64,45 @@ public class DeployAllAction extends AbstractDeployAction {
         this.isButton = isButn;
 
     }
-
-    List<String> defNames = new ArrayList<String>();
-
     @Override
     public void run() {
-
 
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
 
         Set<IRepositoryViewObject> allChangedObjects = findAllChangedObjects();
         String name = getSameServerName();
-
         allChangedObjects.addAll(RemoveFromRepositoryAction.getViewObjectsRemovedList());
+
         DeployAllDialog dialog = new DeployAllDialog(getShell(), commonViewer.getInput(), allChangedObjects, name);
-
-
+        List<IRepositoryViewObject> selectededViewObjs = new ArrayList<IRepositoryViewObject>();
         int retCode = dialog.open();
         IS_DEPLOYALL_FLAG = false;
         IRepositoryViewObject[] theInput = (IRepositoryViewObject[]) commonViewer.getInput();
         backDeleteObjectsTreeView(theInput);
-
         if (retCode == IDialogConstants.OK_ID) {
-
-            List<IRepositoryViewObject> selectededViewObjs = dialog.getSelectededViewObjs();
+            selectededViewObjs = dialog.getSelectededViewObjs();
             for (IRepositoryViewObject viewObj : selectededViewObjs) {
                 Item item = viewObj.getProperty().getItem();
                 MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
                 serverObj.getLastServerDef();
             }
             MDMServerDef def = dialog.getTheServerDef();
-
-
             List<IRepositoryViewObject> viewObjectsRemoved = new ArrayList<IRepositoryViewObject>();
             for (IRepositoryViewObject viewObj : selectededViewObjs) {
                 if (RemoveFromRepositoryAction.getViewObjectsRemovedList().contains(viewObj)) {
                     viewObjectsRemoved.add(viewObj);
                 }
             }
-
             for (IRepositoryViewObject viewObj : viewObjectsRemoved) {
                 selectededViewObjs.remove(viewObj);
             }
-
             if (selectededViewObjs.size() >= 0) {
                 // IStatus status = deploy(null, selectededViewObjs);
                 IStatus status = updateServer(def, selectededViewObjs, viewObjectsRemoved);
-
                 updateChangedStatus(status);
                 if (status.isMultiStatus()) {
                     showDeployStatus(status);
                 }
-
                 if (status.isMultiStatus()) {
                     for (IStatus childStatus : status.getChildren()) {
                         DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
@@ -121,7 +112,6 @@ public class DeployAllAction extends AbstractDeployAction {
                         }
                     }
                 }
-
                 // updateChangedStatus(status);
                 // if (status.isMultiStatus()) {
                 // showDeployStatus(status);
@@ -129,6 +119,10 @@ public class DeployAllAction extends AbstractDeployAction {
             }
         }
         defNames.clear();
+        Object input = commonViewer.getInput();
+        for (IRepositoryViewObject viewObj : (IRepositoryViewObject[]) input) {
+            commonViewer.refresh(viewObj);
+        }
     }
 
     private void backDeleteObjectsTreeView(IRepositoryViewObject[] theInput) {
@@ -137,52 +131,62 @@ public class DeployAllAction extends AbstractDeployAction {
             Item item = viewObj.getProperty().getItem();
             MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
             TreeObject treeObj = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
-
+            viewObj.getRepositoryObjectType();
             switch (treeObj.getType()) {
             case TreeObject.DATA_MODEL:
-                theInput[1].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATAMODEL).getChildren().remove(viewObj);
                 break;
             case TreeObject.DATA_CLUSTER:
-                theInput[0].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATACLUSTER).getChildren().remove(viewObj);
                 break;
             case TreeObject.MENU:
-                theInput[2].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_MENU).getChildren().remove(viewObj);
                 break;
             case TreeObject.ROUTING_RULE:
-                theInput[6].getChildren().get(1).getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(1).getChildren()
+                        .remove(viewObj);
                 break;
             case TreeObject.ROLE:
-                theInput[10].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_ROLE).getChildren().remove(viewObj);
                 break;
             case TreeObject.SERVICE_CONFIGURATION:
-                theInput[7].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION).getChildren()
+                        .remove(viewObj);
                 break;
             case TreeObject.STORED_PROCEDURE:
-                theInput[3].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_STOREPROCEDURE).getChildren().remove(viewObj);
                 break;
             case TreeObject.TRANSFORMER:
-                theInput[6].getChildren().get(0).getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(0).getChildren()
+                        .remove(viewObj);
                 break;
             case TreeObject.UNIVERSE:
-                theInput[12].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_UNIVERSE).getChildren().remove(viewObj);
                 break;
             case TreeObject.VIEW:
-                theInput[4].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_VIEW).getChildren().remove(viewObj);
                 break;
             case TreeObject.SYNCHRONIZATIONPLAN:
-                theInput[11].getChildren().remove(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN).getChildren().remove(viewObj);
                 break;
             default:
                 ;
             }
+        }
+    }
 
+    public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
+        for (IRepositoryViewObject viewObj : theInput) {
+
+            if (viewObj.getRepositoryObjectType().equals(type)) {
+                return viewObj;
+            }
 
         }
-
+        return null;
     }
 
     private String getSameServerName() {
-
         String theName = ""; //$NON-NLS-1$
         for (String name : defNames) {
             if (theName.equals("")) { //$NON-NLS-1$
@@ -191,9 +195,7 @@ public class DeployAllAction extends AbstractDeployAction {
                 if (!name.endsWith(theName))
                     return null;
             }
-
         }
-
         return theName;
     }
 

@@ -34,8 +34,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryObject;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -90,8 +92,6 @@ public class DeployAllDialog extends Dialog {
      */
     @Override
     protected Control createDialogArea(Composite parent) {
-
-
         Composite container1 = (Composite) super.createDialogArea(parent);
         GridLayout gridLayout = (GridLayout) container1.getLayout();
         container1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -106,11 +106,9 @@ public class DeployAllDialog extends Dialog {
         combo.setLayoutData(data);
 
         final List<MDMServerDef> serverDefs = new ArrayList<MDMServerDef>();
-
         List<IRepositoryViewObject> viewObjects = ServerDefService.getAllServerDefViewObjects();
         List<String> itemsLabel = new ArrayList<String>();
         for (IRepositoryViewObject object : viewObjects) {
-
             if (object instanceof IRepositoryObject) {
                 MDMServerDefItem mdmItem = getMDMItem((IRepositoryViewObject) object);
                 if (mdmItem != null) {
@@ -123,14 +121,11 @@ public class DeployAllDialog extends Dialog {
         }
         int size = itemsLabel.size();
         combo.setItems((String[]) itemsLabel.toArray(new String[size]));
-
         combo.addSelectionListener(new SelectionAdapter() {
-
             public void widgetSelected(SelectionEvent e) {
                 theServerDef = serverDefs.get(combo.getSelectionIndex());
             }
         });
-
 
         if (comboServerName != null && comboServerName.trim().length() > 0) {
             for (int index = 0; index < serverDefs.size(); index++) {
@@ -145,55 +140,38 @@ public class DeployAllDialog extends Dialog {
                 theServerDef = serverDefs.get(0);
             }
         }
-
-
         Composite container = new Composite(container1, SWT.BORDER);
         container.setLayout(new GridLayout(2, false));
         container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
         Label lblNewLabel = new Label(container, SWT.NONE);
         lblNewLabel.setText(Messages.DeployAllDialog_label);
         new Label(container, SWT.NONE);
-
-        // if (input instanceof ContainerRepositoryObject[]) {
         IRepositoryViewObject[] theInput = (IRepositoryViewObject[]) input;
-        // theInput[1].getChildren().addAll(RemoveFromRepositoryAction.viewObjectsListRemoved);
-        // }
-
         restoreDeleteObjectsTreeView(theInput);
-
         treeViewer = new RepositoryViewObjectCheckedWidget(container, input, changedViewObjs);
-        //
         treeViewer.addCheckStateListener(new ICheckStateListener() {
-
             public void checkStateChanged(CheckStateChangedEvent event) {
                 // enableOkBun();
             }
-
         });
         treeViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2));
-
         Button selAllButton = new Button(container, SWT.NONE);
         selAllButton.addSelectionListener(new SelectionAdapter() {
-
             @Override
             public void widgetSelected(SelectionEvent e) {
                 treeViewer.selectAll(true);
             }
         });
         selAllButton.setText(Messages.DeployAllDialog_selectAll);
-
         Button deselAllBun = new Button(container, SWT.NONE);
         deselAllBun.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
         deselAllBun.setText(Messages.DeployAllDialog_deselectAll);
         deselAllBun.addSelectionListener(new SelectionAdapter() {
-
             @Override
             public void widgetSelected(SelectionEvent e) {
                 treeViewer.selectAll(false);
             }
         });
-
         return container;
     }
 
@@ -203,47 +181,57 @@ public class DeployAllDialog extends Dialog {
             Item item = viewObj.getProperty().getItem();
             MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
             TreeObject treeObj = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
+            viewObj.getRepositoryObjectType();
 
             switch (treeObj.getType()) {
             case TreeObject.DATA_MODEL:
-                theInput[1].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATAMODEL).getChildren().add(viewObj);
                 break;
             case TreeObject.DATA_CLUSTER:
-                theInput[0].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATACLUSTER).getChildren().add(viewObj);
                 break;
             case TreeObject.MENU:
-                theInput[2].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_MENU).getChildren().add(viewObj);
                 break;
             case TreeObject.ROUTING_RULE:
-                theInput[6].getChildren().get(1).getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(1).getChildren()
+                        .add(viewObj);
                 break;
             case TreeObject.ROLE:
-                theInput[10].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_ROLE).getChildren().add(viewObj);
                 break;
             case TreeObject.SERVICE_CONFIGURATION:
-                theInput[7].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION).getChildren().add(viewObj);
                 break;
             case TreeObject.STORED_PROCEDURE:
-                theInput[3].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_STOREPROCEDURE).getChildren().add(viewObj);
                 break;
             case TreeObject.TRANSFORMER:
-                theInput[6].getChildren().get(0).getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(0).getChildren()
+                        .add(viewObj);
                 break;
             case TreeObject.UNIVERSE:
-                theInput[12].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_UNIVERSE).getChildren().add(viewObj);
                 break;
             case TreeObject.VIEW:
-                theInput[4].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_VIEW).getChildren().add(viewObj);
                 break;
             case TreeObject.SYNCHRONIZATIONPLAN:
-                theInput[11].getChildren().add(viewObj);
+                getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN).getChildren().add(viewObj);
                 break;
             default:
                 ;
             }
-
         }
+    }
 
+    public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
+        for (IRepositoryViewObject viewObj : theInput) {
+            if (viewObj.getRepositoryObjectType().equals(type)) {
+                return viewObj;
+            }
+        }
+        return null;
     }
 
     /**
