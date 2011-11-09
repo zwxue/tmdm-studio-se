@@ -1346,12 +1346,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             // attempt to save
                             try {
                                 final XtentisPort port = Util.getPort(getXObject());
-                                String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
-                                if (validateXML != null) {
-                                    MessageDialog.openError(shell, "Error saving the Record",
-                                            "An error occured trying save the Record:\n\n " + validateXML);
-                                    return;
-                                }
+                                // String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
+                                // if (validateXML != null) {
+                                // MessageDialog.openError(shell, "Error saving the Record",
+                                // "An error occured trying save the Record:\n\n " + validateXML);
+                                // return;
+                                // }
                                 WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject()
                                         .getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
