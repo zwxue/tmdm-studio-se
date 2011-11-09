@@ -14,7 +14,6 @@ package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
-import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -756,23 +755,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         refreshData();
     }
 
-    private String validateXML(XtentisPort port, String dataModelName, String xml) throws RemoteException {
-
-        WSDataModel dataModel = port.getDataModel(new WSGetDataModel((new WSDataModelPK(dataModelName))));
-        if (dataModel != null) {
-
-            String schema = dataModel.getXsdSchema();
-            if (xml != null && schema != null) {
-                try {
-                    Util.parse(xml, schema);
-                } catch (Exception e) {
-                    return e.getMessage();
-                }
-            }
-        }
-        return null;
-    }
-
     class EditItemAction extends Action {
 
         protected Shell shell = null;
@@ -817,12 +799,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (event.button == DOMViewDialog.BUTTON_SAVE) {
                             // attempt to save
                             try {
-                                // String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
-                                // if (validateXML != null) {
-                                // MessageDialog.openError(shell, "Error saving the Record",
-                                // "An error occured trying save the Record:\n\n " + validateXML);
-                                // return;
-                                // }
                                 // check the item is modified by others?
                                 boolean isModified = port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).is_true();
                                 if (isModified) {
@@ -1346,12 +1322,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             // attempt to save
                             try {
                                 final XtentisPort port = Util.getPort(getXObject());
-                                // String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
-                                // if (validateXML != null) {
-                                // MessageDialog.openError(shell, "Error saving the Record",
-                                // "An error occured trying save the Record:\n\n " + validateXML);
-                                // return;
-                                // }
                                 WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject()
                                         .getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
