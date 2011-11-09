@@ -817,12 +817,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (event.button == DOMViewDialog.BUTTON_SAVE) {
                             // attempt to save
                             try {
-                                String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
-                                if (validateXML != null) {
-                                    MessageDialog.openError(shell, "Error saving the Record",
-                                            "An error occured trying save the Record:\n\n " + validateXML);
-                                    return;
-                                }
+                                // String validateXML = validateXML(port, d.getDataModelName(), d.getXML());
+                                // if (validateXML != null) {
+                                // MessageDialog.openError(shell, "Error saving the Record",
+                                // "An error occured trying save the Record:\n\n " + validateXML);
+                                // return;
+                                // }
                                 // check the item is modified by others?
                                 boolean isModified = port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).is_true();
                                 if (isModified) {
