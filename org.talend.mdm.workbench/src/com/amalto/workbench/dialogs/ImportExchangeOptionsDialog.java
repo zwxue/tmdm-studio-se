@@ -16,6 +16,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -26,6 +30,9 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -34,6 +41,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -43,8 +51,10 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osgi.framework.Constants;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -64,13 +74,19 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
     private JSONObject[] dataContent = null;
 
-    private static String EXCHANGE_DOWNLOAD_URL = "http://talendforge.org/exchange/mdm/api/get_revision_list.php?version=1&categories=";//$NON-NLS-1$
+    private String revision;
+
+    private CCombo revisionCombo;
+
+    private static String EXCHANGE_DOWNLOAD_URL = "http://talendforge.org/exchange/mdm/api/get_revision_list.php?";//$NON-NLS-1$
 
     private static String COLUMN_EXTENSION_NAME = "extension_name";//$NON-NLS-1$
 
     private static String COLUMN_REVISION_NAME = "revision_name";//$NON-NLS-1$
 
     private static String COLUMN_URL_NAME = "download_url";//$NON-NLS-1$
+
+    private static String REVISION_LIST_URL = "http://talendforge.org/exchange/mdm/api/get_version_list.php";
 
     public ImportExchangeOptionsDialog(Shell parentShell, FormToolkit toolkit, boolean importOption,
             StringBuffer zipFileRepository) {
@@ -86,7 +102,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         Composite composite = (Composite) super.createDialogArea(parent);
 
         GridLayout layout = (GridLayout) composite.getLayout();
-        layout.numColumns = 3;
+        layout.numColumns = 5;
 
         exportsBtn = new Button(composite, SWT.RADIO);
         exportsBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -100,8 +116,37 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         dataModelBtn.setEnabled(!export ? true : false);
         dataModelBtn.setSelection(false);
 
+        Label label = new Label(composite, SWT.BORDER);
+        label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+        label.setText("Revision:");
+
+        revisionCombo = new CCombo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.FLAT);
+        GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+        revisionCombo.setLayoutData(gd);
+        gd.widthHint = 100;
+        Set<String> revisions = new HashSet<String>();
+        Map<String, String> rMap = getRevisionMap();
+        revisions.addAll(rMap.values());
+        revisionCombo.setItems(revisions.toArray(new String[0]));
+
+        // get current plugin revision
+        String bundleVersion = MDMWorbenchPlugin.getDefault().getBundle().getHeaders().get(Constants.BUNDLE_VERSION).toString();
+        String version = bundleVersion.split("_")[0];//$NON-NLS-1$
+        revision = rMap.get(version);
+        if (revision == null) {
+            revision = "1"; //$NON-NLS-1$
+        }
+        revisionCombo.setText(revision);
+
+        revisionCombo.addModifyListener(new ModifyListener() {
+
+            public void modifyText(ModifyEvent e) {
+                revision = revisionCombo.getText();
+                fillInTable();
+            }
+        });
         executeBtn = new Button(composite, SWT.PUSH);
-        executeBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, true, 1, 1));
+        executeBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, true, 1, 1));
         executeBtn.addSelectionListener(this);
         executeBtn.setImage(ImageCache.getCreatedImage(EImage.REFRESH.getPath()));
 
@@ -111,7 +156,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             exchangeDwnTable = new Table(composite, SWT.VIRTUAL | SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL
                     | SWT.MULTI);
 
-        exchangeDwnTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+        exchangeDwnTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1));
         ((GridData) exchangeDwnTable.getLayoutData()).heightHint = 300;
         exchangeDwnTable.setHeaderVisible(true);
         exchangeDwnTable.setLinesVisible(true);
@@ -218,10 +263,33 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         return composite;
     }
 
+    private HashMap<String, String> getRevisionMap() {
+        HttpClient client = new HttpClient();
+        String url = REVISION_LIST_URL;
+        GetMethod get = new GetMethod(url);
+        HashMap<String, String> idRevisonMap = new HashMap<String, String>();
+        try {
+            client.executeMethod(get);
+            String out = get.getResponseBodyAsString();
+            JSONArray jsonArray = new JSONArray(out);
+            JSONObject[] dc = new JSONObject[jsonArray.length()];
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.get("name").toString(); //$NON-NLS-1$
+                String revision = jsonObject.getString("nb_extensions");//$NON-NLS-1$
+                idRevisonMap.put(name, revision);
+                dc[i] = jsonObject;
+            }
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return idRevisonMap;
+    }
     private void fillInTable() {
         exchangeDwnTable.removeAll();
         HttpClient client = new HttpClient();
-        String url = EXCHANGE_DOWNLOAD_URL + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$
+        String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
         GetMethod get = new GetMethod(url);
         try {
             client.executeMethod(get);
