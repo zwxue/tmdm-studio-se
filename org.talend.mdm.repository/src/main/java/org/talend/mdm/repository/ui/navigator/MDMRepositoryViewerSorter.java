@@ -7,6 +7,7 @@ import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 
@@ -22,7 +23,11 @@ public class MDMRepositoryViewerSorter extends ViewerSorter {
     @Override
     public int category(Object element) {
         if (element instanceof IRepositoryViewObject) {
-            Item item = ((IRepositoryViewObject) element).getProperty().getItem();
+            IRepositoryViewObject viewObject = (IRepositoryViewObject) element;
+            if (viewObject.getRepositoryObjectType() == IServerObjectRepositoryType.TYPE_RECYCLE_BIN) {
+                return 2;
+            }
+            Item item = viewObject.getProperty().getItem();
             if (item != null) {
                 if (item instanceof MDMServerObjectItem) {
                     return 1;

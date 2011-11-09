@@ -181,6 +181,38 @@ public class Messages extends NLS {
     public static String NewCustomFormDialog_selectEntity;
 
     public static String NewCustomFormDialog_selectEntityFromDataModel;
+    public static String NewRoleAction_adminDescription;
+
+    public static String NewRoleAction_normalDescription;
+
+    public static String NewRoleAction_title;
+
+    public static String NewRoleWizard_2;
+
+    public static String NewRoleWizard_editNameDescription;
+
+    public static String NewRoleWizard_editNameTitle;
+
+    public static String NewRoleWizard_selectRoleAdmin;
+
+    public static String NewRoleWizard_selectRoleAdminDescription;
+
+    public static String NewRoleWizard_selectRoleDescription;
+
+    public static String NewRoleWizard_selectRoleInvalidName;
+
+    public static String NewRoleWizard_selectRoleNameExist;
+
+    public static String NewRoleWizard_selectRoleNameIsEmpty;
+
+    public static String NewRoleWizard_selectRoleNormal;
+
+    public static String NewRoleWizard_selectRoleNormalDescription;
+
+    public static String NewRoleWizard_selectRoleTitle;
+
+    public static String NewRoleWizard_selectRoleType;
+
     public static String ExportObjectAction_error;
 
     public static String XSDSetAnnotationRoles;

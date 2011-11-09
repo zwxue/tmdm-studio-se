@@ -471,6 +471,10 @@ public class RepositoryResourceUtil {
         return findAllViewObjects(type, true);
     }
 
+    public static List<IRepositoryViewObject> findAllViewObjectsWithDeleted(ERepositoryObjectType type) {
+        return findAllViewObjects(type, true, true);
+    }
+
     public static List<MDMServerObject> findAllServerObjects(ERepositoryObjectType type) {
         List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type);
         List<MDMServerObject> serverObjects = new LinkedList<MDMServerObject>();
@@ -508,14 +512,19 @@ public class RepositoryResourceUtil {
     }
 
     public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type, boolean useRepositoryViewObject) {
+        return findAllViewObjects(type, useRepositoryViewObject, false);
+    }
+
+    public static List<IRepositoryViewObject> findAllViewObjects(ERepositoryObjectType type, boolean useRepositoryViewObject,
+            boolean withDeleted) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
-            List<IRepositoryViewObject> allObjs = factory.getAll(type);
+            List<IRepositoryViewObject> allObjs = factory.getAll(type, withDeleted);
             List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
             for (IRepositoryViewObject viewObj : allObjs) {
                 Item item = viewObj.getProperty().getItem();
                 ItemState state = item.getState();
-                if (!state.isDeleted()) {
+                if (!state.isDeleted() || withDeleted) {
                     try {
                         IInteractiveHandler handler = InteractiveService.findHandler(viewObj.getRepositoryObjectType());
                         if (handler != null) {
@@ -539,7 +548,7 @@ public class RepositoryResourceUtil {
     }
 
     public static boolean isExistByName(ERepositoryObjectType type, String name) {
-        List<IRepositoryViewObject> viewObjects = findAllViewObjects(type);
+        List<IRepositoryViewObject> viewObjects = findAllViewObjectsWithDeleted(type);
         if (viewObjects != null) {
             for (IRepositoryViewObject viewObj : viewObjects) {
                 if (viewObj.getProperty().getLabel().equalsIgnoreCase(name)) {
@@ -551,7 +560,7 @@ public class RepositoryResourceUtil {
     }
 
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem) {
-        return findViewObjects(type, parentItem, false);
+        return findViewObjects(type, parentItem, true);
     }
 
     public static boolean isDeletedFolder(Item item, ERepositoryObjectType type) {
