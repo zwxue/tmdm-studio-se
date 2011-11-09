@@ -122,7 +122,7 @@ public class ServerExplorer extends ViewPart {
             @Override
             public void mouseDoubleClick(MouseEvent e) {
                 IRepositoryViewObject viewObject = getCurSelectedViewObject();
-                String name = ""; //$NON-NLS-1$
+                String name = null;
                 if (viewObject != null) {
                     MDMServerDefItem serverDefItem = getMDMItem(viewObject);
                     name = serverDefItem.getServerDef().getName();
@@ -370,7 +370,7 @@ public class ServerExplorer extends ViewPart {
 
         public void run() {
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
-            String name = ""; //$NON-NLS-1$
+            String name = null;
             if (viewObject != null) {
                 MDMServerDefItem serverDefItem = getMDMItem(viewObject);
                 name = serverDefItem.getServerDef().getName();
