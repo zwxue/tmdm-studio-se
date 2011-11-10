@@ -12,9 +12,11 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -61,22 +63,31 @@ import com.amalto.workbench.webservices.WSDataModel;
  */
 public class DataModelMainPage2 extends DataModelMainPage {
 
+    private final IFile xsdFile;
+
     /**
      * DOC hbhong DataModelMainPage2 constructor comment.
      * 
      * @param obj
      */
-    public DataModelMainPage2(TreeObject obj) {
+    public DataModelMainPage2(TreeObject obj, IFile xsdFile) {
         super(obj);
+        this.xsdFile = xsdFile;
     }
 
     @Override
     protected void doSave(WSDataModel wsObject) throws Exception {
         XObjectEditorInput2 editorInput = (XObjectEditorInput2) getEditorInput();
+        //
+        if (xsdFile != null) {
+            String xsd = getXSDSchemaString();
 
+            xsdFile.setCharset("utf-8", null);//$NON-NLS-1$
+            xsdFile.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
+        }
+        //
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
         MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
-        EObject eContainer = serverObject.eContainer();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(wsObject, serverObject);
         if (eObj != null) {
             serverObject.setChanged(true);
