@@ -16,8 +16,12 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.talend.core.model.properties.Item;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExternalInfoHolder;
 
 import com.amalto.workbench.editors.TransformerMainPage;
@@ -34,6 +38,9 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
  */
 public class TransformerMainPage2 extends TransformerMainPage {
 
+    XObjectEditor2 editor2;
+
+    MDMServerDef lastServerDef;
     /**
      * DOC hbhong TransformerMainPage2 constructor comment.
      * 
@@ -41,6 +48,11 @@ public class TransformerMainPage2 extends TransformerMainPage {
      */
     public TransformerMainPage2(FormEditor editor) {
         super(editor);
+        this.editor2 = (XObjectEditor2) editor;
+        XObjectEditorInput2 input = (XObjectEditorInput2) editor2.getEditorInput();
+        Item item = input.getInputItem();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        lastServerDef = serverObject.getLastServerDef();
     }
 
     @Override
@@ -91,7 +103,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     @Override
     protected XtentisPort getPort() {
-        return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell());
+        return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell(), lastServerDef);
     }
 
     @Override

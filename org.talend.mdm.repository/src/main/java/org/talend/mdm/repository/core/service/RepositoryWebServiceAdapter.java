@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.AbstractGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.CallJobGetDocument;
@@ -90,6 +91,26 @@ public class RepositoryWebServiceAdapter {
 
     public static XtentisPort getXtentisPort(Shell shell) {
         SelectServerDefDialog dialog = new SelectServerDefDialog(shell);
+
+        try {
+            if (dialog.open() == IDialogConstants.OK_ID) {
+                MDMServerDef serverDef = dialog.getSelectedServerDef();
+                return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+            }
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static XtentisPort getXtentisPort(Shell shell, MDMServerDef lastserverDef) {
+        if (lastserverDef == null) {
+            MessageDialog.openWarning(null, Messages.Warning_text, Messages.RepositoryWebServiceAdapter_DeployFirst);
+            return null;
+        }
+        SelectServerDefDialog dialog = new SelectServerDefDialog(shell);
+        dialog.create();
+        dialog.setSelectServer(lastserverDef);
         try {
             if (dialog.open() == IDialogConstants.OK_ID) {
                 MDMServerDef serverDef = dialog.getSelectedServerDef();

@@ -120,6 +120,8 @@ public class Messages extends NLS {
 
     public static String RepositoryWebServiceAdapter_InvalidEndpointAddress;
 
+    public static String RepositoryWebServiceAdapter_DeployFirst;
+
     public static String RestoreAction_title;
 
     public static String RoleInteractiveHandler_label;
