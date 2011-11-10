@@ -213,6 +213,34 @@ public class DeployAllAction extends AbstractDeployAction {
     private void findFromContainer(IRepositoryViewObject viewObj, Set<IRepositoryViewObject> viewObjs) {
 
         if (viewObj instanceof ContainerRepositoryObject) {
+            List<Object> selectedObjectCon = getSelectedObject();
+            boolean existCon = false;
+            for (Object obj : selectedObjectCon) {
+            if (obj instanceof IRepositoryViewObject) {
+                IRepositoryViewObject vobject = (IRepositoryViewObject) obj;
+            if (viewObj == vobject) {
+                        existCon = true;
+                }
+            }
+            }
+            if (existCon) {
+                if (viewObj instanceof ContainerRepositoryObject) {
+                            for (IRepositoryViewObject vobject : ((ContainerRepositoryObject) viewObj).getChildren()) {
+                                Item itm = vobject.getProperty().getItem();
+                                if (itm instanceof MDMServerObjectItem) {
+                                    MDMServerObject serverObject = ((MDMServerObjectItem) itm).getMDMServerObject();
+                                    if (serverObject.getLastServerDef() == null || serverObject.isChanged()
+                                            || serverObject.isCreated()) {
+                                        if (serverObject.getLastServerDef() != null) {
+                                            defNames.add(serverObject.getLastServerDef().getName());
+                                        }
+                                viewObjs.add(vobject);
+                                    }
+                                }
+                            }
+                }
+            }
+            
             for (IRepositoryViewObject child : ((ContainerRepositoryObject) viewObj).getChildren()) {
                 if (child instanceof ContainerRepositoryObject) {
                     findFromContainer(child, viewObjs);
@@ -223,7 +251,6 @@ public class DeployAllAction extends AbstractDeployAction {
                     List<Object> selectedObject = getSelectedObject();
                     boolean exist = false;
                     for (Object obj : selectedObject) {
-
                         if (obj instanceof IRepositoryViewObject) {
                             IRepositoryViewObject vobject = (IRepositoryViewObject) obj;
                             if (child == vobject) {
@@ -234,26 +261,22 @@ public class DeployAllAction extends AbstractDeployAction {
                     if (!exist)
                         continue;
                     }
-
                     if (item instanceof MDMServerObjectItem) {
                         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                        
                         if (serverObject.getLastServerDef()==null || serverObject.isChanged() || serverObject.isCreated()) {
-
                             if (serverObject.getLastServerDef() != null) {
                                 defNames.add(serverObject.getLastServerDef().getName());
                             }
                             viewObjs.add(child);
-
                         }
                     }
                 }
-
             }
         }
 
         IS_DEPLOYALL_FLAG = true;
     }
+        
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
