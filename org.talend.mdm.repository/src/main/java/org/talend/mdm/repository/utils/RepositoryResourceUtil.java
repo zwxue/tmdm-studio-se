@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend �C www.talend.com
+// Copyright (C) 2006-2011 Talend www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -115,7 +115,7 @@ public class RepositoryResourceUtil {
     }
 
     public static String escapeSpecialCharacters(String input) {
-        return input.replace('#', '$').replace('-','$');
+        return input.replace('#', '$').replace('-', '$');
     }
 
     public static void saveItem(Item item) {
