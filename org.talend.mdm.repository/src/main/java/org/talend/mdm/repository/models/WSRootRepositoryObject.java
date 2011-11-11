@@ -12,31 +12,26 @@
 // ============================================================================
 package org.talend.mdm.repository.models;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.talend.core.model.properties.Property;
-import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.model.repository.RepositoryObject;
-
+import org.talend.core.model.repository.ERepositoryObjectType;
 
 /**
- * DOC hbhong  class global comment. Detailled comment
+ * DOC hbhong class global comment. WorkspaceRoot object
  */
-class ContainerRepositoryObject extends RepositoryObject {
+public class WSRootRepositoryObject extends ContainerRepositoryObject {
 
-    public ContainerRepositoryObject(Property prop) {
+    /**
+     * DOC hbhong RootRepositoryObject constructor comment.
+     * 
+     * @param props
+     */
+    public WSRootRepositoryObject(Property prop) {
         super(prop);
     }
 
-    private List<IRepositoryViewObject> children;
-
     @Override
-    public List<IRepositoryViewObject> getChildren() {
-        if (children == null) {
-            children = new LinkedList<IRepositoryViewObject>();
-        }
-        return children;
+    public ERepositoryObjectType getRepositoryObjectType() {
+        return null;
     }
 
 }

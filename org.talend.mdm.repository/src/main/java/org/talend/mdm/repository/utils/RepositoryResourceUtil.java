@@ -71,8 +71,10 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
+import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -368,15 +370,15 @@ public class RepositoryResourceUtil {
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
-        ContainerRepositoryObject containerRepositoryObject = new ContainerRepositoryObject(prop);
+        FolderRepositoryObject containerRepositoryObject = new FolderRepositoryObject(prop);
         //
         ContainerCacheService.putContainer(containerRepositoryObject);
         //
         return containerRepositoryObject;
     }
 
-    public static ContainerRepositoryObject createDeletedFolderViewObject(ERepositoryObjectType type, String path,
-            String folderName, ContainerRepositoryObject parentConObj) {
+    public static FolderRepositoryObject createDeletedFolderViewObject(ERepositoryObjectType type, String path,
+            String folderName, FolderRepositoryObject parentConObj) {
         Property prop = PropertiesFactory.eINSTANCE.createProperty();
         prop.setId(EcoreUtil.generateUUID());
         //
@@ -396,7 +398,7 @@ public class RepositoryResourceUtil {
         prop.setItem(item);
         prop.setLabel(folderName);
         itemState.setDeleted(true);
-        ContainerRepositoryObject containerRepositoryObject = new ContainerRepositoryObject(prop);
+        FolderRepositoryObject containerRepositoryObject = new FolderRepositoryObject(prop);
         // update cache
         ContainerCacheService.putContainer(containerRepositoryObject);
         //
@@ -406,8 +408,6 @@ public class RepositoryResourceUtil {
 
     private static IRepositoryViewObject[] categoryViewObjects = null;
 
-    private static IRepositoryViewObject[] categoryViewObjectsWithRecycle = null;
-
     public static IRepositoryViewObject[] getCategoryViewObjects() {
         if (categoryViewObjects == null) {
             List<IRepositoryNodeConfiguration> configurations = RepositoryNodeConfigurationManager.getConfigurations();
@@ -415,7 +415,8 @@ public class RepositoryResourceUtil {
             for (IRepositoryNodeConfiguration conf : configurations) {
                 if (conf.getContentProvider().isShownInRoot()) {
                     IRepositoryViewObject categoryViewObject = getCategoryViewObject(conf);
-                    results.add(categoryViewObject);
+                    if (categoryViewObject != null)
+                        results.add(categoryViewObject);
                 }
             }
             categoryViewObjects = results.toArray(new IRepositoryViewObject[0]);
@@ -423,18 +424,31 @@ public class RepositoryResourceUtil {
         return categoryViewObjects;
     }
 
+    private static IRepositoryViewObject rootViewObj = null;
+
     public static IRepositoryViewObject[] getCategoryViewObjectsWithRecycle() {
-        if (categoryViewObjectsWithRecycle == null) {
+        if (rootViewObj == null) {
+            //
+            rootViewObj = null;
+            Property prop = PropertiesFactory.eINSTANCE.createProperty();
+
+            ItemState state = PropertiesFactory.eINSTANCE.createItemState();
+            WorkspaceRootItem item = MdmpropertiesFactory.eINSTANCE.createWorkspaceRootItem();
+            item.setState(state);
+            prop.setItem(item);
+            rootViewObj = new WSRootRepositoryObject(prop);
+            //
             IRepositoryViewObject[] cvos = getCategoryViewObjects();
-            int len = cvos.length + 1;
-            categoryViewObjectsWithRecycle = new IRepositoryViewObject[len];
-            System.arraycopy(cvos, 0, categoryViewObjectsWithRecycle, 0, len - 1);
+            List<IRepositoryViewObject> newViewObjs = rootViewObj.getChildren();
+            for (IRepositoryViewObject viewObj : cvos) {
+                newViewObjs.add(viewObj);
+            }
             //
 
-            categoryViewObjectsWithRecycle[len - 1] = getCategoryViewObject(RepositoryNodeConfigurationManager
-                    .getRecycleBinNodeConfiguration());
+            newViewObjs.add(getCategoryViewObject(RepositoryNodeConfigurationManager.getRecycleBinNodeConfiguration()));
+
         }
-        return categoryViewObjectsWithRecycle;
+        return new IRepositoryViewObject[] { rootViewObj };
     }
 
     public static IRepositoryViewObject getCategoryViewObject(IRepositoryNodeConfiguration conf) {
@@ -444,7 +458,10 @@ public class RepositoryResourceUtil {
         ContainerItem item = MdmpropertiesFactory.eINSTANCE.createContainerItem();
         item.setType(FolderType.SYSTEM_FOLDER_LITERAL);
 
-        item.setRepObjType(conf.getResourceProvider().getRepositoryObjectType(item));
+        ERepositoryObjectType type = conf.getResourceProvider().getRepositoryObjectType(item);
+        if (type == null)
+            return null;
+        item.setRepObjType(type);
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         itemState.setDeleted(false);
         itemState.setPath(""); //$NON-NLS-1$
@@ -453,7 +470,7 @@ public class RepositoryResourceUtil {
         //
         prop.setItem(item);
         //
-        ContainerRepositoryObject containerObject = new ContainerRepositoryObject(prop);
+        FolderRepositoryObject containerObject = new FolderRepositoryObject(prop);
         ContainerCacheService.putContainer(containerObject);
         return containerObject;
     }
@@ -556,7 +573,7 @@ public class RepositoryResourceUtil {
 
     public static boolean isDeletedFolder(Item item, ERepositoryObjectType type) {
         ItemState state = item.getState();
-        if (item instanceof FolderItem) {
+        if (item instanceof ContainerItem) {
 
             String path = ERepositoryObjectType.getFolderName(type);
             if (!path.isEmpty()) {
@@ -731,10 +748,10 @@ public class RepositoryResourceUtil {
 
     public static boolean hasContainerItem(Object obj, FolderType... fTypes) {
 
-        if (obj instanceof ContainerRepositoryObject) {
+        if (obj instanceof FolderRepositoryObject) {
             if (fTypes == null)
                 return true;
-            FolderType type = ((FolderItem) ((ContainerRepositoryObject) obj).getProperty().getItem()).getType();
+            FolderType type = ((FolderItem) ((FolderRepositoryObject) obj).getProperty().getItem()).getType();
             for (FolderType fType : fTypes) {
                 if (type == fType)
                     return true;

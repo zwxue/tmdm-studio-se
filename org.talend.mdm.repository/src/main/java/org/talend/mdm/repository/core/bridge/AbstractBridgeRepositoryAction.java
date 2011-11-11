@@ -16,7 +16,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.repository.ui.actions.AContextualAction;
 
 /**
@@ -82,7 +82,7 @@ public abstract class AbstractBridgeRepositoryAction extends AbstractRepositoryA
         Object object = getSelectedObject().get(0);
         if (object instanceof IRepositoryViewObject) {
             IRepositoryViewObject parent = ContainerCacheService.getParent((IRepositoryViewObject) object);
-            if (parent != null && parent instanceof ContainerRepositoryObject) {
+            if (parent != null && parent instanceof FolderRepositoryObject) {
                 commonViewer.refresh(parent);
                 commonViewer.expandToLevel(parent, 1);
             }
@@ -91,7 +91,7 @@ public abstract class AbstractBridgeRepositoryAction extends AbstractRepositoryA
 
     protected void refreshCurrentContainer() {
         Object object = getSelectedObject().get(0);
-        if (object instanceof ContainerRepositoryObject) {
+        if (object instanceof FolderRepositoryObject) {
             commonViewer.refresh(object);
             commonViewer.expandToLevel(object, 1);
 

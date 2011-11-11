@@ -40,6 +40,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
@@ -78,7 +79,10 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     public void run() {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
+                if (obj instanceof WSRootRepositoryObject)
+                    return;
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+
                 Item item = viewObject.getProperty().getItem();
                 if (item instanceof ContainerItem) {
                     commonViewer.expandToLevel(obj, 1);

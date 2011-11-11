@@ -84,6 +84,7 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
             case MdmpropertiesPackage.WS_WORKFLOW_ITEM: return createWSWorkflowItem();
             case MdmpropertiesPackage.WS_RESOURCE_ITEM: return createWSResourceItem();
             case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM: return createWSCustomFormItem();
+            case MdmpropertiesPackage.WORKSPACE_ROOT_ITEM: return createWorkspaceRootItem();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -327,6 +328,16 @@ public class MdmpropertiesFactoryImpl extends EFactoryImpl implements Mdmpropert
     public WSCustomFormItem createWSCustomFormItem() {
         WSCustomFormItemImpl wsCustomFormItem = new WSCustomFormItemImpl();
         return wsCustomFormItem;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WorkspaceRootItem createWorkspaceRootItem() {
+        WorkspaceRootItemImpl workspaceRootItem = new WorkspaceRootItemImpl();
+        return workspaceRootItem;
     }
 
     /**

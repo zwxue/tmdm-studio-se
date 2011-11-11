@@ -458,5 +458,9 @@
             class="org.talend.mdm.repository.core.impl.serviceconfiguration.ServiceConfigurationNodeConfiguration"
             label="Service Configuration">
       </configuration>
+            <configuration
+                  class="org.talend.mdm.repository.core.impl.workspace.WSRootConfiguration"
+                  label="WorkspaceRoot">
+            </configuration>
    </extension>
 </plugin>

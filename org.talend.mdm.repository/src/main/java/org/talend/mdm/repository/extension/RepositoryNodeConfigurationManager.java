@@ -117,8 +117,6 @@ public class RepositoryNodeConfigurationManager {
         return null;
     }
 
-
-
     public static IRepositoryNodeConfiguration getConfiguration(ERepositoryObjectType type) {
 
         IRepositoryNodeConfiguration configuration = typeConfMap.get(type);
@@ -171,7 +169,9 @@ public class RepositoryNodeConfigurationManager {
             for (IRepositoryNodeConfiguration conf : configurations) {
                 // init class structure
                 Class wsObjectClass = conf.getContentProvider().getWSObjectClass();
-                Bean2EObjUtil.getInstance().registerClassMap(wsObjectClass);
+                if (wsObjectClass != null) {
+                    Bean2EObjUtil.getInstance().registerClassMap(wsObjectClass);
+                }
             }
         initedBean = true;
     }

@@ -41,6 +41,8 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
  */
 public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionProvider, IColorProvider, IFontProvider {
 
+
+
     public void addListener(ILabelProviderListener listener) {
     }
 
@@ -57,24 +59,24 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
 
     public String getDescription(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
-        if(provider!=null){
-            return provider.getDescription(element) ;
+        if (provider != null) {
+            return provider.getDescription(element);
         }
         return null;
     }
 
     public Image getImage(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
-        if(provider!=null){
-            return provider.getImage(element) ;
+        if (provider != null) {
+            return provider.getImage(element);
         }
         return null;
     }
 
     public String getText(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
-        if(provider!=null){
-            return provider.getText(element) ;
+        if (provider != null) {
+            return provider.getText(element);
         }
         return element.toString();
     }

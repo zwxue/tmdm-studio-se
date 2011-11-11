@@ -53,7 +53,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     private static FontData defaultFontData = JFaceResources.getDefaultFont().getFontData()[0];
 
-    private static final Font FONT_BOLD = EclipseResourceManager.getFont(defaultFontData.getName(), defaultFontData.getHeight(),
+    public static final Font FONT_BOLD = EclipseResourceManager.getFont(defaultFontData.getName(), defaultFontData.getHeight(),
             SWT.BOLD);
 
     public String getText(Object element) {

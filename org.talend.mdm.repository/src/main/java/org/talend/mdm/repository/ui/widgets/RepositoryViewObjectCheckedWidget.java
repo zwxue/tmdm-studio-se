@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.navigator.CommonMDMRepositoryContentProvider;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 
@@ -60,10 +60,10 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         // treeViewer.setContentProvider(new MDMRepositoryContentProvider());
         treeViewer.addFilter(new ViewerFilter() {
 
-            private boolean containVisibleElement(ContainerRepositoryObject parent) {
+            private boolean containVisibleElement(FolderRepositoryObject parent) {
                 for (IRepositoryViewObject viewObj : parent.getChildren()) {
-                    if (viewObj instanceof ContainerRepositoryObject) {
-                        boolean result = containVisibleElement((ContainerRepositoryObject) viewObj);
+                    if (viewObj instanceof FolderRepositoryObject) {
+                        boolean result = containVisibleElement((FolderRepositoryObject) viewObj);
                         if (result)
                             return true;
                     } else if (viewObj instanceof IRepositoryViewObject) {
@@ -78,8 +78,8 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
             @Override
             public boolean select(Viewer viewer, Object parentElement, Object element) {
-                if (element instanceof ContainerRepositoryObject) {
-                    return containVisibleElement((ContainerRepositoryObject) element);
+                if (element instanceof FolderRepositoryObject) {
+                    return containVisibleElement((FolderRepositoryObject) element);
                 } else {
                     return changedViewObjs.contains(element);
                 }
@@ -103,7 +103,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     public List<IRepositoryViewObject> getSelectededViewObjs() {
         List<IRepositoryViewObject> selectededViewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : treeViewer.getCheckedElements()) {
-            if (obj instanceof ContainerRepositoryObject)
+            if (obj instanceof FolderRepositoryObject)
                 continue;
             selectededViewObjs.add((IRepositoryViewObject) obj);
         }

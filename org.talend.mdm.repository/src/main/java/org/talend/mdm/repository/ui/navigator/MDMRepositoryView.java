@@ -118,6 +118,7 @@ public class MDMRepositoryView extends CommonNavigator {
 
         getCommonViewer().setInput(categoryViewObjects);
         // getCommonViewer().addFilter(filter);
+        getCommonViewer().expandToLevel(2);
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();

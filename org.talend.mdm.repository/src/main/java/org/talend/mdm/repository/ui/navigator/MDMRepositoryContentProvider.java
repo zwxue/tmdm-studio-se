@@ -26,6 +26,7 @@ public class MDMRepositoryContentProvider implements ITreeContentProvider {
                 return children;
             }
         }
+
         return new Object[0];
     }
 

@@ -23,7 +23,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.image.EImage;
@@ -51,8 +51,8 @@ public class CreateFolderAction extends AbstractRepositoryAction {
     @Override
     public void run() {
         Object object = getSelectedObject().get(0);
-        if (object != null && object instanceof ContainerRepositoryObject) {
-            final ContainerRepositoryObject containerViewObject = (ContainerRepositoryObject) object;
+        if (object != null && object instanceof FolderRepositoryObject) {
+            final FolderRepositoryObject containerViewObject = (FolderRepositoryObject) object;
             InputDialog dlg = new InputDialog(getShell(), Messages.CreateFolderAction_newCategory,
                     Messages.CreateFolderAction_inputCategoryName, null, new IInputValidator() {
 

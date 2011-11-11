@@ -27,7 +27,7 @@ import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.repository.ProjectManager;
@@ -66,7 +66,7 @@ public class EmptyRecycleBinAction extends AbstractRepositoryAction {
     @Override
     public void run() {
         Object selObj = getSelectedObject().get(0);
-        ContainerRepositoryObject conRepObj = (ContainerRepositoryObject) selObj;
+        FolderRepositoryObject conRepObj = (FolderRepositoryObject) selObj;
         List<IRepositoryViewObject> children = conRepObj.getChildren();
         int size = children.size();
 
@@ -90,9 +90,9 @@ public class EmptyRecycleBinAction extends AbstractRepositoryAction {
 
     private void deleteElement(IRepositoryViewObject viewObj) throws PersistenceException {
         Project currentProject = ProjectManager.getInstance().getCurrentProject();
-        if (viewObj instanceof ContainerRepositoryObject) {
+        if (viewObj instanceof FolderRepositoryObject) {
             // delete child
-            for (IRepositoryViewObject childViewObj : ((ContainerRepositoryObject) viewObj).getChildren()) {
+            for (IRepositoryViewObject childViewObj : ((FolderRepositoryObject) viewObj).getChildren()) {
                 deleteElement(childViewObj);
             }
             Item item = viewObj.getProperty().getItem();
@@ -108,7 +108,7 @@ public class EmptyRecycleBinAction extends AbstractRepositoryAction {
     @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         Object selObj = getSelectedObject().get(0);
-        ContainerRepositoryObject conRepObj = (ContainerRepositoryObject) selObj;
+        FolderRepositoryObject conRepObj = (FolderRepositoryObject) selObj;
         return !conRepObj.getChildren().isEmpty();
     }
 

@@ -276,6 +276,15 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.WORKSPACE_ROOT_ITEM: {
+                WorkspaceRootItem workspaceRootItem = (WorkspaceRootItem)theEObject;
+                T result = caseWorkspaceRootItem(workspaceRootItem);
+                if (result == null) result = caseMDMItem(workspaceRootItem);
+                if (result == null) result = caseFolderItem(workspaceRootItem);
+                if (result == null) result = caseItem(workspaceRootItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -592,6 +601,21 @@ public class MdmpropertiesSwitch<T> {
      * @generated
      */
     public T caseWSCustomFormItem(WSCustomFormItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Workspace Root Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Workspace Root Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWorkspaceRootItem(WorkspaceRootItem object) {
         return null;
     }
 

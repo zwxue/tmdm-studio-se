@@ -43,7 +43,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractContentProvider;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -56,7 +56,7 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
 
     private static final String PREFIX = "MDM"; //$NON-NLS-1$
 
-    private Map<ERepositoryObjectType, Map<String, ContainerRepositoryObject>> containerMap = new HashMap<ERepositoryObjectType, Map<String, ContainerRepositoryObject>>();
+    private Map<ERepositoryObjectType, Map<String, FolderRepositoryObject>> containerMap = new HashMap<ERepositoryObjectType, Map<String, FolderRepositoryObject>>();
 
     private static final Pattern pattern = Pattern.compile("(MDM/\\w*+)((/(\\w*))+)"); //$NON-NLS-1$
 
@@ -64,17 +64,17 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private void addToMap(ContainerRepositoryObject viewObj, String path) {
+    private void addToMap(FolderRepositoryObject viewObj, String path) {
         ERepositoryObjectType repObjType = viewObj.getRepositoryObjectType();
-        Map<String, ContainerRepositoryObject> map = containerMap.get(repObjType);
+        Map<String, FolderRepositoryObject> map = containerMap.get(repObjType);
         if (map == null) {
-            map = new HashMap<String, ContainerRepositoryObject>();
+            map = new HashMap<String, FolderRepositoryObject>();
             containerMap.put(repObjType, map);
         }
         map.put(path, viewObj);
     }
 
-    private void buildAllDeletedFolders(ContainerRepositoryObject rootViewObj) {
+    private void buildAllDeletedFolders(FolderRepositoryObject rootViewObj) {
         List<String> deletedFolderPaths = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
         deletedFolderPaths = sortFolderPath(deletedFolderPaths);
         // System.out.println("Deleted Folders:");
@@ -95,9 +95,9 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
                 // }
                 // System.out.println();
                 ERepositoryObjectType type = RepositoryResourceUtil.getTypeByPath(parentFolder);
-                ContainerRepositoryObject parentContainer = getParenContainer(rootViewObj, type, itemPath, true);
+                FolderRepositoryObject parentContainer = getParenContainer(rootViewObj, type, itemPath, true);
                 if (type != null && itemPath != null && folderName != null) {
-                    ContainerRepositoryObject viewObj = RepositoryResourceUtil.createDeletedFolderViewObject(type, itemPath,
+                    FolderRepositoryObject viewObj = RepositoryResourceUtil.createDeletedFolderViewObject(type, itemPath,
                             folderName, parentContainer);
                     addToMap(viewObj, itemPath);
                 }
@@ -105,7 +105,7 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
         }
     }
 
-    private void buildAllDeletedObjects(ContainerRepositoryObject rootViewObj) {
+    private void buildAllDeletedObjects(FolderRepositoryObject rootViewObj) {
         for (ERepositoryObjectType type : IServerObjectRepositoryType.ALL_TYPES) {
             try {
                 List<IRepositoryViewObject> viewObjs = factory.getAll(type, true);
@@ -114,7 +114,7 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
                     ItemState state = property.getItem().getState();
                     if (state.isDeleted()) {
                         String path = state.getPath();
-                        ContainerRepositoryObject container = getParenContainer(rootViewObj, type, path, false);
+                        FolderRepositoryObject container = getParenContainer(rootViewObj, type, path, false);
                         // get from cache
                         IRepositoryViewObject cacheViewObj = ContainerCacheService.get(property);
                         if (cacheViewObj == null) {
@@ -134,8 +134,8 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
     public Object[] getChildren(Object element) {
         IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
         ERepositoryObjectType type = viewObj.getRepositoryObjectType();
-        if (viewObj instanceof ContainerRepositoryObject) {
-            ContainerRepositoryObject containerObj = (ContainerRepositoryObject) viewObj;
+        if (viewObj instanceof FolderRepositoryObject) {
+            FolderRepositoryObject containerObj = (FolderRepositoryObject) viewObj;
             if (type == IServerObjectRepositoryType.TYPE_RECYCLE_BIN) {
                 buildAllDeletedFolders(containerObj);
                 buildAllDeletedObjects(containerObj);
@@ -146,13 +146,13 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
         return new Object[0];
     }
 
-    private ContainerRepositoryObject getParenContainer(ContainerRepositoryObject rootItem, ERepositoryObjectType type,
+    private FolderRepositoryObject getParenContainer(FolderRepositoryObject rootItem, ERepositoryObjectType type,
             String currentPath, boolean isFolder) {
         String parentPath = isFolder ? getParentPath(currentPath) : currentPath;
         if (parentPath != null) {
-            Map<String, ContainerRepositoryObject> map = containerMap.get(type);
+            Map<String, FolderRepositoryObject> map = containerMap.get(type);
             if (map != null) {
-                ContainerRepositoryObject item = map.get(parentPath);
+                FolderRepositoryObject item = map.get(parentPath);
                 if (item != null) {
                     return item;
                 }

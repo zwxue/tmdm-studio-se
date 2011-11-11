@@ -20,7 +20,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewFilter;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.utils.PreferenceUtil;
 
 /**
@@ -40,7 +40,7 @@ public class ServerObjectViewFilter extends ViewerFilter implements IRepositoryV
 
     @Override
     public boolean select(Viewer viewer, Object parentElement, Object element) {
-        if (element instanceof ContainerRepositoryObject) {
+        if (element instanceof FolderRepositoryObject) {
             IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager
                     .getConfiguration((IRepositoryViewObject) element);
             if (conf != null) {

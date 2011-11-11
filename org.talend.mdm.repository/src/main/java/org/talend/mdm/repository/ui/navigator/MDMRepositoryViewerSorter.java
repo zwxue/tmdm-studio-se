@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -24,7 +25,10 @@ public class MDMRepositoryViewerSorter extends ViewerSorter {
     public int category(Object element) {
         if (element instanceof IRepositoryViewObject) {
             IRepositoryViewObject viewObject = (IRepositoryViewObject) element;
-            if (viewObject.getRepositoryObjectType() == IServerObjectRepositoryType.TYPE_RECYCLE_BIN) {
+            ERepositoryObjectType repositoryObjectType = viewObject.getRepositoryObjectType();
+            if (repositoryObjectType == null)
+                return 0;
+            if (repositoryObjectType == IServerObjectRepositoryType.TYPE_RECYCLE_BIN) {
                 return 2;
             }
             Item item = viewObject.getProperty().getItem();

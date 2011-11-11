@@ -34,7 +34,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployAllDialog;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -212,7 +212,7 @@ public class DeployAllAction extends AbstractDeployAction {
 
     private void findFromContainer(IRepositoryViewObject viewObj, Set<IRepositoryViewObject> viewObjs) {
 
-        if (viewObj instanceof ContainerRepositoryObject) {
+        if (viewObj instanceof FolderRepositoryObject) {
             List<Object> selectedObjectCon = getSelectedObject();
             boolean existCon = false;
             for (Object obj : selectedObjectCon) {
@@ -224,8 +224,8 @@ public class DeployAllAction extends AbstractDeployAction {
             }
             }
             if (existCon) {
-                if (viewObj instanceof ContainerRepositoryObject) {
-                            for (IRepositoryViewObject vobject : ((ContainerRepositoryObject) viewObj).getChildren()) {
+                if (viewObj instanceof FolderRepositoryObject) {
+                    for (IRepositoryViewObject vobject : ((FolderRepositoryObject) viewObj).getChildren()) {
                                 Item itm = vobject.getProperty().getItem();
                                 if (itm instanceof MDMServerObjectItem) {
                                     MDMServerObject serverObject = ((MDMServerObjectItem) itm).getMDMServerObject();
@@ -241,8 +241,8 @@ public class DeployAllAction extends AbstractDeployAction {
                 }
             }
             
-            for (IRepositoryViewObject child : ((ContainerRepositoryObject) viewObj).getChildren()) {
-                if (child instanceof ContainerRepositoryObject) {
+            for (IRepositoryViewObject child : ((FolderRepositoryObject) viewObj).getChildren()) {
+                if (child instanceof FolderRepositoryObject) {
                     findFromContainer(child, viewObjs);
                 } else {
                     Item item = child.getProperty().getItem();

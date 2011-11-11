@@ -15,7 +15,7 @@ package org.talend.mdm.repository.ui.navigator;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 
 
 /**
@@ -36,8 +36,8 @@ public class CommonMDMRepositoryContentProvider implements ITreeContentProvider 
     public Object[] getChildren(Object parentElement) {
         if (parentElement instanceof IRepositoryViewObject[]) {
             return (IRepositoryViewObject[]) parentElement;
-        } else if (parentElement instanceof ContainerRepositoryObject) {
-            return ((ContainerRepositoryObject) parentElement).getChildren().toArray();
+        } else if (parentElement instanceof FolderRepositoryObject) {
+            return ((FolderRepositoryObject) parentElement).getChildren().toArray();
         }
         return new Object[0];
     }

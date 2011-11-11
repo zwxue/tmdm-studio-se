@@ -109,6 +109,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int MDM_ITEM__REFERENCE_RESOURCES = PropertiesPackage.ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_ITEM__FILE_EXTENSION = PropertiesPackage.ITEM__FILE_EXTENSION;
+
+    /**
      * The number of structural features of the '<em>MDM Item</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -162,6 +171,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int MDM_SERVER_DEF_ITEM__REFERENCE_RESOURCES = MDM_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_DEF_ITEM__FILE_EXTENSION = MDM_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Server Def</b></em>' reference.
@@ -229,6 +247,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES = MDM_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION = MDM_ITEM__FILE_EXTENSION;
+
+    /**
      * The number of structural features of the '<em>MDM Server Object Item</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -282,6 +309,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_MENU_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MENU_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Ws Menu</b></em>' reference.
@@ -348,6 +384,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_ROLE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROLE_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Role</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -411,6 +456,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int CONTAINER_ITEM__REFERENCE_RESOURCES = MDM_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONTAINER_ITEM__FILE_EXTENSION = MDM_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Children</b></em>' reference list.
@@ -504,6 +558,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_DATA_MODEL_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Data Model</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -566,6 +629,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_DATA_CLUSTER_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Ws Data Cluster</b></em>' reference.
@@ -632,6 +704,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_STORED_PROCEDURE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Stored Procedure</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -694,6 +775,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_UNIVERSE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_UNIVERSE_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Ws Universe</b></em>' reference.
@@ -760,6 +850,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_SYNCHRONIZATION_PLAN_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SYNCHRONIZATION_PLAN_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Synchronization Plan</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -822,6 +921,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_VIEW_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Ws View</b></em>' reference.
@@ -888,6 +996,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_WORKFLOW_DEPLOY_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_DEPLOY_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Workflow Deploy</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -950,6 +1067,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_TRANSFORMER_V2_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Ws Transformer V2</b></em>' reference.
@@ -1016,6 +1142,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_ROUTING_RULE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Routing Rule</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1078,6 +1213,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_JOB_MODEL_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Ws Job Model Item</b></em>' reference.
@@ -1144,6 +1288,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_EVENT_MANAGER_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Event Manager</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1206,6 +1359,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_SERVICE_CONFIGURATION_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Ws Service Configuration</b></em>' reference.
@@ -1272,6 +1434,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_WORKFLOW_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Ws Workflow</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1334,6 +1505,15 @@ public interface MdmpropertiesPackage extends EPackage {
      * @ordered
      */
     int WS_RESOURCE_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
 
     /**
      * The feature id for the '<em><b>Resource</b></em>' reference.
@@ -1400,6 +1580,15 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_CUSTOM_FORM_ITEM__REFERENCE_RESOURCES = MDM_SERVER_OBJECT_ITEM__REFERENCE_RESOURCES;
 
     /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_CUSTOM_FORM_ITEM__FILE_EXTENSION = MDM_SERVER_OBJECT_ITEM__FILE_EXTENSION;
+
+    /**
      * The feature id for the '<em><b>Custom Form</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1418,6 +1607,97 @@ public interface MdmpropertiesPackage extends EPackage {
     int WS_CUSTOM_FORM_ITEM_FEATURE_COUNT = MDM_SERVER_OBJECT_ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WorkspaceRootItemImpl <em>Workspace Root Item</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.WorkspaceRootItemImpl
+     * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWorkspaceRootItem()
+     * @generated
+     */
+    int WORKSPACE_ROOT_ITEM = 21;
+
+    /**
+     * The feature id for the '<em><b>Property</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__PROPERTY = MDM_ITEM__PROPERTY;
+
+    /**
+     * The feature id for the '<em><b>State</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__STATE = MDM_ITEM__STATE;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__PARENT = MDM_ITEM__PARENT;
+
+    /**
+     * The feature id for the '<em><b>Reference Resources</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__REFERENCE_RESOURCES = MDM_ITEM__REFERENCE_RESOURCES;
+
+    /**
+     * The feature id for the '<em><b>File Extension</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__FILE_EXTENSION = MDM_ITEM__FILE_EXTENSION;
+
+    /**
+     * The feature id for the '<em><b>Children</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__CHILDREN = MDM_ITEM_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__TYPE = MDM_ITEM_FEATURE_COUNT + 1;
+
+    /**
+     * The feature id for the '<em><b>Label</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM__LABEL = MDM_ITEM_FEATURE_COUNT + 2;
+
+    /**
+     * The number of structural features of the '<em>Workspace Root Item</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WORKSPACE_ROOT_ITEM_FEATURE_COUNT = MDM_ITEM_FEATURE_COUNT + 3;
+
+    /**
      * The meta object id for the '<em>ERepository Object Type</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1425,7 +1705,7 @@ public interface MdmpropertiesPackage extends EPackage {
      * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getERepositoryObjectType()
      * @generated
      */
-    int EREPOSITORY_OBJECT_TYPE = 21;
+    int EREPOSITORY_OBJECT_TYPE = 22;
 
 
     /**
@@ -1859,6 +2139,27 @@ public interface MdmpropertiesPackage extends EPackage {
     EReference getWSCustomFormItem_CustomForm();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem <em>Workspace Root Item</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Workspace Root Item</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem
+     * @generated
+     */
+    EClass getWorkspaceRootItem();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem#getLabel <em>Label</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Label</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem#getLabel()
+     * @see #getWorkspaceRootItem()
+     * @generated
+     */
+    EAttribute getWorkspaceRootItem_Label();
+
+    /**
      * Returns the meta object for data type '{@link org.talend.core.model.repository.ERepositoryObjectType <em>ERepository Object Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2260,6 +2561,24 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EReference WS_CUSTOM_FORM_ITEM__CUSTOM_FORM = eINSTANCE.getWSCustomFormItem_CustomForm();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WorkspaceRootItemImpl <em>Workspace Root Item</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.WorkspaceRootItemImpl
+         * @see org.talend.mdm.repository.model.mdmproperties.impl.MdmpropertiesPackageImpl#getWorkspaceRootItem()
+         * @generated
+         */
+        EClass WORKSPACE_ROOT_ITEM = eINSTANCE.getWorkspaceRootItem();
+
+        /**
+         * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WORKSPACE_ROOT_ITEM__LABEL = eINSTANCE.getWorkspaceRootItem_Label();
 
         /**
          * The meta object literal for the '<em>ERepository Object Type</em>' data type.

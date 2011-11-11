@@ -31,7 +31,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -62,8 +62,8 @@ public class RecycleBinLabelProvider extends AbstractLabelProvider {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
             ERepositoryObjectType type = viewObj.getRepositoryObjectType();
             if (type == IServerObjectRepositoryType.TYPE_RECYCLE_BIN) {
-                if (viewObj instanceof ContainerRepositoryObject) {
-                    return ((ContainerRepositoryObject) viewObj).getChildren().isEmpty() ? EMPTY_IMG : FULL_IMG;
+                if (viewObj instanceof FolderRepositoryObject) {
+                    return ((FolderRepositoryObject) viewObj).getChildren().isEmpty() ? EMPTY_IMG : FULL_IMG;
                 }
             }
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);

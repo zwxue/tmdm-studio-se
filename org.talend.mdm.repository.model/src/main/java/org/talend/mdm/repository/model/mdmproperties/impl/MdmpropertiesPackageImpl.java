@@ -40,6 +40,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSUniverseItem;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
+import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 
 /**
@@ -195,6 +196,13 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * @generated
      */
     private EClass wsCustomFormItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass workspaceRootItemEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -642,6 +650,24 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWorkspaceRootItem() {
+        return workspaceRootItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWorkspaceRootItem_Label() {
+        return (EAttribute)workspaceRootItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -736,6 +762,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsCustomFormItemEClass = createEClass(WS_CUSTOM_FORM_ITEM);
         createEReference(wsCustomFormItemEClass, WS_CUSTOM_FORM_ITEM__CUSTOM_FORM);
 
+        workspaceRootItemEClass = createEClass(WORKSPACE_ROOT_ITEM);
+        createEAttribute(workspaceRootItemEClass, WORKSPACE_ROOT_ITEM__LABEL);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -796,6 +825,8 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsWorkflowItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsResourceItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         wsCustomFormItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
+        workspaceRootItemEClass.getESuperTypes().add(this.getMDMItem());
+        workspaceRootItemEClass.getESuperTypes().add(thePropertiesPackage.getFolderItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -863,9 +894,10 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         initEReference(getWSResourceItem_Resource(), theMdmserverobjectPackage.getWSResourceE(), null, "resource", null, 0, 1, WSResourceItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsCustomFormItemEClass, WSCustomFormItem.class, "WSCustomFormItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getWSCustomFormItem_CustomForm(), theMdmserverobjectPackage.getWSCustomFormE(), null, "customForm", null,
-                0, 1, WSCustomFormItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
-                !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSCustomFormItem_CustomForm(), theMdmserverobjectPackage.getWSCustomFormE(), null, "customForm", null, 0, 1, WSCustomFormItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(workspaceRootItemEClass, WorkspaceRootItem.class, "WorkspaceRootItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWorkspaceRootItem_Label(), ecorePackage.getEString(), "label", null, 0, 1, WorkspaceRootItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

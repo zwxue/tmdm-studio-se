@@ -254,6 +254,10 @@ public class Messages extends NLS {
 
     public static String Warning_text;
 
+    public static String WSRootLabelProvider_localRepository;
+
+    public static String WSRootLabelProvider_svn;
+
     public static String TheObject_text;
 
     public static String NeverDeploy_text;

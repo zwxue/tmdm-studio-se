@@ -31,7 +31,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -120,7 +120,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     private void removeFolderObject(IRepositoryViewObject viewObj) {
         for (IRepositoryViewObject childObj : viewObj.getChildren()) {
-            if (childObj instanceof ContainerRepositoryObject) {
+            if (childObj instanceof FolderRepositoryObject) {
                 removeFolderObject(childObj);
             } else {
                 removeServerObject(childObj);

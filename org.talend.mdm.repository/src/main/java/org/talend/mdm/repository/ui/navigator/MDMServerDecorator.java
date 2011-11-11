@@ -63,14 +63,14 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
     private void decorateRecycleBin(Item item, IDecoration decoration) {
         ItemState state = item.getState();
         String path = state.getPath();
-
-        int index = path.lastIndexOf(IPath.SEPARATOR);
-        if (index > 0) {
-            path = path.substring(0, index);
-        } else if (index == 0) {
-            path = "";
+        if (item instanceof ContainerItem) {
+            int index = path.lastIndexOf(IPath.SEPARATOR);
+            if (index > 0) {
+                path = path.substring(0, index);
+            } else if (index == 0) {
+                path = "";
+            }
         }
-
         if (path.length() > 0) {
             decoration.addSuffix(" (" + path + ")");
         }

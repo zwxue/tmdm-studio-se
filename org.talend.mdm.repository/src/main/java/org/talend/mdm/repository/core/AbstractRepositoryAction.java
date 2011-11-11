@@ -37,7 +37,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 
@@ -147,8 +147,8 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     }
 
     private boolean refreshRepositoryContainer(IRepositoryViewObject viewObj, ERepositoryObjectType type) {
-        if (viewObj instanceof ContainerRepositoryObject) {
-            ContainerRepositoryObject containerRepositoryObject = (ContainerRepositoryObject) viewObj;
+        if (viewObj instanceof FolderRepositoryObject) {
+            FolderRepositoryObject containerRepositoryObject = (FolderRepositoryObject) viewObj;
             if (containerRepositoryObject.getRepositoryObjectType().equals(type)) {
                 commonViewer.refresh(containerRepositoryObject);
                 return true;

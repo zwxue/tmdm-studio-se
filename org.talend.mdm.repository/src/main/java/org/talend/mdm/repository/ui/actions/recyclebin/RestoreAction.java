@@ -26,7 +26,7 @@ import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -82,14 +82,14 @@ public class RestoreAction extends AbstractRepositoryAction {
     }
 
     private void restore(IRepositoryViewObject viewObj) {
-        if (viewObj instanceof ContainerRepositoryObject) {
-            restoreFolder((ContainerRepositoryObject) viewObj);
+        if (viewObj instanceof FolderRepositoryObject) {
+            restoreFolder((FolderRepositoryObject) viewObj);
         } else {
             restoreServerObject(viewObj);
         }
     }
 
-    private void restoreFolder(ContainerRepositoryObject viewObj) {
+    private void restoreFolder(FolderRepositoryObject viewObj) {
         Item item = viewObj.getProperty().getItem();
         ERepositoryObjectType type = viewObj.getRepositoryObjectType();
         if (RepositoryResourceUtil.isDeletedFolder(item, type)) {
@@ -124,7 +124,7 @@ public class RestoreAction extends AbstractRepositoryAction {
 
     private void restoreParent(IRepositoryViewObject viewObj) {
         IRepositoryViewObject parent = ContainerCacheService.getParent(viewObj);
-        if (parent != null && parent instanceof ContainerRepositoryObject) {
+        if (parent != null && parent instanceof FolderRepositoryObject) {
             Item item = parent.getProperty().getItem();
             ERepositoryObjectType type = parent.getRepositoryObjectType();
             if (RepositoryResourceUtil.isDeletedFolder(item, type)) {

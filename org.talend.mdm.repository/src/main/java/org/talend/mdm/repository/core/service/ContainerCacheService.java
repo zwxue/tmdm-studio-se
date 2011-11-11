@@ -21,7 +21,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.models.ContainerRepositoryObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -81,7 +81,7 @@ public class ContainerCacheService {
                 String next = il.next();
                 if (next.startsWith(path)) {
                     IRepositoryViewObject viewObj = map.get(next);
-                    if (viewObj != null && viewObj instanceof ContainerRepositoryObject) {
+                    if (viewObj != null && viewObj instanceof FolderRepositoryObject) {
                         if (viewObj.getChildren() != null)
                             for (IRepositoryViewObject child : viewObj.getChildren()) {
                                 remove(child.getProperty());

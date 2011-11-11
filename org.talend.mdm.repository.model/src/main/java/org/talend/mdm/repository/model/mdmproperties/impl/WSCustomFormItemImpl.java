@@ -24,19 +24,18 @@ import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSCustomFormItemImpl#getCustomForm <em>Custom Form
- * </em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSCustomFormItemImpl#getCustomForm <em>Custom Form</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSCustomFormItem {
 
     /**
-     * The cached value of the '{@link #getCustomForm() <em>Custom Form</em>}' reference. <!-- begin-user-doc --> <!--
+     * The cached value of the '{@link #getCustomForm() <em>Custom Form</em>}' reference.
+     * <!-- begin-user-doc --> <!--
      * end-user-doc -->
-     * 
      * @see #getCustomForm()
      * @generated
      * @ordered
@@ -45,7 +44,6 @@ public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSC
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     protected WSCustomFormItemImpl() {
@@ -54,7 +52,6 @@ public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSC
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -96,7 +93,6 @@ public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSC
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public WSCustomFormE basicGetCustomForm() {
@@ -105,73 +101,66 @@ public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSC
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     public void setCustomForm(WSCustomFormE newCustomForm) {
         WSCustomFormE oldCustomForm = customForm;
         customForm = newCustomForm;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM,
-                    oldCustomForm, customForm));
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM, oldCustomForm, customForm));
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
-            if (resolve)
-                return getCustomForm();
-            return basicGetCustomForm();
+            case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
+                if (resolve) return getCustomForm();
+                return basicGetCustomForm();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
-            setCustomForm((WSCustomFormE) newValue);
-            return;
+            case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
+                setCustomForm((WSCustomFormE)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
-            setCustomForm((WSCustomFormE) null);
-            return;
+            case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
+                setCustomForm((WSCustomFormE)null);
+                return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-        case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
-            return customForm != null;
+            case MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM:
+                return customForm != null;
         }
         return super.eIsSet(featureID);
     }
