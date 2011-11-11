@@ -64,7 +64,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
             public String isValid(String newText) {
                 if (newText == null || newText.trim().length() == 0)
                     return Messages.Common_nameCanNotBeEmpty;
-                if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
                     return Messages.Common_nameInvalid;
                 }
                 if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
