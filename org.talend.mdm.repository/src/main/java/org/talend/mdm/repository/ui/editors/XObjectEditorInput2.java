@@ -59,7 +59,9 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
     }
 
     public Item getInputItem() {
-        return viewObject.getProperty().getItem();
+        if (viewObject != null && viewObject.getProperty() != null)
+            return viewObject.getProperty().getItem();
+        return null;
     }
 
     private boolean readOnly;
