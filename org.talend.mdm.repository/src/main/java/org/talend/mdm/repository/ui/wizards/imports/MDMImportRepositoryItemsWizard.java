@@ -213,6 +213,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                     }
                 }
             } catch (Exception e) {
+                log.error(e);
             }
         }
         monitor.done();

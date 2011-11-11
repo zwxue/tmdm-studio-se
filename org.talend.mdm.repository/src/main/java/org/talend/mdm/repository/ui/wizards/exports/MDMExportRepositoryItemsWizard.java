@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
@@ -44,6 +46,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
     ExportRepositoryObjectCheckTreeViewer checkTreeViewer;
+
+    private static Log log = LogFactory.getLog(MDMExportRepositoryItemsWizard.class);
 
     public MDMExportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
@@ -101,6 +105,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
                         writeString(sw.toString(), "exportDataContainerItems.xml");//$NON-NLS-1$
                     }
                 } catch (Exception e) {
+                    log.error(e);
                 }
 
             } catch (Exception e) {
