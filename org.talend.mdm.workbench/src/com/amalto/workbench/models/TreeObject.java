@@ -181,6 +181,17 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         this.items = items;
     }
 
+    private String url;
+
+    
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public TreeObject() {
     }
 
@@ -382,16 +393,28 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         this.user = user;
     }
 
+    private String username;
+
+    private String password;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getUsername() {
         if (getServerRoot() != null)
             return getServerRoot().getUser().getUsername();
-        return null;
+        return username;
     }
 
     public String getPassword() {
         if (getServerRoot() != null)
             return getServerRoot().getUser().getPassword();
-        return null;
+        return password;
     }
 
     public String getUniverse() {
@@ -403,7 +426,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public String getEndpointAddress() {
         if (getServerRoot() != null)
             return getServerRoot().getWsKey().toString();
-        return null;
+        return url;
     }
 
     public String getEndpointIpAddress() {

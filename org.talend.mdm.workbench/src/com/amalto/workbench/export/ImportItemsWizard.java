@@ -163,9 +163,9 @@ public class ImportItemsWizard extends Wizard {
     private ServerView view;
 
     // private List<TreeObject> objList =new ArrayList<TreeObject>();
-    private Hashtable<String, String[]> dataClusterContent = new Hashtable<String, String[]>();
+    protected Hashtable<String, String[]> dataClusterContent = new Hashtable<String, String[]>();
 
-    private TreeParent serverRoot;
+    protected TreeParent serverRoot;
 
     private XtentisPort port = null;
 
@@ -1102,7 +1102,7 @@ public class ImportItemsWizard extends Wizard {
         return isV2Transformer;
     }
 
-    private void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap)
+    protected void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap)
             throws Exception {
         if (dataClusterContent.containsKey(item.getDisplayName())) {
             Reader reader = null;
@@ -1278,7 +1278,7 @@ public class ImportItemsWizard extends Wizard {
                 public void widgetSelected(SelectionEvent e) {
 
                     FormToolkit toolkit = WidgetFactory.getWidgetFactory();
-                    ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(view.getSite().getShell(), toolkit, true,
+                    ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(zipBtn.getShell(), toolkit, true,
                             zipFileRepository);
                     dlg.setBlockOnOpen(true);
                     if (dlg.open() == Window.OK) {

@@ -516,7 +516,7 @@ public class ExportItemsWizard extends Wizard {
         }
     }
 
-    private void writeString(String outputStr, String filename) {
+    protected void writeString(String outputStr, String filename) {
         try {
             File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
             if (!f.getParentFile().getParentFile().exists()) {
@@ -639,14 +639,15 @@ public class ExportItemsWizard extends Wizard {
         treeViewer.setItemText("Select items to export:");
         return returnComposite;
     }
-    private void exportCluster(List<TreeObject> exports, WSDataClusterPK pk, XtentisPort port) {
+
+    protected TreeObject exportCluster(List<TreeObject> exports, WSDataClusterPK pk, XtentisPort port) {
         String encodedID = null;
         try {
             List<String> items1 = new ArrayList<String>();
             WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
                     new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE)).getResults();
             if (results == null)
-                return;
+                return null;
             for (WSItemPKsByCriteriaResponseResults item : results) {
                 if (item.getWsItemPK().getIds() == null)
                     continue;
@@ -664,11 +665,13 @@ public class ExportItemsWizard extends Wizard {
                 writeString(sw1.toString(), TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
                 items1.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
             }
-            TreeObject obj1 = new TreeObject("", null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);//$NON-NLS-1$
+            TreeObject obj1 = new TreeObject(pk.getPk(), null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);//$NON-NLS-1$
             obj1.setItems(items1.toArray(new String[items1.size()]));
             exports.add(obj1);
+            return obj1;
         } catch (Exception e) {
         }
+        return null;
     }
 
     private Matcher filter(String name) {

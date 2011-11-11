@@ -13,23 +13,31 @@
 package org.talend.mdm.repository.ui.wizards.exports;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
+import org.exolab.castor.xml.Marshaller;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.RepositoryViewObject;
+import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
 import org.talend.repository.local.ExportItemUtil;
 
 import com.amalto.workbench.export.ExportItemsWizard;
+import com.amalto.workbench.export.Exports;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.XtentisPort;
 /**
  * DOC hywang class global comment. this wizard is used to export the selected items from MDMRepositoryView
  */
@@ -62,7 +70,38 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
             try {
                 ExportItemUtil exportItemUtil = new ExportItemUtil();
                 // MOD sgandon 31/03/2010 bug 12229: moved getAllVersion into ExportItemUtil.exportitems() method.
-                exportItemUtil.exportItems(new File(exportFolder), selectedItems, true, new NullProgressMonitor());
+                exportItemUtil.exportItems(new File(exportFolder), selectedItems, true, monitor);
+                
+                Exports eps = new Exports();
+                List<TreeObject> exports = new ArrayList<TreeObject>();
+                selectedItems = getItemsToExport(objs);
+
+                //export datacluster
+                boolean exportDc = false;
+                for (Item item : selectedItems) {
+                    MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                    if(serverObject.getType()== TreeObject.DATA_CLUSTER){
+                        WSDataClusterPK pk=new WSDataClusterPK(serverObject.getName());
+                        if (serverObject.getLastServerDef() != null) {
+                            XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverObject.getLastServerDef());
+                            TreeObject xobject = exportCluster(exports, pk, port);
+                            xobject.setUrl(serverObject.getLastServerDef().getUrl());
+                            xobject.setUsername(serverObject.getLastServerDef().getUser());
+                            xobject.setPassword(serverObject.getLastServerDef().getPasswd());
+                            exportDc = true;
+                        }
+                    }
+                }
+                eps.setItems(exports.toArray(new TreeObject[exports.size()]));
+
+                StringWriter sw = new StringWriter();
+                try {
+                    if (exportDc) {
+                        Marshaller.marshal(eps, sw);
+                        writeString(sw.toString(), "exportDataContainerItems.xml");//$NON-NLS-1$
+                    }
+                } catch (Exception e) {
+                }
 
             } catch (Exception e) {
                 MessageBoxExceptionHandler.process(e);

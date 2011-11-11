@@ -60,7 +60,10 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.models.KeyValue;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
@@ -274,5 +277,25 @@ public class RepositoryWebServiceAdapter {
     public static String[] getServiceNames() {
         initGetDocumentServices();
         return documentServiceMap.keySet().toArray(new String[0]);
+    }
+
+    public static void resetXObject(MDMServerDef serverDef, TreeObject xobject) {
+        String serverName = serverDef.getHost();
+        String universe = serverDef.getUniverse();
+        String username = serverDef.getUser();
+        String password = serverDef.getPasswd();
+        String endpointaddress = serverDef.getUrl();
+        TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
+                : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        UserInfo user = new UserInfo();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setServerUrl(endpointaddress);
+        user.setUniverse(universe);
+
+        serverRoot.setUser(user);
+
+        xobject.setServerRoot(serverRoot);
+
     }
 }

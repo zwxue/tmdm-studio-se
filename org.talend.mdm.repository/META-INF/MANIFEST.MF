@@ -39,7 +39,8 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ META-INF/lib/castor-1.1-xml.jar
 Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.core.impl,
  org.talend.mdm.repository.core.service,
