@@ -35,6 +35,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
+import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployAllDialog;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -212,7 +213,8 @@ public class DeployAllAction extends AbstractDeployAction {
 
     private void findFromContainer(IRepositoryViewObject viewObj, Set<IRepositoryViewObject> viewObjs) {
 
-        if (viewObj instanceof FolderRepositoryObject) {
+        if (viewObj instanceof FolderRepositoryObject || viewObj instanceof WSRootRepositoryObject) {
+
             List<Object> selectedObjectCon = getSelectedObject();
             boolean existCon = false;
             for (Object obj : selectedObjectCon) {
@@ -224,8 +226,16 @@ public class DeployAllAction extends AbstractDeployAction {
             }
             }
             if (existCon) {
-                if (viewObj instanceof FolderRepositoryObject) {
-                    for (IRepositoryViewObject vobject : ((FolderRepositoryObject) viewObj).getChildren()) {
+                if (viewObj instanceof FolderRepositoryObject || viewObj instanceof WSRootRepositoryObject) {
+                    List<IRepositoryViewObject> objList = null;
+                    if (viewObj instanceof FolderRepositoryObject) {
+                        objList = ((FolderRepositoryObject) viewObj).getChildren();
+                    }
+                    if (viewObj instanceof WSRootRepositoryObject) {
+                        objList = ((WSRootRepositoryObject) viewObj).getChildren();
+                    }
+
+                    for (IRepositoryViewObject vobject : objList) {
                                 Item itm = vobject.getProperty().getItem();
                                 if (itm instanceof MDMServerObjectItem) {
                                     MDMServerObject serverObject = ((MDMServerObjectItem) itm).getMDMServerObject();
@@ -241,12 +251,18 @@ public class DeployAllAction extends AbstractDeployAction {
                 }
             }
             
-            for (IRepositoryViewObject child : ((FolderRepositoryObject) viewObj).getChildren()) {
-                if (child instanceof FolderRepositoryObject) {
+            List<IRepositoryViewObject> objList = null;
+            if (viewObj instanceof FolderRepositoryObject) {
+                objList = ((FolderRepositoryObject) viewObj).getChildren();
+            }
+            if (viewObj instanceof WSRootRepositoryObject) {
+                objList = ((WSRootRepositoryObject) viewObj).getChildren();
+            }
+            for (IRepositoryViewObject child : objList) {
+                if (child instanceof FolderRepositoryObject || child instanceof WSRootRepositoryObject) {
                     findFromContainer(child, viewObjs);
                 } else {
                     Item item = child.getProperty().getItem();
-
                     if (!isButton) {
                     List<Object> selectedObject = getSelectedObject();
                     boolean exist = false;

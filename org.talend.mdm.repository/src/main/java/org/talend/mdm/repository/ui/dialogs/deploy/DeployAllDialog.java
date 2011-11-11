@@ -147,8 +147,10 @@ public class DeployAllDialog extends Dialog {
         lblNewLabel.setText(Messages.DeployAllDialog_label);
         new Label(container, SWT.NONE);
         IRepositoryViewObject[] theInput = (IRepositoryViewObject[]) input;
+        theInput = getNewInput();
         restoreDeleteObjectsTreeView(theInput);
-        treeViewer = new RepositoryViewObjectCheckedWidget(container, input, changedViewObjs);
+        // treeViewer = new RepositoryViewObjectCheckedWidget(container, input, changedViewObjs);
+        treeViewer = new RepositoryViewObjectCheckedWidget(container, theInput, changedViewObjs);
         treeViewer.addCheckStateListener(new ICheckStateListener() {
             public void checkStateChanged(CheckStateChangedEvent event) {
                 // enableOkBun();
@@ -173,6 +175,17 @@ public class DeployAllDialog extends Dialog {
             }
         });
         return container;
+    }
+
+    private IRepositoryViewObject[] getNewInput() {
+        int sze = ((IRepositoryViewObject[]) input)[0].getChildren().toArray().length;
+        IRepositoryViewObject[] newInput = new IRepositoryViewObject[sze];
+        for (int i = 0; i < sze; i++) {
+            IRepositoryViewObject v = ((IRepositoryViewObject[]) input)[0].getChildren().get(i);
+            newInput[i] = v;
+        }
+
+        return newInput;
     }
 
     private void restoreDeleteObjectsTreeView(IRepositoryViewObject[] theInput) {
