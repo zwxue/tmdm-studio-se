@@ -32,6 +32,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
@@ -113,8 +114,12 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
                 break;
             }
         }
+
         complexType.setName(typeName);
         if (superType != null) {
+            if (!checkParentType(superType, group)) {
+                return Status.CANCEL_STATUS;
+            }
             complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
             complexType.setBaseTypeDefinition(superType);
         }
@@ -139,6 +144,27 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
         page.refresh();
         page.markDirty();
         return Status.OK_STATUS;
+    }
+
+    private boolean checkParentType(XSDTypeDefinition superType, XSDModelGroup currentGroup) {
+        XSDParticle complexType = superType.getComplexType();
+        XSDTerm term = complexType.getTerm();
+        if (term instanceof XSDModelGroup) {
+            XSDModelGroup group = (XSDModelGroup) term;
+            if (group.getCompositor() == XSDCompositor.ALL_LITERAL) {
+                if (MessageDialog.openConfirm(null, "Change to sequence type",
+                        "The complex type will be changed to sequence in response to extend parent type")) {
+                    group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                    complexType.updateElement();
+                    currentGroup.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                    currentGroup.updateElement();
+                    return true;
+                }
+                return false;
+
+            }
+        }
+        return true;
     }
 
     public void widgetSelected(SelectionEvent e) {
