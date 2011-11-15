@@ -322,7 +322,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }// keyListener
                     );
             serviceCombo.add("");
-            WSServicesListItem[] servicesList = Util.getPort(getXObject()).getServicesList(new WSGetServicesList("en")).getItem();
+            // WSServicesListItem[] servicesList = Util.getPort(getXObject()).getServicesList(new
+            // WSGetServicesList("en")).getItem();
+            WSServicesListItem[] servicesList = getPort().getServicesList(new WSGetServicesList("en")).getItem();
+
             if ((servicesList != null) && (servicesList.length > 0)) {
                 String[] services = new String[servicesList.length];
                 for (int i = 0; i < servicesList.length; i++) {
@@ -515,8 +518,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             // if (! this.String xml =
             // (String)((IStructuredSelection)event.getSelection()).getFirstElement();equals(getEditor().getActivePageInstance()))
             // return;
-            XtentisPort port = Util.getPort(getXObject());
+            // XtentisPort port = Util.getPort(getXObject());
 
+            XtentisPort port = getPort();
             WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
                     WSRoutingEngineV2ActionCode.STATUS));
             statusLabel.setText(status.getValue());
@@ -588,8 +592,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             waitCursor = new Cursor(display, SWT.CURSOR_WAIT);
             this.getSite().getShell().setCursor(waitCursor);
 
-            XtentisPort port = Util.getPort(getXObject());
-
+            // XtentisPort port = Util.getPort(getXObject());
+            XtentisPort port = getPort();
             long from = -1;
             long to = -1;
 
@@ -832,7 +836,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 try {
                     monitor.beginTask("Deleting items", lineItems.size());
 
-                    XtentisPort port = Util.getPort(getXObject());
+                    // XtentisPort port = Util.getPort(getXObject());
+                    XtentisPort port = getPort();
 
                     int i = 0;
                     for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext();) {
@@ -949,7 +954,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 XtentisPort port = null;
 
                 try {
-                    port = Util.getPort(getXObject());
+                    // port = Util.getPort(getXObject());
+                    port = getPort();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     MessageDialog.openError(shell, "Error Executing",
@@ -1103,7 +1109,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     public void startSubscriptionEngine() {
         try {
-            XtentisPort port = Util.getPort(getXObject());
+            // XtentisPort port = Util.getPort(getXObject());
+            XtentisPort port = getPort();
             WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
                     WSRoutingEngineV2ActionCode.START));
             statusLabel.setText(status.getValue());
@@ -1116,7 +1123,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     public void stopSubscriptionEngine() {
         try {
-            XtentisPort port = Util.getPort(getXObject());
+            // XtentisPort port = Util.getPort(getXObject());
+            XtentisPort port = getPort();
             WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
                     WSRoutingEngineV2ActionCode.STOP));
             statusLabel.setText(status.getValue());
@@ -1129,7 +1137,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     public void suspendSubscriptionEngine() {
         try {
-            XtentisPort port = Util.getPort(getXObject());
+            // XtentisPort port = Util.getPort(getXObject());
+            XtentisPort port = getPort();
             WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
                     WSRoutingEngineV2ActionCode.SUSPEND));
             statusLabel.setText(status.getValue());
@@ -1142,7 +1151,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     public void resumeSubscriptionEngine() {
         try {
-            XtentisPort port = Util.getPort(getXObject());
+            // XtentisPort port = Util.getPort(getXObject());
+            XtentisPort port = getPort();
             WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
                     WSRoutingEngineV2ActionCode.RESUME));
             statusLabel.setText(status.getValue());
