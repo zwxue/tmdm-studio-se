@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.IEditorReference;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
@@ -104,6 +105,11 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     private void removeServerObject(IRepositoryViewObject viewObj) {
         try {
             Item item = viewObj.getProperty().getItem();
+            IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObj);
+
+            if (ref != null) {
+                RepositoryResourceUtil.closeEditor(ref, true);
+            }
             MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
             if (serverObj.getLastServerDef() != null) {
                 viewObjectsListRemoved.add(viewObj);

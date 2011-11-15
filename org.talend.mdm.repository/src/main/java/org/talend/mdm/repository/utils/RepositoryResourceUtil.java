@@ -789,7 +789,7 @@ public class RepositoryResourceUtil {
         return node;
     }
 
-    public static boolean isOpenedInEditor(IRepositoryViewObject viewObj) {
+    public static IEditorReference isOpenedInEditor(IRepositoryViewObject viewObj) {
         IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
                 .getEditorReferences();
         for (IEditorReference ref : editorReferences) {
@@ -800,7 +800,7 @@ public class RepositoryResourceUtil {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
                         IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
                         if (vObj != null && vObj.equals(viewObj)) {
-                            return true;
+                            return ref;
                         }
                     }
                 } catch (PartInitException e) {
@@ -808,7 +808,15 @@ public class RepositoryResourceUtil {
                 }
             }
         }
-        return false;
+        return null;
+    }
+
+    public static void closeEditor(IEditorReference ref, boolean save) {
+        if (ref != null) {
+            IEditorReference[] editorRefs = new IEditorReference[] { ref };
+            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            activePage.closeEditors(editorRefs, save);
+        }
     }
 
     public static void closeEditor(IRepositoryViewObject viewObj, boolean save) {

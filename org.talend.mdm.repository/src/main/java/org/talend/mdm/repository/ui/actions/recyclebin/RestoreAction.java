@@ -112,7 +112,7 @@ public class RestoreAction extends AbstractRepositoryAction {
         Item item = viewObj.getProperty().getItem();
         try {
             factory.restoreObject(viewObj, new Path(item.getState().getPath()));
-            if (RepositoryResourceUtil.isOpenedInEditor(viewObj)) {
+            if (RepositoryResourceUtil.isOpenedInEditor(viewObj) != null) {
                 factory.lock(viewObj);
             }
         } catch (PersistenceException e) {
