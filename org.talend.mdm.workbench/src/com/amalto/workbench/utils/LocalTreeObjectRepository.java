@@ -335,6 +335,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
         Element elemFolder = null;
         String xpath = getXPathForTreeObject(treeObj);
+        if (credentials.get(UnifyUrl(treeObj.getServerRoot().getWsKey().toString())) == null) {
+            return null;
+        }
         Document doc = credentials.get(UnifyUrl(treeObj.getServerRoot().getWsKey().toString())).doc;
         if (doc.selectNodes(xpath).isEmpty()) {
             xpath = xpath.replaceAll("\\[.*\\]", "");//$NON-NLS-1$//$NON-NLS-2$
@@ -415,6 +418,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
         Element elemFolder = getParentElement(parent);
         String xpath = "child::*[name()='" + filterOutBlank(child.getDisplayName()) + "' and text()='" + child.getType() + "']";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        if (elemFolder == null)
+            return;
         List<Element> list = elemFolder.selectNodes(xpath);
         if (!list.isEmpty())
             elemFolder.remove(list.get(0));
