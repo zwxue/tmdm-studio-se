@@ -262,6 +262,8 @@ public class Messages extends NLS {
 
     public static String NeverDeploy_text;
 
+    public static String EventManager_text;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

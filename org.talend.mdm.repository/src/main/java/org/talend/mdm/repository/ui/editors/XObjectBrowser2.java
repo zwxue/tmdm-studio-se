@@ -29,7 +29,6 @@ import org.talend.mdm.repository.ui.contributor.SvnHistorySelectionProvider;
 
 import com.amalto.workbench.editors.DataClusterBrowserMainPage;
 import com.amalto.workbench.editors.ItemsTrashBrowserMainPage;
-import com.amalto.workbench.editors.RoutingEngineV2BrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.views.MDMPerspective;
@@ -118,7 +117,7 @@ public class XObjectBrowser2 extends XObjectBrowser implements ITabbedPropertySh
             break;
         case TreeObject.SUBSCRIPTION_ENGINE:
             try {
-                addPage(new RoutingEngineV2BrowserMainPage(this));
+                addPage(new RoutingEngineV2BrowserMainPage2(this));
             } catch (PartInitException e) {
                 log.error(e.getMessage(), e);
             }

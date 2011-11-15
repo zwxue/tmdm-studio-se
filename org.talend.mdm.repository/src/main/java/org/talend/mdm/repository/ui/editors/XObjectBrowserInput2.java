@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -45,6 +46,15 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
         init(getInputItem());
     }
 
+    // just now for event manager
+    public XObjectBrowserInput2() {
+        super(new TreeObject(), null);
+        this.viewObject = null;
+        TreeObject treeObj = new TreeObject("treeObject", null, TreeObject.SUBSCRIPTION_ENGINE, null, null); //$NON-NLS-1$
+        setModel(treeObj);
+        setName(Messages.EventManager_text);
+    }
+
     protected void init(Item item) {
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         Object treeObject = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObject);
@@ -64,7 +74,9 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
     }
 
     public Item getInputItem() {
-        return viewObject.getProperty().getItem();
+        if (viewObject != null)
+            return viewObject.getProperty().getItem();
+        return null;
     }
 
     public IRepositoryViewObject getViewObject() {
