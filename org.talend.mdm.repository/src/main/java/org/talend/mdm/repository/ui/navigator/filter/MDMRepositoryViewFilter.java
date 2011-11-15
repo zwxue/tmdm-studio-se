@@ -24,7 +24,8 @@ public class MDMRepositoryViewFilter extends ViewerFilter {
     IRepositoryViewFilter[] filters;
 
     public MDMRepositoryViewFilter() {
-        filters = new IRepositoryViewFilter[] { new ServerObjectViewFilter(), new NamePatternViewFilter() };
+        filters = new IRepositoryViewFilter[] { new ServerObjectViewFilter(), new NamePatternViewFilter(),
+                new LastServerViewFilter() };
     }
 
     public boolean select(Viewer viewer, Object parentElement, Object element) {

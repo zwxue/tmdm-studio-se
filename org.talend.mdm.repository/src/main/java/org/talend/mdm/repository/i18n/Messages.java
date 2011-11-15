@@ -261,6 +261,13 @@ public class Messages extends NLS {
     public static String TheObject_text;
 
     public static String NeverDeploy_text;
+    public static String RepositoryViewFilterDialog_groupNamePattern;
+    public static String RepositoryViewFilterDialog_groupServerObject;
+    public static String RepositoryViewFilterDialog_groupLastServer;
+    public static String RepositoryViewFilterDialog_enableLastServerFilter;
+    public static String RepositoryViewFilterDialog_lblLastServer;
+    public static String RepositoryViewFilterDialog_textServerName;
+    public static String RepositoryViewFilterDialog_btnSelectServer;
 
     public static String EventManager_text;
 
