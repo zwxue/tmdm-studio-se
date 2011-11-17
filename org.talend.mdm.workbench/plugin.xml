@@ -55,7 +55,7 @@
       <perspective
             class="com.amalto.workbench.views.MDMPerspective"
             fixed="false"
-            icon="icons/appli_16x16.gif"
+            icon="icons/MDM_16px.png"
             id="org.talend.mdm.perspective"
             name="MDM">
       </perspective>
