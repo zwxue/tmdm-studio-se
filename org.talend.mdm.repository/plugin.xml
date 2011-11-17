@@ -48,9 +48,17 @@
       <page
             class="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
             id="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
-            name="MDM"/>
+            category="org.talend.mdm.repository.ui.preferences.RepositoryPreferencePage"
+            name="MDM"/> 
    </extension>
-   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.talend.mdm.repository.ui.preferences.RepositoryPreferencePage"
+            id="org.talend.mdm.repository.ui.preferences.RepositoryPreferencePage"
+            category="org.talend.core.prefs"
+            name="Repository"/> 
+   </extension>
    
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
