@@ -231,7 +231,7 @@ public class DOMViewDialog extends Dialog {
             // this.getShell().setSize(600, 600);
             // this.getShell().layout();
         	 triggerBtn=new Button(composite,SWT.CHECK);
-        	triggerBtn.setText("Trigger the process");
+        	triggerBtn.setText("Call before processes and triggers");
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
