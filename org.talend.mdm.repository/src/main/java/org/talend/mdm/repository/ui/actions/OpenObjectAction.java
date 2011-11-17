@@ -97,7 +97,9 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                                     this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
                                 // do extra action
                                 MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                                doSelectServer(serverObject, editorInput);
+                                boolean selected = doSelectServer(serverObject, editorInput);
+                                if (!selected)
+                                    return;
                                 try { // svn lock
                                     if (!factory.isLocalConnectionProvider()) {
                                         RepositoryResourceUtil.initialize();
@@ -140,7 +142,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         return null;
     }
 
-    public void doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
+    public boolean doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
         if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
             MDMServerDef serverDef = openServerDialog(serverObject.getLastServerDef());
             if (serverDef != null) {
@@ -163,8 +165,10 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                 serverRoot.setUser(user);
                 xobject.setWsKey(new WSDataClusterPK(xobject.getWsKey().toString()));
                 xobject.setServerRoot(serverRoot);
+                return true;
             }
         }
+        return false;
     }
 
     public MDMServerDef openServerDialog(MDMServerDef serverObject) {
