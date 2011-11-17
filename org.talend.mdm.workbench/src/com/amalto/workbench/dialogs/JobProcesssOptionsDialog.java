@@ -128,15 +128,18 @@ public class JobProcesssOptionsDialog extends Dialog {
 	private void doUpdate() {
 		if(execution == Execution.WEB_SERVICE) {
 			btnIntegrated.setEnabled(false);
-			btnIntegrated.setSelection(false);
+            btnEmbedded.setEnabled(false);
 			btnContext.setSelection(true);
-			
+            btnWebService.setEnabled(true);
 			// When web service is selected, only allowed value for execution is "context"
 			parameter = Parameter.CONTEXT_VARIABLE;
 		}
 		
 		if(execution == Execution.EMBEDDED) {
 			btnIntegrated.setEnabled(true);
+            btnEmbedded.setEnabled(true);
+            btnWebService.setEnabled(false);
+            btnContext.setEnabled(false);
 		}
 		
 		btnIntegrated.setSelection(parameter == Parameter.INTEGRATED);
