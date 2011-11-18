@@ -33,6 +33,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.extension.ActionProviderManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -50,6 +51,7 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
+import org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
@@ -90,6 +92,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction pasteAction;
 
+    protected AbstractRepositoryAction emAction;
+
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
     private IStructuredSelection selection;
@@ -105,6 +109,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         deployToAction = initRepositoryAction(new DeployToAction(), commonViewer);
         deployToLastServerAction = initRepositoryAction(new DeployToLastServerAction(), commonViewer);
         deployAllAction = initRepositoryAction(new DeployAllAction(false), commonViewer);
+        emAction = initRepositoryAction(new MDMEventManagerAction(), commonViewer);
         importServerObjectAction = initRepositoryAction(new ImportServerObjectAction(), commonViewer);
         mdmEditPropertyAction = initRepositoryAction(new MDMEditPropertyAction(), commonViewer);
         //
@@ -174,6 +179,11 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 actions.addAll(providerActions);
             }
         }
+
+        if (viewObj.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_EVENTMANAGER)) {
+            actions.add(emAction);
+        }
+
         //
         return actions;
     }
