@@ -108,7 +108,7 @@ public class RepositoryResourceUtil {
     }
 
     public static String escapeSpecialCharacters(String input) {
-        return input.replace('#', '$').replace('-', '$');
+        return input.replace('#', '$').replace('-', '@');
     }
 
     public static void saveItem(Item item) {
