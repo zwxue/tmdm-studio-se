@@ -167,8 +167,9 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                 xobject.setServerRoot(serverRoot);
                 return true;
             }
+            return false;
         }
-        return false;
+        return true;
     }
 
     public MDMServerDef openServerDialog(MDMServerDef serverObject) {
