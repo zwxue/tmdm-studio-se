@@ -12,13 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.wizards.imports.ImportServerObjectWizard;
-
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
+import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
  * DOC achen  class global comment. Detailled comment
@@ -30,9 +30,14 @@ public class ImportServerObjectAction extends AbstractRepositoryAction {
      * 
      * @param text
      */
+
+    private static final ImageDescriptor IMPORT_SERVER_IMG = EclipseResourceManager.getImageDescriptor(
+            RepositoryPlugin.PLUGIN_ID, "/icons/server_import.png"); //$NON-NLS-1$
+
     public ImportServerObjectAction() {
         super(Messages.ImportServerObject);
-        setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
+        // setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
+        setImageDescriptor(IMPORT_SERVER_IMG);
     }
 
     public String getGroupName() {

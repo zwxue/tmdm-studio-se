@@ -20,6 +20,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
@@ -36,8 +37,10 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployAllDialog;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
+import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.models.TreeObject;
@@ -55,15 +58,18 @@ public class DeployAllAction extends AbstractDeployAction {
 
     List<String> defNames = new ArrayList<String>();
 
+    private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
+            "/icons/server_export.png"); //$NON-NLS-1$
+
     public DeployAllAction() {
         super(Messages.DeployAllAction_label);
-
+        setImageDescriptor(DEPLOY_IMG);
     }
 
     public DeployAllAction(boolean isButn) {
         super(Messages.DeployAllAction_label);
         this.isButton = isButn;
-
+        setImageDescriptor(DEPLOY_IMG);
     }
     @Override
     public void run() {

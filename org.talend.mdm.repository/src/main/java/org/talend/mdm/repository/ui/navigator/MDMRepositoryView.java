@@ -44,7 +44,9 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
+import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
+import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -106,6 +108,14 @@ public class MDMRepositoryView extends CommonNavigator {
         ImportObjectAction importObject = new ImportObjectAction();
         importObject.initCommonViewer(((CommonNavigator) this).getCommonViewer());
         manager.add(importObject);
+        // manager.add(new Separator());
+        ExportObjectAction exportObject = new ExportObjectAction();
+        exportObject.initCommonViewer(((CommonNavigator) this).getCommonViewer());
+        manager.add(exportObject);
+        // manager.add(new Separator());
+        ImportServerObjectAction importServerObject = new ImportServerObjectAction();
+        importServerObject.initCommonViewer(((CommonNavigator) this).getCommonViewer());
+        manager.add(importServerObject);
         manager.add(new Separator());
 
     }
