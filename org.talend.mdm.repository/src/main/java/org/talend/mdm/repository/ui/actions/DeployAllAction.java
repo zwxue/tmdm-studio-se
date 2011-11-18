@@ -41,6 +41,7 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployAllDialog;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.models.TreeObject;
@@ -80,7 +81,9 @@ public class DeployAllAction extends AbstractDeployAction {
         String name = getSameServerName();
         allChangedObjects.addAll(RemoveFromRepositoryAction.getViewObjectsRemovedList());
 
-        DeployAllDialog dialog = new DeployAllDialog(getShell(), commonViewer.getInput(), allChangedObjects, name);
+        IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
+        DeployAllDialog dialog = new DeployAllDialog(getShell(), categoryViewObjects, allChangedObjects, name);
+        // DeployAllDialog dialog = new DeployAllDialog(getShell(), commonViewer.getInput(), allChangedObjects, name);
         List<IRepositoryViewObject> selectededViewObjs = new ArrayList<IRepositoryViewObject>();
         int retCode = dialog.open();
         IS_DEPLOYALL_FLAG = false;
