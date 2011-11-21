@@ -25,6 +25,11 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
     }
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
+        // add quick fix to avoid one problem of palette
+        if (item.eClass().getName().equals("CamelProcessItem")) {
+            return null;
+        }
+
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
             return configuration.getResourceProvider().getRepositoryObjectType(item);
