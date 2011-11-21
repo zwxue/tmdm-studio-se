@@ -10,10 +10,6 @@ public class Messages extends NLS {
 
     public static String AbstractDeployAction_removeMessage;
 
-    public static String AddBrowseItemsWizardR_duplicatedView;
-
-	public static String AddBrowseItemsWizardR_warning;
-
 	public static String Common_inputName;
 
     public static String Common_nameCanNotBeEmpty;
