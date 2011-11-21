@@ -567,6 +567,18 @@ public class RepositoryResourceUtil {
         return false;
     }
 
+    public static IRepositoryViewObject findViewObjectByName(ERepositoryObjectType type, String name) {
+        List<IRepositoryViewObject> viewObjects = findAllViewObjectsWithDeleted(type);
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                if (viewObj.getProperty().getLabel().equalsIgnoreCase(name)) {
+                    return viewObj;
+                }
+            }
+        }
+        return null;
+    }
+    
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem) {
         return findViewObjects(type, parentItem, true);
     }

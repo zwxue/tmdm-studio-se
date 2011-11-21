@@ -18,11 +18,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -137,6 +143,23 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     @Override
     protected void newBrowseItemView(String browseItem) throws RemoteException {
+    	IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW, browseItem);
+    	if(viewObject != null){
+           boolean ok = MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizardR_warning, Messages.AddBrowseItemsWizardR_duplicatedView);
+           if(!ok)return;
+       	//delete the existed browse view
+           try {
+	        IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObject);
+	        if (ref != null) {
+	            RepositoryResourceUtil.closeEditor(ref, true);
+	        }
+			ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
+		   } catch (PersistenceException e) {
+			RemoteException rx = new RemoteException(e.getMessage());
+			throw rx;
+		   }
+    	}
+        
         for (XSDElementDeclaration decl : declList) {
             String fullName = BROWSE_ITEMS + decl.getName();
             if (fullName.equals(browseItem)) {
