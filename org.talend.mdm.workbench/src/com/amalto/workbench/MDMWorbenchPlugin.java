@@ -64,4 +64,12 @@ public class MDMWorbenchPlugin extends AbstractUIPlugin {
     public static ImageDescriptor getImageDescriptor(String path) {
         return AbstractUIPlugin.imageDescriptorFromPlugin(ID, path);
     }
+
+    public String getVersion() {
+        String version = System.getProperty("talend.studio.version"); //$NON-NLS-1$
+        if (version == null || "".equals(version.trim())) { //$NON-NLS-1$
+            version = (String) getDefault().getBundle().getHeaders().get(org.osgi.framework.Constants.BUNDLE_VERSION);
+        }
+        return version;
+    }
 }

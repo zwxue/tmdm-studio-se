@@ -56,13 +56,13 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setShowProgressIndicator(true);
         configurer.setShowPerspectiveBar(true);
         configurer.configureEditorAreaDropListener(new EditorAreaDropAdapter(configurer.getWindow()));
-        
+
         // configurer.setTitle("Talend MDM Studio (3.2.0M2)");
     }
 
     @Override
     public void postWindowOpen() {
-    	PerspectiveReviewUtil.regisitPerspectiveBarSelectListener(); 
+        PerspectiveReviewUtil.regisitPerspectiveBarSelectListener();
         // Start Web Service Registration
         try {
             if (!RegisterManagement.isProductRegistered()) {
@@ -92,15 +92,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
                     // CPU
                     int nbProc = Runtime.getRuntime().availableProcessors();
 
-                    RegisterManagement.register(
-                            registerWizard.getEmail(),
-                            registerWizard.getCountry(),
-                            registerWizard.isProxyEnabled(),
-                            registerWizard.getProxyHost(),
-                            registerWizard.getProxyPort(),
-                            MDMWorbenchPlugin.getDefault().getBundle().getHeaders()
-                                    .get(org.osgi.framework.Constants.BUNDLE_VERSION).toString(), projectLanguage, osName,
-                            osVersion, javaVersion, totalMemory, memRAM, nbProc);
+                    RegisterManagement.register(registerWizard.getEmail(), registerWizard.getCountry(),
+                            registerWizard.isProxyEnabled(), registerWizard.getProxyHost(), registerWizard.getProxyPort(),
+                            MDMWorbenchPlugin.getDefault().getVersion(), projectLanguage, osName, osVersion, javaVersion,
+                            totalMemory, memRAM, nbProc);
                 } else {
                     RegisterManagement.decrementTry();
                 }
@@ -115,4 +110,5 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
                 .setTitle(getWindowConfigurer().getTitle() + service.getBrandingConfiguration().getAdditionalTitle());
 
     }
+
 }

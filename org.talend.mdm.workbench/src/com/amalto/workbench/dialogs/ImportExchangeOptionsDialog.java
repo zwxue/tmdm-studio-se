@@ -51,7 +51,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.osgi.framework.Constants;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
@@ -130,7 +129,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         revisionCombo.setItems(revisions.toArray(new String[0]));
 
         // get current plugin revision
-        String bundleVersion = MDMWorbenchPlugin.getDefault().getBundle().getHeaders().get(Constants.BUNDLE_VERSION).toString();
+        String bundleVersion = MDMWorbenchPlugin.getDefault().getVersion();
         String version = bundleVersion.split("_")[0];//$NON-NLS-1$
         revision = rMap.get(version);
         if (revision == null) {
@@ -286,6 +285,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         }
         return idRevisonMap;
     }
+
     private void fillInTable() {
         exchangeDwnTable.removeAll();
         HttpClient client = new HttpClient();
