@@ -48,6 +48,9 @@ import org.eclipse.ui.internal.wizards.datatransfer.TarLeveledStructureProvider;
 import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
+import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.ImportRepositoryObjectCheckTreeViewer;
 import org.talend.repository.imports.ImportItemUtil;
@@ -88,6 +91,16 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         for (Object obj : selectedObjs) {
             if (obj instanceof ItemRecord) {
                 itemRecords.add((ItemRecord) obj);
+            }
+        }
+        for (ItemRecord itemRec : itemRecords) {
+            Item item = itemRec.getProperty().getItem();
+            MDMServerObject serverObj = null;
+            if (item instanceof MDMServerObjectItem) {
+                serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                if (serverObj.getLastServerDef() != null) {
+                    serverObj.setLastServerDef(null);
+                }
             }
         }
         repositoryUtil.importItemRecords(manager, itemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
