@@ -220,7 +220,8 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         item.setWsTransformerV2(transformer);
         item.getState().setPath(""); //$NON-NLS-1$
         RepositoryResourceUtil.createItem(item, PREFIX + filename);
-        refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+        getCommonViewer().refresh();
+        // refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
 
     }
 

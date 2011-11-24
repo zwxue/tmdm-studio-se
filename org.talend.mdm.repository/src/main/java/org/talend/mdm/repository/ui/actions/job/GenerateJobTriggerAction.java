@@ -172,7 +172,8 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         item.setWsRoutingRule(trigger);
         item.getState().setPath(""); //$NON-NLS-1$
         RepositoryResourceUtil.createItem(item, PREFIX + filename);
-        refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+        getCommonViewer().refresh();
+        // refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
 
     }
 
