@@ -441,8 +441,7 @@ public class TransformerMainPage extends AMainPageV2 {
                             transformerDialog.create();
                             transformerDialog.getShell().setText("Setup Process's input variables");
                         }
-                        transformerDialog.open();
-
+                        openTransformerDialog();
                     } catch (Exception ex) {
                         log.error(ex.getMessage(), ex);
                     }
@@ -915,6 +914,10 @@ public class TransformerMainPage extends AMainPageV2 {
 
     public void textChanged(TextEvent event) {
         markDirtyWithoutCommit();
+    }
+
+    protected void openTransformerDialog() {
+        transformerDialog.open();
     }
 
     @Override
