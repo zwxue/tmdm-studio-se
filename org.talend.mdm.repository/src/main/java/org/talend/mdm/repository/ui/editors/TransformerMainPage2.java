@@ -49,10 +49,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     public TransformerMainPage2(FormEditor editor) {
         super(editor);
         this.editor2 = (XObjectEditor2) editor;
-        XObjectEditorInput2 input = (XObjectEditorInput2) editor2.getEditorInput();
-        Item item = input.getInputItem();
-        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        lastServerDef = serverObject.getLastServerDef();
+        setLastServerDef();
     }
 
     @Override
@@ -108,8 +105,19 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     @Override
     protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) throws RemoteException {
-
         return RepositoryWebServiceAdapter.findTransformerPluginV2Detail(jndi);
+    }
+
+    protected void openTransformerDialog() {
+        setLastServerDef();
+        super.openTransformerDialog();
+    }
+
+    private void setLastServerDef() {
+        XObjectEditorInput2 input = (XObjectEditorInput2) editor2.getEditorInput();
+        Item item = input.getInputItem();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        lastServerDef = serverObject.getLastServerDef();
     }
 
 }
