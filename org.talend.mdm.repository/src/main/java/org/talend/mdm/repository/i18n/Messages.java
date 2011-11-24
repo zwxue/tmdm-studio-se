@@ -15,6 +15,8 @@ public class Messages extends NLS {
 	public static String AddBrowseItemsWizardR_warning;
 	
 	public static String Common_inputName;
+    
+    public static String Common_rename;
 
     public static String Common_nameCanNotBeEmpty;
 

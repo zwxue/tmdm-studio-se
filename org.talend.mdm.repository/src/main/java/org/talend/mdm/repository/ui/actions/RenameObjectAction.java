@@ -76,7 +76,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                 try {
                     if (serverObject != null) {
 
-                        String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem());
+                        String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem(),viewObj.getLabel());
                         if (newName != null) {
                             serverObject.setName(newName);
                             newName = RepositoryResourceUtil.escapeSpecialCharacters(newName);
@@ -93,8 +93,9 @@ public class RenameObjectAction extends AbstractRepositoryAction {
 
     }
 
-    private String showRenameDlg(final ERepositoryObjectType type, final ContainerItem parentItem) {
-        InputDialog dlg = new InputDialog(getShell(), Messages.RenameObjectAction_rename, Messages.Common_inputName, null,
+    private String showRenameDlg(final ERepositoryObjectType type, final ContainerItem parentItem,final String originalName) {
+   
+        InputDialog dlg = new InputDialog(getShell(), Messages.RenameObjectAction_rename, Messages.Common_rename, originalName,
                 new IInputValidator() {
 
                     public String isValid(String newText) {
