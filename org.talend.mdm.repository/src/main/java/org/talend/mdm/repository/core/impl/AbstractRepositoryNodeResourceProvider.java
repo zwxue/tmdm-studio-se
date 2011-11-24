@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,9 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.ByteArray;
@@ -45,6 +48,8 @@ import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -125,11 +130,13 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
 
     protected void linkReferenceFile(Item item, IFile file) {
         try {
+            file.refreshLocal(0, null);
             ReferenceFileItem procFileItem = PropertiesFactory.eINSTANCE.createReferenceFileItem();
             ByteArray byteArray = PropertiesFactory.eINSTANCE.createByteArray();
             byteArray.setInnerContentFromFile(file);
             procFileItem.setContent(byteArray);
             procFileItem.setExtension(file.getFileExtension());
+            procFileItem.setName(file.getName());
             item.getReferenceResources().clear();
             item.getReferenceResources().add(procFileItem);
         } catch (IOException e) {
@@ -140,5 +147,16 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
 
     }
 
+    protected IFile createOrUpdateFile(Item item, IFile file) throws UnsupportedEncodingException, CoreException {
+        WSResourceE resource = ((WSResourceItem) item).getResource();
+        byte[] content = resource.getFileContent();
+        if (content != null) {
+            if (!file.exists())
+                file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+            else
+                file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+        }
+        return file;
+    }
 
 }

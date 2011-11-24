@@ -23,6 +23,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.service.DeployService;
@@ -92,7 +93,11 @@ public class DataModelMainPage2 extends DataModelMainPage {
         if (eObj != null) {
             serverObject.setChanged(true);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            try {
             factory.save(serverObjectItem);
+            } catch (PersistenceException e) {
+
+            }
         }
 
         refreshDirtyCue();

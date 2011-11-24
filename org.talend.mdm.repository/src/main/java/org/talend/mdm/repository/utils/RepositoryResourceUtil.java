@@ -250,6 +250,7 @@ public class RepositoryResourceUtil {
 
         ByteArrayOutputStream os = null;
         try {
+            file.refreshLocal(0, null);
             os = new ByteArrayOutputStream();
             inputStream = file.getContents();
             byte[] ba = new byte[inputStream.available()];
@@ -697,6 +698,15 @@ public class RepositoryResourceUtil {
                             cacheViewObj = viewObj;
                         }
                         ContainerCacheService.put(property, cacheViewObj);
+                    }
+                    // handle reference files
+                    IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(property
+                            .getItem());
+                    if (configuration != null) {
+                        IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
+                        if (resourceProvider.needSaveReferenceFile()) {
+                            resourceProvider.handleReferenceFile(property.getItem());
+                        }
                     }
                     viewObjects.add(cacheViewObj);
 
