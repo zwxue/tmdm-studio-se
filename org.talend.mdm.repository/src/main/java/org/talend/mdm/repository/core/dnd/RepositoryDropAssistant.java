@@ -40,6 +40,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -151,7 +152,12 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                     public String isValid(String newText) {
                         if (newText == null || newText.trim().length() == 0)
                             return Messages.Common_nameCanNotBeEmpty;
-                        if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                        if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
+                                || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
+                            if (!Pattern.matches("\\w*(#|\\.|\\w*)+(#|\\w+)", newText)) {//$NON-NLS-1$
+                                return Messages.Common_nameInvalid;
+                            }
+                        } else if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
                             return Messages.Common_nameInvalid;
                         }
                         //
