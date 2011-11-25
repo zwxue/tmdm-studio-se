@@ -180,7 +180,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
             }
         }
 
-        if (IServerObjectRepositoryType.TYPE_EVENTMANAGER.equals(viewObj.getRepositoryObjectType())) {
+        if (viewObj.getRepositoryObjectType() != null
+                && IServerObjectRepositoryType.TYPE_EVENTMANAGER.equals(viewObj.getRepositoryObjectType())) {
             actions.add(emAction);
         }
 
