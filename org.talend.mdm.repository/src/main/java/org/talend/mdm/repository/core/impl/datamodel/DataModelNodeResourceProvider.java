@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.datamodel;
 
+import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
@@ -28,6 +29,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -114,4 +116,16 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
         }
     }
 
+    protected IFile createOrUpdateFile(Item item, IFile file) throws UnsupportedEncodingException, CoreException {
+
+        String resource = ((WSDataModelItem) item).getWsDataModel().getXsdSchema();
+        if (resource != null) {
+            byte[] content = resource.getBytes("utf-8"); //$NON-NLS-1$
+            if (!file.exists())
+                file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+            else
+                file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+        }
+        return file;
+    }
 }
