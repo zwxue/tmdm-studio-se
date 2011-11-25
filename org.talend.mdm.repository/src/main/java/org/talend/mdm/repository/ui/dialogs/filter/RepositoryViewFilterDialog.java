@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.dialogs.filter;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,20 +40,23 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.core.IRepositoryViewFilter;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.core.impl.eventmanager.EventManagerNodeConfiguration;
-import org.talend.mdm.repository.core.impl.routingrule.RoutingRuleNodeConfiguration;
 import org.talend.mdm.repository.core.impl.transformerV2.TransformerV2NodeConfiguration;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.ui.navigator.filter.LastServerViewFilter;
 import org.talend.mdm.repository.ui.navigator.filter.NamePatternViewFilter;
 import org.talend.mdm.repository.ui.navigator.filter.ServerObjectViewFilter;
 import org.talend.mdm.repository.utils.PreferenceUtil;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 /**
@@ -67,6 +71,7 @@ public class RepositoryViewFilterDialog extends Dialog {
             if (labelProvider instanceof AbstractLabelProvider)
                 return ((AbstractLabelProvider) ((IRepositoryNodeConfiguration) element).getLabelProvider())
                         .getCategoryImage(null);
+            
             return null;
         }
 
@@ -76,8 +81,12 @@ public class RepositoryViewFilterDialog extends Dialog {
     }
 
     private String getLabel(Object element) {
-        if (element instanceof IRepositoryNodeConfiguration) {
-            return ((IRepositoryNodeConfiguration) element).getLabelProvider().getCategoryLabel(null);
+        if (element instanceof IRepositoryViewObject) {
+            Item item = ((IRepositoryViewObject) element).getProperty().getItem();
+            IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);
+            if (conf != null) {
+                return conf.getLabelProvider().getText(element);
+            }
         }
         return ""; //$NON-NLS-1$
     }
@@ -86,9 +95,9 @@ public class RepositoryViewFilterDialog extends Dialog {
 
     private CheckboxTableViewer serverObjViewer;
 
-    private List<IRepositoryNodeConfiguration> allConfigs;
+    private List<IRepositoryViewObject> allConfigs;
 
-    private Set<IRepositoryNodeConfiguration> enabledConfigs;
+    private Set<IRepositoryViewObject> enabledConfigs;
 
     private Button enableServerObjFilterBun;
 
@@ -191,7 +200,7 @@ public class RepositoryViewFilterDialog extends Dialog {
         serverObjViewer.addCheckStateListener(new ICheckStateListener() {
 
             public void checkStateChanged(CheckStateChangedEvent event) {
-                IRepositoryNodeConfiguration config = (IRepositoryNodeConfiguration) event.getElement();
+            	IRepositoryViewObject config = (IRepositoryViewObject) event.getElement();
                 if (event.getChecked()) {
                     enabledConfigs.add(config);
                 } else {
@@ -204,7 +213,7 @@ public class RepositoryViewFilterDialog extends Dialog {
             }
 
         });
-        serverObjViewer.setLabelProvider(new ServerObjectLabelProvider());
+        serverObjViewer.setLabelProvider(new MDMRepositoryLabelProvider());
         serverObjViewer.setContentProvider(new ArrayContentProvider());
         Group lastServerGroup = new Group(container, SWT.NONE);
         lastServerGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -252,21 +261,24 @@ public class RepositoryViewFilterDialog extends Dialog {
     }
 
     private void solveProcTriCase() {
-        IRepositoryNodeConfiguration eventMgr = null;
+    	IRepositoryViewObject eventMgr = null;
         boolean exist = false;
 
-        for (IRepositoryNodeConfiguration conf : enabledConfigs) {
-            if (conf instanceof EventManagerNodeConfiguration) {
+        for (IRepositoryViewObject conf : enabledConfigs) {
+
+            Item item = ((IRepositoryViewObject) conf).getProperty().getItem();
+            IRepositoryNodeConfiguration repositoryConf = RepositoryNodeConfigurationManager.getConfiguration(item);
+
+            
+            if (repositoryConf instanceof EventManagerNodeConfiguration) {
                 exist = true;
                 break;
             }
 
-            if (conf instanceof RoutingRuleNodeConfiguration || conf instanceof TransformerV2NodeConfiguration) {
+            if (repositoryConf instanceof IRepositoryViewObject || repositoryConf instanceof TransformerV2NodeConfiguration) {
 
-                for (IRepositoryNodeConfiguration confi : allConfigs) {
-                    if (confi instanceof EventManagerNodeConfiguration) {
+                for (IRepositoryViewObject confi : allConfigs) {
                         eventMgr = confi;
-                    }
                 }
             }
         }
@@ -294,11 +306,11 @@ public class RepositoryViewFilterDialog extends Dialog {
         boolean enableServerObjFilter = PreferenceUtil.getBoolean(ServerObjectViewFilter.PROP_ENABLE);
         enableServerObjFilterBun.setSelection(enableServerObjFilter);
         //
-        allConfigs = RepositoryNodeConfigurationManager.getConfigurations();
+        allConfigs = Arrays.asList(RepositoryResourceUtil.getCategoryViewObjects()); //RepositoryNodeConfigurationManager.getConfigurations();
         serverObjViewer.setInput(allConfigs);
         Set<String> enabledObjectLabels = PreferenceUtil.getStringSet(ServerObjectViewFilter.PROP_ENABLE_LIST);
-        enabledConfigs = new HashSet<IRepositoryNodeConfiguration>();
-        for (IRepositoryNodeConfiguration conf : allConfigs) {
+        enabledConfigs = new HashSet<IRepositoryViewObject>();
+        for (IRepositoryViewObject conf : allConfigs) {
             String label = getLabel(conf);
             if (enabledObjectLabels.contains(label)) {
                 serverObjViewer.setChecked(conf, true);
@@ -366,7 +378,7 @@ public class RepositoryViewFilterDialog extends Dialog {
 
     private Set<String> getNewServerObjectPref() {
         Set<String> values = new HashSet<String>();
-        for (IRepositoryNodeConfiguration conf : enabledConfigs) {
+        for (IRepositoryViewObject conf : enabledConfigs) {
             String label = getLabel(conf);
             if (label.length() > 0) {
                 values.add(label);

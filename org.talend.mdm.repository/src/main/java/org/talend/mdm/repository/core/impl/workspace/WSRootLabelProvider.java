@@ -40,7 +40,7 @@ public class WSRootLabelProvider implements IRepositoryNodeLabelProvider {
             "icons/svn_repository.gif"); //$NON-NLS-1$;
 
     public String getCategoryLabel(ERepositoryObjectType type) {
-        return null;
+        return getText(null);
     }
 
     public String getText(Object element) {
