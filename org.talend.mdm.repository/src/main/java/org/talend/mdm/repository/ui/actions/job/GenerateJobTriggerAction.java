@@ -29,6 +29,8 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleOperatorE;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog;
+import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Execution;
+import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Parameter;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -61,7 +63,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
     public void run() {
         selectObj = getSelectedObject().get(0);
 
-        JobOptionsDialog dialog = new JobOptionsDialog(getShell(), Messages.JobProcesssDialogTiggerTitle_title, true);
+        JobOptionsDialog dialog = new JobOptionsDialog(getShell(), Messages.JobProcesssDialogTiggerTitle_title, Execution.EMBEDDED);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
         if (ret == Dialog.CANCEL)
@@ -93,20 +95,33 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         WSRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleE();
 
         try {
-            String parameter = "";//$NON-NLS-1$
             String server = "http://localhost:8080"; //$NON-NLS-1$
 
-            boolean isWar = dialog.isWar();
-            if (!isWar) {
-
-                parameter = "<configuration>\n" + "<url>ltj://" + jobName + "/" + jobVersion + "</url>\n" + "<contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                        + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-                        + "</configuration>\n";//$NON-NLS-1$ 
-            } else {
-                parameter = "<configuration>\n" + "<url>" + server + "/" + jobName + "_" + jobVersion + "/services/" + jobName + "</url>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-                        + "<contextParam>\n" + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-                        + "</contextParam>\n" + "</configuration>\n";//$NON-NLS-1$ //$NON-NLS-2$ 
-            }
+            Execution execution = dialog.getExecution();
+            String url = "";
+    		switch (execution) {
+    		case EMBEDDED:
+    			url = "ltj://" + jobName + "/" + jobVersion;
+    			break;
+    		case WEB_SERVICE:
+    			url = server + "/" + jobName + "_" + jobVersion + "/services/" + jobName;
+    			break;
+    		}
+            
+    		Parameter executionParameter = dialog.getParameter();
+    		String parameter = ""; //$NON-NLS-1$
+			switch(executionParameter) {
+			case CONTEXT_VARIABLE:
+				parameter = "<configuration>\n" + "<url>" + url + "</url><contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				+ "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+				+ "</configuration>\n";//$NON-NLS-1$
+				break;
+			case INTEGRATED:
+				parameter = "<configuration>\n" + "<url>" + url + "</url>" 
+				+ "</configuration>\n";//$NON-NLS-1$
+				break;
+			}
+    		
             // Generate the job call
             // create default CREATE operation express
             WSRoutingRuleExpressionE expression1 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
@@ -173,8 +188,6 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         item.getState().setPath(""); //$NON-NLS-1$
         RepositoryResourceUtil.createItem(item, PREFIX + filename);
         getCommonViewer().refresh();
-        // refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
-
     }
 
 }
