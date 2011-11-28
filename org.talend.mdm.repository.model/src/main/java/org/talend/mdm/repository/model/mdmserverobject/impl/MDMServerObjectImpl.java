@@ -127,28 +127,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected int type = TYPE_EDEFAULT;
 
     /**
-     * The default value of the '{@link #isChanged() <em>Changed</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #isChanged()
-     * @generated
-     * @ordered
-     */
-    protected static final boolean CHANGED_EDEFAULT = false;
-
-    /**
-     * The cached value of the '{@link #isChanged() <em>Changed</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #isChanged()
-     * @generated
-     * @ordered
-     */
-    protected boolean changed = CHANGED_EDEFAULT;
-
-    protected boolean isCreated = false;
-
-    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -290,27 +268,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public boolean isChanged() {
-        return changed;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setChanged(boolean newChanged) {
-        boolean oldChanged = changed;
-        changed = newChanged;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED, oldChanged, changed));
-    }
-
-    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * 
      * @generated NOT
@@ -349,8 +306,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return getLastServerDef();
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 return getType();
-            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
-                return isChanged();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -376,9 +331,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 setType((Integer)newValue);
-                return;
-            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
-                setChanged((Boolean)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -406,9 +358,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 setType(TYPE_EDEFAULT);
                 return;
-            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
-                setChanged(CHANGED_EDEFAULT);
-                return;
         }
         super.eUnset(featureID);
     }
@@ -430,21 +379,10 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return lastServerDef != null;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 return type != TYPE_EDEFAULT;
-            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CHANGED:
-                return changed != CHANGED_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
 
-
-    public boolean isCreated() {
-        return this.isCreated;
-    }
-
-
-    public void setCreated(boolean isCreated) {
-        this.isCreated = isCreated;
-    }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -463,8 +401,6 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         result.append(system);
         result.append(", type: ");
         result.append(type);
-        result.append(", changed: ");
-        result.append(changed);
         result.append(')');
         return result.toString();
     }

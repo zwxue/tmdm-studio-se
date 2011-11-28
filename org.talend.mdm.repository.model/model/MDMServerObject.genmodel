@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src/main/java"
     modelPluginID="org.talend.mdm.repository.model" modelName="MDMServerObject" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg MDMMetadata.genmodel#//mdmmetadata ../../org.talend.model/model/metadata.genmodel#//connection">
   <foreignModel>MDMServerObject.ecore</foreignModel>
@@ -13,7 +13,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/system"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference MDMServerObject.ecore#//MDMServerObject/lastServerDef"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/changed"/>
       <genOperations ecoreOperation="MDMServerObject.ecore#//MDMServerObject/getUniqueName"/>
     </genClasses>
     <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuE">
