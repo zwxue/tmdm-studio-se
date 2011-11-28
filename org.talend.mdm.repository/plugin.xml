@@ -205,6 +205,22 @@
       </decorator>
    </extension>
    <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.talend.mdm.repository.ui.navigator.TriggerDecorator"
+            id="org.talend.mdm.repository.ui.navigator.TriggerDecorator"
+            label="TriggerDecorator"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="org.talend.core.model.repository.IRepositoryViewObject">
+            </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
+   
+   <extension
          point="org.eclipse.ui.editors">
       <editor
             class="org.talend.mdm.repository.ui.editors.XObjectEditor2"
