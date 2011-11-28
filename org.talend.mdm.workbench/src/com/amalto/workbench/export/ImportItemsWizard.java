@@ -240,6 +240,7 @@ public class ImportItemsWizard extends Wizard {
                     return Status.CANCEL_STATUS;
                 } finally {
                     refreshViewJob();
+
                     // modified by honghb ,fix bug 21552
                     if (selectZip && zipFilePath != null && new File(importFolder).exists()) {
                         ZipToFile.deleteDirectory(new File(importFolder));
@@ -323,7 +324,7 @@ public class ImportItemsWizard extends Wizard {
         try {
             boolean importFromArchieve = zipBtn.getSelection();
             if (importFromArchieve) {
-                importFolder = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "tmp"//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                importFolder = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "subfolder"//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         + System.currentTimeMillis();
             }
             if (folderBtn.getSelection()) {

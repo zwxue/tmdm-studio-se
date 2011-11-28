@@ -128,7 +128,7 @@ public class ExportItemsWizard extends Wizard {
 
         if (zipBtn.getSelection()) {
             // fix bug 0016873:clear the temp directory before zip the exported items.
-            File tempFile = new File(System.getProperty("user.dir") + "/temp/tmp");//$NON-NLS-1$//$NON-NLS-2$
+            File tempFile = new File(System.getProperty("user.dir") + "/temp/subfolder" + System.currentTimeMillis());//$NON-NLS-1$//$NON-NLS-2$
             if (tempFile.exists()) {
                 File[] tempFiles = tempFile.listFiles();
                 for (File file : tempFiles) {
