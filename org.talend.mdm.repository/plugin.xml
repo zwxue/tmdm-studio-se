@@ -437,7 +437,7 @@
             class="org.talend.mdm.repository.core.nodes.CustomFormRepositoryNode"
             folder="MDM/customForm"
             isResouce="true"
-            label="Custom Form"
+            label="Custom Layout"
             products="MDM"
             type="MDM.CustomForm">
       </repositoryNode>

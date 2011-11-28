@@ -52,7 +52,7 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Custom Form";
+        return "Custom Layout";
     }
 
     public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
