@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.repository.ui.wizards.PropertiesWizard;
+import org.talend.mdm.repository.ui.wizards.MdmPropertiesWizard;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -48,7 +48,7 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
-                PropertiesWizard wizard = new PropertiesWizard(viewObject, new Path(viewObject.getPath()), false);
+                MdmPropertiesWizard wizard = new MdmPropertiesWizard(viewObject, new Path(viewObject.getPath()), false);
 
                 WizardDialog dlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
                 if (dlg.open() == Window.OK) {

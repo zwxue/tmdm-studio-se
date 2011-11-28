@@ -45,6 +45,7 @@ import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -118,20 +119,23 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         if (dropViewObj != null && dragViewObj != null) {
 
             Property dragProp = dropViewObj.getProperty();
+            MDMServerObject serverObj = ((MDMServerObjectItem) dragProp.getItem()).getMDMServerObject();
             // show dialog
             IRepositoryViewObject dragParentViewObj = getParentRepositoryViewObject(dragViewObj);
             ContainerItem dragParentItem = (ContainerItem) dragParentViewObj.getProperty().getItem();
-            String newName = showPasteDlg(dragParentItem.getRepObjType(), dragParentItem, "Copy_" + dragProp.getLabel()); //$NON-NLS-1$
+            String newName = showPasteDlg(dragParentItem.getRepObjType(), dragParentItem, "Copy_" + serverObj.getName()); //$NON-NLS-1$
             if (newName != null) {
                 String pathStr = dragProp.getItem().getState().getPath();
                 IPath path = new Path(pathStr);
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 try {
                     Item copy = factory.copy(dragProp.getItem(), path, true);
-                    copy.getProperty().setLabel(newName);
                     if (copy instanceof MDMServerObjectItem) {
                         ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
                     }
+                    newName = RepositoryResourceUtil.escapeSpecialCharacters(newName);
+                    copy.getProperty().setLabel(newName);
+
                     factory.save(copy);
                     return true;
                 } catch (PersistenceException e) {
