@@ -49,6 +49,7 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
     public boolean isEmpty() {
         return subCmds.size() == 0;
     }
+
     public void addDeleteCommand(ICommand cmd) {
         subDeleteCmds.add(cmd);
     }
@@ -72,7 +73,8 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
     public IStatus execute(Object params, IProgressMonitor monitor) {
         IStatus status = super.execute(params, monitor);
         //
-        MultiStatus ms = new MultiStatus(RepositoryPlugin.PLUGIN_ID, status.getSeverity(), "Deploy job", null);
+        MultiStatus ms = new MultiStatus(RepositoryPlugin.PLUGIN_ID, status.getSeverity(),
+                Messages.BatchDeployJobCommand_deployJob, null);
         IInteractiveHandler handler = InteractiveService.findHandler(getViewObjectType());
         String typeLabel = handler.getLabel();
         if (status.isOK()) {
@@ -89,9 +91,11 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
             int severity = dialogStatus.getSeverity();
             if (severity == IStatus.OK) {
                 if (cmd.getCommandType() == CMD_MODIFY)
-                    ms.add(DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was updated successfully"));
+                    ms.add(DeployStatus.getOKStatus(this,
+                            Messages.bind(Messages.BatchDeployJobCommand_successfullyUpdate, typeLabel, objectName)));
                 else
-                    ms.add(DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was created successfully"));
+                    ms.add(DeployStatus.getOKStatus(this,
+                            Messages.bind(Messages.BatchDeployJobCommand_createSuccessfully, typeLabel, objectName)));
             } else if (severity == IStatus.INFO) {
                 ms.add(DeployStatus.getInfoStatus(null,
                         Messages.bind(Messages.JobInteractiveHandler_skipToDeploy, getLabel(), objectName)));
@@ -112,7 +116,7 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
 
     @Override
     protected String getLabel() {
-        return "Job";
+        return Messages.BatchDeployJobCommand_title;
     }
 
     /*

@@ -264,6 +264,14 @@ public class Messages extends NLS {
 
     public static String AutoDeploy_saving_text;
 
+    public static String BatchDeployJobCommand_createSuccessfully;
+
+    public static String BatchDeployJobCommand_deployJob;
+
+    public static String BatchDeployJobCommand_successfullyUpdate;
+
+    public static String BatchDeployJobCommand_title;
+
     public static String Warning_text;
 
     public static String WSRootLabelProvider_localRepository;
