@@ -324,7 +324,7 @@ public class ImportItemsWizard extends Wizard {
         try {
             boolean importFromArchieve = zipBtn.getSelection();
             if (importFromArchieve) {
-                importFolder = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "subfolder"//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                importFolder = System.getProperty("java.io.tmpdir") + File.separator + "temp" + File.separator + "subfolder"//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         + System.currentTimeMillis();
             }
             if (folderBtn.getSelection()) {
