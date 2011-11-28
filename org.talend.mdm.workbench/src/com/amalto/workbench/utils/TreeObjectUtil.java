@@ -417,46 +417,47 @@ public class TreeObjectUtil {
         for (IAvailableModel model : availablemodels) {
             model.deleteTreeObject(port, xobject);
         }
+        String displayName = xobject.getDisplayName();
         switch (xobject.getType()) {
         // replace the object types with the name which is got from the EXtentisObjects.
         case TreeObject.DATA_MODEL:
             port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK) xobject.getWsKey()));
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.DataMODEL.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.DataMODEL.getName());
             break;
         case TreeObject.VIEW:
             port.deleteView(new WSDeleteView((WSViewPK) xobject.getWsKey()));
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.View.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.View.getName());
             break;
         case TreeObject.DATA_CLUSTER:
             port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK) xobject.getWsKey()));
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.DataCluster.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.DataCluster.getName());
             break;
         case TreeObject.STORED_PROCEDURE:
             port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK) xobject.getWsKey()));
             break;
         case TreeObject.ROUTING_RULE:
             port.deleteRoutingRule(new WSDeleteRoutingRule((WSRoutingRulePK) xobject.getWsKey()));
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.RoutingRule.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.RoutingRule.getName());
             break;
         case TreeObject.TRANSFORMER:
             port.deleteTransformerV2(new WSDeleteTransformerV2((WSTransformerV2PK) xobject.getWsKey()));
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Transformer.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.Transformer.getName());
             break;
         case TreeObject.MENU:
             port.deleteMenu(new WSDeleteMenu((WSMenuPK) xobject.getWsKey()));
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Menu.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.Menu.getName());
             break;
         case TreeObject.CATEGORY_FOLDER:
             // do nothing over here
             break;
         case TreeObject.ROLE:
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Role.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.Role.getName());
             break;
         case TreeObject.SYNCHRONIZATIONPLAN:
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.SynchronizationPlan.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.SynchronizationPlan.getName());
             break;
         case TreeObject.UNIVERSE:
-            deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Universe.getName());
+            deleteSpecificationFromAttachedRole(port, displayName, EXtentisObjects.Universe.getName());
             break;
         default:
             // MessageDialog.openError(view.getSite().getShell(), "Error",
@@ -472,7 +473,7 @@ public class TreeObjectUtil {
         view.getViewer().refresh();
     }
 
-    private static void deleteSpecificationFromAttachedRole(XtentisPort port, TreeObject xobject, String objectType)
+    public static void deleteSpecificationFromAttachedRole(XtentisPort port, String displayName, String objectType)
             throws RemoteException {
         if (Util.IsEnterPrise()) {
             String revision = retrieveRevisionID(port, objectType);
@@ -488,7 +489,7 @@ public class TreeObjectUtil {
                         WSRoleSpecificationInstance[] specInstance = spec.getInstance();
                         List<WSRoleSpecificationInstance> newSpecInstanceLst = new ArrayList<WSRoleSpecificationInstance>();
                         for (WSRoleSpecificationInstance specIns : specInstance) {
-                            if (!specIns.getInstanceName().equals(xobject.getDisplayName())) {
+                            if (!specIns.getInstanceName().equals(displayName)) {
                                 newSpecInstanceLst.add(specIns);
                             }
                         }
