@@ -18,13 +18,13 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
-import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.webservices.WSDeleteRole;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.XtentisPort;
-
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -39,7 +39,7 @@ public class RoleInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.RoleInteractiveHandler_label;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putRole(new WSPutRole((WSRole) wsObj));
             return true;
@@ -47,19 +47,13 @@ public class RoleInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
-
-        if (xobject != null) {
-            if (xobject.getWsKey() instanceof String) {
-                WSRolePK pk = new WSRolePK();
-                pk.setPk((String) xobject.getWsKey());
-                port.deleteRole(new WSDeleteRole(pk));
-            } else
-                port.deleteRole(new WSDeleteRole((WSRolePK) xobject.getWsKey()));
-
-            return true;
-        }
-        return false;
+    @Override
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        WSRolePK pk = new WSRolePK();
+        String name = ((WSRole) wsObj).getName();
+        pk.setPk(name);
+        port.deleteRole(new WSDeleteRole(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Role.getName());
+        return true;
     }
-
 }

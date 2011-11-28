@@ -14,10 +14,16 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
@@ -25,13 +31,16 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
-import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
+import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public abstract class AbstractDeployAction extends AbstractRepositoryAction {
+
+    private static Logger log = Logger.getLogger(AbstractDeployAction.class);
 
     private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/deploy.png"); //$NON-NLS-1$
@@ -46,13 +55,8 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         return DeployService.getInstance().deploy(serverDef, viewObjs);
     }
 
-    protected IStatus updateServer(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs,
-            List<IRepositoryViewObject> deletedViewObjects) {
-        return DeployService.getInstance().updateServer(serverDef, viewObjs, deletedViewObjects);
-    }
-
     protected void showDeployStatus(IStatus status) {
-        MutliStatusDialog dialog = new MutliStatusDialog(getShell(), status.getChildren().length
+        MultiStatusDialog dialog = new MultiStatusDialog(getShell(), status.getChildren().length
                 + Messages.AbstractDeployAction_deployMessage, status);
         dialog.open();
     }
@@ -64,15 +68,50 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     protected void updateChangedStatus(IStatus status) {
         if (status.isMultiStatus()) {
             for (IStatus childStatus : status.getChildren()) {
-                DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
+                DeployStatus deployStatus = null;
+                if (childStatus instanceof DeployStatus) {
+                    deployStatus = (DeployStatus) childStatus;
+                } else if (childStatus instanceof MultiStatus) {
+                    deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
+                }
+
                 if (deployStatus.isOK()) {
-                    if (deployStatus.getItem() instanceof MDMServerObjectItem) {
-                        MDMServerObjectItem item = (MDMServerObjectItem) deployStatus.getItem();
-                        MDMServerObject mdmServerObject = item.getMDMServerObject();
-                        mdmServerObject.setChanged(false);
+                    CommandManager.getInstance().removeCommandStack(deployStatus.getCommand().getCommandId());
+                }
+
+            }
+        }
+    }
+
+    protected void updateLastServer(IStatus status, MDMServerDef serverDef) {
+        if (status.isMultiStatus()) {
+            for (IStatus childStatus : status.getChildren()) {
+                if (childStatus.isOK()) {
+                    DeployStatus deployStatus = null;
+                    if (childStatus instanceof DeployStatus) {
+                        deployStatus = (DeployStatus) childStatus;
+                    } else if (childStatus instanceof MultiStatus) {
+                        deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
                     }
+                    Item item = deployStatus.getCommand().getViewObject().getProperty().getItem();
+
+                    if (item instanceof MDMServerObjectItem)
+                        saveLastServer((MDMServerObjectItem) item, serverDef);
                 }
             }
+        }
+    }
+
+    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+    private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
+        MDMServerObject mdmServerObject = item.getMDMServerObject();
+        mdmServerObject.setLastServerDef(serverDef);
+        try {
+            factory.save(item);
+            refreshParent();
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
         }
     }
 }

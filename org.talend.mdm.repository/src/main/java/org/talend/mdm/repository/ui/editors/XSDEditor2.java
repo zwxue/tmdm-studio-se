@@ -14,14 +14,20 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.editors.xsdeditor.XSDSelectionListener;
@@ -121,6 +127,17 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void doSave(IProgressMonitor monitor) {
+        super.doSave(monitor);
+        XSDEditorInput2 editorInput = (XSDEditorInput2) getEditorInput();
+        Item item = editorInput.getViewObject().getProperty().getItem();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        if (serverObject.getLastServerDef() != null) {
+            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, editorInput.getViewObject());
+        }
     }
 
 }

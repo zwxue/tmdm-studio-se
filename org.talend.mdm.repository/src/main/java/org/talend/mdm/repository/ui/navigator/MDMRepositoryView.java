@@ -30,9 +30,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.navigator.CommonNavigator;
@@ -42,6 +45,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
@@ -198,4 +202,17 @@ public class MDMRepositoryView extends CommonNavigator {
     private void unRegisterEditorListener() {
         this.getSite().getPage().removePartListener(editorListener);
     }
+
+    @Override
+    public void init(IViewSite aSite, IMemento aMemento) throws PartInitException {
+        super.init(aSite, aMemento);
+        CommandManager.getInstance().restoreState(aMemento);
+    }
+
+    @Override
+    public void saveState(IMemento aMemento) {
+        super.saveState(aMemento);
+        CommandManager.getInstance().saveState(aMemento);
+    }
+
 }

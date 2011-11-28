@@ -18,18 +18,26 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public abstract class AbstractInteractiveHandler implements IInteractiveHandler {
+
+    protected XtentisPort getPort(MDMServerDef serverDef) throws XtentisException {
+        return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+    }
 
     /*
      * (non-Javadoc)
@@ -42,7 +50,7 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return wsObj;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         return false;
         // do nothing
     }
@@ -51,6 +59,7 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return false;
         // do nothing
     }
+
     /*
      * (non-Javadoc)
      * 
@@ -58,17 +67,32 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
      * org.talend.mdm.repository.core.service.IInteractiveHandler#deploy(com.amalto.workbench.webservices.XtentisPort,
      * org.talend.core.model.properties.Item, org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)
      */
-    public boolean deployMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj) throws RemoteException {
-        Object wsObj = convert(item, serverObj);
-        return doDeploy(port, wsObj);
+    public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        IRepositoryViewObject viewObj = cmd.getViewObject();
+        Item item = viewObj.getProperty().getItem();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        Object wsObj = convert(item, serverObject);
+        XtentisPort port = getPort(cmd.getServerDef());
+        return doDeployWSObject(port, wsObj);
     }
 
+    public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        IRepositoryViewObject viewObj = cmd.getViewObject();
+        Item item = viewObj.getProperty().getItem();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        Object wsObj = convert(item, serverObject);
+        XtentisPort port = getPort(cmd.getServerDef());
+        return doRemove(port, wsObj);
+    }
+
+    @Deprecated
     public boolean deleteMDM(MDMServerDef serverDef, XtentisPort port, TreeObject treeObject) throws RemoteException {
         // TreeObject treeObject = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
 
         return doDelete(port, treeObject);
     }
 
+    @Deprecated
     public boolean doDelete(XtentisPort port, TreeObject wsObj) throws RemoteException {
         return false;
         // do nothing

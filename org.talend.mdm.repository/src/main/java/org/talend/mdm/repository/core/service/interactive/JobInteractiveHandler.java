@@ -16,8 +16,6 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -30,12 +28,15 @@ import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
-import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.RepositoryNode;
+
+import com.amalto.workbench.utils.XtentisException;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -51,31 +52,35 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.JobInteractiveHandler_label;
     }
 
-    public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {
-        IStructuredSelection selection = getSelection(viewObjs);
-        //
-        final DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
-        SpagoBiServer server = getServer(serverDef);
-        publishWizard.setMdmServer(server);
 
-        IWorkbench workbench = RepositoryPlugin.getDefault().getWorkbench();
-        publishWizard.setWindowTitle(Messages.JobInteractiveHandler_wizardTitle);
-        publishWizard.init(workbench, selection);
-        final Display display = Display.getDefault();
 
-        display.syncExec(new Runnable() {
+    @Override
+    public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        result = false;
+        if (cmd instanceof BatchDeployJobCommand) {
+            BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) cmd;
+            IStructuredSelection selection = getSelection(deployJobCommand.getViewObjects());
+            //
+            final DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
+            SpagoBiServer server = getServer(deployJobCommand.getServerDef());
+            publishWizard.setMdmServer(server);
 
-            public void run() {
-                Shell activeShell = display.getActiveShell();
-                WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-                setResult(dialog.open() == IDialogConstants.OK_ID);
-                // setResult(true);
-            }
-        });
+            IWorkbench workbench = RepositoryPlugin.getDefault().getWorkbench();
+            publishWizard.setWindowTitle(Messages.JobInteractiveHandler_wizardTitle);
+            publishWizard.init(workbench, selection);
+            final Display display = Display.getDefault();
 
-        //
+            display.syncExec(new Runnable() {
 
-        return getResultStatus(viewObjs);
+                public void run() {
+                    Shell activeShell = display.getActiveShell();
+                    WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
+                    setResult(dialog.open() == IDialogConstants.OK_ID);
+                    // setResult(true);
+                }
+            });
+        }
+        return result;
     }
 
     private boolean result = false;
@@ -94,22 +99,6 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
 
     }
 
-    private IStatus getResultStatus(List<IRepositoryViewObject> viewObjs) {
-        MultiStatus status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, IStatus.OK, null, null);
-
-        for (IRepositoryViewObject viewObj : viewObjs) {
-            DeployStatus deployStatus = null;
-            if (result) {
-                deployStatus = DeployStatus.getOKStatus(null,
-                        Messages.bind(Messages.JobInteractiveHandler_sucessToDeploy, getLabel(), viewObj.getLabel()));
-            } else {
-                deployStatus = DeployStatus.getInfoStatus(null,
-                        Messages.bind(Messages.JobInteractiveHandler_skipToDeploy, getLabel(), viewObj.getLabel()));
-            }
-            status.add(deployStatus);
-        }
-        return status;
-    }
 
     private SpagoBiServer getServer(MDMServerDef serverDef) {
         SpagoBiServer spagoBiServer = PropertiesFactory.eINSTANCE.createSpagoBiServer();

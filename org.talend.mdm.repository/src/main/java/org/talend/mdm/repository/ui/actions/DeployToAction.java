@@ -19,17 +19,10 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.PlatformUI;
-import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.mdm.repository.core.service.DeployService;
-import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -57,18 +50,12 @@ public class DeployToAction extends AbstractDeployAction {
             }
             //
             IStatus status = deploy(serverDef, viewObjs);
+            updateChangedStatus(status);
             if (status.isMultiStatus()) {
                 showDeployStatus(status);
-
-                for (IStatus childStatus : status.getChildren()) {
-                    DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
-                    if (deployStatus.isOK()) {
-                        if (deployStatus.getItem() instanceof MDMServerObjectItem)
-                            saveLastServer((MDMServerObjectItem) deployStatus.getItem(), serverDef);
-                    }
-                }
             }
 
+            updateLastServer(status, serverDef);
             for (IRepositoryViewObject viewObj : viewObjs) {
                 commonViewer.refresh(viewObj);
             }
@@ -77,18 +64,6 @@ public class DeployToAction extends AbstractDeployAction {
 
     }
 
-    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
-        MDMServerObject mdmServerObject = item.getMDMServerObject();
-        mdmServerObject.setChanged(false);
-        mdmServerObject.setCreated(false);
-        mdmServerObject.setLastServerDef(serverDef);
-        try {
-            factory.save(item);
-            refreshParent();
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
+
 }

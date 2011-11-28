@@ -157,7 +157,6 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         item.setState(itemState);
         //
         WSTransformerV2E process = newProcess(key);
-        process.setCreated(true);
         item.setWsTransformerV2(process);
 
         if (parentItem != null) {

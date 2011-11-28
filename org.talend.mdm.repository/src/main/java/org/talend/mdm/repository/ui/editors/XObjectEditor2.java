@@ -34,13 +34,14 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
-import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.contributor.SvnHistorySelectionProvider;
-import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
+import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
@@ -110,7 +111,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
         MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(xobject.getWsObject(), serverObject);
         if (eObj != null) {
-            serverObject.setChanged(true);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
                 factory.save(serverObjectItem);
@@ -122,6 +122,9 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
                 refreshDirtyCue();
                 if (PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_AUTO_DEPLOY)) {
                     autoDeploy(serverObject);
+                }
+                if (serverObject.getLastServerDef() != null) {
+                    CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, editorInput.getViewObject());
                 }
                 return true;
             } catch (PersistenceException e) {
@@ -143,7 +146,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
             viewObjs.add(viewObj);
 
             IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs);
-            updateChangedStatus(status);
             if (status.isMultiStatus()) {
                 showDeployStatus(status);
             }
@@ -153,23 +155,8 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
         }
     }
 
-    protected void updateChangedStatus(IStatus status) {
-        if (status.isMultiStatus()) {
-            for (IStatus childStatus : status.getChildren()) {
-                DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
-                if (deployStatus.isOK()) {
-                    if (deployStatus.getItem() instanceof MDMServerObjectItem) {
-                        MDMServerObjectItem item = (MDMServerObjectItem) deployStatus.getItem();
-                        MDMServerObject mdmServerObject = item.getMDMServerObject();
-                        mdmServerObject.setChanged(false);
-                    }
-                }
-            }
-        }
-    }
-
     protected void showDeployStatus(IStatus status) {
-        MutliStatusDialog dialog = new MutliStatusDialog(getSite().getShell(), status.getChildren().length
+        MultiStatusDialog dialog = new MultiStatusDialog(getSite().getShell(), status.getChildren().length
                 + Messages.AbstractDeployAction_deployMessage, status);
         dialog.open();
     }

@@ -24,6 +24,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
@@ -112,6 +114,7 @@ public class RestoreAction extends AbstractRepositoryAction {
         Item item = viewObj.getProperty().getItem();
         try {
             factory.restoreObject(viewObj, new Path(item.getState().getPath()));
+            CommandManager.getInstance().pushCommand(ICommand.CMD_RESTORE, viewObj);
             if (RepositoryResourceUtil.isOpenedInEditor(viewObj) != null) {
                 factory.lock(viewObj);
             }

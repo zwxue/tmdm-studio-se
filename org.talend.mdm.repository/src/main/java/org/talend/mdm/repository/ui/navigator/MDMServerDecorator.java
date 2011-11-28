@@ -9,6 +9,9 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.CommandStack;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -22,6 +25,15 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
     private static final ImageDescriptor IMG_SERVER = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "icons/run_co.gif"); //$NON-NLS-1$
 
+    private static final ImageDescriptor IMG_MODIFY = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
+            "icons/dirty_ov.gif"); //$NON-NLS-1$
+
+    private static final ImageDescriptor IMG_NEW = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
+            "icons/new_resource.gif"); //$NON-NLS-1$
+
+    private static final ImageDescriptor IMG_DELETE = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
+            "icons/DELETED.gif"); //$NON-NLS-1$
+
     public void decorate(Object element, IDecoration decoration) {
         IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(viewObj);
@@ -30,7 +42,29 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
         } else {
             decorateRepositoryObject(item, decoration);
         }
+        decorateModifiedObject(viewObj, decoration);
 
+    }
+
+    private void decorateModifiedObject(IRepositoryViewObject viewObj, IDecoration decoration) {
+        CommandStack stack = CommandManager.getInstance().findCommandStack(viewObj.getId());
+        if (stack != null) {
+            ICommand command = stack.getValidCommand();
+            switch (command.getCommandType()) {
+            case ICommand.CMD_ADD:
+                decoration.addOverlay(IMG_NEW, IDecoration.BOTTOM_RIGHT);
+                return;
+            case ICommand.CMD_DELETE:
+                decoration.addOverlay(IMG_DELETE, IDecoration.BOTTOM_RIGHT);
+                return;
+            case ICommand.CMD_MODIFY:
+            case ICommand.CMD_RENAME:
+                decoration.addPrefix("> ");
+                decoration.addOverlay(IMG_MODIFY, IDecoration.BOTTOM_RIGHT);
+                return;
+
+            }
+        }
     }
 
     private boolean isDeleted(ERepositoryObjectType type, Item item) {
@@ -45,17 +79,8 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
             MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
             MDMServerDef serverDef = serverObject.getLastServerDef();
             if (serverDef != null) {
-
                 decoration.addOverlay(IMG_SERVER, IDecoration.TOP_RIGHT);
-                if (serverObject.isChanged()) {
-                    decoration.addSuffix(" " + serverDef.getName() + " (*)"); //$NON-NLS-1$ //$NON-NLS-2$ 
-                } else {
-                    decoration.addSuffix(" " + serverDef.getName()); //$NON-NLS-1$
-                }
-            } else {
-                if (serverObject.isChanged()) {
-                    decoration.addSuffix(" (*)"); //$NON-NLS-1$
-                }
+                decoration.addSuffix(" " + serverDef.getName());
             }
         }
     }

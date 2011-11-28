@@ -127,7 +127,6 @@ public class NewViewAction extends AbstractSimpleAddAction {
         item.setState(itemState);
         //
         WSViewE view = newView(key);
-        view.setCreated(true);
         item.setWsView(view);
 
         if (parentItem != null) {

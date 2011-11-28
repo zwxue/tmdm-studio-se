@@ -18,7 +18,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
-import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.webservices.WSDeleteUniverse;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -39,7 +40,7 @@ public class VersionInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.VersionInteractiveHandler_label;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putUniverse(new WSPutUniverse((WSUniverse) wsObj));
             return true;
@@ -47,19 +48,12 @@ public class VersionInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
-
-        if (xobject != null) {
-            if (xobject.getWsKey() instanceof String) {
-                WSUniversePK pk = new WSUniversePK();
-                pk.setPk((String) xobject.getWsKey());
-                port.deleteUniverse(new WSDeleteUniverse(pk));
-            } else
-                port.deleteUniverse(new WSDeleteUniverse((WSUniversePK) xobject.getWsKey()));
-
-            return true;
-        }
-        return false;
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        WSUniversePK pk = new WSUniversePK();
+        String name = ((WSUniverse) wsObj).getName();
+        pk.setPk(name);
+        port.deleteUniverse(new WSDeleteUniverse(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Universe.getName());
+        return true;
     }
-
 }

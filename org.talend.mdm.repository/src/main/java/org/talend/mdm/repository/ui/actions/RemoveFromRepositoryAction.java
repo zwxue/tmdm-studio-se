@@ -27,6 +27,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -118,6 +120,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
             // Property property = viewObj.getProperty();
             // ContainerCacheService.remove(property);
             factory.deleteObjectLogical(viewObj);
+            CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), serverObj.getName());
             // factory.deleteObjectPhysical(viewObj);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

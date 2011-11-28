@@ -18,7 +18,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
-import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDeleteDataCluster;
@@ -39,7 +40,7 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
         return Messages.DataContainerInteractiveHandler_title;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             WSPutDataCluster wsPutDataCluster = new WSPutDataCluster((WSDataCluster) wsObj);
             port.putDataCluster(wsPutDataCluster);
@@ -48,20 +49,15 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
         return false;
     }
 
-    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
-        // port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK) xobject.getWsKey()));
-
-        if (xobject != null) {
-            if (xobject.getWsKey() instanceof String) {
-                WSDataClusterPK pk = new WSDataClusterPK();
-                pk.setPk((String) xobject.getWsKey());
-                port.deleteDataCluster(new WSDeleteDataCluster(pk));
-            } else
-                port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK) xobject.getWsKey()));
-
-            return true;
-        }
-        return false;
+    @Override
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        WSDataClusterPK pk = new WSDataClusterPK();
+        String name = ((WSDataCluster) wsObj).getName();
+        pk.setPk(name);
+        port.deleteDataCluster(new WSDeleteDataCluster(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.DataCluster.getName());
+        return true;
     }
+
 
 }

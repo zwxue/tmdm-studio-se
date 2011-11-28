@@ -24,6 +24,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
@@ -76,13 +78,15 @@ public class RenameObjectAction extends AbstractRepositoryAction {
 
                 try {
                     if (serverObject != null) {
-
+                        String oldName = serverObject.getName();
                         String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem(),viewObj.getLabel());
                         if (newName != null) {
                             serverObject.setName(newName);
                             newName = RepositoryResourceUtil.escapeSpecialCharacters(newName);
                             viewObj.getProperty().setLabel(newName);
                             factory.save(viewObj.getProperty().getItem(), false);
+                            CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
+                                    new String[] { oldName, newName });
                         }
                     }
                     commonViewer.refresh(obj);

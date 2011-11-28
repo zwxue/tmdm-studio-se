@@ -17,10 +17,12 @@ import java.rmi.RemoteException;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.w3c.dom.Node;
 
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.WSServiceConfiguration;
 import com.amalto.workbench.webservices.WSServicePutConfiguration;
@@ -41,7 +43,7 @@ public class ServiceConfigurationInteractiveHandler extends AbstractInteractiveH
         return Messages.ServiceConfigurationInteractiveHandler_label;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             WSServiceConfiguration configurations = (WSServiceConfiguration) wsObj;
             for (WSServicePutConfiguration config : configurations.getServicePutConfigurations()) {
@@ -74,6 +76,12 @@ public class ServiceConfigurationInteractiveHandler extends AbstractInteractiveH
         WSPutVersioningSystemConfiguration conf = new WSPutVersioningSystemConfiguration(new WSVersioningSystemConfiguration(
                 ICoreConstants.DEFAULT_SVN, ICoreConstants.DEFAULT_SVN, url, username, password, autocommit, jndi));
         return conf;
+    }
+
+    @Override
+    public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        // Not support by MDM Server
+        return true;
     }
 
 }

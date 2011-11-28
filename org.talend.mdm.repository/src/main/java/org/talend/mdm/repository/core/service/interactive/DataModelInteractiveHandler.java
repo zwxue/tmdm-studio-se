@@ -24,7 +24,8 @@ import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteDataModel;
@@ -45,6 +46,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
      * 
      */
     private static final String FILE_EXTENSION = "xsd"; //$NON-NLS-1$
+
     Logger log = Logger.getLogger(DataModelInteractiveHandler.class);
 
     public ERepositoryObjectType getRepositoryObjectType() {
@@ -56,7 +58,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.DataModelInteractiveHandler_label;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putDataModel(new WSPutDataModel((WSDataModel) wsObj));
             return true;
@@ -80,19 +82,16 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
         ((WSDataModelItem) item).getWsDataModel().setXsdSchema(schema);
     }
 
-    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
-        if (xobject != null) {
-            // port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK) wsObj.getWsKey()));
-            if (xobject.getWsKey() instanceof String) {
-                WSDataModelPK pk = new WSDataModelPK();
-                pk.setPk((String) xobject.getWsKey());
-                port.deleteDataModel(new WSDeleteDataModel(pk));
-            } else
-                port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK) xobject.getWsKey()));
-
-            return true;
-        }
-        return false;
+    @Override
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        WSDataModelPK pk = new WSDataModelPK();
+        String name = ((WSDataModel) wsObj).getName();
+        pk.setPk(name);
+        port.deleteDataModel(new WSDeleteDataModel(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.DataMODEL.getName());
+        return true;
     }
+
+
 
 }

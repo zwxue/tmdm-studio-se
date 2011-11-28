@@ -46,6 +46,8 @@ public class Messages extends NLS {
 
     public static String DeployAllAction_label;
 
+    public static String DeployAllDialog_chooseServerFirst;
+
     public static String DeployAllDialog_deselectAll;
 
     public static String DeployAllDialog_label;
@@ -53,6 +55,10 @@ public class Messages extends NLS {
     public static String DeployAllDialog_label_selectserver;
 
     public static String DeployAllDialog_selectAll;
+
+    public static String DeployAllDialog_selectMoreItem;
+
+    public static String DeployAllDialog_warning;
 
     public static String DeployToAction_deployTo;
 

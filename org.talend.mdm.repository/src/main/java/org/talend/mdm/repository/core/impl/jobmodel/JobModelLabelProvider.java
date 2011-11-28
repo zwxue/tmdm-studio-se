@@ -60,10 +60,4 @@ public class JobModelLabelProvider extends AbstractLabelProvider {
         return img;
     }
 
-    @Override
-    protected String getServerObjectItemText(Item item) {
-        WSJobModelItem jobItem = (WSJobModelItem) item;
-        return jobItem.getWsJobModelItem().getName();
-    }
-
 }

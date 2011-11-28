@@ -154,7 +154,10 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         return false;
     }
 
-    protected abstract String getServerObjectItemText(Item item);
+    protected String getServerObjectItemText(Item item) {
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        return serverObject.getName();
+    }
 
     public abstract Image getCategoryImage(Item item);
 

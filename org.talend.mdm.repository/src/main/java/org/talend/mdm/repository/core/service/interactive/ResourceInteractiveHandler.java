@@ -18,7 +18,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -26,7 +28,6 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -45,15 +46,17 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean deployMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj)
-            throws RemoteException {
+    public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        IRepositoryViewObject viewObj = cmd.getViewObject();
+        MDMServerDef serverDef = cmd.getServerDef();
         String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$
+        Item item = viewObj.getProperty().getItem();
         String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
         IFile referenceFile = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, fileExtension);
         String path = referenceFile.getLocation().toOSString();
         try {
             String fileName = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", path//$NON-NLS-1$
-                    , "admin", "talend", null);
+                    , "admin", "talend", null); //$NON-NLS-1$ //$NON-NLS-2$
             return true;
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
@@ -69,6 +72,12 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
         // dataModel.setXsdSchema(schema);
         // return dataModel;
         return null;
+    }
+
+    @Override
+    public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        // Now unsupport remove
+        return true;
     }
 
 }

@@ -95,7 +95,6 @@ public class NewServiceConfigurationAction extends AbstractSimpleAddAction {
         item.setState(itemState);
 
         WSServiceConfigurationE serConfig = newServiceConfiguration(key);
-        serConfig.setCreated(true);
         item.setWsServiceConfiguration(serConfig);
 
         if (parentItem != null) {

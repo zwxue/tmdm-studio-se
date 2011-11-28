@@ -18,7 +18,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
-import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedure;
@@ -39,7 +40,7 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
         return Messages.StoredProcedureInteractiveHandler_label;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure) wsObj));
             return true;
@@ -47,19 +48,13 @@ public class StoredProcedureInteractiveHandler extends AbstractInteractiveHandle
         return false;
     }
 
-    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
-        // port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK) xobject.getWsKey()));
-        if (xobject != null) {
-            if (xobject.getWsKey() instanceof String) {
-                WSStoredProcedurePK pk = new WSStoredProcedurePK();
-                pk.setPk((String) xobject.getWsKey());
-                port.deleteStoredProcedure(new WSDeleteStoredProcedure(pk));
-            } else
-                port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK) xobject.getWsKey()));
-
-            return true;
-        }
-        return false;
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        WSStoredProcedurePK pk = new WSStoredProcedurePK();
+        String name = ((WSStoredProcedure) wsObj).getName();
+        pk.setPk(name);
+        port.deleteStoredProcedure(new WSDeleteStoredProcedure(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.StoredProcedure.getName());
+        return true;
     }
 
 }

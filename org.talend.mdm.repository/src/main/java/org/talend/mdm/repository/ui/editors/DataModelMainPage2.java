@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -27,7 +28,6 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.service.DeployService;
-import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -39,7 +39,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
-import org.talend.mdm.repository.ui.dialogs.message.MutliStatusDialog;
+import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
@@ -63,6 +63,8 @@ import com.amalto.workbench.webservices.WSDataModel;
  * DOC hbhong class global comment. Detailled comment
  */
 public class DataModelMainPage2 extends DataModelMainPage {
+
+    private static Logger log = Logger.getLogger(DataModelMainPage2.class);
 
     private final IFile xsdFile;
 
@@ -91,12 +93,11 @@ public class DataModelMainPage2 extends DataModelMainPage {
         MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(wsObject, serverObject);
         if (eObj != null) {
-            serverObject.setChanged(true);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
             factory.save(serverObjectItem);
             } catch (PersistenceException e) {
-
+                log.error(e.getMessage(), e);
             }
         }
 
@@ -118,7 +119,6 @@ public class DataModelMainPage2 extends DataModelMainPage {
             viewObjs.add(viewObj);
             IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs);
 
-            updateChangedStatus(status);
             if (status.isMultiStatus()) {
                 showDeployStatus(status);
             }
@@ -128,23 +128,10 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
     }
 
-    protected void updateChangedStatus(IStatus status) {
-        if (status.isMultiStatus()) {
-            for (IStatus childStatus : status.getChildren()) {
-                DeployService.DeployStatus deployStatus = (DeployStatus) childStatus;
-                if (deployStatus.isOK()) {
-                    if (deployStatus.getItem() instanceof MDMServerObjectItem) {
-                        MDMServerObjectItem item = (MDMServerObjectItem) deployStatus.getItem();
-                        MDMServerObject mdmServerObject = item.getMDMServerObject();
-                        mdmServerObject.setChanged(false);
-                    }
-                }
-            }
-        }
-    }
+
 
     protected void showDeployStatus(IStatus status) {
-        MutliStatusDialog dialog = new MutliStatusDialog(getSite().getShell(), status.getChildren().length
+        MultiStatusDialog dialog = new MultiStatusDialog(getSite().getShell(), status.getChildren().length
                 + Messages.AbstractDeployAction_deployMessage, status);
         dialog.open();
     }

@@ -1,0 +1,124 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.mdm.repository.core.command.deploy.job;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.command.deploy.DefaultDeployCommand;
+import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.core.service.InteractiveService;
+import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
+
+/**
+ * DOC hbhong class global comment. Detailled comment
+ */
+public class BatchDeployJobCommand extends DefaultDeployCommand {
+
+    List<ICommand> subCmds = new ArrayList<ICommand>();
+
+    List<ICommand> subDeleteCmds = new ArrayList<ICommand>();
+
+    public void addCommand(ICommand cmd) {
+        subCmds.add(cmd);
+    }
+
+    public boolean isEmpty() {
+        return subCmds.size() == 0;
+    }
+    public void addDeleteCommand(ICommand cmd) {
+        subDeleteCmds.add(cmd);
+    }
+
+    @Override
+    protected ERepositoryObjectType getViewObjectType() {
+        return ERepositoryObjectType.PROCESS;
+    }
+
+    public List<IRepositoryViewObject> getViewObjects() {
+        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        for (ICommand cmd : subCmds) {
+            if (cmd instanceof AbstractDeployCommand) {
+                viewObjs.add(((AbstractDeployCommand) cmd).getViewObject());
+            }
+        }
+        return viewObjs;
+    }
+
+    @Override
+    public IStatus execute(Object params, IProgressMonitor monitor) {
+        IStatus status = super.execute(params, monitor);
+        //
+        MultiStatus ms = new MultiStatus(RepositoryPlugin.PLUGIN_ID, status.getSeverity(), null, null);
+        IInteractiveHandler handler = InteractiveService.findHandler(getViewObjectType());
+        String typeLabel = handler.getLabel();
+        if (status.isOK()) {
+            runDeleteCmds(params, monitor, ms);
+        }
+        collectSuccessStatus(status, ms, typeLabel);
+        return ms;
+
+    }
+
+    private void collectSuccessStatus(IStatus dialogStatus, MultiStatus ms, String typeLabel) {
+        for (ICommand cmd : subCmds) {
+            String objectName = cmd.getObjLastName();
+            int severity = dialogStatus.getSeverity();
+            if (severity == IStatus.OK) {
+                if (cmd.getCommandType() == CMD_MODIFY)
+                    ms.add(DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was updated successfully"));
+                else
+                    ms.add(DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was created successfully"));
+            } else if (severity == IStatus.INFO) {
+                ms.add(DeployStatus.getInfoStatus(null,
+                        Messages.bind(Messages.JobInteractiveHandler_skipToDeploy, getLabel(), objectName)));
+            }
+
+        }
+    }
+
+    private void runDeleteCmds(Object params, IProgressMonitor monitor, MultiStatus ms) {
+        for (ICommand cmd : subDeleteCmds) {
+            if (cmd instanceof AbstractDeployCommand) {
+                AbstractDeployCommand removeCmd = (AbstractDeployCommand) cmd;
+                IStatus status = removeCmd.execute(params, monitor);
+                ms.add(status);
+            }
+        }
+    }
+
+    @Override
+    protected String getLabel() {
+        return "Job";
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.command.AbstractCommand#getCommandType()
+     */
+    @Override
+    public int getCommandType() {
+        return CMD_MODIFY;
+    }
+}

@@ -64,6 +64,8 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.bridge.MDMRepositoryNode;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
@@ -130,6 +132,7 @@ public class RepositoryResourceUtil {
     }
 
     public static boolean createItem(Item item, String propLabel, String version) {
+        String name = propLabel;
         propLabel = escapeSpecialCharacters(propLabel);
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
@@ -153,6 +156,7 @@ public class RepositoryResourceUtil {
                     resourceProvider.handleReferenceFile(item);
                 }
             }
+            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, nextId, name);
             return true;
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -425,6 +429,18 @@ public class RepositoryResourceUtil {
         return categoryViewObjects;
     }
 
+    public static IRepositoryViewObject[] getCategoryViewObjects(ERepositoryObjectType type) {
+        IRepositoryViewObject[] viewObjects = getCategoryViewObjects();
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                if (viewObj.getRepositoryObjectType().equals(type)) {
+                    return new IRepositoryViewObject[] { viewObj };
+                }
+            }
+        }
+        return new IRepositoryViewObject[0];
+    }
+
     private static IRepositoryViewObject rootViewObj = null;
 
     public static IRepositoryViewObject[] getCategoryViewObjectsWithRecycle() {
@@ -599,9 +615,13 @@ public class RepositoryResourceUtil {
             return state.isDeleted();
         }
     }
-
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject) {
+        return findViewObjects(type, parentItem, useRepositoryViewObject, false);
+    }
+
+    public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem,
+            boolean useRepositoryViewObject, boolean withDeleted) {
         try {
             Project project = ProjectManager.getInstance().getCurrentProject();
             IProject fsProject = ResourceModelUtils.getProject(project);
@@ -612,7 +632,7 @@ public class RepositoryResourceUtil {
                     path += DIVIDE;
                 path += parentItem.getState().getPath();
                 IFolder folder = fsProject.getFolder(new Path(path));
-                return findViewObjects(type, parentItem, folder, useRepositoryViewObject);
+                return findViewObjects(type, parentItem, folder, useRepositoryViewObject, withDeleted);
             }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -622,7 +642,7 @@ public class RepositoryResourceUtil {
     }
 
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem, IFolder folder,
-            boolean useRepositoryViewObject) {
+            boolean useRepositoryViewObject, boolean withDeleted) {
         List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
         try {
             for (IResource res : folder.members()) {
@@ -640,7 +660,7 @@ public class RepositoryResourceUtil {
                 // }
                 // }
             }
-            List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem, useRepositoryViewObject);
+            List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem, useRepositoryViewObject, withDeleted);
             viewObjects.addAll(children);
 
         } catch (CoreException e) {
@@ -665,9 +685,13 @@ public class RepositoryResourceUtil {
         List deletedFolders = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
         return deletedFolders.contains(folderPath);
     }
-
     public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject) {
+        return findViewObjectsInFolder(type, parentItem, useRepositoryViewObject, false);
+    }
+
+    public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
+            boolean useRepositoryViewObject, boolean withDeleted) {
         // because the IProxyRepositoryFactory doesn't expose the getSerializableFromFolder method ,so only through the
         // following to get object
         List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
@@ -683,12 +707,12 @@ public class RepositoryResourceUtil {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
 
-            List<IRepositoryViewObject> allObjs = factory.getAll(type);
+            List<IRepositoryViewObject> allObjs = factory.getAll(type, withDeleted);
             for (IRepositoryViewObject viewObj : allObjs) {
                 Property property = viewObj.getProperty();
 
                 ItemState state = property.getItem().getState();
-                if ((!state.isDeleted())
+                if ((!state.isDeleted() || withDeleted)
                         && (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2))) {
                     IRepositoryViewObject cacheViewObj = ContainerCacheService.get(property);
                     if (cacheViewObj == null) {
@@ -698,15 +722,6 @@ public class RepositoryResourceUtil {
                             cacheViewObj = viewObj;
                         }
                         ContainerCacheService.put(property, cacheViewObj);
-                    }
-                    // handle reference files
-                    IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(property
-                            .getItem());
-                    if (configuration != null) {
-                        IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
-                        if (resourceProvider.needSaveReferenceFile()) {
-                            resourceProvider.handleReferenceFile(property.getItem());
-                        }
                     }
                     viewObjects.add(cacheViewObj);
 
@@ -740,7 +755,8 @@ public class RepositoryResourceUtil {
             Project project = ProjectManager.getInstance().getCurrentProject();
             IProject fsProject = ResourceModelUtils.getProject(project);
             IFolder stableFolder = fsProject.getFolder(((ContainerItem) parentItem).getRepObjType().getFolder());
-            List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder, useRepositoryViewObject);
+            List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder, useRepositoryViewObject,
+                    false);
             // if (hasSystemFolder) {
             //                IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "System", null, true); //$NON-NLS-1$
             // for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {

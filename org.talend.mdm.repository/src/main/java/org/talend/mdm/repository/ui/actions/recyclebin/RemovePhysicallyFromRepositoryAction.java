@@ -24,6 +24,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -99,7 +100,10 @@ public class RemovePhysicallyFromRepositoryAction extends AbstractRepositoryActi
 
     private void removeServerObject(IRepositoryViewObject viewObj) {
         try {
+            String id = viewObj.getId();
             factory.deleteObjectPhysical(viewObj);
+            CommandManager.getInstance().removeCommandStack(id);
+
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }

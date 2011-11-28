@@ -19,6 +19,8 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSView;
@@ -39,7 +41,7 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.ViewInteractiveHandler_label;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putView(new WSPutView((WSView) wsObj));
             return true;
@@ -47,19 +49,14 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
-
-        if (xobject != null) {
-            if (xobject.getWsKey() instanceof String) {
-                WSViewPK pk = new WSViewPK();
-                pk.setPk((String) xobject.getWsKey());
-                port.deleteView(new WSDeleteView(pk));
-            } else
-                port.deleteView(new WSDeleteView((WSViewPK) xobject.getWsKey()));
-
-            return true;
-        }
-        return false;
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        WSViewPK pk = new WSViewPK();
+        String name = ((WSView) wsObj).getName();
+        pk.setPk(name);
+        port.deleteView(new WSDeleteView(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.View.getName());
+        return true;
     }
+
 
 }

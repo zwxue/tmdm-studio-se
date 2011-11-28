@@ -60,10 +60,4 @@ public class EventManagerLabelProvider extends AbstractLabelProvider {
         return img;
     }
 
-    @Override
-    protected String getServerObjectItemText(Item item) {
-        WSEventManagerItem eventMItem = (WSEventManagerItem) item;
-        return eventMItem.getWsEventManager().getName();
-    }
-
 }

@@ -18,12 +18,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.ui.PlatformUI;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.mdm.repository.core.service.RemoveService;
-import org.talend.mdm.repository.core.service.RemoveService.RemoveStatus;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -34,7 +36,7 @@ import org.talend.repository.model.IProxyRepositoryFactory;
 /**
  * DOC achen  class global comment. Detailled comment
  */
-public class RemoveFromServerAction extends AbstractRemoveAction {
+public class RemoveFromServerAction extends AbstractDeployAction {
 
     private static Logger log = Logger.getLogger(DeployToAction.class);
 
@@ -45,35 +47,54 @@ public class RemoveFromServerAction extends AbstractRemoveAction {
 
     @Override
     public void run() {
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
-        dialog.create();
-        List<Object> list = getSelectedObject();
-        if (list.size() > 0) {
-            IRepositoryViewObject viewObj = (IRepositoryViewObject) list.get(0);
-            Item item = viewObj.getProperty().getItem();
-            MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-            dialog.setSelectServer(serverObject.getLastServerDef());
-        }
         if (dialog.open() == IDialogConstants.OK_ID) {
             MDMServerDef serverDef = dialog.getSelectedServerDef();
-            List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+            List<AbstractDeployCommand> commands = new LinkedList<AbstractDeployCommand>();
+            CommandManager commandManager = CommandManager.getInstance();
             for (Object obj : getSelectedObject()) {
-                viewObjs.add((IRepositoryViewObject) obj);
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+                ICommand deleteCommand = commandManager.getNewCommand(ICommand.CMD_DELETE);
+                deleteCommand.init(viewObj);
+                commands.add((AbstractDeployCommand) deleteCommand);
             }
             //
-            IStatus status = remove(serverDef, viewObjs);
+            IStatus status = DeployService.getInstance().runCommands(commands, serverDef);
             if (status.isMultiStatus()) {
-                for (IStatus childStatus : status.getChildren()) {
-                    RemoveService.RemoveStatus removeStatus = (RemoveStatus) childStatus;
-                    if (removeStatus.isOK()) {
-                        if (removeStatus.getItem() instanceof MDMServerObjectItem)
-                            removeLastServer((MDMServerObjectItem) removeStatus.getItem(), serverDef);
-                    }
-                }
-                showRemoveStatus(status);
+                showDeployStatus(status);
             }
-
         }
+        // SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
+        // dialog.create();
+        // List<Object> list = getSelectedObject();
+        // if (list.size() > 0) {
+        // IRepositoryViewObject viewObj = (IRepositoryViewObject) list.get(0);
+        // Item item = viewObj.getProperty().getItem();
+        // MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        // dialog.setSelectServer(serverObject.getLastServerDef());
+        // }
+        // if (dialog.open() == IDialogConstants.OK_ID) {
+        // MDMServerDef serverDef = dialog.getSelectedServerDef();
+        // List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        // for (Object obj : getSelectedObject()) {
+        // viewObjs.add((IRepositoryViewObject) obj);
+        // }
+        // //
+        // IStatus status = remove(serverDef, viewObjs);
+        // if (status.isMultiStatus()) {
+        // for (IStatus childStatus : status.getChildren()) {
+        // RemoveService.RemoveStatus removeStatus = (RemoveStatus) childStatus;
+        // if (removeStatus.isOK()) {
+        // if (removeStatus.getItem() instanceof MDMServerObjectItem)
+        // removeLastServer((MDMServerObjectItem) removeStatus.getItem(), serverDef);
+        // }
+        // }
+        // showRemoveStatus(status);
+        // }
+        //
+        // }
 
     }
 
@@ -81,8 +102,6 @@ public class RemoveFromServerAction extends AbstractRemoveAction {
 
     private void removeLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
         MDMServerObject mdmServerObject = item.getMDMServerObject();
-        mdmServerObject.setChanged(false);
-        mdmServerObject.setCreated(false);
         mdmServerObject.setLastServerDef(null);
         try {
             factory.save(item);

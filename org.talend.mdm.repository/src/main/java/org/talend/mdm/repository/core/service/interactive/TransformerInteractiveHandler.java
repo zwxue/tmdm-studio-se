@@ -18,7 +18,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 
-import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.webservices.WSDeleteTransformerV2;
 import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2;
@@ -39,7 +40,7 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.TransformerInteractiveHandler_label;
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putTransformerV2(new WSPutTransformerV2((WSTransformerV2) wsObj));
             return true;
@@ -47,19 +48,12 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doDelete(XtentisPort port, TreeObject xobject) throws RemoteException {
-        // port.deleteTransformerV2(new WSDeleteTransformerV2((WSTransformerV2PK) xobject.getWsKey()));
-        if (xobject != null) {
-            if (xobject.getWsKey() instanceof String) {
-                WSTransformerV2PK pk = new WSTransformerV2PK();
-                pk.setPk((String) xobject.getWsKey());
-                port.deleteTransformerV2(new WSDeleteTransformerV2(pk));
-            } else
-                port.deleteTransformerV2(new WSDeleteTransformerV2((WSTransformerV2PK) xobject.getWsKey()));
-
-            return true;
-        }
-        return false;
+    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+        WSTransformerV2PK pk = new WSTransformerV2PK();
+        String name = ((WSTransformerV2) wsObj).getName();
+        pk.setPk(name);
+        port.deleteTransformerV2(new WSDeleteTransformerV2(pk));
+        TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Transformer.getName());
+        return true;
     }
-
 }

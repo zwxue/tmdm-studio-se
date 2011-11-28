@@ -43,6 +43,7 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
      * 
      */
     private static final String FILE_EXTENSION = "form"; //$NON-NLS-1$
+
     Logger log = Logger.getLogger(CustomFormInteractiveHandler.class);
 
     public ERepositoryObjectType getRepositoryObjectType() {
@@ -54,13 +55,15 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
         return "Custom Form";
     }
 
-    public boolean doDeploy(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
             port.putCustomForm(new WSPutCustomForm((WSCustomForm) wsObj));
             return true;
         }
         return false;
     }
+
+
 
     public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
         if (wsObj != null) {
@@ -71,6 +74,7 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
         }
         return false;
     }
+
     @Override
     public Object convert(Item item, MDMServerObject serverObj) {
         WSCustomForm customForm = (WSCustomForm) super.convert(item, serverObj);
