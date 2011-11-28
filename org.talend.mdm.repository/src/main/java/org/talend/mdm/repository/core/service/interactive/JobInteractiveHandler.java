@@ -76,7 +76,6 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
                     Shell activeShell = display.getActiveShell();
                     WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
                     setResult(dialog.open() == IDialogConstants.OK_ID);
-                    // setResult(true);
                 }
             });
         }

@@ -138,9 +138,12 @@ public class CommandManager implements IMementoAware {
         CommandStack commandStack = map.get(command.getCommandId());
         if (commandStack == null) {
             commandStack = new CommandStack();
-            map.put(command.getCommandId(), commandStack);
+            if (commandStack.pushCommand(command)) {
+                map.put(command.getCommandId(), commandStack);
+            }
+        } else {
+            commandStack.pushCommand(command);
         }
-        commandStack.pushCommand(command);
     }
 
     public ICommand restoreCommand(IMemento mem) {
@@ -254,9 +257,6 @@ public class CommandManager implements IMementoAware {
                             jobCommand.addDeleteCommand(subCmd);
                         } else if (type == ICommand.CMD_MODIFY) {
                             jobCommand.addCommand(subCmd);
-                        } else {
-                            // TODO remove it after debug
-                            System.out.println();
                         }
                     }
                 } else {

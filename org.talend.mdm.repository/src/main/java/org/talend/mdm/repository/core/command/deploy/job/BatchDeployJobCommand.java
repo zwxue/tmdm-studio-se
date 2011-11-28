@@ -40,6 +40,9 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
     List<ICommand> subDeleteCmds = new ArrayList<ICommand>();
 
     public void addCommand(ICommand cmd) {
+        if (cmd instanceof AbstractDeployCommand && getServerDef() == null) {
+            setServerDef(((AbstractDeployCommand) cmd).getServerDef());
+        }
         subCmds.add(cmd);
     }
 
@@ -69,7 +72,7 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
     public IStatus execute(Object params, IProgressMonitor monitor) {
         IStatus status = super.execute(params, monitor);
         //
-        MultiStatus ms = new MultiStatus(RepositoryPlugin.PLUGIN_ID, status.getSeverity(), null, null);
+        MultiStatus ms = new MultiStatus(RepositoryPlugin.PLUGIN_ID, status.getSeverity(), "Deploy job", null);
         IInteractiveHandler handler = InteractiveService.findHandler(getViewObjectType());
         String typeLabel = handler.getLabel();
         if (status.isOK()) {

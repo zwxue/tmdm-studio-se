@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.IMemento;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 
@@ -82,9 +83,14 @@ public abstract class AbstractCommand implements ICommand {
         this.commandId = viewObject.getId();
         //
         Item item = viewObj.getProperty().getItem();
-        if (item != null && item instanceof MDMServerObjectItem) {
-            objName = ((MDMServerObjectItem) item).getMDMServerObject().getName();
-            lastName = objName;
+        if (item != null) {
+            if (item instanceof MDMServerObjectItem) {
+                objName = ((MDMServerObjectItem) item).getMDMServerObject().getName();
+                lastName = objName;
+            } else if (item instanceof ProcessItem) {
+                objName = viewObj.getLabel();
+                lastName = objName;
+            }
         }
     }
 

@@ -93,10 +93,13 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
                     } else if (childStatus instanceof MultiStatus) {
                         deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
                     }
-                    Item item = deployStatus.getCommand().getViewObject().getProperty().getItem();
+                    IRepositoryViewObject viewObject = deployStatus.getCommand().getViewObject();
+                    if (viewObject != null) {
+                        Item item = viewObject.getProperty().getItem();
 
-                    if (item instanceof MDMServerObjectItem)
-                        saveLastServer((MDMServerObjectItem) item, serverDef);
+                        if (item instanceof MDMServerObjectItem)
+                            saveLastServer((MDMServerObjectItem) item, serverDef);
+                    }
                 }
             }
         }
@@ -109,7 +112,7 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         mdmServerObject.setLastServerDef(serverDef);
         try {
             factory.save(item);
-            refreshParent();
+            commonViewer.refresh();
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
