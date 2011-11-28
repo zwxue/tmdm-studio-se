@@ -42,12 +42,23 @@ public class XSDVisibleRuleAction extends UndoAction {
 
     protected String dataModelName;
 
+    protected boolean isDelete = false;
+
     public XSDVisibleRuleAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ROUTINE.getPath()));
         setText("Set the Visible Rule");
         setToolTipText("Set the Visible Rule");
         this.dataModelName = dataModelName;
+    }
+
+    public XSDVisibleRuleAction(DataModelMainPage page, String dataModelName, boolean isDelete) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
+        setText("Delete the Visible Rule");
+        setToolTipText("Delete the Visible Rule");
+        this.dataModelName = dataModelName;
+        this.isDelete = isDelete;
     }
 
     public IStatus doAction() {
@@ -81,6 +92,7 @@ public class XSDVisibleRuleAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
             // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
+            if (!isDelete) {
             ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),getTreeParent(),
                     "Build Validation Rule Expression ", struc.getVisibleRule(), conceptName, true, false);
             // The ending| bug:21784
@@ -92,6 +104,10 @@ public class XSDVisibleRuleAction extends UndoAction {
             if (ret == Window.OK) {
                 struc.setVisibleRule(dlg.getExpression());
             }
+            } else {
+                struc.setVisibleRule(""); //$NON-NLS-1$
+            }
+
             if (struc.hasChanged()) {
                 page.refresh();
                 page.getTreeViewer().expandToLevel(xSDCom, 2);

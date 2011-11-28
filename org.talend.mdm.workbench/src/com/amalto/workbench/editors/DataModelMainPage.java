@@ -1606,6 +1606,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             if (obj instanceof XSDParticle) {
                 manager.add(visibleRuleAction);
+                XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
+                manager.add(deleteVisibleRuleAction);
                 XSDParticle xsdParticle = (XSDParticle) obj;
 
                 XSDTerm xsdTerm = xsdParticle.getTerm();
