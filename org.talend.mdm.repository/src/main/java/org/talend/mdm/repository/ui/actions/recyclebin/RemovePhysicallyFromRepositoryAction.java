@@ -12,25 +12,12 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.recyclebin;
 
-import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.general.Project;
-import org.talend.core.model.properties.FolderType;
-import org.talend.core.model.properties.Item;
-import org.talend.core.model.properties.ProcessItem;
-import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.repository.ProjectManager;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -38,11 +25,9 @@ import com.amalto.workbench.image.ImageCache;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class RemovePhysicallyFromRepositoryAction extends AbstractRepositoryAction {
+public class RemovePhysicallyFromRepositoryAction extends AbstractRemoveCommandStackAction {
 
-    static Logger log = Logger.getLogger(RemovePhysicallyFromRepositoryAction.class);
 
-    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
@@ -70,57 +55,17 @@ public class RemovePhysicallyFromRepositoryAction extends AbstractRepositoryActi
             }
 
         }
+        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
-                RepositoryResourceUtil.closeEditor(viewObj, false);
-                if (isServerObject(viewObj)) {
-                    removeServerObject(viewObj);
-                } else if (RepositoryResourceUtil.hasContainerItem(obj, FolderType.FOLDER_LITERAL)) {
-                    removeFolderObject(viewObj);
-                }
 
+                viewObjs.add(viewObj);
             }
         }
-
-        try {
-            factory.saveProject(ProjectManager.getInstance().getCurrentProject());
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
-        }
-
-        commonViewer.refresh();
+        removeViewObjects(viewObjs);
 
     }
 
-    private boolean isServerObject(IRepositoryViewObject viewObj) {
-        Item item = viewObj.getProperty().getItem();
-        return item instanceof MDMServerObjectItem || item instanceof ProcessItem;
-    }
-
-    private void removeServerObject(IRepositoryViewObject viewObj) {
-        try {
-            String id = viewObj.getId();
-            factory.deleteObjectPhysical(viewObj);
-            CommandManager.getInstance().removeCommandStack(id);
-
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    private void removeFolderObject(IRepositoryViewObject viewObj) {
-        Project project = ProjectManager.getInstance().getCurrentProject();
-        ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
-        String path = containerItem.getState().getPath();
-        ERepositoryObjectType repObjType = containerItem.getRepObjType();
-        // ContainerCacheService.removeContainer(repObjType, path);
-        try {
-            factory.deleteFolder(project, repObjType, new Path(path), false);
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
-        }
-
-    }
 
 }

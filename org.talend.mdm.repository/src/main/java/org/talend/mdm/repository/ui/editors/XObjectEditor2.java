@@ -145,7 +145,7 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
             List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
             viewObjs.add(viewObj);
 
-            IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs);
+            IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs, ICommand.CMD_MODIFY);
             if (status.isMultiStatus()) {
                 showDeployStatus(status);
             }

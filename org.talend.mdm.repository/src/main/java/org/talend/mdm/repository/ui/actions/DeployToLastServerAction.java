@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -51,7 +52,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
         MDMServerDef currentServerDef = mdmServerObject.getLastServerDef();
         //
-        IStatus status = deploy(currentServerDef, viewObjs);
+        IStatus status = deploy(currentServerDef, viewObjs, ICommand.CMD_MODIFY);
         updateChangedStatus(status);
         if (status.isMultiStatus()) {
             showDeployStatus(status);

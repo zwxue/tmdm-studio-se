@@ -210,7 +210,14 @@ public class CommandManager implements IMementoAware {
         return cmds;
     }
 
-    public List<AbstractDeployCommand> getDeployCommands(List<IRepositoryViewObject> viewObjs) {
+    /**
+     * DOC hbhong Comment method "getDeployCommands".
+     * 
+     * @param viewObjs
+     * @param defaultCmdType if none then assign -1
+     * @return
+     */
+    public List<AbstractDeployCommand> getDeployCommands(List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
         List<AbstractDeployCommand> cmds = new LinkedList<AbstractDeployCommand>();
         for (IRepositoryViewObject viewObj : viewObjs) {
             CommandStack stack = findCommandStack(viewObj.getId());
@@ -226,6 +233,12 @@ public class CommandManager implements IMementoAware {
                     fillViewObjectToCommand(validCommand);
                     AbstractDeployCommand deployCommand = (AbstractDeployCommand) validCommand;
                     cmds.add(deployCommand);
+                } else if (validCommand instanceof NOPCommand && defaultCmdType > 0) {
+                    ICommand cmd = getNewCommand(defaultCmdType);
+                    if (cmd instanceof AbstractDeployCommand) {
+                        cmd.init(viewObj);
+                        cmds.add((AbstractDeployCommand) cmd);
+                    }
                 }
             }
         }

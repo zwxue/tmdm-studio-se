@@ -272,6 +272,8 @@ public class Messages extends NLS {
 
     public static String BatchDeployJobCommand_title;
 
+    public static String WaitToDeployDialog_message;
+
     public static String Warning_text;
 
     public static String WSRootLabelProvider_localRepository;

@@ -27,6 +27,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -117,7 +118,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
         if (serverObject.getLastServerDef() != null) {
             List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
             viewObjs.add(viewObj);
-            IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs);
+            IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs, ICommand.CMD_MODIFY);
 
             if (status.isMultiStatus()) {
                 showDeployStatus(status);

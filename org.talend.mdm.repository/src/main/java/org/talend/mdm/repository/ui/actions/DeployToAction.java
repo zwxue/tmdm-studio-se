@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
@@ -49,7 +50,7 @@ public class DeployToAction extends AbstractDeployAction {
                 viewObjs.add((IRepositoryViewObject) obj);
             }
             //
-            IStatus status = deploy(serverDef, viewObjs);
+            IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY);
             updateChangedStatus(status);
             if (status.isMultiStatus()) {
                 showDeployStatus(status);

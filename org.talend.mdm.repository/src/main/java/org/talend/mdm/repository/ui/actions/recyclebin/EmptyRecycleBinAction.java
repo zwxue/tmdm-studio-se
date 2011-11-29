@@ -15,28 +15,18 @@ package org.talend.mdm.repository.ui.actions.recyclebin;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.general.Project;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
-import org.talend.repository.ProjectManager;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class EmptyRecycleBinAction extends AbstractRepositoryAction {
+public class EmptyRecycleBinAction extends AbstractRemoveCommandStackAction {
 
     static Logger log = Logger.getLogger(EmptyRecycleBinAction.class);
 
@@ -75,35 +65,36 @@ public class EmptyRecycleBinAction extends AbstractRepositoryAction {
                     Messages.EmptyRecycleBinAction_confirmEmpty))) {
                 return;
             }
-            try {
-                for (IRepositoryViewObject childViewObj : children) {
-                    deleteElement(childViewObj);
-                }
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            }
-            refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_RECYCLE_BIN);
+            removeViewObjects(children);
+            // try {
+            // for (IRepositoryViewObject childViewObj : children) {
+            // deleteElement(childViewObj);
+            // }
+            // } catch (PersistenceException e) {
+            // log.error(e.getMessage(), e);
+            // }
+            // refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_RECYCLE_BIN);
         }
     }
 
-    IProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+    // IProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
 
-    private void deleteElement(IRepositoryViewObject viewObj) throws PersistenceException {
-        Project currentProject = ProjectManager.getInstance().getCurrentProject();
-        if (viewObj instanceof FolderRepositoryObject) {
-            // delete child
-            for (IRepositoryViewObject childViewObj : ((FolderRepositoryObject) viewObj).getChildren()) {
-                deleteElement(childViewObj);
-            }
-            Item item = viewObj.getProperty().getItem();
-            IPath folderPath = new Path(item.getState().getPath());
-
-            factory.deleteFolder(currentProject, viewObj.getRepositoryObjectType(), folderPath, true);
-        } else {
-
-            factory.deleteObjectPhysical(currentProject, viewObj, null, true);
-        }
-    }
+    // private void deleteElement(IRepositoryViewObject viewObj) throws PersistenceException {
+    // Project currentProject = ProjectManager.getInstance().getCurrentProject();
+    // if (viewObj instanceof FolderRepositoryObject) {
+    // // delete child
+    // for (IRepositoryViewObject childViewObj : ((FolderRepositoryObject) viewObj).getChildren()) {
+    // deleteElement(childViewObj);
+    // }
+    // Item item = viewObj.getProperty().getItem();
+    // IPath folderPath = new Path(item.getState().getPath());
+    //
+    // factory.deleteFolder(currentProject, viewObj.getRepositoryObjectType(), folderPath, true);
+    // } else {
+    //
+    // factory.deleteObjectPhysical(currentProject, viewObj, null, true);
+    // }
+    // }
 
     @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {

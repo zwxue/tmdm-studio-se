@@ -51,8 +51,8 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         setImageDescriptor(DEPLOY_IMG);
     }
 
-    protected IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
-        return DeployService.getInstance().deploy(serverDef, viewObjs);
+    protected IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
+        return DeployService.getInstance().deploy(serverDef, viewObjs, defaultCmdType);
     }
 
     protected void showDeployStatus(IStatus status) {

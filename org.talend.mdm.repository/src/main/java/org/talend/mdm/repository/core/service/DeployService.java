@@ -117,9 +117,9 @@ public class DeployService {
 
     }
 
-    public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
+    public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
         CommandManager manager = CommandManager.getInstance();
-        List<AbstractDeployCommand> commands = manager.getDeployCommands(viewObjs);
+        List<AbstractDeployCommand> commands = manager.getDeployCommands(viewObjs, defaultCmdType);
         return runCommands(commands, serverDef);
     }
 
