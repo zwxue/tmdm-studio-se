@@ -163,7 +163,7 @@ public class CommandManager implements IMementoAware {
     }
 
     public void restoreState(IMemento aMemento) {
-        if (map.isEmpty()) {
+        if (map.isEmpty() && aMemento != null) {
             IMemento cmdManagerMem = aMemento.getChild(ICommand.MDM_COMMANDS);
             if (cmdManagerMem != null) {
                 IMemento[] stackMems = cmdManagerMem.getChildren(ICommand.MEM_TYPE_COMMAND_STACK);
