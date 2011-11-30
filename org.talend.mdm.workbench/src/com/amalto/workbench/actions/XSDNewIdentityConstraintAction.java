@@ -105,7 +105,14 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
                 return Status.CANCEL_STATUS;
             }
             childNames = Util.getChildElementNames("", decl);
-            dialog = new IdentityConstraintInputDialog(decl, page.getSite().getShell(), "Add a new Key", childNames,
+            // filter the non top level fields
+            List<String> topChilds = new ArrayList<String>();
+            for (String child : childNames) {
+                if (child.indexOf('/') == -1) {
+                    topChilds.add(child);
+                }
+            }
+            dialog = new IdentityConstraintInputDialog(decl, page.getSite().getShell(), "Add a new Key", topChilds,
                     decl.getName());
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();

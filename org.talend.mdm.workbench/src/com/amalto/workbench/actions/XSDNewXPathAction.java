@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -82,7 +83,14 @@ public class XSDNewXPathAction extends UndoAction {
             // );
 
             List<String> childNames = Util.getChildElementNames("", (XSDElementDeclaration) icd.getContainer());
-            SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), "Select one field", childNames, null);
+            // filter the non top level fields
+            List<String> topChilds = new ArrayList<String>();
+            for (String child : childNames) {
+                if (child.indexOf('/') == -1) {
+                    topChilds.add(child);
+                }
+            }
+            SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), "Select one field", topChilds, null);
             id.create();
             id.setBlockOnOpen(true);
             int ret = id.open();

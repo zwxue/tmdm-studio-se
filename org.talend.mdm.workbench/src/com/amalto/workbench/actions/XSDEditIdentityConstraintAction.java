@@ -77,7 +77,7 @@ public class XSDEditIdentityConstraintAction extends UndoAction {
                     && !((XSDElementDeclaration) constraint.getContainer()).getName().equals(id.getValue())) {
 
                 MessageDialog.openWarning(page.getSite().getShell(), "Warning",
-                        "The name of the unique key should be same to the name of it's parent enitity");
+                        "The name of the unique key should be same to the name of it's parent entity");
                 return Status.CANCEL_STATUS;
             }
 

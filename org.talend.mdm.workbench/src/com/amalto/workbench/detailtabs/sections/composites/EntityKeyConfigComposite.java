@@ -275,7 +275,7 @@ public class EntityKeyConfigComposite extends Composite {
     private void initComboSelectorContents() {
         if (entityWrapper != null) {
             try {
-            	List<String> list =Util.getChildElementNames("", entityWrapper.getSourceEntity());//$NON-NLS-1$
+                List<String> list = new ArrayList<String>();//Util.getChildElementNames("", entityWrapper.getSourceEntity());//$NON-NLS-1$
             	list.add(0,".");//$NON-NLS-1$
                 comboSelector.setItems(list.toArray(new String[0]));
             } catch (Exception e) {
@@ -535,9 +535,16 @@ public class EntityKeyConfigComposite extends Composite {
                     return;
 
                 try {
-
-                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field",
-                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), selectedFields[0].getXPath());//$NON-NLS-1$
+                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity());
+                    // filter the non top level fields
+                    List<String> topChilds = new ArrayList<String>();
+                    for (String child : childNames) {
+                        if (child.indexOf('/') == -1) {
+                            topChilds.add(child);
+                        }
+                    }
+                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(),
+                            "Select one field", topChilds, selectedFields[0].getXPath());//$NON-NLS-1$
 
                     if (selectFieldDlg.open() != Window.OK)
                         return;
@@ -566,9 +573,16 @@ public class EntityKeyConfigComposite extends Composite {
                     KeyWrapper[] selectedKeys = getSelectedKeys();
                     if (selectedKeys.length == 0)
                         return;
-
+                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity());
+                    // filter the non top level fields
+                    List<String> topChilds = new ArrayList<String>();
+                    for (String child : childNames) {
+                        if (child.indexOf('/') == -1) {
+                            topChilds.add(child);
+                        }
+                    }
                     SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field",
-                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), null);//$NON-NLS-1$
+ topChilds, null);//$NON-NLS-1$
 
                     if (selectFieldDlg.open() != Window.OK)
                         return;
@@ -601,9 +615,16 @@ public class EntityKeyConfigComposite extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 try {
-
+                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity());
+                    // filter the non top level fields
+                    List<String> topChilds = new ArrayList<String>();
+                    for (String child : childNames) {
+                        if (child.indexOf('/') == -1) {
+                            topChilds.add(child);
+                        }
+                    }
                     IdentityConstraintInputDialog dialog = new IdentityConstraintInputDialog(entityWrapper.getSourceEntity(),
-                            getShell(), "Add a new Key", Util.getChildElementNames("", entityWrapper.getSourceEntity()),
+                            getShell(), "Add a new Key", topChilds,
                             entityWrapper.getSourceEntityName());
 
                     dialog.setInputValidator(new NewKeyWrapperValidator(entityWrapper));
