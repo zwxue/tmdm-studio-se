@@ -132,6 +132,10 @@ public class RepositoryResourceUtil {
     }
 
     public static boolean createItem(Item item, String propLabel, String version) {
+        return createItem(item, propLabel, version, true);
+    }
+
+    public static boolean createItem(Item item, String propLabel, String version, boolean pushCommandStack) {
         String name = propLabel;
         propLabel = escapeSpecialCharacters(propLabel);
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
@@ -156,7 +160,9 @@ public class RepositoryResourceUtil {
                     resourceProvider.handleReferenceFile(item);
                 }
             }
-            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, nextId, name);
+            if (pushCommandStack) {
+                CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, nextId, name);
+            }
             return true;
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -595,7 +601,7 @@ public class RepositoryResourceUtil {
         }
         return null;
     }
-    
+
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem) {
         return findViewObjects(type, parentItem, true);
     }
@@ -615,6 +621,7 @@ public class RepositoryResourceUtil {
             return state.isDeleted();
         }
     }
+
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject) {
         return findViewObjects(type, parentItem, useRepositoryViewObject, false);
@@ -685,6 +692,7 @@ public class RepositoryResourceUtil {
         List deletedFolders = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
         return deletedFolders.contains(folderPath);
     }
+
     public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject) {
         return findViewObjectsInFolder(type, parentItem, useRepositoryViewObject, false);

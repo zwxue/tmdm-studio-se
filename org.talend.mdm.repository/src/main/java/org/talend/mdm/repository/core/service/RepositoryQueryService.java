@@ -75,6 +75,7 @@ public class RepositoryQueryService {
     public static List<String> findAllWorkflowNames() {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_WORKFLOW);
     }
+
     public static List<String> findAllStoredProcedureNames() {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_STOREPROCEDURE);
     }
@@ -160,8 +161,9 @@ public class RepositoryQueryService {
         return null;
     }
 
-    public static MDMServerObjectItem findServerObjectItemByName(ERepositoryObjectType type, String name) {
-        List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type);
+    public static MDMServerObjectItem findServerObjectItemByNameWithDeleted(ERepositoryObjectType type, String name,
+            boolean withDeleted) {
+        List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type, true, withDeleted);
         if (viewObjects != null) {
             for (IRepositoryViewObject viewObj : viewObjects) {
                 Item item = viewObj.getProperty().getItem();
@@ -174,6 +176,10 @@ public class RepositoryQueryService {
             }
         }
         return null;
+    }
+
+    public static MDMServerObjectItem findServerObjectItemByName(ERepositoryObjectType type, String name) {
+        return findServerObjectItemByNameWithDeleted(type, name, false);
     }
 
     private static void initTypeMap() {

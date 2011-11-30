@@ -57,6 +57,7 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
@@ -265,7 +266,7 @@ public class ImportServerObjectWizard extends Wizard {
 
                 ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
                 String uniqueName = getUniqueName(treeObj, treeObjName);
-                MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByName(type, uniqueName);
+                MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByNameWithDeleted(type, uniqueName, true);
                 if (item != null) {
                     if (!isOverrideAll) {
                         int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
@@ -282,6 +283,8 @@ public class ImportServerObjectWizard extends Wizard {
                     item.setMDMServerObject(eobj);
                     // save
                     RepositoryResourceUtil.saveItem(item);
+                    item.getState().setDeleted(false);
+                    CommandManager.getInstance().removeCommandStack(item.getProperty().getId());
                 } else {
                     IRepositoryNodeConfiguration config = RepositoryNodeConfigurationManager.getConfiguration(type);
                     item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);
@@ -292,7 +295,8 @@ public class ImportServerObjectWizard extends Wizard {
                     handlePath(itemState, type);
                     item.setState(itemState);
                     String version = getVersion(treeObj);
-                    RepositoryResourceUtil.createItem(item, treeObj.getName(), version);
+                    RepositoryResourceUtil.createItem(item, treeObj.getName(), version, false);
+
                 }
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
