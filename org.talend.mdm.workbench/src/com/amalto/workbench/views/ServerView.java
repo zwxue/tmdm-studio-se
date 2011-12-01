@@ -795,14 +795,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             }
 
             java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-
-            IAvailableModel theRoleAvailableModelR = null;
-            for (IAvailableModel model : availablemodels) {
-                if (model.getClass().getName().contains("RoleAvailableModelR")) { //$NON-NLS-1$
-                    theRoleAvailableModelR = model;
-                }
-            }
-            availablemodels.remove(theRoleAvailableModelR);
+            cutAllAvailableModelFromRepository(availablemodels);
             for (IAvailableModel model : availablemodels) {
                 model.fillContextMenu(xobject, manager);
             }
@@ -812,6 +805,24 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         // Other plug-ins can contribute there actions here
         manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
     }
+
+    private void cutAllAvailableModelFromRepository(java.util.List<IAvailableModel> availablemodels) {
+        java.util.List<IAvailableModel> cutAvailableModels = new java.util.ArrayList<IAvailableModel>();
+        for (IAvailableModel model : availablemodels) {
+            if (model.getClass().getName().contains("ExtraAccessAvailableModelR") //$NON-NLS-1$
+                    || model.getClass().getName().contains("WorkflowAvailableModelR") //$NON-NLS-1$
+                    || model.getClass().getName().contains("SchematronAvailableModelR") //$NON-NLS-1$
+                    || model.getClass().getName().contains("ResourceAvailableModelR") //$NON-NLS-1$
+                    || model.getClass().getName().contains("SyncAvailableModelR") //$NON-NLS-1$
+                    || model.getClass().getName().contains("RoleAvailableModelR") //$NON-NLS-1$
+                    || model.getClass().getName().contains("UniverseAvailableModelR")) { //$NON-NLS-1$
+                cutAvailableModels.add(model);
+            }
+        }
+        for (IAvailableModel model : cutAvailableModels) {
+            availablemodels.remove(model);
+        }
+     }
 
     private void fillLocalToolBar(IToolBarManager manager) {
 
