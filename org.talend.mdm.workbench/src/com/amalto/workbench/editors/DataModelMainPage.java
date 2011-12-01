@@ -53,6 +53,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -1607,7 +1609,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             if (obj instanceof XSDParticle) {
                 manager.add(visibleRuleAction);
                 XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
+                XSDAnnotationsStructure struc = getSturByActiveItem();
+                if (struc != null){
+                    deleteVisibleRuleAction.setEnabled(struc.getVisibleRule() != null);
+                }
                 manager.add(deleteVisibleRuleAction);
+
                 XSDParticle xsdParticle = (XSDParticle) obj;
 
                 XSDTerm xsdTerm = xsdParticle.getTerm();
@@ -2875,6 +2882,40 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             return new XSDDeleteConceptAction(this);
         }
         return super.getAdapter(adapter);
+    }
+
+    public XSDAnnotationsStructure getSturByActiveItem() {
+        XSDComponent xSDCom = null;
+        XSDAnnotationsStructure struc = null;
+        IStructuredSelection selection = (TreeSelection) getTreeViewer().getSelection();
+        if (selection.getFirstElement() instanceof Element) {
+            TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+            for (int i = 0; i < tPath.getSegmentCount(); i++) {
+                if (tPath.getSegment(i) instanceof XSDAnnotation)
+                    xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+            }
+        } else
+            xSDCom = (XSDComponent) selection.getFirstElement();
+        
+        if (xSDCom != null)
+            struc = new XSDAnnotationsStructure(xSDCom);
+        
+        return struc;
+    }
+    
+    public boolean hasVisibleRule(XSDElementDeclaration xsdEl) {
+        XSDAnnotation annotation = xsdEl.getAnnotation();
+        List<Element> informations = annotation.getApplicationInformation();
+        for (Element el : informations) {
+            String name = el.getLocalName();
+            if ("appinfo".equals(name.toLowerCase())) {//$NON-NLS-1$
+                name = el.getAttribute("source");//$NON-NLS-1$
+                if (name.matches("X_Visible_Rule")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean isLocalInput() {
