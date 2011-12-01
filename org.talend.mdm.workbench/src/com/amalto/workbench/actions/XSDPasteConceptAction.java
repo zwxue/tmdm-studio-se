@@ -403,47 +403,53 @@ public class XSDPasteConceptAction extends UndoAction {
     public void copyElements() {
         ArrayList<XSDParticle> particles = WorkbenchClipboard.getWorkbenchClipboard().getParticles();
         IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
-        XSDElementDeclaration element = (XSDElementDeclaration) selection.getFirstElement();
-        if (element.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-            XSDComplexTypeContent content = ((XSDComplexTypeDefinition) element.getTypeDefinition()).getContent();
-            if (content instanceof XSDParticle) {
-                XSDParticle partile = (XSDParticle) content;
-                if (((XSDParticle) partile).getTerm() instanceof XSDModelGroup) {
-                    XSDModelGroup toGroup = ((XSDModelGroup) partile.getTerm());
-                    for (XSDParticle particle : particles) {
-                        // if the is particle with the same name, donot copy it.
-                        if (isExist(toGroup, particle)) {
-                            boolean ifOverwrite = MessageDialog.openConfirm(this.page.getSite().getShell(), "confirm",
-                                    "The Element '" + ((XSDElementDeclaration) particle.getTerm()).getName()
-                                            + "' already exsists,do you want to overwrite it?");
-                            if (ifOverwrite) {
-                                reomveElement(toGroup, particle);
-                            } else
-                                continue;
+        XSDComplexTypeContent content = null;
+        XSDElementDeclaration element = null;
+        if(selection.getFirstElement() instanceof XSDElementDeclaration){
+        	element = (XSDElementDeclaration) selection.getFirstElement();
+        	content = ((XSDComplexTypeDefinition) element.getTypeDefinition()).getContent();
+        }
+        else{
+        	content = ((XSDComplexTypeDefinition) selection.getFirstElement()).getContent();
+        }
+        
+        if (content instanceof XSDParticle) {
+            XSDParticle partile = (XSDParticle) content;
+            if (((XSDParticle) partile).getTerm() instanceof XSDModelGroup) {
+                XSDModelGroup toGroup = ((XSDModelGroup) partile.getTerm());
+                for (XSDParticle particle : particles) {
+                    // if the is particle with the same name, donot copy it.
+                    if (isExist(toGroup, particle)) {
+                        boolean ifOverwrite = MessageDialog.openConfirm(this.page.getSite().getShell(), "confirm",
+                                "The Element '" + ((XSDElementDeclaration) particle.getTerm()).getName()
+                                        + "' already exsists,do you want to overwrite it?");
+                        if (ifOverwrite) {
+                            reomveElement(toGroup, particle);
+                        } else
+                            continue;
+                    }
+
+                    XSDParticle newParticle = (XSDParticle) particle.cloneConcreteComponent(true, false);
+                    if (newParticle.getContent() instanceof XSDElementDeclaration
+                            && Util.changeElementTypeToSequence(element, newParticle.getMaxOccurs()) == Status.CANCEL_STATUS)
+                        break;
+                    toGroup.getContents().add(newParticle);
+                    toGroup.updateElement();
+
+                    if (newParticle.getContent() instanceof XSDElementDeclaration) {
+                        if (((XSDElementDeclaration) newParticle.getContent()).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                            addAnnotationForComplexType(
+                                    (XSDComplexTypeDefinition) ((XSDElementDeclaration) particle.getContent())
+                                            .getTypeDefinition(),
+                                    (XSDComplexTypeDefinition) ((XSDElementDeclaration) newParticle.getContent())
+                                            .getTypeDefinition());
                         }
 
-                        XSDParticle newParticle = (XSDParticle) particle.cloneConcreteComponent(true, false);
-                        if (newParticle.getContent() instanceof XSDElementDeclaration
-                                && Util.changeElementTypeToSequence(element, newParticle.getMaxOccurs()) == Status.CANCEL_STATUS)
-                            break;
-                        toGroup.getContents().add(newParticle);
-                        toGroup.updateElement();
-
-                        if (newParticle.getContent() instanceof XSDElementDeclaration) {
-                            if (((XSDElementDeclaration) newParticle.getContent()).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-                                addAnnotationForComplexType(
-                                        (XSDComplexTypeDefinition) ((XSDElementDeclaration) particle.getContent())
-                                                .getTypeDefinition(),
-                                        (XSDComplexTypeDefinition) ((XSDElementDeclaration) newParticle.getContent())
-                                                .getTypeDefinition());
-                            }
-
-                            XSDAnnotationsStructure struc1 = new XSDAnnotationsStructure(newParticle.getTerm());
-                            addAnnotion(struc1, ((XSDElementDeclaration) particle.getTerm()).getAnnotation());
-
-                        }
+                        XSDAnnotationsStructure struc1 = new XSDAnnotationsStructure(newParticle.getTerm());
+                        addAnnotion(struc1, ((XSDElementDeclaration) particle.getTerm()).getAnnotation());
 
                     }
+
                 }
             }
         }

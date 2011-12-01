@@ -1457,6 +1457,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(new Separator());
                 manager.add(editComplexTypeAction);
             }
+            XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, "Paste Element");
+            manager.add(pasteConceptAction);
         }
 
         if (obj instanceof XSDIdentityConstraintDefinition && selectedObjs.length == 1
