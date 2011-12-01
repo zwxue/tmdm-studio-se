@@ -56,8 +56,8 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     protected void showDeployStatus(IStatus status) {
-        String prompt = ""; //$NON-NLS-1$
-        if ((status.getSeverity() == 0) || (null == status.getChildren()[0].getException()))
+        String prompt;
+        if (status.getSeverity() < IStatus.ERROR)
             prompt = Messages.AbstractDeployAction_deployMessage;
         else
             prompt = Messages.AbstractDeployAction_deployFailure;
