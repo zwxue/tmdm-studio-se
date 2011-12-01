@@ -795,6 +795,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             }
 
             java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+
+            IAvailableModel theRoleAvailableModelR = null;
+            for (IAvailableModel model : availablemodels) {
+                if (model.getClass().getName().contains("RoleAvailableModelR")) { //$NON-NLS-1$
+                    theRoleAvailableModelR = model;
+                }
+            }
+            availablemodels.remove(theRoleAvailableModelR);
             for (IAvailableModel model : availablemodels) {
                 model.fillContextMenu(xobject, manager);
             }
