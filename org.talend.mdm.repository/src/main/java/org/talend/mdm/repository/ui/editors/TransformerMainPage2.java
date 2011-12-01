@@ -109,6 +109,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     }
 
     protected void openTransformerDialog() {
+        if (lastServerDef == null)
         setLastServerDef();
         super.openTransformerDialog();
     }
