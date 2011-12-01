@@ -56,9 +56,16 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     protected void showDeployStatus(IStatus status) {
+        String prompt = ""; //$NON-NLS-1$
+        if ((status.getSeverity() == 0) || (null == status.getChildren()[0].getException()))
+            prompt = Messages.AbstractDeployAction_deployMessage;
+        else
+            prompt = Messages.AbstractDeployAction_deployFailure;
+
         MultiStatusDialog dialog = new MultiStatusDialog(getShell(), status.getChildren().length
-                + Messages.AbstractDeployAction_deployMessage, status);
+ + prompt, status);
         dialog.open();
+
     }
 
     public String getGroupName() {

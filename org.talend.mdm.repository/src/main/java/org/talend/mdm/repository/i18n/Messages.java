@@ -20,6 +20,8 @@ public class Messages extends NLS {
 
     public static String AbstractDeployAction_deployMessage;
 
+    public static String AbstractDeployAction_deployFailure;
+
     public static String AbstractDeployAction_removeMessage;
 
     public static String AddBrowseItemsWizardR_duplicatedView;

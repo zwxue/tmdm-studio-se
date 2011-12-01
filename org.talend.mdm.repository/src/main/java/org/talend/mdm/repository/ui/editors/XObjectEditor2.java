@@ -156,8 +156,14 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
     }
 
     protected void showDeployStatus(IStatus status) {
+        String prompt = ""; //$NON-NLS-1$
+        if ((status.getSeverity() == 0) || (null == status.getChildren()[0].getException()))
+            prompt = Messages.AbstractDeployAction_deployMessage;
+        else
+            prompt = Messages.AbstractDeployAction_deployFailure;
+
         MultiStatusDialog dialog = new MultiStatusDialog(getSite().getShell(), status.getChildren().length
-                + Messages.AbstractDeployAction_deployMessage, status);
+ + prompt, status);
         dialog.open();
     }
 
