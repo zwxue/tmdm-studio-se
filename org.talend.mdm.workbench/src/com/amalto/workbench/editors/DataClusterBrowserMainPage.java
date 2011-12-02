@@ -75,6 +75,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.compare.CompareHeadInfo;
@@ -121,6 +122,7 @@ import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
 import com.amalto.workbench.widgets.WidgetFactory;
+
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener, IPagingListener {
 
@@ -562,6 +564,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             searchText.setFocus();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            if (e.getMessage().contains("java.net.ConnectException"))
+                MessageDialog.openError(getSite().getShell(), "Please check connection",
+                        Messages.getString("ServerExplorer.checkConnection"));
+            else
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }

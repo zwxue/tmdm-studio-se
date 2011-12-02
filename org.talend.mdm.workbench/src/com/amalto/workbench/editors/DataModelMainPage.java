@@ -1611,7 +1611,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             if (obj instanceof XSDParticle) {
                 manager.add(visibleRuleAction);
                 XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
-                XSDAnnotationsStructure struc = getSturByActiveItem();
+                XSDAnnotationsStructure struc = getStructureByActiveItem();
                 if (struc != null){
                     deleteVisibleRuleAction.setEnabled(struc.getVisibleRule() != null);
                 }
@@ -2886,7 +2886,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         return super.getAdapter(adapter);
     }
 
-    public XSDAnnotationsStructure getSturByActiveItem() {
+    public XSDAnnotationsStructure getStructureByActiveItem() {
         XSDComponent xSDCom = null;
         XSDAnnotationsStructure struc = null;
         IStructuredSelection selection = (TreeSelection) getTreeViewer().getSelection();
