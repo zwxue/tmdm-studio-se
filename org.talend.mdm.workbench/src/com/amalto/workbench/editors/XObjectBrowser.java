@@ -78,7 +78,8 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
             // register model listener in order to close the browser when object is removed
             xobject.addListener(this);
             // available models
-            java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+            java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
+            ;
             for (IAvailableModel model : availablemodels) {
                 model.addPage(xobject, this);
             }
@@ -275,6 +276,9 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         }
     }
 
+    public boolean isLocalInput() {
+        return false;
+    }
     private class RefreshSectionAction extends Action {
 
         public RefreshSectionAction() {
