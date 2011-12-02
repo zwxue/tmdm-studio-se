@@ -143,4 +143,7 @@ public class XObjectBrowser2 extends XObjectBrowser implements ITabbedPropertySh
         return true;
     }
 
+    public boolean isLocalInput() {
+        return true;
+    }
 }
