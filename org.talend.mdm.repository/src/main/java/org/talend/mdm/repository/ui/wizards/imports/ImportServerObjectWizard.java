@@ -631,6 +631,9 @@ public class ImportServerObjectWizard extends Wizard {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
                     isOverrideAll = btnOverwrite.getSelection();
+
+                    treeViewer.setOverWrite(isOverrideAll);
+                    treeViewer.getViewer().refresh();
                 }
 
             });

@@ -39,6 +39,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -284,7 +291,7 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     protected abstract void filterCheckedObjects(Object[] selected, List<Object> ret);
 
-    protected boolean filterRepositoryNode(TreeObject node) {
+    protected boolean filterRepositoryNode(TreeObject node, boolean isOverWrite) {
         if (node == null) {
             return false;
         }
@@ -301,8 +308,77 @@ public abstract class AbstractNodeCheckTreeViewer {
                 return false;
             }
         }
+
+        if (!isOverWrite) {
+            if (isExist(node))
+                return false;
+        }
         return true;
     }
+
+    private boolean isExist(TreeObject treeObj) {
+        List<IRepositoryViewObject> children = getRelatedChildren(treeObj);
+        if (children == null)
+            return false;
+        for (IRepositoryViewObject viewObject : children) {
+            Item item = viewObject.getProperty().getItem();
+            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+            if (treeObj.getName().equals(serverObj.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<IRepositoryViewObject> getRelatedChildren(TreeObject treeObj) {
+        IRepositoryViewObject[] theInput = RepositoryResourceUtil.getCategoryViewObjects();
+
+        switch (treeObj.getType()) {
+        case TreeObject.DATA_MODEL:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATAMODEL).getChildren();
+        case TreeObject.DATA_CLUSTER:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATACLUSTER).getChildren();
+
+        case TreeObject.MENU:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_MENU).getChildren();
+
+        case TreeObject.ROUTING_RULE:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(1)
+                    .getChildren();
+
+        case TreeObject.ROLE:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_ROLE).getChildren();
+
+        case TreeObject.STORED_PROCEDURE:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_STOREPROCEDURE).getChildren();
+
+        case TreeObject.TRANSFORMER:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(0)
+                    .getChildren();
+
+        case TreeObject.UNIVERSE:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_UNIVERSE).getChildren();
+
+        case TreeObject.VIEW:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_VIEW).getChildren();
+
+        case TreeObject.SYNCHRONIZATIONPLAN:
+            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN).getChildren();
+
+        default:
+            return null;
+        }
+    }
+
+    public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
+        for (IRepositoryViewObject viewObj : theInput) {
+            if (viewObj.getRepositoryObjectType().equals(type)) {
+                return viewObj;
+            }
+        }
+        return null;
+    }
+
 
     public Object[] getCheckNodes() {
         Object[] selected = null;

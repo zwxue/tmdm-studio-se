@@ -61,6 +61,8 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     Collection<TreeObject> repositoryNodes = new ArrayList<TreeObject>();
 
+    private boolean isOverWrite = true;
+
     /**
      * DOC hbhong TreeObjectCheckTreeViewer constructor comment.
      * 
@@ -101,7 +103,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
             @Override
             public boolean select(Viewer viewer, Object parentElement, Object element) {
                 TreeObject node = (TreeObject) element;
-                return filterRepositoryNode(node);
+                return filterRepositoryNode(node, isOverWrite);
             }
         });
     }
@@ -129,5 +131,13 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     public void setRoot(TreeParent root) {
         contentProvider.setRoot(root);
+    }
+
+    public boolean isOverWrite() {
+        return this.isOverWrite;
+    }
+
+    public void setOverWrite(boolean isOverWrite) {
+        this.isOverWrite = isOverWrite;
     }
 }
