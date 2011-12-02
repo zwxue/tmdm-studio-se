@@ -14,6 +14,8 @@ package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
+import java.rmi.RemoteException;
+import java.rmi.ServerException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -476,7 +478,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 cluster = port.getDataCluster(new WSGetDataCluster((WSDataClusterPK) getXObject().getWsKey()));
                 getXObject().setWsObject(cluster);
             } else { // it has been opened by an editor - use the object there
+                // added for TMDM-3064
+                // the following may throw ServerException to identify the data continer not exist on the server
+                cluster = port.getDataCluster(new WSGetDataCluster(new WSDataClusterPK(getXObject().getName())));
+                // if you could go to next line, that means the data container is on the server specified
                 cluster = (WSDataCluster) getXObject().getWsObject();
+
             }
 
             WSUniverse currentUniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
@@ -562,12 +569,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
             conceptCombo.select(0);
             searchText.setFocus();
+        } catch (ServerException e) {
+            log.error(e.getMessage(), e);
+            MessageDialog.openError(getSite().getShell(), "ServerExplorer.dataContainerNotExist.title",
+                    Messages.getString("ServerExplorer.dataContainerNotExist.content"));
+        } catch (RemoteException e) {
+            log.error(e.getMessage(), e);
+            MessageDialog.openError(getSite().getShell(), "ServerExplorer.checkConnection.title",
+                    Messages.getString("ServerExplorer.checkConnection.content"));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if (e.getMessage().contains("java.net.ConnectException"))
-                MessageDialog.openError(getSite().getShell(), "Please check connection",
-                        Messages.getString("ServerExplorer.checkConnection"));
-            else
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
