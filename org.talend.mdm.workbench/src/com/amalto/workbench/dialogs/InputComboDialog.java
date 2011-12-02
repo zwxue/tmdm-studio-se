@@ -32,10 +32,15 @@ public class InputComboDialog extends Dialog {
 
     private String value = "";//$NON-NLS-1$
 
+    private int type;
+
     public String getValue() {
         return value;
     }
 
+    public int getType() {
+        return type;
+    }
     private Button okButton;
 
     private Combo inputCombo;
@@ -96,7 +101,9 @@ public class InputComboDialog extends Dialog {
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
             value = inputCombo.getText();
+            type = inputCombo.getSelectionIndex();
         } else {
+            type = -1;
             value = null;
         }
         super.buttonPressed(buttonId);

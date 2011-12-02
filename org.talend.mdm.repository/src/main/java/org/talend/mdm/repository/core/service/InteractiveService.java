@@ -46,7 +46,7 @@ public class InteractiveService {
 
     public static IInteractiveHandler findHandler(ERepositoryObjectType type) {
         if (type != null) {
-            if (handlers.isEmpty())
+            if (handlers.isEmpty() || handlers.size() == 1)
                 initHandler();
             for (IInteractiveHandler handler : handlers) {
                 if (handler.getRepositoryObjectType().equals(type))
@@ -89,7 +89,7 @@ public class InteractiveService {
 
     }
 
-    private static void initHandler() {
+    public static void initHandler() {
         registerHandler(new CustomFormInteractiveHandler());
         registerHandler(new DataContainerInteractiveHandler());
         registerHandler(new DataModelInteractiveHandler());

@@ -19,10 +19,19 @@ public class RepositoryWorkflowUtil {
 
     private static final String PROCESS_EXTENSION = ".proc"; //$NON-NLS-1$
 
-    public static String getProcFileName(String procName, String version) {
+    private static final String BAR_EXTENSION = ".bar"; //$NON-NLS-1$
+
+    public static String getProcFileName(String workflowname, String version) {
         if (version != null)
-            return procName + "_" + version + PROCESS_EXTENSION; //$NON-NLS-1$
+            return workflowname + "_" + version + PROCESS_EXTENSION; //$NON-NLS-1$
         else
-            return procName + PROCESS_EXTENSION;
+            return workflowname + PROCESS_EXTENSION;
+    }
+
+    public static String getBarFileName(String workflowname, String version) {
+        if (version != null)
+            return workflowname + "_" + version + BAR_EXTENSION; //$NON-NLS-1$
+        else
+            return workflowname + BAR_EXTENSION;
     }
 }

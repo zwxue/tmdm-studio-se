@@ -21,8 +21,14 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.LoginException;
@@ -76,6 +82,20 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
+    public List<Object> getSelectedObject() {
+
+        IStructuredSelection structuredSelection = getStructuredSelection();
+        if (structuredSelection.isEmpty()) {
+            structuredSelection = (IStructuredSelection) getCommonViewer().getSelection();
+        }
+        if (structuredSelection.isEmpty())
+            return Collections.EMPTY_LIST;
+        List<Object> result = new LinkedList<Object>();
+        for (Iterator<Object> il = structuredSelection.iterator(); il.hasNext();) {
+            result.add(il.next());
+        }
+        return result;
+    }
     public void run() {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
@@ -85,7 +105,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
                 Item item = viewObject.getProperty().getItem();
                 if (item instanceof ContainerItem) {
-                    commonViewer.expandToLevel(obj, 1);
+                    getCommonViewer().expandToLevel(obj, 1);
                 } else {
                     IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
                     if (configuration != null) {
@@ -94,7 +114,8 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                             IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
                             if (editorInput != null) {
                                 if (page == null)
-                                    this.page = commonViewer.getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                                    this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow()
+                                            .getActivePage();
                                 // do extra action
                                 MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
                                 boolean selected = doSelectServer(serverObject, editorInput);
@@ -108,7 +129,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                                             factory.lock(item);
 
                                         }
-                                        commonViewer.refresh(obj);
+                                        getCommonViewer().refresh(obj);
                                         //
                                         editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER);
                                     }
