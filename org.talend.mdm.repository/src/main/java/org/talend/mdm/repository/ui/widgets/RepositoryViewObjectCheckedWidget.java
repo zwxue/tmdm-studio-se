@@ -33,6 +33,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -221,6 +222,8 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     private void updateServerDef(IRepositoryViewObject viewObj) {
         if (hasSameServerDef) {
             Item item = viewObj.getProperty().getItem();
+            if (item instanceof ContainerItem)
+                return;
             MDMServerDef serverDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
             if (lastServerDef == null) {
                 lastServerDef = serverDef;
