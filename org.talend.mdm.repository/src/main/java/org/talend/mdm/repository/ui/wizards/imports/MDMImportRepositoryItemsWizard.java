@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -38,6 +39,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
@@ -49,6 +51,7 @@ import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
 import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
@@ -201,6 +204,16 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             items.addAll(repositoryUtil.populateItems(manager, isOverride, monitor));
 
         selectedItems.addAll(items);
+        
+        if (this.importServerItem(items)){ //$NON-NLS-1$
+            Display.getDefault().syncExec(new Runnable() {
+                
+                public void run() {
+                    MessageDialog.openWarning(getContainer().getShell(), Messages.AddBrowseItemsWizardR_warning, Messages.RepositoryViewImportRepositoryItem_nothingImport); 
+                }
+            });
+      
+        }
 
         this.getShell().getDisplay().syncExec(new Runnable() {
 
@@ -299,6 +312,21 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         checkTreeViewer.getViewer().setInput(null);
         checkTreeViewer.setItemText("Select items to import:");
         return returnComposite;
+    }
+    
+    private boolean importServerItem(Collection<ItemRecord> items){
+        
+        if (items.size() == 0){
+            return true;
+        }
+        Iterator<ItemRecord> itemIt = items.iterator();
+        while (itemIt.hasNext()){
+            ItemRecord itemRecord = itemIt.next();
+            if (itemRecord.getExistingItemWithSameId() == null && itemRecord.getErrors() != null){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
