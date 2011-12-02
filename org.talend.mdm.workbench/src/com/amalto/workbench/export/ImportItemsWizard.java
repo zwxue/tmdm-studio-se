@@ -77,6 +77,7 @@ import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
@@ -269,13 +270,19 @@ public class ImportItemsWizard extends Wizard {
         for (int i = 0; i < length; i++) {
             IEditorPart part = page.getEditors()[i - j];
             if (part instanceof XObjectBrowser) {
-                version = ((TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel()).getUniverse();
-                tabEndpointAddress = ((TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel()).getEndpointAddress();
-                unserName = ((TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel()).getUsername();
+                TreeObject obj = (TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel();
+                if (obj != null) {
+                version = obj.getUniverse();
+                tabEndpointAddress = obj.getEndpointAddress();
+                unserName = obj.getUsername();
+                }
             } else if (part instanceof XObjectEditor) {
-                version = ((XObjectEditor) part).getInitialXObject().getServerRoot().getUniverse();
-                tabEndpointAddress = ((XObjectEditor) part).getInitialXObject().getServerRoot().getEndpointAddress();
-                unserName = ((XObjectEditor) part).getInitialXObject().getServerRoot().getUsername();
+                TreeObject obj = (TreeObject) ((XObjectEditorInput) part.getEditorInput()).getModel();
+                if (obj != null) {
+                version = obj.getUniverse();
+                tabEndpointAddress = obj.getEndpointAddress();
+                unserName = obj.getUsername();
+                }
             }
             if (serverRoot != null) {
                 if (serverRoot.getUniverse().equals(version) && serverRoot.getEndpointAddress().equals(tabEndpointAddress)
@@ -285,9 +292,7 @@ public class ImportItemsWizard extends Wizard {
                     page.closeEditor(part, false);
                     j++;
                 }
-
             }
-
         }
 
     }
