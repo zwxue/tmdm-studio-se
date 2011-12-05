@@ -245,7 +245,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private XSDDeleteConceptWrapAction deleteConceptWrapAction = null;
 
-    private XSDNewBrowseItemViewAction newBrowseItemAction = null;
+    protected XSDNewBrowseItemViewAction newBrowseItemAction = null;
 
     private XSDNewElementAction newElementAction = null;
 
@@ -1048,7 +1048,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     protected void createActions() {
         this.newConceptAction = new XSDNewConceptAction(this);
         this.deleteConceptAction = (XSDDeleteConceptAction) getAdapter(XSDDeleteConceptAction.class);
-        this.newBrowseItemAction = new XSDNewBrowseItemViewAction(this);
+        createNewBrowseItemViewAction();
         this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
         this.newElementAction = new XSDNewElementAction(this);
         this.deleteElementAction = new XSDDeleteElementAction(this);
@@ -1110,6 +1110,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
         deleteConceptWrapAction.regisDelAction(XSDComplexTypeDefinitionImpl.class, deleteTypeDefinition);
         deleteConceptWrapAction.regisDelAction(XSDSimpleTypeDefinitionImpl.class, deleteTypeDefinition);
+    }
+
+    protected void createNewBrowseItemViewAction() {
+        this.newBrowseItemAction = new XSDNewBrowseItemViewAction(this);
     }
 
     private int getElementType(Object decl) {
