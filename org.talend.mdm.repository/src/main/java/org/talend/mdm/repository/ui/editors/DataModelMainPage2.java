@@ -32,7 +32,7 @@ import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.ui.actions.MDMXSDNewBrowseItemViewAction;
+import org.talend.mdm.repository.ui.actions.xsd.XSDNewBrowseItemViewActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
@@ -191,7 +191,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
     }
 
     protected void createNewBrowseItemViewAction() {
-        this.newBrowseItemAction = new MDMXSDNewBrowseItemViewAction(this);
+        this.newBrowseItemAction = new XSDNewBrowseItemViewActionR(this);
     }
 
     public void setGenView(boolean isGenView) {
