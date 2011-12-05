@@ -35,7 +35,7 @@ public class XSDNewBrowseItemViewAction extends Action {
 
     private static Log log = LogFactory.getLog(XSDNewBrowseItemViewAction.class);
 
-    private DataModelMainPage page;
+    protected DataModelMainPage page;
 
     private List<XSDElementDeclaration> declList = new ArrayList<XSDElementDeclaration>();
 
@@ -54,7 +54,8 @@ public class XSDNewBrowseItemViewAction extends Action {
             boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"
                     + page.getXObject().getDisplayName() + "' has been modified. Save changes?");
             if (save)
-                page.SaveWithForce(new NullProgressMonitor());
+                pageSave();
+
             else
                 return;
         }
@@ -71,6 +72,11 @@ public class XSDNewBrowseItemViewAction extends Action {
         AddBrowseItemsWizard wizard = getAddBrowseItemsWizard(declList);
         WizardDialog dialog = new WizardDialog(page.getSite().getShell(), wizard);
         dialog.open();
+    }
+
+    protected void pageSave() {
+        page.SaveWithForce(new NullProgressMonitor());
+
     }
 
     private AddBrowseItemsWizard getAddBrowseItemsWizard(List<XSDElementDeclaration> declList) {
