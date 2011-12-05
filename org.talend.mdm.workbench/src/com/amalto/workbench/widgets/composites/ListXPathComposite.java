@@ -19,6 +19,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
@@ -58,7 +59,7 @@ public class ListXPathComposite extends ListStringContentsComposite {
 	protected void createExtentUIArea(Composite parent) {
 
 		chkResolveAutoInWeb = new Button(this, SWT.CHECK);
-		chkResolveAutoInWeb.setText("Resolve automatically in the Web");
+		chkResolveAutoInWeb.setText(Messages.getString("FKInfos.resolve")); //$NON-NLS-1$
 		chkResolveAutoInWeb.setSelection(true);
 		chkResolveAutoInWeb.setLayoutData(new GridData());
 

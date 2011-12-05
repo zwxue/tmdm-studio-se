@@ -59,6 +59,7 @@ import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -89,7 +90,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     private boolean recursive = true;
 
-    private boolean retrieveFKinfos = false;
+    private boolean retrieveFKinfos = true;
 
     public boolean isRetrieveFKinfos() {
         return retrieveFKinfos;
@@ -267,8 +268,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 boolean exist = false;
-                for (Iterator it = xPaths.iterator(); it.hasNext();) {
-                    if (((String) it.next()).equals(getControlText(textControl)))
+                for (Iterator<String> it = xPaths.iterator(); it.hasNext();) {
+                    if (it.next().equals(getControlText(textControl)))
                         exist = true;
                 }
                 if (!exist && getControlText(textControl) != null && getControlText(textControl) != "")
@@ -317,11 +318,11 @@ public class AnnotationOrderedListsDialog extends Dialog {
             }
 
             public Object[] getElements(Object inputElement) {
-                // System.out.println("getElements() ");
+                @SuppressWarnings("unchecked")
                 ArrayList<String> xPaths = (ArrayList<String>) inputElement;
                 ArrayList<DescriptionLine> lines = new ArrayList<DescriptionLine>();
-                for (Iterator iter = xPaths.iterator(); iter.hasNext();) {
-                    String xPath = ((String) iter.next());
+                for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
+                    String xPath = iter.next();
                     DescriptionLine line = new DescriptionLine(xPath);
                     lines.add(line);
                 }
@@ -444,6 +445,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 // System.out.println("Table keyReleased() ");
                 if ((e.stateMask == 0) && (e.character == SWT.DEL) && (viewer.getSelection() != null)) {
                     DescriptionLine line = (DescriptionLine) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+                    @SuppressWarnings("unchecked")
                     ArrayList<String> xPaths = (ArrayList<String>) viewer.getInput();
                     xPaths.remove(line.getLabel());
                     viewer.refresh();
@@ -472,8 +474,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 if (line == null)
                     return;
                 int i = 0;
-                for (Iterator iter = xPaths.iterator(); iter.hasNext();) {
-                    String xPath = (String) iter.next();
+                for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
+                    String xPath = iter.next();
                     if (xPath.equals(line.getLabel())) {
                         if (i > 0) {
                             xPaths.remove(i);
@@ -502,8 +504,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 if (line == null)
                     return;
                 int i = 0;
-                for (Iterator iter = xPaths.iterator(); iter.hasNext();) {
-                    String xPath = (String) iter.next();
+                for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
+                    String xPath = iter.next();
                     if (xPath.equals(line.getLabel())) {
                         if (i < xPaths.size() - 1) {
                             xPaths.remove(i);
@@ -531,6 +533,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 DescriptionLine line = (DescriptionLine) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
                 if (line != null) {
+                    @SuppressWarnings("unchecked")
                     ArrayList<String> xPaths = (ArrayList<String>) viewer.getInput();
                     xPaths.remove(line.getLabel());
                     viewer.refresh();
@@ -554,7 +557,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
             });
 
             checkBox.setSelection(isRetrieveFKinfos());
-            checkBox.setText("resolve automatically in the Web");
+            checkBox.setText(Messages.getString("FKInfos.resolve")); //$NON-NLS-1$
         } else if (actionType != AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
                 && actionType != AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType
                 && actionType != AnnotationOrderedListsDialog.AnnotationSchematron_ActionType

@@ -108,7 +108,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
     }
 
     protected AnnotationOrderedListsDialog getNewAnnotaionOrderedListsDialog(Collection<String> values) {
-        return new AnnotationOrderedListsDialog(new ArrayList(values), new SelectionAdapter() {
+        return new AnnotationOrderedListsDialog(new ArrayList<String>(values), new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
                 dlg.close();
