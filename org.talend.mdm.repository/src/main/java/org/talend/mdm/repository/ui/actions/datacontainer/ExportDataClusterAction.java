@@ -98,6 +98,7 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                             } catch (InvocationTargetException e) {
                                 log.error(e.getMessage(), e);
                             } catch (InterruptedException e) {
+                                log.error(e.getMessage(), e);
                             }
 
                         } else {
