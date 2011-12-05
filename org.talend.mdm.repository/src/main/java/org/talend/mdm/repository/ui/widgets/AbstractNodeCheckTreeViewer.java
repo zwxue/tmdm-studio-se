@@ -317,60 +317,67 @@ public abstract class AbstractNodeCheckTreeViewer {
     }
 
     private boolean isExist(TreeObject treeObj) {
-        List<IRepositoryViewObject> children = getRelatedChildren(treeObj);
+        List<IRepositoryViewObject> children = getRelatedChildren(treeObj.getType());
         if (children == null)
             return false;
         for (IRepositoryViewObject viewObject : children) {
             Item item = viewObject.getProperty().getItem();
             MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-            if (treeObj.getName().equals(serverObj.getName())) {
+            if (serverObj != null && treeObj.getName().equals(serverObj.getName())) {
                 return true;
             }
         }
         return false;
     }
 
-    private List<IRepositoryViewObject> getRelatedChildren(TreeObject treeObj) {
-        IRepositoryViewObject[] theInput = RepositoryResourceUtil.getCategoryViewObjects();
-
-        switch (treeObj.getType()) {
+    private ERepositoryObjectType getRepositoryType(int type) {
+        switch (type) {
         case TreeObject.DATA_MODEL:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATAMODEL).getChildren();
+            return IServerObjectRepositoryType.TYPE_DATAMODEL;
         case TreeObject.DATA_CLUSTER:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_DATACLUSTER).getChildren();
-
+            return IServerObjectRepositoryType.TYPE_DATACLUSTER;
         case TreeObject.MENU:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_MENU).getChildren();
-
-        case TreeObject.ROUTING_RULE:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(1)
-                    .getChildren();
-
+            return IServerObjectRepositoryType.TYPE_MENU;
         case TreeObject.ROLE:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_ROLE).getChildren();
-
+            return IServerObjectRepositoryType.TYPE_ROLE;
         case TreeObject.STORED_PROCEDURE:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_STOREPROCEDURE).getChildren();
-
-        case TreeObject.TRANSFORMER:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER).getChildren().get(0)
-                    .getChildren();
-
+            return IServerObjectRepositoryType.TYPE_STOREPROCEDURE;
         case TreeObject.UNIVERSE:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_UNIVERSE).getChildren();
-
+            return IServerObjectRepositoryType.TYPE_UNIVERSE;
         case TreeObject.VIEW:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_VIEW).getChildren();
-
+            return IServerObjectRepositoryType.TYPE_VIEW;
         case TreeObject.SYNCHRONIZATIONPLAN:
-            return getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN).getChildren();
-
+            return IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN;
         default:
             return null;
         }
     }
 
+    private List<IRepositoryViewObject> getRelatedChildren(int type) {
+        IRepositoryViewObject[] theInput = RepositoryResourceUtil.getCategoryViewObjects();
+        IRepositoryViewObject vObj = null;
+        if (type == TreeObject.ROUTING_RULE) {
+            vObj = getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER);
+            if (vObj != null && vObj.getChildren().get(1) != null)
+                return vObj.getChildren().get(1).getChildren();
+        } else if (type == TreeObject.TRANSFORMER) {
+            vObj = getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER);
+            if (vObj != null && vObj.getChildren().get(1) != null)
+                return vObj.getChildren().get(0).getChildren();
+        } else {
+            ERepositoryObjectType repType = getRepositoryType(type);
+            vObj = getViewObjectByType(theInput, repType);
+            if (vObj != null)
+                return vObj.getChildren();
+        }
+        return null;
+
+      
+    }
+
     public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
+        if (theInput == null || type == null)
+            return null;
         for (IRepositoryViewObject viewObj : theInput) {
             if (viewObj.getRepositoryObjectType().equals(type)) {
                 return viewObj;
