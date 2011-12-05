@@ -259,7 +259,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         Iterator<ItemRecord> itemIt = items.iterator();
         while (itemIt.hasNext()){
             ItemRecord itemRecord = itemIt.next();
-            if (itemRecord.getExistingItemWithSameId() == null && itemRecord.getErrors() != null){
+            if (itemRecord.getExistingItemWithSameId() == null && itemRecord.getErrors() != null && itemRecord.getErrors().size() > 0){
                 return true;
             }
         }
