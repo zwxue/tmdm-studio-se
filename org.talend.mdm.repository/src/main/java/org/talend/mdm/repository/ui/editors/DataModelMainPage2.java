@@ -32,6 +32,7 @@ import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.actions.MDMXSDNewBrowseItemViewAction;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
@@ -69,6 +70,8 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
     private final IFile xsdFile;
 
+    private boolean isGenView = false;
+
     /**
      * DOC hbhong DataModelMainPage2 constructor comment.
      * 
@@ -82,14 +85,13 @@ public class DataModelMainPage2 extends DataModelMainPage {
     @Override
     protected void doSave(WSDataModel wsObject) throws Exception {
         XObjectEditorInput2 editorInput = (XObjectEditorInput2) getEditorInput();
-        //
-        if (xsdFile != null) {
-            String xsd = getXSDSchemaString();
 
+        if (isGenView && xsdFile != null) {
+            String xsd = getXSDSchemaString();
             xsdFile.setCharset("utf-8", null);//$NON-NLS-1$
             xsdFile.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
         }
-        //
+
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
         MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(wsObject, serverObject);
@@ -187,5 +189,14 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
         return super.getAdapter(adapter);
     }
+
+    protected void createNewBrowseItemViewAction() {
+        this.newBrowseItemAction = new MDMXSDNewBrowseItemViewAction(this);
+    }
+
+    public void setGenView(boolean isGenView) {
+        this.isGenView = isGenView;
+    }
+
 
 }
