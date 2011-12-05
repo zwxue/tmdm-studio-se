@@ -29,6 +29,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.ui.actions.datacontainer.ExportDataClusterAction;
 import org.talend.mdm.repository.ui.actions.datacontainer.NewDataContainerAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -40,14 +41,17 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
 
     AbstractRepositoryAction addAction;
 
+    AbstractRepositoryAction exportDataClusterAction;
+
+    // AbstractRepositoryAction importDataClusterAction;
+
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
 
-        addAction = new NewDataContainerAction();
-
-        addAction.initCommonViewer(commonViewer);
-
+        addAction = initRepositoryAction(new NewDataContainerAction(), commonViewer);
+        exportDataClusterAction = initRepositoryAction(new ExportDataClusterAction(), commonViewer);
+        // importDataClusterAction = initRepositoryAction(new ImportDataClusterAction(), commonViewer);
     }
 
     @Override
@@ -55,12 +59,13 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
             actions.add(addAction);
-
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
             actions.add(renameAction);
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
+            actions.add(exportDataClusterAction);
+            // actions.add(importDataClusterAction);
         }
         actions.add(deployAllAction);
         return actions;
