@@ -571,16 +571,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             searchText.setFocus();
         } catch (ServerException e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(getSite().getShell(), "ServerExplorer.dataContainerNotExist.title",
-                    Messages.getString("ServerExplorer.dataContainerNotExist.content"));
+            MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
+                    Messages.getString("DataClusterBrowser.dataContainerError")); //$NON-NLS-1$
         } catch (RemoteException e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(getSite().getShell(), "ServerExplorer.checkConnection.title",
-                    Messages.getString("ServerExplorer.checkConnection.content"));
+            MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
+                    Messages.getString("DataClusterBrowser.connectionError")); //$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.getString("Error.title"),//$NON-NLS-1$
+                    Messages.getString("DataClusterBrowser.error", e.getLocalizedMessage())); //$NON-NLS-1$
         }
     }
 
@@ -946,6 +946,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
+                @SuppressWarnings("unchecked")
                 List<LineItem> liList = selection.toList();
 
                 LineItem leftLineItem = liList.get(0);
@@ -1081,6 +1082,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 // retrieve the list of items
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
+                @SuppressWarnings("unchecked")
                 List<LineItem> lineItems = selection.toList();
 
                 if (lineItems.size() == 0)
@@ -1209,6 +1211,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 // retrieve the list of items
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
+                @SuppressWarnings("unchecked")
                 List<LineItem> lineItems = selection.toList();
 
                 if (lineItems.size() == 0)
@@ -1404,6 +1407,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 // retrieve the list of items
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
+                @SuppressWarnings("unchecked")
                 List<LineItem> lineItems = selection.toList();
 
                 if (lineItems.size() == 0)
