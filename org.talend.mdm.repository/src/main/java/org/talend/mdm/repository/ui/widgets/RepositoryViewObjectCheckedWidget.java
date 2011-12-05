@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.widgets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +33,10 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -162,10 +167,29 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         if (type != null) {
             return RepositoryResourceUtil.getCategoryViewObjects(type);
         } else {
-            return RepositoryResourceUtil.getCategoryViewObjects();
+            IRepositoryViewObject[] elements = RepositoryResourceUtil.getCategoryViewObjects();
+
+            IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
+                    .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+            IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
+                    .getConfiguration(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+            List<IRepositoryViewObject> objs = new ArrayList<IRepositoryViewObject>();
+            addCategoryViewObject(objs, processConf);
+            addCategoryViewObject(objs, triggerConf);
+
+            objs.addAll(Arrays.asList(elements));
+            return objs.toArray(new IRepositoryViewObject[0]);
         }
     }
 
+    private void addCategoryViewObject(List<IRepositoryViewObject> result, IRepositoryNodeConfiguration conf) {
+        if (conf != null) {
+            IRepositoryViewObject categoryViewObject = RepositoryResourceUtil.getCategoryViewObject(conf);
+            if (categoryViewObject != null) {
+                result.add(categoryViewObject);
+            }
+        }
+    }
     private void initWidget() {
         //
         setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -179,8 +203,10 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
             private boolean containVisibleElement(FolderRepositoryObject parent) {
                 Item item = parent.getProperty().getItem();
+
                 List<IRepositoryViewObject> children = RepositoryResourceUtil.findViewObjects(parent.getRepositoryObjectType(),
                         item, true, true);
+
                 for (IRepositoryViewObject viewObj : children) {
                     if (viewObj instanceof FolderRepositoryObject) {
                         boolean result = containVisibleElement((FolderRepositoryObject) viewObj);
