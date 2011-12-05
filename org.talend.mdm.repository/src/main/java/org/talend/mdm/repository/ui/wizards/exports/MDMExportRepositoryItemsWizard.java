@@ -67,39 +67,6 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
                 // MOD sgandon 31/03/2010 bug 12229: moved getAllVersion into ExportItemUtil.exportitems() method.
                 exportItemUtil.exportItems(new File(exportFolder), selectedItems, true, monitor);
                 
-
-                // Exports eps = new Exports();
-                // List<TreeObject> exports = new ArrayList<TreeObject>();
-                // selectedItems = getItemsToExport(objs);
-                //
-                // //export datacluster
-                // boolean exportDc = false;
-                // for (Item item : selectedItems) {
-                // MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                // if(serverObject.getType()== TreeObject.DATA_CLUSTER){
-                // WSDataClusterPK pk=new WSDataClusterPK(serverObject.getName());
-                // if (serverObject.getLastServerDef() != null) {
-                // XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverObject.getLastServerDef());
-                // TreeObject xobject = exportCluster(exports, pk, port);
-                // xobject.setUrl(serverObject.getLastServerDef().getUrl());
-                // xobject.setUsername(serverObject.getLastServerDef().getUser());
-                // xobject.setPassword(serverObject.getLastServerDef().getPasswd());
-                // exportDc = true;
-                // }
-                // }
-                // }
-                // eps.setItems(exports.toArray(new TreeObject[exports.size()]));
-                //
-                // StringWriter sw = new StringWriter();
-                // try {
-                // if (exportDc) {
-                // Marshaller.marshal(eps, sw);
-                //                        writeString(sw.toString(), "exportDataContainerItems.xml");//$NON-NLS-1$
-                // }
-                // } catch (Exception e) {
-                // log.error(e);
-                // }
-
             } catch (Exception e) {
                 MessageBoxExceptionHandler.process(e);
             } finally {

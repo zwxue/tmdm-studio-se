@@ -20,7 +20,9 @@ import java.rmi.RemoteException;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.repository.utils.ZipFileUtils;
 
 import com.amalto.workbench.webservices.WSBoolean;
@@ -39,7 +41,7 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
 
     private static final String INDEX_FILE_NAME = "DataCluster.list"; //$NON-NLS-1$
 
-    private static final String PROP_DATA_CLUSTER_NAME = "DataClusterNames";
+    private static final String PROP_DATA_CLUSTER_NAME = "DataClusterNames"; //$NON-NLS-1$
 
     protected void storeIndexFile(String folderPath, String dName) {
         Properties prop = new Properties();
@@ -47,7 +49,7 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
         FileOutputStream fo = null;
         try {
             fo = new FileOutputStream(getIndexFilePath(folderPath));
-            prop.store(fo, "");
+            prop.store(fo, ""); //$NON-NLS-1$
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -55,6 +57,7 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
                 try {
                     fo.close();
                 } catch (IOException e) {
+                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -76,6 +79,7 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
                 try {
                     fi.close();
                 } catch (IOException e) {
+                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -119,8 +123,10 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
      * @param tempFolderPath
      * @param fPath
      */
-    protected void zipFile(String tempFolderPath, String fPath) {
+    protected void zipFile(String tempFolderPath, String fPath, IProgressMonitor monitor) {
+        monitor.subTask(Messages.AbstractDataClusterAction_zipContentFile);
         ZipFileUtils.zip(tempFolderPath, fPath, false);
+        monitor.worked(5);
     }
 
     protected void unZipFile(String fPath, String tempFolderPath) {
@@ -144,7 +150,7 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
 
     protected boolean createDataCluster(XtentisPort port, String dName) {
         try {
-            WSPutDataCluster wsDataCluster = new WSPutDataCluster(new WSDataCluster(dName, "", ""));
+            WSPutDataCluster wsDataCluster = new WSPutDataCluster(new WSDataCluster(dName, "", "")); //$NON-NLS-1$ //$NON-NLS-2$
             port.putDataCluster(wsDataCluster);
             return true;
         } catch (RemoteException e) {
@@ -154,9 +160,9 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
     }
 
     protected File getTempFolder() {
-        String usrDir = System.getProperty("user.dir"); //$NON-NLS-1$
-        usrDir = "E:/temp";
-        File tmpFolder = new File(usrDir + File.separator + System.currentTimeMillis()); //$NON-NLS-1$
+        String usrDir = System.getProperty("java.io.tmpdir");//$NON-NLS-1$
+
+        File tmpFolder = new File(usrDir + File.separator + System.currentTimeMillis());
         if (!tmpFolder.exists()) {
             tmpFolder.mkdirs();
         }

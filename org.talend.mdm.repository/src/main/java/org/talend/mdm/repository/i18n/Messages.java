@@ -18,6 +18,8 @@ public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
+    public static String AbstractDataClusterAction_zipContentFile;
+
     public static String AbstractDeployAction_deployMessage;
 
     public static String AbstractDeployAction_deployFailure;
@@ -160,6 +162,8 @@ public class Messages extends NLS {
 
     public static String Common_Error;
 
+    public static String Common_Warning;
+
     public static String StoredProcedureInteractiveHandler_label;
 
     public static String StoredProcedureMainPage2_noDataContainer;
@@ -195,6 +199,24 @@ public class Messages extends NLS {
     public static String ImportServerObjectWizard_loadCustomForm;
 
     public static String Import_Objects;
+
+    public static String ImportDataClusterAction_createConfirm;
+
+    public static String ImportDataClusterAction_createDataClusterTitle;
+
+    public static String ImportDataClusterAction_errorFormat;
+
+    public static String ImportDataClusterAction_errorTitle;
+
+    public static String ImportDataClusterAction_importErrorMsg;
+
+    public static String ImportDataClusterAction_importProcessTitle;
+
+    public static String ImportDataClusterAction_importTitle;
+
+    public static String ImportDataClusterAction_successImport;
+
+    public static String ImportDataClusterAction_title;
 
     public static String ImportObjectAction_error;
 
@@ -242,6 +264,16 @@ public class Messages extends NLS {
     public static String NewRoleWizard_selectRoleTitle;
 
     public static String NewRoleWizard_selectRoleType;
+
+    public static String ExportDataClusterAction_exportContent;
+
+    public static String ExportDataClusterAction_exporting;
+
+    public static String ExportDataClusterAction_noContainerFound;
+
+    public static String ExportDataClusterAction_successExport;
+
+    public static String ExportDataClusterAction_title;
 
     public static String ExportObjectAction_error;
 

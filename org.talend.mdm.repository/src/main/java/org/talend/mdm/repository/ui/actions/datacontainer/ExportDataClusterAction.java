@@ -16,22 +16,30 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
 import org.exolab.castor.xml.Marshaller;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -54,7 +62,8 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
      * @param text
      */
     public ExportDataClusterAction() {
-        super("Export content from MDM server");
+        super(Messages.ExportDataClusterAction_title);
+        setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
     }
 
     @Override
@@ -79,12 +88,21 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                             File tempFolder = getTempFolder();
                             String tempFolderPath = tempFolder.getAbsolutePath();
                             storeIndexFile(tempFolderPath, dName);
-                            exportCluster(port, tempFolderPath, dName);
-                            zipFile(tempFolderPath, fPath);
-                            // cleanTempFolder(tempFolder);
+                            ExportContentProcess process = new ExportContentProcess(port, tempFolderPath, dName, fPath);
+                            try {
+                                IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+                                progressService.run(true, true, process);
+                                // show success info
+                                MessageDialog.openInformation(getShell(), Messages.ExportDataClusterAction_exportContent,
+                                        Messages.bind(Messages.ExportDataClusterAction_successExport, dName));
+                            } catch (InvocationTargetException e) {
+                                log.error(e.getMessage(), e);
+                            } catch (InterruptedException e) {
+                            }
+
                         } else {
-                            MessageDialog.openInformation(getShell(), "Warning", "no such container named \"" + dName
-                                    + "\" on selected server");
+                            MessageDialog.openInformation(getShell(), Messages.Common_Warning,
+                                    Messages.bind(Messages.ExportDataClusterAction_noContainerFound, dName));
                         }
                     }
                 } catch (XtentisException e) {
@@ -94,65 +112,108 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
         }
     }
 
-    protected List<TreeObject> exportCluster(XtentisPort port, String tempFolderPath, String dName) {
+    class ExportContentProcess implements IRunnableWithProgress {
 
-        String encodedID = null;
-        List<TreeObject> exports = new ArrayList<TreeObject>();
-        WSDataClusterPK pk = new WSDataClusterPK(dName);
-        try {
-            List<String> items = new ArrayList<String>();
-            WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
-                    new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE)).getResults();
-            if (results == null)
-                return null;
+        private XtentisPort port;
 
-            for (WSItemPKsByCriteriaResponseResults item : results) {
-                if (item.getWsItemPK().getIds() == null)
-                    continue;
-                WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
+        private String tempFolderPath;
 
-                // Marshal
-                StringWriter sw = new StringWriter();
-                Marshaller.marshal(wsitem, sw);
+        private String dName;
 
-                String uniqueId = pk.getPk() + "." + wsitem.getConceptName();//$NON-NLS-1$
-                for (String id : wsitem.getIds()) {
-                    uniqueId = uniqueId + "." + id;//$NON-NLS-1$
+        private String fPath;
+
+        /**
+         * DOC hbhong ExprocessContentProcess constructor comment.
+         * 
+         * @param port
+         * @param tempFolderPath
+         * @param dName
+         */
+        public ExportContentProcess(XtentisPort port, String tempFolderPath, String dName, String fPath) {
+            this.port = port;
+            this.tempFolderPath = tempFolderPath;
+            this.dName = dName;
+            this.fPath = fPath;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+         */
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+            exportCluster(port, tempFolderPath, dName, monitor);
+            zipFile(tempFolderPath, fPath, monitor);
+            cleanTempFolder(new File(tempFolderPath));
+            monitor.done();
+        }
+
+        protected void exportCluster(XtentisPort port, String tempFolderPath, String dName, IProgressMonitor monitor) {
+
+            String encodedID = null;
+            // List<TreeObject> exports = new ArrayList<TreeObject>();
+            WSDataClusterPK pk = new WSDataClusterPK(dName);
+            try {
+                List<String> items = new ArrayList<String>();
+                WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
+                        new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE))
+                        .getResults();
+                if (results == null)
+                    return;
+                monitor.beginTask(Messages.ExportDataClusterAction_exportContent, results.length + 10);
+                monitor.subTask(Messages.ExportDataClusterAction_exporting);
+                for (WSItemPKsByCriteriaResponseResults item : results) {
+                    if (item.getWsItemPK().getIds() == null)
+                        continue;
+                    WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
+
+                    // Marshal
+                    StringWriter sw = new StringWriter();
+                    Marshaller.marshal(wsitem, sw);
+
+                    String uniqueId = pk.getPk() + "." + wsitem.getConceptName();//$NON-NLS-1$
+                    for (String id : wsitem.getIds()) {
+                        uniqueId = uniqueId + "." + id;//$NON-NLS-1$
+                    }
+                    encodedID = URLEncoder.encode(uniqueId, "UTF-8");//$NON-NLS-1$
+                    writeString(tempFolderPath, sw.toString(), pk.getPk() + "/" + encodedID);//$NON-NLS-1$ 
+                    items.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
+                    monitor.worked(1);
                 }
-                encodedID = URLEncoder.encode(uniqueId, "UTF-8");//$NON-NLS-1$
-                writeString(tempFolderPath, sw.toString(), pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
-                items.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
+                //            TreeObject obj1 = new TreeObject(pk.getPk(), null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);//$NON-NLS-1$
+                // obj1.setItems(items.toArray(new String[items.size()]));
+                // exports.add(obj1);
+                // return exports;
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
-            TreeObject obj1 = new TreeObject(pk.getPk(), null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);//$NON-NLS-1$
-            obj1.setItems(items.toArray(new String[items.size()]));
-            exports.add(obj1);
-            return exports;
-        } catch (Exception e) {
+            // return null;
         }
-        return null;
-    }
 
-    protected void writeString(String exportFolder, String outputStr, String filename) {
+        protected void writeString(String exportFolder, String outputStr, String filename) {
 
-        File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
+            File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
 
-        if (!f.getParentFile().exists()) {
-            f.getParentFile().mkdir();
-        }
-        FileWriter fo = null;
-        try {
-            fo = new FileWriter(f);
-            //            IOUtils.write(outputStr, fo, "UTF-8");//$NON-NLS-1$
-            fo.write(outputStr);
-            fo.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            if (fo != null)
-                try {
-                    fo.close();
-                } catch (IOException e) {
-                }
+            if (!f.getParentFile().exists()) {
+                f.getParentFile().mkdir();
+            }
+            FileWriter fo = null;
+            try {
+                fo = new FileWriter(f);
+                //            IOUtils.write(outputStr, fo, "UTF-8");//$NON-NLS-1$
+                fo.write(outputStr);
+                fo.flush();
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            } finally {
+                if (fo != null)
+                    try {
+                        fo.close();
+                    } catch (IOException e) {
+                        log.error(e.getMessage(), e);
+                    }
+            }
+
         }
 
     }

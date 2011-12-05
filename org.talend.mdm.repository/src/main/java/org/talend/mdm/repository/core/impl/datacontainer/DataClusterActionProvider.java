@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.datacontainer.ExportDataClusterAction;
+import org.talend.mdm.repository.ui.actions.datacontainer.ImportDataClusterAction;
 import org.talend.mdm.repository.ui.actions.datacontainer.NewDataContainerAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -43,7 +44,7 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
 
     AbstractRepositoryAction exportDataClusterAction;
 
-    // AbstractRepositoryAction importDataClusterAction;
+    AbstractRepositoryAction importDataClusterAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
@@ -51,7 +52,7 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
 
         addAction = initRepositoryAction(new NewDataContainerAction(), commonViewer);
         exportDataClusterAction = initRepositoryAction(new ExportDataClusterAction(), commonViewer);
-        // importDataClusterAction = initRepositoryAction(new ImportDataClusterAction(), commonViewer);
+        importDataClusterAction = initRepositoryAction(new ImportDataClusterAction(), commonViewer);
     }
 
     @Override
@@ -65,9 +66,9 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
             actions.add(exportDataClusterAction);
-            // actions.add(importDataClusterAction);
         }
         actions.add(deployAllAction);
+        actions.add(importDataClusterAction);
         return actions;
     }
 

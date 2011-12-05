@@ -13,18 +13,12 @@
 package org.talend.mdm.repository.ui.wizards.imports;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
@@ -43,13 +37,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
-import org.eclipse.ui.internal.wizards.datatransfer.TarEntry;
 import org.eclipse.ui.internal.wizards.datatransfer.TarException;
 import org.eclipse.ui.internal.wizards.datatransfer.TarFile;
 import org.eclipse.ui.internal.wizards.datatransfer.TarLeveledStructureProvider;
 import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
-import org.exolab.castor.xml.Unmarshaller;
 import org.talend.core.model.properties.Item;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -61,10 +53,7 @@ import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
 import org.talend.repository.imports.ResourcesManagerFactory;
 
-import com.amalto.workbench.export.Exports;
 import com.amalto.workbench.export.ImportItemsWizard;
-import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.utils.Util;
 
 /**
  * DOC hywang class global comment. Detailled comment
@@ -80,10 +69,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     private static Logger log = Logger.getLogger(MDMImportRepositoryItemsWizard.class);
     ImportRepositoryObjectCheckTreeViewer checkTreeViewer;
 
-    // data container that has items
-    private List<TreeObject> dataClusters = new ArrayList<TreeObject>();
 
-    private static final String exportDataContainerItems_xml = "exportDataContainerItems.xml";
     public MDMImportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
     }
@@ -108,17 +94,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }
         repositoryUtil.importItemRecords(manager, itemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
 
-        monitor.beginTask("Importing Data Container Items ...", 20);
-        HashMap<String, String> picturePathMap = new HashMap<String, String>();
-        for (TreeObject item : dataClusters) {
 
-            try {
-                importClusterContents(item, Util.getPort(item), picturePathMap);
-            } catch (Exception e) {
-                log.error(e);
-            }
-        }
-        monitor.done();
     }
 
     protected void createOverwriteBtn(Composite composite) {
@@ -149,7 +125,6 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
         monitor.beginTask(DataTransferMessages.WizardProjectsImportPage_SearchingMessage, 100);
         File directory = new File(importPath);
-        InputStream exportDataContainerItems = null;
         monitor.worked(10);
         if (importFromArchieve && ArchiveFileManipulations.isTarFile(importPath)) {
             TarFile sourceTarFile = getSpecifiedTarSourceFile(importPath);
@@ -162,11 +137,6 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if (!manager.collectPath2Object(provider.getRoot())) {
                 return;
             }
-            try {
-                exportDataContainerItems = sourceTarFile.getInputStream(new TarEntry("/" + exportDataContainerItems_xml)); //$NON-NLS-1$
-            } catch (Exception e) {
-                log.error(e);
-            }
         } else if (importFromArchieve && ArchiveFileManipulations.isZipFile(importPath)) {
             ZipFile sourceFile = getSpecifiedZipSourceFile(importPath);
             if (sourceFile == null) {
@@ -178,23 +148,11 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if (!manager.collectPath2Object(provider.getRoot())) {
                 return;
             }
-            try {
-                ZipEntry entry = sourceFile.getEntry(exportDataContainerItems_xml);
-                exportDataContainerItems = sourceFile.getInputStream(entry); //$NON-NLS-1$
-            } catch (Exception e) {
-                log.error(e);
-            }
         } else if (!importFromArchieve && directory.isDirectory()) {
             manager = ResourcesManagerFactory.getInstance().createResourcesManager();
 
             if (!manager.collectPath2Object(directory)) {
                 return;
-            }
-            try {
-                exportDataContainerItems = new FileInputStream(directory.getAbsolutePath() + File.separator
-                        + exportDataContainerItems_xml);
-            } catch (FileNotFoundException e) {
-                log.error(e);
             }
         } else {
             monitor.worked(60);
@@ -221,27 +179,6 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 checkTreeViewer.getViewer().setInput(repositoryUtil.getTreeViewInput());
             }
         });
-        dataClusters.clear();
-        dataClusterContent.clear();
-        if (exportDataContainerItems != null) {
-            // import dataContainer items
-            InputStreamReader reader = null;
-            try {
-                reader = new InputStreamReader(exportDataContainerItems, "UTF-8");//$NON-NLS-1$
-                final Exports exports = (Exports) Unmarshaller.unmarshal(Exports.class, reader);
-                for (TreeObject obj : exports.getItems()) {
-                    dataClusters.add(obj);
-                    if (obj.getItems() != null && obj.getItems().length > 0) {
-                        for (int i = 0; i < obj.getItems().length; i++) {
-                            if (obj.getItems()[i].split("/")[1] != null) //$NON-NLS-1$
-                                dataClusterContent.put(obj.getItems()[i].split("/")[1], obj.getItems()); //$NON-NLS-1$
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                log.error(e);
-            }
-        }
         monitor.done();
 
     }

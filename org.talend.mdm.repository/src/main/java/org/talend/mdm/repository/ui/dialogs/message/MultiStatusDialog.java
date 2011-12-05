@@ -16,6 +16,7 @@ import java.util.Collection;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -101,7 +102,18 @@ public class MultiStatusDialog extends Dialog {
                 if (((MultiStatus) element).isOK()) {
                     return IMG_OK;
                 }
+            } else if (element instanceof Status) {
+                Status status = (Status) element;
+                int severity = status.getSeverity();
+                if (severity == IStatus.OK) {
+                    return IMG_OK;
+                } else if (severity == IStatus.INFO) {
+                    return IMG_INFO;
+                } else if (severity == IStatus.ERROR) {
+                    return IMG_ERR;
+                }
             }
+
             return null;
         }
 
