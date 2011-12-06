@@ -14,6 +14,8 @@ package com.amalto.workbench.detailtabs.sections.util;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -23,6 +25,8 @@ import org.eclipse.core.runtime.Platform;
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
 
 public class MDMRepositoryViewExtensionService {
+
+    private static Log log = LogFactory.getLog(MDMRepositoryViewExtensionService.class);
 
     private static final String PLUGIN = "org.talend.mdm.workbench"; //$NON-NLS-1$ 
 
@@ -44,7 +48,7 @@ public class MDMRepositoryViewExtensionService {
                                     .createExecutableExtension(PROP_CLASS);
                             return repositoryViewService.findAllRoleNames();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log.error(e.getMessage(), e);
                             return null;
                         }
                     }
