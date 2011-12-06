@@ -13,7 +13,10 @@
 package com.amalto.workbench.editors;
 
 import java.net.URL;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,6 +110,8 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
     private Button refreshCacheBtn;
 
+    private final static String[] KEYWORDS = new String[] {"nested", "exception", "is:"};
+    
     public StoredProcedureMainPage(FormEditor editor) {
         super(editor, StoredProcedureMainPage.class.getName(), "Stored Procedure "
                 + ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -127,7 +132,6 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.setText(wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription());//$NON-NLS-1$
             descriptionText.addModifyListener(this);
-            // Util.createCompDropTarget(descriptionText);
             // Procedure
             Group storedProcedureGroup = new Group(charComposite, SWT.SHADOW_NONE);
             storedProcedureGroup.setText("Procedure");
@@ -216,7 +220,6 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             resultsViewer.addDoubleClickListener(new IDoubleClickListener() {
 
                 public void doubleClick(DoubleClickEvent event) {
-                    // String result = (String)((IStructuredSelection)event.getSelection()).getFirstElement();
                     resultsViewer.setSelection(event.getSelection());
                     new ResultsViewAction(StoredProcedureMainPage.this.getSite().getShell(), resultsViewer).run();
                 }
@@ -302,7 +305,6 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
     public void textChanged(TextEvent event) {
         if (this.refreshing)
             return;
-        // markDirty();
         markDirty();
     }
 
@@ -312,7 +314,6 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
         menuMgr.addMenuListener(new IMenuListener() {
 
             public void menuAboutToShow(IMenuManager manager) {
-                // ViewBrowserMainPage.this.fillContextMenu(manager);
                 manager.add(new ResultsViewAction(StoredProcedureMainPage.this.getSite().getShell(),
                         StoredProcedureMainPage.this.resultsViewer));
             }
@@ -367,21 +368,9 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                                 currentParameters.set(i, ps[i]);
                             else
                                 currentParameters.add(ps[i]);
-                            // replace parameters
-                            // proc=proc.replaceAll("([^\\\\])%"+i+"([^\\d])", "$1"+ps[i]+"$2");
                         }
                     }
                     // perform call
-                    // String[] results =
-                    // Util.getPort(getXObject()).runQuery(
-                    // new WSRunQuery(
-                    // null,
-                    // dcpk,
-                    // proc,
-                    // currentParameters.toArray(new String[currentParameters.size()])
-                    // )
-                    // ).getStrings();
-
                     XtentisPort port = getPort();
                     if (port != null) {
                         WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
@@ -394,10 +383,48 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                         resultsViewer.setInput(results);
                     }
                 } catch (Exception ex) {
-                    MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), "Error", ex.getMessage());
+                	String message = ex.getMessage();
+                	Set<String> messages = getMessages(message);
+                	StringBuilder builder = new StringBuilder();
+                	for (String currentMessage : messages) {
+						builder.append(currentMessage + '\n');
+					}
+                	
+					MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), "Error", builder.toString());
                 }
             }
         });
+    }
+    
+    private static Set<String> getMessages(String msg) {
+        StringTokenizer tokenizer = new StringTokenizer(msg, " ");
+        StringBuilder currentMessage = new StringBuilder();
+        Set<String> messages = new HashSet<String>();
+       
+        int currentKeywordIndex = 0;
+
+        while (tokenizer.hasMoreElements()) {
+            String element = tokenizer.nextToken().trim();
+            if (!element.matches(".*Exception:")) { //$NON-NLS-1$
+                if(element.equals(KEYWORDS[currentKeywordIndex])) {
+                    currentKeywordIndex++;
+                    if (currentKeywordIndex == KEYWORDS.length - 1) {
+                        String newMessage = currentMessage.toString();
+                        messages.add(newMessage);
+                        currentMessage = new StringBuilder();
+                        currentKeywordIndex = 0;
+                    }
+                } else {
+                    if(!element.equals("is:") && !element.equals("\n;")) { //$NON-NLS-1$ //$NON-NLS-2$
+                        currentMessage.append(element.replace("\n;", "")).append(" "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    }
+                }
+            }
+        }
+        String newMessage = currentMessage.toString();
+        messages.add(newMessage);
+        
+        return messages;
     }
 
     class ResultsViewAction extends Action {
