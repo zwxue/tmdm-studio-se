@@ -42,7 +42,10 @@ import org.eclipse.ui.internal.wizards.datatransfer.TarFile;
 import org.eclipse.ui.internal.wizards.datatransfer.TarLeveledStructureProvider;
 import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
@@ -84,30 +87,30 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 itemRecords.add((ItemRecord) obj);
             }
         }
-        List<Item> items = new LinkedList<Item>();
-        for (ItemRecord itemRec : itemRecords) {
-            Item item = itemRec.getProperty().getItem();
-            items.add(item);
-            MDMServerObject serverObj = null;
-            if (item instanceof MDMServerObjectItem) {
-                serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-                if (serverObj.getLastServerDef() != null) {
-                    serverObj.setLastServerDef(null);
-                }
-            }
-        }
         repositoryUtil.importItemRecords(manager, itemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
-        // flagged as new
-        for (Item item : items) {
+
+        for (ItemRecord itemRec : itemRecords) {
             MDMServerObject serverObj = null;
-            if (item instanceof MDMServerObjectItem) {
-                serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-                String name = serverObj.getName() == null ? item.getProperty().getLabel() : serverObj.getName();
-                // flagged as new
-                CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, item.getProperty().getId(), name);
+            try {
+                for (IRepositoryViewObject object : ProxyRepositoryFactory.getInstance().getAllVersion(itemRec.getItemId())) {
+                    if (object.getVersion() != null && object.getVersion().equals(itemRec.getItemVersion())) {
+                        if (object.getProperty().getItem() instanceof MDMServerObjectItem) {
+                            Item item = object.getProperty().getItem();
+                            serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                            if (serverObj.getLastServerDef() != null) {
+                                serverObj.setLastServerDef(null);
+                            }
+                            ProxyRepositoryFactory.getInstance().save(item);
+                            String name = serverObj.getName() == null ? item.getProperty().getLabel() : serverObj.getName();
+                            // flagged as new
+                            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, item.getProperty().getId(), name);
+                        }
+                    }
+                }
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
             }
         }
-
     }
 
     protected void createOverwriteBtn(Composite composite) {
