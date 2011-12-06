@@ -13,6 +13,7 @@
 package com.amalto.workbench.detailtabs.sections.util;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 
 public abstract class BasePropertySectionGlobalInfoExtractor {
@@ -30,12 +31,15 @@ public abstract class BasePropertySectionGlobalInfoExtractor {
 
         if (propSection.getTreeObject() == null)
             return new String[0];
-
+        if (propSection.getTreeObject().getServerRoot() == null && typeCode == TreeObject.ROLE) {
+            return MDMRepositoryViewExtensionService.findAllRoleNames().toArray(new String[0]);
+        }
         return Util.getChildren(propSection.getTreeObject().getServerRoot(), typeCode).toArray(new String[0]);
     }
 
     public boolean hasGlobalInfo() {
         return getGlobalInfos().length > 0;
     }
+
 
 }

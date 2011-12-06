@@ -4,6 +4,7 @@
    <extension-point id="AvailableModel" name="AvailableModel" schema="schema/AvailableModel.exsd"/>
    <extension-point id="service" name="Service Registration" schema="schema/service.exsd"/>
    <extension-point id="extensibleXMLEditorPage" name="ExtensibleXMLEditorPage" schema="schema/extensibleXMLEditorPage.exsd"/>
+   <extension-point id="repositoryViewService" name="repositoryViewService" schema="schema/repositoryViewService.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
