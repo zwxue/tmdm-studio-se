@@ -499,4 +499,11 @@
                   label="WorkspaceRoot">
             </configuration>
    </extension>
+   <extension
+         point="org.talend.mdm.workbench.repositoryViewService">
+          	 <repositoryViewService
+                  class="org.talend.mdm.repository.core.service.MDMRepositoryViewServiceExt"
+                  label="mdm repository service"> 
+ 	         </repositoryViewService> 
+   </extension>
 </plugin>
