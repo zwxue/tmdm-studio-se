@@ -151,7 +151,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         if (commands != null) {
             cmdMap = new HashMap<String, AbstractDeployCommand>();
             for (AbstractDeployCommand cmd : commands) {
+                if (cmd.getViewObject() != null) {
                 cmdMap.put(cmd.getViewObject().getId(), cmd);
+                }
             }
 
         }
