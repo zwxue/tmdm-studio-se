@@ -197,6 +197,7 @@ public class RepositoryQueryService {
             typeMap.put(TreeObject.SYNCHRONIZATIONPLAN, IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN);
             typeMap.put(TreeObject.VIEW, IServerObjectRepositoryType.TYPE_VIEW);
             typeMap.put(TreeObject.PICTURES_RESOURCE, IServerObjectRepositoryType.TYPE_RESOURCE);
+            typeMap.put(TreeObject.WORKFLOW_PROCESS, IServerObjectRepositoryType.TYPE_WORKFLOW);
         }
     }
 

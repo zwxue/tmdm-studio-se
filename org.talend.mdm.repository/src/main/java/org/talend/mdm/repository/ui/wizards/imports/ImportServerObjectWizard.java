@@ -12,15 +12,32 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.imports;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -66,8 +83,10 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
+import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
+import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
@@ -81,6 +100,7 @@ import com.amalto.workbench.webservices.WSGetCustomForm;
 import com.amalto.workbench.webservices.WSGetCustomFormPKs;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -103,8 +123,6 @@ public class ImportServerObjectWizard extends Wizard {
     private Text txtServer;
 
     WidgetFactory toolkit = WidgetFactory.getWidgetFactory();
-
-
 
     CommonViewer commonViewer;
 
@@ -140,8 +158,6 @@ public class ImportServerObjectWizard extends Wizard {
         return true;
     }
 
-
-
     private void updateSelectedObjects() {
         selectedObjects = treeViewer.getCheckNodes();
     }
@@ -167,9 +183,9 @@ public class ImportServerObjectWizard extends Wizard {
 
     }
 
-    Pattern fileNamePattern = Pattern.compile("(.*?)-(.*)\\.(.*?)"); //$NON-NLS-1$
+    Pattern picFileNamePattern = Pattern.compile("(.*?)-(.*)\\.(.*?)"); //$NON-NLS-1$
 
-    Pattern fileVersionPattern = Pattern.compile("(.*)_(\\d+\\.\\d+)"); //$NON-NLS-1$
+    Pattern picFileVersionPattern = Pattern.compile("(.*)_(\\d+\\.\\d+)"); //$NON-NLS-1$
 
     /**
      * DOC hbhong Comment method "getFileInfo".
@@ -178,8 +194,8 @@ public class ImportServerObjectWizard extends Wizard {
      * @return // dirName result[0] // fileQName result[1] // fileExtension result[2] // fileName result[3] // version
      * result[4]
      */
-    private String[] getFileInfo(String input) {
-        Matcher m = fileNamePattern.matcher(input);
+    private String[] getPicResourceFileInfo(String input) {
+        Matcher m = picFileNamePattern.matcher(input);
         if (m.matches()) {
             String[] result = new String[5];
             // dirName
@@ -192,7 +208,7 @@ public class ImportServerObjectWizard extends Wizard {
             result[3] = result[1];
             // version
             result[4] = VersionUtils.DEFAULT_VERSION;
-            Matcher versionM = fileVersionPattern.matcher(result[1]);
+            Matcher versionM = picFileVersionPattern.matcher(result[1]);
             if (versionM.matches()) {
                 // fileName
                 result[3] = versionM.group(1);
@@ -206,30 +222,146 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private MDMServerObject handleSpecialTreeObject(TreeObject treeObj) throws IOException {
-        if (treeObj.getType() == TreeObject.PICTURES_RESOURCE) {
-            String[] fileInfo = getFileInfo(treeObj.getName());
+        int type = treeObj.getType();
+        if (type == TreeObject.PICTURES_RESOURCE) {
+            return handlePictureResourceObject(treeObj);
+        }
+        if (type == TreeObject.WORKFLOW_PROCESS) {
+            return handleWorkflowObject(treeObj);
 
-            if (fileInfo != null) {
-                String dirName = fileInfo[0];
-                String fileQName = fileInfo[1];
-                String fileExtension = fileInfo[2];
+        }
+        return null;
+    }
 
-                String fileName = fileInfo[3];
+    private WSWorkflowE handleWorkflowObject(TreeObject treeObj) throws IOException, ClientProtocolException,
+            UnsupportedEncodingException {
+        WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
+        String workflowURL = treeObj.getEndpointIpAddress() + TreeObject.BARFILE_URI + treeObj.getDisplayName();
 
-                WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
-                resource.setName(fileName);
-                resource.setFileExtension(fileExtension);
-                StringBuffer strBuf = new StringBuffer();
-                strBuf.append("http://").append(serverDef.getHost()).append(":").append(serverDef.getPort()) //$NON-NLS-1$ //$NON-NLS-2$
-                        .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                String url = strBuf.toString();
-                byte[] bytes = Util.downloadFile(url);
-                resource.setFileContent(bytes);
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        httpclient.getCredentialsProvider().setCredentials(
+                new AuthScope(treeObj.getEndpointHost(), Integer.valueOf(treeObj.getEndpointPort())),
+                new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
+        HttpGet httpget = new HttpGet(workflowURL);
+        // System.out.println("executing request" + httpget.getRequestLine());
+        HttpResponse response = httpclient.execute(httpget);
+        HttpEntity entity = response.getEntity();
 
-                treeObj.setName(fileName);
-                return resource;
+        String encodedID = URLEncoder.encode(treeObj.getDisplayName(), "UTF-8");//$NON-NLS-1$
+        File tempFolder = IOUtil.getTempFolder();
+        String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
+        InputStream is = entity.getContent();
+        OutputStream os = null;
+        try {
+            File barFile = new File(filename);
+            os = new FileOutputStream(barFile);
+            IOUtils.copy(is, os);
+            byte[] procBytes = extractBar(barFile);
+            if (procBytes != null) {
+                WSWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWSWorkflowE();
+                workflow.setName(wsKey.getProcessName());
+                workflow.setFileContent(procBytes);
+                return workflow;
             }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (Exception e) {
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (Exception e) {
+                }
+            }
+            IOUtil.cleanFolder(tempFolder);
+        }
+        return null;
+    }
 
+    private byte[] extractBar(File barFile) {
+        // BusinessArchive archive = BusinessArchiveFactory.getBusinessArchive(barFile);
+        //
+        // ProcessDefinitionUUID uuid = archive.getProcessUUID();
+        //
+        // String procFileName = RepositoryWorkflowUtil.getProcFileName(uuid.getProcessName(),
+        // uuid.getProcessVersion());
+        // IFolder folder = RepositoryResourceUtil.getFolder(IServerObjectRepositoryType.TYPE_WORKFLOW);
+        // IFile procFile = folder.getFile(procFileName);
+        // Set<String> barResources = archive.getResources().keySet();
+        // byte[] bytes = new byte[0];
+        // for (String barResource : barResources) {
+        //            if (barResource.endsWith(".proc")) { //$NON-NLS-1$
+        // bytes = archive.getResources().get(barResource);
+        // break;
+        // }
+        // }
+        ZipFile zipFile = null;
+        InputStream entryInputStream = null;
+        byte[] processBytes = null;
+        try {
+            zipFile = new ZipFile(barFile);
+
+            for (Enumeration entries = zipFile.entries(); entries.hasMoreElements();) {
+                ZipEntry entry = (ZipEntry) entries.nextElement();
+                if (!entry.isDirectory()) {
+                    if (entry.getName().endsWith(".proc")) {
+                        entryInputStream = zipFile.getInputStream(entry);
+                        processBytes = IOUtils.toByteArray(entryInputStream);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            if (entryInputStream != null) {
+                try {
+                    entryInputStream.close();
+                } catch (IOException e) {
+                }
+            }
+            if (zipFile != null)
+                try {
+                    zipFile.close();
+                } catch (IOException e) {
+                }
+
+        }
+        return processBytes;
+    }
+
+    /**
+     * DOC hbhong Comment method "handlePictureResourceObject".
+     * 
+     * @param treeObj
+     * @throws IOException
+     */
+    private WSResourceE handlePictureResourceObject(TreeObject treeObj) throws IOException {
+        String[] fileInfo = getPicResourceFileInfo(treeObj.getName());
+
+        if (fileInfo != null) {
+            String dirName = fileInfo[0];
+            String fileQName = fileInfo[1];
+            String fileExtension = fileInfo[2];
+
+            String fileName = fileInfo[3];
+
+            WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
+            resource.setName(fileName);
+            resource.setFileExtension(fileExtension);
+            StringBuffer strBuf = new StringBuffer();
+            strBuf.append("http://").append(serverDef.getHost()).append(":").append(serverDef.getPort()) //$NON-NLS-1$ //$NON-NLS-2$
+                    .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            String url = strBuf.toString();
+            byte[] bytes = Util.downloadFile(url);
+            resource.setFileContent(bytes);
+
+            treeObj.setName(fileName);
+            return resource;
         }
         return null;
     }
@@ -249,6 +381,8 @@ public class ImportServerObjectWizard extends Wizard {
         types.add(TreeObject.STORED_PROCEDURE);
         types.add(TreeObject.UNIVERSE);
         types.add(TreeObject.VIEW);
+        types.add(TreeObject.WORKFLOW_PROCESS);
+
         for (Object obj : objs) {
             try {
                 TreeObject treeObj = (TreeObject) obj;
@@ -295,7 +429,7 @@ public class ImportServerObjectWizard extends Wizard {
                     handlePath(itemState, type);
                     item.setState(itemState);
                     String version = getVersion(treeObj);
-                    RepositoryResourceUtil.createItem(item, treeObj.getName(), version, false);
+                    RepositoryResourceUtil.createItem(item, uniqueName, version, false);
 
                 }
             } catch (IOException e) {
@@ -339,11 +473,16 @@ public class ImportServerObjectWizard extends Wizard {
      * @return
      */
     private String getVersion(TreeObject treeObj) {
-        if (treeObj.getType() == TreeObject.PICTURES_RESOURCE) {
-            String[] fileInfo = getFileInfo(treeObj.getName());
+        int type = treeObj.getType();
+        if (type == TreeObject.PICTURES_RESOURCE) {
+            String[] fileInfo = getPicResourceFileInfo(treeObj.getName());
             if (fileInfo != null) {
                 return fileInfo[4];
             }
+        }
+        if (type == TreeObject.WORKFLOW_PROCESS) {
+            WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
+            return wsKey.getProcessVersion();
         }
         return VersionUtils.DEFAULT_VERSION;
     }
@@ -355,14 +494,19 @@ public class ImportServerObjectWizard extends Wizard {
      * @return
      */
     private String getUniqueName(TreeObject treeObj, String name) {
-        if (treeObj.getType() == TreeObject.PICTURES_RESOURCE) {
+        int type = treeObj.getType();
+        if (type == TreeObject.PICTURES_RESOURCE) {
             if (name == null) {
                 name = treeObj.getName();
             }
-            String[] fileInfo = getFileInfo(name);
+            String[] fileInfo = getPicResourceFileInfo(name);
             if (fileInfo != null) {
                 return fileInfo[3] + "." + fileInfo[2]; //$NON-NLS-1$
             }
+        }
+        if (type == TreeObject.WORKFLOW_PROCESS) {
+            WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
+            return wsKey.getProcessName();
         }
         return treeObj.getName();
     }
@@ -409,7 +553,8 @@ public class ImportServerObjectWizard extends Wizard {
                 XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
                         serverDef.getPasswd());
                 // Data Models
-                TreeParent models = new TreeParent(Messages.ImportServerObjectWizard_customForm, parent, TreeObject.CUSTOM_FORM, null, null);
+                TreeParent models = new TreeParent(Messages.ImportServerObjectWizard_customForm, parent, TreeObject.CUSTOM_FORM,
+                        null, null);
                 WSCustomFormPK[] xdmPKs = null;
 
                 xdmPKs = port.getCustomFormPKs(new WSGetCustomFormPKs("")).getWsCustomFormPK(); //$NON-NLS-1$
@@ -563,7 +708,6 @@ public class ImportServerObjectWizard extends Wizard {
                                         universeCombo.add(universe);
                                     }
                                 }
-
 
                             } catch (Exception e1) {
                                 comboVersion.getCombo().removeAll();

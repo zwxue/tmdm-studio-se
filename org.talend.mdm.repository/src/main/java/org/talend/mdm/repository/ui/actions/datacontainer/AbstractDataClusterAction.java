@@ -98,24 +98,7 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
         super(text);
     }
 
-    /**
-     * DOC hbhong Comment method "cleanTempFolder".
-     * 
-     * @param tempFolder
-     */
-    protected void cleanTempFolder(File tempFolder) {
-        if (tempFolder.exists()) {
-            File[] tempFiles = tempFolder.listFiles();
-            for (File file : tempFiles) {
-                if (file.isDirectory()) {
-                    cleanTempFolder(file);
-                }
-                file.delete();
-            }
-            tempFolder.delete();
-        }
 
-    }
 
     /**
      * DOC hbhong Comment method "zipFile".
@@ -159,15 +142,5 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
         }
     }
 
-    protected File getTempFolder() {
-        String usrDir = System.getProperty("java.io.tmpdir");//$NON-NLS-1$
 
-        File tmpFolder = new File(usrDir + File.separator + System.currentTimeMillis());
-        if (!tmpFolder.exists()) {
-            tmpFolder.mkdirs();
-        }
-
-        return tmpFolder;
-
-    }
 }

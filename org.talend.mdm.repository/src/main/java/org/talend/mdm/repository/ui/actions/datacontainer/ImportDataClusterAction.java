@@ -43,6 +43,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
+import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.image.EImage;
@@ -74,7 +75,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
         fd.setFilterExtensions(new String[] { "*.zip" }); //$NON-NLS-1$
         String fPath = fd.open();
         if (fPath != null) {
-            File tempFolder = getTempFolder();
+            File tempFolder = IOUtil.getTempFolder();
             String tempFolderPath = tempFolder.getAbsolutePath();
             unZipFile(fPath, tempFolderPath);
             String dName = loadIndexFile(tempFolderPath);
@@ -121,7 +122,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                 } catch (XtentisException e) {
                     log.error(e.getMessage(), e);
                 } finally {
-                    cleanTempFolder(tempFolder);
+                    IOUtil.cleanFolder(tempFolder);
                 }
 
             }

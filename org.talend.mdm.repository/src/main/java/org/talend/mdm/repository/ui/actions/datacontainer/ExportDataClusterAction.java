@@ -36,6 +36,7 @@ import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.image.EImage;
@@ -85,7 +86,7 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                     if (fPath != null) {
                         XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
                         if (isExistDataCluster(port, dName)) {
-                            File tempFolder = getTempFolder();
+                            File tempFolder = IOUtil.getTempFolder();
                             String tempFolderPath = tempFolder.getAbsolutePath();
                             storeIndexFile(tempFolderPath, dName);
                             ExportContentProcess process = new ExportContentProcess(port, tempFolderPath, dName, fPath);
@@ -98,7 +99,6 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                             } catch (InvocationTargetException e) {
                                 log.error(e.getMessage(), e);
                             } catch (InterruptedException e) {
-                                log.error(e.getMessage(), e);
                             }
 
                         } else {
@@ -145,7 +145,7 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
             exportCluster(port, tempFolderPath, dName, monitor);
             zipFile(tempFolderPath, fPath, monitor);
-            cleanTempFolder(new File(tempFolderPath));
+            IOUtil.cleanFolder(new File(tempFolderPath));
             monitor.done();
         }
 
