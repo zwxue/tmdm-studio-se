@@ -350,8 +350,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private int undoLimit = 20;
 
-    private DataModelFilter dataModelFilter;
+    protected DataModelFilter dataModelFilter;
 
+    protected TreeViewer targetTreeViewer;
     // private StructuredSelection sel;
 
     private SashForm sash;
@@ -385,7 +386,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     WSDataModel datamodel;
 
-    TreeObject xobject;
+    protected TreeObject xobject;
 
     boolean dirty;
 
@@ -2241,7 +2242,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             createFilterToolItem(parentToolBar, typesViewer);
     }
 
-    private ToolItem createFilterToolItem(ToolBar parentToolBar, final TreeViewer targetTreeViewer) {
+    private ToolItem createFilterToolItem(ToolBar parentToolBar, final TreeViewer tTreeViewer) {
 
         ToolItem filterToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         filterToolItem.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
@@ -2250,9 +2251,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         filterToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
+                targetTreeViewer = tTreeViewer;
                 dataModelFilter = new DataModelFilter("", false, false, false, true);//$NON-NLS-1$
-                DataModelFilterDialog dataModelFilterDialog = new DataModelFilterDialog(getSite().getShell(), xobject,
-                        dataModelFilter, getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
+                DataModelFilterDialog dataModelFilterDialog = (DataModelFilterDialog) getAdapter(DataModelFilterDialog.class);
 
                 if (dataModelFilterDialog.open() == Dialog.OK) {
                     getSchemaRoleFilterFromTreeViewer(targetTreeViewer).setDataModelFilter(dataModelFilter);
@@ -2422,7 +2423,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         return null;
     }
 
-    private SchemaElementNameFilterDes getSchemaElementNameFilterDesByTreeViewer(TreeViewer targetViewer) {
+    protected SchemaElementNameFilterDes getSchemaElementNameFilterDesByTreeViewer(TreeViewer targetViewer) {
 
         if (typesViewer.equals(targetViewer))
             return typeElementNameFilterDes;
@@ -2886,6 +2887,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         if (adapter == XSDDeleteConceptAction.class) {
             return new XSDDeleteConceptAction(this);
+        }
+        if (adapter == DataModelFilterDialog.class) {
+            return new DataModelFilterDialog(getSite().getShell(), xobject, dataModelFilter,
+                    getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
         }
         return super.getAdapter(adapter);
     }

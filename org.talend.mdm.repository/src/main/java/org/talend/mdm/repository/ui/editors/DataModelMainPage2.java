@@ -41,6 +41,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
+import org.talend.mdm.repository.ui.dialogs.datamodel.DataModelFilterDialogR;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
@@ -57,6 +58,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
+import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -186,6 +188,10 @@ public class DataModelMainPage2 extends DataModelMainPage {
         }
         if (adapter == XSDDeleteConceptAction.class) {
             return new XSDDeleteConceptActionR(this);
+        }
+        if (adapter == DataModelFilterDialog.class) {
+            return new DataModelFilterDialogR(getSite().getShell(), xobject, dataModelFilter,
+                    getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
         }
         return super.getAdapter(adapter);
     }

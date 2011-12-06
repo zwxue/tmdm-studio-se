@@ -117,6 +117,9 @@ public class DataModelFilterDialog extends Dialog {
         addUIListenersInNameFilterArea();
     }
 
+    protected List<String> getRoles() {
+        return Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
+    }
     private void createSecurityFilterArea(Composite compParent) {
         Group secutityFilterGroup = new Group(compParent, SWT.NORMAL);
         secutityFilterGroup.setText("Security Filter Setting");
@@ -127,7 +130,7 @@ public class DataModelFilterDialog extends Dialog {
         comboRole = new LabelCombo(toolkit, secutityFilterGroup, "Role", SWT.BORDER, 2);
         comboRole.getCombo().setEditable(false);
         // List<String> roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
-        List<String> roles = Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
+        List<String> roles = getRoles();// Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
         comboRole.getCombo().setItems(roles.toArray(new String[roles.size()]));
         if (dataModelFilter.getRole() == null || dataModelFilter.getRole().length() == 0) {
             comboRole.getCombo().select(0);
