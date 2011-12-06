@@ -2302,13 +2302,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_WORKFLOW_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>File Content</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_E__FILE_CONTENT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
      * The number of structural features of the '<em>WS Workflow E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_WORKFLOW_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+    int WS_WORKFLOW_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl <em>WS Resource E</em>}' class.
@@ -3951,6 +3960,17 @@ public interface MdmserverobjectPackage extends EPackage {
     EClass getWSWorkflowE();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE#getFileContent <em>File Content</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>File Content</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE#getFileContent()
+     * @see #getWSWorkflowE()
+     * @generated
+     */
+    EAttribute getWSWorkflowE_FileContent();
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE <em>WS Resource E</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5220,6 +5240,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EClass WS_WORKFLOW_E = eINSTANCE.getWSWorkflowE();
+
+        /**
+         * The meta object literal for the '<em><b>File Content</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_WORKFLOW_E__FILE_CONTENT = eINSTANCE.getWSWorkflowE_FileContent();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl <em>WS Resource E</em>}' class.

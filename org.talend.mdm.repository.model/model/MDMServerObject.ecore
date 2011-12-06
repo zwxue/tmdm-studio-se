@@ -201,7 +201,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="jndiName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="configuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WSWorkflowE" eSuperTypes="#//MDMServerObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WSWorkflowE" eSuperTypes="#//MDMServerObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileContent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSResourceE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileExtension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileContent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"

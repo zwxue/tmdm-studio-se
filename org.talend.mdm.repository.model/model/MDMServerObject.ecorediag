@@ -877,6 +877,10 @@
   <children xmi:type="notation:Node" xmi:id="_hNJM0cl7EeCRG4ESnHIh_g" type="1001">
     <children xmi:type="notation:Node" xmi:id="_hNcHwMl7EeCRG4ESnHIh_g" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_hNvpwMl7EeCRG4ESnHIh_g" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_0OIGMB-5EeGAkN-IZwcdOQ" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMServerObject.ecore#//WSWorkflowE/fileContent"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0OIGMR-5EeGAkN-IZwcdOQ"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_hNvpwcl7EeCRG4ESnHIh_g"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_hNvpwsl7EeCRG4ESnHIh_g"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_hNvpw8l7EeCRG4ESnHIh_g"/>

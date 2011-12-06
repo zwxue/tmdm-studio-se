@@ -1610,6 +1610,15 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getWSWorkflowE_FileContent() {
+        return (EAttribute)wsWorkflowEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getWSResourceE() {
         return wsResourceEEClass;
     }
@@ -1884,6 +1893,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsServicePutConfigurationEEClass, WS_SERVICE_PUT_CONFIGURATION_E__CONFIGURATION);
 
         wsWorkflowEEClass = createEClass(WS_WORKFLOW_E);
+        createEAttribute(wsWorkflowEEClass, WS_WORKFLOW_E__FILE_CONTENT);
 
         wsResourceEEClass = createEClass(WS_RESOURCE_E);
         createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILE_EXTENSION);
@@ -2119,6 +2129,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSServicePutConfigurationE_Configuration(), ecorePackage.getEString(), "configuration", null, 0, 1, WSServicePutConfigurationE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsWorkflowEEClass, WSWorkflowE.class, "WSWorkflowE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSWorkflowE_FileContent(), ecorePackage.getEByteArray(), "fileContent", null, 0, 1, WSWorkflowE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsResourceEEClass, WSResourceE.class, "WSResourceE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSResourceE_FileExtension(), ecorePackage.getEString(), "fileExtension", null, 0, 1, WSResourceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
