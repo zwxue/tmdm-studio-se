@@ -32,12 +32,16 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
+import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
@@ -149,6 +153,53 @@ public class MDMRepositoryView extends CommonNavigator {
         return (MDMRepositoryView) part;
     }
 
+    private IPartListener2 partListener = new IPartListener2() {
+
+        public void partVisible(IWorkbenchPartReference partRef) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void partOpened(IWorkbenchPartReference partRef) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void partInputChanged(IWorkbenchPartReference partRef) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void partHidden(IWorkbenchPartReference partRef) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void partDeactivated(IWorkbenchPartReference partRef) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void partClosed(IWorkbenchPartReference partRef) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void partBroughtToTop(IWorkbenchPartReference partRef) {
+            // TODO Auto-generated method stub
+
+        }
+
+        public void partActivated(IWorkbenchPartReference partRef) {
+            if (partRef.getId().equals("org.bonitasoft.studio.model.process.diagram.part.ProcessDiagramEditorID")) {//$NON-NLS-1$
+                IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
+                        .findPerspectiveWithId("org.bonitasoft.studio.application.perspective"); //$NON-NLS-1$
+                if (perspective != null) {
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+                }
+            }
+        }
+    };
     IPartListener editorListener = new IPartListener() {
 
         public void partActivated(IWorkbenchPart part) {
@@ -197,10 +248,12 @@ public class MDMRepositoryView extends CommonNavigator {
     private void registerEditorListener() {
 
         this.getSite().getPage().addPartListener(editorListener);
+        this.getSite().getPage().addPartListener(partListener);
     }
 
     private void unRegisterEditorListener() {
         this.getSite().getPage().removePartListener(editorListener);
+        this.getSite().getPage().removePartListener(partListener);
     }
 
     @Override
