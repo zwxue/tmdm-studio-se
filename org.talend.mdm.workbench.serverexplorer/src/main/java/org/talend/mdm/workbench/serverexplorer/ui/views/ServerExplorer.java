@@ -25,6 +25,11 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -51,6 +56,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
+import org.talend.mdm.workbench.serverexplorer.ui.actions.IEventMgrAction;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.ServerDefDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.TreeContentProvider;
@@ -88,6 +94,12 @@ public class ServerExplorer extends ViewPart {
 
     public AddServerDefAction getAddServerDefAction() {
         return this.addServerDefAction;
+    }
+
+    private EventManageAction eventManagerAction;
+
+    public EventManageAction getEventManageAction() {
+        return this.eventManagerAction;
     }
 
     public ServerExplorer() {
@@ -176,6 +188,8 @@ public class ServerExplorer extends ViewPart {
         menuManager.add(new DeleteServerDefAction());
         menuManager.add(new EditServerDefAction());
         menuManager.add(new CheckConnectionAction());
+        eventManagerAction = new EventManageAction();
+        menuManager.add(eventManagerAction);
 
         // Context
         Menu contextMenu = menuManager.createContextMenu(tree);
@@ -285,6 +299,53 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
+    public class EventManageAction extends Action {
+
+        private static final String PLUGIN = "org.talend.mdm.workbench.serverexplorer"; //$NON-NLS-1$
+
+        private static final String EXTENSION_POINT = "emAction"; //$NON-NLS-1$
+
+        private static final String PROP_CLASS = "class"; //$NON-NLS-1$
+
+        public EventManageAction() {
+            setImageDescriptor(IMG_EVENTMANAGER);
+            setText(Messages.ServerExplorer_EventManager);
+        }
+
+        public void run() {
+            doOpenEventManagerAction();
+        }
+
+        private void doOpenEventManagerAction() {
+            IExtensionRegistry registry = Platform.getExtensionRegistry();
+            IExtensionPoint extensionPoint = registry.getExtensionPoint(PLUGIN, EXTENSION_POINT);
+            if (extensionPoint != null && extensionPoint.isValid()) {
+                IExtension[] extensions = extensionPoint.getExtensions();
+                for (IExtension s : extensions) {
+                    IConfigurationElement[] elements = s.getConfigurationElements();
+                    for (IConfigurationElement element : elements) {
+                        if (element.getAttribute(PROP_CLASS) != null) {
+                            try {
+                                IEventMgrAction emAction = (IEventMgrAction) element.createExecutableExtension(PROP_CLASS);
+                                IRepositoryViewObject viewObject = getCurSelectedViewObject();
+                                if (viewObject != null) {
+                                    MDMServerDefItem mdmItem = getMDMItem(viewObject);
+                                    if (mdmItem != null) {
+                                        MDMServerDef serverDef = mdmItem.getServerDef();
+                                        emAction.setMDMServerDef(serverDef);
+                                    }
+                                }
+                                emAction.doRun();
+                            } catch (Exception e) {
+                                log.error(e.getMessage(), e);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     class EditServerDefAction extends Action {
 
         public EditServerDefAction() {
@@ -293,7 +354,6 @@ public class ServerExplorer extends ViewPart {
         }
 
         public void run() {
-
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
             String name = null;
             if (viewObject != null) {
@@ -304,7 +364,6 @@ public class ServerExplorer extends ViewPart {
             deleteServerDefForSerView(name);
             synchronizeMDMServerView();
         }
-
     }
 
     private void editServerDef() {
@@ -346,14 +405,11 @@ public class ServerExplorer extends ViewPart {
                 }
             }
         }
-
-        
-
     }
 
     private void deleteServerDefForSerView(String nameToDel) {
-
         synchronizeMDMServerView();
+
         ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
         if (viewPart != null) {
             for (TreeObject object : viewPart.getRoot().getChildren()) {
