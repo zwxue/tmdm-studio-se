@@ -156,37 +156,30 @@ public class MDMRepositoryView extends CommonNavigator {
     private IPartListener2 partListener = new IPartListener2() {
 
         public void partVisible(IWorkbenchPartReference partRef) {
-            // TODO Auto-generated method stub
 
         }
 
         public void partOpened(IWorkbenchPartReference partRef) {
-            // TODO Auto-generated method stub
 
         }
 
         public void partInputChanged(IWorkbenchPartReference partRef) {
-            // TODO Auto-generated method stub
 
         }
 
         public void partHidden(IWorkbenchPartReference partRef) {
-            // TODO Auto-generated method stub
 
         }
 
         public void partDeactivated(IWorkbenchPartReference partRef) {
-            // TODO Auto-generated method stub
 
         }
 
         public void partClosed(IWorkbenchPartReference partRef) {
-            // TODO Auto-generated method stub
 
         }
 
         public void partBroughtToTop(IWorkbenchPartReference partRef) {
-            // TODO Auto-generated method stub
 
         }
 
