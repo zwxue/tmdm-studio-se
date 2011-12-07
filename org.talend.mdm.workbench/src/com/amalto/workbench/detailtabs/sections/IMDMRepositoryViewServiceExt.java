@@ -19,4 +19,6 @@ public interface IMDMRepositoryViewServiceExt {
 
     public List<String> findAllRoleNames();
 
+    public List<String> findAllWorkflowNames();
+
 }

@@ -34,7 +34,7 @@ public class MDMRepositoryViewExtensionService {
 
     private static final String PROP_CLASS = "class"; //$NON-NLS-1$ 
 
-    public static List<String> findAllRoleNames() {
+    public static IMDMRepositoryViewServiceExt getRepositoryViewService() {
         IExtensionRegistry registry = Platform.getExtensionRegistry();
         IExtensionPoint extensionPoint = registry.getExtensionPoint(PLUGIN, EXTENSION_POINT);
         if (extensionPoint != null && extensionPoint.isValid()) {
@@ -46,17 +46,33 @@ public class MDMRepositoryViewExtensionService {
                         try {
                             IMDMRepositoryViewServiceExt repositoryViewService = (IMDMRepositoryViewServiceExt) element
                                     .createExecutableExtension(PROP_CLASS);
-                            return repositoryViewService.findAllRoleNames();
+                            return repositoryViewService;
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
                             return null;
                         }
                     }
-}
-
+                }
             }
         }
         return null;
+    }
+
+    public static List<String> findAllRoleNames() {
+        IMDMRepositoryViewServiceExt service = getRepositoryViewService();
+        if (service != null)
+            return service.findAllRoleNames();
+        else
+            return null;
+    }
+
+    public static List<String> findAllWorkflowNames() {
+        IMDMRepositoryViewServiceExt service = getRepositoryViewService();
+        if (service != null)
+            return service.findAllWorkflowNames();
+        else
+            return null;
+
     }
 
 }
