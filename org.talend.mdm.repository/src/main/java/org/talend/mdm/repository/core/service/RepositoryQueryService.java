@@ -73,7 +73,20 @@ public class RepositoryQueryService {
     }
 
     public static List<String> findAllWorkflowNames() {
-        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_WORKFLOW);
+        List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil
+                .findAllViewObjects(IServerObjectRepositoryType.TYPE_WORKFLOW);
+        List<String> names = new LinkedList<String>();
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                Item item = viewObj.getProperty().getItem();
+                if (item instanceof MDMServerObjectItem) {
+                    MDMServerObjectItem serverItem = (MDMServerObjectItem) item;
+                    names.add(serverItem.getMDMServerObject().getName() + "_" + item.getProperty().getVersion()); //$NON-NLS-1$
+                }
+                // names[i]=viewObj.getLabel();
+            }
+        }
+        return names;
     }
 
     public static List<String> findAllStoredProcedureNames() {
