@@ -58,6 +58,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.model.ResourceModelUtils;
+import org.talend.core.repository.utils.ResourceFilenameHelper;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
@@ -109,10 +110,6 @@ public class RepositoryResourceUtil {
         return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
     }
 
-    public static String escapeSpecialCharacters(String input) {
-        return input.replace('#', '$').replace('-', '@');
-    }
-
     public static void saveItem(Item item) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
@@ -137,7 +134,6 @@ public class RepositoryResourceUtil {
 
     public static boolean createItem(Item item, String propLabel, String version, boolean pushCommandStack) {
         String name = propLabel;
-        propLabel = escapeSpecialCharacters(propLabel);
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
 
@@ -296,16 +292,10 @@ public class RepositoryResourceUtil {
         if (path != null && path.length() > 0) {
             folder = folder.getFolder(path);
         }
-        String name = null;
         Property property = item.getProperty();
-        // if (item instanceof MDMServerObjectItem) {
-        // MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        // name = mdmServerObject.getName();
-        // } else {
-        name = property.getLabel();
-        // }
 
-        String fileName = name + UNDERLINE + property.getVersion() + DOT + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$ 
+        String fileName = ResourceFilenameHelper.getExpectedFileName(property.getLabel(), property.getVersion()) + DOT
+                + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$ 
         IFile file = folder.getFile(fileName);
         return file;
     }

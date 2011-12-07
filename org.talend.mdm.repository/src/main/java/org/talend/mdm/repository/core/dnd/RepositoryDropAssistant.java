@@ -133,7 +133,6 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                     if (copy instanceof MDMServerObjectItem) {
                         ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
                     }
-                    newName = RepositoryResourceUtil.escapeSpecialCharacters(newName);
                     copy.getProperty().setLabel(newName);
 
                     factory.save(copy);
@@ -150,8 +149,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     private String showPasteDlg(final ERepositoryObjectType type, final ContainerItem parentItem, String initLabel) {
         InputDialog dlg = new InputDialog(getShell(), Messages.RepositoryDropAssistant_pasteObject, Messages.Common_inputName,
-                initLabel,
-                new IInputValidator() {
+                initLabel, new IInputValidator() {
 
                     public String isValid(String newText) {
                         if (newText == null || newText.trim().length() == 0)

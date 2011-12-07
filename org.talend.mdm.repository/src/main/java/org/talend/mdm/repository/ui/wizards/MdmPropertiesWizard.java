@@ -21,13 +21,11 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.ui.wizards.PropertiesWizard;
 
-
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class MdmPropertiesWizard extends PropertiesWizard {
 
@@ -62,12 +60,11 @@ public class MdmPropertiesWizard extends PropertiesWizard {
                 String oldName = serverObject.getName();
                 if (newName != null) {
                     serverObject.setName(newName);
-                    newName = RepositoryResourceUtil.escapeSpecialCharacters(newName);
                     object.getProperty().setLabel(newName);
                     factory.save(object.getProperty().getItem(), false);
                     if (!oldName.equals(newName)) {
-                    CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, object.getId(),
-                            new String[] { oldName, newName });
+                        CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, object.getId(),
+                                new String[] { oldName, newName });
                     }
                 }
             }

@@ -82,7 +82,6 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                         String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem(), oldName);
                         if (newName != null) {
                             serverObject.setName(newName);
-                            newName = RepositoryResourceUtil.escapeSpecialCharacters(newName);
                             viewObj.getProperty().setLabel(newName);
                             factory.save(viewObj.getProperty().getItem(), false);
                             CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
@@ -98,8 +97,8 @@ public class RenameObjectAction extends AbstractRepositoryAction {
 
     }
 
-    private String showRenameDlg(final ERepositoryObjectType type, final ContainerItem parentItem,final String originalName) {
-   
+    private String showRenameDlg(final ERepositoryObjectType type, final ContainerItem parentItem, final String originalName) {
+
         InputDialog dlg = new InputDialog(getShell(), Messages.RenameObjectAction_rename, Messages.Common_rename, originalName,
                 new IInputValidator() {
 
@@ -111,8 +110,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                             if (!Pattern.matches("\\w*(#|\\.|\\w*)+(#|\\w+)", newText)) {//$NON-NLS-1$
                                 return Messages.Common_nameInvalid;
                             }
-                        }
-                        else if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                        } else if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
                             return Messages.Common_nameInvalid;
                         }
                         //
