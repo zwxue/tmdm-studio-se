@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.ByteArray;
@@ -123,22 +124,37 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
         // do nothing
     }
 
-    protected void linkReferenceFile(Item item, IFile file) {
+    public void linkReferenceFile(Item item, IFile file) {
         try {
             file.refreshLocal(0, null);
-            ReferenceFileItem procFileItem = PropertiesFactory.eINSTANCE.createReferenceFileItem();
-            ByteArray byteArray = PropertiesFactory.eINSTANCE.createByteArray();
-            byteArray.setInnerContentFromFile(file);
-            procFileItem.setContent(byteArray);
-            procFileItem.setExtension(file.getFileExtension());
-            procFileItem.setName(file.getName());
-            item.getReferenceResources().clear();
-            item.getReferenceResources().add(procFileItem);
+            ReferenceFileItem fileItem = findReferenceFileItem(item, file);
+            if (fileItem != null) {
+                fileItem.getContent().setInnerContentFromFile(file);
+            } else {
+                ReferenceFileItem procFileItem = PropertiesFactory.eINSTANCE.createReferenceFileItem();
+                ByteArray byteArray = PropertiesFactory.eINSTANCE.createByteArray();
+                byteArray.setInnerContentFromFile(file);
+                procFileItem.setContent(byteArray);
+                procFileItem.setExtension(file.getFileExtension());
+                procFileItem.setName(file.getName());
+                item.getReferenceResources().clear();
+                item.getReferenceResources().add(procFileItem);
+            }
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         } catch (CoreException e) {
             log.error(e.getMessage(), e);
         }
+    }
 
+    private ReferenceFileItem findReferenceFileItem(Item item, IFile file) {
+        EList referenceResources = item.getReferenceResources();
+        if (referenceResources != null)
+            for (Object refObj : referenceResources) {
+                ReferenceFileItem fileItem = (ReferenceFileItem) refObj;
+                if (fileItem.getName().equals(file.getName()))
+                    return fileItem;
+            }
+        return null;
     }
 }
