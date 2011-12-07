@@ -120,6 +120,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     public ViewInputDialog(IWorkbenchPartSite site, TreeParent treeParent, Shell parentShell, String dialogTitle,
             String dialogMessage, String initialValue, IInputValidator validator, boolean isTransfor) {
         super(parentShell);
+        setShellStyle(getShellStyle() | SWT.RESIZE | SWT.WRAP);
         this.site = site;
         this.title = dialogTitle;
         message = dialogMessage;
@@ -167,21 +168,22 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
     @Override
     protected Control createDialogArea(final Composite parent) {
+        setShellStyle(SWT.WRAP);
         // create composite
         composite = (Composite) super.createDialogArea(parent);
         GridLayout layout = (GridLayout) composite.getLayout();
         layout.makeColumnsEqualWidth = false;
         layout.numColumns = 2;
-
+        label = new Label(composite, SWT.NONE | SWT.WRAP);
         // create message
         if (message != null) {
-            label = new Label(composite, SWT.NONE);
+            // label = new Label(composite, SWT.NONE);
             label.setText(message);
             label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
             label.setFont(parent.getFont());
         }
 
-        text = new Text(composite, getInputTextStyle());
+        text = new Text(composite, getInputTextStyle() | SWT.WRAP);
         text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 
         text.addModifyListener(new ModifyListener() {
@@ -200,6 +202,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         openDLG.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         openDLG.setVisible(isBtnShow);
         openDLG.setToolTipText("Select one Entity");
+
 
         errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
         errorMessageText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
