@@ -1612,31 +1612,51 @@ public class Util {
         return objs;
     }
 
+    private static List<String> getComplexChilds(String parentxpath, XSDComplexTypeDefinition ctype) throws Exception {
+        List<String> childNames = new ArrayList<String>();
+
+        if (ctype.getContent() instanceof XSDParticle) {
+            XSDParticleImpl particle = (XSDParticleImpl) ctype.getContent();
+            if (particle.getTerm() instanceof XSDModelGroup) {
+                XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+                EList<XSDParticle> particles = group.getParticles();
+                for (XSDParticle part : particles) {
+                    if (part.getTerm() instanceof XSDElementDeclaration) {
+                        XSDElementDeclaration el = (XSDElementDeclaration) part.getTerm();
+                        if (el.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
+                            String child = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
+                            childNames.add(child);
+                        } else {
+                            String parent = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
+                            childNames.addAll(getChildElementNames(parent, el));
+                        }
+                    }
+                }
+            }
+        }
+        return childNames;
+    }
+
+    public static List<String> getChildElementNames(String parentxpath, XSDComplexTypeDefinition ctype) throws Exception {
+        List<String> childNames = new ArrayList<String>();
+        XSDTypeDefinition baseType = ctype.getBaseType();
+        if (baseType instanceof XSDComplexTypeDefinition) {
+            XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) baseType;
+            childNames.addAll(getComplexChilds(parentxpath, cmpType));
+        }
+
+        childNames.addAll(getComplexChilds(parentxpath, ctype));
+
+        return childNames;
+    }
+
     public static List<String> getChildElementNames(String parentxpath, XSDElementDeclaration decl) throws Exception {
         List<String> childNames = new ArrayList<String>();
 
         XSDTypeDefinition type = decl.getTypeDefinition();
         if (type instanceof XSDComplexTypeDefinition) {
             XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) type;
-            if (cmpType.getContent() instanceof XSDParticle) {
-                XSDParticleImpl particle = (XSDParticleImpl) cmpType.getContent();
-                if (particle.getTerm() instanceof XSDModelGroup) {
-                    XSDModelGroup group = (XSDModelGroup) particle.getTerm();
-                    EList<XSDParticle> particles = group.getParticles();
-                    for (XSDParticle part : particles) {
-                        if (part.getTerm() instanceof XSDElementDeclaration) {
-                            XSDElementDeclaration el = (XSDElementDeclaration) part.getTerm();
-                            if (el.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
-                                String child = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
-                                childNames.add(child);
-                            } else {
-                                String parent = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
-                                childNames.addAll(getChildElementNames(parent, el));
-                            }
-                        }
-                    }
-                }
-            }
+            return getChildElementNames(parentxpath, cmpType);
         }
         return childNames;
     }
