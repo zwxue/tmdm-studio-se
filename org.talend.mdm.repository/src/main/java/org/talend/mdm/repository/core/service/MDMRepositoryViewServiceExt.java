@@ -24,5 +24,7 @@ public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt
         return RepositoryQueryService.findAllRoleNames();
     }
 
-
+    public List<String> findAllWorkflowNames() {
+        return RepositoryQueryService.findAllWorkflowNames();
+    }
 }
