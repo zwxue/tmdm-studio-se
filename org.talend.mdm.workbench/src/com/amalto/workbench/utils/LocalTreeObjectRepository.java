@@ -1208,7 +1208,12 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
     public void cancelMergeImportCategory(TreeParent serverRoot) {
         if (spareDoc != null) {
-            credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc = spareDoc;
+            if (serverRoot != null && serverRoot.getServerRoot() != null) {
+                String key = UnifyUrl(serverRoot.getServerRoot().getWsKey().toString());
+                if (credentials.get(key) != null) {
+                    credentials.get(key).doc = spareDoc;
+                }
+            }
             originalImportXobjects = null;
             importCategories = null;
             spareDoc = null;
