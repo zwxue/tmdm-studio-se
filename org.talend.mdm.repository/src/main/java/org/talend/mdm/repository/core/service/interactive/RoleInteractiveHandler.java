@@ -16,10 +16,12 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteRole;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSRole;
@@ -48,9 +50,9 @@ public class RoleInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         WSRolePK pk = new WSRolePK();
-        String name = ((WSRole) wsObj).getName();
+        String name = cmd.getObjName();
         pk.setPk(name);
         port.deleteRole(new WSDeleteRole(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Role.getName());

@@ -16,10 +16,12 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteTransformerV2;
 import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2;
@@ -48,9 +50,9 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         WSTransformerV2PK pk = new WSTransformerV2PK();
-        String name = ((WSTransformerV2) wsObj).getName();
+        String name = cmd.getObjName();
         pk.setPk(name);
         port.deleteTransformerV2(new WSDeleteTransformerV2(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Transformer.getName());

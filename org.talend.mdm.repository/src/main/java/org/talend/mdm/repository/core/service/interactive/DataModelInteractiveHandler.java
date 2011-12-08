@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -26,6 +27,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteDataModel;
@@ -83,9 +85,9 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         WSDataModelPK pk = new WSDataModelPK();
-        String name = ((WSDataModel) wsObj).getName();
+        String name = cmd.getObjName();
         pk.setPk(name);
         port.deleteDataModel(new WSDeleteDataModel(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.DataMODEL.getName());

@@ -13,9 +13,7 @@
 package org.talend.mdm.repository.core.service.interactive;
 
 import java.rmi.RemoteException;
-import java.util.List;
 
-import org.eclipse.core.runtime.IStatus;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -26,7 +24,6 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 
-import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -55,8 +52,8 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         // do nothing
     }
 
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
-        return false;
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        return true;
         // do nothing
     }
 
@@ -77,43 +74,12 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
     }
 
     public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
-        IRepositoryViewObject viewObj = cmd.getViewObject();
-        Item item = viewObj.getProperty().getItem();
-        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        Object wsObj = convert(item, serverObject);
         XtentisPort port = getPort(cmd.getServerDef());
-        return doRemove(port, wsObj);
+        return doRemove(port, cmd);
     }
 
-    @Deprecated
-    public boolean deleteMDM(MDMServerDef serverDef, XtentisPort port, TreeObject treeObject) throws RemoteException {
-        // TreeObject treeObject = Bean2EObjUtil.getInstance().wrapEObjWithTreeObject(serverObj);
 
-        return doDelete(port, treeObject);
-    }
 
-    @Deprecated
-    public boolean doDelete(XtentisPort port, TreeObject wsObj) throws RemoteException {
-        return false;
-        // do nothing
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.talend.mdm.repository.core.service.IInteractiveHandler#deploy(com.amalto.workbench.webservices.XtentisPort,
-     * org.talend.core.model.properties.Item, org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)
-     */
-    public boolean removeMDM(MDMServerDef serverDef, XtentisPort port, Item item, MDMServerObject serverObj)
-            throws RemoteException {
-        Object wsObj = convert(item, serverObj);
-        return doRemove(port, wsObj);
-    }
-
-    public IStatus deployOther(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException {
-        return null;
-    }
 
     public void assertPropertyIsInited(Item item) {
     }

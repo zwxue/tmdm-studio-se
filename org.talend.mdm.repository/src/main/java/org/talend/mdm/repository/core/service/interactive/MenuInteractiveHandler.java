@@ -16,10 +16,12 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteMenu;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -49,9 +51,9 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         WSMenuPK pk = new WSMenuPK();
-        String name = ((WSMenu) wsObj).getName();
+        String name = cmd.getObjName();
         pk.setPk(name);
         port.deleteMenu(new WSDeleteMenu(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Menu.getName());

@@ -18,11 +18,15 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSCustomForm;
 import com.amalto.workbench.webservices.WSCustomFormPK;
 import com.amalto.workbench.webservices.WSDeleteCustomForm;
@@ -65,11 +69,16 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
 
 
 
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        IRepositoryViewObject viewObj = cmd.getViewObject();
+        Item item = viewObj.getProperty().getItem();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        Object wsObj = convert(item, serverObject);
         if (wsObj != null) {
             WSCustomForm wsForm = (WSCustomForm) wsObj;
-            port.deleteCustomForm(new WSDeleteCustomForm(new WSCustomFormPK(wsForm.getDatamodel(), wsForm.getEntity(), wsForm
-                    .getName())));
+            port.deleteCustomForm(new WSDeleteCustomForm(new WSCustomFormPK(wsForm.getDatamodel(), wsForm.getEntity(), cmd
+                    .getObjName())));
             return true;
         }
         return false;

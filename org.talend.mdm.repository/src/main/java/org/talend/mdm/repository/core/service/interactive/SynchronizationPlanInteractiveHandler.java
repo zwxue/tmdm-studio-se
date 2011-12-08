@@ -16,10 +16,12 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
 import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
@@ -48,9 +50,9 @@ public class SynchronizationPlanInteractiveHandler extends AbstractInteractiveHa
         return false;
     }
 
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         WSSynchronizationPlanPK pk = new WSSynchronizationPlanPK();
-        String name = ((WSSynchronizationPlan) wsObj).getName();
+        String name = cmd.getObjName();
         pk.setPk(name);
         port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.SynchronizationPlan.getName());

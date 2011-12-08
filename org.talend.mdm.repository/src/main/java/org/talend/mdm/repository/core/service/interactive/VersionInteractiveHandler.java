@@ -16,10 +16,12 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteUniverse;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -48,9 +50,9 @@ public class VersionInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         WSUniversePK pk = new WSUniversePK();
-        String name = ((WSUniverse) wsObj).getName();
+        String name = cmd.getObjName();
         pk.setPk(name);
         port.deleteUniverse(new WSDeleteUniverse(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.Universe.getName());

@@ -16,10 +16,12 @@ import java.rmi.RemoteException;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.TreeObjectUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteRoutingRule;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRule;
@@ -49,9 +51,9 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         WSRoutingRulePK pk = new WSRoutingRulePK();
-        String name = ((WSRoutingRule) wsObj).getName();
+        String name = cmd.getObjName();
         pk.setPk(name);
         port.deleteRoutingRule(new WSDeleteRoutingRule(pk));
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.RoutingRule.getName());
