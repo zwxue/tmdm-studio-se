@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.ui.navigator.CommonMDMRepositoryContentProvider;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryContentProvider;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.ui.widgets.AbstractNodeCheckTreeViewer;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -53,7 +53,7 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                 treeViewer = new ContainerCheckedTreeViewer(parent);
 
                 treeViewer.setLabelProvider(new MDMRepositoryLabelProvider());
-                treeViewer.setContentProvider(new CommonMDMRepositoryContentProvider());
+                treeViewer.setContentProvider(new MDMRepositoryContentProvider());
 
                 treeViewer.setInput(categoryViewObjects);
                 return treeViewer;
