@@ -33,6 +33,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -40,6 +41,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
+import org.talend.mdm.repository.core.service.IMDMSVNProviderService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -96,6 +98,33 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         }
         return result;
     }
+
+
+
+    private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
+        String version = viewObject.getVersion();
+        try {
+            if (!factory.isLocalConnectionProvider()) {
+                IMDMSVNProviderService service = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
+                        IMDMSVNProviderService.class);
+                if (service != null) {
+                    if (service.isProjectInSvnMode()) {
+                        String revisionNumStr = service.getCurrentSVNRevision(viewObject);
+                        if (revisionNumStr != null) {
+                            revisionNumStr = ".r" + revisionNumStr; //$NON-NLS-1$
+                            version += revisionNumStr;
+                        }
+                    }
+                }
+
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        editorInput.setVersion(version);
+    }
+
     public void run() {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
@@ -136,6 +165,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                                     if (!editorInput.isReadOnly()) {
                                         editorInput.setReadOnly(item.getState().isDeleted());
                                     }
+                                    updateEditorInputVersionInfo(editorInput, viewObject);
                                     this.page.openEditor(editorInput, editorInput.getEditorId());
                                 } catch (PartInitException e) {
                                     log.error(e.getMessage(), e);

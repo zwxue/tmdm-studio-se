@@ -30,6 +30,16 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
 
     private final IRepositoryViewObject viewObject;
 
+    private String version;
+
+    public String getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     private MDMServerDef serverDef;
 
     public MDMServerDef getServerDef() {
@@ -95,5 +105,10 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    @Override
+    public String getName() {
+        return super.getName() + " " + getVersion(); //$NON-NLS-1$
     }
 }

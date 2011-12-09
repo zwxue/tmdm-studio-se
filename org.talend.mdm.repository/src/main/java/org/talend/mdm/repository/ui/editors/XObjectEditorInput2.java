@@ -25,6 +25,16 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
     private final IRepositoryViewObject viewObject;
 
+    private String version;
+
+    public String getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     public XObjectEditorInput2(IRepositoryViewObject viewObject) {
         super(new TreeObject(), null);
         this.viewObject = viewObject;
@@ -73,4 +83,10 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
+
+    @Override
+    public String getName() {
+        return super.getName() + " " + getVersion(); //$NON-NLS-1$
+    }
+
 }

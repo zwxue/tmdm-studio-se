@@ -32,8 +32,6 @@ public class ResourceRepositoryFileEditorInput extends XObjectEditorInput2 {
 
     private IFile file;
 
-   
-
     public ResourceRepositoryFileEditorInput(IRepositoryViewObject viewObject) {
         super(viewObject);
     }
@@ -51,17 +49,17 @@ public class ResourceRepositoryFileEditorInput extends XObjectEditorInput2 {
         setName(name);
     }
 
-
-
-
-
     public IFile getReferenceFile() {
         if (file == null) {
             Item item = getInputItem();
-        String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
+            String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
             file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_RESOURCE, item, fileExtension);
         }
         return file;
     }
 
+    @Override
+    public String getName() {
+        return super.getName();
+    }
 }

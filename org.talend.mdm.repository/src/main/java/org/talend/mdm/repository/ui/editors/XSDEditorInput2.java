@@ -30,8 +30,17 @@ import com.amalto.workbench.models.TreeObject;
  */
 public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEditorInput {
 
-
     private TreeObject treeObject;
+
+    private String version;
+
+    public String getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     private final IRepositoryViewObject viewObject;
 
@@ -75,5 +84,10 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    @Override
+    public String getName() {
+        return super.getName() + " " + getVersion(); //$NON-NLS-1$
     }
 }

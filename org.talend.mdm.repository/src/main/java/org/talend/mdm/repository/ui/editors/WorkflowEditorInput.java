@@ -22,12 +22,21 @@ import org.talend.core.model.repository.IRepositoryViewObject;
  */
 public class WorkflowEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
 
-
     private IFile procFile;
 
     public static String EDITOR_ID = "org.bonitasoft.studio.model.process.diagram.part.ProcessDiagramEditorID"; //$NON-NLS-1$
 
     private final IRepositoryViewObject viewObject;
+
+    private String version;
+
+    public String getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     /**
      * DOC hbhong WorkflowEditorInput constructor comment.
@@ -39,8 +48,6 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
         this.viewObject = viewObject;
     }
 
-
-  
     /*
      * (non-Javadoc)
      * 
@@ -68,4 +75,8 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
         this.readOnly = readOnly;
     }
 
+    @Override
+    public String getName() {
+        return super.getName() + " " + getVersion(); //$NON-NLS-1$
+    }
 }

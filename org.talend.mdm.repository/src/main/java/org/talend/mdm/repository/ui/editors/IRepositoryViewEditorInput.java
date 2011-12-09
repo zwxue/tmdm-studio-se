@@ -30,4 +30,8 @@ public interface IRepositoryViewEditorInput extends IEditorInput {
     public boolean isReadOnly();
 
     public void setReadOnly(boolean readOnly);
+
+    public String getVersion();
+
+    public void setVersion(String version);
 }
