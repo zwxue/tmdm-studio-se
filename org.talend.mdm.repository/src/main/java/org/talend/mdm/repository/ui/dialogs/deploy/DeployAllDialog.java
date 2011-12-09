@@ -56,7 +56,6 @@ public class DeployAllDialog extends Dialog {
 
     private ERepositoryObjectType initType;
 
-
     public DeployAllDialog(Shell parentShell, ERepositoryObjectType type) {
         super(parentShell);
         this.initType = type;
@@ -157,16 +156,13 @@ public class DeployAllDialog extends Dialog {
                     }
                 }
             }
-            if (defaultServerDef == null)
+            if (defaultServerDef == null && serverDefs.size() > 0)
                 defaultServerDef = serverDefs.get(0);
 
         }
-
-        comboViewer.setSelection(new StructuredSelection(defaultServerDef));
+        if (defaultServerDef != null)
+            comboViewer.setSelection(new StructuredSelection(defaultServerDef));
     }
-
-
-
 
     public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
         for (IRepositoryViewObject viewObj : theInput) {
@@ -236,7 +232,6 @@ public class DeployAllDialog extends Dialog {
     private void enableOkBun() {
         okBun.setEnabled(treeViewer.getSelectededViewObjs().size() > 0);
     }
-
 
     public MDMServerDef getServerDef() {
         return this.serverDef;
