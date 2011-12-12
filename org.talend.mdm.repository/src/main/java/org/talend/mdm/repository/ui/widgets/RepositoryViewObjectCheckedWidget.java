@@ -167,7 +167,16 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
      */
     private IRepositoryViewObject[] initInput(ERepositoryObjectType type) {
         if (type != null) {
-            return RepositoryResourceUtil.getCategoryViewObjects(type);
+            IRepositoryViewObject[] elements = RepositoryResourceUtil.getCategoryViewObjects(type);
+            List<IRepositoryViewObject> objs = new ArrayList<IRepositoryViewObject>();
+            objs.addAll(Arrays.asList(elements));
+            // missing transformer2, routingrule
+            if (type.getKey().equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2.getKey())
+                    || type.getKey().equals(IServerObjectRepositoryType.TYPE_ROUTINGRULE.getKey())) {
+                IRepositoryNodeConfiguration typeConf = RepositoryNodeConfigurationManager.getConfiguration(type);
+                addCategoryViewObject(objs, typeConf);
+            }
+            return objs.toArray(new IRepositoryViewObject[0]);
         } else {
             IRepositoryViewObject[] elements = RepositoryResourceUtil.getCategoryViewObjects();
 
