@@ -176,6 +176,14 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 IRepositoryNodeConfiguration typeConf = RepositoryNodeConfigurationManager.getConfiguration(type);
                 addCategoryViewObject(objs, typeConf);
             }
+            if (type.getKey().equals(IServerObjectRepositoryType.TYPE_EVENTMANAGER.getKey())) {
+                IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
+                        .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+                IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
+                        .getConfiguration(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+                addCategoryViewObject(objs, processConf);
+                addCategoryViewObject(objs, triggerConf);
+            }
             return objs.toArray(new IRepositoryViewObject[0]);
         } else {
             IRepositoryViewObject[] elements = RepositoryResourceUtil.getCategoryViewObjects();
