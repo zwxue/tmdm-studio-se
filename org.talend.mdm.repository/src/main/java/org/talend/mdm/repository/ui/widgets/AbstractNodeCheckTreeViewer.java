@@ -42,9 +42,10 @@ import org.eclipse.swt.widgets.Label;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
@@ -317,62 +318,43 @@ public abstract class AbstractNodeCheckTreeViewer {
     }
 
     private boolean isExist(TreeObject treeObj) {
-        List<IRepositoryViewObject> children = getRelatedChildren(treeObj.getType());
+        if (treeObj instanceof TreeParent) {
+            return false;
+        }
+        int type = treeObj.getType();
+        ERepositoryObjectType rType = RepositoryQueryService.getRepositoryObjectType(type);
+        if (rType == null) {
+            return false;
+        }
+        List<IRepositoryViewObject> children = RepositoryResourceUtil.findAllViewObjectsWithDeleted(rType);
         if (children == null)
             return false;
-        for (IRepositoryViewObject viewObject : children) {
-            Item item = viewObject.getProperty().getItem();
-            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-            if (serverObj != null && treeObj.getName().equals(serverObj.getName())) {
-                return true;
+        String treeObjName = treeObj.getName();
+        if (type == TreeObject.PICTURES_RESOURCE) {
+            int index = treeObjName.indexOf("-"); //$NON-NLS-1$
+            if (index > 0) {
+                treeObjName = treeObjName.substring(index + 1);
             }
         }
+        for (IRepositoryViewObject viewObject : children) {
+            Item item = viewObject.getProperty().getItem();
+            if (item instanceof MDMServerObjectItem) {
+                MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                String name = serverObj.getName();
+                if (type == TreeObject.WORKFLOW_PROCESS) {
+                    name = name + "_" + viewObject.getVersion(); //$NON-NLS-1$
+                }
+
+                if (type == TreeObject.PICTURES_RESOURCE) {
+                    name = name + "_" + viewObject.getVersion() + "." + ((WSResourceE) serverObj).getFileExtension(); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+                if (serverObj != null && treeObjName.equals(name)) {
+                    return true;
+                }
+            }
+
+        }
         return false;
-    }
-
-    private ERepositoryObjectType getRepositoryType(int type) {
-        switch (type) {
-        case TreeObject.DATA_MODEL:
-            return IServerObjectRepositoryType.TYPE_DATAMODEL;
-        case TreeObject.DATA_CLUSTER:
-            return IServerObjectRepositoryType.TYPE_DATACLUSTER;
-        case TreeObject.MENU:
-            return IServerObjectRepositoryType.TYPE_MENU;
-        case TreeObject.ROLE:
-            return IServerObjectRepositoryType.TYPE_ROLE;
-        case TreeObject.STORED_PROCEDURE:
-            return IServerObjectRepositoryType.TYPE_STOREPROCEDURE;
-        case TreeObject.UNIVERSE:
-            return IServerObjectRepositoryType.TYPE_UNIVERSE;
-        case TreeObject.VIEW:
-            return IServerObjectRepositoryType.TYPE_VIEW;
-        case TreeObject.SYNCHRONIZATIONPLAN:
-            return IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN;
-        default:
-            return null;
-        }
-    }
-
-    private List<IRepositoryViewObject> getRelatedChildren(int type) {
-        IRepositoryViewObject[] theInput = RepositoryResourceUtil.getCategoryViewObjects();
-        IRepositoryViewObject vObj = null;
-        if (type == TreeObject.ROUTING_RULE) {
-            vObj = getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER);
-            if (vObj != null && vObj.getChildren().get(1) != null)
-                return vObj.getChildren().get(1).getChildren();
-        } else if (type == TreeObject.TRANSFORMER) {
-            vObj = getViewObjectByType(theInput, IServerObjectRepositoryType.TYPE_EVENTMANAGER);
-            if (vObj != null && vObj.getChildren().get(1) != null)
-                return vObj.getChildren().get(0).getChildren();
-        } else {
-            ERepositoryObjectType repType = getRepositoryType(type);
-            vObj = getViewObjectByType(theInput, repType);
-            if (vObj != null)
-                return vObj.getChildren();
-        }
-        return null;
-
-      
     }
 
     public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
@@ -385,7 +367,6 @@ public abstract class AbstractNodeCheckTreeViewer {
         }
         return null;
     }
-
 
     public Object[] getCheckNodes() {
         Object[] selected = null;
@@ -403,11 +384,9 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     }
 
-
     public SelectionListener getRestoreSelectionListener() {
         return restoreSelectionListener;
     }
-
 
     public SelectionListener getTagSelectionListener() {
         return tagSelectionListener;
