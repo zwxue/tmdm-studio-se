@@ -158,7 +158,7 @@ public class GenerateJobDefaultTransformerAction extends Action {
 				steps = new WSTransformerProcessStep[1];
 				
 				input = new WSTransformerVariablesMapping[1];
-				input[0] = new WSTransformerVariablesMapping("_DEFAULT_", "xml", null);//$NON-NLS-1$ //$NON-NLS-2$ 
+                input[0] = new WSTransformerVariablesMapping("_DEFAULT_", "text", null);//$NON-NLS-1$ //$NON-NLS-2$ 
 				output = new WSTransformerVariablesMapping[1];
 				output[0] = new WSTransformerVariablesMapping("item_xml", "result", null);//$NON-NLS-1$ //$NON-NLS-2$ 
 				parameter = "<configuration>\n" + "<url>" + url +"</url>\n"  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 

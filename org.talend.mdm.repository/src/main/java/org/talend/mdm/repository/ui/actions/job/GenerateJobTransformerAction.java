@@ -217,7 +217,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 	            inItems = new ArrayList<WSTransformerVariablesMappingE>();
 	            inputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
 	            inputLine.setPipelineVariable("_DEFAULT_");//$NON-NLS-1$
-	            inputLine.setPluginVariable("xml");//$NON-NLS-1$
+                inputLine.setPluginVariable("text");//$NON-NLS-1$
 	            inItems.add(inputLine);
 
 	            outItems = new ArrayList<WSTransformerVariablesMappingE>();
