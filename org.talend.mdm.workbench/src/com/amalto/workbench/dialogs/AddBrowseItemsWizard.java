@@ -434,8 +434,10 @@ public class AddBrowseItemsWizard extends Wizard {
             selectedMultiViews = selectObjs;
             multiChanges.clear();
             //
-            complexTableViewer.getViewer().setInput(multiChanges);
-            complexTableViewer.getViewer().refresh();
+            if (complexTableViewer != null) {
+                complexTableViewer.getViewer().setInput(multiChanges);
+                complexTableViewer.getViewer().refresh();
+            }
         }
 
         private void applyChangeToRoles() {
