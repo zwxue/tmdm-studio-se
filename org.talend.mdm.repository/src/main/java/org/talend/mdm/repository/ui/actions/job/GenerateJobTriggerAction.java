@@ -95,7 +95,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         WSRoutingRuleE routingRule = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleE();
 
         try {
-            String server = "http://localhost:8080"; //$NON-NLS-1$
+            String server = "http://localhost:8180"; //$NON-NLS-1$
 
             Execution execution = dialog.getExecution();
             String url = "";

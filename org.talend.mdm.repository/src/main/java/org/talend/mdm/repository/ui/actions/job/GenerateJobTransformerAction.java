@@ -99,7 +99,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
      * @param jobVersion
      */
     private WSTransformerV2E createTransformer(String jobName, String jobVersion, JobOptionsDialog dialog) {
-        String server = "http://localhost:8080"; //$NON-NLS-1$
+        String server = "http://localhost:8180"; //$NON-NLS-1$
         Execution execution = dialog.getExecution();
         Parameter executionParameter = dialog.getParameter();
         final String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/xslt";//$NON-NLS-1$
