@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.imports.viewer;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -79,7 +80,9 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                     }
 
                     public Object[] getElements(Object inputElement) {
-                        // return getValidItems();
+                        if (inputElement instanceof Collection) {
+                            return ((Collection) inputElement).toArray();
+                        }
                         return repositoryUtil.getTreeViewInput().toArray();
                     }
 

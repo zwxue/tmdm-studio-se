@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -179,22 +180,22 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
         selectedItems.addAll(items);
         
-        if (this.importServerItem(items)){ //$NON-NLS-1$
+        if (this.importServerItem(items)) {
             Display.getDefault().syncExec(new Runnable() {
                 
                 public void run() {
                     MessageDialog.openWarning(getContainer().getShell(), Messages.AddBrowseItemsWizardR_warning, Messages.RepositoryViewImportRepositoryItem_nothingImport); 
+                    checkTreeViewer.getViewer().setInput(Collections.EMPTY_LIST);
                 }
             });
-      
+        } else {
+            this.getShell().getDisplay().syncExec(new Runnable() {
+
+                public void run() {
+                    checkTreeViewer.getViewer().setInput(repositoryUtil.getTreeViewInput());
+                }
+            });
         }
-
-        this.getShell().getDisplay().syncExec(new Runnable() {
-
-            public void run() {
-                checkTreeViewer.getViewer().setInput(repositoryUtil.getTreeViewInput());
-            }
-        });
         monitor.done();
 
     }
