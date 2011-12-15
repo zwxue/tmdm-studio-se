@@ -75,6 +75,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
@@ -368,7 +369,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     public void doImport(Object[] objs, IProgressMonitor monitor) {
         monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
-
+        ImportService.setImporting(true);
         List<Integer> types = new ArrayList<Integer>();
         types.add(TreeObject.CUSTOM_FORM);
         types.add(TreeObject.DATA_CLUSTER);
@@ -436,6 +437,7 @@ public class ImportServerObjectWizard extends Wizard {
                 log.error(e.getMessage(), e);
             }
         }
+        ImportService.setImporting(false);
         monitor.done();
     }
 

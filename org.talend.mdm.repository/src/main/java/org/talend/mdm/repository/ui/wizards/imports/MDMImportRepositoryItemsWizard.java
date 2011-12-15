@@ -49,6 +49,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -82,6 +83,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     @Override
     public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
+        ImportService.setImporting(true);
         List<ItemRecord> itemRecords = new LinkedList<ItemRecord>();
         for (Object obj : selectedObjs) {
             if (obj instanceof ItemRecord) {
@@ -112,6 +114,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 log.error(e.getMessage(), e);
             }
         }
+        ImportService.setImporting(false);
     }
 
     protected void createOverwriteBtn(Composite composite) {
