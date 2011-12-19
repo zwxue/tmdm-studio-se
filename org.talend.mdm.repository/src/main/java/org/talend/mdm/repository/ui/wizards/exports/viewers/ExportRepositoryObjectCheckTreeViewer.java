@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.exports.viewers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -20,7 +21,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryContentProvider;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.ui.widgets.AbstractNodeCheckTreeViewer;
@@ -38,6 +41,8 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
      * 
      * @param selection
      */
+    IRepositoryViewObject[] categoryViewObjects;
+
     public ExportRepositoryObjectCheckTreeViewer(IStructuredSelection selection) {
         super(selection);
     }
@@ -49,15 +54,16 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
             @Override
             protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
-                IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
-                treeViewer = new ContainerCheckedTreeViewer(parent);
+                categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
+                IRepositoryViewObject[] viewObjs = getSortedViewObjects(categoryViewObjects);
 
+                treeViewer = new ContainerCheckedTreeViewer(parent);
                 treeViewer.setLabelProvider(new MDMRepositoryLabelProvider());
                 treeViewer.setContentProvider(new MDMRepositoryContentProvider());
-
-                treeViewer.setInput(categoryViewObjects);
+                treeViewer.setInput(viewObjs);
                 return treeViewer;
             }
+
 
             @Override
             protected void refreshCompleted() {
@@ -71,6 +77,36 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
             }
         };
 
+    }
+
+    private IRepositoryViewObject[] getSortedViewObjects(IRepositoryViewObject[] categoryViewObjects) {
+        List<IRepositoryViewObject> sortedViewObjs = new ArrayList<IRepositoryViewObject>();
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_CUSTOM_FORM));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_DATACLUSTER));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_DATAMODEL));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_EVENTMANAGER));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_MENU));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_RESOURCE));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_ROLE));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_STOREPROCEDURE));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_UNIVERSE));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_VIEW));
+        sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_WORKFLOW));
+        sortedViewObjs.add(categoryViewObjects[5]);
+        return (IRepositoryViewObject[]) sortedViewObjs.toArray(new IRepositoryViewObject[0]);
+    }
+
+    public IRepositoryViewObject getViewObjectByType(ERepositoryObjectType type) {
+        if (categoryViewObjects == null || type == null)
+            return null;
+        for (IRepositoryViewObject viewObj : categoryViewObjects) {
+            if (viewObj.getRepositoryObjectType().equals(type)) {
+                return viewObj;
+            }
+        }
+        return null;
     }
 
     @Override
