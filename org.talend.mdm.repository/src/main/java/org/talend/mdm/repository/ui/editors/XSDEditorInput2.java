@@ -52,6 +52,7 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
     public XSDEditorInput2(IRepositoryViewObject viewObject, IFile file) {
         super(file);
         this.viewObject = viewObject;
+        this.version = viewObject.getVersion();
         Item item = getInputItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         IInteractiveHandler handler = InteractiveService.findHandler(IServerObjectRepositoryType.TYPE_DATAMODEL);

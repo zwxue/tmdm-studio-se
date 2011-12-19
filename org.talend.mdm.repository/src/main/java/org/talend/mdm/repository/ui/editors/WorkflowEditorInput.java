@@ -46,6 +46,7 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
     public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
         super(file);
         this.viewObject = viewObject;
+        this.version = viewObject.getVersion();
     }
 
     /*

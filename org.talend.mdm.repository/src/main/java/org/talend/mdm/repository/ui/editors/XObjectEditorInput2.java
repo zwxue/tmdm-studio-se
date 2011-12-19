@@ -56,6 +56,7 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
     public XObjectEditorInput2(IRepositoryViewObject viewObject, Object model, String name) {
         super(model, name);
         this.viewObject = viewObject;
+        this.version = viewObject.getVersion();
     }
 
     public String getToolTipText() {

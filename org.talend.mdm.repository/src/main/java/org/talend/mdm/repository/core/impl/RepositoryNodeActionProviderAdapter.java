@@ -49,6 +49,7 @@ import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
+import org.talend.mdm.repository.ui.actions.MDMOpenExistVersionProcessAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction;
@@ -94,6 +95,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     protected AbstractRepositoryAction emAction;
 
+    protected AbstractRepositoryAction openVersionAction;
+
     protected IRepositoryViewGlobalActionHandler globalActionHandler;
 
     private IStructuredSelection selection;
@@ -112,6 +115,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         emAction = initRepositoryAction(new MDMEventManagerAction(), commonViewer);
         importServerObjectAction = initRepositoryAction(new ImportServerObjectAction(), commonViewer);
         mdmEditPropertyAction = initRepositoryAction(new MDMEditPropertyAction(), commonViewer);
+        openVersionAction = initRepositoryAction(new MDMOpenExistVersionProcessAction(), commonViewer);
         //
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
@@ -160,6 +164,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
             } else if (item instanceof MDMServerObjectItem) {
                 actions.add(removeFromRepositoryAction);
                 actions.add(mdmEditPropertyAction);
+                actions.add(openVersionAction);
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);

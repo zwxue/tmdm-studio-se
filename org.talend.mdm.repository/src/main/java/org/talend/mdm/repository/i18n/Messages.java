@@ -339,6 +339,13 @@ public class Messages extends NLS {
     public static String RepositoryViewFilterDialog_btnSelectServer;
 
     public static String EventManager_text;
+    
+    public static String MDMOpenExistVersionProcessWizard_NewObject;
+
+    public static String MDMOpenExistVersionProcessPage_ChooseVersion;
+
+    public static String MDMOpenExistVersionProcessPage_lockedByUser;
+    
 
     // //////////////////////////////////////////////////////////////////////////
     //
