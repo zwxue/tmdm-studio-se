@@ -100,7 +100,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.setItemText(Messages.MDMExportRepositoryItemsWizard_exportItem);
-        checkTreeViewer.getViewer().expandAll();
+        ((CheckboxTreeViewer) checkTreeViewer.getViewer()).setAllChecked(true);
         ((CheckboxTreeViewer) checkTreeViewer.getViewer()).expandToLevel(2);
         return returnComposite;
     }
