@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
@@ -99,6 +100,8 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.setItemText(Messages.MDMExportRepositoryItemsWizard_exportItem);
+        checkTreeViewer.getViewer().expandAll();
+        ((CheckboxTreeViewer) checkTreeViewer.getViewer()).expandToLevel(2);
         return returnComposite;
     }
 
