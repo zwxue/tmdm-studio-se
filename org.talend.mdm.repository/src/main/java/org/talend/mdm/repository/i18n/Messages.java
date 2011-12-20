@@ -76,6 +76,8 @@ public class Messages extends NLS {
 
     public static String DeployAllDialog_warning;
 
+    public static String DeployService_processTitle;
+
     public static String DeployToAction_deployTo;
 
     public static String DeployToLastServerAction_deployToLastServer;

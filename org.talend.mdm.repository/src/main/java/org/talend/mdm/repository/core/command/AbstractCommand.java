@@ -33,6 +33,17 @@ public abstract class AbstractCommand implements ICommand {
 
     protected String commandId;
 
+    protected int runPhase = -1;
+
+    public int getToRunPhase() {
+
+        return runPhase;
+    }
+
+    public void setToRunPhase(int phase) {
+        this.runPhase = phase;
+    }
+
     public void setCommandId(String commandId) {
         this.commandId = commandId;
     }
@@ -68,7 +79,10 @@ public abstract class AbstractCommand implements ICommand {
         commandId = aMemento.getString(PROP_ID);
         this.objName = aMemento.getString(PROP_OBJ_NAME);
         this.lastName = aMemento.getString(PROP_LAST_OBJ_NAME);
-
+        Integer phaseObj = aMemento.getInteger(PROP_PHASE);
+        if (phaseObj != null) {
+            runPhase = phaseObj.intValue();
+        }
     }
 
     public void saveState(IMemento aMemento) {
@@ -76,6 +90,7 @@ public abstract class AbstractCommand implements ICommand {
         aMemento.putInteger(PROP_TYPE, getCommandType());
         aMemento.putString(PROP_OBJ_NAME, objName);
         aMemento.putString(PROP_LAST_OBJ_NAME, lastName);
+        aMemento.putInteger(PROP_PHASE, getToRunPhase());
     }
 
     public void init(IRepositoryViewObject viewObj) {

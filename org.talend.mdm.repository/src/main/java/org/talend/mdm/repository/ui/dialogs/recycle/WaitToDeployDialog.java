@@ -146,7 +146,7 @@ public class WaitToDeployDialog extends Dialog {
         String id = viewObj.getId();
         CommandStack commandStack = CommandManager.getInstance().findCommandStack(id);
         if (commandStack != null) {
-            ICommand validCommand = commandStack.getValidCommand();
+            ICommand validCommand = commandStack.getValidDeployCommand();
             if (validCommand instanceof AbstractDeployCommand) {
                 if (validCommand.getCommandType() == ICommand.CMD_DELETE) {
                     Item item = viewObj.getProperty().getItem();

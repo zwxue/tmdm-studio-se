@@ -27,6 +27,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 
@@ -105,10 +106,12 @@ public class DeployService {
 
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
             if (commands != null) {
-                monitor.beginTask("Deploy to MDM Server", commands.size());
+                monitor.beginTask(Messages.DeployService_processTitle, commands.size());
                 for (ICommand cmd : commands) {
-                    IStatus status = cmd.execute(null, monitor);
-                    mStatus.add(status);
+                    if (cmd.getToRunPhase() == ICommand.PHASE_DEPLOY) {
+                        IStatus status = cmd.execute(null, monitor);
+                        mStatus.add(status);
+                    }
                     monitor.worked(1);
                 }
                 monitor.done();

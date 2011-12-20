@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -56,10 +57,11 @@ public class DeployToAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
 
-            updateLastServer(status, serverDef);
-            for (IRepositoryViewObject viewObj : viewObjs) {
-                commonViewer.refresh(viewObj);
-            }
+            // updateLastServer(status, serverDef);
+            updateLastServer(new NullProgressMonitor());
+            // for (IRepositoryViewObject viewObj : viewObjs) {
+            // commonViewer.refresh(viewObj);
+            // }
 
         }
 

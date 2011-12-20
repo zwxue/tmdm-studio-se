@@ -14,6 +14,7 @@ package org.talend.mdm.repository.core.command.deploy;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.command.AbstractCommand;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 /**
@@ -34,4 +35,9 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
     protected ERepositoryObjectType getViewObjectType() {
         return viewObject.getRepositoryObjectType();
     }
+
+    public int getToRunPhase() {
+        return ICommand.PHASE_DEPLOY;
+    }
+
 }

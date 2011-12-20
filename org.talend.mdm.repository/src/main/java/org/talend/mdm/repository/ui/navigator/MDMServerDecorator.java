@@ -49,7 +49,7 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
     private void decorateModifiedObject(IRepositoryViewObject viewObj, IDecoration decoration) {
         CommandStack stack = CommandManager.getInstance().findCommandStack(viewObj.getId());
         if (stack != null) {
-            ICommand command = stack.getValidCommand();
+            ICommand command = stack.getValidDeployCommand();
             switch (command.getCommandType()) {
             case ICommand.CMD_ADD:
                 decoration.addOverlay(IMG_NEW, IDecoration.BOTTOM_RIGHT);

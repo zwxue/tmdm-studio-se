@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.command;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.ui.IMemento;
@@ -31,7 +32,7 @@ public class CommandStack implements IMementoAware {
 
     private ICommand validCommand;
 
-    public ICommand getValidCommand() {
+    public ICommand getValidDeployCommand() {
         return this.validCommand;
     }
 
@@ -43,6 +44,16 @@ public class CommandStack implements IMementoAware {
         return pushCommand(cmd, true);
     }
 
+    public List<ICommand> getCommands(int phase) {
+        List<ICommand> cmds = new ArrayList<ICommand>();
+        for (ICommand cmd : commands) {
+            if (cmd.getToRunPhase() == phase) {
+                cmds.add(cmd);
+            }
+        }
+        return cmds;
+    }
+
     public boolean pushCommand(ICommand cmd, boolean updateValidCmd) {
         if (commands.isEmpty()) {
             if (cmd.getCommandType() == ICommand.CMD_RESTORE) {
@@ -51,7 +62,7 @@ public class CommandStack implements IMementoAware {
             commands.add(cmd);
             cmdId = cmd.getCommandId();
             if (updateValidCmd) {
-                calValidCommand();
+                calValidDeployCommand();
             }
             return true;
         }
@@ -59,7 +70,7 @@ public class CommandStack implements IMementoAware {
         if (commandId != null && commandId.equals(cmdId)) {
             commands.add(cmd);
             if (updateValidCmd) {
-                calValidCommand();
+                calValidDeployCommand();
             }
             return true;
         }
@@ -77,7 +88,7 @@ public class CommandStack implements IMementoAware {
                     pushCommand(cmd, false);
                 }
             }
-            calValidCommand();
+            calValidDeployCommand();
         }
 
     }
@@ -90,27 +101,29 @@ public class CommandStack implements IMementoAware {
 
     }
 
-    private List<ICommand> shrinkCommandStack() {
+    private List<ICommand> shrinkDeployCommandStack() {
         List<ICommand> result = new ArrayList<ICommand>();
         int lastAddPos = -1;
         for (ICommand cmd : commands) {
-            int type = cmd.getCommandType();
-            if (type != ICommand.CMD_RESTORE) {
-                result.add(cmd);
-                if (type == ICommand.CMD_DELETE) {
-                    lastAddPos = result.size() - 1;
-                }
-            } else {
-                if (lastAddPos >= 0) {
-                    result.remove(lastAddPos);
+            if (cmd.getToRunPhase() == ICommand.PHASE_DEPLOY) {
+                int type = cmd.getCommandType();
+                if (type != ICommand.CMD_RESTORE) {
+                    result.add(cmd);
+                    if (type == ICommand.CMD_DELETE) {
+                        lastAddPos = result.size() - 1;
+                    }
+                } else {
+                    if (lastAddPos >= 0) {
+                        result.remove(lastAddPos);
+                    }
                 }
             }
         }
         return result;
     }
 
-    private void calValidCommand() {
-        List<ICommand> shrinked = shrinkCommandStack();
+    private void calValidDeployCommand() {
+        List<ICommand> shrinked = shrinkDeployCommandStack();
         ICommand first = getFirstCommand(shrinked);
         if (first == null) {
             validCommand = manager.getDefaultNOPCommand();
@@ -181,5 +194,18 @@ public class CommandStack implements IMementoAware {
             return lastCommand.getObjLastName();
         }
         return null;
+    }
+
+    public void removeCommandsByPhase(int phase) {
+        for (Iterator<ICommand> il = commands.iterator(); il.hasNext();) {
+            ICommand cmd = il.next();
+            if (cmd.getToRunPhase() == phase) {
+                il.remove();
+            }
+        }
+    }
+
+    public boolean isEmpty() {
+        return commands.isEmpty();
     }
 }
