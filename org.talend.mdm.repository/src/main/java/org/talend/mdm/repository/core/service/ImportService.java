@@ -12,22 +12,19 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
-
 /**
- * DOC hbhong  class global comment. Detailled comment
+ * DOC hbhong class global comment. Detailled comment
  */
 public class ImportService {
 
     private static boolean importing = false;
 
-    public static boolean isImporting() {
+    public synchronized static boolean isImporting() {
         return importing;
     }
 
-    
-    public static void setImporting(boolean importing) {
+    public synchronized static void setImporting(boolean importing) {
         ImportService.importing = importing;
-        // System.out.println("## Importing " + importing);
     }
 
 }
