@@ -125,7 +125,6 @@ import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener, IPagingListener {
 
     private static final Log log = LogFactory.getLog(DataClusterBrowserMainPage.class);
@@ -526,14 +525,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     }
                     String revision = "";//$NON-NLS-1$
                     if (object != null) {
-                    	// TMDM-2606: Don't expect data model to contain revision name (CE edition doesn't support revisions).
-						if (object.getDisplayName().contains("[") && object.getDisplayName().contains("]")) {
-							revision = object.getDisplayName().substring(
-									object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
-									object.getDisplayName().indexOf("]"));//$NON-NLS-1$
-						}
+                        // TMDM-2606: Don't expect data model to contain revision name (CE edition doesn't support
+                        // revisions).
+                        if (object.getDisplayName().contains("[") && object.getDisplayName().contains("]")) {
+                            revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
+                                    object.getDisplayName().indexOf("]"));//$NON-NLS-1$
+                        }
                     }
-                    
+
                     for (int i = 0; i < concepts.length; i++) {
                         String concept = concepts[i];
                         if (revision == null || revision.equals("")) { //$NON-NLS-1$
@@ -1347,6 +1346,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                         .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
                                         "genericUI", d.isTriggerProcess());//$NON-NLS-1$
                                 port.putItemWithReport(item);
+                                doSearch();
                             } catch (Exception e) {
                                 MessageDialog.openError(shell, "Error saving the Record",
                                         "An error occured trying save the Record:\n\n " + e.getLocalizedMessage());
@@ -1359,7 +1359,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                 d.setBlockOnOpen(true);
                 d.open();
-                DataClusterBrowserMainPage.this.doSearch();
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
