@@ -42,12 +42,23 @@ public class XSDDefaultValueRuleAction extends UndoAction {
 
     protected String dataModelName;
 
+    protected boolean isDelete = false;
+
     public XSDDefaultValueRuleAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ROUTINE.getPath()));
         setText("Set the Default Value Rule");
         setToolTipText("Set the Default Value Rule");
         this.dataModelName = dataModelName;
+    }
+
+    public XSDDefaultValueRuleAction(DataModelMainPage page, String dataModelName, boolean isDelete) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
+        setText("Delete the Default Value Rule");
+        setToolTipText("Delete the Default Value Rule");
+        this.dataModelName = dataModelName;
+        this.isDelete = isDelete;
     }
 
     public IStatus doAction() {
@@ -81,6 +92,7 @@ public class XSDDefaultValueRuleAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
             // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
+            if (!isDelete) {
             ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),getTreeParent(),
                     "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, false, false);
             // The ending| bug:21784
@@ -91,6 +103,9 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             int ret = dlg.open();
             if (ret == Window.OK) {
                 struc.setDefaultValueRule(dlg.getExpression());
+            }
+            } else {
+                struc.setDefaultValueRule(""); //$NON-NLS-1$
             }
             if (struc.hasChanged()) {
                 page.refresh();

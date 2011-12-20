@@ -1614,23 +1614,24 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationNoAction);
 
             if (obj instanceof XSDParticle) {
-                manager.add(visibleRuleAction);
-                XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
                 XSDAnnotationsStructure struc = getStructureByActiveItem();
-                if (struc != null) {
-                    deleteVisibleRuleAction.setEnabled(struc.getVisibleRule() != null);
-                }
-                manager.add(deleteVisibleRuleAction);
+                manager.add(visibleRuleAction);
+                if (struc != null){
 
-                XSDParticle xsdParticle = (XSDParticle) obj;
-
-                XSDTerm xsdTerm = xsdParticle.getTerm();
-                if (xsdTerm instanceof XSDElementDeclaration) {
-                    if (Util.getKeyInfo(xsdTerm) == null || Util.getKeyInfo(xsdTerm).size() == 0) {
-                        manager.add(defaultValueRuleAction);
+                    if (struc.getVisibleRule() != null) {
+                        XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
+                        manager.add(deleteVisibleRuleAction);
                     }
                 }
 
+                manager.add(defaultValueRuleAction);
+                if (struc != null) {
+                    if (struc.getDefaultValueRule() != null) {
+                        XSDDefaultValueRuleAction deleteDefaultRuleAction = new XSDDefaultValueRuleAction(this, dataModelName,
+                                true);
+                        manager.add(deleteDefaultRuleAction);
+                    }
+                }
             }
         }
         // available models
