@@ -16,6 +16,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CompoundCommand;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -28,6 +29,10 @@ public class DeployCompoundCommand extends CompoundCommand {
     private AbstractDeployCommand deployCommand;
 
     private MDMServerDef serverDef;
+
+    public MDMServerDef getServerDef() {
+        return this.serverDef;
+    }
 
     public DeployCompoundCommand(AbstractDeployCommand deployCommand) {
         this.deployCommand = deployCommand;
@@ -45,6 +50,9 @@ public class DeployCompoundCommand extends CompoundCommand {
         return true;
     }
 
+    public int getToRunPhase() {
+        return ICommand.PHASE_DEPLOY;
+    }
     @Override
     protected String getOKStatusMsg() {
         ERepositoryObjectType type = getViewObjectType();

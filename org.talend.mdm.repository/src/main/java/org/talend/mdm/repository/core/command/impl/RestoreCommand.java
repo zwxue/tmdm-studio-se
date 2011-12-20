@@ -26,6 +26,11 @@ public class RestoreCommand extends AbstractCommand {
     }
 
     @Override
+    public int getToRunPhase() {
+        return PHASE_DEPLOY;
+    }
+
+    @Override
     public int getCommandType() {
         return ICommand.CMD_RESTORE;
     }

@@ -13,23 +13,28 @@
 package org.talend.mdm.repository.ui.actions;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.CompoundCommand;
+import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.command.common.PushCmdCommand;
+import org.talend.mdm.repository.core.command.common.UpdateLastServerCommand;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.command.deploy.DeployCompoundCommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -62,8 +67,7 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         else
             prompt = Messages.AbstractDeployAction_deployFailure;
 
-        MultiStatusDialog dialog = new MultiStatusDialog(getShell(), status.getChildren().length
- + prompt, status);
+        MultiStatusDialog dialog = new MultiStatusDialog(getShell(), status.getChildren().length + prompt, status);
         dialog.open();
 
     }
@@ -83,45 +87,89 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
                 }
 
                 if (deployStatus.isOK()) {
-                    CommandManager.getInstance().removeCommandStack(deployStatus.getCommand().getCommandId());
+                    ICommand command = deployStatus.getCommand();
+                    CommandManager manager = CommandManager.getInstance();
+                    manager.removeCommandStack(command.getCommandId(), ICommand.PHASE_DEPLOY);
+                    MDMServerDef serverDef = null;
+                    if (command instanceof AbstractDeployCommand) {
+                        serverDef = ((AbstractDeployCommand) command).getServerDef();
+                    } else if (command instanceof DeployCompoundCommand) {
+                        serverDef = ((DeployCompoundCommand) command).getServerDef();
+                    }
+                    // updateserver
+                    MDMServerObjectItem item = (MDMServerObjectItem) command.getViewObject().getProperty().getItem();
+                    UpdateLastServerCommand updateLastServerCommand = new UpdateLastServerCommand(item, serverDef);
+                    updateLastServerCommand.setToRunPhase(ICommand.PHASE_AFTER_DEPLOY);
+                    updateLastServerCommand.init(command.getCommandId(), command.getObjLastName());
+                    manager.pushCommand(updateLastServerCommand);
+                    //
+                    if (command.getCommandType() == ICommand.CMD_DELETE && !(command instanceof CompoundCommand)) {
+
+                        UpdateLastServerCommand emptyLastServerCommand = new UpdateLastServerCommand();
+                        //
+                        PushCmdCommand pushCmd = new PushCmdCommand();
+                        pushCmd.setPushCmdType(ICommand.CMD_ADD);
+                        pushRestoreCommand(manager, command, emptyLastServerCommand);
+                        pushRestoreCommand(manager, command, pushCmd);
+                    }
                 }
 
             }
         }
     }
 
-    protected void updateLastServer(IStatus status, MDMServerDef serverDef) {
-        if (status.isMultiStatus()) {
-            for (IStatus childStatus : status.getChildren()) {
-                if (childStatus.isOK()) {
-                    DeployStatus deployStatus = null;
-                    if (childStatus instanceof DeployStatus) {
-                        deployStatus = (DeployStatus) childStatus;
-                    } else if (childStatus instanceof MultiStatus) {
-                        deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
-                    }
-                    IRepositoryViewObject viewObject = deployStatus.getCommand().getViewObject();
-                    if (viewObject != null) {
-                        Item item = viewObject.getProperty().getItem();
-
-                        if (item instanceof MDMServerObjectItem)
-                            saveLastServer((MDMServerObjectItem) item, serverDef);
-                    }
-                }
-            }
-        }
+    private void pushRestoreCommand(CommandManager manager, ICommand command, ICommand cmd) {
+        cmd.init(command.getCommandId(), command.getObjLastName());
+        cmd.setToRunPhase(ICommand.PHASE_RESTORE);
+        manager.pushCommand(cmd);
     }
+
+    protected void updateLastServer(IProgressMonitor monitor) {
+        CommandManager manager = CommandManager.getInstance();
+        Map<String, List<ICommand>> commandMap = manager.getAllCommandsByPhase(ICommand.PHASE_AFTER_DEPLOY);
+        for (String id : commandMap.keySet()) {
+            List<ICommand> cmds = commandMap.get(id);
+            for (ICommand cmd : cmds) {
+                cmd.execute(null, monitor);
+            }
+            manager.removeCommandStack(id, ICommand.PHASE_AFTER_DEPLOY);
+        }
+
+        commonViewer.refresh();
+    }
+
+    // protected void updateLastServer(IStatus status, MDMServerDef serverDef) {
+    // if (status.isMultiStatus()) {
+    // for (IStatus childStatus : status.getChildren()) {
+    // if (childStatus.isOK()) {
+    // DeployStatus deployStatus = null;
+    // if (childStatus instanceof DeployStatus) {
+    // deployStatus = (DeployStatus) childStatus;
+    // } else if (childStatus instanceof MultiStatus) {
+    // deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
+    // }
+    // IRepositoryViewObject viewObject = deployStatus.getCommand().getViewObject();
+    // if (viewObject != null) {
+    // Item item = viewObject.getProperty().getItem();
+    //
+    // if (item instanceof MDMServerObjectItem)
+    // saveLastServer((MDMServerObjectItem) item, serverDef);
+    // }
+    // }
+    // }
+    // }
+    // }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
-        MDMServerObject mdmServerObject = item.getMDMServerObject();
-        mdmServerObject.setLastServerDef(serverDef);
-        try {
-            factory.save(item);
-            commonViewer.refresh();
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
+    // private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
+    // MDMServerObject mdmServerObject = item.getMDMServerObject();
+    // mdmServerObject.setLastServerDef(serverDef);
+    // try {
+    // factory.save(item);
+    // commonViewer.refresh();
+    // } catch (PersistenceException e) {
+    // log.error(e.getMessage(), e);
+    // }
+    // }
 }

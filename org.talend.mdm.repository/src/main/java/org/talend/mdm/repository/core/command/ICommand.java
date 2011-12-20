@@ -30,6 +30,8 @@ public interface ICommand extends IMementoAware {
 
     public static final String PROP_LAST_OBJ_NAME = "lastObjName"; //$NON-NLS-1$
 
+    public static final String PROP_PHASE = "runPhase"; //$NON-NLS-1$
+
     public static final int CMD_NOP = 0;
 
     public static final int CMD_ADD = 1;
@@ -42,7 +44,16 @@ public interface ICommand extends IMementoAware {
 
     public static final int CMD_RESTORE = 16;
 
+    public static final int CMD_UPDATE_SERVER = 32;
+
+    public static final int CMD_PUSH_COMMAND = 1024;
     //
+    public static final int PHASE_DEPLOY = 1;
+
+    public static final int PHASE_AFTER_DEPLOY = 2;
+
+    public static final int PHASE_RESTORE = 4;
+
     public static final String MEM_TYPE_COMMAND = "Command"; //$NON-NLS-1$
 
     public static final String MEM_TYPE_COMMAND_STACK = "CommandStack"; //$NON-NLS-1$
@@ -59,6 +70,10 @@ public interface ICommand extends IMementoAware {
     public String getObjName();
 
     public String getObjLastName();
+
+    public int getToRunPhase();
+
+    public void setToRunPhase(int phase);
 
     public IRepositoryViewObject getViewObject();
 

@@ -15,6 +15,7 @@ package org.talend.mdm.repository.ui.actions;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.PlatformUI;
@@ -75,7 +76,8 @@ public class DeployAllAction extends AbstractDeployAction {
                 if (status.isMultiStatus()) {
                     showDeployStatus(status);
                 }
-                updateLastServer(status, serverDef);
+                // updateLastServer(status, serverDef);
+                updateLastServer(new NullProgressMonitor());
             }
         }
         commonViewer.refresh();

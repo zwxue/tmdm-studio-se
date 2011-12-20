@@ -15,6 +15,8 @@ package org.talend.mdm.repository.ui.actions.recyclebin;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.PersistenceException;
@@ -25,6 +27,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.CommandStack;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
@@ -114,15 +117,38 @@ public class RestoreAction extends AbstractRepositoryAction {
         Item item = viewObj.getProperty().getItem();
         try {
             factory.restoreObject(viewObj, new Path(item.getState().getPath()));
-            CommandManager.getInstance().pushCommand(ICommand.CMD_RESTORE, viewObj);
+
             if (RepositoryResourceUtil.isOpenedInEditor(viewObj) != null) {
                 factory.lock(viewObj);
             }
+            executeRestoreCommand(viewObj);
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         } catch (BusinessException e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    protected void executeRestoreCommand(IRepositoryViewObject viewObj) {
+
+        CommandManager manager = CommandManager.getInstance();
+        String id = viewObj.getId();
+        CommandStack stack = manager.findCommandStack(id);
+
+        if (stack != null) {
+            List<ICommand> deployCommands = stack.getCommands(ICommand.PHASE_DEPLOY);
+            if (deployCommands.size() > 0) {
+                manager.pushCommand(ICommand.CMD_RESTORE, viewObj);
+            }
+            IProgressMonitor monitor = new NullProgressMonitor();
+            List<ICommand> commands = stack.getCommands(ICommand.PHASE_RESTORE);
+            for (ICommand cmd : commands) {
+                cmd.updateViewObject(viewObj);
+                cmd.execute(null, monitor);
+            }
+            manager.removeCommandStack(id, ICommand.PHASE_RESTORE);
+        }
+
     }
 
     private void restoreParent(IRepositoryViewObject viewObj) {

@@ -26,6 +26,8 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.command.common.PushCmdCommand;
+import org.talend.mdm.repository.core.command.common.UpdateLastServerCommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.command.deploy.AddCommand;
 import org.talend.mdm.repository.core.command.deploy.DeleteCommand;
@@ -80,6 +82,10 @@ public class CommandManager implements IMementoAware {
             return new RenameCommand();
         case ICommand.CMD_RESTORE:
             return new RestoreCommand();
+        case ICommand.CMD_UPDATE_SERVER:
+            return new UpdateLastServerCommand();
+        case ICommand.CMD_PUSH_COMMAND:
+            return new PushCmdCommand();
         }
         return null;
     }
@@ -134,7 +140,7 @@ public class CommandManager implements IMementoAware {
         pushCommand(newCommand);
     }
 
-    private void pushCommand(ICommand command) {
+    public void pushCommand(ICommand command) {
         CommandStack commandStack = map.get(command.getCommandId());
         if (commandStack == null) {
             commandStack = new CommandStack();
@@ -160,6 +166,18 @@ public class CommandManager implements IMementoAware {
         if (id == null)
             return;
         map.remove(id);
+    }
+
+    public void removeCommandStack(String id, int phase) {
+        if (id == null)
+            return;
+        CommandStack stack = map.get(id);
+        if (stack != null) {
+            stack.removeCommandsByPhase(phase);
+            if (stack.isEmpty()) {
+                map.remove(id);
+            }
+        }
     }
 
     public void restoreState(IMemento aMemento) {
@@ -198,7 +216,7 @@ public class CommandManager implements IMementoAware {
     public List<AbstractDeployCommand> getAllDeployCommands() {
         List<AbstractDeployCommand> cmds = new ArrayList<AbstractDeployCommand>();
         for (CommandStack stack : map.values()) {
-            ICommand validCommand = stack.getValidCommand();
+            ICommand validCommand = stack.getValidDeployCommand();
             if (validCommand != null) {
                 if (validCommand instanceof AbstractDeployCommand) {
                     fillViewObjectToCommand(validCommand);
@@ -208,6 +226,18 @@ public class CommandManager implements IMementoAware {
             }
         }
         return cmds;
+    }
+
+    public Map<String, List<ICommand>> getAllCommandsByPhase(int phase) {
+        Map<String, List<ICommand>> cmdMap = new HashMap<String, List<ICommand>>();
+        for (String id : map.keySet()) {
+            CommandStack commandStack = map.get(id);
+            List<ICommand> commands = commandStack.getCommands(phase);
+            if (!commands.isEmpty()) {
+                cmdMap.put(id, commands);
+            }
+        }
+        return cmdMap;
     }
 
     /**
@@ -227,7 +257,7 @@ public class CommandManager implements IMementoAware {
                 cmd.init(viewObj);
                 stack.pushCommand(cmd);
             }
-            ICommand validCommand = stack.getValidCommand();
+            ICommand validCommand = stack.getValidDeployCommand();
             if (validCommand != null) {
                 if (validCommand instanceof AbstractDeployCommand) {
                     fillViewObjectToCommand(validCommand);
