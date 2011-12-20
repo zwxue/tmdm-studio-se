@@ -353,6 +353,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     protected DataModelFilter dataModelFilter;
 
     protected TreeViewer targetTreeViewer;
+
     // private StructuredSelection sel;
 
     private SashForm sash;
@@ -752,66 +753,65 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     }
 
+    private EList getXSDComponentContainer(Object data) {
+        if (data instanceof XSDConcreteComponent) {
+            if (data instanceof XSDParticle) {
+                XSDParticle particle = (XSDParticle) data;
+                if (particle.getContainer() instanceof XSDModelGroup) {
+                    XSDModelGroup mp = (XSDModelGroup) particle.getContainer();
+                    return mp.getContents();
+                }
+            }
+            if (data instanceof XSDXPathDefinition) {
+                XSDXPathDefinition path = (XSDXPathDefinition) data;
+                if (path.getContainer() instanceof XSDIdentityConstraintDefinition) {
+                    XSDIdentityConstraintDefinition idDef = (XSDIdentityConstraintDefinition) path.getContainer();
+                    return idDef.getFields();
+                }
+            }
+        }
+        return null;
+    }
+
     public void stepUp(TreeViewer targetTreeViewer) {
         TreeItem item;
         TreeItem[] items = targetTreeViewer.getTree().getSelection();
+        boolean isDirty = false;
         for (int i = 0; i < items.length; i++) {
             item = items[i];
-
-            if (!(item.getData() instanceof XSDConcreteComponent))
-                continue;
-
-            XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
-            if (!(component instanceof XSDParticle))
-                continue;
-            else {
-
-                XSDParticle particle = (XSDParticle) component;
-                if (particle.getContainer() instanceof XSDModelGroup) {
-                    XSDModelGroup mp = (XSDModelGroup) particle.getContainer();
-                    // EList<XSDParticle> el = mp.getParticles();
-                    int index = mp.getContents().indexOf(particle);
-                    if (index > 0) {
-                        mp.getContents().move(index - 1, index);
-                        // openXSDParticle();
-                        this.refresh();
-                    }// else
-
+            Object data = item.getData();
+            EList content = getXSDComponentContainer(data);
+            if (content != null) {
+                int index = content.indexOf(data);
+                if (index > 0) {
+                    content.move(index - 1, index);
+                    isDirty = true;
+                    this.refresh();
                 }
-
             }
-
         }
-        this.markDirtyWithoutCommit();
+        if (isDirty)
+            this.markDirtyWithoutCommit();
     }
 
     public void stepDown(TreeViewer targetTreeViewer) {
         TreeItem item;
         TreeItem[] items = targetTreeViewer.getTree().getSelection();
+        boolean isDirty = false;
         for (int i = items.length - 1; i >= 0; i--) {
             item = items[i];
-
-            if (!(item.getData() instanceof XSDConcreteComponent))
-                continue;
-
-            XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
-            if (!(component instanceof XSDParticle))
-                continue;
-            else {
-                XSDParticle particle = (XSDParticle) component;
-                if (particle.getContainer() instanceof XSDModelGroup) {
-                    XSDModelGroup mp = (XSDModelGroup) particle.getContainer();
-                    // EList<XSDParticle> el = mp.getParticles();
-                    int index = mp.getContents().indexOf(particle);
-                    if (index < mp.getContents().size() - 1) {
-                        mp.getContents().move(index, index + 1);
-                        this.refresh();
-                    }// else
+            Object data = item.getData();
+            EList content = getXSDComponentContainer(data);
+            if (content != null) {
+                int index = content.indexOf(data);
+                if (index < content.size() - 1) {
+                    content.move(index, index + 1);
+                    this.refresh();
                 }
-
             }
         }
-        this.markDirtyWithoutCommit();
+        if (isDirty)
+            this.markDirtyWithoutCommit();
     }
 
     public SashForm createSash(Composite parent) {
@@ -1617,7 +1617,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(visibleRuleAction);
                 XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
                 XSDAnnotationsStructure struc = getStructureByActiveItem();
-                if (struc != null){
+                if (struc != null) {
                     deleteVisibleRuleAction.setEnabled(struc.getVisibleRule() != null);
                 }
                 manager.add(deleteVisibleRuleAction);
@@ -2907,13 +2907,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
         } else
             xSDCom = (XSDComponent) selection.getFirstElement();
-        
+
         if (xSDCom != null)
             struc = new XSDAnnotationsStructure(xSDCom);
-        
+
         return struc;
     }
-    
+
     public boolean hasVisibleRule(XSDElementDeclaration xsdEl) {
         XSDAnnotation annotation = xsdEl.getAnnotation();
         List<Element> informations = annotation.getApplicationInformation();
