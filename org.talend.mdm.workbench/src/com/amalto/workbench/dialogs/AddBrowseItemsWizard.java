@@ -350,8 +350,10 @@ public class AddBrowseItemsWizard extends Wizard {
                         List<Line> lines = browseItemToRoles.get(BROWSE_ITEMS + elem.getName());
                         browseItemToRoles.remove(BROWSE_ITEMS + elem.getName());
                         int prex = value.toString().trim().indexOf(BROWSE_ITEMS);
-                        if ((prex + BROWSE_ITEMS.length()) <= value.toString().trim().length())
-                        elem.setName(value.toString().trim().substring(prex + BROWSE_ITEMS.length()));
+
+                        if ((prex + BROWSE_ITEMS.length()) <= value.toString().trim().length()) {
+                            elem.setName(value.toString().trim().substring(prex + BROWSE_ITEMS.length()));
+                        }
                         browseItemToRoles.put(value.toString().trim(), lines);
                         refreshRoleView(BROWSE_ITEMS + elem.getName());
                         browseViewer.update(elem, null);
