@@ -331,30 +331,31 @@ public class AddBrowseItemsWizard extends Wizard {
                 public void modify(Object element, String property, Object value) {
                     TableItem item = (TableItem) element;
 
+                    String tValue = value.toString().trim();
                     if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()//$NON-NLS-1$
-                            || value.toString().trim().replaceAll("\\s", "").length() != value.toString().trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
+                            || tValue.replaceAll("\\s", "").length() != tValue.length()) {//$NON-NLS-1$//$NON-NLS-2$
                         MessageDialog.openInformation(null, "Warnning", "The name cannot contain the empty characters");
                         return;
                     }
 
                     XSDElementDeclaration elem = (XSDElementDeclaration) item.getData();
-                    if (!(BROWSE_ITEMS + elem.getName()).equals(value.toString().trim())) {
+                    if (!(BROWSE_ITEMS + elem.getName()).equals(tValue)) {
                         for (XSDElementDeclaration theElem : declList) {
                             if (theElem == elem)
                                 continue;
-                            if ((BROWSE_ITEMS + theElem.getName()).equals(value.toString().trim())) {
+                            if ((BROWSE_ITEMS + theElem.getName()).equals(tValue)) {
                                 MessageDialog.openInformation(null, "Warnning", "The Browse Items name already exists");
                                 return;
                             }
                         }
                         List<Line> lines = browseItemToRoles.get(BROWSE_ITEMS + elem.getName());
                         browseItemToRoles.remove(BROWSE_ITEMS + elem.getName());
-                        int prex = value.toString().trim().indexOf(BROWSE_ITEMS);
+                        int prex = tValue.indexOf(BROWSE_ITEMS);
 
-                        if ((prex + BROWSE_ITEMS.length()) <= value.toString().trim().length()) {
-                            elem.setName(value.toString().trim().substring(prex + BROWSE_ITEMS.length()));
+                        if (prex != -1 && (prex + BROWSE_ITEMS.length()) <= tValue.length()) {
+                            elem.setName(tValue.substring(prex + BROWSE_ITEMS.length()));
                         }
-                        browseItemToRoles.put(value.toString().trim(), lines);
+                        browseItemToRoles.put(tValue, lines);
                         refreshRoleView(BROWSE_ITEMS + elem.getName());
                         browseViewer.update(elem, null);
                     }
