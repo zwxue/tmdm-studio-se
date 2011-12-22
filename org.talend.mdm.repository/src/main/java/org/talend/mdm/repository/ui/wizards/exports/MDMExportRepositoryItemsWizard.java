@@ -28,6 +28,7 @@ import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
 import org.talend.repository.local.ExportItemUtil;
 
@@ -91,6 +92,9 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
             toReturn = new ArrayList<Item>();
             for (RepositoryViewObject obj : objs) {
                 Item item = obj.getProperty().getItem();
+                if (item instanceof MDMServerObjectItem) {
+                    ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(null);
+                }
                 toReturn.add(item);
             }
         }
