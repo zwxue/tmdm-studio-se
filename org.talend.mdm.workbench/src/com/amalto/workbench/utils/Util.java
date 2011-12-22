@@ -337,7 +337,7 @@ public class Util {
         }
     }
 
-    public static String default_endpoint_address = "http://localhost:8080/talend/TalendPort";//$NON-NLS-1$
+    public static String default_endpoint_address = "http://localhost:8180/talend/TalendPort";//$NON-NLS-1$
 
     /*********************************************************************
      * WEB SERVICES

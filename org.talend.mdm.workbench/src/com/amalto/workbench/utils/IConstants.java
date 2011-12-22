@@ -63,7 +63,7 @@ public interface IConstants {
 
     public final static String EXIST_ADMIN_PASSWD = "1bc29b36f623ba82aaf6724fd3b16718";//$NON-NLS-1$
 
-    public final static String EXIST_PORT = "8080";//$NON-NLS-1$
+    public final static String EXIST_PORT = "8180";//$NON-NLS-1$
 
     public final static String DEFAULT_NAME_SPACE = "http://www.w3.org/2001/XMLSchema";//$NON-NLS-1$
 

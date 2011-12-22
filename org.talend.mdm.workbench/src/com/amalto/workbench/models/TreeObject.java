@@ -460,13 +460,13 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
         String portAddress = getEndpointAddress();
         if (portAddress == null)
-            return "8080";//$NON-NLS-1$
+            return "8180";//$NON-NLS-1$
         Pattern p = Pattern.compile(":(\\d+?)/");//$NON-NLS-1$
         Matcher m = p.matcher(portAddress);
         if (m.find()) {
             return m.group(1);
         } else {
-            return "8080";//$NON-NLS-1$
+            return "8180";//$NON-NLS-1$
         }
 
     }
