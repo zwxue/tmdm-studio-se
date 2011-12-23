@@ -14,14 +14,8 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CompoundCommand;
@@ -38,7 +32,6 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -138,38 +131,6 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         commonViewer.refresh();
     }
 
-    // protected void updateLastServer(IStatus status, MDMServerDef serverDef) {
-    // if (status.isMultiStatus()) {
-    // for (IStatus childStatus : status.getChildren()) {
-    // if (childStatus.isOK()) {
-    // DeployStatus deployStatus = null;
-    // if (childStatus instanceof DeployStatus) {
-    // deployStatus = (DeployStatus) childStatus;
-    // } else if (childStatus instanceof MultiStatus) {
-    // deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
-    // }
-    // IRepositoryViewObject viewObject = deployStatus.getCommand().getViewObject();
-    // if (viewObject != null) {
-    // Item item = viewObject.getProperty().getItem();
-    //
-    // if (item instanceof MDMServerObjectItem)
-    // saveLastServer((MDMServerObjectItem) item, serverDef);
-    // }
-    // }
-    // }
-    // }
-    // }
-
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    // private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
-    // MDMServerObject mdmServerObject = item.getMDMServerObject();
-    // mdmServerObject.setLastServerDef(serverDef);
-    // try {
-    // factory.save(item);
-    // commonViewer.refresh();
-    // } catch (PersistenceException e) {
-    // log.error(e.getMessage(), e);
-    // }
-    // }
 }

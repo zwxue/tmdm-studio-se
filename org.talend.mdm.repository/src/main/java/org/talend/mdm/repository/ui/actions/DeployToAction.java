@@ -14,13 +14,8 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.ui.PlatformUI;
-import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -57,11 +52,7 @@ public class DeployToAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
 
-            // updateLastServer(status, serverDef);
             updateLastServer(new NullProgressMonitor());
-            // for (IRepositoryViewObject viewObj : viewObjs) {
-            // commonViewer.refresh(viewObj);
-            // }
 
         }
 
