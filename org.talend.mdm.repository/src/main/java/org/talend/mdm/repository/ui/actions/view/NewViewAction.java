@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -119,7 +119,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
 
     }
 
-    protected boolean createServerObject(String key) {
+    protected Item createServerObject(String key) {
 
         WSViewItem item = MdmpropertiesFactory.eINSTANCE.createWSViewItem();
 
@@ -134,7 +134,8 @@ public class NewViewAction extends AbstractSimpleAddAction {
         } else {
             item.getState().setPath(""); //$NON-NLS-1$
         }
-        return RepositoryResourceUtil.createItem(item, key);
+        RepositoryResourceUtil.createItem(item, key);
+        return item;
     }
 
     public void setXSDElementDeclaration(XSDElementDeclaration decl) {

@@ -98,10 +98,11 @@ public class NewProcessAction extends AbstractSimpleAddAction {
             return;
         String key = vid.getValue();
 
-        createServerObject(key);
+        Item item = createServerObject(key);
         commonViewer.refresh(selectObj);
         commonViewer.expandToLevel(selectObj, 1);
 
+        openEditor(item);
     }
 
     private WSTransformerV2E newProcess(String key) {
@@ -150,7 +151,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         return transformer;
     }
 
-    protected boolean createServerObject(String key) {
+    protected Item createServerObject(String key) {
 
         WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
@@ -161,9 +162,9 @@ public class NewProcessAction extends AbstractSimpleAddAction {
 
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
-            return RepositoryResourceUtil.createItem(item, key);
+            RepositoryResourceUtil.createItem(item, key);
         }
-        return false;
+        return item;
     }
 
 }

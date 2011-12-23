@@ -53,6 +53,7 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
     public XObjectBrowserInput2(IRepositoryViewObject viewObject) {
         super(new TreeObject(), null);
         this.viewObject = viewObject;
+        this.version = viewObject.getVersion();
         init(getInputItem());
     }
 
@@ -75,6 +76,7 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
     public XObjectBrowserInput2(IRepositoryViewObject viewObject, Object model, String name) {
         super(model, name);
         this.viewObject = viewObject;
+        this.version = viewObject.getVersion();
     }
 
     public String getToolTipText() {
@@ -109,6 +111,8 @@ public class XObjectBrowserInput2 extends XObjectBrowserInput implements IReposi
 
     @Override
     public String getName() {
-        return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        if (getVersion() != null)
+            return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        return super.getName();
     }
 }

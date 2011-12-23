@@ -131,7 +131,8 @@ public class SaveXObjectAction extends Action {
                 // add the item to the tree
                 if (xobject.getType() != TreeObject.DOCUMENT) {
                     TreeParent folder = xobject.findServerFolder(xobject.getType());
-                    folder.addChild(xobject);
+                    if (folder != null)
+                        folder.addChild(xobject);
                 }
                 xobject.fireEvent(IXObjectModelListener.SAVE, xobject.getParent(), xobject);
                 // new object notify the server root that it needs a refresh (actually not needed for this but a good

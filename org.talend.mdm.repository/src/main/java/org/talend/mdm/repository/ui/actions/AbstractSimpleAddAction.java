@@ -12,14 +12,18 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -32,6 +36,7 @@ import com.amalto.workbench.image.ImageCache;
  */
 public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
+    private static Logger log = Logger.getLogger(AbstractSimpleAddAction.class);
     /**
      * DOC hbhong AddMenu constructor comment.
      * 
@@ -78,15 +83,25 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
             return;
         String key = dlg.getValue();
         if (key != null) {
-            createServerObject(key);
+            Item item = createServerObject(key);
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
             // TODO open editor
+            openEditor(item);
         }
-
     }
 
-    protected abstract boolean createServerObject(String key);
+    protected void openEditor(Item item) {
+        if (item == null)
+            return;
+        IRepositoryViewObject viewObject = ContainerCacheService.get(item.getProperty());
+        OpenObjectAction action = new OpenObjectAction();
+        List<Object> selObjects = new ArrayList<Object>();
+        selObjects.add(viewObject);
+        action.setSelObjects(selObjects);
+        action.run();
+    }
+    protected abstract Item createServerObject(String key);
 
     public String getGroupName() {
         return GROUP_EDIT;

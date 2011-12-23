@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2011 Talend ¨C www.talend.com
+// Copyright (C) 2006-2011 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.menu;
 
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
@@ -72,7 +73,7 @@ public class NewMenuAction extends AbstractSimpleAddAction {
         return menu;
     }
 
-    protected boolean createServerObject(String key) {
+    protected Item createServerObject(String key) {
 
         WSMenuItem item = MdmpropertiesFactory.eINSTANCE.createWSMenuItem();
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
@@ -83,9 +84,9 @@ public class NewMenuAction extends AbstractSimpleAddAction {
 
         if (parentItem != null) {
             item.getState().setPath(parentItem.getState().getPath());
-            return RepositoryResourceUtil.createItem(item, key);
+            RepositoryResourceUtil.createItem(item, key);
         }
-        return false;
+        return item;
     }
 
 

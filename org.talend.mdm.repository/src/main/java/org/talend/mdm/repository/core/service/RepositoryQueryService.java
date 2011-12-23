@@ -150,7 +150,11 @@ public class RepositoryQueryService {
             for (IRepositoryViewObject viewObj : viewObjects) {
                 Item item = viewObj.getProperty().getItem();
                 if (item instanceof MDMServerObjectItem) {
-                    names.add(((MDMServerObjectItem) item).getMDMServerObject().getName());
+                    String name = ((MDMServerObjectItem) item).getMDMServerObject().getName();
+                    if (name != null)
+                        names.add(name);
+                    else
+                        names.add(viewObj.getLabel());
                 }
                 // names[i]=viewObj.getLabel();
             }
@@ -165,7 +169,9 @@ public class RepositoryQueryService {
                 Item item = viewObj.getProperty().getItem();
                 if (item instanceof MDMServerObjectItem) {
                     MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                    if (serverObject.getName().equals(name)) {
+                    if (serverObject.getName() != null && serverObject.getName().equals(name)) {
+                        return serverObject;
+                    } else if (viewObj.getLabel().equals(name)) {
                         return serverObject;
                     }
                 }
