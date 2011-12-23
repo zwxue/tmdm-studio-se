@@ -46,7 +46,7 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
     public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
         super(file);
         this.viewObject = viewObject;
-        this.version = viewObject.getVersion();
+        version = viewObject.getVersion();
     }
 
     /*
@@ -78,6 +78,8 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
 
     @Override
     public String getName() {
-        return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        if (getVersion() != null)
+            return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        return super.getName();
     }
 }

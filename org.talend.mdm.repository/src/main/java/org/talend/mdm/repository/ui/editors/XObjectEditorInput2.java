@@ -56,7 +56,7 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
     public XObjectEditorInput2(IRepositoryViewObject viewObject, Object model, String name) {
         super(model, name);
         this.viewObject = viewObject;
-        this.version = viewObject.getVersion();
+        version = viewObject.getVersion();
     }
 
     public String getToolTipText() {
@@ -87,7 +87,9 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
     @Override
     public String getName() {
-        return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        if (getVersion() != null)
+            return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        return super.getName();
     }
 
 }

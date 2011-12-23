@@ -72,6 +72,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         String part = super.getPartName();
         if (part.endsWith(".xsd")) {//$NON-NLS-1$
             return part.substring(0, part.length() - 4);
+        } else {
+            int start = part.lastIndexOf('_');
+            int end = part.lastIndexOf(' ');
+            if (start != -1 && end != -1) {
+                return part.substring(0, start) + part.substring(end);
+            }
         }
         return part;
     }

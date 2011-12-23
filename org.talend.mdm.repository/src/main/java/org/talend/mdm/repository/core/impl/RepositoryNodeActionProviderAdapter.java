@@ -65,7 +65,7 @@ import com.amalto.workbench.models.TreeObject;
  */
 public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActionProvider {
 
-    static AbstractRepositoryAction createFolderAction;
+    public static AbstractRepositoryAction createFolderAction;
 
     static AbstractRepositoryAction removeFromRepositoryAction;
 
