@@ -14,8 +14,8 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CompoundCommand;
@@ -43,7 +43,6 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/deploy.png"); //$NON-NLS-1$
 
-    // private static Logger log = Logger.getLogger(AbstractDeployAction.class);
     protected AbstractDeployAction(String text) {
         super(text);
         setImageDescriptor(DEPLOY_IMG);
