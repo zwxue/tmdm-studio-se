@@ -14,7 +14,6 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
@@ -25,8 +24,6 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
  * DOC hbhong class global comment. Detailled comment
  */
 public class DeployToAction extends AbstractDeployAction {
-
-    private static Logger log = Logger.getLogger(DeployToAction.class);
 
     public DeployToAction() {
         super(Messages.DeployToAction_deployTo);
@@ -45,7 +42,6 @@ public class DeployToAction extends AbstractDeployAction {
             for (Object obj : getSelectedObject()) {
                 viewObjs.add((IRepositoryViewObject) obj);
             }
-            //
             IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY);
             updateChangedStatus(status);
             if (status.isMultiStatus()) {
@@ -53,7 +49,6 @@ public class DeployToAction extends AbstractDeployAction {
             }
 
             updateLastServer(new NullProgressMonitor());
-
         }
 
     }

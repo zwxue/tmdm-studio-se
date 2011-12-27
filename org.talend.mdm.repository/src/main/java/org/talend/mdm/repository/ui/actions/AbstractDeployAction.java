@@ -15,7 +15,6 @@ package org.talend.mdm.repository.ui.actions;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CompoundCommand;
@@ -37,8 +36,6 @@ import org.talend.mdm.repository.utils.EclipseResourceManager;
  * DOC hbhong class global comment. Detailled comment
  */
 public abstract class AbstractDeployAction extends AbstractRepositoryAction {
-
-    private static Logger log = Logger.getLogger(AbstractDeployAction.class);
 
     private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/deploy.png"); //$NON-NLS-1$
@@ -98,7 +95,6 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
                     if (command.getCommandType() == ICommand.CMD_DELETE && !(command instanceof CompoundCommand)) {
 
                         UpdateLastServerCommand emptyLastServerCommand = new UpdateLastServerCommand();
-                        //
                         PushCmdCommand pushCmd = new PushCmdCommand();
                         pushCmd.setPushCmdType(ICommand.CMD_ADD);
                         pushRestoreCommand(manager, command, emptyLastServerCommand);
@@ -131,5 +127,4 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-
 }
