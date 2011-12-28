@@ -51,8 +51,8 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
+import org.talend.repository.RepositoryWorkUnit;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -108,8 +108,6 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         return result;
     }
 
-
-
     private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
         String version = viewObject.getVersion();
         try {
@@ -135,6 +133,18 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     }
 
     public void run() {
+        RepositoryWorkUnit<Object> repositoryWorkUnit = new RepositoryWorkUnit<Object>(Messages.OpenObjectAction_open, this) {
+
+            @Override
+            protected void run() throws LoginException, PersistenceException {
+                doRun();
+            }
+        };
+        repositoryWorkUnit.setAvoidUnloadResources(true);
+        CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().executeRepositoryWorkUnit(repositoryWorkUnit);
+    }
+
+    protected void doRun() {
         List<Object> sels = getSelectedObject();
         if (selObjects != null) {
             sels = selObjects;
@@ -191,16 +201,16 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                     if (!selected)
                         return;
                     try { // svn lock
-                        if (!factory.isLocalConnectionProvider()) {
-                            RepositoryResourceUtil.initialize();
-                            ERepositoryStatus status = factory.getStatus(item);
-                            if (status.isPotentiallyEditable()) {
-                                factory.lock(item);
-                            }
-                            getCommonViewer().refresh(viewObject);
-                            //
-                            editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER);
+                          // if (!factory.isLocalConnectionProvider()) {
+                        ERepositoryStatus status = factory.getStatus(item);
+                        // if (status.isPotentiallyEditable()) {
+                        if (factory.isEditableAndLockIfPossible(item)) {
+                            factory.lock(item);
                         }
+                        getCommonViewer().refresh(viewObject);
+                        //
+                        editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER);
+                        // }
                         if (!editorInput.isReadOnly()) {
                             editorInput.setReadOnly(item.getState().isDeleted());
                         }
@@ -223,6 +233,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             }
         }
     }
+
     public String getGroupName() {
         // this action not be shown in context menu,so Nothing need to do in here
         return null;
