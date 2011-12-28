@@ -817,24 +817,29 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             try {
                                 // check the item is modified by others?
                                 boolean isModified = port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).is_true();
+                                WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
+                                        "".equals(d //$NON-NLS-1$
+                                                .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);
+                                WSPutItemWithReport itemWithReport = new WSPutItemWithReport(putItem,
+                                        "genericUI", d.isBeforeVerification());//$NON-NLS-1$
                                 if (isModified) {
                                     if (MessageDialog
                                             .openConfirm(
                                                     null,
                                                     "Confirm",
                                                     "This object was also modified by somebody else. If you save now, you will overwrite his or her changes. Are you sure you want to do that?")) {
-                                        WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem(
-                                                (WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
-                                                false), "genericUI", d.isTriggerProcess());//$NON-NLS-1$
-                                        Util.getPort(getXObject()).putItemWithReport(item);
+                                        if (d.isTriggerProcess()) {
+                                            Util.getPort(getXObject()).putItemWithReport(itemWithReport);
+                                        } else {
+                                            Util.getPort(getXObject()).putItem(putItem);
+                                        }
                                     }
                                 } else {
-                                    WSPutItemWithReport item = new WSPutItemWithReport(
-                                            new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                                    .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
-                                            "genericUI", d.isTriggerProcess());//$NON-NLS-1$
-                                    Util.getPort(getXObject()).putItemWithReport(item);
+                                    if (d.isTriggerProcess()) {
+                                        Util.getPort(getXObject()).putItemWithReport(itemWithReport);
+                                    } else {
+                                        Util.getPort(getXObject()).putItem(putItem);
+                                    }
                                 }
                                 // previousDataModel = d.getDataModelName();
                             } catch (Exception e) {
@@ -1341,11 +1346,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             // attempt to save
                             try {
                                 final XtentisPort port = Util.getPort(getXObject());
-                                WSPutItemWithReport item = new WSPutItemWithReport(new WSPutItem((WSDataClusterPK) getXObject()
+                                WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject()
                                         .getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
-                                        .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false),
-                                        "genericUI", d.isTriggerProcess());//$NON-NLS-1$
-                                port.putItemWithReport(item);
+                                                .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);
+                                WSPutItemWithReport item = new WSPutItemWithReport(putItem, "genericUI", d.isBeforeVerification());//$NON-NLS-1$
+                                if (d.isTriggerProcess()) {
+                                    port.putItemWithReport(item);
+                                } else {
+                                    port.putItem(putItem);
+                                }
                                 doSearch();
                             } catch (Exception e) {
                                 MessageDialog.openError(shell, "Error saving the Record",
