@@ -100,6 +100,8 @@ public class DOMViewDialog extends Dialog {
 
 	private Button triggerBtn;
 
+    private Button beforeBtn;
+
     public DOMViewDialog(Shell parentShell, Node node) {
         this(parentShell, node, false, null, TREE_VIEWER, null);
     }
@@ -231,7 +233,9 @@ public class DOMViewDialog extends Dialog {
             // this.getShell().setSize(600, 600);
             // this.getShell().layout();
         	 triggerBtn=new Button(composite,SWT.CHECK);
-        	triggerBtn.setText("Call before processes and triggers");
+            triggerBtn.setText("Fire a change event (update report) and triggers");
+            beforeBtn = new Button(composite, SWT.CHECK);
+            beforeBtn.setText("Enable verification by before processes");
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -243,6 +247,10 @@ public class DOMViewDialog extends Dialog {
     }
     public boolean isTriggerProcess(){
     	return triggerBtn.getSelection();
+    }
+
+    public boolean isBeforeVerification() {
+        return beforeBtn.getSelection();
     }
     public int getButtonPressed() {
         return buttonPressed;
