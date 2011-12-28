@@ -45,12 +45,12 @@ import org.talend.repository.model.IProxyRepositoryFactory;
  */
 public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
-    private static Logger log = Logger.getLogger(AbstractDeployAction.class);
+    
 
     private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/deploy.png"); //$NON-NLS-1$
 
-    // private static Logger log = Logger.getLogger(AbstractDeployAction.class);
+  
     protected AbstractDeployAction(String text) {
         super(text);
         setImageDescriptor(DEPLOY_IMG);

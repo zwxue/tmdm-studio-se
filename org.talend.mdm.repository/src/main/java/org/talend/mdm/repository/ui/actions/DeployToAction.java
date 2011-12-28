@@ -31,7 +31,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
  */
 public class DeployToAction extends AbstractDeployAction {
 
-    private static Logger log = Logger.getLogger(DeployToAction.class);
+   
 
     public DeployToAction() {
         super(Messages.DeployToAction_deployTo);
