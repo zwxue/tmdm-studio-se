@@ -587,8 +587,11 @@ public class MenuMainPage extends AMainPageV2 {
                             .setSubMenus(subMenus.toArray(new WSMenuEntry[subMenus.size()]));
                 }
                 // refresh the viewer
-                viewer.setExpandedState(treeEntry.getParentTreeEntry(), true);
-                viewer.refresh(treeEntry.getParentTreeEntry(), false);
+                if (treeEntry.getParentTreeEntry() != null) {
+                    viewer.setExpandedState(treeEntry.getParentTreeEntry(), true);
+                    viewer.refresh(treeEntry.getParentTreeEntry(), false);
+                }
+                viewer.refresh();
                 // mark dirty
                 markDirtyWithoutCommit();
             } catch (Exception e) {
