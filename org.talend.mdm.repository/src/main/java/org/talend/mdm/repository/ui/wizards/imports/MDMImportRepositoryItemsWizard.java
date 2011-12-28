@@ -102,8 +102,8 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                             serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
                             if (serverObj.getLastServerDef() != null) {
                                 serverObj.setLastServerDef(null);
+                                ProxyRepositoryFactory.getInstance().save(item);
                             }
-                            ProxyRepositoryFactory.getInstance().save(item);
                             String name = serverObj.getName() == null ? item.getProperty().getLabel() : serverObj.getName();
                             // flagged as new
                             CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, item.getProperty().getId(), name);

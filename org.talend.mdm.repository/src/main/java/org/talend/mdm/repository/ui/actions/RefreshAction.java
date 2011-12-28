@@ -20,7 +20,6 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -44,36 +43,6 @@ public class RefreshAction extends AbstractRepositoryAction {
 
     @Override
     public void run() {
-        // ProgressDialog progressDialog = new ProgressDialog(getShell(), 1000) {
-        //
-        // private IProgressMonitor monitorWrap;
-        //
-        // @Override
-        // public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-        //                Timer timer = Timer.getTimer("repositoryView"); //$NON-NLS-1$
-        // timer.start();
-        // monitorWrap = new EventLoopProgressMonitor(monitor);
-        // try {
-        // final ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
-        // factory.initialize();
-        // } catch (Exception e) {
-        // throw new InvocationTargetException(e);
-        // }
-        // timer.stop();
-        // timer.print();
-        // }
-        // };
-        //
-        // try {
-        // progressDialog.executeProcess();
-        // } catch (InvocationTargetException e) {
-        // ExceptionHandler.process(e);
-        // return;
-        // } catch (Exception e) {
-        // MessageBoxExceptionHandler.process(e);
-        // return;
-        // }
-        RepositoryResourceUtil.initialize();
 
         List<Object> selectedObject = getSelectedObject();
         if (!selectedObject.isEmpty()) {

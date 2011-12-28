@@ -55,6 +55,7 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.RepositoryObject;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.model.ResourceModelUtils;
@@ -551,11 +552,9 @@ public class RepositoryResourceUtil {
                         if (handler != null) {
                             handler.assertPropertyIsInited(item);
                         }
-                        if (useRepositoryViewObject) {
-                            viewObjects.add(new RepositoryViewObject(viewObj.getProperty()));
-                        } else {
-                            viewObjects.add(viewObj);
-                        }
+                        IRepositoryViewObject cacheViewObj = getCacheViewObject(viewObj.getProperty(), viewObj,
+                                useRepositoryViewObject);
+                        viewObjects.add(cacheViewObj);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
                     }
@@ -688,6 +687,24 @@ public class RepositoryResourceUtil {
         return findViewObjectsInFolder(type, parentItem, useRepositoryViewObject, false);
     }
 
+    private static IRepositoryViewObject getCacheViewObject(Property property, IRepositoryViewObject viewObj,
+            boolean useRepositoryViewObject) {
+        IRepositoryViewObject cacheViewObj = ContainerCacheService.get(property);
+        if (cacheViewObj == null) {
+            if (useRepositoryViewObject) {
+                cacheViewObj = new RepositoryViewObject(property);
+            } else {
+                cacheViewObj = viewObj;
+            }
+            ContainerCacheService.put(property, cacheViewObj);
+        } else {
+            if (!useRepositoryViewObject) {
+                ((RepositoryObject) cacheViewObj).setProperty(viewObj.getProperty());
+            }
+        }
+        return cacheViewObj;
+    }
+
     public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject, boolean withDeleted) {
         // because the IProxyRepositoryFactory doesn't expose the getSerializableFromFolder method ,so only through the
@@ -712,17 +729,9 @@ public class RepositoryResourceUtil {
                 ItemState state = property.getItem().getState();
                 if ((!state.isDeleted() || withDeleted)
                         && (state.getPath().equalsIgnoreCase(parentPath) || state.getPath().equalsIgnoreCase(parentPath2))) {
-                    IRepositoryViewObject cacheViewObj = ContainerCacheService.get(property);
-                    if (cacheViewObj == null) {
-                        if (useRepositoryViewObject) {
-                            cacheViewObj = new RepositoryViewObject(property);
-                        } else {
-                            cacheViewObj = viewObj;
-                        }
-                        ContainerCacheService.put(property, cacheViewObj);
-                    }
-                    viewObjects.add(cacheViewObj);
+                    IRepositoryViewObject cacheViewObj = getCacheViewObject(property, viewObj, useRepositoryViewObject);
 
+                    viewObjects.add(cacheViewObj);
                 }
             }
         } catch (PersistenceException e) {
