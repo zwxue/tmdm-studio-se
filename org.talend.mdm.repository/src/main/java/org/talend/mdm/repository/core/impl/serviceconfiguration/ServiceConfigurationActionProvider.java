@@ -42,7 +42,6 @@ public class ServiceConfigurationActionProvider extends RepositoryNodeActionProv
         super.initCommonViewer(commonViewer);
         addAction = new NewServiceConfigurationAction();
 
-        //
         addAction.initCommonViewer(commonViewer);
 
     }
@@ -50,19 +49,7 @@ public class ServiceConfigurationActionProvider extends RepositoryNodeActionProv
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
-        // if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL,
-        // FolderType.FOLDER_LITERAL)) {
-        // actions.add(addAction);
-        //
-        // }
-        // if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-        // actions.add(renameAction);
-        // // deploy
-        // actions.add(deployToAction);
-        // addAction(actions, deployToLastServerAction, viewObj);
-        // }
-        // actions.add(deployAllAction);
-        // remove createFolderAction
+
         actions.remove(super.createFolderAction);
         return actions;
     }
