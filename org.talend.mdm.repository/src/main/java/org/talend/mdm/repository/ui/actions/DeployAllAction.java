@@ -46,8 +46,7 @@ public class DeployAllAction extends AbstractDeployAction {
         setImageDescriptor(DEPLOY_IMG);
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         if (isDeployAll) {
             runWithType(null);
         } else {

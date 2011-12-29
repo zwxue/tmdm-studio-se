@@ -64,7 +64,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         return Messages.NewProcessAction_newProcess;
     }
 
-    public void run() {
+    protected void doRun() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);
         if (selectObj instanceof IRepositoryViewObject) {

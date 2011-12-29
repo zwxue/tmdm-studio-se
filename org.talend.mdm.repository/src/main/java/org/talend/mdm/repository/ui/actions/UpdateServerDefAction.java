@@ -41,8 +41,7 @@ public class UpdateServerDefAction extends AbstractRepositoryAction {
         return GROUP_SERVER;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
         if (dlg.open() == IDialogConstants.OK_ID) {
             MDMServerDef def = dlg.getSelectedServerDef();

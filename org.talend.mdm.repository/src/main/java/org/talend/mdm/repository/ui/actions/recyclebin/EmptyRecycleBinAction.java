@@ -43,18 +43,11 @@ public class EmptyRecycleBinAction extends AbstractRemoveCommandStackAction {
         setImageDescriptor(EMPTY_IMG);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
-     */
-    @Override
     public String getGroupName() {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         Object selObj = getSelectedObject().get(0);
         FolderRepositoryObject conRepObj = (FolderRepositoryObject) selObj;
         List<IRepositoryViewObject> children = conRepObj.getChildren();
@@ -66,37 +59,9 @@ public class EmptyRecycleBinAction extends AbstractRemoveCommandStackAction {
                 return;
             }
             removeViewObjects(children);
-            // try {
-            // for (IRepositoryViewObject childViewObj : children) {
-            // deleteElement(childViewObj);
-            // }
-            // } catch (PersistenceException e) {
-            // log.error(e.getMessage(), e);
-            // }
-            // refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_RECYCLE_BIN);
         }
     }
 
-    // IProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
-
-    // private void deleteElement(IRepositoryViewObject viewObj) throws PersistenceException {
-    // Project currentProject = ProjectManager.getInstance().getCurrentProject();
-    // if (viewObj instanceof FolderRepositoryObject) {
-    // // delete child
-    // for (IRepositoryViewObject childViewObj : ((FolderRepositoryObject) viewObj).getChildren()) {
-    // deleteElement(childViewObj);
-    // }
-    // Item item = viewObj.getProperty().getItem();
-    // IPath folderPath = new Path(item.getState().getPath());
-    //
-    // factory.deleteFolder(currentProject, viewObj.getRepositoryObjectType(), folderPath, true);
-    // } else {
-    //
-    // factory.deleteObjectPhysical(currentProject, viewObj, null, true);
-    // }
-    // }
-
-    @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         Object selObj = getSelectedObject().get(0);
         FolderRepositoryObject conRepObj = (FolderRepositoryObject) selObj;

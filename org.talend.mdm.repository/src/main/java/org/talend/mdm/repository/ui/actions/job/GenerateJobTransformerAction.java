@@ -68,8 +68,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
 
         selectObj = getSelectedObject().get(0);
 

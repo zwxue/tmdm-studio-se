@@ -38,8 +38,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
 
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
 
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
 

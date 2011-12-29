@@ -24,15 +24,13 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class RefreshViewAction extends AbstractRepositoryAction {
 
-
     public RefreshViewAction() {
         super(Messages.RefreshAction_Refresh_All);
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
         setToolTipText(Messages.RefreshAction_Refresh_All_tooltip);
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         Object input = commonViewer.getInput();
         for (IRepositoryViewObject viewObj : (IRepositoryViewObject[]) input) {
             commonViewer.refresh(viewObj);

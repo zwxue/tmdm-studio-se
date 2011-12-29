@@ -34,7 +34,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
- * DOC achen  class global comment. Detailled comment
+ * DOC achen class global comment. Detailled comment
  */
 public class RemoveFromServerAction extends AbstractDeployAction {
 
@@ -45,8 +45,7 @@ public class RemoveFromServerAction extends AbstractDeployAction {
 
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
 
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());

@@ -49,33 +49,8 @@ public abstract class AbstractBridgeRepositoryAction extends AbstractRepositoryA
 
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         contextAction.run();
-        //        String name = "User action : " + getText(); //$NON-NLS-1$
-        // RepositoryWorkUnit<Object> repositoryWorkUnit = new RepositoryWorkUnit<Object>(name, this) {
-        //
-        // @Override
-        // protected void run() throws LoginException, PersistenceException {
-        // boolean exist = false;
-        // // if (node != null && node.getObject() != null) {
-        // // Property property = node.getObject().getProperty();
-        // // // only avoid NPE if item has been deleted in svn
-        // // if (property != null) {
-        // // exist = true;
-        // // contextAction.doRun();
-        // // }
-        // // // if (!exist) {
-        // // // refreshRelatedItem(getOldItem());
-        // // // }
-        // // } else {
-        // contextAction.doRun();
-        // // }
-        // }
-        // };
-        // boolean avoidUnloadResources = false;
-        // repositoryWorkUnit.setAvoidUnloadResources(avoidUnloadResources);
-        // CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().executeRepositoryWorkUnit(repositoryWorkUnit);
     }
 
     protected void refreshParentContainer() {

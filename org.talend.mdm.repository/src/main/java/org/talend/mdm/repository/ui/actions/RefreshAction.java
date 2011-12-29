@@ -41,9 +41,7 @@ public class RefreshAction extends AbstractRepositoryAction {
         this.setActionDefinitionId(IRepositoryViewGlobalActionHandler.REFRESH);
     }
 
-    @Override
-    public void run() {
-
+    protected void doRun() {
         List<Object> selectedObject = getSelectedObject();
         if (!selectedObject.isEmpty()) {
             Object obj = selectedObject.get(0);

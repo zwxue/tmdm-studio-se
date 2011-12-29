@@ -69,8 +69,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
         setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
         fd.setFilterExtensions(new String[] { "*.zip" }); //$NON-NLS-1$
         String fPath = fd.open();

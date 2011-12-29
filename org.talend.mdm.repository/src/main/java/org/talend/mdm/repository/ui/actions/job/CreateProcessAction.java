@@ -20,8 +20,6 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
  */
 public class CreateProcessAction extends AbstractBridgeRepositoryAction {
 
-
-
     /**
      * DOC hbhong EditProcessAction constructor comment.
      * 
@@ -36,9 +34,8 @@ public class CreateProcessAction extends AbstractBridgeRepositoryAction {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
-        super.run();
+    protected void doRun() {
+        super.doRun();
         refreshCurrentContainer();
     }
 

@@ -59,8 +59,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         selectObj = getSelectedObject().get(0);
 
         JobOptionsDialog dialog = new JobOptionsDialog(getShell(), Messages.JobProcesssDialogTiggerTitle_title, Execution.EMBEDDED);

@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
@@ -43,12 +44,11 @@ public class BrowseViewAction extends AbstractRepositoryAction {
      * @param text
      */
     public BrowseViewAction() {
-        super("Test");
+        super(Messages.BrowseViewAction_label);
         setImageDescriptor(ImageCache.getImage(EImage.BROWSE.getPath()));
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         Object obj = getSelectedObject().get(0);
         if (obj instanceof IRepositoryViewObject) {
             IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;

@@ -38,8 +38,7 @@ public class DeployToAction extends AbstractDeployAction {
 
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
 
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
 
@@ -62,7 +61,5 @@ public class DeployToAction extends AbstractDeployAction {
         }
 
     }
-
-
 
 }

@@ -41,8 +41,7 @@ public class ImportObjectAction extends AbstractRepositoryAction {
         setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
 
         try {
             ISelection selection = null;

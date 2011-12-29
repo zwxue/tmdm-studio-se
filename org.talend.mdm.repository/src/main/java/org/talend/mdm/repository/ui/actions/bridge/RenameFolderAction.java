@@ -27,9 +27,8 @@ public class RenameFolderAction extends AbstractBridgeRepositoryAction {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
-        super.run();
+    protected void doRun() {
+        super.doRun();
         refreshParentContainer();
     }
 }

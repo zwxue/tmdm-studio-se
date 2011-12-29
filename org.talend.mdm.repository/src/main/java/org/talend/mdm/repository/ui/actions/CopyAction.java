@@ -42,8 +42,7 @@ public class CopyAction extends AbstractRepositoryAction {
         return GROUP_COMMON;
     }
 
-    public void run() {
-
+    protected void doRun() {
         IStructuredSelection selection = (IStructuredSelection) getStructuredSelection();
         LocalSelectionTransfer.getTransfer().setSelection(selection);
     }

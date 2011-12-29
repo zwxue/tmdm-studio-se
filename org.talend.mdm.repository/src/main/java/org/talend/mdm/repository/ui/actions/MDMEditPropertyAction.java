@@ -39,10 +39,6 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
         return GROUP_COMMON;
     }
 
-    public void run() {
-        doRun();
-
-    }
 
     protected void doRun() {
         for (Object obj : getSelectedObject()) {

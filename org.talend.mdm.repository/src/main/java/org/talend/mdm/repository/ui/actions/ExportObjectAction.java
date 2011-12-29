@@ -56,9 +56,7 @@ public class ExportObjectAction extends AbstractRepositoryAction {
         setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
     }
 
-    @Override
-    public void run() {
-
+    protected void doRun() {
         try {
             super.run();
             ISelection selection = null;

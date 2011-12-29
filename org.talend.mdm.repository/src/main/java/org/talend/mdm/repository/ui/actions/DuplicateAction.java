@@ -41,7 +41,7 @@ public class DuplicateAction extends AbstractRepositoryAction {
         return GROUP_COMMON;
     }
 
-    public void run() {
+    protected void doRun() {
         RepositoryDropAssistant dropAssistant = getDropAssistant();
 
         if (dropAssistant != null) {

@@ -35,7 +35,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class AbstractDataClusterAction extends AbstractRepositoryAction {
+public abstract class AbstractDataClusterAction extends AbstractRepositoryAction {
 
     protected static Logger log = Logger.getLogger(AbstractDataClusterAction.class);
 
@@ -141,6 +141,7 @@ public class AbstractDataClusterAction extends AbstractRepositoryAction {
             return false;
         }
     }
+
 
 
 }

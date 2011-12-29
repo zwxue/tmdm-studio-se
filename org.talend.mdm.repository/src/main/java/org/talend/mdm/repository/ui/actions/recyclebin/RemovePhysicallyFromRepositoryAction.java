@@ -44,8 +44,7 @@ public class RemovePhysicallyFromRepositoryAction extends AbstractRemoveCommandS
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         int size = getSelectedObject().size();
         if (size > 0) {
             if (!MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
