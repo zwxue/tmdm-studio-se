@@ -67,8 +67,7 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
         setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         List<Object> selectedObject = getSelectedObject();
         if (!selectedObject.isEmpty()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) selectedObject.get(0);

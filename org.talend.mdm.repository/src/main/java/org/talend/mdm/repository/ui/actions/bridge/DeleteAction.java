@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.actions.bridge;
 
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
+import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -21,16 +22,15 @@ public class DeleteAction extends AbstractBridgeRepositoryAction {
 
     public DeleteAction() {
         super(new org.talend.repository.ui.actions.DeleteAction());
-        setText("Delete Logically");
+        setText(Messages.RemoveFromRepositoryAction_removeFromRepository);
     }
 
     public String getGroupName() {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
-        super.run();
+    protected void doRun() {
+        super.doRun();
         refreshParentContainer();
     }
 

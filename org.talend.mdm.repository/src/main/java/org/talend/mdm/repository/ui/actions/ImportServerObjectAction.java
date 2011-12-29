@@ -44,8 +44,7 @@ public class ImportServerObjectAction extends AbstractRepositoryAction {
         return GROUP_EXPORT;
     }
 
-    public void run() {
-
+    protected void doRun() {
         ImportServerObjectWizard wizard = new ImportServerObjectWizard(commonViewer);
 
         WizardDialog dialog = new WizardDialog(getShell(), wizard);

@@ -48,8 +48,7 @@ public class CreateFolderAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         Object object = getSelectedObject().get(0);
         if (object != null && object instanceof FolderRepositoryObject) {
             final FolderRepositoryObject containerViewObject = (FolderRepositoryObject) object;

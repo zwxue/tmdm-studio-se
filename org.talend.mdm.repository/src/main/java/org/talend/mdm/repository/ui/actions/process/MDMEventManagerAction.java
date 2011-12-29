@@ -30,7 +30,9 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 public class MDMEventManagerAction extends AbstractRepositoryAction {
 
     private static Log log = LogFactory.getLog(MDMEventManagerAction.class);
+
     private IWorkbenchPage page = null;
+
     private static final ImageDescriptor EM_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/sub_engine.png"); //$NON-NLS-1$
 
@@ -39,19 +41,19 @@ public class MDMEventManagerAction extends AbstractRepositoryAction {
         setImageDescriptor(EM_IMG);
     }
 
-    public void run() {
+    protected void doRun() {
         SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
         dlg.create();
         if (dlg.open() == IDialogConstants.OK_ID) {
             XObjectBrowserInput2 input = new XObjectBrowserInput2();
             input.setServerDef(dlg.getSelectedServerDef());
-        if (page == null)
-            this.page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        try {
-            this.page.openEditor(input, XObjectBrowser2.EDITOR_ID);
-        } catch (PartInitException e) {
-            log.error(e.getMessage(), e);
-        }
+            if (page == null)
+                this.page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            try {
+                this.page.openEditor(input, XObjectBrowser2.EDITOR_ID);
+            } catch (PartInitException e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -59,7 +61,4 @@ public class MDMEventManagerAction extends AbstractRepositoryAction {
         return GROUP_COMMON;
     }
 
-    public void doRun() {
-        run();
-    }
 }

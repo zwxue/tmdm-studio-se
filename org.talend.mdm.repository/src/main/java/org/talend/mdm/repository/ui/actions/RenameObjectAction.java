@@ -63,8 +63,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         Object obj = getSelectedObject().get(0);
         if (obj instanceof IRepositoryViewObject) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;

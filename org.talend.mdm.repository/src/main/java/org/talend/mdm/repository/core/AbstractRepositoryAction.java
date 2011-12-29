@@ -33,13 +33,17 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.commons.exception.LoginException;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+import org.talend.repository.RepositoryWorkUnit;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -98,6 +102,27 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
         return true;
     }
 
+    @Override
+    public final void run() {
+        // TODO judge lock and alert user
+        runRWU();
+    }
+
+    protected void runRWU() {
+        RepositoryWorkUnit<Object> repositoryWorkUnit = new RepositoryWorkUnit<Object>(Messages.OpenObjectAction_open, this) {
+
+            @Override
+            protected void run() throws LoginException, PersistenceException {
+                doRun();
+            }
+        };
+        repositoryWorkUnit.setAvoidUnloadResources(true);
+        CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().executeRepositoryWorkUnit(repositoryWorkUnit);
+    }
+
+    protected abstract void doRun();
+
+    // protected abstract void doRun(final Object... params);
     protected void refreshParent() {
         Object object = getSelectedObject().get(0);
         commonViewer.setSelection(new StructuredSelection());
@@ -162,4 +187,5 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
                 + Messages.AbstractDeployAction_removeMessage, status);
         dialog.open();
     }
+
 }

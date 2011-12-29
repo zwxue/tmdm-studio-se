@@ -37,6 +37,7 @@ import com.amalto.workbench.image.ImageCache;
 public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
     private static Logger log = Logger.getLogger(AbstractSimpleAddAction.class);
+
     /**
      * DOC hbhong AddMenu constructor comment.
      * 
@@ -53,8 +54,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
     protected abstract String getDialogTitle();
 
-    @Override
-    public void run() {
+    protected void doRun() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);
         if (selectObj instanceof IRepositoryViewObject) {
@@ -91,6 +91,8 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
         }
     }
 
+
+
     protected void openEditor(Item item) {
         if (item == null)
             return;
@@ -101,6 +103,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
         action.setSelObjects(selObjects);
         action.run();
     }
+
     protected abstract Item createServerObject(String key);
 
     public String getGroupName() {

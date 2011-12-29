@@ -58,18 +58,12 @@ public class RestoreAction extends AbstractRepositoryAction {
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
-     */
-    @Override
+
     public String getGroupName() {
         return GROUP_EDIT;
     }
 
-    @Override
-    public void run() {
+    protected void doRun() {
         for (Object obj : getSelectedObject()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
             restore(viewObj);

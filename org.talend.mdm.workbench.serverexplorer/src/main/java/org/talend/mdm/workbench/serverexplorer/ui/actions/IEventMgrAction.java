@@ -17,7 +17,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 public interface IEventMgrAction {
 
-    public void doRun();
+    public void run();
 
     public void setMDMServerDef(MDMServerDef def);
 }

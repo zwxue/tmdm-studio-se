@@ -31,7 +31,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
@@ -52,7 +51,6 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
-import org.talend.repository.RepositoryWorkUnit;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -132,18 +130,6 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         editorInput.setVersion(version);
     }
 
-    public void run() {
-        RepositoryWorkUnit<Object> repositoryWorkUnit = new RepositoryWorkUnit<Object>(Messages.OpenObjectAction_open, this) {
-
-            @Override
-            protected void run() throws LoginException, PersistenceException {
-                doRun();
-            }
-        };
-        repositoryWorkUnit.setAvoidUnloadResources(true);
-        CoreRuntimePlugin.getInstance().getProxyRepositoryFactory().executeRepositoryWorkUnit(repositoryWorkUnit);
-    }
-
     protected void doRun() {
         List<Object> sels = getSelectedObject();
         if (selObjects != null) {
@@ -205,9 +191,8 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                         ERepositoryStatus status = factory.getStatus(item);
                         // if (status.isPotentiallyEditable()) {
                         if (factory.isEditableAndLockIfPossible(item)) {
-                            factory.lock(item);
+                            getCommonViewer().refresh(viewObject);
                         }
-                        getCommonViewer().refresh(viewObject);
                         //
                         editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER);
                         // }
@@ -217,10 +202,6 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                         updateEditorInputVersionInfo(editorInput, viewObject);
                         this.page.openEditor(editorInput, editorInput.getEditorId());
                     } catch (PartInitException e) {
-                        log.error(e.getMessage(), e);
-                    } catch (PersistenceException e) {
-                        log.error(e.getMessage(), e);
-                    } catch (LoginException e) {
                         log.error(e.getMessage(), e);
                     }
                 } else {

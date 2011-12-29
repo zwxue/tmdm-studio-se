@@ -335,7 +335,7 @@ public class ServerExplorer extends ViewPart {
                                         emAction.setMDMServerDef(serverDef);
                                     }
                                 }
-                                emAction.doRun();
+                                emAction.run();
                             } catch (Exception e) {
                                 log.error(e.getMessage(), e);
                             }
