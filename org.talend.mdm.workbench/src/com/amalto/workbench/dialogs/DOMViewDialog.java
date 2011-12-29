@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -232,10 +233,17 @@ public class DOMViewDialog extends Dialog {
 
             // this.getShell().setSize(600, 600);
             // this.getShell().layout();
-        	 triggerBtn=new Button(composite,SWT.CHECK);
+            triggerBtn = new Button(composite, SWT.CHECK);
             triggerBtn.setText("Fire a change event (update report) and triggers");
+            triggerBtn.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    beforeBtn.setEnabled(triggerBtn.getSelection());
+                }
+            });
             beforeBtn = new Button(composite, SWT.CHECK);
             beforeBtn.setText("Enable verification by before processes");
+            beforeBtn.setEnabled(triggerBtn.getSelection());
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
