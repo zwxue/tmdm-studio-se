@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.view;
 
-
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,9 +24,11 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.i18n.Messages;
@@ -41,6 +42,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationInstan
 import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.ui.actions.view.NewViewAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -54,7 +56,7 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
 public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     static Logger log = Logger.getLogger(AddBrowseItemsWizardR.class);
-    
+
     /**
      * DOC hbhong AddBrowseItemsWizardR constructor comment.
      * 
@@ -79,22 +81,33 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
                     IServerObjectRepositoryType.TYPE_ROLE, roleName);
 
             if (roleItem != null) {
-                WSRoleE role = ((WSRoleItem) roleItem).getWsRole();
-                for (WSRoleSpecificationE spec : role.getSpecification()) {
-                    if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
-                        EList<WSRoleSpecificationInstanceE> specInstance = spec.getInstance();
-                        //
-                        WSRoleSpecificationInstanceE newInstance = MdmserverobjectFactory.eINSTANCE
-                                .createWSRoleSpecificationInstanceE();
-                        newInstance.setInstanceName(browseItem);
-                        newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
-                        //
-                        specInstance.add(newInstance);
-                        //
-                        break;
+                IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+                if (factory.isEditableAndLockIfPossible(roleItem)) {
+                    WSRoleE role = ((WSRoleItem) roleItem).getWsRole();
+                    for (WSRoleSpecificationE spec : role.getSpecification()) {
+                        if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
+                            EList<WSRoleSpecificationInstanceE> specInstance = spec.getInstance();
+                            //
+                            WSRoleSpecificationInstanceE newInstance = MdmserverobjectFactory.eINSTANCE
+                                    .createWSRoleSpecificationInstanceE();
+                            newInstance.setInstanceName(browseItem);
+                            newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
+                            //
+                            specInstance.add(newInstance);
+                            //
+                            break;
+                        }
                     }
+                    RepositoryResourceUtil.saveItem(roleItem);
+
                 }
-                RepositoryResourceUtil.saveItem(roleItem);
+                try {
+                    factory.unlock(roleItem);
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                } catch (LoginException e) {
+                    log.error(e.getMessage(), e);
+                }
             }
         }
     }
@@ -147,24 +160,27 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     @Override
     protected void newBrowseItemView(String browseItem) throws RemoteException {
-    	IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW, browseItem);
-    	if(viewObject != null){
-           boolean ok = MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizardR_warning, Messages.AddBrowseItemsWizardR_duplicatedView);
-           if(!ok)return;
-       	//delete the existed browse view
-           try {
-	        IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObject);
-	        if (ref != null) {
-	            RepositoryResourceUtil.closeEditor(ref, true);
-	        }
-			ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
-		   } catch (PersistenceException e) {
-               log.error(e.getMessage(), e);
-			RemoteException rx = new RemoteException(e.getMessage());
-			throw rx;
-		   }
-    	}
-        
+        IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW,
+                browseItem);
+        if (viewObject != null) {
+            boolean ok = MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizardR_warning,
+                    Messages.AddBrowseItemsWizardR_duplicatedView);
+            if (!ok)
+                return;
+            // delete the existed browse view
+            try {
+                IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObject);
+                if (ref != null) {
+                    RepositoryResourceUtil.closeEditor(ref, true);
+                }
+                ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+                RemoteException rx = new RemoteException(e.getMessage());
+                throw rx;
+            }
+        }
+
         for (XSDElementDeclaration decl : declList) {
             String fullName = BROWSE_ITEMS + decl.getName();
             if (fullName.equals(browseItem)) {

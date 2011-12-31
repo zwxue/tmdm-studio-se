@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.wizards;
 
 import org.eclipse.core.runtime.IPath;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -58,11 +59,12 @@ public class MdmPropertiesWizard extends PropertiesWizard {
         try {
             if (serverObject != null) {
                 String oldName = serverObject.getName();
-                if (newName != null) {
+                if (newName != null && factory.isEditableAndLockIfPossible(item)) {
+
                     serverObject.setName(newName);
                     object.getProperty().setLabel(newName);
                     factory.save(object.getProperty().getItem(), false);
-                    if (!oldName.equals(newName)) {
+                    if (!oldName.equals(newName) && serverObject.getLastServerDef() != null) {
                         CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, object.getId(),
                                 new String[] { oldName, newName });
                     }
@@ -71,6 +73,14 @@ public class MdmPropertiesWizard extends PropertiesWizard {
         } catch (PersistenceException e) {
             MessageBoxExceptionHandler.process(e);
             return false;
+        } finally {
+            try {
+                factory.unlock(item);
+            } catch (PersistenceException e) {
+                MessageBoxExceptionHandler.process(e);
+            } catch (LoginException e) {
+                MessageBoxExceptionHandler.process(e);
+            }
         }
         return true;
     }

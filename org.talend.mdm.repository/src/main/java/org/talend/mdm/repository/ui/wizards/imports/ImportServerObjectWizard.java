@@ -68,10 +68,13 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.progress.UIJob;
+import org.talend.commons.exception.LoginException;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -90,6 +93,7 @@ import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -383,7 +387,7 @@ public class ImportServerObjectWizard extends Wizard {
         types.add(TreeObject.UNIVERSE);
         types.add(TreeObject.VIEW);
         types.add(TreeObject.WORKFLOW_PROCESS);
-
+        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         for (Object obj : objs) {
             try {
                 TreeObject treeObj = (TreeObject) obj;
@@ -415,10 +419,20 @@ public class ImportServerObjectWizard extends Wizard {
                             break;
                         }
                     }
-                    item.setMDMServerObject(eobj);
-                    // save
-                    RepositoryResourceUtil.saveItem(item);
-                    item.getState().setDeleted(false);
+                    if (factory.isEditableAndLockIfPossible(item)) {
+                        item.setMDMServerObject(eobj);
+                        item.getState().setDeleted(false);
+                        // save
+                        RepositoryResourceUtil.saveItem(item);
+                        try {
+                            factory.unlock(item);
+                        } catch (PersistenceException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (LoginException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+
                     CommandManager.getInstance().removeCommandStack(item.getProperty().getId());
                 } else {
                     IRepositoryNodeConfiguration config = RepositoryNodeConfigurationManager.getConfiguration(type);

@@ -33,6 +33,7 @@ import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.talend.commons.exception.BusinessException;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
@@ -128,19 +129,31 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                 String pathStr = dragProp.getItem().getState().getPath();
                 IPath path = new Path(pathStr);
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+                Item copy = null;
                 try {
-                    Item copy = factory.copy(dragProp.getItem(), path, true);
-                    if (copy instanceof MDMServerObjectItem) {
-                        ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
-                    }
-                    copy.getProperty().setLabel(newName);
+                    copy = factory.copy(dragProp.getItem(), path, true);
+                    if (factory.isEditableAndLockIfPossible(copy)) {
+                        if (copy instanceof MDMServerObjectItem) {
+                            ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
+                        }
+                        copy.getProperty().setLabel(newName);
 
-                    factory.save(copy);
-                    return true;
+                        factory.save(copy);
+                        return true;
+                    }
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
                 } catch (BusinessException e) {
                     log.error(e.getMessage(), e);
+                } finally {
+
+                    try {
+                        factory.unlock(copy);
+                    } catch (PersistenceException e) {
+                        log.error(e.getMessage(), e);
+                    } catch (LoginException e) {
+                        log.error(e.getMessage(), e);
+                    }
                 }
             }
         }
