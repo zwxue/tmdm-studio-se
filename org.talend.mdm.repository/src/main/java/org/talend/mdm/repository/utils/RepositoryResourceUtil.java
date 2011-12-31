@@ -42,6 +42,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
@@ -153,8 +154,15 @@ public class RepositoryResourceUtil {
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
             if (configuration != null) {
                 IRepositoryNodeResourceProvider resourceProvider = configuration.getResourceProvider();
-                if (resourceProvider.needSaveReferenceFile()) {
+                if (resourceProvider.needSaveReferenceFile() && factory.isEditableAndLockIfPossible(item)) {
+
                     resourceProvider.handleReferenceFile(item);
+                    try {
+                        factory.unlock(item);
+                    } catch (LoginException e) {
+                        log.error(e.getMessage(), e);
+                    }
+
                 }
             }
             if (pushCommandStack) {

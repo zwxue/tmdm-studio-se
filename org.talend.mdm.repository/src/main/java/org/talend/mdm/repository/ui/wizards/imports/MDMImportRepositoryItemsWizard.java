@@ -95,14 +95,15 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         for (ItemRecord itemRec : itemRecords) {
             MDMServerObject serverObj = null;
             try {
-                for (IRepositoryViewObject object : ProxyRepositoryFactory.getInstance().getAllVersion(itemRec.getItemId())) {
+                ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+                for (IRepositoryViewObject object : factory.getAllVersion(itemRec.getItemId())) {
                     if (object.getVersion() != null && object.getVersion().equals(itemRec.getItemVersion())) {
                         if (object.getProperty().getItem() instanceof MDMServerObjectItem) {
                             Item item = object.getProperty().getItem();
                             serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
                             if (serverObj.getLastServerDef() != null) {
                                 serverObj.setLastServerDef(null);
-                                ProxyRepositoryFactory.getInstance().save(item);
+                                factory.save(item);
                             }
                             String name = serverObj.getName() == null ? item.getProperty().getLabel() : serverObj.getName();
                             // flagged as new

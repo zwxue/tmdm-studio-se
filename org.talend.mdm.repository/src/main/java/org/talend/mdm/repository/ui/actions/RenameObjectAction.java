@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -79,17 +80,27 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                     if (serverObject != null) {
                         String oldName = serverObject.getName();
                         String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem(), oldName);
-                        if (newName != null) {
+                        if (newName != null && factory.isEditableAndLockIfPossible(item)) {
                             serverObject.setName(newName);
                             viewObj.getProperty().setLabel(newName);
                             factory.save(viewObj.getProperty().getItem(), false);
-                            CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
-                                    new String[] { oldName, newName });
+                            if (serverObject.getLastServerDef() != null) {
+                                CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
+                                        new String[] { oldName, newName });
+                            }
                         }
                     }
                     commonViewer.refresh(obj);
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
+                } finally {
+                    try {
+                        factory.unlock(item);
+                    } catch (PersistenceException e) {
+                        log.error(e.getMessage(), e);
+                    } catch (LoginException e) {
+                        log.error(e.getMessage(), e);
+                    }
                 }
             }
         }
