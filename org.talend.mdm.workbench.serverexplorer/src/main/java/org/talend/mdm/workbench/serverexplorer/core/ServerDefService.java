@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.context.RepositoryContext;
@@ -88,13 +89,7 @@ public class ServerDefService {
 
         if (viewObject != null) {
             try {
-                // because TIS Repository's hard code
                 factory.deleteObjectPhysical(viewObject);
-                // so use the following to replace above
-                // Project project = ProjectManager.getInstance().getCurrentProject();
-                // IRepositoryViewObject object = new RepositoryObject(viewObject.getProperty());
-                // ((ProxyRepositoryFactory) factory).getRepositoryFactoryFromProvider().deleteObjectPhysical(project,
-                // object);
                 return true;
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
@@ -119,13 +114,24 @@ public class ServerDefService {
 
     public static boolean saveServeDef(MDMServerDefItem item) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
         try {
-            String name = item.getServerDef().getName();
-            item.getProperty().setLabel(name);
-            factory.save(item, false);
-            return true;
+            if (factory.isEditableAndLockIfPossible(item)) {
+                String name = item.getServerDef().getName();
+                item.getProperty().setLabel(name);
+                factory.save(item, false);
+                return true;
+            }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
+        } finally {
+            try {
+                factory.unlock(item);
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            } catch (LoginException e) {
+                log.error(e.getMessage(), e);
+            }
         }
         return false;
     }
