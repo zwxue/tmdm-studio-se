@@ -12,11 +12,11 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -25,6 +25,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -42,11 +43,12 @@ public class DeployToLastServerAction extends AbstractDeployAction {
 
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
 
-        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
-        for (Object obj : getSelectedObject()) {
-            viewObjs.add((IRepositoryViewObject) obj);
+        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
+        LockedObjectDialog dialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage, viewObjs);
+        if (dialog.needShowDialog() && dialog.open() == IDialogConstants.CANCEL_ID) {
+            return;
         }
-        IRepositoryViewObject viewObj = (IRepositoryViewObject) getSelectedObject().get(0);
+        IRepositoryViewObject viewObj = viewObjs.get(0);
         MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
         MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
         MDMServerDef currentServerDef = mdmServerObject.getLastServerDef();

@@ -64,6 +64,9 @@ public class RenameObjectAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
+    protected boolean needValidateLockedObject() {
+        return true;
+    }
     protected void doRun() {
         Object obj = getSelectedObject().get(0);
         if (obj instanceof IRepositoryViewObject) {

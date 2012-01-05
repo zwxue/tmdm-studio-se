@@ -193,6 +193,7 @@ public class MDMRepositoryView extends CommonNavigator {
             }
         }
     };
+
     IPartListener editorListener = new IPartListener() {
 
         public void partActivated(IWorkbenchPart part) {
@@ -215,7 +216,9 @@ public class MDMRepositoryView extends CommonNavigator {
                                 Display.getDefault().asyncExec(new Runnable() {
 
                                     public void run() {
-                                        getCommonViewer().refresh(viewObject);
+                                        if (!getCommonViewer().getTree().isDisposed()) {
+                                            getCommonViewer().refresh(viewObject);
+                                        }
                                     }
                                 });
 

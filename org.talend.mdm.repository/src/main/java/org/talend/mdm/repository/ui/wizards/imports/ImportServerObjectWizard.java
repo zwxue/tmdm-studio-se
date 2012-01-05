@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,7 +66,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.LoginException;
@@ -74,6 +74,7 @@ import org.talend.commons.utils.VersionUtils;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -88,6 +89,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.IOUtil;
@@ -141,7 +143,6 @@ public class ImportServerObjectWizard extends Wizard {
 
         setNeedsProgressMonitor(true);
         this.commonViewer = commonViewer;
-        IWorkbenchPage page = commonViewer.getCommonNavigator().getSite().getPage();
     }
 
     /*
@@ -151,6 +152,9 @@ public class ImportServerObjectWizard extends Wizard {
      */
     @Override
     public boolean performFinish() {
+        if (!showLockedObjDialog(selectedObjects)) {
+            return false;
+        }
         try {
             doImport();
         } catch (InvocationTargetException e) {
@@ -314,7 +318,7 @@ public class ImportServerObjectWizard extends Wizard {
             for (Enumeration entries = zipFile.entries(); entries.hasMoreElements();) {
                 ZipEntry entry = (ZipEntry) entries.nextElement();
                 if (!entry.isDirectory()) {
-                    if (entry.getName().endsWith(".proc")) {
+                    if (entry.getName().endsWith(".proc")) { //$NON-NLS-1$
                         entryInputStream = zipFile.getInputStream(entry);
                         processBytes = IOUtils.toByteArray(entryInputStream);
                     }
@@ -371,9 +375,33 @@ public class ImportServerObjectWizard extends Wizard {
         return null;
     }
 
+    private boolean showLockedObjDialog(Object[] objs) {
+        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        for (Object obj : objs) {
+            TreeObject treeObj = (TreeObject) obj;
+            String treeObjName = treeObj.getName();
+            ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
+            if (type != null && treeObjName != null) {
+                String uniqueName = getUniqueName(treeObj, treeObjName);
+                IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(type, uniqueName);
+                viewObjs.add(viewObject);
+            }
+        }
+        LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.ImportServerObjectWizard_lockedObjectMessage,
+                viewObjs);
+        if (lockDialog.needShowDialog() && lockDialog.open() == IDialogConstants.CANCEL_ID) {
+            return false;
+        }
+        return true;
+    }
+
     public void doImport(Object[] objs, IProgressMonitor monitor) {
         monitor.beginTask(Messages.Import_Objects, IProgressMonitor.UNKNOWN);
         ImportService.setImporting(true);
+        // if (!showLockedObjDialog(objs)) {
+        // ImportService.setImporting(false);
+        // return;
+        // }
         List<Integer> types = new ArrayList<Integer>();
         types.add(TreeObject.CUSTOM_FORM);
         types.add(TreeObject.DATA_CLUSTER);
@@ -406,34 +434,38 @@ public class ImportServerObjectWizard extends Wizard {
                 ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
                 String uniqueName = getUniqueName(treeObj, treeObjName);
                 MDMServerObjectItem item = RepositoryQueryService.findServerObjectItemByNameWithDeleted(type, uniqueName, true);
-                if (item != null) {
-                    if (!isOverrideAll) {
-                        int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
-                        if (result == IDialogConstants.CANCEL_ID) {
-                            return;
-                        }
-                        if (result == IDialogConstants.YES_TO_ALL_ID) {
-                            isOverrideAll = true;
-                        }
-                        if (result == IDialogConstants.NO_ID) {
-                            break;
-                        }
-                    }
-                    if (factory.isEditableAndLockIfPossible(item)) {
-                        item.setMDMServerObject(eobj);
-                        item.getState().setDeleted(false);
-                        // save
-                        RepositoryResourceUtil.saveItem(item);
-                        try {
-                            factory.unlock(item);
-                        } catch (PersistenceException e) {
-                            log.error(e.getMessage(), e);
-                        } catch (LoginException e) {
-                            log.error(e.getMessage(), e);
-                        }
-                    }
 
-                    CommandManager.getInstance().removeCommandStack(item.getProperty().getId());
+                if (item != null) {
+                    if (!RepositoryResourceUtil.isLockedItem(item)) {
+                        if (!isOverrideAll) {
+                            int result = isOveride(treeObj.getName(), TreeObject.getTypeName(treeObj.getType()));
+                            if (result == IDialogConstants.CANCEL_ID) {
+                                ImportService.setImporting(false);
+                                return;
+                            }
+                            if (result == IDialogConstants.YES_TO_ALL_ID) {
+                                isOverrideAll = true;
+                            }
+                            if (result == IDialogConstants.NO_ID) {
+                                break;
+                            }
+                        }
+                        if (factory.isEditableAndLockIfPossible(item)) {
+                            item.setMDMServerObject(eobj);
+                            item.getState().setDeleted(false);
+                            // save
+                            RepositoryResourceUtil.saveItem(item);
+                            try {
+                                factory.unlock(item);
+                            } catch (PersistenceException e) {
+                                log.error(e.getMessage(), e);
+                            } catch (LoginException e) {
+                                log.error(e.getMessage(), e);
+                            }
+                        }
+
+                        CommandManager.getInstance().removeCommandStack(item.getProperty().getId());
+                    }
                 } else {
                     IRepositoryNodeConfiguration config = RepositoryNodeConfigurationManager.getConfiguration(type);
                     item = (MDMServerObjectItem) config.getResourceProvider().createNewItem(type);

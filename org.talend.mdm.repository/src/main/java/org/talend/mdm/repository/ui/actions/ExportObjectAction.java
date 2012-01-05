@@ -58,7 +58,6 @@ public class ExportObjectAction extends AbstractRepositoryAction {
 
     protected void doRun() {
         try {
-            super.run();
             ISelection selection = null;
             // if (this.view != null) { // called from ServerView
             view = MDMRepositoryView.show();

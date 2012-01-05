@@ -29,7 +29,6 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class MDMEditPropertyAction extends AbstractRepositoryAction {
 
-
     public MDMEditPropertyAction() {
         super(Messages.EditPropertiesAction_action_title);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_PROPERTY.getPath()));
@@ -39,6 +38,9 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
         return GROUP_COMMON;
     }
 
+    protected boolean needValidateLockedObject() {
+        return true;
+    }
 
     protected void doRun() {
         for (Object obj : getSelectedObject()) {

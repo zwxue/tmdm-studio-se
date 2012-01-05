@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -121,9 +122,20 @@ public class DeployService {
     }
 
     public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
+        removeLockedViewObj(viewObjs);
         CommandManager manager = CommandManager.getInstance();
         List<AbstractDeployCommand> commands = manager.getDeployCommands(viewObjs, defaultCmdType);
         return runCommands(commands, serverDef);
+    }
+
+    private void removeLockedViewObj(List<IRepositoryViewObject> viewObjs) {
+        if (viewObjs != null) {
+            for (java.util.Iterator<IRepositoryViewObject> il = viewObjs.iterator(); il.hasNext();) {
+                if (RepositoryResourceUtil.isLockedViewObject(il.next())) {
+                    il.remove();
+                }
+            }
+        }
     }
 
     public IStatus runCommands(List<AbstractDeployCommand> commands, MDMServerDef serverDef) {

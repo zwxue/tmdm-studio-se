@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -26,9 +27,13 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -37,6 +42,7 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -152,7 +158,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             cmdMap = new HashMap<String, AbstractDeployCommand>();
             for (AbstractDeployCommand cmd : commands) {
                 if (cmd.getViewObject() != null) {
-                cmdMap.put(cmd.getViewObject().getId(), cmd);
+                    cmdMap.put(cmd.getViewObject().getId(), cmd);
                 }
             }
 
@@ -209,6 +215,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             }
         }
     }
+
     private void initWidget() {
         //
         setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -218,6 +225,35 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         DecoratingLabelProvider labelProvider = new DecoratingLabelProvider(new MDMRepositoryLabelProvider(), labelDecorator);
         treeViewer.setLabelProvider(labelProvider);
         treeViewer.setContentProvider(new ContentProvider());
+
+        treeViewer.getTree().addListener(SWT.PaintItem, new Listener() {
+
+            public void handleEvent(Event event) {
+                TreeItem item = (TreeItem) event.item;
+                Object data = item.getData();
+                if (data != null && lockedViewObjs.contains(data)) {
+                    String text = item.getText(event.index);
+                    Point point = event.gc.textExtent(text);
+                    int y = event.y + point.y / 2 + 2;
+                    int x = event.x + 20;
+                    event.gc.drawLine(x, y, x + point.x, y);
+                    event.gc.drawText(Messages.RepositoryViewObjectCheckedWidget_lock, x + point.x + 2, event.y + 2);
+                }
+            }
+
+        });
+
+        treeViewer.addCheckStateListener(new ICheckStateListener() {
+
+            public void checkStateChanged(CheckStateChangedEvent event) {
+                Object element = event.getElement();
+                if (lockedViewObjs.contains(element)) {
+                    treeViewer.setChecked(element, false);
+                }
+
+            }
+        });
+
         treeViewer.addFilter(new ViewerFilter() {
 
             private boolean containVisibleElement(FolderRepositoryObject parent) {
@@ -231,12 +267,14 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                         boolean result = containVisibleElement((FolderRepositoryObject) viewObj);
                         if (result) {
                             updateServerDef(viewObj);
+                            updateLockedObject(viewObj);
                             return true;
                         }
                     } else if (viewObj instanceof IRepositoryViewObject) {
                         boolean result = cmdMap.containsKey(viewObj.getId());
                         if (result) {
                             updateServerDef(viewObj);
+                            updateLockedObject(viewObj);
                             return true;
                         }
                     }
@@ -261,7 +299,14 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     }
 
     public void selectAll(boolean isAll) {
-        treeViewer.setAllChecked(isAll);
+
+        for (IRepositoryViewObject viewObj : input) {
+            treeViewer.setSubtreeChecked(viewObj, isAll);
+        }
+        for (IRepositoryViewObject lockObj : lockedViewObjs) {
+            treeViewer.setChecked(lockObj, false);
+        }
+
     }
 
     private void updateServerDef(IRepositoryViewObject viewObj) {
@@ -278,6 +323,17 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                     hasSameServerDef = false;
                 }
             }
+        }
+    }
+
+    private List<IRepositoryViewObject> lockedViewObjs = new LinkedList<IRepositoryViewObject>();
+
+    private void updateLockedObject(IRepositoryViewObject viewObject) {
+        if (viewObject instanceof FolderRepositoryObject) {
+            return;
+        }
+        if (RepositoryResourceUtil.isLockedViewObject(viewObject)) {
+            lockedViewObjs.add(viewObject);
         }
     }
 }

@@ -187,9 +187,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                     if (!selected)
                         return;
                     try { // svn lock
-                          // if (!factory.isLocalConnectionProvider()) {
                         ERepositoryStatus status = factory.getStatus(item);
-                        // if (status.isPotentiallyEditable()) {
                         if (factory.isEditableAndLockIfPossible(item)) {
                             getCommonViewer().refresh(viewObject);
                         }
@@ -213,6 +211,11 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                 }
             }
         }
+    }
+
+    @Override
+    protected boolean needValidateLockedObject() {
+        return true;
     }
 
     public String getGroupName() {
