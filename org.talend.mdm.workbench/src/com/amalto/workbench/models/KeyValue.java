@@ -27,7 +27,9 @@ public class KeyValue {
             return false;
         }
         KeyValue other=(KeyValue) obj;
-        return key.equals(other.key)&&value.equals(other.value);
+        if (key != null && value != null)
+            return key.equals(other.key) && value.equals(other.value);
+        return false;
     }
 
     public String toString() {
