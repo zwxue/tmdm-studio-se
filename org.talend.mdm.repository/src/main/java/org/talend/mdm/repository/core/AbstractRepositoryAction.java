@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
@@ -43,6 +44,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.RepositoryWorkUnit;
 
 /**
@@ -104,8 +106,34 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     @Override
     public final void run() {
-        // TODO judge lock and alert user
-        runRWU();
+        if (needValidateLockedObject()) {
+            if (isLocked()) {
+                MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertLockedMsg());
+            } else {
+                runRWU();
+            }
+        } else {
+            runRWU();
+        }
+    }
+
+    protected boolean isLocked() {
+        List<Object> selectedObject = getSelectedObject();
+        if (selectedObject != null && !selectedObject.isEmpty()) {
+            Object object = selectedObject.get(0);
+            if (object instanceof IRepositoryViewObject) {
+                return RepositoryResourceUtil.isLockedViewObject((IRepositoryViewObject) object);
+            }
+        }
+        return false;
+    }
+
+    protected boolean needValidateLockedObject() {
+        return false;
+    }
+
+    protected String getAlertLockedMsg() {
+        return Messages.AbstractRepositoryAction_lockedObjMessage;
     }
 
     protected void runRWU() {
@@ -122,7 +150,6 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     protected abstract void doRun();
 
-    // protected abstract void doRun(final Object... params);
     protected void refreshParent() {
         Object object = getSelectedObject().get(0);
         commonViewer.setSelection(new StructuredSelection());

@@ -68,6 +68,11 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
+    @Override
+    protected boolean needValidateLockedObject() {
+        return true;
+    }
+
     protected void doRun() {
         int size = getSelectedObject().size();
         if (size > 0) {

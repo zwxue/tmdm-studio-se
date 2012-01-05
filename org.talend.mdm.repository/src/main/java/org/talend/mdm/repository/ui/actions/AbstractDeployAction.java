@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -134,4 +135,13 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+    protected List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
+        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        for (Object obj : getSelectedObject()) {
+            if (obj instanceof IRepositoryViewObject)
+                viewObjs.add((IRepositoryViewObject) obj);
+        }
+        return viewObjs;
+    }
 }

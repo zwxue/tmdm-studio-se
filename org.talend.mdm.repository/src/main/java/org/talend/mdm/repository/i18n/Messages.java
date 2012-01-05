@@ -26,6 +26,10 @@ public class Messages extends NLS {
 
     public static String AbstractDeployAction_removeMessage;
 
+    public static String AbstractRepositoryAction_lockedObjMessage;
+
+    public static String AbstractRepositoryAction_lockedObjTitle;
+
     public static String AddBrowseItemsWizardR_duplicatedView;
 
 	public static String AddBrowseItemsWizardR_warning;
@@ -59,6 +63,8 @@ public class Messages extends NLS {
     public static String DataContainerInteractiveHandler_title;
 
     public static String DataModelInteractiveHandler_label;
+
+    public static String DeployAction_lockedObjectMessage;
 
     public static String DeployAllAction_label;
 
@@ -199,6 +205,8 @@ public class Messages extends NLS {
     public static String ImportServerObjectWizard_customForm;
 
     public static String ImportServerObjectWizard_loadCustomForm;
+
+    public static String ImportServerObjectWizard_lockedObjectMessage;
 
     public static String Import_Objects;
 
@@ -341,6 +349,8 @@ public class Messages extends NLS {
     public static String RepositoryViewFilterDialog_enableLastServerFilter;
     public static String RepositoryViewFilterDialog_lblLastServer;
     public static String RepositoryViewFilterDialog_btnSelectServer;
+
+    public static String RepositoryViewObjectCheckedWidget_lock;
 
     public static String EventManager_text;
     

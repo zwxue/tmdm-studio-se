@@ -82,6 +82,7 @@ import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.repository.ProjectManager;
+import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
@@ -112,6 +113,17 @@ public class RepositoryResourceUtil {
         return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
     }
 
+    public static boolean isLockedViewObject(IRepositoryViewObject viewObj) {
+        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+        ERepositoryStatus status = factory.getStatus(viewObj);
+        return status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER;
+    }
+
+    public static boolean isLockedItem(Item item) {
+        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+        ERepositoryStatus status = factory.getStatus(item);
+        return status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER;
+    }
     public static void saveItem(Item item) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {

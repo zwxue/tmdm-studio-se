@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -53,8 +54,10 @@ import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.ImportRepositoryObjectCheckTreeViewer;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.imports.ImportItemUtil;
 import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
@@ -74,25 +77,61 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     private ResourcesManager manager;
 
     private static Logger log = Logger.getLogger(MDMImportRepositoryItemsWizard.class);
-    ImportRepositoryObjectCheckTreeViewer checkTreeViewer;
 
+    ImportRepositoryObjectCheckTreeViewer checkTreeViewer;
 
     public MDMImportRepositoryItemsWizard(IStructuredSelection sel) {
         super(sel);
     }
 
     @Override
-    public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
-        ImportService.setImporting(true);
-        List<ItemRecord> itemRecords = new LinkedList<ItemRecord>();
-        for (Object obj : selectedObjs) {
+    public boolean performFinish() {
+        if (!showLockedObjDialog(getCheckedObjects())) {
+            return false;
+        }
+        return super.performFinish();
+    }
+
+    List<ItemRecord> toImportItemRecords = new LinkedList<ItemRecord>();
+
+    private boolean showLockedObjDialog(Object[] objs) {
+
+        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+        for (Object obj : objs) {
             if (obj instanceof ItemRecord) {
-                itemRecords.add((ItemRecord) obj);
+                ItemRecord itemRecord = (ItemRecord) obj;
+                try {
+                    IRepositoryViewObject viewObj = factory.getLastVersion(itemRecord.getProperty().getId());
+                    if (viewObj != null) {
+                        if (RepositoryResourceUtil.isLockedViewObject(viewObj)) {
+                            viewObjs.add(viewObj);
+                        } else {
+                            toImportItemRecords.add(itemRecord);
+                        }
+                    } else {
+                        toImportItemRecords.add(itemRecord);
+                    }
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                }
             }
         }
-        repositoryUtil.importItemRecords(manager, itemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
+        LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.ImportServerObjectWizard_lockedObjectMessage,
+                viewObjs);
+        if (lockDialog.needShowDialog() && lockDialog.open() == IDialogConstants.CANCEL_ID) {
+            return false;
+        }
+        return true;
+    }
 
-        for (ItemRecord itemRec : itemRecords) {
+    @Override
+    public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
+        ImportService.setImporting(true);
+
+        repositoryUtil.importItemRecords(manager, toImportItemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
+
+        for (ItemRecord itemRec : toImportItemRecords) {
             MDMServerObject serverObj = null;
             try {
                 ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
@@ -183,12 +222,13 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             items.addAll(repositoryUtil.populateItems(manager, isOverride, monitor));
 
         selectedItems.addAll(items);
-        
+
         if (this.importServerItem(items)) {
             Display.getDefault().syncExec(new Runnable() {
-                
+
                 public void run() {
-                    MessageDialog.openWarning(getContainer().getShell(), Messages.AddBrowseItemsWizardR_warning, Messages.RepositoryViewImportRepositoryItem_nothingImport); 
+                    MessageDialog.openWarning(getContainer().getShell(), Messages.AddBrowseItemsWizardR_warning,
+                            Messages.RepositoryViewImportRepositoryItem_nothingImport);
                     checkTreeViewer.getViewer().setInput(Collections.EMPTY_LIST);
                 }
             });
@@ -264,23 +304,23 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }.schedule();
     }
 
-
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.getViewer().setInput(null);
         checkTreeViewer.setItemText("Select items to import:");
         return returnComposite;
     }
-    
-    private boolean importServerItem(Collection<ItemRecord> items){
-        
-        if (items.size() == 0){
+
+    private boolean importServerItem(Collection<ItemRecord> items) {
+
+        if (items.size() == 0) {
             return true;
         }
         Iterator<ItemRecord> itemIt = items.iterator();
-        while (itemIt.hasNext()){
+        while (itemIt.hasNext()) {
             ItemRecord itemRecord = itemIt.next();
-            if (itemRecord.getExistingItemWithSameId() == null && itemRecord.getErrors() != null && itemRecord.getErrors().size() > 0){
+            if (itemRecord.getExistingItemWithSameId() == null && itemRecord.getErrors() != null
+                    && itemRecord.getErrors().size() > 0) {
                 return true;
             }
         }
