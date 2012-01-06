@@ -746,6 +746,7 @@ public class Util {
         String url = "http://localhost:8080/imageserver/upload/c201108/di_perspective_16x16.png.png";
         downloadFile(url, "/tmp");
     }
+
     public static OutputStream downloadFile(String url, String downloadFolder) {
         try {
             URL urlFile = new URL(url);
@@ -805,6 +806,7 @@ public class Util {
         }
         return null;
     }
+
     public static String uploadImageFile(String URL, String localFilename, String username, String password,
             HashMap<String, String> picturePathMap) throws XtentisException {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
@@ -1566,7 +1568,8 @@ public class Util {
             avaiList.addAll(systemDataModelValues);
         return avaiList;
     }
-    // modify this to resolve the bug 21723,by jsxie 
+
+    // modify this to resolve the bug 21723,by jsxie
     public static List<TreeObject> getChildrenObj(TreeParent xObject) {
         List<TreeObject> objs = new ArrayList<TreeObject>();
 
@@ -1575,35 +1578,34 @@ public class Util {
                 if (obj instanceof TreeParent) {
                     TreeParent parent = (TreeParent) obj;
                     if (parent != null) {
-                         // system folder
-                        if( obj.getType()== TreeObject.CATEGORY_FOLDER ){
+                        // system folder
+                        if (obj.getType() == TreeObject.CATEGORY_FOLDER) {
                             // Data container
-                            if ( obj.getParent().getType() == TreeObject.DATA_CLUSTER){ 
-                                for(TreeObject chld : ((TreeParent)obj).getChildren() ){
-                                    if(  chld.getName().equals(XSystemObjects.DC_PROVISIONING.getName()))
+                            if (obj.getParent().getType() == TreeObject.DATA_CLUSTER) {
+                                for (TreeObject chld : ((TreeParent) obj).getChildren()) {
+                                    if (chld.getName().equals(XSystemObjects.DC_PROVISIONING.getName()))
                                         objs.add(chld);
-                                    if(chld.getName().equals(XSystemObjects.DC_CONF.getName()))  
+                                    if (chld.getName().equals(XSystemObjects.DC_CONF.getName()))
                                         objs.add(chld);
                                 }
                                 continue;
-                            }
-                            else{
+                            } else {
                                 continue;
                             }
-                          }
-                        
-                        if( obj.getType()== TreeObject.RESOURCES ){
-                            for(TreeObject child : ((TreeParent)obj).getChildren() ){
-                                if(child.getType() == TreeObject.PICTURES_RESOURCE)  { 
-                                    objs.add(child);  
+                        }
+
+                        if (obj.getType() == TreeObject.RESOURCES) {
+                            for (TreeObject child : ((TreeParent) obj).getChildren()) {
+                                if (child.getType() == TreeObject.PICTURES_RESOURCE) {
+                                    objs.add(child);
                                 }
-                          } 
-                            continue;  
-                          }
+                            }
+                            continue;
+                        }
                         objs.addAll(getChildrenObj(parent));
-                    
+
                     }
-                    
+
                 } else {
                     if (obj.isXObject())
                         objs.add(obj);
@@ -2575,13 +2577,15 @@ public class Util {
         }
         return null;
     }
+
     /**
      * get all complex types's complextype children
+     * 
      * @param complexTypeDefinition
      * @return
      */
     public static ArrayList<Object> getAllComplexTypeChildren(XSDElementDeclaration declaration) {
-    	XSDComplexTypeDefinition complexTypeDefinition =(XSDComplexTypeDefinition)declaration.getTypeDefinition();
+        XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) declaration.getTypeDefinition();
         XSDComplexTypeContent xsdComplexTypeContent = complexTypeDefinition.getContent();
         ArrayList<Object> list = new ArrayList<Object>();
 
@@ -2589,15 +2593,15 @@ public class Util {
         if (xsdComplexTypeContent == null) {
             XSDTypeDefinition typeDefinition = complexTypeDefinition.getBaseTypeDefinition();
             if (typeDefinition instanceof XSDComplexTypeDefinition) {
-                list.add(((XSDComplexTypeDefinition) typeDefinition).getContent());                
-            } 
+                list.add(((XSDComplexTypeDefinition) typeDefinition).getContent());
+            }
         }
 
         // check if we are extending a complex Definition
         if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {//$NON-NLS-1$
             if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
-            	XSDComplexTypeDefinition complex=(XSDComplexTypeDefinition)complexTypeDefinition.getBaseTypeDefinition();
-            	XSDParticle particle=(XSDParticle)complex.getContent();
+                XSDComplexTypeDefinition complex = (XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition();
+                XSDParticle particle = (XSDParticle) complex.getContent();
                 if (particle.getTerm() instanceof XSDModelGroup) {
                     XSDModelGroup group = (XSDModelGroup) particle.getTerm();
                     EList<XSDParticle> elist = group.getContents();
@@ -2605,7 +2609,7 @@ public class Util {
                         if (pt.getContent() instanceof XSDElementDeclaration) {
                             XSDTypeDefinition typeDef = ((XSDElementDeclaration) pt.getContent()).getTypeDefinition();
                             if (typeDef instanceof XSDComplexTypeDefinition) {
-                            	list.addAll(getAllComplexTypeChildren((XSDElementDeclaration) pt.getContent()));
+                                list.addAll(getAllComplexTypeChildren((XSDElementDeclaration) pt.getContent()));
                             }
                         }
                     }
@@ -2613,16 +2617,14 @@ public class Util {
             }
         }
 
-
-
         // now check what we have in the content
 
-        //if (xsdComplexTypeContent instanceof XSDComplexTypeDefinition) {
-            list.add(declaration);
-        //}
+        // if (xsdComplexTypeContent instanceof XSDComplexTypeDefinition) {
+        list.add(declaration);
+        // }
 
         // xsd Particle: we have a model group
-        
+
         if (xsdComplexTypeContent instanceof XSDParticle) {
             XSDParticle particle = (XSDParticle) xsdComplexTypeContent;
             if (particle.getTerm() instanceof XSDModelGroup) {
@@ -2632,16 +2634,16 @@ public class Util {
                     if (pt.getContent() instanceof XSDElementDeclaration) {
                         XSDTypeDefinition typeDef = ((XSDElementDeclaration) pt.getContent()).getTypeDefinition();
                         if (typeDef instanceof XSDComplexTypeDefinition) {
-                        	list.addAll(getAllComplexTypeChildren((XSDElementDeclaration) pt.getContent()));
+                            list.addAll(getAllComplexTypeChildren((XSDElementDeclaration) pt.getContent()));
                         }
                     }
                 }
             }
         }
-        
 
         return list;
     }
+
     public static ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
         // log.info("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
 
@@ -3060,10 +3062,9 @@ public class Util {
 
     public static List<XSDSimpleTypeDefinition> getAllBuildInTypes(XSDSchema schema) {
 
-        if(schema == null)
-            return new ArrayList <XSDSimpleTypeDefinition> ();
-        
-        
+        if (schema == null)
+            return new ArrayList<XSDSimpleTypeDefinition>();
+
         List<XSDSimpleTypeDefinition> builtInTypes = new ArrayList<XSDSimpleTypeDefinition>();
         for (XSDTypeDefinition eachBuildInTypeDef : schema.getSchemaForSchema().getTypeDefinitions()) {
 
@@ -3279,5 +3280,23 @@ public class Util {
                 }
             }
         }
+    }
+
+    public static String formatErrorMessage(String sourceMessage) {
+        String result = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+        String saxExceptionPattern = "\\[\\w*\\]\\s:\\d+:\\d+:\\s.+:\\s"; //$NON-NLS-1$
+        String nestedExceptionPattern = ";?\\s?nested exception is:[\\w\\W]*"; //$NON-NLS-1$              
+
+        pattern = Pattern.compile(saxExceptionPattern);
+        matcher = pattern.matcher(sourceMessage);
+        result = matcher.replaceFirst(""); //$NON-NLS-1$
+
+        pattern = Pattern.compile(nestedExceptionPattern);
+        matcher = pattern.matcher(result);
+        result = matcher.replaceFirst(""); //$NON-NLS-1$
+
+        return result;
     }
 }

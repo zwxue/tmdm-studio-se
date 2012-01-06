@@ -843,8 +843,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 }
                                 // previousDataModel = d.getDataModelName();
                             } catch (Exception e) {
-                                MessageDialog.openError(shell, "Error saving the Record",
-                                        "An error occured trying save the Record:\n\n " + e.getLocalizedMessage());
+                                MessageDialog
+                                        .openError(shell,
+                                                "Error saving the Record", //$NON-NLS-1$
+                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage())); //$NON-NLS-1$
                                 return;
                             }
                         }// if
@@ -1346,8 +1348,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             // attempt to save
                             try {
                                 final XtentisPort port = Util.getPort(getXObject());
-                                WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject()
-                                        .getWsKey(), d.getXML(), "".equals(d //$NON-NLS-1$
+                                WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
+                                        "".equals(d //$NON-NLS-1$
                                                 .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);
                                 WSPutItemWithReport item = new WSPutItemWithReport(putItem, "genericUI", d.isBeforeVerification());//$NON-NLS-1$
                                 if (d.isTriggerProcess()) {
@@ -1357,8 +1359,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 }
                                 doSearch();
                             } catch (Exception e) {
-                                MessageDialog.openError(shell, "Error saving the Record",
-                                        "An error occured trying save the Record:\n\n " + e.getLocalizedMessage());
+                                MessageDialog
+                                        .openError(shell,
+                                                "Error saving the Record", //$NON-NLS-1$
+                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage()));//$NON-NLS-1$
                                 return;
                             }
                         }// if
