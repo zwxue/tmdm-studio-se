@@ -296,6 +296,10 @@ public class Messages extends NLS {
 
     public static String MDMExportRepositoryItemsWizard_exportItem;
 
+    public static String MDMImportRepositoryItemsWizard_refreshServer;
+
+    public static String MDMImportRepositoryItemsWizard_toImport;
+
     public static String MenuInteractiveHandler_label;
 
     public static String SelectItemsPage_Title;
