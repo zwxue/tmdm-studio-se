@@ -193,7 +193,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                         }
                         //
                         editorInput.setReadOnly(status == ERepositoryStatus.LOCK_BY_OTHER);
-                        // }
+
                         if (!editorInput.isReadOnly()) {
                             editorInput.setReadOnly(item.getState().isDeleted());
                         }

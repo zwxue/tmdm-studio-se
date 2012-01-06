@@ -159,7 +159,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     protected void createOverwriteBtn(Composite composite) {
         btnOverwrite = new Button(composite, SWT.CHECK);
-        btnOverwrite.setText("Overwrite existing items"); //$NON-NLS-N$
+        btnOverwrite.setText(Messages.Overwrite_Exists_Items);
         btnOverwrite.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -293,7 +293,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     @Override
     protected void refreshViewJob() {
-        new UIJob("Refreshing server") {
+        new UIJob(Messages.MDMImportRepositoryItemsWizard_refreshServer) {
 
             @Override
             public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -307,7 +307,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.getViewer().setInput(null);
-        checkTreeViewer.setItemText("Select items to import:");
+        checkTreeViewer.setItemText(Messages.MDMImportRepositoryItemsWizard_toImport);
         return returnComposite;
     }
 

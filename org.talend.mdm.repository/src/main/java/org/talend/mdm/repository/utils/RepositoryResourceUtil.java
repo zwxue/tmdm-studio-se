@@ -669,12 +669,6 @@ public class RepositoryResourceUtil {
                         viewObjects.add(folderObject);
                     }
                 }
-                // else if (res instanceof IFile) {
-                // if (resourceManager.isPropertyFile((IFile) res)) {
-                // Property property = resourceManager.loadProperty(res);
-                // viewObjects.add(new RepositoryObject(property));
-                // }
-                // }
             }
             List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem, useRepositoryViewObject, withDeleted);
             viewObjects.addAll(children);
@@ -784,19 +778,7 @@ public class RepositoryResourceUtil {
             IFolder stableFolder = fsProject.getFolder(((ContainerItem) parentItem).getRepObjType().getFolder());
             List<IRepositoryViewObject> viewObjects = findViewObjects(type, parentItem, stableFolder, useRepositoryViewObject,
                     false);
-            // if (hasSystemFolder) {
-            //                IRepositoryViewObject sysFolderViewOj = createFolderViewObject(type, "System", null, true); //$NON-NLS-1$
-            // for (Iterator<IRepositoryViewObject> il = viewObjects.iterator(); il.hasNext();) {
-            // IRepositoryViewObject viewObject = il.next();
-            // String key = viewObject.getProperty().getLabel();
-            // if (XSystemObjects.isXSystemObject(systemType, key)) {
-            // sysFolderViewOj.getChildren().add(viewObject);
-            // ((MDMServerObjectItem) viewObject.getProperty().getItem()).getMDMServerObject().setSystem(true);
-            // il.remove();
-            // }
-            // }
-            // viewObjects.add(0, sysFolderViewOj);
-            // }
+
             return viewObjects;
         } catch (PersistenceException e) {
             return Collections.EMPTY_LIST;
