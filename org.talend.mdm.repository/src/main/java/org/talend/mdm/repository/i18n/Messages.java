@@ -351,6 +351,7 @@ public class Messages extends NLS {
     public static String RepositoryViewFilterDialog_btnSelectServer;
 
     public static String EventManager_text;
+	public static String RepositoryViewObjectCheckedWidget_lock;
 
     // //////////////////////////////////////////////////////////////////////////
     //
