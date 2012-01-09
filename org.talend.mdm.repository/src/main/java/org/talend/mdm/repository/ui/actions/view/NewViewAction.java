@@ -113,10 +113,10 @@ public class NewViewAction extends AbstractSimpleAddAction {
             return;
         String key = vid.getValue();
 
-        createServerObject(key);
+        Item item = createServerObject(key);
         commonViewer.refresh(selectObj);
         commonViewer.expandToLevel(selectObj, 1);
-
+        openEditor(item);
     }
 
     protected Item createServerObject(String key) {
