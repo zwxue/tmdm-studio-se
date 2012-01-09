@@ -2645,13 +2645,6 @@ public class Util {
     }
 
     public static ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
-        // log.info("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
-
-        // log.info(
-        // "getComplexTypeDefinitionChildren BASE TYPE "+
-        // complexTypeDefinition.getBaseTypeDefinition().getName()+" : "+
-        // complexTypeDefinition.getDerivationMethod().getName()
-        // );
 
         XSDComplexTypeContent xsdComplexTypeContent = complexTypeDefinition.getContent();
         ArrayList<Object> list = new ArrayList<Object>();
@@ -2671,9 +2664,13 @@ public class Util {
 
         // check if we are extending a complex Definition
         if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {//$NON-NLS-1$
+
             if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                String name = ((XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition()).getDerivationMethod()
+                        .getName();
+                if (name.equals("restriction")) //$NON-NLS-1$
                 list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) complexTypeDefinition
-                        .getBaseTypeDefinition()));
+                            .getBaseTypeDefinition()));
             }
         }
 
