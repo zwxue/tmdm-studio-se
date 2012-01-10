@@ -12,8 +12,12 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.bridge;
 
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -31,7 +35,13 @@ public class DeleteAction extends AbstractBridgeRepositoryAction {
 
     protected void doRun() {
         super.doRun();
-        refreshParentContainer();
+        commonViewer.refresh();
+        for (Object obj : getSelectedObject()) {
+            if (obj instanceof IRepositoryViewObject && !(obj instanceof FolderRepositoryObject)) {
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+                CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), viewObj.getLabel());
+            }
+        }
     }
 
 }

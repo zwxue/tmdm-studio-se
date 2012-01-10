@@ -14,8 +14,6 @@ import org.talend.mdm.repository.core.command.CommandStack;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -59,7 +57,7 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
                 return;
             case ICommand.CMD_MODIFY:
             case ICommand.CMD_RENAME:
-                decoration.addPrefix("> ");
+                decoration.addPrefix("> "); //$NON-NLS-1$
                 decoration.addOverlay(IMG_MODIFY, IDecoration.BOTTOM_RIGHT);
                 return;
 
@@ -75,12 +73,11 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
     }
 
     private void decorateRepositoryObject(Item item, IDecoration decoration) {
-        if (item != null && item instanceof MDMServerObjectItem) {
-            MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-            MDMServerDef serverDef = serverObject.getLastServerDef();
+        if (item != null) {
+            MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(item);
             if (serverDef != null) {
                 decoration.addOverlay(IMG_SERVER, IDecoration.TOP_RIGHT);
-                decoration.addSuffix(" " + serverDef.getName());
+                decoration.addSuffix(" " + serverDef.getName()); //$NON-NLS-1$
             }
         }
     }
@@ -93,11 +90,11 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
             if (index > 0) {
                 path = path.substring(0, index);
             } else if (index == 0) {
-                path = "";
+                path = ""; //$NON-NLS-1$
             }
         }
         if (path.length() > 0) {
-            decoration.addSuffix(" (" + path + ")");
+            decoration.addSuffix(" (" + path + ")"); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 

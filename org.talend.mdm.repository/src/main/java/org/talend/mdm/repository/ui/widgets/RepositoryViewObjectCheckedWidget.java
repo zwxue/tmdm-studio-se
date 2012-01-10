@@ -45,7 +45,6 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
@@ -289,7 +288,6 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 } else {
                     return cmdMap.containsKey(((IRepositoryViewObject) element).getId());
                 }
-                // return true;
 
             }
         });
@@ -312,9 +310,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     private void updateServerDef(IRepositoryViewObject viewObj) {
         if (hasSameServerDef) {
             Item item = viewObj.getProperty().getItem();
-            if (item instanceof ContainerItem)
+            if (item == null || item instanceof ContainerItem)
                 return;
-            MDMServerDef serverDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
+            MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(item);
             if (lastServerDef == null) {
                 lastServerDef = serverDef;
             } else {

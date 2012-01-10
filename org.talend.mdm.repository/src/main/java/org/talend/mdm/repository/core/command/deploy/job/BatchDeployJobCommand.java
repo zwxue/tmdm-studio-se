@@ -37,6 +37,14 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
 
     List<ICommand> subCmds = new ArrayList<ICommand>();
 
+    public List<ICommand> getSubCmds() {
+        return this.subCmds;
+    }
+
+    public List<ICommand> getSubDeleteCmds() {
+        return this.subDeleteCmds;
+    }
+
     List<ICommand> subDeleteCmds = new ArrayList<ICommand>();
 
     public void addCommand(ICommand cmd) {
@@ -47,10 +55,13 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
     }
 
     public boolean isEmpty() {
-        return subCmds.size() == 0;
+        return subCmds.isEmpty() && subDeleteCmds.isEmpty();
     }
 
     public void addDeleteCommand(ICommand cmd) {
+        if (cmd instanceof AbstractDeployCommand && getServerDef() == null) {
+            setServerDef(((AbstractDeployCommand) cmd).getServerDef());
+        }
         subDeleteCmds.add(cmd);
     }
 
@@ -128,4 +139,5 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
     public int getCommandType() {
         return CMD_MODIFY;
     }
+
 }

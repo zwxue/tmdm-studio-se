@@ -59,7 +59,11 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         result = false;
         if (cmd instanceof BatchDeployJobCommand) {
             BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) cmd;
-            IStructuredSelection selection = getSelection(deployJobCommand.getViewObjects());
+            List<IRepositoryViewObject> viewObjects = deployJobCommand.getViewObjects();
+            if (viewObjects.isEmpty()) {
+                return true;
+            }
+            IStructuredSelection selection = getSelection(viewObjects);
             //
             final DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
             SpagoBiServer server = getServer(deployJobCommand.getServerDef());

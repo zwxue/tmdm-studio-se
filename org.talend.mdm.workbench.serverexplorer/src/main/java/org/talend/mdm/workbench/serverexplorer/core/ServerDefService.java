@@ -112,6 +112,19 @@ public class ServerDefService {
         return false;
     }
 
+    public static MDMServerDef findServerDefByName(String name) {
+        if (name == null)
+            throw new IllegalArgumentException();
+        List<MDMServerDef> serverDefs = getAllServerDefs();
+        if (serverDefs != null) {
+            for (MDMServerDef def : serverDefs) {
+                if (def.getName().equalsIgnoreCase(name))
+                    return def;
+            }
+        }
+        return null;
+    }
+
     public static boolean saveServeDef(MDMServerDefItem item) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
