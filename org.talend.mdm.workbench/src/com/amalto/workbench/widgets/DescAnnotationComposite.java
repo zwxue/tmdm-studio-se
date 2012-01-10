@@ -14,7 +14,6 @@ package com.amalto.workbench.widgets;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.window.Window;
@@ -144,74 +143,85 @@ public class DescAnnotationComposite implements SelectionListener {
         fillDataStore(text);
     }
 
+    public static void parseMultiLanguageString(String s, Map<String, String> m) {
+        // Parse states
+        final byte PARSE_ERROR = 0;
+        final byte LOOKING_FOR_OPENING_BRACKET = 1;
+        final byte LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR = 2;
+        final byte LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR = 3;
+        final byte LOOKING_FOR_COLON = 4;
+        final byte LOOKING_FOR_CLOSING_BRACKET = 5;
+        final byte ENCOUNTERED_FIRST_BACKSLASH = 6;
+
+        byte parseState = LOOKING_FOR_OPENING_BRACKET;
+        StringBuffer countryCodeBuffer = new StringBuffer(); // string buffer for constructing current country code
+        StringBuffer messageBuffer = new StringBuffer(); // string buffer for constructing current error message
+
+        for (int i = 0, l = s.length(); i < l && parseState != PARSE_ERROR; ++i) {
+            char c = s.charAt(i);
+
+            switch (parseState) {
+            case LOOKING_FOR_OPENING_BRACKET:
+                if (c == '[') {
+                    parseState = LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR;
+                }
+                break;
+            case LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR:
+                if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
+                    countryCodeBuffer.append(c);
+                    parseState = LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR;
+                } else {
+                    parseState = LOOKING_FOR_OPENING_BRACKET;
+                }
+                break;
+            case LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR:
+                if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
+                    countryCodeBuffer.append(c);
+                    parseState = LOOKING_FOR_COLON;
+                } else {
+                    countryCodeBuffer = new StringBuffer();
+                    parseState = LOOKING_FOR_OPENING_BRACKET;
+                }
+                break;
+            case LOOKING_FOR_COLON:
+                if (c == ':') {
+                    parseState = LOOKING_FOR_CLOSING_BRACKET;
+                } else {
+                    countryCodeBuffer = new StringBuffer();
+                    parseState = LOOKING_FOR_OPENING_BRACKET;
+                }
+                break;
+            case LOOKING_FOR_CLOSING_BRACKET:
+                if (c == ']') {
+                    String countryCode = countryCodeBuffer.toString().toLowerCase();
+                    if (Util.iso2lang.get(countryCode) != null) {
+                        m.put(countryCode, messageBuffer.toString());
+                    }
+                    countryCodeBuffer = new StringBuffer();
+                    messageBuffer = new StringBuffer();
+                    parseState = LOOKING_FOR_OPENING_BRACKET;
+                } else if (c == '\\') {
+                    parseState = ENCOUNTERED_FIRST_BACKSLASH;
+                } else {
+                    messageBuffer.append(c);
+                }
+                break;
+            case ENCOUNTERED_FIRST_BACKSLASH:
+                if (c == '\\' || c == ']') {
+                    messageBuffer.append(c);
+                }
+                parseState = LOOKING_FOR_CLOSING_BRACKET;
+                break;
+            default:
+                parseState = PARSE_ERROR;
+            }
+        }
+    }
+
     private void fillDataStore(String text) {
         dataStore.clear();
-        
-      // modified by jsxie  to fix the bug 19542        
-		int enIndex =text.indexOf("[EN:");   //$NON-NLS-1$
-		int frIndex =text.indexOf("[FR:");   //$NON-NLS-1$
-		
-		if(enIndex >= 0 && frIndex >=0 ){
-			// EN first
-			if(enIndex < frIndex ){
-			   String enDesc = text.substring(enIndex+4,frIndex-1);
-			   String frDesc = text.substring(frIndex+4,text.length()-1 );
-			  
-               dataStore.put("en", enDesc);  //$NON-NLS-1$
-               dataStore.put("fr", frDesc);  //$NON-NLS-1$
-			   
-			   
-			}
-			// FR first
-			else{
-				String enDesc = text.substring(enIndex+4,text.length()-1);
-				String frDesc = text.substring(frIndex+4,enIndex-1 );
-				
-	           
-	            dataStore.put("fr", frDesc);  //$NON-NLS-1$
-	            dataStore.put("en", enDesc);  //$NON-NLS-1$
-
-			}
-		}
-		// only EN
-		else if (enIndex>=0 && frIndex==-1){
-			   String enDesc = text.substring(enIndex+4,text.length()-1);
-			   dataStore.put("en", enDesc);   //$NON-NLS-1$
-			
-		}
-		//only FR
-		else if(frIndex>=0 && enIndex==-1){
-			   String frDesc = text.substring(frIndex+4,text.length()-1);
-			   
-			   dataStore.put("fr", frDesc);   //$NON-NLS-1$
-			
-		}
-		// only text or blank or null 
-		else if ( !text.equals("") && text.indexOf("[")== -1){    //$NON-NLS-1$ //$NON-NLS-2$
-			dataStore.put("en", text);//$NON-NLS-1$
-		}
-		
-		//  the original code ,use regular expression
-		
-		else {
-	        boolean find = false;
-	        Matcher match = DESC_PATTERN.matcher(text);
-	        
-	        while (match.find()) {
-	            find = true;
-	            String country = match.group(1).trim().toLowerCase();
-	            String desc = match.group(2).trim();
-	            if (Util.iso2lang.get(country) != null) {
-	                dataStore.put(country, desc);
-	            }
-	        }
-	      if (!find && !text.equals("")) {//$NON-NLS-1$
-	      dataStore.put("en", text);//$NON-NLS-1$
-	  }
-			
-  }
-        
- }
+        parseMultiLanguageString(text, dataStore);
+    }
 
     public String getText() {
         return descriptionText.getText();
