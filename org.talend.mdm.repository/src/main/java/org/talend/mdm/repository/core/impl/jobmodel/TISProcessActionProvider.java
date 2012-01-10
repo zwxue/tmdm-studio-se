@@ -144,6 +144,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             addAction(actions, deployToLastServerAction, viewObj);
 
         }
+        actions.add(deployAllAction);
         return actions;
     }
 
