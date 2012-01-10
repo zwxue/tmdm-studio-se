@@ -45,10 +45,8 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
                                 + " was deployed successfully");
                     return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was created successfully");
                 }
-                // return DeployStatus.getOKStatus(item, "Success to deploy " + typeLabel + " \"" + objectName
-                // + "\"");
                 else
-                    return DeployStatus.getInfoStatus(this, "Skip to deploy " + typeLabel + " \"" + objectName + "\"");
+                    return DeployStatus.getErrorStatus(this, "Fail to deploy " + typeLabel + " \"" + objectName);
             } catch (RemoteException e) {
                 return DeployStatus.getErrorStatus(this,
                         "Fail to deploy " + typeLabel + " \"" + objectName + "\",Cause is:" + e.getMessage(), e);
