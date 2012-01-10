@@ -244,12 +244,26 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
         treeViewer.addCheckStateListener(new ICheckStateListener() {
 
+            private void checkSubElement(IRepositoryViewObject viewObj) {
+                if (viewObj instanceof FolderRepositoryObject) {
+                    List<IRepositoryViewObject> children = ((FolderRepositoryObject) viewObj).getChildren();
+                    if (children != null) {
+                        for (IRepositoryViewObject child : children) {
+                            checkSubElement(child);
+                        }
+                    }
+                } else {
+                    if (lockedViewObjs.contains(viewObj)) {
+                        treeViewer.setChecked(viewObj, false);
+                    }
+                }
+            }
+
             public void checkStateChanged(CheckStateChangedEvent event) {
                 Object element = event.getElement();
-                if (lockedViewObjs.contains(element)) {
-                    treeViewer.setChecked(element, false);
+                if (element instanceof IRepositoryViewObject) {
+                    checkSubElement((IRepositoryViewObject) element);
                 }
-
             }
         });
 
