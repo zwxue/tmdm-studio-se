@@ -12,10 +12,9 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -46,12 +45,9 @@ import org.talend.repository.model.IProxyRepositoryFactory;
  */
 public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
-    
-
     private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/deploy.png"); //$NON-NLS-1$
 
-  
     protected AbstractDeployAction(String text) {
         super(text);
         setImageDescriptor(DEPLOY_IMG);
@@ -109,7 +105,6 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
                     if (command.getCommandType() == ICommand.CMD_DELETE && !(command instanceof CompoundCommand)) {
 
                         UpdateLastServerCommand emptyLastServerCommand = new UpdateLastServerCommand();
-                        //
                         PushCmdCommand pushCmd = new PushCmdCommand();
                         pushCmd.setPushCmdType(ICommand.CMD_ADD);
                         pushRestoreCommand(manager, command, emptyLastServerCommand);
@@ -142,6 +137,7 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
     protected List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : getSelectedObject()) {
