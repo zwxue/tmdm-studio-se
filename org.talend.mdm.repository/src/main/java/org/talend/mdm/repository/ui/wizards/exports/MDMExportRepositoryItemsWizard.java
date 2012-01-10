@@ -28,11 +28,12 @@ import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.local.ExportItemUtil;
 
 import com.amalto.workbench.export.ExportItemsWizard;
+
 /**
  * DOC hywang class global comment. this wizard is used to export the selected items from MDMRepositoryView
  */
@@ -68,7 +69,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
                 ExportItemUtil exportItemUtil = new ExportItemUtil();
                 // MOD sgandon 31/03/2010 bug 12229: moved getAllVersion into ExportItemUtil.exportitems() method.
                 exportItemUtil.exportItems(new File(exportFolder), selectedItems, true, monitor);
-                
+
             } catch (Exception e) {
                 MessageBoxExceptionHandler.process(e);
             } finally {
@@ -92,8 +93,8 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
             toReturn = new ArrayList<Item>();
             for (RepositoryViewObject obj : objs) {
                 Item item = obj.getProperty().getItem();
-                if (item instanceof MDMServerObjectItem) {
-                    ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(null);
+                if (item != null) {
+                    RepositoryResourceUtil.setLastServerDef(item, null);
                 }
                 toReturn.add(item);
             }

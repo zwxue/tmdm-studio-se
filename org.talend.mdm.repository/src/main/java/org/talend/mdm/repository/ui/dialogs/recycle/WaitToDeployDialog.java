@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
@@ -42,8 +41,8 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -149,10 +148,7 @@ public class WaitToDeployDialog extends Dialog {
             ICommand validCommand = commandStack.getValidDeployCommand();
             if (validCommand instanceof AbstractDeployCommand) {
                 if (validCommand.getCommandType() == ICommand.CMD_DELETE) {
-                    Item item = viewObj.getProperty().getItem();
-                    if (item instanceof MDMServerObjectItem) {
-                        return ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef() != null;
-                    }
+                    return RepositoryResourceUtil.getLastServerDef(viewObj) != null;
                 }
                 return true;
             }

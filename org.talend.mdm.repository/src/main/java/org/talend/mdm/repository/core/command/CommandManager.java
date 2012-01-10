@@ -180,6 +180,26 @@ public class CommandManager implements IMementoAware {
         }
     }
 
+    private void removeCommandStack(List<ICommand> cmds, int phase) {
+        if (cmds == null || cmds.isEmpty())
+            return;
+        for (ICommand cmd : cmds) {
+            removeCommandStack(cmd.getCommandId(), phase);
+        }
+    }
+
+    public void removeCommandStack(ICommand cmd, int phase) {
+        if (cmd == null)
+            return;
+        if (cmd instanceof BatchDeployJobCommand) {
+            BatchDeployJobCommand jobCommand = (BatchDeployJobCommand) cmd;
+            removeCommandStack(jobCommand.getSubCmds(), phase);
+            removeCommandStack(jobCommand.getSubDeleteCmds(), phase);
+        } else {
+            removeCommandStack(cmd.getCommandId(), phase);
+        }
+    }
+
     public void restoreState(IMemento aMemento) {
         if (map.isEmpty() && aMemento != null) {
             IMemento cmdManagerMem = aMemento.getChild(ICommand.MDM_COMMANDS);
@@ -303,7 +323,12 @@ public class CommandManager implements IMementoAware {
                         }
                     }
                 } else {
-                    jobCommand.addCommand(cmd);
+                    int type = cmd.getCommandType();
+                    if (type == ICommand.CMD_DELETE) {
+                        jobCommand.addDeleteCommand(cmd);
+                    } else {
+                        jobCommand.addCommand(cmd);
+                    }
                 }
                 il.remove();
             }

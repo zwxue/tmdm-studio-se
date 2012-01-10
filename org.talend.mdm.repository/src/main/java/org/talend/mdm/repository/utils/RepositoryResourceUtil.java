@@ -73,6 +73,7 @@ import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -81,6 +82,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -124,6 +126,7 @@ public class RepositoryResourceUtil {
         ERepositoryStatus status = factory.getStatus(item);
         return status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER;
     }
+
     public static void saveItem(Item item) {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
@@ -922,5 +925,50 @@ public class RepositoryResourceUtil {
             }
         }
         return typePathMap.get(path);
+    }
+
+    private static final String PROP_LAST_SERVER_DEF = "lastServerDef";
+
+    public static MDMServerDef getLastServerDef(IRepositoryViewObject viewObj) {
+        if (viewObj != null) {
+            Item item = viewObj.getProperty().getItem();
+            return getLastServerDef(item);
+        }
+        return null;
+    }
+
+    public static MDMServerDef getLastServerDef(Item item) {
+        if (item != null) {
+            if (item instanceof MDMServerObjectItem) {
+                return ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
+            }
+            Property property = item.getProperty();
+            if (property != null) {
+                Object value = property.getAdditionalProperties().get(PROP_LAST_SERVER_DEF);
+                if (value != null) {
+                    return ServerDefService.findServerDefByName((String) value);
+                }
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void setLastServerDef(Item item, MDMServerDef def) {
+        if (item == null)
+            return;
+        if (item instanceof MDMServerObjectItem) {
+            ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(def);
+            return;
+        }
+        Property property = item.getProperty();
+        if (property != null) {
+            if (def != null)
+                property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, def.getName());
+            else {
+                property.getAdditionalProperties().remove(PROP_LAST_SERVER_DEF);
+            }
+        }
+
     }
 }

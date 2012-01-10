@@ -18,13 +18,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.Item;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.AbstractCommand;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
@@ -36,9 +36,9 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     private static IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private MDMServerObjectItem item;
+    private Item item;
 
-    public void setItem(MDMServerObjectItem item) {
+    public void setItem(Item item) {
         this.item = item;
     }
 
@@ -52,7 +52,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     }
 
-    public UpdateLastServerCommand(MDMServerObjectItem item, MDMServerDef serverDef) {
+    public UpdateLastServerCommand(Item item, MDMServerDef serverDef) {
         this.item = item;
         this.serverDef = serverDef;
 
@@ -80,7 +80,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
             if (viewObject == null) {
                 CommandManager.getInstance().fillViewObjectToCommand(this);
             }
-            item = (MDMServerObjectItem) viewObject.getProperty().getItem();
+            item = viewObject.getProperty().getItem();
         }
         if (item != null) {
             saveLastServer(item, serverDef);
@@ -88,11 +88,10 @@ public class UpdateLastServerCommand extends AbstractCommand {
         return Status.OK_STATUS;
     }
 
-    private void saveLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
+    private void saveLastServer(Item item, MDMServerDef serverDef) {
 
         if (factory.isEditableAndLockIfPossible(item)) {
-            MDMServerObject mdmServerObject = item.getMDMServerObject();
-            mdmServerObject.setLastServerDef(serverDef);
+            RepositoryResourceUtil.setLastServerDef(item, serverDef);
             try {
                 factory.save(item);
             } catch (PersistenceException e) {

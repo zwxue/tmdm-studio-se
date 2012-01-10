@@ -12,9 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -50,8 +47,6 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     static Logger log = Logger.getLogger(RemoveFromRepositoryAction.class);
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-
-    private static List<IRepositoryViewObject> viewObjectsListRemoved = new ArrayList<IRepositoryViewObject>();
 
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
@@ -117,15 +112,9 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
                 RepositoryResourceUtil.closeEditor(ref, true);
             }
             MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-            if (serverObj.getLastServerDef() != null) {
-                viewObjectsListRemoved.add(viewObj);
-            }
 
-            // Property property = viewObj.getProperty();
-            // ContainerCacheService.remove(property);
             factory.deleteObjectLogical(viewObj);
             CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), serverObj.getName());
-            // factory.deleteObjectPhysical(viewObj);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -141,21 +130,15 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         }
         //
         ContainerItem containerItem = (ContainerItem) viewObj.getProperty().getItem();
-        // Project project = ProjectManager.getInstance().getCurrentProject();
         String path = containerItem.getState().getPath();
         ERepositoryObjectType repObjType = containerItem.getRepObjType();
 
         ContainerCacheService.removeContainer(repObjType, path);
 
-        // factory.deleteFolder(project, repObjType, new Path(path), false);
         FolderItem folderItem = factory.getFolderItem(ProjectManager.getInstance().getCurrentProject(), repObjType,
                 new Path(path));
         folderItem.getState().setDeleted(true);
 
-    }
-
-    public static List<IRepositoryViewObject> getViewObjectsRemovedList() {
-        return viewObjectsListRemoved;
     }
 
 }

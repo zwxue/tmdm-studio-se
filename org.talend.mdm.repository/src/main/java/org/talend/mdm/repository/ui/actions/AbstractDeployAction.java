@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
@@ -30,11 +31,11 @@ import org.talend.mdm.repository.core.command.common.PushCmdCommand;
 import org.talend.mdm.repository.core.command.common.UpdateLastServerCommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.command.deploy.DeployCompoundCommand;
+import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -59,14 +60,13 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
     protected void showDeployStatus(IStatus status) {
         String prompt;
-        MultiStatusDialog dialog = null;
         if (status.getSeverity() < IStatus.ERROR) {
-            prompt = Messages.AbstractDeployAction_deployMessage;
-            dialog = new MultiStatusDialog(getShell(), status.getChildren().length + prompt, status);
+            prompt = Messages.bind(Messages.AbstractDeployAction_deployMessage, status.getChildren().length);
         } else {
             prompt = Messages.bind(Messages.AbstractDeployAction_deployFailure, status.getChildren().length);
-            dialog = new MultiStatusDialog(getShell(), prompt, status);
+
         }
+        MultiStatusDialog dialog = new MultiStatusDialog(getShell(), prompt, status);
         dialog.open();
 
     }
@@ -87,32 +87,53 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
                 if (deployStatus.isOK()) {
                     ICommand command = deployStatus.getCommand();
-                    CommandManager manager = CommandManager.getInstance();
-                    manager.removeCommandStack(command.getCommandId(), ICommand.PHASE_DEPLOY);
+                    CommandManager manager = CommandManager.getInstance();// manager.getAllCommandsByPhase(ICommand.PHASE_DEPLOY)
+                    manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
                     MDMServerDef serverDef = null;
                     if (command instanceof AbstractDeployCommand) {
                         serverDef = ((AbstractDeployCommand) command).getServerDef();
                     } else if (command instanceof DeployCompoundCommand) {
                         serverDef = ((DeployCompoundCommand) command).getServerDef();
                     }
-                    // updateserver
-                    MDMServerObjectItem item = (MDMServerObjectItem) command.getViewObject().getProperty().getItem();
-                    UpdateLastServerCommand updateLastServerCommand = new UpdateLastServerCommand(item, serverDef);
-                    updateLastServerCommand.setToRunPhase(ICommand.PHASE_AFTER_DEPLOY);
-                    updateLastServerCommand.init(command.getCommandId(), command.getObjLastName());
-                    manager.pushCommand(updateLastServerCommand);
-                    //
-                    if (command.getCommandType() == ICommand.CMD_DELETE && !(command instanceof CompoundCommand)) {
-
-                        UpdateLastServerCommand emptyLastServerCommand = new UpdateLastServerCommand();
-                        PushCmdCommand pushCmd = new PushCmdCommand();
-                        pushCmd.setPushCmdType(ICommand.CMD_ADD);
-                        pushRestoreCommand(manager, command, emptyLastServerCommand);
-                        pushRestoreCommand(manager, command, pushCmd);
+                    if (command instanceof BatchDeployJobCommand) {
+                        BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) command;
+                        pushRestoreCommand(manager, deployJobCommand.getSubCmds(), serverDef);
+                        pushRestoreCommand(manager, deployJobCommand.getSubDeleteCmds(), serverDef);
+                    } else {
+                        // updateserver
+                        pushRestoreCommand(manager, command, serverDef);
                     }
                 }
 
             }
+        }
+    }
+
+    private void pushRestoreCommand(CommandManager manager, List<ICommand> subCmds, MDMServerDef serverDef) {
+        if (subCmds != null && subCmds.size() > 0) {
+            for (ICommand command : subCmds) {
+                pushRestoreCommand(manager, command, serverDef);
+            }
+        }
+    }
+
+    private void pushRestoreCommand(CommandManager manager, ICommand command, MDMServerDef serverDef) {
+        // updateserver
+        if (command.getCommandType() != ICommand.CMD_DELETE) {
+            Item item = command.getViewObject().getProperty().getItem();
+            UpdateLastServerCommand updateLastServerCommand = new UpdateLastServerCommand(item, serverDef);
+            updateLastServerCommand.setToRunPhase(ICommand.PHASE_AFTER_DEPLOY);
+            updateLastServerCommand.init(command.getCommandId(), command.getObjLastName());
+            manager.pushCommand(updateLastServerCommand);
+        }
+        //
+        if (command.getCommandType() == ICommand.CMD_DELETE && !(command instanceof CompoundCommand)) {
+
+            UpdateLastServerCommand emptyLastServerCommand = new UpdateLastServerCommand();
+            PushCmdCommand pushCmd = new PushCmdCommand();
+            pushCmd.setPushCmdType(ICommand.CMD_ADD);
+            pushRestoreCommand(manager, command, emptyLastServerCommand);
+            pushRestoreCommand(manager, command, pushCmd);
         }
     }
 

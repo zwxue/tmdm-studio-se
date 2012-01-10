@@ -18,14 +18,13 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.ui.PlatformUI;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -49,9 +48,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
             return;
         }
         IRepositoryViewObject viewObj = viewObjs.get(0);
-        MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
-        MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        MDMServerDef currentServerDef = mdmServerObject.getLastServerDef();
+        MDMServerDef currentServerDef = RepositoryResourceUtil.getLastServerDef(viewObj);
         //
         IStatus status = deploy(currentServerDef, viewObjs, ICommand.CMD_MODIFY);
         updateChangedStatus(status);
@@ -70,21 +67,17 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         MDMServerDef firstDef = null;
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
-                Item item = ((IRepositoryViewObject) obj).getProperty().getItem();
-                if (item instanceof MDMServerObjectItem) {
-                    MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                    MDMServerDef currentServerDef = mdmServerObject.getLastServerDef();
-                    if (currentServerDef == null)
-                        return false;
-                    if (firstDef == null) {
-                        firstDef = currentServerDef;
-                    } else {
-                        if (!isSameServer(firstDef, currentServerDef)) {
-                            return false;
-                        }
-                    }
-                } else {
+                if (obj instanceof FolderRepositoryObject)
                     return false;
+                MDMServerDef currentServerDef = RepositoryResourceUtil.getLastServerDef((IRepositoryViewObject) obj);
+                if (currentServerDef == null)
+                    return false;
+                if (firstDef == null) {
+                    firstDef = currentServerDef;
+                } else {
+                    if (!isSameServer(firstDef, currentServerDef)) {
+                        return false;
+                    }
                 }
             }
         }
