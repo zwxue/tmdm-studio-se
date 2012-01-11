@@ -143,81 +143,138 @@ public class DescAnnotationComposite implements SelectionListener {
         fillDataStore(text);
     }
 
+    public static boolean isLetter(char c) {
+        boolean result = ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
+
+        return result;
+    }
+    
     public static void parseMultiLanguageString(String s, Map<String, String> m) {
-        // Parse states
-        final byte PARSE_ERROR = 0;
-        final byte LOOKING_FOR_OPENING_BRACKET = 1;
-        final byte LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR = 2;
-        final byte LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR = 3;
-        final byte LOOKING_FOR_COLON = 4;
-        final byte LOOKING_FOR_CLOSING_BRACKET = 5;
-        final byte ENCOUNTERED_FIRST_BACKSLASH = 6;
 
-        byte parseState = LOOKING_FOR_OPENING_BRACKET;
-        StringBuffer countryCodeBuffer = new StringBuffer(); // string buffer for constructing current country code
-        StringBuffer messageBuffer = new StringBuffer(); // string buffer for constructing current error message
+        if (s != null && m != null) {
 
-        for (int i = 0, l = s.length(); i < l && parseState != PARSE_ERROR; ++i) {
-            char c = s.charAt(i);
+            // Parse states
+            final byte PARSE_ERROR = 0;
+            final byte LOOKING_FOR_OPENING_BRACKET = 1;
+            final byte LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR = 2;
+            final byte LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR = 3;
+            final byte LOOKING_FOR_COLON = 4;
+            final byte LOOKING_FOR_CLOSING_BRACKET = 5;
+            final byte ENCOUNTERED_FIRST_BACKSLASH = 6;
 
-            switch (parseState) {
-            case LOOKING_FOR_OPENING_BRACKET:
-                if (c == '[') {
-                    parseState = LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR;
-                }
-                break;
-            case LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR:
-                if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
-                    countryCodeBuffer.append(c);
-                    parseState = LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR;
-                } else {
-                    parseState = LOOKING_FOR_OPENING_BRACKET;
-                }
-                break;
-            case LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR:
-                if (('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')) {
-                    countryCodeBuffer.append(c);
-                    parseState = LOOKING_FOR_COLON;
-                } else {
-                    countryCodeBuffer = new StringBuffer();
-                    parseState = LOOKING_FOR_OPENING_BRACKET;
-                }
-                break;
-            case LOOKING_FOR_COLON:
-                if (c == ':') {
-                    parseState = LOOKING_FOR_CLOSING_BRACKET;
-                } else {
-                    countryCodeBuffer = new StringBuffer();
-                    parseState = LOOKING_FOR_OPENING_BRACKET;
-                }
-                break;
-            case LOOKING_FOR_CLOSING_BRACKET:
-                if (c == ']') {
-                    String countryCode = countryCodeBuffer.toString().toLowerCase();
-                    if (Util.iso2lang.get(countryCode) != null) {
-                        m.put(countryCode, messageBuffer.toString());
+            byte parseState = LOOKING_FOR_OPENING_BRACKET;
+            StringBuffer countryCodeBuffer = new StringBuffer(); // string buffer for constructing current country code
+            StringBuffer messageBuffer = new StringBuffer(); // string buffer for constructing current error message
+
+            for (int i = 0, l = s.length(); i < l && parseState != PARSE_ERROR; ++i) {
+                char c = s.charAt(i);
+
+                switch (parseState) {
+                case LOOKING_FOR_OPENING_BRACKET:
+                    if (c == '[') {
+                        parseState = LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR;
                     }
-                    countryCodeBuffer = new StringBuffer();
-                    messageBuffer = new StringBuffer();
-                    parseState = LOOKING_FOR_OPENING_BRACKET;
-                } else if (c == '\\') {
-                    parseState = ENCOUNTERED_FIRST_BACKSLASH;
-                } else {
-                    messageBuffer.append(c);
+                    break;
+                case LOOKING_FOR_COUNTRY_CODE_FIRST_CHAR:
+                    if (isLetter(c)) {
+                        countryCodeBuffer.append(c);
+                        parseState = LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR;
+                    } else {
+                        parseState = LOOKING_FOR_OPENING_BRACKET;
+                    }
+                    break;
+                case LOOKING_FOR_COUNTRY_CODE_SECOND_CHAR:
+                    if (isLetter(c)) {
+                        countryCodeBuffer.append(c);
+                        parseState = LOOKING_FOR_COLON;
+                    } else {
+                        countryCodeBuffer = new StringBuffer();
+                        parseState = LOOKING_FOR_OPENING_BRACKET;
+                    }
+                    break;
+                case LOOKING_FOR_COLON:
+                    if (c == ':') {
+                        parseState = LOOKING_FOR_CLOSING_BRACKET;
+                    } else {
+                        countryCodeBuffer = new StringBuffer();
+                        parseState = LOOKING_FOR_OPENING_BRACKET;
+                    }
+                    break;
+                case LOOKING_FOR_CLOSING_BRACKET:
+                    if (c == ']') {
+                        String countryCode = countryCodeBuffer.toString().toLowerCase();
+                        if (Util.iso2lang.get(countryCode) != null) {
+                            m.put(countryCode, messageBuffer.toString());
+                        }
+                        countryCodeBuffer = new StringBuffer();
+                        messageBuffer = new StringBuffer();
+                        parseState = LOOKING_FOR_OPENING_BRACKET;
+                    } else if (c == '\\') {
+                        parseState = ENCOUNTERED_FIRST_BACKSLASH;
+                    } else {
+                        messageBuffer.append(c);
+                    }
+                    break;
+                case ENCOUNTERED_FIRST_BACKSLASH:
+                    if (c == '\\' || c == ']') {
+                        messageBuffer.append(c);
+                    }
+                    parseState = LOOKING_FOR_CLOSING_BRACKET;
+                    break;
+                default:
+                    parseState = PARSE_ERROR;
                 }
-                break;
-            case ENCOUNTERED_FIRST_BACKSLASH:
-                if (c == '\\' || c == ']') {
-                    messageBuffer.append(c);
-                }
-                parseState = LOOKING_FOR_CLOSING_BRACKET;
-                break;
-            default:
-                parseState = PARSE_ERROR;
             }
         }
     }
 
+    /**
+     * Encode multi-language message as a string using format [cc:mmm][cc:mmm] where cc is the language code and mmm is
+     * the user specified message. ']' and '\' are automatically backslash escaped.
+     * 
+     * @param m Map between two letter language code and message in that language
+     * @return Multi-language message encoded as a string, with ']' and '\' escaped
+     */
+    public static String escapeMultiLanguageString(Map<String, String> m) {
+
+        StringBuffer resultBuffer = new StringBuffer();
+
+        if (m != null) {
+
+            for (Map.Entry<String, String> entry : m.entrySet()) {
+                String k = entry.getKey();
+                String v = entry.getValue();
+
+                if (k != null) {
+                    k = k.toLowerCase();
+
+                    if (Util.iso2lang.get(k) != null) {
+
+                        resultBuffer.append('[');
+                        resultBuffer.append(k);
+                        resultBuffer.append(':');
+
+                        if (v != null) {
+
+                            for (int i = 0, l = v.length(); i < l; ++i) {
+
+                                char c = v.charAt(i);
+                                if (c == '\\' || c == ']') {
+                                    resultBuffer.append('\\');
+                                }
+                                resultBuffer.append(c);
+                            }
+                        }
+
+                        resultBuffer.append(']');
+                    }
+                }
+            }
+        }
+
+        return resultBuffer.toString();
+    }
+    
     private void fillDataStore(String text) {
         dataStore.clear();
         parseMultiLanguageString(text, dataStore);
