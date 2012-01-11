@@ -36,26 +36,25 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
         IInteractiveHandler handler = InteractiveService.findHandler(type);
         if (handler != null) {
             String typeLabel = handler.getLabel();
-            monitor.subTask("Deploying " + typeLabel + "...");
+            monitor.subTask("Deploying " + typeLabel + "..."); //$NON-NLS-2$
             try {
                 if (handler.deploy(this)) {
                     if (getCommandType() == CMD_MODIFY)
-                        return DeployStatus
-.getOKStatus(this, typeLabel + " \"" + objectName + "\""
+                        return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" //$NON-NLS-1$//$NON-NLS-2$
                                 + " was deployed successfully");
-                    return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was created successfully");
+                    return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was created successfully"); //$NON-NLS-2$//$NON-NLS-3$
                 }
                 else
-                    return DeployStatus.getErrorStatus(this, "Fail to deploy " + typeLabel + " \"" + objectName);
+                    return DeployStatus.getErrorStatus(this, "Fail to deploy " + typeLabel + " \"" + objectName); //$NON-NLS-2$
             } catch (RemoteException e) {
                 return DeployStatus.getErrorStatus(this,
-                        "Fail to deploy " + typeLabel + " \"" + objectName + "\",Cause is:" + e.getMessage(), e);
+                        "Fail to deploy " + typeLabel + " \"" + objectName + "\",Cause is:" + e.getMessage(), e); //$NON-NLS-2$//$NON-NLS-3$
             } catch (XtentisException e) {
                 return DeployStatus.getErrorStatus(this,
-                        "Fail to deploy " + typeLabel + " \"" + objectName + "\",Cause is:" + e.getMessage(), e);
+                        "Fail to deploy " + typeLabel + " \"" + objectName + "\",Cause is:" + e.getMessage(), e); //$NON-NLS-2$
             }
         } else {
-            return DeployStatus.getErrorStatus(this, "Not support for deploying \"" + objectName + "\"");
+            return DeployStatus.getErrorStatus(this, "Not support for deploying \"" + objectName + "\""); //$NON-NLS-2$
         }
 
     }
