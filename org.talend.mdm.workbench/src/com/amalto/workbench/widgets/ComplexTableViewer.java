@@ -939,6 +939,8 @@ public class ComplexTableViewer {
     }
 
     protected XpathWidget getNewXpathWidget(Composite parent) {
+        if (treeParent == null)
+            treeParent = (TreeParent) ((IAdaptable) mainPage).getAdapter(TreeParent.class);
         return new XpathWidget(parent, treeParent, false);
     }
 
