@@ -3053,6 +3053,24 @@ public class Util {
         return customTypeNames;
     }
 
+    public static boolean isUUID(XSDElementDeclaration decl) {
+        XSDTypeDefinition typeDefinition = decl.getTypeDefinition();
+        String type = typeDefinition.getName();
+        if (type == null) {
+            type = typeDefinition.getBaseType().getName();
+        }
+        // set enum
+        if (typeDefinition instanceof XSDSimpleTypeDefinition && Util.isCustomrType(decl.getSchema(), type)) {
+            XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) typeDefinition;
+            if (typedef.getBaseTypeDefinition() != null && typedef.getEnumerationFacets().size() > 0) {
+                type = "enum"; //$NON-NLS-1$
+            }
+        }
+        if ("UUID".equals(type) || "AUTO_INCREMENT".equals(type)) { //$NON-NLS-1$ //$NON-NLS-2$
+            return true;
+        }
+        return false;
+    }
     public static boolean isCustomrType(XSDSchema schema, String typeName) {
         return getAllCustomTypeNames(schema).contains(typeName);
     }
