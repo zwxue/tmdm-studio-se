@@ -15,7 +15,7 @@ package com.amalto.workbench.utils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,6 +28,9 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.Platform;
+import org.talend.core.GlobalServiceRegister;
+
+import com.amalto.workbench.service.ILegendServerDefService;
 
 public class MDMServerHelper {
 
@@ -48,17 +51,17 @@ public class MDMServerHelper {
     public static final String workbenchConfigFile = Platform.getInstanceLocation().getURL().getPath()
             + "/mdm_workbench_config.xml"; //$NON-NLS-1$
 
-    private static java.util.List<MDMServerDef> serversListFromSerExp = new ArrayList<MDMServerDef>();
-
     private static final Log log = LogFactory.getLog(MDMServerHelper.class);
 
     public static List<MDMServerDef> getServers() {
-        return getServersListFromSerExp();
+        ILegendServerDefService service = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
+                ILegendServerDefService.class);
+        if (service != null) {
+            return service.getLegendServerDefs();
+        }
+        return Collections.EMPTY_LIST;
     }
 
-    public static java.util.List<MDMServerDef> getServersListFromSerExp() {
-        return serversListFromSerExp;
-    }
 
     public static MDMServerDef getServer(String name) {
         Element rootElement = getRootElement();

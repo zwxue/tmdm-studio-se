@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -36,6 +37,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSPing;
@@ -45,7 +47,7 @@ import com.amalto.workbench.webservices.XtentisPort;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class ServerDefService {
+public class ServerDefService implements ILegendServerDefService {
 
     private static Logger log = Logger.getLogger(ServerDefService.class);
 
@@ -191,5 +193,25 @@ public class ServerDefService {
             log.error(e.getMessage(), e);
         }
         return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.amalto.workbench.service.ILegendServerDefService#getLegendServerDefs()
+     */
+    public List<com.amalto.workbench.utils.MDMServerDef> getLegendServerDefs() {
+        List<MDMServerDef> servers = ServerDefService.getAllServerDefs();
+        List<com.amalto.workbench.utils.MDMServerDef> legendDefs = new LinkedList<com.amalto.workbench.utils.MDMServerDef>();
+        if (servers != null) {
+            for (MDMServerDef serverDef : servers) {
+                com.amalto.workbench.utils.MDMServerDef legendDef = com.amalto.workbench.utils.MDMServerDef.parse(
+                        serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(),
+                        serverDef.getName());
+                legendDefs.add(legendDef);
+            }
+
+        }
+        return legendDefs;
     }
 }

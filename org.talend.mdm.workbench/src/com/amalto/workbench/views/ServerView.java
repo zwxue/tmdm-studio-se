@@ -139,7 +139,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     protected Action logoutAction;
 
-
     protected Action editServerAction;
 
     protected Action newXObjectAction;
@@ -179,7 +178,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     private int dragType = -1;
 
     private BrowseRevisionAction browseRevisionAction;
-
 
     /**********************************************************************************
      * The VIEW
@@ -639,8 +637,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     public void initView() {
-        // java.util.List<MDMServerDef> servers = MDMServerHelper.getServers();
-        java.util.List<MDMServerDef> servers = MDMServerHelper.getServersListFromSerExp();
+        java.util.List<MDMServerDef> servers = MDMServerHelper.getServers();
         for (MDMServerDef server : servers) {
             initServerTreeParent(server);
         }
@@ -664,8 +661,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         IActionBars bars = getViewSite().getActionBars();
         fillLocalToolBar(bars.getToolBarManager());
     }
-
-
 
     protected void fillContextMenu(IMenuManager manager) {
         TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
@@ -822,7 +817,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         for (IAvailableModel model : cutAvailableModels) {
             availablemodels.remove(model);
         }
-     }
+    }
 
     private void fillLocalToolBar(IToolBarManager manager) {
 
@@ -863,9 +858,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 ISelection selection = ServerView.this.getViewer().getSelection();
                 TreeObject xo = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
                 // add by jsxie to fix the bug 22575
-                if( xo == null )
+                if (xo == null)
                     return;
-                
+
                 if (xo.getType() == TreeObject._ACTION_) {
                     Class<?> actionClass = (Class<?>) xo.getWsKey();
                     try {
@@ -1120,11 +1115,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         // Remove authenticator dialog
         Authenticator.setDefault(null);
 
-//        TreeParent serverRoot = (TreeParent) ((IStructuredSelection) getViewer().getSelection()).getFirstElement();
-        TreeParent serverRoot =null;
-        for(TreeObject treeObj:getTreeContentProvider().getInvisibleRoot().getChildren()){
-            if(treeObj.getName().equals(oldServerDef.getName())&&treeObj.getType()==TreeObject._SERVER_){
-                serverRoot=(TreeParent) treeObj;
+        TreeParent serverRoot = null;
+        for (TreeObject treeObj : getTreeContentProvider().getInvisibleRoot().getChildren()) {
+            if (treeObj.getName().equals(oldServerDef.getName()) && treeObj.getType() == TreeObject._SERVER_) {
+                serverRoot = (TreeParent) treeObj;
                 break;
             }
         }
@@ -1139,7 +1133,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     universeStr = "HEAD";//$NON-NLS-1$
             }
             if (universeStr != null && universeStr.length() != 0) {
-                displayName.append(" [");   //$NON-NLS-1$
+                displayName.append(" ["); //$NON-NLS-1$
                 displayName.append(universeStr);
                 displayName.append("] "); //$NON-NLS-1$
             } else {
@@ -1158,12 +1152,12 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             }
         } else {
             String tmp = String.valueOf(System.currentTimeMillis());
-            //to prevent to delete current server when the new connection is refused 
+            // to prevent to delete current server when the new connection is refused
             boolean success = addServerTree(tmp, url, username, password, universe);
             if (success) {
                 new ServerLogoutAction(this).run();
                 MDMServerDef tmpServerDef = MDMServerDef.parse(url, username, password, universe, tmp);
-                
+
                 updateServerTree(tmpServerDef, name, url, username, password, universe);
             }
 

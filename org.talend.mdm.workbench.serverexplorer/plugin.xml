@@ -80,4 +80,11 @@
             class="org.talend.mdm.workbench.serverexplorer.core.ServerDefRepositoryContentHandler">
       </RepositoryContent>
    </extension>
+   <extension
+         point="org.talend.core.runtime.service">
+      <Service
+            class="org.talend.mdm.workbench.serverexplorer.core.ServerDefService"
+            serviceId="ILegendServerDefService">
+      </Service>
+   </extension>
 </plugin>
