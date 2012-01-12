@@ -65,7 +65,6 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.views.ServerView;
 
 /**
@@ -140,21 +139,10 @@ public class ServerExplorer extends ViewPart {
         createActions();
         initializeToolBar();
         initializeMenu();
-        // for debug
-        // treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-        //
-        // @Override
-        // public void selectionChanged(SelectionChangedEvent event) {
-        // IRepositoryViewObject viewObject = getCurSelectedViewObject();
-        // Property property = viewObject.getProperty();
-        // Item item = property.getItem();
-        // System.out.println(property.eResource());
-        //
-        // }
-        // });
-        refreshServerDefs();
-        synchronizeMDMServerView();
 
+        refreshServerDefs();
+
+        synchronizeMDMServerView();
     }
 
     public void dispose() {
@@ -216,11 +204,7 @@ public class ServerExplorer extends ViewPart {
 
         IWorkbenchPage page = getViewSite().getPage();
         ServerView serverView = (ServerView) page.findView(ServerView.VIEW_ID);
-        MDMServerHelper.getServersListFromSerExp().clear();
-        List<MDMServerDef> servers = ServerDefService.getAllServerDefs();
-        for (MDMServerDef server : servers) {
-            addMDMServerViewDef(server);
-        }
+
         if (serverView == null)
             return;
         if (serverView != null) {
@@ -229,13 +213,6 @@ public class ServerExplorer extends ViewPart {
             serverView.getViewer().refresh();
         }
     }
-
-    private void addMDMServerViewDef(MDMServerDef serverDef) {
-        com.amalto.workbench.utils.MDMServerDef serDef = com.amalto.workbench.utils.MDMServerDef.parse(serverDef.getUrl(),
-                serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), serverDef.getName());
-        MDMServerHelper.getServersListFromSerExp().add(serDef);
-    }
-
 
 
     private MDMServerDefItem getMDMItem(IRepositoryViewObject viewObject) {
@@ -287,8 +264,7 @@ public class ServerExplorer extends ViewPart {
                 if (mdmItem != null) {
                     MDMServerDef serverDef = mdmItem.getServerDef();
                     boolean success = ServerDefService.checkMDMConnection(serverDef);
-                    String msg = success ? Messages.ServerExplorer_ConnectSuccessful
-                            : Messages.ServerExplorer_ConnectFailed;
+                    String msg = success ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
                     if (success) {
                         MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
                     } else {
@@ -362,6 +338,7 @@ public class ServerExplorer extends ViewPart {
             }
             editServerDef();
             deleteServerDefForSerView(name);
+
             synchronizeMDMServerView();
         }
     }
@@ -401,15 +378,14 @@ public class ServerExplorer extends ViewPart {
                         refreshServerDefs();
                     }
                     deleteServerDefForSerView(serverDefItem.getServerDef().getName());
-                    // synchronizeMDMServerView();
+                    //
+                    synchronizeMDMServerView();
                 }
             }
         }
     }
 
     private void deleteServerDefForSerView(String nameToDel) {
-        synchronizeMDMServerView();
-
         ServerView viewPart = (ServerView) getSite().getPage().findView(ServerView.VIEW_ID);
         if (viewPart != null) {
             for (TreeObject object : viewPart.getRoot().getChildren()) {
