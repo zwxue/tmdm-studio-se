@@ -146,6 +146,8 @@ public class Messages extends NLS {
 
     public static String RepositoryDropAssistant_pasteObject;
 
+    public static String RepositoryDropAssistant_stopMoveMsg;
+
     public static String RepositoryViewFilterDialog_enableAllServerObject;
 
     public static String RepositoryViewFilterDialog_enableNameFilter;
