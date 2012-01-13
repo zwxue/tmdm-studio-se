@@ -1076,8 +1076,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.setAnnotationLabelAction = new XSDSetAnnotationLabelAction(this);
         this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
         this.setAnnotationForeignKeyAction = (XSDSetAnnotationForeignKeyAction) getAdapter(XSDSetAnnotationForeignKeyAction.class);
-        visibleRuleAction = new XSDVisibleRuleAction(this, dataModelName);
-        defaultValueRuleAction = new XSDDefaultValueRuleAction(this, dataModelName);
+        visibleRuleAction = (XSDVisibleRuleAction) getAdapter(XSDVisibleRuleAction.class);
+        defaultValueRuleAction = (XSDDefaultValueRuleAction) getAdapter(XSDDefaultValueRuleAction.class);
         this.setAnnotationFKFilterAction = (XSDSetAnnotationFKFilterAction) getAdapter(XSDSetAnnotationFKFilterAction.class);
         this.setAnnotationForeignKeyInfoAction = (XSDSetAnnotationForeignKeyInfoAction) getAdapter(XSDSetAnnotationForeignKeyInfoAction.class);
         this.setAnnotationWriteAction = (XSDSetAnnotationWriteAction) getAdapter(XSDSetAnnotationWriteAction.class);
@@ -2892,6 +2892,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         if (adapter == DataModelFilterDialog.class) {
             return new DataModelFilterDialog(getSite().getShell(), xobject, dataModelFilter,
                     getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
+        }
+        if (adapter == XSDDefaultValueRuleAction.class) {
+            return new XSDDefaultValueRuleAction(this, dataModelName);
+        }
+        if (adapter == XSDVisibleRuleAction.class) {
+            return new XSDVisibleRuleAction(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }

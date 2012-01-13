@@ -54,7 +54,7 @@ public class SchematronExpressBuilder {
 
     private static Log log = LogFactory.getLog(SchematronExpressBuilder.class);
 
-    Composite parent;
+    protected Composite parent;
 
     private SourceViewer sourceViewer;
 
@@ -76,7 +76,7 @@ public class SchematronExpressBuilder {
 
     String concept;
 
-    private boolean isAbsoluteXPath = false;
+    protected boolean isAbsoluteXPath = false;
     // Modified by hbhong,to fix bug 21784, add a treeParent field to receive TreeParent object
     protected TreeParent treeParent;
 
@@ -292,8 +292,7 @@ public class SchematronExpressBuilder {
         xpathButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                XpathSelectDialog dlg = new XpathSelectDialog(parent.getShell(), treeParent, "Select Xpath ...", ServerView.show()
-                        .getSite(), false, null, isAbsoluteXPath);
+                XpathSelectDialog dlg = getXPathSelectDialog();
                 dlg.setConceptName(conceptName);
                 // dlg.setContext(context);
                 dlg.setBlockOnOpen(true);
@@ -420,5 +419,10 @@ public class SchematronExpressBuilder {
     }
     public SourceViewer getSourceViewer(){
     	return sourceViewer;
+    }
+
+    protected XpathSelectDialog getXPathSelectDialog() {
+        return new XpathSelectDialog(parent.getShell(), treeParent, "Select Xpath ...", ServerView.show().getSite(), false, null,
+                isAbsoluteXPath);
     }
 }
