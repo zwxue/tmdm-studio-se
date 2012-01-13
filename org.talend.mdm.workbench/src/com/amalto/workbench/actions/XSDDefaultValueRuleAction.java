@@ -44,6 +44,10 @@ public class XSDDefaultValueRuleAction extends UndoAction {
 
     protected boolean isDelete = false;
 
+    protected String conceptName;
+
+    protected XSDAnnotationsStructure struc;
+
     public XSDDefaultValueRuleAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ROUTINE.getPath()));
@@ -84,8 +88,8 @@ public class XSDDefaultValueRuleAction extends UndoAction {
                 }
             } else
                 xSDCom = (XSDComponent) selection.getFirstElement();
-            String conceptName = Util.getConceptName(xSDCom);
-            XSDAnnotationsStructure struc = null;
+            conceptName = Util.getConceptName(xSDCom);
+            struc = null;
             if (xSDCom != null)
                 struc = new XSDAnnotationsStructure(xSDCom);
             if (struc == null || struc.getAnnotation() == null) {
@@ -93,8 +97,7 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             }
             // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
             if (!isDelete) {
-            ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),getTreeParent(),
-                    "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, false, false);
+                ValidationRuleExcpressDialog dlg = getExpressDialog();
             // The ending| bug:21784
             dlg.create();
             dlg.getShell().setMaximized(false);
@@ -121,5 +124,10 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
+    }
+
+    protected ValidationRuleExcpressDialog getExpressDialog() {
+        return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(),
+                "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, false, false);
     }
 }

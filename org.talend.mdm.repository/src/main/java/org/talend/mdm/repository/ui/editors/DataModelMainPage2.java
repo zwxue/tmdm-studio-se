@@ -32,8 +32,9 @@ import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.ui.actions.xsd.XSDNewBrowseItemViewActionR;
+import org.talend.mdm.repository.ui.actions.xsd.XSDDefaultValueRuleActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
+import org.talend.mdm.repository.ui.actions.xsd.XSDNewBrowseItemViewActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyInfoActionR;
@@ -41,6 +42,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
+import org.talend.mdm.repository.ui.actions.xsd.XSDVisibleRuleActionR;
 import org.talend.mdm.repository.ui.dialogs.datamodel.DataModelFilterDialogR;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
@@ -49,6 +51,7 @@ import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
@@ -57,6 +60,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
+import com.amalto.workbench.actions.XSDVisibleRuleAction;
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -192,6 +196,12 @@ public class DataModelMainPage2 extends DataModelMainPage {
         if (adapter == DataModelFilterDialog.class) {
             return new DataModelFilterDialogR(getSite().getShell(), xobject, dataModelFilter,
                     getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
+        }
+        if (adapter == XSDDefaultValueRuleAction.class) {
+            return new XSDDefaultValueRuleActionR(this, dataModelName);
+        }
+        if (adapter == XSDVisibleRuleAction.class) {
+            return new XSDVisibleRuleActionR(this, dataModelName);
         }
         return super.getAdapter(adapter);
     }
