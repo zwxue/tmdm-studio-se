@@ -384,6 +384,7 @@ public class ImportServerObjectWizard extends Wizard {
             if (type != null && treeObjName != null) {
                 String uniqueName = getUniqueName(treeObj, treeObjName);
                 IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(type, uniqueName);
+                if (viewObject != null)
                 viewObjs.add(viewObject);
             }
         }
