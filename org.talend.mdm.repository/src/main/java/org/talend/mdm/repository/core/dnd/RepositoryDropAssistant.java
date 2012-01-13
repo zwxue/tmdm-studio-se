@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -28,6 +29,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TransferData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
@@ -47,6 +49,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -59,37 +62,47 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
     private static Logger log = Logger.getLogger(RepositoryDropAssistant.class);
 
     public IStatus validateDrop(Object target, int operation, TransferData transferType) {
-        if (operation == DND.DROP_COPY) {
+        if (operation == DND.DROP_COPY || operation == DND.DROP_MOVE) {
             if (!(target instanceof IRepositoryViewObject)) {
                 return Status.CANCEL_STATUS;
             }
             IRepositoryViewObject dragViewObj = getSelectedDragViewObj();
             IRepositoryViewObject dropViewObj = (IRepositoryViewObject) target;
-            return validate(dragViewObj, dropViewObj) ? Status.OK_STATUS : Status.CANCEL_STATUS;
+            return validate(operation, dragViewObj, dropViewObj) ? Status.OK_STATUS : Status.CANCEL_STATUS;
         }
         return Status.CANCEL_STATUS;
     }
 
-    public boolean validate(IRepositoryViewObject dragViewObj, IRepositoryViewObject dropViewObj) {
+    public boolean validate(int operation, IRepositoryViewObject dragViewObj, IRepositoryViewObject dropViewObj) {
         if (dragViewObj == null || dropViewObj == null) {
             return false;
         }
         //
-        Item item = dragViewObj.getProperty().getItem();
-        if (item instanceof ContainerItem) {
+        if (dragViewObj instanceof FolderRepositoryObject) {
             return false;
         }
 
         ERepositoryObjectType dragType = dragViewObj.getRepositoryObjectType();
-
-        Item dropItem = dropViewObj.getProperty().getItem();
-        if (dropItem instanceof ContainerItem
-                && ((ContainerItem) dropItem).getType().getValue() == FolderType.STABLE_SYSTEM_FOLDER) {
+        // can't support workflow and job object
+        if (dragType == IServerObjectRepositoryType.TYPE_WORKFLOW || dragType == ERepositoryObjectType.PROCESS) {
             return false;
         }
+
+        if (dropViewObj instanceof FolderRepositoryObject) {
+            if (((ContainerItem) dropViewObj.getProperty().getItem()).getType().getValue() == FolderType.STABLE_SYSTEM_FOLDER) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+        // can't move to self folder
+        if (operation == DND.DROP_MOVE) {
+            IRepositoryViewObject dragParent = getParentRepositoryViewObject(dragViewObj);
+            if (dragParent.equals(dropViewObj))
+                return false;
+        }
+        // can't move/copy to different node folder
         ERepositoryObjectType dropType = dropViewObj.getRepositoryObjectType();
-        // System.out.println("Source:" + dragViewObj + "\t" + dragType);
-        // System.out.println("Target:" + target + "\t" + dropType);
         if (!dragType.equals(dropType))
             return false;
         return true;
@@ -109,29 +122,80 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
     public IStatus handleDrop(CommonDropAdapter dropAdapter, DropTargetEvent dropTargetEvent, Object aTarget) {
         IRepositoryViewObject dropViewObj = (IRepositoryViewObject) aTarget;
         IRepositoryViewObject dragViewObj = getSelectedDragViewObj();
-        if (copyViewObj(dragViewObj, dropViewObj)) {
-            refreshTarget(dropViewObj);
-            return Status.OK_STATUS;
+        IRepositoryViewObject dragParent = getParentRepositoryViewObject(dragViewObj);
+        IRepositoryViewObject dropParent = getParentRepositoryViewObject(dropViewObj);
+        int detail = dropTargetEvent.detail;
+        if (detail == DND.DROP_COPY) {
+            if (copyViewObj(dragViewObj, dropViewObj)) {
+                refreshContainer(dropParent);
+                return Status.OK_STATUS;
+            }
+        } else if (detail == DND.DROP_MOVE) {
+            if (moveViewObj(dragViewObj, dropViewObj)) {
+                refreshContainer(dropParent);
+                refreshContainer(dragParent);
+                return Status.OK_STATUS;
+            }
         }
+
         return Status.CANCEL_STATUS;
+    }
+
+    /**
+     * DOC hbhong Comment method "moveViewObj".
+     * 
+     * @param dragViewObj
+     * @param dropViewObj
+     * @return
+     */
+    private boolean moveViewObj(IRepositoryViewObject dragViewObj, IRepositoryViewObject dropViewObj) {
+        if (dropViewObj != null && dragViewObj != null) {
+            if (RepositoryResourceUtil.isLockedViewObject(dragViewObj)) {
+                MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle,
+                        Messages.RepositoryDropAssistant_stopMoveMsg);
+                return false;
+            }
+            Property dropProp = dropViewObj.getProperty();
+            String pathStr = dropProp.getItem().getState().getPath();
+            IPath path = new Path(pathStr);
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            try {
+                factory.moveObject(dragViewObj, path);
+                return true;
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            } catch (BusinessException e) {
+                log.error(e.getMessage(), e);
+            }
+
+        }
+        return false;
     }
 
     public boolean copyViewObj(IRepositoryViewObject dragViewObj, IRepositoryViewObject dropViewObj) {
         if (dropViewObj != null && dragViewObj != null) {
 
-            Property dragProp = dropViewObj.getProperty();
-            MDMServerObject serverObj = ((MDMServerObjectItem) dragProp.getItem()).getMDMServerObject();
+            Property dragProp = dragViewObj.getProperty();
+            Property dropProp = dropViewObj.getProperty();
+            Item item = dragProp.getItem();
+            String name;
+            if (item instanceof MDMServerObjectItem) {
+                MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                name = serverObj.getName();
+            } else {
+                name = dragProp.getLabel();
+            }
             // show dialog
             IRepositoryViewObject dragParentViewObj = getParentRepositoryViewObject(dragViewObj);
             ContainerItem dragParentItem = (ContainerItem) dragParentViewObj.getProperty().getItem();
-            String newName = showPasteDlg(dragParentItem.getRepObjType(), dragParentItem, "Copy_" + serverObj.getName()); //$NON-NLS-1$
+            String newName = showPasteDlg(dragParentItem.getRepObjType(), dragParentItem, "Copy_" + name); //$NON-NLS-1$
             if (newName != null) {
-                String pathStr = dragProp.getItem().getState().getPath();
+                String pathStr = dropProp.getItem().getState().getPath();
                 IPath path = new Path(pathStr);
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 Item copy = null;
                 try {
-                    copy = factory.copy(dragProp.getItem(), path, true);
+                    copy = factory.copy(item, path, true);
                     if (factory.isEditableAndLockIfPossible(copy)) {
                         if (copy instanceof MDMServerObjectItem) {
                             ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
@@ -189,19 +253,24 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     }
 
-    private void refreshTarget(IRepositoryViewObject dropViewObj) {
-        IRepositoryViewObject parenViewObj = getParentRepositoryViewObject(dropViewObj);
-        if (parenViewObj != null) {
-            try {
-                IViewPart viewPart = RepositoryPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                        .findView(getContentService().getViewerId());
-                if (viewPart != null && viewPart instanceof CommonNavigator) {
-                    ((CommonNavigator) viewPart).getCommonViewer().refresh(parenViewObj);
+    private void refreshContainer(final IRepositoryViewObject viewObj) {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                if (viewObj != null) {
+                    try {
+                        IViewPart viewPart = RepositoryPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow()
+                                .getActivePage().findView(getContentService().getViewerId());
+                        if (viewPart != null && viewPart instanceof CommonNavigator) {
+                            ((CommonNavigator) viewPart).getCommonViewer().refresh(viewObj);
+                        }
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                    }
                 }
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
             }
-        }
+        });
+
     }
 
     public IRepositoryViewObject getParentRepositoryViewObject(IRepositoryViewObject dropViewObj) {

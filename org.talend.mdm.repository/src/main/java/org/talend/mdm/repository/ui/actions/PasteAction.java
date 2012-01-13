@@ -15,6 +15,7 @@ package org.talend.mdm.repository.ui.actions;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import org.eclipse.ui.navigator.INavigatorDnDService;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -97,7 +98,7 @@ public class PasteAction extends AbstractRepositoryAction {
         if (dropAssistant != null) {
             IRepositoryViewObject dragViewObj = getSelectedDragViewObj();
             IRepositoryViewObject dropViewObj = (IRepositoryViewObject) getSelectedObject().get(0);
-            return dropAssistant.validate(dragViewObj, dropViewObj);
+            return dropAssistant.validate(DND.DROP_COPY, dragViewObj, dropViewObj);
         }
         return super.isVisible(viewObj);
     }
