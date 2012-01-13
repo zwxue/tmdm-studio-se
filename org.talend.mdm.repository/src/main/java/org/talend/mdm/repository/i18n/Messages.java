@@ -363,8 +363,18 @@ public class Messages extends NLS {
     public static String MDMOpenExistVersionProcessPage_ChooseVersion;
 
     public static String MDMOpenExistVersionProcessPage_lockedByUser;
-    
 
+    public static String Deploy_text;
+    
+    public static String Deploy_successfully_text;
+
+    public static String Create_successfully_text;
+
+    public static String Deploy_fail_text;
+
+    public static String Deploy_notSupport_text;
+
+    public static String Causeis_text;
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
