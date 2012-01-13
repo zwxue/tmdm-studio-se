@@ -354,9 +354,27 @@ public class Messages extends NLS {
     public static String RepositoryViewFilterDialog_lblLastServer;
     public static String RepositoryViewFilterDialog_btnSelectServer;
 
-    public static String EventManager_text;
-	public static String RepositoryViewObjectCheckedWidget_lock;
+    public static String RepositoryViewObjectCheckedWidget_lock;
 
+    public static String EventManager_text;
+    
+    public static String MDMOpenExistVersionProcessWizard_NewObject;
+
+    public static String MDMOpenExistVersionProcessPage_ChooseVersion;
+
+    public static String MDMOpenExistVersionProcessPage_lockedByUser;
+
+    public static String Deploy_text;
+    
+    public static String Deploy_successfully_text;
+
+    public static String Create_successfully_text;
+
+    public static String Deploy_fail_text;
+
+    public static String Deploy_notSupport_text;
+
+    public static String Causeis_text;
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
