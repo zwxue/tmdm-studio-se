@@ -191,6 +191,14 @@ public class MDMRepositoryView extends CommonNavigator {
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
                 }
             }
+            // if editor is talend job editor, switch to org.talend.rcp.perspective
+            if (partRef.getId().equals("org.talend.designer.core.ui.MultiPageTalendEditor")) {//$NON-NLS-1$
+                IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
+                        .findPerspectiveWithId("org.talend.rcp.perspective"); //$NON-NLS-1$
+                if (perspective != null) {
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+                }
+            }
         }
     };
 
