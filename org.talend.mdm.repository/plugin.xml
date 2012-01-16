@@ -174,7 +174,7 @@
             id="org.talend.mdm.repository.linkHelper">
          <editorInputEnablement>
             <instanceof
-                  value="org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput">
+                  value="org.eclipse.ui.IEditorInput">
             </instanceof></editorInputEnablement>
          <selectionEnablement>
             <instanceof
