@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorReference;
+import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
@@ -115,6 +116,8 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
             factory.deleteObjectLogical(viewObj);
             CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), serverObj.getName());
+        } catch(BusinessException e) {
+            MessageDialog.openError(getShell(), Messages.Common_Error, e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
