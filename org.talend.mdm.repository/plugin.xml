@@ -173,9 +173,14 @@
             class="org.talend.mdm.repository.ui.navigator.MDMRepositoryLinkHelper"
             id="org.talend.mdm.repository.linkHelper">
          <editorInputEnablement>
-            <instanceof
-                  value="org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput">
-            </instanceof></editorInputEnablement>
+            <or>
+               <instanceof
+                     value="org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput">
+               </instanceof>
+               <instanceof
+                     value="org.talend.designer.core.ui.editor.ProcessEditorInput">
+               </instanceof>
+            </or></editorInputEnablement>
          <selectionEnablement>
             <instanceof
                   value="org.talend.core.model.repository.IRepositoryViewObject">
