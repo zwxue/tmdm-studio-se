@@ -87,7 +87,7 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
                 if (deployStatus.isOK()) {
                     ICommand command = deployStatus.getCommand();
-                    CommandManager manager = CommandManager.getInstance();// manager.getAllCommandsByPhase(ICommand.PHASE_DEPLOY)
+                    CommandManager manager = CommandManager.getInstance();
                     manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
                     MDMServerDef serverDef = null;
                     if (command instanceof AbstractDeployCommand) {
