@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.widgets;
 
 import org.eclipse.swt.widgets.Composite;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
@@ -56,7 +57,8 @@ public class SchematronExpressBuilderR extends SchematronExpressBuilder {
      */
     @Override
     protected XpathSelectDialog getXPathSelectDialog() {
-        return new XpathSelectDialog2(parent.getShell(), "Select Xpath ...", ServerView.show().getSite(), false, null,
+        return new XpathSelectDialog2(parent.getShell(), Messages.SchematronExpressBuilder_selectXPath, ServerView.show()
+                .getSite(), false, null,
                 isAbsoluteXPath);
     }
 }
