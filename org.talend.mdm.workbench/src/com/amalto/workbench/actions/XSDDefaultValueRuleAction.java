@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.axis.i18n.Messages;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
@@ -128,6 +129,7 @@ public class XSDDefaultValueRuleAction extends UndoAction {
 
     protected ValidationRuleExcpressDialog getExpressDialog() {
         return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(),
-                "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, false, false);
+                Messages.getMessage("XSDDefaultValueRuleAction_buildDefaultValue"), struc.getDefaultValueRule(), conceptName,
+                false, false);
     }
 }

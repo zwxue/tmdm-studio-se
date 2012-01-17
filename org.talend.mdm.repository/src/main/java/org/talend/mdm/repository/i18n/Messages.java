@@ -377,6 +377,9 @@ public class Messages extends NLS {
     public static String Deploy_notSupport_text;
 
     public static String Causeis_text;
+
+    public static String SchematronExpressBuilder_selectXPath;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

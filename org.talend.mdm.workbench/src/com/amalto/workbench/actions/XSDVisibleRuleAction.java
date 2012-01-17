@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.axis.i18n.Messages;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
@@ -127,7 +128,8 @@ public class XSDVisibleRuleAction extends UndoAction {
     }
 
     protected ValidationRuleExcpressDialog getExpressDialog() {
-        return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(), "Build Validation Rule Expression ",
+        return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(),
+                Messages.getMessage("XSDVisibleRuleAction_buildValidationRule"),
                 struc.getVisibleRule(), conceptName, true, false);
     }
 }
