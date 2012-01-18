@@ -3298,15 +3298,12 @@ public class Util {
     }
 
     public static String formatErrorMessage(String sourceMessage) {
-        String result = null;
-        Pattern pattern = null;
-        Matcher matcher = null;
         String saxExceptionPattern = "\\[\\w*\\]\\s:\\d+:\\d+:\\s.+:\\s"; //$NON-NLS-1$
         String nestedExceptionPattern = ";?\\s?nested exception is:[\\w\\W]*"; //$NON-NLS-1$              
 
-        pattern = Pattern.compile(saxExceptionPattern);
-        matcher = pattern.matcher(sourceMessage);
-        result = matcher.replaceFirst(""); //$NON-NLS-1$
+        Pattern pattern = Pattern.compile(saxExceptionPattern);
+        Matcher matcher = pattern.matcher(sourceMessage);
+        String result = matcher.replaceFirst(""); //$NON-NLS-1$
 
         pattern = Pattern.compile(nestedExceptionPattern);
         matcher = pattern.matcher(result);
