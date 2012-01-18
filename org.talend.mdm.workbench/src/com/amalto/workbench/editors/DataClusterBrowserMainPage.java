@@ -840,13 +840,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                     } else {
                                         Util.getPort(getXObject()).putItem(putItem);
                                     }
-                                }
-                                // previousDataModel = d.getDataModelName();
+                                }                    
                             } catch (Exception e) {
                                 MessageDialog
                                         .openError(shell,
-                                                "Error saving the Record", //$NON-NLS-1$
-                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage())); //$NON-NLS-1$
+                                                "Error saving the Record",
+                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage()));
                                 return;
                             }
                         }// if
@@ -1361,8 +1360,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             } catch (Exception e) {
                                 MessageDialog
                                         .openError(shell,
-                                                "Error saving the Record", //$NON-NLS-1$
-                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage()));//$NON-NLS-1$
+                                                "Error saving the Record", 
+                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage()));
                                 return;
                             }
                         }// if
