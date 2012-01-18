@@ -148,7 +148,27 @@ public class DescAnnotationComposite implements SelectionListener {
 
         return result;
     }
-    
+
+    /**
+     * Parse a multiple language string.
+     * 
+     * s is expected to be in the following format:
+     * 
+     * [en:...][fr:...][zh:...]
+     * 
+     * Characters ] and \ can be escaped in these using backslash escapes, for example
+     * 
+     * [en: a message with a \] character in the middle]
+     * 
+     * A message for a language can also be embedded anywhere in the string, for example
+     * 
+     * abcd[en:...]abcd[fr:...]abcd
+     * 
+     * The map between language code and message is stored in m.
+     * 
+     * @param s Multiple language message string to be parsed
+     * @param m Map between language codes and messages in which to store results
+     */
     public static void parseMultiLanguageString(String s, Map<String, String> m) {
 
         if (s != null && m != null) {
@@ -274,7 +294,7 @@ public class DescAnnotationComposite implements SelectionListener {
 
         return resultBuffer.toString();
     }
-    
+
     private void fillDataStore(String text) {
         dataStore.clear();
         parseMultiLanguageString(text, dataStore);
