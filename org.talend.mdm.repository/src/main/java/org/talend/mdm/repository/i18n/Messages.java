@@ -346,7 +346,6 @@ public class Messages extends NLS {
 
     public static String WSRootLabelProvider_svn;
 
-    public static String TheObject_text;
 
     public static String NeverDeploy_text;
     public static String RepositoryViewFilterDialog_groupNamePattern;
@@ -379,6 +378,7 @@ public class Messages extends NLS {
     public static String Causeis_text;
 
     public static String SchematronExpressBuilder_selectXPath;
+    public static String AutoDeployPreferencePage_btnCheckButton_text;
 
     // //////////////////////////////////////////////////////////////////////////
     //

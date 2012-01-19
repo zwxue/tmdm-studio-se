@@ -12,12 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
@@ -41,9 +37,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.contributor.SvnHistorySelectionProvider;
-import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
-import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -90,8 +84,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
                     return;
                 }
             }
-            // if(xmlEditor!=null)xmlEditor.doSave(monitor);
-            // perform the actual save
 
             boolean saved = saveResourceToRepository();
             if (xmlEditor != null && saved) {
@@ -120,10 +112,17 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
                 editorDirtyStateChanged();
 
                 refreshDirtyCue();
-                if (PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_AUTO_DEPLOY)) {
-                    autoDeploy(serverObject);
-                }
-                if (serverObject.getLastServerDef() != null) {
+
+                DeployService deployService = DeployService.getInstance();
+                if (deployService.isAutoDeploy()) {
+                    IEditorInput input = getEditorInput();
+                    XObjectEditorInput2 theInput = null;
+                    if (input instanceof XObjectEditorInput2) {
+                        theInput = (XObjectEditorInput2) input;
+                    }
+                    IRepositoryViewObject viewObj = theInput.getViewObject();
+                    deployService.autoDeploy(getSite().getShell(), viewObj);
+                } else if (serverObject.getLastServerDef() != null) {
                     CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, editorInput.getViewObject());
                 }
                 return true;
@@ -132,39 +131,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
             }
         }
         return false;
-    }
-
-    private void autoDeploy(MDMServerObject serverObject) {
-        if (serverObject.getLastServerDef() != null) {
-            IEditorInput input = getEditorInput();
-            XObjectEditorInput2 theInput = null;
-            if (input instanceof XObjectEditorInput2) {
-                theInput = (XObjectEditorInput2) input;
-            }
-            IRepositoryViewObject viewObj = theInput.getViewObject();
-            List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
-            viewObjs.add(viewObj);
-
-            IStatus status = DeployService.getInstance().deploy(serverObject.getLastServerDef(), viewObjs, ICommand.CMD_MODIFY);
-            if (status.isMultiStatus()) {
-                showDeployStatus(status);
-            }
-        } else {
-            MessageDialog.openWarning(getSite().getShell(), Messages.Warning_text, Messages.TheObject_text + " " //$NON-NLS-1$
-                    + serverObject.getName() + " " + Messages.NeverDeploy_text);//$NON-NLS-1$
-        }
-    }
-
-    protected void showDeployStatus(IStatus status) {
-        String prompt;
-        if (status.getSeverity() < IStatus.ERROR)
-            prompt = Messages.AbstractDeployAction_deployMessage;
-        else
-            prompt = Messages.AbstractDeployAction_deployFailure;
-
-        MultiStatusDialog dialog = new MultiStatusDialog(getSite().getShell(), status.getChildren().length
- + prompt, status);
-        dialog.open();
     }
 
     private void refreshDirtyCue() {
@@ -183,15 +149,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
         try {
             switch (xobject.getType()) {
             case TreeObject.DATA_MODEL:
-                // addPage(new DataModelMainPage(this));
-                //
-                // // addPage(new DataModelEditorPage(this));
-                // WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
-                // Document doc = new Document(Util.formatXsdSource(wsObject.getXsdSchema()));
-                // xmlEditor = new XMLEditor(this, xobject);
-                // addPage(xmlEditor, new XMLEditorInput(doc));
-                // this.setPageText(1, "Schema");
-
                 break;
 
             case TreeObject.INBOUND_PLUGIN:
@@ -233,10 +190,9 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
                 break;
 
             default:
-                // MessageDialog.openError(this.getSite().getShell(), "Error",
-                // "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
+
                 return;
-            }// switch
+            }
 
         } catch (PartInitException e) {
             log.error(e.getMessage(), e);
@@ -291,7 +247,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
      */
     @Override
     protected void addPages() {
-        // TODO Auto-generated method stub
         super.addPages();
         try {
             refreshPropertyView();

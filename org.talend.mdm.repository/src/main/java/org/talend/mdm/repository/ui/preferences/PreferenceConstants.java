@@ -16,4 +16,6 @@ public class PreferenceConstants {
 
     public static final String P_AUTO_DEPLOY = "autoDeploy"; //$NON-NLS-1$
 
+    public static final String P_WARN_USER_AUTO_DEPLOY = "warnUserBeforeAutoDeploy"; //$NON-NLS-1$
+
 }

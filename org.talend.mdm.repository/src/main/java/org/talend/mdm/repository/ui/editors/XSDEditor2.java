@@ -25,6 +25,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -133,10 +134,16 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     public void doSave(IProgressMonitor monitor) {
         super.doSave(monitor);
         XSDEditorInput2 editorInput = (XSDEditorInput2) getEditorInput();
-        Item item = editorInput.getViewObject().getProperty().getItem();
+        IRepositoryViewObject viewObject = editorInput.getViewObject();
+        Item item = viewObject.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        if (serverObject.getLastServerDef() != null) {
-            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, editorInput.getViewObject());
+
+        //
+        DeployService deployService = DeployService.getInstance();
+        if (deployService.isAutoDeploy()) {
+            deployService.autoDeploy(getSite().getShell(), viewObject);
+        } else if (serverObject.getLastServerDef() != null) {
+            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
         }
     }
 
