@@ -39,6 +39,7 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
@@ -163,15 +164,13 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
+            } else if (item instanceof WorkspaceRootItem) { // fix bug TMDM-3168
+                actions.add(importObjectAction);
             }
         }
 
-        //
-        // actions.add(exportAction);
         actions.add(refreshAction);
-        // actions.add(importServerObjectAction);
         actions.add(exportObjectAction);
-        // actions.add(importObjectAction);
         // action provider
         for (IRepositoryNodeActionProvider provider : getExtendActionProviders()) {
             List<AbstractRepositoryAction> providerActions = provider.getActions(viewObj);
