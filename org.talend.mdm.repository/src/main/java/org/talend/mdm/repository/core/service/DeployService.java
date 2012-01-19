@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,7 +21,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -30,6 +33,8 @@ import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
+import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -121,11 +126,16 @@ public class DeployService {
 
     }
 
-    public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
-        removeLockedViewObj(viewObjs);
+    public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType, boolean removeLocked) {
+        if (removeLocked)
+            removeLockedViewObj(viewObjs);
         CommandManager manager = CommandManager.getInstance();
         List<AbstractDeployCommand> commands = manager.getDeployCommands(viewObjs, defaultCmdType);
         return runCommands(commands, serverDef);
+    }
+
+    public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
+        return deploy(serverDef, viewObjs, defaultCmdType, true);
     }
 
     private void removeLockedViewObj(List<IRepositoryViewObject> viewObjs) {
@@ -136,6 +146,63 @@ public class DeployService {
                 }
             }
         }
+    }
+
+    public boolean isAutoDeploy() {
+        return PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_AUTO_DEPLOY);
+    }
+
+    public void autoDeploy(Shell shell, IRepositoryViewObject viewObj) {
+        if (shell == null || viewObj == null)
+            throw new IllegalArgumentException();
+        MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObj);
+        if (serverDef != null) {
+
+            List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+            viewObjs.add(viewObj);
+
+            IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY, false);
+            updateAutoStatus(status);
+            if (status.isMultiStatus()) {
+                showDeployStatus(shell, status);
+            }
+        } else {
+            boolean warnUser = PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_WARN_USER_AUTO_DEPLOY);
+            if (warnUser)
+                MessageDialog.openWarning(shell, Messages.Warning_text,
+                        Messages.bind(Messages.NeverDeploy_text, viewObj.getLabel()));
+        }
+    }
+
+    protected void updateAutoStatus(IStatus status) {
+        if (status.isMultiStatus()) {
+            for (IStatus childStatus : status.getChildren()) {
+                DeployStatus deployStatus = null;
+                if (childStatus instanceof DeployStatus) {
+                    deployStatus = (DeployStatus) childStatus;
+                } else if (childStatus instanceof MultiStatus) {
+                    deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
+                }
+
+                ICommand command = deployStatus.getCommand();
+                CommandManager manager = CommandManager.getInstance();
+                manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
+
+            }
+        }
+    }
+
+    private void showDeployStatus(Shell shell, IStatus status) {
+        String prompt;
+
+        if (status.getSeverity() < IStatus.ERROR) {
+            prompt = Messages.bind(Messages.AbstractDeployAction_deployMessage, status.getChildren().length);
+        } else {
+            prompt = Messages.bind(Messages.AbstractDeployAction_deployFailure, status.getChildren().length);
+
+        }
+        MultiStatusDialog dialog = new MultiStatusDialog(shell, prompt, status);
+        dialog.open();
     }
 
     public IStatus runCommands(List<AbstractDeployCommand> commands, MDMServerDef serverDef) {
