@@ -201,7 +201,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                             ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
                         }
                         copy.getProperty().setLabel(newName);
-
+                        RepositoryResourceUtil.setLastServerDef(copy, null);
                         factory.save(copy);
                         return true;
                     }
