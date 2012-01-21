@@ -96,10 +96,15 @@ public class MenuMainPage extends AMainPageV2 {
 
     private String uripre;
 
+    private TreeObject treeObject;
+
     public MenuMainPage(FormEditor editor) {
+
         super(editor, MenuMainPage.class.getName(), "Menu " + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
-        uripre = ((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()).getEndpointIpAddress();
+        treeObject = (TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel();
+        uripre = treeObject.getEndpointIpAddress();
+
     }
 
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
@@ -405,7 +410,7 @@ public class MenuMainPage extends AMainPageV2 {
                 // if attribute, edit parent else edit this one
                 dlg = new MenuEntryDialog(treeEntry.getWsMenuEntry(), new MenuEntryDialogSelectionListener(viewer, treeEntry),
                         this.viewer.getControl().getShell(), "Edit the Menu Entry " + treeEntry.getWsMenuEntry().getId(), false,
-                        uripre, isLocalInput());
+                        uripre, isLocalInput(), treeObject);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
 
@@ -469,7 +474,7 @@ public class MenuMainPage extends AMainPageV2 {
                 super.run();
                 // if attribute, edit parent else edit this one
                 dlg = new MenuEntryDialog(new WSMenuEntry(), new MenuEntryDialogSelectionListener(viewer, treeEntry), this.viewer
-                        .getControl().getShell(), "New Menu Entry ", uripre, isLocalInput());
+                        .getControl().getShell(), "New Menu Entry ", uripre, isLocalInput(), treeObject);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
                 if (dlg.getReturnCode() == Window.OK) {

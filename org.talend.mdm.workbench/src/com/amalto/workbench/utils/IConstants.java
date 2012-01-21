@@ -56,12 +56,6 @@ public interface IConstants {
 
     // public final static String OPERATIONTYPE_SYNCHRONIZE="SYNCHRONIZE";
 
-    /**
-     * Used for exist admin user/passwd
-     */
-    public final static String EXIST_ADMIN = "admin";//$NON-NLS-1$
-
-    public final static String EXIST_ADMIN_PASSWD = "1bc29b36f623ba82aaf6724fd3b16718";//$NON-NLS-1$
 
     public final static String EXIST_PORT = "8180";//$NON-NLS-1$
 

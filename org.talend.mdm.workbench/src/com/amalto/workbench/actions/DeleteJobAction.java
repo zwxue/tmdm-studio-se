@@ -62,7 +62,7 @@ public class DeleteJobAction extends AbstractAction {
         // String filename= xobject.getDisplayName();//TODO
         String uploadURL = new URL(endpointaddress).getProtocol() + "://" + new URL(endpointaddress).getHost() + ":" //$NON-NLS-1$ //$NON-NLS-2$
                 + new URL(endpointaddress).getPort() + "/datamanager/uploadFile?deletefile=" + filename; //$NON-NLS-1$
-        Util.uploadFileToAppServer(uploadURL, filename, "admin", "talend");//$NON-NLS-1$ //$NON-NLS-2$
+        Util.uploadFileToAppServer(uploadURL, filename, xobject.getUsername(), xobject.getPassword());//$NON-NLS-1$ //$NON-NLS-2$
         xobject.getParent().removeChild(xobject);
     }
 

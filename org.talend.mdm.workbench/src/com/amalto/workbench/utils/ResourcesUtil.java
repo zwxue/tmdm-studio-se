@@ -43,6 +43,8 @@ import org.dom4j.io.SAXReader;
 
 import sun.misc.BASE64Encoder;
 
+import com.amalto.workbench.models.TreeObject;
+
 public class ResourcesUtil {
 
     private static Log log = LogFactory.getLog(ResourcesUtil.class);
@@ -116,12 +118,12 @@ public class ResourcesUtil {
         return null;
     }
 
-    private static String getXMLString(String uri) {
+    private static String getXMLString(String uri, TreeObject treeObject) {
         DefaultHttpClient httpclient = new DefaultHttpClient();
 
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(getEndpointHost(uri), Integer.valueOf(getEndpointPort(uri))),
-                new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
+                new UsernamePasswordCredentials(treeObject.getUsername(), treeObject.getPassword()));//$NON-NLS-1$//$NON-NLS-2$
 
         HttpGet httpget = new HttpGet(uri);
 
@@ -142,9 +144,9 @@ public class ResourcesUtil {
 
     }
 
-    public static HashMap<String, String> getResourcesMapFromURI(String uri) {
+    public static HashMap<String, String> getResourcesMapFromURI(String uri, TreeObject treeObject) {
         HashMap<String, String> contentMap = new HashMap<String, String>();
-        String responseBody = getXMLString(uri);
+        String responseBody = getXMLString(uri, treeObject);
         Document document = parsXMLString(responseBody);
         if (document == null)
             return contentMap;
@@ -161,9 +163,9 @@ public class ResourcesUtil {
         return contentMap;
     }
 
-    public static List<String> getResourcesNameListFromURI(String uri) throws Exception {
+    public static List<String> getResourcesNameListFromURI(String uri, TreeObject treeObject) throws Exception {
         List<String> nameList = new ArrayList<String>();
-        String responseBody = getXMLString(uri);
+        String responseBody = getXMLString(uri, treeObject);
         // nameList=getNameList(responseBody);
         Document document = parsXMLString(responseBody);
         if (document == null)
