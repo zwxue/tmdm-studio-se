@@ -56,7 +56,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
         String path = referenceFile.getLocation().toOSString();
         try {
             String fileName = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", path//$NON-NLS-1$
-                    , "admin", "talend", null); //$NON-NLS-1$ //$NON-NLS-2$
+                    , serverDef.getUser(), serverDef.getPasswd(), null);
             return true;
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);

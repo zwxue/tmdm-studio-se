@@ -1982,7 +1982,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 if (dropTargetValidate(event, nameList)) {
                     if (MessageDialog.openConfirm(sash.getShell(), "Confirm", "Do you want to include or import schema?")) {
                         HashMap<String, String> customTypesMap = ResourcesUtil.getResourcesMapFromURI(uriPre
-                                + TreeObject.CUSTOM_TYPES_URI);
+                                + TreeObject.CUSTOM_TYPES_URI, xobject);
                         List<String> customTypeList = new ArrayList<String>();
                         for (String key : nameList) {
                             customTypeList.add(customTypesMap.get(key));

@@ -250,7 +250,7 @@ public class ImportServerObjectWizard extends Wizard {
         DefaultHttpClient httpclient = new DefaultHttpClient();
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(treeObj.getEndpointHost(), Integer.valueOf(treeObj.getEndpointPort())),
-                new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
+                new UsernamePasswordCredentials(treeObj.getUsername(), treeObj.getPassword()));//$NON-NLS-1$//$NON-NLS-2$
         HttpGet httpget = new HttpGet(workflowURL);
         // System.out.println("executing request" + httpget.getRequestLine());
         HttpResponse response = httpclient.execute(httpget);

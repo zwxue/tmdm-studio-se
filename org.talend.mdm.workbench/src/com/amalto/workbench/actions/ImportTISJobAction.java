@@ -94,7 +94,7 @@ public class ImportTISJobAction extends Action {
                 String endpointaddress = xobject.getEndpointAddress();
                 String uploadURL = new URL(endpointaddress).getProtocol() + "://" + new URL(endpointaddress).getHost() + ":"//$NON-NLS-1$ //$NON-NLS-2$
                         + new URL(endpointaddress).getPort() + "/datamanager/uploadFile?deployjob=" + fileName;//$NON-NLS-1$ 
-                String remoteFile = Util.uploadFileToAppServer(uploadURL, name, "admin", "talend");//$NON-NLS-1$ //$NON-NLS-2$
+                String remoteFile = Util.uploadFileToAppServer(uploadURL, name, xobject.getUsername(), xobject.getPassword());//$NON-NLS-1$ //$NON-NLS-2$
 
                 // parse file to get jobinfo
                 TreeObject jobFolder = xobject.findObject(TreeObject.BUILT_IN_CATEGORY_FOLDER, "Deployed Jobs");//$NON-NLS-1$

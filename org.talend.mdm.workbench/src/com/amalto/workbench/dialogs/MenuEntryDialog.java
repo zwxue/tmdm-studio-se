@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
@@ -92,17 +93,19 @@ public class MenuEntryDialog extends Dialog {
 
     private final boolean isLocal;
 
+    private TreeObject treeObject;
     /**
      * @param parentShell
      */
     public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, String uripre,
-            boolean isLocal) {
+            boolean isLocal, TreeObject treeObject) {
         super(parentShell);
         this.wsMenuEntry = wsMenuEntry;
         this.caller = caller;
         this.title = title;
         this.uripre = uripre;
         this.isLocal = isLocal;
+        this.treeObject = treeObject;
         // feed the descritions hashmap used by the labels Table
         WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
@@ -113,7 +116,7 @@ public class MenuEntryDialog extends Dialog {
     }
 
     public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title, boolean isChanged,
-            String uripre, boolean isLocal) {
+            String uripre, boolean isLocal, TreeObject treeObject) {
         super(parentShell);
         this.wsMenuEntry = wsMenuEntry;
         this.caller = caller;
@@ -121,6 +124,7 @@ public class MenuEntryDialog extends Dialog {
         this.isChanged = isChanged;
         this.uripre = uripre;
         this.isLocal = isLocal;
+        this.treeObject = treeObject;
         // feed the descritions hashmap used by the labels Table
         WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
@@ -403,17 +407,17 @@ public class MenuEntryDialog extends Dialog {
                 if (wsMenuEntry.getIcon() != null) {
                     if (!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())) {
                         Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",//$NON-NLS-1$//$NON-NLS-2$
-                                "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
+                                treeObject.getUsername(), treeObject.getPassword(), null);
                         if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
                             icon = Util.uploadImageFile(
                                     uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText()//$NON-NLS-1$
-                                    .getText(), "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
+                                            .getText(), treeObject.getUsername(), treeObject.getPassword(), null);
                         getIconPathText().setText(icon);
                     }
                 } else if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
                     icon = Util.uploadImageFile(
                             uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText().getText(),//$NON-NLS-1$
-                            "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
+                            treeObject.getUsername(), treeObject.getPassword(), null);
                 getIconPathText().setText(icon);
                 // ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);
             } catch (Exception e) {

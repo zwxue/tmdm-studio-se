@@ -276,7 +276,8 @@ public class ExportItemsWizard extends Wizard {
                     // picture
                     try {
                         String picUrl = obj.getEndpointIpAddress()
-                                + ResourcesUtil.getResourcesMapFromURI(obj.getEndpointIpAddress() + TreeObject.PICTURES_URI).get(
+                                + ResourcesUtil.getResourcesMapFromURI(obj.getEndpointIpAddress() + TreeObject.PICTURES_URI,
+                                        objs[0]).get(
                                         obj.getDisplayName());
                         HttpClient client = new HttpClient();
                         GetMethod get = new GetMethod(picUrl);
@@ -455,7 +456,7 @@ public class ExportItemsWizard extends Wizard {
                         DefaultHttpClient httpclient = new DefaultHttpClient();
                         httpclient.getCredentialsProvider().setCredentials(
                                 new AuthScope(obj.getEndpointHost(), Integer.valueOf(obj.getEndpointPort())),
-                                new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
+                                new UsernamePasswordCredentials(obj.getUsername(), obj.getPassword()));//$NON-NLS-1$//$NON-NLS-2$
                         HttpGet httpget = new HttpGet(workflowURL);
                         // System.out.println("executing request" + httpget.getRequestLine());
                         HttpResponse response = httpclient.execute(httpget);
