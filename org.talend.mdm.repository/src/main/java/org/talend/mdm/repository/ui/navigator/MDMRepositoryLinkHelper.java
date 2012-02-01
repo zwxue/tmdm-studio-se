@@ -63,7 +63,6 @@ public class MDMRepositoryLinkHelper implements ILinkHelper {
     public void activateEditor(IWorkbenchPage aPage, IStructuredSelection selection) {
         initOpenAction();
         openAction.selectionChanged(selection);
-        // openAction.run();
 
         for (IEditorPart editor : PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditors()) {
             if (editor instanceof XObjectEditor2) {
