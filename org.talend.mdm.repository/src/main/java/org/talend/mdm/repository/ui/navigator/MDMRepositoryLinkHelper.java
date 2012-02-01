@@ -5,13 +5,19 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.ILinkHelper;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.ui.actions.OpenObjectAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.ui.editors.XObjectEditor2;
+import org.talend.mdm.repository.ui.editors.XObjectEditorInput2;
+import org.talend.mdm.repository.ui.editors.XSDEditor2;
+import org.talend.mdm.repository.ui.editors.XSDEditorInput2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 
@@ -57,8 +63,19 @@ public class MDMRepositoryLinkHelper implements ILinkHelper {
     public void activateEditor(IWorkbenchPage aPage, IStructuredSelection selection) {
         initOpenAction();
         openAction.selectionChanged(selection);
-        openAction.run();
+        // openAction.run();
 
+        for (IEditorPart editor : PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditors()) {
+            if (editor instanceof XObjectEditor2) {
+                if (selection.getFirstElement() == ((XObjectEditorInput2) editor.getEditorInput()).getViewObject()) {
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(editor);
+                }
+            }
+            if (editor instanceof XSDEditor2) {
+                if (selection.getFirstElement() == ((XSDEditorInput2) editor.getEditorInput()).getViewObject()) {
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(editor);
+                }
+            }
+        }
     }
-
 }
