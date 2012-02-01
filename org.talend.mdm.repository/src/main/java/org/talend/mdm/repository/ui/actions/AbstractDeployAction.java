@@ -60,10 +60,20 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
     protected void showDeployStatus(IStatus status) {
         String prompt;
+        int count = 0;
+        if (status.isMultiStatus()) {
+            for (IStatus child : status.getChildren()) {
+                if (child.isMultiStatus()) {
+                    count += child.getChildren().length;
+                } else {
+                    count++;
+                }
+            }
+        }
         if (status.getSeverity() < IStatus.ERROR) {
-            prompt = Messages.bind(Messages.AbstractDeployAction_deployMessage, status.getChildren().length);
+            prompt = Messages.bind(Messages.AbstractDeployAction_deployMessage, count);
         } else {
-            prompt = Messages.bind(Messages.AbstractDeployAction_deployFailure, status.getChildren().length);
+            prompt = Messages.bind(Messages.AbstractDeployAction_deployFailure, count);
 
         }
         MultiStatusDialog dialog = new MultiStatusDialog(getShell(), prompt, status);
