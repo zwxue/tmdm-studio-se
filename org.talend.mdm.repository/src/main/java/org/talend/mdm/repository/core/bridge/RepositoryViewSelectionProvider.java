@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.bridge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -34,30 +35,27 @@ public class RepositoryViewSelectionProvider implements ISelectionProvider {
         this.action = action;
     }
 
-
     public void addSelectionChangedListener(ISelectionChangedListener listener) {
 
     }
 
-
     public ISelection getSelection() {
         List<Object> selectedObjects = action.getSelectedObject();
         if (!selectedObjects.isEmpty()) {
-            Object object = selectedObjects.get(0);
-            if (object instanceof IRepositoryViewObject) {
-                IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
-                RepositoryNode node = RepositoryResourceUtil.convertToNode(viewObj);
-                // IRepositoryViewObject parentViewObj = ContainerCacheService.getParent(viewObj);
-                // if (parentViewObj != null) {
-                // RepositoryNode parentNode = RepositoryResourceUtil.convertToNode(parentViewObj);
-                // node.setParent(parentNode);
-                // }
-                return new StructuredSelection(node);
+            List<RepositoryNode> selectedNodes = new ArrayList<RepositoryNode>();
+            for (Object object : selectedObjects) {
+                if (object instanceof IRepositoryViewObject) {
+                    IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
+                    RepositoryNode node = RepositoryResourceUtil.convertToNode(viewObj);
+                    if (node != null) {
+                        selectedNodes.add(node);
+                    }
+                }
             }
+            return new StructuredSelection(selectedNodes);
         }
         return new StructuredSelection();
     }
-
 
     public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 
