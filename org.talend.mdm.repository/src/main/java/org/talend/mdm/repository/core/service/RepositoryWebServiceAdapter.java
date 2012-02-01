@@ -239,7 +239,7 @@ public class RepositoryWebServiceAdapter {
         String[] objects = new String[] { "Routing Engine V2", "Synchronization Plan", "Service", "Universe", "Routing Rule", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
                 "Background Job", "Menu", "Transformer V2", "Stored Procedure", "View", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
                 "Routing Order V2 Failed", "Item", "Data Model", "Routing Order V2 Completed", "Synchronization Conflict", //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                "Transformer Plugin V2", "Role", "Data Cluster", "Configuration Info" };//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+                "Transformer Plugin V2", "Role", "Data Cluster", "Configuration Info", "Custom Layout" };//$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         return objects;
 
     }
