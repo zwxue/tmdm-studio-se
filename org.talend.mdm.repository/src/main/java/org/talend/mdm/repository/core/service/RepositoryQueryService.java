@@ -22,9 +22,11 @@ import org.apache.log4j.Logger;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoleE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -162,6 +164,30 @@ public class RepositoryQueryService {
         return names;
     }
 
+    public static List<String> findAllCustomFormPks() {
+        List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil
+                .findAllViewObjects(IServerObjectRepositoryType.TYPE_CUSTOM_FORM);
+        List<String> names = new LinkedList<String>();
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                Item item = viewObj.getProperty().getItem();
+                if (item instanceof MDMServerObjectItem) {
+                    MDMServerObject sObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                    if (sObject instanceof WSCustomFormE) {
+                        WSCustomFormE sForm = (WSCustomFormE) sObject;
+                        String name = sForm.getDatamodel() + ICoreConstants.ITEM_PK_SPLIT + sForm.getEntity()
+                                + ICoreConstants.ITEM_PK_SPLIT + sForm.getName();
+                        if (name != null)
+                            names.add(name);
+                        else
+                            names.add(viewObj.getLabel());
+                    }
+                }
+                // names[i]=viewObj.getLabel();
+            }
+        }
+        return names;
+    }
     public static MDMServerObject findServerObjectByName(ERepositoryObjectType type, String name) {
         List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(type);
         if (viewObjects != null) {
