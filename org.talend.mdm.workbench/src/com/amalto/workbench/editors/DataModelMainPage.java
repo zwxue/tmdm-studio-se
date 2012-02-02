@@ -339,7 +339,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected String dataModelName;
 
-    private XSDSchema xsdSchema;
+    protected XSDSchema xsdSchema;
 
     // private XSDTreeContentProvider provider;
     private SchemaTreeContentProvider schemaTreeContentProvider;
@@ -2841,8 +2841,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         importSchemalItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                SelectImportedModulesDialog dlg = new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject,
-                        "Import xsd schema modules");
+                SelectImportedModulesDialog dlg = createSelectImportedModulesDialog();
                 dlg.create();
                 dlg.setBlockOnOpen(true);
                 dlg.open();
@@ -2853,6 +2852,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         });
 
+    }
+
+    protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
+        return new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject, "Import xsd schema modules");
     }
 
     @Override

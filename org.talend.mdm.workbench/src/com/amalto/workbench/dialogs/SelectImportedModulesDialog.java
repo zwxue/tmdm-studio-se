@@ -61,6 +61,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -95,7 +96,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
     private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";//$NON-NLS-1$
 
-    private String LOCAL_MDM_URL = null;
+    protected String local_mdm_url = null;
 
     public SelectImportedModulesDialog(Shell parentShell, XSDSchema schema, TreeObject treeObj, String title) {
         super(parentShell);
@@ -106,7 +107,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
         String endpointIpAddress = treeObject.getEndpointIpAddress();
         if (endpointIpAddress != null && endpointIpAddress.length() > 0) {
-            LOCAL_MDM_URL = endpointIpAddress + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
+            local_mdm_url = endpointIpAddress + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
         }
     }
 
@@ -204,7 +205,7 @@ public class SelectImportedModulesDialog extends Dialog {
                             "Select XSD Schema from MDM Web Site");
                     try {
                         ArrayList<String> schemaList = new ArrayList<String>();
-                        XtentisPort port = Util.getPort(treeObject);
+                        XtentisPort port = getPort();
                         WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
                         if (xdmPKs != null) {
                             for (int i = 0; i < xdmPKs.length; i++) {
@@ -225,7 +226,7 @@ public class SelectImportedModulesDialog extends Dialog {
                     if (dlg.getReturnCode() == Window.OK) {
                         List<String> urls = dlg.getMDMDataModelUrls();
                         for (String url : urls) {
-                            XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
+                            XSDDesc xsdDesc = buildUp(getLocal_mdm_url() + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
                             include(xsdDesc);
                         }
                         getButton(IDialogConstants.OK_ID).setEnabled(true);
@@ -395,6 +396,19 @@ public class SelectImportedModulesDialog extends Dialog {
             }
         }
         return toDelList;
+    }
+
+    protected XtentisPort getPort() {
+        try {
+            return Util.getPort(treeObject);
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public String getLocal_mdm_url() {
+        return this.local_mdm_url;
     }
 
     private static class XSDSchemaLabelProvider extends StyledCellLabelProvider {
