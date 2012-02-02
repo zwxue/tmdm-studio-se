@@ -35,6 +35,7 @@ import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapNoActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWrapWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationWriteActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDVisibleRuleActionR;
+import org.talend.mdm.repository.ui.dialogs.SelectImportedModulesDialog2;
 import org.talend.mdm.repository.ui.dialogs.datamodel.DataModelFilterDialogR;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
@@ -53,6 +54,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDVisibleRuleAction;
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
+import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -168,5 +170,8 @@ public class DataModelMainPage2 extends DataModelMainPage {
         this.isGenView = isGenView;
     }
 
+    protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
+        return new SelectImportedModulesDialog2(getSite().getShell(), xsdSchema, xobject, "Import xsd schema modules");
+    }
 
 }
