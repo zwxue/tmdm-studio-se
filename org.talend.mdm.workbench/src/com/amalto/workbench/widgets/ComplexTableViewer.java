@@ -774,7 +774,7 @@ public class ComplexTableViewer {
         return mainComposite;
     }
 
-    class ValidationRuleEditor extends CellEditor implements ICellEditor {
+    protected class ValidationRuleEditor extends CellEditor implements ICellEditor {
 
         public ValidationRuleEditor(Composite parent) {
             super(parent);
@@ -782,8 +782,7 @@ public class ComplexTableViewer {
 
         @Override
         protected Control createControl(Composite parent) {
-            validationRule = new ValidationRuleWidget(parent, getCurrentTreeParent(), conceptName);
-
+            createValidationRuleWidget(parent);
             ((GridData) validationRule.getComposite().getChildren()[0].getLayoutData()).heightHint = 15;
             ((GridData) validationRule.getComposite().getChildren()[1].getLayoutData()).heightHint = 15;
             if (parent instanceof Table) {
@@ -818,6 +817,9 @@ public class ComplexTableViewer {
             return validationRule.getComposite();
         }
 
+        public void createValidationRuleWidget(Composite parent) {
+            validationRule = new ValidationRuleWidget(parent, getCurrentTreeParent(), conceptName);
+        }
         boolean isMouseInControl(MouseEvent e) {
             if (e.widget instanceof Table) {
                 if (validationRule.getComposite().getBounds().contains(e.x, e.y)) {
