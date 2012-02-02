@@ -365,7 +365,7 @@ public class TisTableViewer extends ComplexTableViewer {
                 editors[i] = new MultiMessageEditor(table);
                 multiMsg.setColumn(table.getColumn(i));
             } else if (columns.get(i).isValidationRule()) {
-                editors[i] = new ValidationRuleEditor(table);
+                editors[i] = createValidationRuleEditor();
                 validationRule.setColumn(table.getColumn(i));
             }
         }
@@ -520,6 +520,11 @@ public class TisTableViewer extends ComplexTableViewer {
                 btns.remove(pastButton);
             }
         });
+    }
+
+
+    protected CellEditor createValidationRuleEditor() {
+        return new ValidationRuleEditor(table);
     }
 
     @Override

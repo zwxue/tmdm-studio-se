@@ -40,18 +40,18 @@ public class ValidationRuleWidget {
 
     private Button button;
 
-    private Text text;
+    protected Text text;
 
-    ValidationRuleExcpressDialog dlg;
+    protected ValidationRuleExcpressDialog dlg;
 
-    String conceptName;
+    protected String conceptName;
 
     private GridData textGD;
 
     TableColumn column;
 
     // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
-    private final TreeParent treeParent;
+    protected final TreeParent treeParent;
 
     public ValidationRuleWidget(Composite parent, TreeParent treeParent,String conceptName) {
         this.parent = parent;
@@ -82,8 +82,9 @@ public class ValidationRuleWidget {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 Shell shell = new Shell(composite.getDisplay(), SWT.BORDER);
-                dlg = new ValidationRuleExcpressDialog(shell, treeParent, "Build Validation Rule Expression ", text.getText(),
-                        conceptName, false, true);
+              
+                createValidationRuleExcpressDialog(shell);
+
                 dlg.create();
                 dlg.getShell().setMaximized(false);
                 // dlg.getShell().setSize(new Point(640,560));
@@ -98,6 +99,12 @@ public class ValidationRuleWidget {
         button.setToolTipText("Build Validation Rule Expression");
     }
 
+    protected void createValidationRuleExcpressDialog(Shell shell) {
+        dlg = new ValidationRuleExcpressDialog(shell, treeParent, "Build Validation Rule Expression ", text.getText(),
+
+        conceptName, false, true);
+
+    }
     public Composite getComposite() {
         return composite;
     }
