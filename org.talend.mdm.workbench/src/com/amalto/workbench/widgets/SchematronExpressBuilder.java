@@ -20,7 +20,6 @@ import java.util.Comparator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.axis.utils.Messages;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.text.BadLocationException;
@@ -44,6 +43,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.TreeParent;
@@ -423,7 +423,7 @@ public class SchematronExpressBuilder {
     }
 
     protected XpathSelectDialog getXPathSelectDialog() {
-        return new XpathSelectDialog(parent.getShell(), treeParent, Messages.getMessage("SchematronExpressBuilder_selectXPath"),
+        return new XpathSelectDialog(parent.getShell(), treeParent, Messages.getString("SchematronExpressBuilder_selectXPath"),
                 ServerView.show().getSite(), false, null,
                 isAbsoluteXPath);
     }
