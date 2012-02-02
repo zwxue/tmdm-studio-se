@@ -143,6 +143,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.actions.XSDAnnotationLookupFieldsAction;
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
@@ -2855,7 +2856,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
-        return new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject, "Import xsd schema modules");
+        return new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject, Messages.getString("ImportXSDSchema"));
     }
 
     @Override

@@ -226,7 +226,7 @@ public class SelectImportedModulesDialog extends Dialog {
                     if (dlg.getReturnCode() == Window.OK) {
                         List<String> urls = dlg.getMDMDataModelUrls();
                         for (String url : urls) {
-                            XSDDesc xsdDesc = buildUp(getLocal_mdm_url() + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
+                            XSDDesc xsdDesc = buildUp(getLocalMdmUrl() + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
                             include(xsdDesc);
                         }
                         getButton(IDialogConstants.OK_ID).setEnabled(true);
@@ -398,16 +398,13 @@ public class SelectImportedModulesDialog extends Dialog {
         return toDelList;
     }
 
-    protected XtentisPort getPort() {
-        try {
+    protected XtentisPort getPort() throws XtentisException {
+
             return Util.getPort(treeObject);
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
+
     }
 
-    public String getLocal_mdm_url() {
+    public String getLocalMdmUrl() {
         return this.local_mdm_url;
     }
 
