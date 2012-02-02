@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.widgets;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -58,6 +59,23 @@ public class TisTableViewerR extends TisTableViewer {
     @Override
     protected XpathWidget getNewXpathWidget(Composite parent) {
         return new XpathWidgetR(parent, false);
+    }
+
+    @Override
+    protected CellEditor createValidationRuleEditor() {
+        return new ValidationRuleEditorR(table); 
+    }
+
+    public class ValidationRuleEditorR extends ValidationRuleEditor {
+
+        public ValidationRuleEditorR(Composite parent) {
+            super(parent);
+        }
+
+        @Override
+        public void createValidationRuleWidget(Composite parent) {
+            validationRule = new ValidationRuleWidgetR(parent, getCurrentTreeParent(), conceptName);
+        }
     }
 
 }
