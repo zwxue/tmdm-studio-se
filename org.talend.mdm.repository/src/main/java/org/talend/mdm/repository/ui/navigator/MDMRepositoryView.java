@@ -36,9 +36,11 @@ import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.internal.WorkbenchPlugin;
@@ -81,6 +83,9 @@ public class MDMRepositoryView extends CommonNavigator {
         registerEditorListener();
         contributeToActionBars();
         activateContext();
+        
+        //new added
+        regisitPerspectiveBarSelectListener();
     }
 
     /**
@@ -193,15 +198,50 @@ public class MDMRepositoryView extends CommonNavigator {
             }
             // if editor is talend job editor, switch to org.talend.rcp.perspective
             if (partRef.getId().equals("org.talend.designer.core.ui.MultiPageTalendEditor")) {//$NON-NLS-1$
+
+                String perspectiveId = "org.talend.rcp.perspective";
+
+                if (activePerspective != null && deactivePerspective != null) {
+                    if (!activePerspective.equals(deactivePerspective)) {
+                        perspectiveId = activePerspective.getId();
+                    }
+                }
+
                 IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-                        .findPerspectiveWithId("org.talend.rcp.perspective"); //$NON-NLS-1$
+                        .findPerspectiveWithId(perspectiveId); //$NON-NLS-1$
                 if (perspective != null) {
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
                 }
             }
+
+            activePerspective = null;
+            deactivePerspective = null;
         }
     };
 
+
+    private IPerspectiveDescriptor activePerspective;//record current activated perspective for temp use
+    private IPerspectiveDescriptor deactivePerspective;//record current deactivated perspective for temp use
+    
+    /**
+     * Register one perspective selection listener
+     */
+    private void regisitPerspectiveBarSelectListener() {
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
+
+            @Override
+            public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+                activePerspective = perspective;
+            }
+            
+            @Override
+            public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+                deactivePerspective = perspective;
+            }
+            
+        });
+    }
+    
     IPartListener editorListener = new IPartListener() {
 
         public void partActivated(IWorkbenchPart part) {
