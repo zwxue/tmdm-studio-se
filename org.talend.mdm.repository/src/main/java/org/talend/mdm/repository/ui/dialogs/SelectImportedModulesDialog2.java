@@ -38,28 +38,22 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
 
     }
 
-    protected XtentisPort getPort() {
+    protected XtentisPort getPort() throws XtentisException {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
 
-        try {
             if (dialog.open() == IDialogConstants.OK_ID) {
                 MDMServerDef serverDef = dialog.getSelectedServerDef();
                 this.serverDef = serverDef;
                 return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
             }
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
 
         return null;
     }
 
-    public String getLocal_mdm_url() {
-        if (local_mdm_url == null) {
-            String url = "http://" + serverDef.getHost() + ":" + serverDef.getPort() + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            return url;
-        }
-        return null;
+    @Override
+    public String getLocalMdmUrl() {
+        return "http://" + serverDef.getHost() + ":" + serverDef.getPort() + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
     }
 
 }

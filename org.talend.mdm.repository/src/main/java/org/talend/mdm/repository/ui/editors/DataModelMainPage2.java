@@ -22,6 +22,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDefaultValueRuleActionR;
@@ -162,6 +163,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
         return super.getAdapter(adapter);
     }
 
+    @Override
     protected void createNewBrowseItemViewAction() {
         this.newBrowseItemAction = new XSDNewBrowseItemViewActionR(this);
     }
@@ -170,8 +172,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
         this.isGenView = isGenView;
     }
 
+    @Override
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
-        return new SelectImportedModulesDialog2(getSite().getShell(), xsdSchema, xobject, "Import xsd schema modules");
+        return new SelectImportedModulesDialog2(getSite().getShell(), xsdSchema, xobject, Messages.ImportXSDSchema);
     }
 
 }

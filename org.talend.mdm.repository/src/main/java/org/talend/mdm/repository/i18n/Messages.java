@@ -380,6 +380,8 @@ public class Messages extends NLS {
     public static String SchematronExpressBuilder_selectXPath;
     public static String AutoDeployPreferencePage_btnCheckButton_text;
 
+    public static String ImportXSDSchema;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
