@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.dialogs;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xsd.XSDSchema;
@@ -30,30 +29,26 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
 
-    private static Logger log = Logger.getLogger(SelectImportedModulesDialog2.class);
-
     MDMServerDef serverDef;
     public SelectImportedModulesDialog2(Shell parentShell, XSDSchema schema, TreeObject treeObj, String title) {
         super(parentShell, schema, treeObj, title);
 
     }
 
+    @Override
     protected XtentisPort getPort() throws XtentisException {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
-
             if (dialog.open() == IDialogConstants.OK_ID) {
                 MDMServerDef serverDef = dialog.getSelectedServerDef();
                 this.serverDef = serverDef;
                 return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
             }
-
         return null;
     }
 
     @Override
-    public String getLocalMdmUrl() {
+    protected String getUrl() {
         return "http://" + serverDef.getHost() + ":" + serverDef.getPort() + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
     }
 
 }
