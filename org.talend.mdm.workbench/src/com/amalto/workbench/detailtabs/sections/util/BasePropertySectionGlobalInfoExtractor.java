@@ -36,6 +36,9 @@ public abstract class BasePropertySectionGlobalInfoExtractor {
                 return MDMRepositoryViewExtensionService.findAllRoleNames().toArray(new String[0]);
             if (typeCode == TreeObject.WORKFLOW_PROCESS)
                 return MDMRepositoryViewExtensionService.findAllWorkflowNames().toArray(new String[0]);
+            if (typeCode == TreeObject.DATA_MODEL)
+                return MDMRepositoryViewExtensionService.findAllDataModelNames().toArray(new String[0]);
+
         }
         return Util.getChildren(propSection.getTreeObject().getServerRoot(), typeCode).toArray(new String[0]);
     }

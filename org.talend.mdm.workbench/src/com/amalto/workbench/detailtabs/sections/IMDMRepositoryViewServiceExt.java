@@ -21,4 +21,6 @@ public interface IMDMRepositoryViewServiceExt {
 
     public List<String> findAllWorkflowNames();
 
+    public List<String> findAllDataModelNames();
+
 }
