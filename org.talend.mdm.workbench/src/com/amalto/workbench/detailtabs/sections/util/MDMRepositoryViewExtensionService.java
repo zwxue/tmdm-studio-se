@@ -75,4 +75,13 @@ public class MDMRepositoryViewExtensionService {
 
     }
 
+    public static List<String> findAllDataModelNames() {
+        IMDMRepositoryViewServiceExt service = getRepositoryViewService();
+        if (service != null)
+            return service.findAllWorkflowNames();
+        else
+            return null;
+
+    }
+
 }
