@@ -29,6 +29,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -57,6 +58,7 @@ import org.eclipse.xsd.XSDSchemaContent;
 import org.eclipse.xsd.impl.XSDImportImpl;
 import org.eclipse.xsd.impl.XSDIncludeImpl;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -96,7 +98,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
     private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";//$NON-NLS-1$
 
-    protected String local_mdm_url = null;
+    protected String url = null;
 
     public SelectImportedModulesDialog(Shell parentShell, XSDSchema schema, TreeObject treeObj, String title) {
         super(parentShell);
@@ -107,7 +109,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
         String endpointIpAddress = treeObject.getEndpointIpAddress();
         if (endpointIpAddress != null && endpointIpAddress.length() > 0) {
-            local_mdm_url = endpointIpAddress + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
+            url = endpointIpAddress + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
         }
     }
 
@@ -206,6 +208,11 @@ public class SelectImportedModulesDialog extends Dialog {
                     try {
                         ArrayList<String> schemaList = new ArrayList<String>();
                         XtentisPort port = getPort();
+                        if (port == null) {
+                            MessageDialog.openError(getShell(), Messages.getString("Error.title"), Messages
+                                    .getString("ServerNotNull"));
+                            return;
+                        }
                         WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
                         if (xdmPKs != null) {
                             for (int i = 0; i < xdmPKs.length; i++) {
@@ -224,9 +231,14 @@ public class SelectImportedModulesDialog extends Dialog {
                     dlg.setBlockOnOpen(true);
                     dlg.open();
                     if (dlg.getReturnCode() == Window.OK) {
+                        if (getUrl() == null) {
+                            MessageDialog.openError(getShell(), Messages.getString("Error.title"), Messages
+                                    .getString("ServerNotNull"));
+                            return;
+                        }
                         List<String> urls = dlg.getMDMDataModelUrls();
                         for (String url : urls) {
-                            XSDDesc xsdDesc = buildUp(getLocalMdmUrl() + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
+                            XSDDesc xsdDesc = buildUp(getUrl() + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
                             include(xsdDesc);
                         }
                         getButton(IDialogConstants.OK_ID).setEnabled(true);
@@ -399,13 +411,11 @@ public class SelectImportedModulesDialog extends Dialog {
     }
 
     protected XtentisPort getPort() throws XtentisException {
-
             return Util.getPort(treeObject);
-
     }
 
-    public String getLocalMdmUrl() {
-        return this.local_mdm_url;
+    protected String getUrl() {
+        return this.url;
     }
 
     private static class XSDSchemaLabelProvider extends StyledCellLabelProvider {
