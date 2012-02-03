@@ -113,6 +113,7 @@ public class SelectImportedModulesDialog extends Dialog {
         }
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
 
@@ -387,6 +388,7 @@ public class SelectImportedModulesDialog extends Dialog {
         return new XSDDesc(url, image, type);
     }
 
+    @Override
     protected Control createButtonBar(Composite parent) {
         Control control = super.createButtonBar(parent);
         getButton(IDialogConstants.OK_ID).setEnabled(false);
@@ -423,6 +425,7 @@ public class SelectImportedModulesDialog extends Dialog {
         public XSDSchemaLabelProvider() {
         }
 
+        @Override
         public void update(ViewerCell cell) {
             Object element = cell.getElement();
 
@@ -439,6 +442,7 @@ public class SelectImportedModulesDialog extends Dialog {
             super.update(cell);
         }
 
+        @Override
         protected void measure(Event event, Object element) {
             super.measure(event, element);
         }
