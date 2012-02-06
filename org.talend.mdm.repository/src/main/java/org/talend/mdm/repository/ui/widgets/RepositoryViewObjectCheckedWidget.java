@@ -15,8 +15,10 @@ package org.talend.mdm.repository.ui.widgets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -246,7 +248,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
             private void checkSubElement(IRepositoryViewObject viewObj) {
                 if (viewObj instanceof FolderRepositoryObject) {
-                    List<IRepositoryViewObject> children = ((FolderRepositoryObject) viewObj).getChildren();
+                    Item item = viewObj.getProperty().getItem();
+                    List<IRepositoryViewObject> children = RepositoryResourceUtil.findViewObjects(
+                            viewObj.getRepositoryObjectType(), item, true, true);
                     if (children != null) {
                         for (IRepositoryViewObject child : children) {
                             checkSubElement(child);
@@ -271,28 +275,27 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
             private boolean containVisibleElement(FolderRepositoryObject parent) {
                 Item item = parent.getProperty().getItem();
-
                 List<IRepositoryViewObject> children = RepositoryResourceUtil.findViewObjects(parent.getRepositoryObjectType(),
                         item, true, true);
-
+                boolean result = false;
                 for (IRepositoryViewObject viewObj : children) {
+
                     if (viewObj instanceof FolderRepositoryObject) {
-                        boolean result = containVisibleElement((FolderRepositoryObject) viewObj);
-                        if (result) {
-                            updateServerDef(viewObj);
-                            updateLockedObject(viewObj);
-                            return true;
+                        boolean r = containVisibleElement((FolderRepositoryObject) viewObj);
+                        if (r) {
+                            result = true;
                         }
                     } else if (viewObj instanceof IRepositoryViewObject) {
-                        boolean result = cmdMap.containsKey(viewObj.getId());
-                        if (result) {
+                        boolean r = cmdMap.containsKey(viewObj.getId());
+
+                        if (r) {
                             updateServerDef(viewObj);
                             updateLockedObject(viewObj);
-                            return true;
+                            result = true;
                         }
                     }
                 }
-                return false;
+                return result;
             }
 
             @Override
@@ -338,7 +341,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         }
     }
 
-    private List<IRepositoryViewObject> lockedViewObjs = new LinkedList<IRepositoryViewObject>();
+    private Set<IRepositoryViewObject> lockedViewObjs = new HashSet<IRepositoryViewObject>();
 
     private void updateLockedObject(IRepositoryViewObject viewObject) {
         if (viewObject instanceof FolderRepositoryObject) {
