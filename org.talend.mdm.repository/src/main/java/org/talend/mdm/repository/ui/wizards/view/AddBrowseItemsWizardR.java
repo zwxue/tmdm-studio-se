@@ -30,6 +30,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -79,6 +81,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             String roleName = keyValues.get(0).value;
             MDMServerObjectItem roleItem = RepositoryQueryService.findServerObjectItemByName(
                     IServerObjectRepositoryType.TYPE_ROLE, roleName);
+            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, roleItem.getProperty().getId(),
+                    roleItem.getMDMServerObject().getName());
 
             if (roleItem != null) {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
