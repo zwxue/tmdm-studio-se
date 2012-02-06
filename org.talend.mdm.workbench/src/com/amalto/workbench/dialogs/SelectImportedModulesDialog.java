@@ -123,7 +123,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Label label = new Label(composite, SWT.NONE);
         label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 2, 1));
-        label.setText("Viewer with imported xsd schema modules:");
+        label.setText(Messages.getString("ViewerWithModules"));
 
         tableViewer = new TableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         GridData data = new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1);
@@ -138,6 +138,7 @@ public class SelectImportedModulesDialog extends Dialog {
         tableViewer.setInput(new Object());
         tableViewer.setSorter(new ViewerSorter() {
 
+            @Override
             public int category(Object element) {
                 if (element instanceof XSDDesc) {
                     return ((XSDDesc) element).getType();
@@ -145,6 +146,7 @@ public class SelectImportedModulesDialog extends Dialog {
                 return -1;
             }
 
+            @Override
             public int compare(Viewer theViewer, Object e1, Object e2) {
                 int cat1 = category(e1);
                 int cat2 = category(e2);
@@ -166,8 +168,8 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Button addXSDFromLocal = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
         addXSDFromLocal.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        addXSDFromLocal.setText("Add xsd from local");
-        addXSDFromLocal.setToolTipText("Add xsd schema from local");
+        addXSDFromLocal.setText(Messages.getString("AddXsdFromlocal"));
+        addXSDFromLocal.setToolTipText(Messages.getString("AddXsdSchemaFromlocal"));
         addXSDFromLocal.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -176,7 +178,7 @@ public class SelectImportedModulesDialog extends Dialog {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 FileDialog fd = new FileDialog(shell.getShell(), SWT.SAVE);
                 fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
-                fd.setText("import XSD Schema");
+                fd.setText(Messages.getString("ImportXSDSchema"));
                 String filename = fd.open();
 
                 if (filename == null)
@@ -196,16 +198,16 @@ public class SelectImportedModulesDialog extends Dialog {
         if (Util.IsEnterPrise()) {
             Button addXSDFromWebSite = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
             addXSDFromWebSite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-            addXSDFromWebSite.setText("Add Types from Data Models");
-            addXSDFromWebSite.setToolTipText("Add xsd schema from the data model types");
+            addXSDFromWebSite.setText(Messages.getString("AddTypesDataModels"));
+            addXSDFromWebSite.setToolTipText(Messages.getString("AddFromModelTypes"));
             addXSDFromWebSite.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
                 };
 
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(),
-                            "Select XSD Schema from MDM Web Site");
+                    MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), Messages
+                            .getString("SelectXSDSchemaWebSite"));
                     try {
                         ArrayList<String> schemaList = new ArrayList<String>();
                         XtentisPort port = getPort();
@@ -251,8 +253,8 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Button impXSDFromExchange = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
         impXSDFromExchange.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        impXSDFromExchange.setText("Import xsd schema from exchange server");
-        impXSDFromExchange.setToolTipText("Import xsd schema from exchange server");
+        impXSDFromExchange.setText(Messages.getString("ImportFromExchangeServer"));
+        impXSDFromExchange.setToolTipText(Messages.getString("ImportSchemaFromServer"));
         impXSDFromExchange.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {
@@ -283,20 +285,20 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Button addXSDFromInputDlg = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
         addXSDFromInputDlg.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        addXSDFromInputDlg.setText("Add xsd from Other site");
-        addXSDFromInputDlg.setToolTipText("Add xsd schema from the URL of other site");
+        addXSDFromInputDlg.setText(Messages.getString("AddXsdFromOther"));
+        addXSDFromInputDlg.setToolTipText(Messages.getString("AddFromOtherSite"));
         addXSDFromInputDlg.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             };
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                InputDialog id = new InputDialog(shell.getShell(), "Add xsd from Other site",
-                        "Enter a text for the URL of XSD Schema resource", "", new IInputValidator() {
+                InputDialog id = new InputDialog(shell.getShell(), Messages.getString("AddXsdFromOther"),
+                        Messages.getString("EnterTextUrl") , "", new IInputValidator() {
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                    return "The name cannot be empty";
+                            return Messages.getString("NameNotEmpty");
                                 return null;
                             };
                         });
@@ -315,8 +317,8 @@ public class SelectImportedModulesDialog extends Dialog {
 
         delLabelButton = new Button(compositeBtn, SWT.PUSH);
         delLabelButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        delLabelButton.setText("Delete xsd modules");
-        delLabelButton.setToolTipText("Delete");
+        delLabelButton.setText(Messages.getString("DeleteXsdModule"));
+        delLabelButton.setToolTipText(Messages.getString("DeleteText"));
         delLabelButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
