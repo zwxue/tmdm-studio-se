@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.ValidationRuleExcpressDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -100,7 +101,8 @@ public class ValidationRuleWidget {
     }
 
     protected void createValidationRuleExcpressDialog(Shell shell) {
-        dlg = new ValidationRuleExcpressDialog(shell, treeParent, "Build Validation Rule Expression ", text.getText(),
+        dlg = new ValidationRuleExcpressDialog(shell, treeParent, Messages.getString("BuildValidationRuleExpression"), text
+                .getText(),
 
         conceptName, false, true);
 
