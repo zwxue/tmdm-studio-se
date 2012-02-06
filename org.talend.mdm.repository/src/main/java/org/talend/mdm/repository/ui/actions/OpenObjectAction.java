@@ -96,11 +96,6 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
             if (object instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
-                // boolean locked = RepositoryResourceUtil.isLockedViewObject(viewObj);
-                // if (locked) {
-                // IEditorReference openRef = RepositoryResourceUtil.isOpenedInEditor(viewObj);
-                // return openRef == null;
-                // }
                 ERepositoryStatus status = factory.getStatus(viewObj);
                 if (status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER)
                     return !status.isEditable();
@@ -109,7 +104,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         }
 
         return false;
-        // return super.isLocked();
+
     }
 
     private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
