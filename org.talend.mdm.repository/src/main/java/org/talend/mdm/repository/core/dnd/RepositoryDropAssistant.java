@@ -44,6 +44,8 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -199,6 +201,8 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                     if (factory.isEditableAndLockIfPossible(copy)) {
                         if (copy instanceof MDMServerObjectItem) {
                             ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
+                            ((MDMServerObjectItem) copy).getMDMServerObject().setLastServerDef(null);
+                            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, copy.getProperty().getId(), newName);
                         }
                         copy.getProperty().setLabel(newName);
                         RepositoryResourceUtil.setLastServerDef(copy, null);
