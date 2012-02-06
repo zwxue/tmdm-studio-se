@@ -626,7 +626,7 @@ public class ExportItemsWizard extends Wizard {
             // create viewer
             createViewer();
             Composite itemcom = initItemTreeViewer(composite);
-            itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 5));
+            itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 0));
 
             folder.setEnabled(folderBtn.getSelection());
             zip.setEnabled(zipBtn.getSelection());
