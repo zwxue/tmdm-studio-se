@@ -147,5 +147,6 @@ public class NewViewAction extends AbstractSimpleAddAction {
         RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_VIEW, viewName, null, null);
         createServerObject(viewName);
         refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_VIEW);
+        refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_ROLE);
     }
 }
