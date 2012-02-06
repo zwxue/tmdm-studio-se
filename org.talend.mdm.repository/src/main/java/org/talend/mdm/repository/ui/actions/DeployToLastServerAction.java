@@ -43,10 +43,13 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        LockedObjectDialog dialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage, viewObjs);
+        LockedObjectDialog dialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
+                Messages.DeployAction_singleLockedObjectMessage, viewObjs);
         if (dialog.needShowDialog() && dialog.open() == IDialogConstants.CANCEL_ID) {
             return;
         }
+        if (!dialog.canContinueRestOperation())
+            return;
         IRepositoryViewObject viewObj = viewObjs.get(0);
         MDMServerDef currentServerDef = RepositoryResourceUtil.getLastServerDef(viewObj);
         //

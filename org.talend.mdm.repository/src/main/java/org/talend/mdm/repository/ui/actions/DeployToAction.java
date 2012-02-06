@@ -42,15 +42,18 @@ public class DeployToAction extends AbstractDeployAction {
     protected void doRun() {
 
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
-
+        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
+        LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
+                Messages.DeployAction_singleLockedObjectMessage, viewObjs);
+        if (lockDialog.needShowDialog() && lockDialog.open() == IDialogConstants.CANCEL_ID) {
+            return;
+        }
+        if (!lockDialog.canContinueRestOperation())
+            return;
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
             MDMServerDef serverDef = dialog.getSelectedServerDef();
-            List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
-            for (Object obj : getSelectedObject()) {
-                viewObjs.add((IRepositoryViewObject) obj);
-            }
-            //
+
             IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY);
             updateChangedStatus(status);
             if (status.isMultiStatus()) {
@@ -58,7 +61,6 @@ public class DeployToAction extends AbstractDeployAction {
             }
 
             updateLastServer(new NullProgressMonitor());
-
         }
 
     }
