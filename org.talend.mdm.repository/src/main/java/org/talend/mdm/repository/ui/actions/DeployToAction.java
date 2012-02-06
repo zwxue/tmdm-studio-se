@@ -39,10 +39,13 @@ public class DeployToAction extends AbstractDeployAction {
 
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage, viewObjs);
+        LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
+                Messages.DeployAction_singleLockedObjectMessage, viewObjs);
         if (lockDialog.needShowDialog() && lockDialog.open() == IDialogConstants.CANCEL_ID) {
             return;
         }
+        if (!lockDialog.canContinueRestOperation())
+            return;
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
             MDMServerDef serverDef = dialog.getSelectedServerDef();

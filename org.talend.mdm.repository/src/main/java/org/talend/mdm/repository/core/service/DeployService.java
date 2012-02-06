@@ -141,7 +141,7 @@ public class DeployService {
     private void removeLockedViewObj(List<IRepositoryViewObject> viewObjs) {
         if (viewObjs != null) {
             for (java.util.Iterator<IRepositoryViewObject> il = viewObjs.iterator(); il.hasNext();) {
-                if (RepositoryResourceUtil.isLockedViewObject(il.next())) {
+                if (RepositoryResourceUtil.isLockedAndEdited(il.next())) {
                     il.remove();
                 }
             }

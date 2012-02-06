@@ -122,7 +122,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
         if (selectedObject != null && !selectedObject.isEmpty()) {
             Object object = selectedObject.get(0);
             if (object instanceof IRepositoryViewObject) {
-                return RepositoryResourceUtil.isLockedViewObject((IRepositoryViewObject) object);
+                return RepositoryResourceUtil.isLockedAndEdited((IRepositoryViewObject) object);
             }
         }
         return false;

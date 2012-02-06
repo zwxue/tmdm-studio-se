@@ -76,17 +76,33 @@ public class LockedObjectDialog extends Dialog {
 
     private List<IRepositoryViewObject> lockedObjs;
 
-    private final String alertMsg;
+    private final String mutliObjAlertMsg;
+
+    private boolean continueRestOperation = true;
+
+    private String singleObjAlertMsg;
+
+    public boolean canContinueRestOperation() {
+        return this.continueRestOperation;
+    }
 
     /**
      * Create the dialog.
      * 
      * @param parentShell
      */
-    public LockedObjectDialog(Shell parentShell, String alertMsg, List<IRepositoryViewObject> inputObjs) {
+    public LockedObjectDialog(Shell parentShell, String multiObjAlertMsg, List<IRepositoryViewObject> inputObjs) {
+        this(parentShell, multiObjAlertMsg, multiObjAlertMsg, inputObjs);
+    }
+
+    public LockedObjectDialog(Shell parentShell, String multiObjAlertMsg, String singleObjAlertMsg,
+            List<IRepositoryViewObject> inputObjs) {
         super(parentShell);
-        this.alertMsg = alertMsg;
+        this.mutliObjAlertMsg = multiObjAlertMsg;
+        this.singleObjAlertMsg = singleObjAlertMsg;
+
         initInput(inputObjs);
+
     }
 
     /**
@@ -105,9 +121,12 @@ public class LockedObjectDialog extends Dialog {
         gd_titleLabel.heightHint = 30;
         gd_titleLabel.verticalIndent = 5;
         titleLabel.setLayoutData(gd_titleLabel);
-        if (alertMsg != null)
-            titleLabel.setText(alertMsg);
-
+        if (mutliObjAlertMsg != null) {
+            if (canContinueRestOperation())
+                titleLabel.setText(mutliObjAlertMsg);
+            else
+                titleLabel.setText(singleObjAlertMsg);
+        }
         treeViewer = new TreeViewer(container, SWT.BORDER);
         Tree tree = treeViewer.getTree();
         GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -124,11 +143,24 @@ public class LockedObjectDialog extends Dialog {
         return container;
     }
 
+    @Override
+    protected void cancelPressed() {
+        super.cancelPressed();
+        continueRestOperation = false;
+    }
+
     private void initInput(List<IRepositoryViewObject> inputObjs) {
         lockedObjs = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryViewObject viewObject : inputObjs) {
-            if (RepositoryResourceUtil.isLockedViewObject(viewObject)) {
+            if (RepositoryResourceUtil.isLockedAndEdited(viewObject)) {
                 lockedObjs.add(viewObject);
+            }
+        }
+        // can continue
+        continueRestOperation = true;
+        if (inputObjs.size() > 0) {
+            if (inputObjs.size() == lockedObjs.size()) {
+                continueRestOperation = false;
             }
         }
     }
@@ -145,7 +177,9 @@ public class LockedObjectDialog extends Dialog {
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
         createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+        if (continueRestOperation) {
+            createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+        }
     }
 
     /**

@@ -21,14 +21,10 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.PersistenceException;
@@ -91,19 +87,29 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    public List<Object> getSelectedObject() {
+    @Override
+    protected boolean isLocked() {
 
-        IStructuredSelection structuredSelection = getStructuredSelection();
-        if (structuredSelection.isEmpty()) {
-            structuredSelection = (IStructuredSelection) getCommonViewer().getSelection();
+        List<Object> selectedObject = getSelectedObject();
+        if (!selectedObject.isEmpty()) {
+            Object object = selectedObject.get(0);
+
+            if (object instanceof IRepositoryViewObject) {
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
+                // boolean locked = RepositoryResourceUtil.isLockedViewObject(viewObj);
+                // if (locked) {
+                // IEditorReference openRef = RepositoryResourceUtil.isOpenedInEditor(viewObj);
+                // return openRef == null;
+                // }
+                ERepositoryStatus status = factory.getStatus(viewObj);
+                if (status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER)
+                    return !status.isEditable();
+
+            }
         }
-        if (structuredSelection.isEmpty())
-            return Collections.EMPTY_LIST;
-        List<Object> result = new LinkedList<Object>();
-        for (Iterator<Object> il = structuredSelection.iterator(); il.hasNext();) {
-            result.add(il.next());
-        }
-        return result;
+
+        return false;
+        // return super.isLocked();
     }
 
     private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
@@ -135,26 +141,28 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         if (selObjects != null) {
             sels = selObjects;
         }
-        for (Object obj : sels) {
-            if (obj instanceof IRepositoryViewObject) {
-                if (obj instanceof WSRootRepositoryObject)
-                    return;
-                IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+        if (sels.isEmpty())
+            return;
+        Object obj = sels.get(0);
+        if (obj instanceof IRepositoryViewObject) {
+            if (obj instanceof WSRootRepositoryObject)
+                return;
+            IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
 
-                Item item = viewObject.getProperty().getItem();
-                if (item instanceof ContainerItem) {
-                    if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
-                                                                                                                             // configuration
-                        MDMServerDef serverDef = openServerDialog(null);
-                        openServiceConfig(serverDef);
-                    } else {
-                        getCommonViewer().expandToLevel(obj, 1);
-                    }
+            Item item = viewObject.getProperty().getItem();
+            if (item instanceof ContainerItem) {
+                if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
+                                                                                                                         // configuration
+                    MDMServerDef serverDef = openServerDialog(null);
+                    openServiceConfig(serverDef);
                 } else {
-                    openItem(viewObject);
+                    getCommonViewer().expandToLevel(obj, 1);
                 }
+            } else {
+                openItem(viewObject);
             }
         }
+
     }
 
     private void openServiceConfig(MDMServerDef serverDef) {

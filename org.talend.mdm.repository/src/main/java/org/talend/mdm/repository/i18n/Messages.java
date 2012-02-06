@@ -66,6 +66,8 @@ public class Messages extends NLS {
 
     public static String DeployAction_lockedObjectMessage;
 
+    public static String DeployAction_singleLockedObjectMessage;
+
     public static String DeployAllAction_label;
 
     public static String DeployAllDialog_chooseServerFirst;

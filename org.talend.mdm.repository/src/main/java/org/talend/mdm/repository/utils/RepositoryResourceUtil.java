@@ -121,6 +121,18 @@ public class RepositoryResourceUtil {
         return status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER;
     }
 
+    public static boolean isLockedAndEdited(IRepositoryViewObject viewObj) {
+        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+        ERepositoryStatus status = factory.getStatus(viewObj);
+        if (status == ERepositoryStatus.LOCK_BY_OTHER)
+            return true;
+        else if (status == ERepositoryStatus.LOCK_BY_USER) {
+            IEditorReference openRef = RepositoryResourceUtil.isOpenedInEditor(viewObj);
+            return openRef != null;
+        }
+        return false;
+    }
+
     public static boolean isLockedItem(Item item) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         ERepositoryStatus status = factory.getStatus(item);
