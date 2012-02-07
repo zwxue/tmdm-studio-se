@@ -384,6 +384,10 @@ public class Messages extends NLS {
 
     public static String ImportXSDSchema;
 
+    public static String BuildValidationRuleExpression;
+
+    public static String SelectMultipleXPaths;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

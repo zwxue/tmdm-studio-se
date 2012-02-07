@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
@@ -52,7 +53,7 @@ public class TisTableViewerR extends TisTableViewer {
         if (site == null) {
             site = getMainPage().getSite();
         }
-        return new XpathSelectDialog2(table.getShell(), "Select Multiple XPaths", site, true,
+        return new XpathSelectDialog2(table.getShell(), Messages.SelectMultipleXPaths, site, true,
                 getDatamodelName());
     }
 
