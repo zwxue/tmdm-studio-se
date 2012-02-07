@@ -79,6 +79,10 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
                 decoration.addOverlay(IMG_SERVER, IDecoration.TOP_RIGHT);
                 decoration.addSuffix(" " + serverDef.getName()); //$NON-NLS-1$
             }
+            
+            String version = item.getProperty().getVersion();
+            if (version != null)
+                decoration.addSuffix(" " + version); //$NON-NLS-1$
         }
     }
 
