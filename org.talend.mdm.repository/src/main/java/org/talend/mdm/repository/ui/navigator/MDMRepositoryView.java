@@ -245,6 +245,37 @@ public class MDMRepositoryView extends CommonNavigator {
     IPartListener editorListener = new IPartListener() {
 
         public void partActivated(IWorkbenchPart part) {
+            if (part instanceof IEditorPart) {
+                IEditorInput input = ((IEditorPart) part).getEditorInput();
+                if (input != null && input instanceof IRepositoryViewEditorInput) {
+                    Item item = ((IRepositoryViewEditorInput) input).getInputItem();
+                    if (item != null) {
+                        try {
+                            if (factory.isEditableAndLockIfPossible(item)) {
+                                factory.lock(item);
+                            }
+                            Property property = item.getProperty();
+                            final IRepositoryViewObject viewObject = ContainerCacheService.get(property);
+                            if (viewObject != null) {
+                                Display.getDefault().asyncExec(new Runnable() {
+
+                                    public void run() {
+                                        if (!getCommonViewer().getTree().isDisposed()) {
+                                            getCommonViewer().refresh(viewObject);
+                                        }
+                                    }
+                                });
+
+                            }
+                        } 
+                        catch (PersistenceException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (LoginException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                }
+            }
         }
 
         public void partBroughtToTop(IWorkbenchPart part) {
