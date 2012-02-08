@@ -417,7 +417,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
 
             // description
-            Label descriptionLabel = toolkit.createLabel(mainComposite, Messages.getString("DescriptionText"), SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(mainComposite, Messages.getString("DescriptionText"), SWT.NULL); //$NON-NLS-1$
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 
             descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);//$NON-NLS-1$
@@ -476,19 +476,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             commit();
                             refreshData();
                             XSDSchema mc = xsdSchema;
-                            MessageDialog.openInformation(getSite().getShell(), Messages.getString("ImportXSDSche"), Messages
-                                    .getString("ImportingXSDSchemaCompleted"));
+                            MessageDialog.openInformation(getSite().getShell(), Messages.getString("ImportXSDSche"), Messages //$NON-NLS-1$
+                                    .getString("ImportingXSDSchemaCompleted")); //$NON-NLS-1$
                         } catch (Exception ex) {
                             log.error(ex.getMessage(), ex);
                             String detail = "";//$NON-NLS-1$
                             if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
-                                detail += " , " + Messages.getString("Dueto") + "\n" + ex.getMessage();
+                                detail += " , " + Messages.getString("Dueto") + "\n" + ex.getMessage(); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
                             }
                             setXsdSchema(schemaCpy);
                             commit();
                             refresh();
-                            MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), Messages
-                                    .getString("ImportingXSDSchemaFailed")
+                            MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), Messages //$NON-NLS-1$
+                                    .getString("ImportingXSDSchemaFailed") //$NON-NLS-1$
                                     + detail);
                         }
                     }
@@ -501,10 +501,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     public void validateSchema() throws IllegalAccessException {
-        final String msg_omit[] = { Messages.getString("XsdOmit1"), Messages.getString("XsdOmit2"),
-                Messages.getString("XsdOmit3"), Messages.getString("XsdOmit4"), Messages.getString("XsdOmit5") };
+        final String msg_omit[] = { Messages.getString("XsdOmit1"), Messages.getString("XsdOmit2"), //$NON-NLS-1$//$NON-NLS-2$
+                Messages.getString("XsdOmit3"), Messages.getString("XsdOmit4"), Messages.getString("XsdOmit5") }; //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 
-        final String msg_shouldRefresh[] = { Messages.getString("XsdRefresh"), };
+        final String msg_shouldRefresh[] = { Messages.getString("XsdRefresh"), }; //$NON-NLS-1$
 
         // do not force to refresh every time just when an error throws.
         String error = validateDiagnoses(msg_omit);
@@ -661,7 +661,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         compSchemaTree.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         Label title = new Label(compInfo, SWT.VERTICAL);
-        title.setText(Messages.getString("DataModelEntities"));
+        title.setText(Messages.getString("DataModelEntities")); //$NON-NLS-1$
         title.setFont(FontUtils.getBoldFont(title.getFont()));
         Color blue = new Color(compInfo.getDisplay(), 0, 0, 255);
         title.setForeground(blue);
@@ -705,8 +705,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
                         deleteConceptWrapAction.run();
                     } else {
-                        MessageDialog.openWarning(getSite().getShell(), Messages.getString("WarnningText"), Messages
-                                .getString("SelectDeletableTry"));
+                        MessageDialog.openWarning(getSite().getShell(), Messages.getString("WarnningText"), Messages //$NON-NLS-1$
+                                .getString("SelectDeletableTry")); //$NON-NLS-1$
                     }
                 }
             }
@@ -829,7 +829,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         compTypeTree.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         Label title = new Label(compInfo, SWT.VERTICAL);
-        title.setText(Messages.getString("DataModelTypes"));
+        title.setText(Messages.getString("DataModelTypes")); //$NON-NLS-1$
         title.setFont(FontUtils.getBoldFont(title.getFont()));
         Color blue = new Color(compInfo.getDisplay(), 0, 0, 255);
         title.setForeground(blue);
@@ -885,9 +885,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
                             deleteConceptWrapAction.run();
                         } else {
-                            MessageDialog.openWarning(getSite().getShell(), Messages.getString("WarnningText"),
- Messages
-                                    .getString("SelectDeletableTry"));
+                            MessageDialog.openWarning(getSite().getShell(), Messages.getString("WarnningText"), Messages //$NON-NLS-1$
+                                    .getString("SelectDeletableTry")); //$NON-NLS-1$
                         }
                     }
                 }
@@ -923,7 +922,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "
+            ErrorExceptionDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: " //$NON-NLS-1$//$NON-NLS-2$
                     + e.getLocalizedMessage());
         }
     }
@@ -971,7 +970,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             doSave(wsObject);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.getString("ErrorCommittingPage"),
+            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.getString("ErrorCommittingPage"), //$NON-NLS-1$
                     CommonUtil.getErrMsgFromException(e));
             return 1;
         }
@@ -984,7 +983,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
                 xobject.getPassword());
         port.putDataModel(new WSPutDataModel((WSDataModel) wsObject));
-        RoleAssignmentDialog.doSave(port, ((WSDataModel) wsObject).getName(), Messages.getString("DataModelText"));
+        RoleAssignmentDialog.doSave(port, ((WSDataModel) wsObject).getName(), Messages.getString("DataModelText")); //$NON-NLS-1$
     }
 
     protected void commit() {
@@ -1242,9 +1241,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // add by ymli, fix bug 0009770
             String title = "";//$NON-NLS-1$
             if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
-                title = Messages.getString("PasteEntityText");
+                title = Messages.getString("PasteEntityText"); //$NON-NLS-1$
             else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
-                title = Messages.getString("PasteEntitiesText");
+                title = Messages.getString("PasteEntitiesText"); //$NON-NLS-1$
 
             XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
             if (pasteConceptAction.checkInPasteType()) {
@@ -1271,7 +1270,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
 
                 // add by ymli. fix bug 0009770 add the copy of concepts
-                XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, Messages.getString("CopyEntityText"));
+                XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, Messages.getString("CopyEntityText")); //$NON-NLS-1$
                 if (Util.checkInCopy(selectedObjs)) {
                     manager.add(new Separator());
                     manager.add(copyConceptAction);
@@ -1283,13 +1282,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                  */
                 String title = "";//$NON-NLS-1$
                 if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
-                    title = Messages.getString("PasteEntitiesText");
+                    title = Messages.getString("PasteEntitiesText"); //$NON-NLS-1$
                 else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
-                    title = Messages.getString("PasteEntityText");
+                    title = Messages.getString("PasteEntityText"); //$NON-NLS-1$
                 else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() > 1)
-                    title = Messages.getString("PasteElementsText");
+                    title = Messages.getString("PasteElementsText"); //$NON-NLS-1$
                 else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() == 1)
-                    title = Messages.getString("PasteElement");
+                    title = Messages.getString("PasteElement"); //$NON-NLS-1$
 
                 XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
                 if (pasteConceptAction.checkInPasteType())
@@ -1340,7 +1339,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         manager.add(deleteParticleAction);
                         // edit by ymli. fix the bug:0011523
                         XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, Messages
-                                .getString("CopyElementText"));
+                                .getString("CopyElementText")); //$NON-NLS-1$
                         manager.add(copyConceptAction);
 
                         manager.add(new Separator());
@@ -1382,7 +1381,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(new Separator());
                 manager.add(editComplexTypeAction);
             }
-            XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, "Paste Element");
+            XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, "Paste Element"); //$NON-NLS-1$
             manager.add(pasteConceptAction);
         }
 
@@ -1441,9 +1440,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             String title = "";//$NON-NLS-1$
             if (Util.checkInCopyTypeElement(selectedObjs))
-                title = Messages.getString("CopyEntitiesText");
+                title = Messages.getString("CopyEntitiesText"); //$NON-NLS-1$
             else if (Util.checkInCOpyTypeParticle(selectedObjs))
-                title = Messages.getString("CopyElements");
+                title = Messages.getString("CopyElements"); //$NON-NLS-1$
             XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, title);
 
             if (Util.checkInCopy(selectedObjs)) {
@@ -1743,11 +1742,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         undoRedoGroup.fillActionBars(getEditorSite().getActionBars());
 
-        /*
-         * // Install an operation approver for this undo context that prompts // according to a user preference.
-         * operationApprover = new PromptingUserApprover(undoContext);
-         * getOperationHistory().addOperationApprover(operationApprover);
-         */
     }
 
     public ObjectUndoContext getUndoContext() {
@@ -1837,8 +1831,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             public void drop(DropTargetEvent event) {
                 List<String> nameList = new ArrayList<String>();
                 if (dropTargetValidate(event, nameList)) {
-                    if (MessageDialog.openConfirm(sash.getShell(), Messages.getString("ConfirmText"), Messages
-                            .getString("DoIncludeImportSchema"))) {
+                    if (MessageDialog.openConfirm(sash.getShell(), Messages.getString("ConfirmText"), Messages //$NON-NLS-1$
+                            .getString("DoIncludeImportSchema"))) { //$NON-NLS-1$
                         HashMap<String, String> customTypesMap = ResourcesUtil.getResourcesMapFromURI(uriPre
                                 + TreeObject.CUSTOM_TYPES_URI, xobject);
                         List<String> customTypeList = new ArrayList<String>();
@@ -1875,7 +1869,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         EList<XSDElementDeclaration> elems = xsdSchema.getElementDeclarations();
         for (XSDElementDeclaration elem : elems) {
             if (elemCntMap.get(elem.getName()) == Boolean.TRUE) {
-                throw new IllegalAccessException(Messages.getString("XSDDuplicateName") + elem.getName());
+                throw new IllegalAccessException(Messages.getString("XSDDuplicateName") + elem.getName()); //$NON-NLS-1$
             }
             elemCntMap.put(elem.getName(), Boolean.TRUE);
         }
@@ -1887,9 +1881,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         String tail = "";//$NON-NLS-1$
         for (XSDTypeDefinition type : types) {
             if (type instanceof XSDComplexTypeDefinition) {
-                tail = Messages.getString("ComplexText");
+                tail = Messages.getString("ComplexText"); //$NON-NLS-1$
             } else {
-                tail = Messages.getString("SimpleText");
+                tail = Messages.getString("SimpleText"); //$NON-NLS-1$
             }
             if (typeCntMap.get(type.getName() + tail + type.getTargetNamespace()) == Boolean.TRUE) {
                 
@@ -2115,7 +2109,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         ToolItem filterToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         filterToolItem.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
-        filterToolItem.setToolTipText(Messages.getString("FilterText"));
+        filterToolItem.setToolTipText(Messages.getString("FilterText")); //$NON-NLS-1$
 
         filterToolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -2140,7 +2134,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         ToolItem expanedToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         expanedToolItem.setImage(ImageCache.getCreatedImage(EImage.EXPAND.getPath()));
-        expanedToolItem.setToolTipText(Messages.getString("ExpandText"));
+        expanedToolItem.setToolTipText(Messages.getString("ExpandText")); //$NON-NLS-1$
         expanedToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -2157,7 +2151,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         ToolItem collapseToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         collapseToolItem.setImage(ImageCache.getCreatedImage(EImage.COLLAPSE.getPath()));
-        collapseToolItem.setToolTipText(Messages.getString("CollapseText"));
+        collapseToolItem.setToolTipText(Messages.getString("CollapseText")); //$NON-NLS-1$
         collapseToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -2174,7 +2168,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         ToolItem expandGroupToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         expandGroupToolItem.setImage(ImageCache.getCreatedImage(EImage.ACTIVITY_CATEGORY.getPath()));
-        expandGroupToolItem.setToolTipText(Messages.getString("ExpandModelGroup"));
+        expandGroupToolItem.setToolTipText(Messages.getString("ExpandModelGroup")); //$NON-NLS-1$
         expandGroupToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -2189,7 +2183,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         ToolItem moveUpToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         moveUpToolItem.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
-        moveUpToolItem.setToolTipText(Messages.getString("UPText"));
+        moveUpToolItem.setToolTipText(Messages.getString("UPText")); //$NON-NLS-1$
         moveUpToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -2204,7 +2198,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         ToolItem moveDownToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         moveDownToolItem.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-        moveDownToolItem.setToolTipText(Messages.getString("DownText"));
+        moveDownToolItem.setToolTipText(Messages.getString("DownText")); //$NON-NLS-1$
         moveDownToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -2219,7 +2213,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         final ToolItem sortByLabelToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         sortByLabelToolItem.setImage(ImageCache.getCreatedImage(EImage.SORT_DESC.getPath()));
-        sortByLabelToolItem.setToolTipText(Messages.getString("SortDescText"));
+        sortByLabelToolItem.setToolTipText(Messages.getString("SortDescText")); //$NON-NLS-1$
         sortByLabelToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -2234,7 +2228,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         final ToolItem filtUniqueElementToolItem = new ToolItem(parentToolBar, SWT.CHECK);
         filtUniqueElementToolItem.setImage(ImageCache.getCreatedImage(EImage.ELEMENT_ONLY_SKIP.getPath()));
-        filtUniqueElementToolItem.setToolTipText(Messages.getString("HideElementsText"));
+        filtUniqueElementToolItem.setToolTipText(Messages.getString("HideElementsText")); //$NON-NLS-1$
         filtUniqueElementToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -2321,9 +2315,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         filter.setSelector(filtUniqueElementToolItem.getSelection());
         if (filtUniqueElementToolItem.getSelection())
-            filtUniqueElementToolItem.setToolTipText(Messages.getString("ShowElementsText"));
+            filtUniqueElementToolItem.setToolTipText(Messages.getString("ShowElementsText")); //$NON-NLS-1$
         else
-            filtUniqueElementToolItem.setToolTipText(Messages.getString("HideElementsText"));
+            filtUniqueElementToolItem.setToolTipText(Messages.getString("HideElementsText")); //$NON-NLS-1$
 
         targetTreeViewer.refresh();
     }
@@ -2347,9 +2341,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     private String getTooltipAfterClickSortByLabel(boolean isCurrentASC) {
 
         if (isCurrentASC)
-            return Messages.getString("SortAscText");
+            return Messages.getString("SortAscText"); //$NON-NLS-1$
 
-        return Messages.getString("SortDescText");
+        return Messages.getString("SortDescText"); //$NON-NLS-1$
     }
 
     private class DoubleClickListener implements IDoubleClickListener {
@@ -2525,14 +2519,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-        monitor.beginTask(Messages.getString("SavingText"), 1);
+        monitor.beginTask(Messages.getString("SavingText"), 1); //$NON-NLS-1$
         commit();
         monitor.done();
     }
 
     @Override
     public void doSaveAs() {
-
         commit();
     }
 
@@ -2578,15 +2571,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         resultToolBar.setLayoutData(gd);
         ToolItem importToolItem = new ToolItem(resultToolBar, SWT.PUSH);
         importToolItem.setImage(ImageCache.getCreatedImage(EImage.IMPORT.getPath()));
-        importToolItem.setToolTipText(Messages.getString("ImportText"));
+        importToolItem.setToolTipText(Messages.getString("ImportText")); //$NON-NLS-1$
 
         ToolItem exportToolItem = new ToolItem(resultToolBar, SWT.PUSH);
         exportToolItem.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
-        exportToolItem.setToolTipText(Messages.getString("ExportText"));
+        exportToolItem.setToolTipText(Messages.getString("ExportText")); //$NON-NLS-1$
 
         ToolItem importSchemalItem = new ToolItem(resultToolBar, SWT.PUSH);
         importSchemalItem.setImage(ImageCache.getCreatedImage(EImage.CHECKIN_ACTION.getPath()));
-        importSchemalItem.setToolTipText(Messages.getString("ImportIncludeSchema"));
+        importSchemalItem.setToolTipText(Messages.getString("ImportIncludeSchema")); //$NON-NLS-1$
 
         importToolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -2596,7 +2589,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 fd.setFilterExtensions(new String[] { "*.xsd", "*.dtd", "*.xml" });//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 // set the default path to the workspace.
                 fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
-                fd.setText(Messages.getString("SelectXMLDefinition"));
+                fd.setText(Messages.getString("SelectXMLDefinition")); //$NON-NLS-1$
                 String filename = fd.open();
                 if (filename == null)
                     return;
@@ -2632,8 +2625,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         refreshData();
                         markDirtyWithoutCommit();
                     } else if (infer != 0) {
-                        MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), Messages
-                                .getString("XsdSchemaInferred"));
+                        MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), Messages //$NON-NLS-1$
+                                .getString("XsdSchemaInferred")); //$NON-NLS-1$
                     }
                 }
             }
@@ -2651,8 +2644,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         }
                     }
                     if (!elem) {
-                        MessageDialog.openWarning(getSite().getShell(), Messages.getString("WarnningText"), Messages
-                                .getString("NoElementNode"));
+                        MessageDialog.openWarning(getSite().getShell(), Messages.getString("WarnningText"), Messages //$NON-NLS-1$
+                                .getString("NoElementNode")); //$NON-NLS-1$
                     }
                 } catch (Exception e) {
 
@@ -2668,7 +2661,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 FileDialog fd = new FileDialog(getSite().getShell(), SWT.SAVE);
                 fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
                 fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
-                fd.setText(Messages.getString("SaveDataModuleXSDSchema"));
+                fd.setText(Messages.getString("SaveDataModuleXSDSchema")); //$NON-NLS-1$
                 String filename = fd.open();
                 if (filename == null)
                     return;
@@ -2679,11 +2672,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
                 XSDDriver d = new XSDDriver();
                 if (d.outputXSD_UTF_8(wsObject.getXsdSchema(), xmlFile) != null) {
-                    MessageDialog.openInformation(getSite().getShell(), Messages.getString("ExportXSD"), Messages
-                            .getString("OperationExportingXsd"));
+                    MessageDialog.openInformation(getSite().getShell(), Messages.getString("ExportXSD"), Messages //$NON-NLS-1$
+                            .getString("OperationExportingXsd")); //$NON-NLS-1$
                 } else {
-                    MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), Messages
-                            .getString("FailedExportXSD"));
+                    MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), Messages //$NON-NLS-1$
+                            .getString("FailedExportXSD")); //$NON-NLS-1$
                 }
             }
         });
@@ -2705,7 +2698,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
-        return new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject, Messages.getString("ImportXSDSchema"));
+        return new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject, Messages.getString("ImportXSDSchema")); //$NON-NLS-1$
     }
 
     @Override
@@ -2793,7 +2786,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             String name = el.getLocalName();
             if ("appinfo".equals(name.toLowerCase())) {//$NON-NLS-1$
                 name = el.getAttribute("source");//$NON-NLS-1$
-                if (name.matches("X_Visible_Rule")) {
+                if (name.matches("X_Visible_Rule")) { //$NON-NLS-1$
                     return true;
                 }
             }
