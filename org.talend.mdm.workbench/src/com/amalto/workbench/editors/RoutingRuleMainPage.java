@@ -58,6 +58,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
@@ -159,7 +160,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     }
 
     public RoutingRuleMainPage(FormEditor editor) {
-        super(editor, RoutingRuleMainPage.class.getName(), "Trigger " + ((XObjectEditorInput) editor.getEditorInput()).getName()
+        super(editor, RoutingRuleMainPage.class.getName(), Messages.triggerLabel + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
         // get Version information
         try {
@@ -212,7 +213,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         try {
 
             // description
-            Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(charComposite, Messages.descriptionLabel, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -227,7 +228,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // Util.createCompDropTarget(descriptionText);
             // objectType
 
-            Label objectTypeLabel = toolkit.createLabel(charComposite, "Entity", SWT.NULL);
+            Label objectTypeLabel = toolkit.createLabel(charComposite, Messages.entityLabel, SWT.NULL);
             objectTypeLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, true, 1, 1));
             Composite typeComposite = toolkit.createComposite(charComposite);
             typeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -250,7 +251,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             });
             xpathButton = toolkit.createButton(typeComposite, "", SWT.PUSH);//$NON-NLS-1$
             xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-            xpathButton.setToolTipText("Select an Entity");
+            xpathButton.setToolTipText(Messages.entitySelectLabel);
             xpathButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(SelectionEvent e) {
@@ -278,7 +279,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // charComposite,(AMainPageV2)RoutingRuleMainPage.this,false,false,dataModelName);
 
             // issynchronous Button
-            isSynchronousButton = toolkit.createButton(charComposite, "Execute Synchronously", SWT.CHECK);
+            isSynchronousButton = toolkit.createButton(charComposite, Messages.executesynLabel, SWT.CHECK);
             isSynchronousButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             isSynchronousButton.addMouseListener(new MouseListener() {
 
@@ -293,8 +294,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 public void mouseDown(MouseEvent e) {
                 }
             });
-            deactiveButton = toolkit.createButton(charComposite, "Deactive", SWT.CHECK);
-            deactiveButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            deactiveButton = toolkit.createButton(charComposite, Messages.deactivateLabel, SWT.CHECK);
+            deactiveButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.FILL, false, true, 1, 1));
             deactiveButton.addMouseListener(new MouseListener() {
 
                 public void mouseUp(MouseEvent e) {
@@ -309,10 +310,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 }
             });
             // Routing Expressions
-            Composite serviceGroup = this.getNewSectionComposite("Service");
+            Composite serviceGroup = this.getNewSectionComposite(Messages.serviceLabel);
             serviceGroup.setLayout(new GridLayout(2, false));
             // Service Name
-            Label serviceNameLabel = toolkit.createLabel(serviceGroup, "Service JNDI Name", SWT.NULL);
+            Label serviceNameLabel = toolkit.createLabel(serviceGroup, Messages.serviceJndiLabel, SWT.NULL);
             serviceNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
 
             Composite subPanel = toolkit.createComposite(serviceGroup);
@@ -327,12 +328,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     if (refreshing)
                         return;
                     String serviceName = serviceNameCombo.getText();
-                    String helpPara = "";
-                    if (!"".equals(serviceName) && !serviceName.equals(null))
+                    String helpPara = ""; //$NON-NLS-1$
+                    if (!"".equals(serviceName) && !serviceName.equals(null)) //$NON-NLS-1$
                         if (EInputTemplate.getXtentisObjexts().get(serviceName) != null)
                             helpPara = EInputTemplate.getXtentisObjexts().get(serviceName).getContent();
                         else
-                            helpPara = "";
+                            helpPara = ""; //$NON-NLS-1$
                     // serviceParametersText.setText(XmlUtil.formatXmlSource(helpPara));
                     refreshParameterEditor(serviceName);
 
@@ -347,7 +348,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // default parameters button
             defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);//$NON-NLS-1$
             defultParameterBtn.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
-            defultParameterBtn.setToolTipText("Help...");
+            defultParameterBtn.setToolTipText(Messages.helpLabel);
             defultParameterBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             defultParameterBtn.addSelectionListener(new SelectionListener() {
 
@@ -375,7 +376,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
                 private void showUpDialog(String desc, String doc) {
                     final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(), desc, doc, null,
-                            "Documentation");
+                            Messages.documentionLabel);
                     dialog.addListener(new Listener() {
 
                         public void handleEvent(Event event) {
@@ -383,14 +384,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                         }
                     });
                     dialog.create();
-                    dialog.getShell().setText(serviceNameCombo.getText() + " Service Details");
+                    dialog.getShell().setText(serviceNameCombo.getText() + Messages.serviceDetailLabel);
                     dialog.setBlockOnOpen(true);
                     dialog.open();
                 }
             });
 
             // Service Parameters
-            Label serviceParametersLabel = toolkit.createLabel(serviceGroup, "Service Parameters", SWT.NULL);
+            Label serviceParametersLabel = toolkit.createLabel(serviceGroup, Messages.serviceParamLabel, SWT.NULL);
             serviceParametersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 2, 1));
 
             serviceParametersEditor = new ExtensibleContentEditor(serviceGroup, SWT.MULTI | SWT.WRAP, EXCONTENTEDITOR_ID);
@@ -444,7 +445,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // }
             // });
             // Routing Expressions
-            Composite routingExpressionsGroup = this.getNewSectionComposite("Trigger xPath Expressions");
+            Composite routingExpressionsGroup = this.getNewSectionComposite(Messages.triggerExpressionLabel);
             routingExpressionsGroup.setLayout(new GridLayout(1, true));
 
             conditionsColumns[0].setColumnWidth(250);
@@ -503,7 +504,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
      * @return
      */
     protected XpathSelectDialog getNewXpathDlg() {
-        return new XpathSelectDialog(getSite().getShell(), treeParent, "Select Entity", getSite(), false, dataModelName);
+        return new XpathSelectDialog(getSite().getShell(), treeParent, Messages.selectEntityLabel, getSite(), false, dataModelName);
     }
 
     protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
@@ -632,8 +633,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // initConditionProposal();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.errorMsgLabel,
+                    Messages.errorMsgLabel+": " + e.getLocalizedMessage()); //$NON-NLS-1$
         }
     }
 
@@ -676,8 +677,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             refreshServerView();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.errorCommitLabel,
+                    Messages.errorCommitLabel+": " + e.getLocalizedMessage()); //$NON-NLS-1$
         }
     }
 
@@ -808,7 +809,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     @Override
     public boolean beforeDoSave() {
         if (serviceNameCombo.getText() == null || serviceNameCombo.getText().length() == 0) {
-            MessageDialog.openError(this.getSite().getShell(), "Error saving", "Service JNDI Name cannot be null");
+            MessageDialog.openError(this.getSite().getShell(), Messages.errorSaveTitleLabel, Messages.errorSaveMsgLabel);
             return false;
         } else
             return true;
