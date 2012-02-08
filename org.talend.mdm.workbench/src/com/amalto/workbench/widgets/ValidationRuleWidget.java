@@ -63,7 +63,6 @@ public class ValidationRuleWidget {
     // The ending| bug:21784
     private void create() {
         composite = toolkit.createComposite(parent, SWT.NO_FOCUS);
-        // composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
         GridLayout layout = new GridLayout(2, false);
         layout.marginWidth = 0;
         layout.marginLeft = 0;
@@ -88,7 +87,6 @@ public class ValidationRuleWidget {
 
                 dlg.create();
                 dlg.getShell().setMaximized(false);
-                // dlg.getShell().setSize(new Point(640,560));
                 dlg.setBlockOnOpen(true);
                 int ret = dlg.open();
                 if (ret == Window.OK) {
@@ -97,7 +95,7 @@ public class ValidationRuleWidget {
             }
         });
         button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-        button.setToolTipText("Build Validation Rule Expression");
+        button.setToolTipText(Messages.getString("BuildValidationRuleExpression"));
     }
 
     protected void createValidationRuleExcpressDialog(Shell shell) {

@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -58,8 +59,7 @@ import com.amalto.workbench.views.ServerView;
  */
 public class TisTableViewer extends ComplexTableViewer {
 
-    // protected List<Line> copyLines=new ArrayList<Line>();
-    // static List<Button> pastBtns=new ArrayList<Button>(); //records all paste Buttons
+
     static HashMap<String, HashSet<Button>> pastBtns = new HashMap<String, HashSet<Button>>();
 
     private Button copyButton;
@@ -107,7 +107,7 @@ public class TisTableViewer extends ComplexTableViewer {
         //
         addButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-        addButton.setToolTipText("Add");
+        addButton.setToolTipText(Messages.getString("AddText"));
         if (isXpath()) {
             addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_NEWXPATH.getPath()));
         } else {
@@ -137,7 +137,7 @@ public class TisTableViewer extends ComplexTableViewer {
         if (isAddMulti()) {
             Button selNewPathButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             selNewPathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-            selNewPathButton.setToolTipText("Add Multiple");
+            selNewPathButton.setToolTipText(Messages.getString("AddMultiple"));
             selNewPathButton.setImage(ImageCache.getCreatedImage(EImage.SELECT_NEWXPATH.getPath()));
             selNewPathButton.addSelectionListener(new SelectionListener() {
 
@@ -174,7 +174,7 @@ public class TisTableViewer extends ComplexTableViewer {
             });
         }
         deleteButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        deleteButton.setToolTipText("Delete the selected item");
+        deleteButton.setToolTipText(Messages.getString("DeleteSelectedItem"));
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         deleteButton.addSelectionListener(new SelectionListener() {
 
@@ -195,7 +195,7 @@ public class TisTableViewer extends ComplexTableViewer {
         deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
         // delete all
         Button deleteAllButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        deleteAllButton.setToolTipText("Delete all items");
+        deleteAllButton.setToolTipText(Messages.getString("DeleteAllItems"));
         deleteAllButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         deleteAllButton.addSelectionListener(new SelectionListener() {
 
@@ -213,7 +213,7 @@ public class TisTableViewer extends ComplexTableViewer {
         deleteAllButton.setImage(ImageCache.getCreatedImage(EImage.PROGRESS_REMALL.getPath()));
 
         upButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        upButton.setToolTipText("Move up the selected item");
+        upButton.setToolTipText(Messages.getString("MoveUpSelectedItem"));
         upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
         upButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         upButton.addSelectionListener(new SelectionListener() {
@@ -244,7 +244,7 @@ public class TisTableViewer extends ComplexTableViewer {
             };
         });
         downButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        downButton.setToolTipText("Move down the selected item");
+        downButton.setToolTipText(Messages.getString("MovedownSelectedItem"));
         downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
         downButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         downButton.addSelectionListener(new SelectionListener() {
@@ -276,7 +276,7 @@ public class TisTableViewer extends ComplexTableViewer {
         });
 
         copyButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        copyButton.setToolTipText("Copy the selected items");
+        copyButton.setToolTipText(Messages.getString("CopySelectedItems"));
         copyButton.setImage(ImageCache.getCreatedImage(EImage.COPY.getPath()));
         copyButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         copyButton.addSelectionListener(new SelectionListener() {
@@ -310,7 +310,7 @@ public class TisTableViewer extends ComplexTableViewer {
             }
         });
         pastButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        pastButton.setToolTipText("Paste the selected item");
+        pastButton.setToolTipText(Messages.getString("PasteSelectedItem"));
         pastButton.setImage(ImageCache.getCreatedImage(EImage.PASTE.getPath()));
         pastButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         pastButton.setEnabled(false);
@@ -321,7 +321,6 @@ public class TisTableViewer extends ComplexTableViewer {
 
             @SuppressWarnings("unchecked")
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                // if(copyLines.size()==0 || WorkbenchClipboard.getWorkbenchClipboard().getLines().size()==0)return;
                 if (mainPage != null) {
                     mainPage.setComitting(true);
                 }
@@ -436,7 +435,6 @@ public class TisTableViewer extends ComplexTableViewer {
         viewer.setCellModifier(new ICellModifier() {
 
             public boolean canModify(Object element, String property) {
-
                 return editable;
             }
 
@@ -567,7 +565,7 @@ public class TisTableViewer extends ComplexTableViewer {
     }
 
     protected XpathSelectDialog getNewXpathDlgInstance() {
-        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), "Select Multiple XPaths", ServerView.show()
-                .getSite(), true, getDatamodelName());
+        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.getString("SelectMultipleXPaths"),
+                ServerView.show().getSite(), true, getDatamodelName());
     }
 }
