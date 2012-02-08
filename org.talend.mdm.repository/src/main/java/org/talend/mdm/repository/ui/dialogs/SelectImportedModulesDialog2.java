@@ -12,13 +12,18 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xsd.XSDSchema;
+import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.dialogs.MDMXSDSchemaEntryDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
@@ -47,8 +52,19 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
     }
 
     @Override
+    protected void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) {
+        schemaList = RepositoryQueryService.findAllDataModelNames();
+        dlg.create();
+        ArrayList<String> newList = new ArrayList<String>();
+        for (String string : schemaList) {
+            newList.add(string);
+        }
+        dlg.retrieveDataModels(newList, false);
+    }
+
+    @Override
     protected String getUrl() {
-        return "http://" + serverDef.getHost() + ":" + serverDef.getPort() + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return ""; //$NON-NLS-1$
     }
 
 }
