@@ -107,7 +107,7 @@ public class TisTableViewer extends ComplexTableViewer {
         //
         addButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-        addButton.setToolTipText(Messages.getString("AddText"));
+        addButton.setToolTipText(Messages.getString("AddText")); //$NON-NLS-1$
         if (isXpath()) {
             addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_NEWXPATH.getPath()));
         } else {
@@ -137,7 +137,7 @@ public class TisTableViewer extends ComplexTableViewer {
         if (isAddMulti()) {
             Button selNewPathButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             selNewPathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-            selNewPathButton.setToolTipText(Messages.getString("AddMultiple"));
+            selNewPathButton.setToolTipText(Messages.getString("AddMultiple")); //$NON-NLS-1$
             selNewPathButton.setImage(ImageCache.getCreatedImage(EImage.SELECT_NEWXPATH.getPath()));
             selNewPathButton.addSelectionListener(new SelectionListener() {
 
@@ -174,7 +174,7 @@ public class TisTableViewer extends ComplexTableViewer {
             });
         }
         deleteButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        deleteButton.setToolTipText(Messages.getString("DeleteSelectedItem"));
+        deleteButton.setToolTipText(Messages.getString("DeleteSelectedItem")); //$NON-NLS-1$
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         deleteButton.addSelectionListener(new SelectionListener() {
 
@@ -195,7 +195,7 @@ public class TisTableViewer extends ComplexTableViewer {
         deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
         // delete all
         Button deleteAllButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        deleteAllButton.setToolTipText(Messages.getString("DeleteAllItems"));
+        deleteAllButton.setToolTipText(Messages.getString("DeleteAllItems")); //$NON-NLS-1$
         deleteAllButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         deleteAllButton.addSelectionListener(new SelectionListener() {
 
@@ -213,7 +213,7 @@ public class TisTableViewer extends ComplexTableViewer {
         deleteAllButton.setImage(ImageCache.getCreatedImage(EImage.PROGRESS_REMALL.getPath()));
 
         upButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        upButton.setToolTipText(Messages.getString("MoveUpSelectedItem"));
+        upButton.setToolTipText(Messages.getString("MoveUpSelectedItem")); //$NON-NLS-1$
         upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
         upButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         upButton.addSelectionListener(new SelectionListener() {
@@ -244,7 +244,7 @@ public class TisTableViewer extends ComplexTableViewer {
             };
         });
         downButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        downButton.setToolTipText(Messages.getString("MovedownSelectedItem"));
+        downButton.setToolTipText(Messages.getString("MovedownSelectedItem")); //$NON-NLS-1$
         downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
         downButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         downButton.addSelectionListener(new SelectionListener() {
@@ -276,7 +276,7 @@ public class TisTableViewer extends ComplexTableViewer {
         });
 
         copyButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        copyButton.setToolTipText(Messages.getString("CopySelectedItems"));
+        copyButton.setToolTipText(Messages.getString("CopySelectedItems")); //$NON-NLS-1$
         copyButton.setImage(ImageCache.getCreatedImage(EImage.COPY.getPath()));
         copyButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         copyButton.addSelectionListener(new SelectionListener() {
@@ -310,7 +310,7 @@ public class TisTableViewer extends ComplexTableViewer {
             }
         });
         pastButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
-        pastButton.setToolTipText(Messages.getString("PasteSelectedItem"));
+        pastButton.setToolTipText(Messages.getString("PasteSelectedItem")); //$NON-NLS-1$
         pastButton.setImage(ImageCache.getCreatedImage(EImage.PASTE.getPath()));
         pastButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         pastButton.setEnabled(false);
@@ -565,7 +565,7 @@ public class TisTableViewer extends ComplexTableViewer {
     }
 
     protected XpathSelectDialog getNewXpathDlgInstance() {
-        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.getString("SelectMultipleXPaths"),
+        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.getString("SelectMultipleXPaths"), //$NON-NLS-1$
                 ServerView.show().getSite(), true, getDatamodelName());
     }
 }
