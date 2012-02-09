@@ -86,12 +86,15 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
             Item item = createServerObject(key);
             commonViewer.refresh(selectObj);
             commonViewer.expandToLevel(selectObj, 1);
-            // TODO open editor
-            openEditor(item);
+            if (runOpenActionAfterCreation(item)) {
+                openEditor(item);
+            }
         }
     }
 
-
+    protected boolean runOpenActionAfterCreation(Item item) {
+        return true;
+    }
 
     protected void openEditor(Item item) {
         if (item == null)
