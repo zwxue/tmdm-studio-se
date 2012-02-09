@@ -79,4 +79,9 @@ public class NewDataContainerAction extends AbstractSimpleAddAction {
     }
 
 
+    @Override
+    protected boolean runOpenActionAfterCreation(Item item) {
+        return false;
+    }
+
 }
