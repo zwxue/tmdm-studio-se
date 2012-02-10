@@ -30,6 +30,7 @@ import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.SimpleXpathInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
@@ -48,8 +49,8 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
     public XSDSetAnnotationForeignKeyAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.PRIMARYKEY.getPath()));
-        setText("Set the Foreign Key");
-        setToolTipText("Set the Foreign Key");
+        setText(Messages.getString("SetForeignKey")); //$NON-NLS-1$
+        setToolTipText(Messages.getString("SetForeignKey")); //$NON-NLS-1$
         this.dataModelName = dataModelName;
     }
 
@@ -59,8 +60,8 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             // add by ymli. fix the bug:0010293
             if (page.isDirty()) {
                 // MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"
-                        + page.getXObject().getDisplayName() + "' has been modified. Save changes?");
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.getString("SaveResource"), "'" //$NON-NLS-1$ //$NON-NLS-2$
+                        + page.getXObject().getDisplayName() + "' " + Messages.getString("modifiedChanges")); //$NON-NLS-1$ //$NON-NLS-2$
                 if (save) {
                     IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
@@ -81,7 +82,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             if (xSDCom != null)
                 struc = new XSDAnnotationsStructure(xSDCom);
             if (struc == null || struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.getString("UnableEditType") + xSDCom.getClass().getName()); //$NON-NLS-1$
             }
 
             sxid = getNewSimpleXpathInputDlg(struc.getForeignKey());
@@ -108,16 +109,16 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set a Foreign Key: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
+                    Messages.getString("ErrorForeignKey") + e.getLocalizedMessage()); //$NON-NLS-1$
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
     }
 
     protected SimpleXpathInputDialog getNewSimpleXpathInputDlg(String foreignKey) {
-        return new SimpleXpathInputDialog(page, "Set the Foreign Key",
-                "Enter an xPath for the Foreign Key - Leave BLANK to delete the Foreign Key", foreignKey, new SelectionAdapter() {
+        return new SimpleXpathInputDialog(page, Messages.getString("SetForeignKey"), //$NON-NLS-1$
+                Messages.getString("EnterXpathForeignKey"), foreignKey, new SelectionAdapter() { //$NON-NLS-1$
 
                     public void widgetSelected(SelectionEvent e) {
                         sxid.close();

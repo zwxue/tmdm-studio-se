@@ -18,7 +18,6 @@ import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -28,10 +27,13 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
@@ -49,8 +51,8 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
     public XSDSetAnnotationForeignKeyInfoAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.KEYINFO.getPath()));
-        setText("Set the Foreign Key Infos");
-        setToolTipText("Set the Foreign Key Infos");
+        setText(Messages.getString("SetForeignKeyInfos")); //$NON-NLS-1$
+        setToolTipText(Messages.getString("SetForeignKeyInfos")); //$NON-NLS-1$
         this.dataModelName = dataModelName;
     }
 
@@ -58,10 +60,12 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
         try {
             // add by ymli. fix the bug:0010293
             if (page.isDirty()) {
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"
-                        + page.getXObject().getDisplayName() + "' has been modified. Save changes?");
-                if (save)
-                    page.SaveWithForce(new NullProgressMonitor());
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.getString("SaveResource"), "'" //$NON-NLS-1$ //$NON-NLS-2$
+                        + page.getXObject().getDisplayName() + "' " + Messages.getString("modifiedChanges")); //$NON-NLS-1$ //$NON-NLS-2$
+                if (save) {
+                    IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
+                }
                 else
                     return Status.CANCEL_STATUS;
             }
@@ -78,7 +82,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
                 xSDCom = (XSDComponent) selection.getFirstElement();
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.getString("UnableEditAnnotationType") + xSDCom.getClass().getName()); //$NON-NLS-1$
             }
 
             dlg = getNewAnnotaionOrderedListsDialog(struc.getForeignKeyInfos().values());
@@ -100,8 +104,8 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set a Forign Key: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
+                    Messages.getString("ErrorForeignKey") + e.getLocalizedMessage()); //$NON-NLS-1$
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -113,7 +117,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
             public void widgetSelected(SelectionEvent e) {
                 dlg.close();
             }
-        }, page.getSite().getShell(), "Set the Foreign Key Infos", "xPaths", page,//$NON-NLS-2$
+        }, page.getSite().getShell(), Messages.getString("SetForeignKeyInfos"), "xPaths", page, //$NON-NLS-1$//$NON-NLS-2$
                 AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType, dataModelName);
     }
 

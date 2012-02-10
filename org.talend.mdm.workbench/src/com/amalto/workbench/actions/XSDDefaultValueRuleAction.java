@@ -12,21 +12,22 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
-import org.apache.axis.i18n.Messages;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.SimpleXpathInputDialog;
 import com.amalto.workbench.dialogs.ValidationRuleExcpressDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -52,16 +53,16 @@ public class XSDDefaultValueRuleAction extends UndoAction {
     public XSDDefaultValueRuleAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ROUTINE.getPath()));
-        setText("Set the Default Value Rule");
-        setToolTipText("Set the Default Value Rule");
+        setText(Messages.getString("SetDefaultValueRule")); //$NON-NLS-1$
+        setToolTipText(Messages.getString("SetDefaultValueRule")); //$NON-NLS-1$
         this.dataModelName = dataModelName;
     }
 
     public XSDDefaultValueRuleAction(DataModelMainPage page, String dataModelName, boolean isDelete) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete the Default Value Rule");
-        setToolTipText("Delete the Default Value Rule");
+        setText(Messages.getString("DeleteDefaultValueRule")); //$NON-NLS-1$
+        setToolTipText(Messages.getString("DeleteDefaultValueRule")); //$NON-NLS-1$
         this.dataModelName = dataModelName;
         this.isDelete = isDelete;
     }
@@ -72,10 +73,12 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             // add by ymli. fix the bug:0010293
             if (page.isDirty()) {
                 // MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"
-                        + page.getXObject().getDisplayName() + "' has been modified. Save changes?");
-                if (save)
-                    page.SaveWithForce(new NullProgressMonitor());
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.getString("SaveResource"), "'" //$NON-NLS-1$ //$NON-NLS-2$
+                        + page.getXObject().getDisplayName() + "' " + Messages.getString("modifiedChanges")); //$NON-NLS-1$//$NON-NLS-2$
+                if (save) {
+                    IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
+                }
                 else
                     return Status.CANCEL_STATUS;
             }
@@ -94,7 +97,7 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             if (xSDCom != null)
                 struc = new XSDAnnotationsStructure(xSDCom);
             if (struc == null || struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.getString("UnableEditType") + xSDCom.getClass().getName()); //$NON-NLS-1$
             }
             // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
             if (!isDelete) {
@@ -120,7 +123,8 @@ public class XSDDefaultValueRuleAction extends UndoAction {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
 
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to set a Default Value Rule: "
+            MessageDialog.openError(page.getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
+                    Messages.getString("ErrorDefaultValueRule") //$NON-NLS-1$
                     + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
@@ -128,8 +132,8 @@ public class XSDDefaultValueRuleAction extends UndoAction {
     }
 
     protected ValidationRuleExcpressDialog getExpressDialog() {
-        return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(),
-                Messages.getMessage("XSDDefaultValueRuleAction_buildDefaultValue"), struc.getDefaultValueRule(), conceptName,
+        return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(), Messages
+                .getString("XSDDefaultValueRuleAction_buildDefaultValue"), struc.getDefaultValueRule(), conceptName, //$NON-NLS-1$
                 false, false);
     }
 }
