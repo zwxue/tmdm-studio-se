@@ -123,7 +123,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Label label = new Label(composite, SWT.NONE);
         label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 2, 1));
-        label.setText(Messages.getString("ViewerWithModules"));
+        label.setText(Messages.getString("ViewerWithModules")); //$NON-NLS-1$
 
         tableViewer = new TableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         GridData data = new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1);
@@ -168,8 +168,8 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Button addXSDFromLocal = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
         addXSDFromLocal.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        addXSDFromLocal.setText(Messages.getString("AddXsdFromlocal"));
-        addXSDFromLocal.setToolTipText(Messages.getString("AddXsdSchemaFromlocal"));
+        addXSDFromLocal.setText(Messages.getString("AddXsdFromlocal")); //$NON-NLS-1$
+        addXSDFromLocal.setToolTipText(Messages.getString("AddXsdSchemaFromlocal")); //$NON-NLS-1$
         addXSDFromLocal.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -178,7 +178,7 @@ public class SelectImportedModulesDialog extends Dialog {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 FileDialog fd = new FileDialog(shell.getShell(), SWT.SAVE);
                 fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
-                fd.setText(Messages.getString("ImportXSDSchema"));
+                fd.setText(Messages.getString("ImportXSDSchema")); //$NON-NLS-1$
                 String filename = fd.open();
 
                 if (filename == null)
@@ -198,8 +198,8 @@ public class SelectImportedModulesDialog extends Dialog {
         if (Util.IsEnterPrise()) {
             Button addXSDFromWebSite = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
             addXSDFromWebSite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-            addXSDFromWebSite.setText(Messages.getString("AddTypesDataModels"));
-            addXSDFromWebSite.setToolTipText(Messages.getString("AddFromModelTypes"));
+            addXSDFromWebSite.setText(Messages.getString("AddTypesDataModels")); //$NON-NLS-1$
+            addXSDFromWebSite.setToolTipText(Messages.getString("AddFromModelTypes")); //$NON-NLS-1$
             addXSDFromWebSite.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -207,26 +207,12 @@ public class SelectImportedModulesDialog extends Dialog {
 
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                     MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), Messages
-                            .getString("SelectXSDSchemaWebSite"));
+                            .getString("SelectXSDSchemaWebSite")); //$NON-NLS-1$
                     try {
                         ArrayList<String> schemaList = new ArrayList<String>();
-                        XtentisPort port = getPort();
-                        if (port == null) {
-                            MessageDialog.openError(getShell(), Messages.getString("Error.title"), Messages
-                                    .getString("ServerNotNull"));
-                            return;
-                        }
-                        WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
-                        if (xdmPKs != null) {
-                            for (int i = 0; i < xdmPKs.length; i++) {
-                                String name = xdmPKs[i].getPk();
-                                if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
-                                    schemaList.add(name);
-                                }
-                            }
-                            dlg.create();
-                            dlg.retrieveDataModels(schemaList, false);
-                        }
+                        resolveSchemaList(schemaList, dlg);
+
+                     
                     } catch (Exception es) {
                         log.error(es.getMessage(), es);
                         return;
@@ -235,8 +221,8 @@ public class SelectImportedModulesDialog extends Dialog {
                     dlg.open();
                     if (dlg.getReturnCode() == Window.OK) {
                         if (getUrl() == null) {
-                            MessageDialog.openError(getShell(), Messages.getString("Error.title"), Messages
-                                    .getString("ServerNotNull"));
+                            MessageDialog.openError(getShell(), Messages.getString("Error.title"), Messages //$NON-NLS-1$
+                                    .getString("ServerNotNull")); //$NON-NLS-1$
                             return;
                         }
                         List<String> urls = dlg.getMDMDataModelUrls();
@@ -253,8 +239,8 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Button impXSDFromExchange = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
         impXSDFromExchange.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        impXSDFromExchange.setText(Messages.getString("ImportFromExchangeServer"));
-        impXSDFromExchange.setToolTipText(Messages.getString("ImportSchemaFromServer"));
+        impXSDFromExchange.setText(Messages.getString("ImportFromExchangeServer")); //$NON-NLS-1$
+        impXSDFromExchange.setToolTipText(Messages.getString("ImportSchemaFromServer")); //$NON-NLS-1$
         impXSDFromExchange.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {
@@ -285,20 +271,20 @@ public class SelectImportedModulesDialog extends Dialog {
 
         Button addXSDFromInputDlg = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
         addXSDFromInputDlg.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        addXSDFromInputDlg.setText(Messages.getString("AddXsdFromOther"));
-        addXSDFromInputDlg.setToolTipText(Messages.getString("AddFromOtherSite"));
+        addXSDFromInputDlg.setText(Messages.getString("AddXsdFromOther")); //$NON-NLS-1$
+        addXSDFromInputDlg.setToolTipText(Messages.getString("AddFromOtherSite")); //$NON-NLS-1$
         addXSDFromInputDlg.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             };
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                InputDialog id = new InputDialog(shell.getShell(), Messages.getString("AddXsdFromOther"),
-                        Messages.getString("EnterTextUrl") , "", new IInputValidator() {
+                InputDialog id = new InputDialog(shell.getShell(), Messages.getString("AddXsdFromOther"), //$NON-NLS-1$
+                        Messages.getString("EnterTextUrl"), "", new IInputValidator() { //$NON-NLS-1$//$NON-NLS-2$
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                            return Messages.getString("NameNotEmpty");
+                                    return Messages.getString("NameNotEmpty"); //$NON-NLS-1$
                                 return null;
                             };
                         });
@@ -317,8 +303,8 @@ public class SelectImportedModulesDialog extends Dialog {
 
         delLabelButton = new Button(compositeBtn, SWT.PUSH);
         delLabelButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        delLabelButton.setText(Messages.getString("DeleteXsdModule"));
-        delLabelButton.setToolTipText(Messages.getString("DeleteText"));
+        delLabelButton.setText(Messages.getString("DeleteXsdModule")); //$NON-NLS-1$
+        delLabelButton.setToolTipText(Messages.getString("DeleteText")); //$NON-NLS-1$
         delLabelButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -412,6 +398,27 @@ public class SelectImportedModulesDialog extends Dialog {
             }
         }
         return toDelList;
+    }
+
+    protected void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) throws Exception {
+
+        XtentisPort port = getPort();
+        if (port == null) {
+            MessageDialog.openError(getShell(), Messages.getString("Error.title"), Messages.getString("ServerNotNull")); //$NON-NLS-1$//$NON-NLS-2$
+            return;
+        }
+        WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
+        if (xdmPKs != null) {
+            for (int i = 0; i < xdmPKs.length; i++) {
+                String name = xdmPKs[i].getPk();
+                if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
+                    schemaList.add(name);
+                }
+            }
+            dlg.create();
+            dlg.retrieveDataModels((ArrayList<String>) schemaList, false);
+        }
+
     }
 
     protected XtentisPort getPort() throws XtentisException {
