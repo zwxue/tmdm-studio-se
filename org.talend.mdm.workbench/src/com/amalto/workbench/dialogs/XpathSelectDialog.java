@@ -306,6 +306,7 @@ public class XpathSelectDialog extends Dialog {
         } catch (Exception e1) {
             log.error(e1.getMessage(), e1);
         }
+        
     }// changeDomTree(
 
     protected void provideViwerContent(XSDSchema xsdSchema, String filter) {
