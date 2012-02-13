@@ -14,6 +14,7 @@ import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
@@ -89,6 +90,10 @@ public class MDMRepositoryActionProvider extends CommonActionProvider implements
 
     @Override
     public void fillContextMenu(IMenuManager menu) {
+        if (ProxyRepositoryFactory.getInstance().isUserReadOnlyOnCurrentProject()) {
+            return;
+        }
+
         IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
         List<AbstractRepositoryAction> finalActions = null;
         for (Iterator il = selection.iterator(); il.hasNext();) {
