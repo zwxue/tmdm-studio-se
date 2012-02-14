@@ -17,6 +17,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.part.Page;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
@@ -67,7 +68,15 @@ public class XpathSelectDialog2 extends XpathSelectDialog {
             try {
 
                 // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-                String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
+               
+                String schema = null;
+
+                if (page != null) {
+                    schema = page.getXSDSchemaString();
+                } else {
+                    schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
+                }
+                
                 XSDSchema xsd = Util.createXsdSchema(schema, pObject);
                 provideViwerContent(xsd, filter);
             } catch (Exception ex) {
