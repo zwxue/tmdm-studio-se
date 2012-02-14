@@ -123,6 +123,10 @@ public class ValidationRuleDialog extends Dialog {
       //The ending| bug:21784
         viewer.setXpath(true);
         // viewer.setMainPage(page);
+        
+        viewer.setDataModelMainPage(page);
+        String modelName = page.getDataModel().getName();
+        viewer.setDatamodelName(modelName);
         viewer.setConceptName(conceptName);
         viewer.setContext(true);
         viewer.create();
