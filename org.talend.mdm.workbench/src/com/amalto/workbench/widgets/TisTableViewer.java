@@ -45,6 +45,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
@@ -69,6 +70,8 @@ public class TisTableViewer extends ComplexTableViewer {
     private boolean addMulti;// 'addAll' and 'deleteAll' button will be added if this field is not null
 
     private boolean isXpath;
+
+    protected DataModelMainPage page;
 
     public boolean isAddMulti() {
         return addMulti;
@@ -567,5 +570,10 @@ public class TisTableViewer extends ComplexTableViewer {
     protected XpathSelectDialog getNewXpathDlgInstance() {
         return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.getString("SelectMultipleXPaths"), //$NON-NLS-1$
                 ServerView.show().getSite(), true, getDatamodelName());
+    }
+
+    public void setDataModelMainPage(DataModelMainPage page) {
+        this.page = page;
+        
     }
 }
