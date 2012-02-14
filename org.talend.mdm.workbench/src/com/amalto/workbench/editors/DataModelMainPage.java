@@ -1972,7 +1972,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             source = new InputSource(IOUtils.toInputStream(urlContent));
             importSchema(source, fileName);
         } else {
-            String inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
+            String inputType = ""; //$NON-NLS-1$
+            if (fileName.lastIndexOf(".") != -1) { //$NON-NLS-1$
+                inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
+            }
             if (!inputType.equals(".xsd"))//$NON-NLS-1$
                 return;
             File file = new File(fileName);
