@@ -13,15 +13,20 @@
 package org.talend.mdm.repository.ui.editors;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -41,7 +46,9 @@ import org.talend.mdm.repository.ui.dialogs.datamodel.DataModelFilterDialogR;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
+import org.xml.sax.InputSource;
 
 import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
@@ -175,6 +182,37 @@ public class DataModelMainPage2 extends DataModelMainPage {
     @Override
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
         return new SelectImportedModulesDialog2(getSite().getShell(), xsdSchema, xobject, Messages.ImportXSDSchema);
+    }
+
+    @Override
+    protected void importFromFile(InputSource source, String fileName) {
+        if (fileName.indexOf("/") == -1) { //$NON-NLS-1$
+            return;
+        }
+        String name = fileName.substring(0, fileName.indexOf("/")); //$NON-NLS-1$
+        IRepositoryViewObject viewObj = getViewObjForDataModel(name);
+        ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
+        String prjLabel = viewObj.getProjectLabel();
+        String path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + "\\" + prjLabel.toUpperCase() + "\\" //$NON-NLS-1$ //$NON-NLS-2$
+                + "MDM" + "\\" + "datamodel" + "\\" + viewObj.getLabel() + "_" + viewObj.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+        try {
+            File file = new File(path);
+            source = new InputSource(new FileInputStream(file));
+            importSchema(source, file.getAbsolutePath());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private IRepositoryViewObject getViewObjForDataModel(String name) {
+        List<IRepositoryViewObject> vObjs = RepositoryResourceUtil.findAllViewObjects(IServerObjectRepositoryType.TYPE_DATAMODEL);
+        IRepositoryViewObject theViewObj = null;
+        for (IRepositoryViewObject obj : vObjs) {
+            if (obj.getLabel().equals(name)) {
+                theViewObj = obj;
+            }
+        }
+        return theViewObj;
     }
 
 }
