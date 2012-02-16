@@ -27,6 +27,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -102,6 +103,8 @@ public class JobResourceListener implements IResourceChangeListener {
     }
 
     public void resourceChanged(IResourceChangeEvent event) {
+        if (!ProxyRepositoryFactory.getInstance().isFullLogonFinished())
+            return;
         IResourceDelta delta = event.getDelta();
         try {
             delta.accept(visitor);
