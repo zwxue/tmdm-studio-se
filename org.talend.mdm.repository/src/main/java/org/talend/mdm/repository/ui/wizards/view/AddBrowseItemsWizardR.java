@@ -21,9 +21,10 @@ import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
-import org.eclipse.xsd.XSDIdentityConstraintDefinition;
-import org.eclipse.xsd.XSDXPathDefinition;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -50,6 +51,7 @@ import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 /**
@@ -81,9 +83,10 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             String roleName = keyValues.get(0).value;
             MDMServerObjectItem roleItem = RepositoryQueryService.findServerObjectItemByName(
                     IServerObjectRepositoryType.TYPE_ROLE, roleName);
+            if (roleItem != null) {
             CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, roleItem.getProperty().getId(),
                     roleItem.getMDMServerObject().getName());
-
+            }
             if (roleItem != null) {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 if (factory.isEditableAndLockIfPossible(roleItem)) {
@@ -129,6 +132,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             StringBuffer desc = new StringBuffer();
             LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
             XSDElementDeclaration decl = getXSDElementDeclaration();
+
+
             if (decl.getAnnotation() != null)
                 labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
             if (labels.size() == 0)
@@ -143,20 +148,35 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             view.setIsTransformerActive(wsBool);
             // SearchableBusinessElements & ViewableBusinessElements
             List<String> keys = new ArrayList<String>();
-            for (XSDIdentityConstraintDefinition idty : decl.getIdentityConstraintDefinitions()) {
-                EList<XSDXPathDefinition> xpathList = idty.getFields();
-                for (XSDXPathDefinition path : xpathList) {
-                    String key = decl.getName();
-                    // remove
-                    key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
-                    key += "/" + path.getValue();//$NON-NLS-1$
-                    keys.add(key);
+            if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                String labelValue = null;
+                List childrenList = Util
+                        .getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) ((XSDElementDeclaration) decl)
+                                .getTypeDefinition());
+                for (int j = 0; j < childrenList.size(); j++) {
+                    List<XSDParticle> particles = new ArrayList<XSDParticle>();
+                    if (childrenList.get(j) instanceof XSDModelGroup)
+                        particles = ((XSDModelGroup) childrenList.get(j)).getParticles();
+                    int count = 0;
+                    for (int k = 0; k < particles.size(); k++) {
+                        count++;
+                        if (count <= 5) {
+                            XSDParticle xSDCom = particles.get(k);
+                            if (((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
+                                labelValue = ((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent()).getName();
+                                String key = decl.getName();
+                                // remove
+                                key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
+                                key += "/" + labelValue;//$NON-NLS-1$
+                                keys.add(key);
+                        }
+                        }
+                    }
                 }
-
             }
+
             view.getSearchableBusinessElements().addAll(keys);
             view.getViewableBusinessElements().addAll(keys);
-            //
             return view;
         }
 
