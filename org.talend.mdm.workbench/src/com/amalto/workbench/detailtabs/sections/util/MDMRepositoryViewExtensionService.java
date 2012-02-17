@@ -21,8 +21,10 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
+import com.amalto.workbench.models.TreeParent;
 
 public class MDMRepositoryViewExtensionService {
 
@@ -78,10 +80,18 @@ public class MDMRepositoryViewExtensionService {
     public static List<String> findAllDataModelNames() {
         IMDMRepositoryViewServiceExt service = getRepositoryViewService();
         if (service != null)
-            return service.findAllWorkflowNames();
+            return service.findAllDataModelNames();
         else
             return null;
 
     }
 
+    public static XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName) {
+        IMDMRepositoryViewServiceExt service = getRepositoryViewService();
+        if (service != null)
+            return service.getDataModelXsd(pObject, filter, dataModelName);
+        else
+            return null;
+
+    }
 }

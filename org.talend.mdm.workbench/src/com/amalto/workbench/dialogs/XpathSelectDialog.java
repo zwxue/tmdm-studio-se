@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -50,6 +51,8 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 
+
+import com.amalto.workbench.detailtabs.sections.util.MDMRepositoryViewExtensionService;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -128,8 +131,12 @@ public class XpathSelectDialog extends Dialog {
         this.isAbsolutePath = isAbsolutePath;
         if (dataModelName != null)
             this.dataModelName = dataModelName;// default dataModel
-        if (this.site == null)
+        if (this.site == null && this.parent != null)
             this.site = ServerView.show().getSite();
+        else {
+            this.site = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getSite();
+        }
+
     }
 
     public String getEntityName() {
@@ -222,8 +229,12 @@ public class XpathSelectDialog extends Dialog {
 
         final TreeParent tree = this.parent == null ? null : this.parent.findServerFolder(TreeObject.DATA_MODEL);
 
+
         // filter the datamodel according to conceptName
-        avaiList = getAvailableDataModel();
+        if(tree != null)
+            avaiList = getAvailableDataModel();
+        else 
+            avaiList = MDMRepositoryViewExtensionService.findAllDataModelNames();
 
         dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
         dataModelCombo.addSelectionListener(new SelectionListener() {
@@ -296,6 +307,13 @@ public class XpathSelectDialog extends Dialog {
             log.error(e3.getMessage(), e3);
         }
         WSDataModel wsDataModel = null;
+
+        String schema = null;
+        XSDSchema xsd = null;
+        if (port == null) {
+            xsd = MDMRepositoryViewExtensionService.getDataModelXsd(pObject, filter, dataModelName);
+            provideViwerContent(xsd, filter);
+        } else {
         try {
             wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
         } catch (RemoteException e2) {
@@ -303,11 +321,12 @@ public class XpathSelectDialog extends Dialog {
         }
         try {
             // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-            String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
-            XSDSchema xsd = Util.createXsdSchema(schema, pObject);
+            schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
+            xsd = Util.createXsdSchema(schema, pObject);
             provideViwerContent(xsd, filter);
         } catch (Exception e1) {
             log.error(e1.getMessage(), e1);
+        }
         }
         
     }// changeDomTree(
