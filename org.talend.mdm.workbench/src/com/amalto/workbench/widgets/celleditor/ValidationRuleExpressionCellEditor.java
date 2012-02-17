@@ -21,9 +21,9 @@ import com.amalto.workbench.models.TreeParent;
 
 public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor {
 
-    private String conceptName;
+    protected String conceptName;
     // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
-    private   TreeParent treeParent;
+    protected   TreeParent treeParent;
 
     
     public void setTreeParent(TreeParent treeParent) {
