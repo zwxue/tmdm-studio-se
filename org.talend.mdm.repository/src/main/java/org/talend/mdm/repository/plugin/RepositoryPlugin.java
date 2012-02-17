@@ -42,9 +42,10 @@ public class RepositoryPlugin extends AbstractUIPlugin {
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
     public void stop(BundleContext context) throws Exception {
+        if (jobResourceListener != null)
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener(jobResourceListener);
         plugin = null;
         super.stop(context);
-        ResourcesPlugin.getWorkspace().removeResourceChangeListener(jobResourceListener);
     }
 
     /**
