@@ -145,7 +145,8 @@ public class CommandManager implements IMementoAware {
         if (commandStack == null) {
             commandStack = new CommandStack();
             if (commandStack.pushCommand(command)) {
-                map.put(command.getCommandId(), commandStack);
+                if (command.getCommandId() != null && commandStack != null)
+                    map.put(command.getCommandId(), commandStack);
             }
         } else {
             commandStack.pushCommand(command);
@@ -209,7 +210,7 @@ public class CommandManager implements IMementoAware {
                     for (IMemento stackMem : stackMems) {
                         CommandStack stack = new CommandStack();
                         stack.restoreState(stackMem);
-                        if (stack.getCommandId() != null) {
+                        if (stack.getCommandId() != null && stack != null) {
                             map.put(stack.getCommandId(), stack);
                         }
                     }
