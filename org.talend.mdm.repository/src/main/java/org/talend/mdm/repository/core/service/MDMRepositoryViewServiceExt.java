@@ -14,11 +14,19 @@ package org.talend.mdm.repository.core.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.eclipse.xsd.XSDSchema;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
+import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.utils.Util;
 
 
  
 public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt {
+
+    private static Logger log = Logger.getLogger(MDMRepositoryViewServiceExt.class);
 
     public List<String> findAllRoleNames() {
         return RepositoryQueryService.findAllRoleNames();
@@ -31,4 +39,21 @@ public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt
     public List<String> findAllDataModelNames() {
         return RepositoryQueryService.findAllDataModelNames();
     }
+
+    public XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName) {
+
+        WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
+        XSDSchema xsd = null;
+        if (wsDataModel != null) {
+            try {
+
+                String schema = wsDataModel.getXsdSchema();
+                xsd = Util.createXsdSchema(schema, pObject);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return xsd;
+    }
+
 }
