@@ -124,7 +124,8 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
         return new KeyListener() {
 
             public void keyReleased(KeyEvent event) {
-
+                if (textViewer.getDocument() == null)
+                    return;
                 int start = textViewer.getSelectedRange().x;
                 int end = textViewer.getSelectedRange().y;
                 int length = textViewer.getDocument().get().length();

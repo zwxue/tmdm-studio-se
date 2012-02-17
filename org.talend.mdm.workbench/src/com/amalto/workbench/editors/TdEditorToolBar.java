@@ -35,7 +35,7 @@ public class TdEditorToolBar {
 
     private List<Action> actions = new ArrayList<Action>();
 
-    public TdEditorToolBar(Composite parent, List<Action> actions) {
+    public TdEditorToolBar(Composite parent) {
 
         // create coolbar
 

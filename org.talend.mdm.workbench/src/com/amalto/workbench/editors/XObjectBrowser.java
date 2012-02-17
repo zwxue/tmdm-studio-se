@@ -13,7 +13,6 @@
 package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -112,9 +111,9 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         }// switch
     }
 
-    protected void createToolbar(final Composite parent, List<Action> actions) {
+    protected void createToolbar(final Composite parent) {
 
-        toolBar = new TdEditorToolBar(parent, actions);
+        toolBar = new TdEditorToolBar(parent);
 
         FormData data = new FormData();
         data.top = new FormAttachment(0, 0);
@@ -146,10 +145,9 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
         GridData gdData = new GridData(GridData.FILL_HORIZONTAL);
         barComp.setLayoutData(gdData);
         barComp.setLayout(new FormLayout());
-        List<Action> actions = new ArrayList<Action>();
-        actions.add(new RefreshSectionAction());
-        createToolbar(barComp, actions);
 
+        createToolbar(barComp);
+        toolBar.addActions(new RefreshSectionAction());
         Composite mainParent = new Composite(parent, SWT.NONE);
         GridData gdData1 = new GridData(GridData.FILL_BOTH);
         gdData1.grabExcessVerticalSpace = true;
