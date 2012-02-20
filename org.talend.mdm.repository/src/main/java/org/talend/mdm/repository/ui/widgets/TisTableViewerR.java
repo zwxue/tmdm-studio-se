@@ -59,7 +59,7 @@ public class TisTableViewerR extends TisTableViewer {
 
     @Override
     protected XpathWidget getNewXpathWidget(Composite parent) {
-        return new XpathWidgetR(parent, false);
+        return new XpathWidgetR(parent, false, page);
     }
 
     @Override
