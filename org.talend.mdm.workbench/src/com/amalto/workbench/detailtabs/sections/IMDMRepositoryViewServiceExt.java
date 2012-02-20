@@ -14,6 +14,7 @@ package com.amalto.workbench.detailtabs.sections;
 
 import java.util.List;
 
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.models.TreeParent;
@@ -28,4 +29,5 @@ public interface IMDMRepositoryViewServiceExt {
 
     public XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName);
 
+    public IWorkbenchPartSite getMDMRepositoryViewSite();
 }

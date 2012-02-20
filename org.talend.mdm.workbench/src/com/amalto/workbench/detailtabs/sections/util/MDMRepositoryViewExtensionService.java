@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
@@ -94,4 +95,14 @@ public class MDMRepositoryViewExtensionService {
             return null;
 
     }
+
+    public static IWorkbenchPartSite getMDMRepositoryViewSite() {
+        IMDMRepositoryViewServiceExt service = getRepositoryViewService();
+        if (service != null)
+            return service.getMDMRepositoryViewSite();
+        else
+            return null;
+
+    }
+
 }

@@ -41,7 +41,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -50,7 +49,6 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
-
 
 import com.amalto.workbench.detailtabs.sections.util.MDMRepositoryViewExtensionService;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -134,7 +132,7 @@ public class XpathSelectDialog extends Dialog {
         if (this.site == null && this.parent != null)
             this.site = ServerView.show().getSite();
         else {
-            this.site = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getSite();
+            this.site = MDMRepositoryViewExtensionService.getMDMRepositoryViewSite();
         }
 
     }
