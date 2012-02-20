@@ -1972,21 +1972,31 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             source = new InputSource(IOUtils.toInputStream(urlContent));
             importSchema(source, fileName);
         } else {
-            String inputType = ""; //$NON-NLS-1$
-            if (fileName.lastIndexOf(".") != -1) { //$NON-NLS-1$
-                inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
-            }
-            if (!inputType.equals(".xsd"))//$NON-NLS-1$
-                return;
-            File file = new File(fileName);
+            importFromFile(source, fileName);
 
-            source = new InputSource(new FileInputStream(file));
-            importSchema(source, file.getAbsolutePath());
         }
 
     }
 
-    private void importSchema(InputSource source, String uri) throws Exception {
+    protected void importFromFile(InputSource source, String fileName) {
+        String inputType = ""; //$NON-NLS-1$
+        if (fileName.lastIndexOf(".") != -1) { //$NON-NLS-1$
+            inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
+        }
+        if (!inputType.equals(".xsd"))//$NON-NLS-1$
+            return;
+        File file = new File(fileName);
+
+        try {
+            source = new InputSource(new FileInputStream(file));
+            importSchema(source, file.getAbsolutePath());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+    }
+
+    protected void importSchema(InputSource source, String uri) throws Exception {
         String ns = "";//$NON-NLS-1$
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
