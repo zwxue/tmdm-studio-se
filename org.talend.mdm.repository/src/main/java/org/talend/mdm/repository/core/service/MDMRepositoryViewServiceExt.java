@@ -15,8 +15,10 @@ package org.talend.mdm.repository.core.service;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
 import com.amalto.workbench.models.TreeParent;
@@ -38,6 +40,10 @@ public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt
 
     public List<String> findAllDataModelNames() {
         return RepositoryQueryService.findAllDataModelNames();
+    }
+
+    public IWorkbenchPartSite getMDMRepositoryViewSite() {
+        return MDMRepositoryView.show().getSite();
     }
 
     public XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName) {
