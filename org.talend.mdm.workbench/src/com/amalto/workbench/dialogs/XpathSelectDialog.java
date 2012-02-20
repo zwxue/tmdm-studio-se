@@ -50,6 +50,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XPathTreeContentProvider;
@@ -109,6 +110,8 @@ public class XpathSelectDialog extends Dialog {
     private List<String> avaiList;
 
     private boolean isAbsolutePath = false;
+
+    protected DataModelMainPage page;
 
     public XpathSelectDialog(Shell parentShell, TreeParent parent, String title, IWorkbenchPartSite site, boolean isMulti,
             String dataModelName) {
@@ -388,6 +391,10 @@ public class XpathSelectDialog extends Dialog {
 
     public static void setContext(String c) {
         context = c;
+    }
+
+    public void setDataModelPage(DataModelMainPage page) {
+        this.page = page;        
     }
 
 }
