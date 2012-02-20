@@ -75,7 +75,7 @@ public class TisTableViewerR extends TisTableViewer {
 
         @Override
         public void createValidationRuleWidget(Composite parent) {
-            validationRule = new ValidationRuleWidgetR(parent, getCurrentTreeParent(), conceptName);
+            validationRule = new ValidationRuleWidgetR(parent, getCurrentTreeParent(), conceptName, page);
         }
     }
 

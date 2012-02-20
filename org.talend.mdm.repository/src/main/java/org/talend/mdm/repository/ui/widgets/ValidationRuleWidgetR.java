@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.mdm.repository.i18n.Messages;
 
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.widgets.ValidationRuleWidget;
 
@@ -23,14 +24,18 @@ import com.amalto.workbench.widgets.ValidationRuleWidget;
 
 public class ValidationRuleWidgetR extends ValidationRuleWidget {
 
-    public ValidationRuleWidgetR(Composite parent, TreeParent treeParent, String conceptName) {
+    private DataModelMainPage page;
+
+    public ValidationRuleWidgetR(Composite parent, TreeParent treeParent, String conceptName, DataModelMainPage page) {
         super(parent, treeParent, conceptName);
+        this.page = page;
     }
 
     @Override
     protected void createValidationRuleExcpressDialog(Shell shell) {
         dlg = new ValidationRuleExcpressDialogR(shell, treeParent, Messages.BuildValidationRuleExpression, text.getText(),
-        conceptName, false, true);
+                conceptName, false, true);
+        dlg.setPage(page);
     }
 
 }
