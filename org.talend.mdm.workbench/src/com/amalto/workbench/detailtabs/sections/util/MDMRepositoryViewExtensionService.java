@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -21,8 +21,11 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
+import com.amalto.workbench.models.TreeParent;
 
 public class MDMRepositoryViewExtensionService {
 
@@ -78,7 +81,25 @@ public class MDMRepositoryViewExtensionService {
     public static List<String> findAllDataModelNames() {
         IMDMRepositoryViewServiceExt service = getRepositoryViewService();
         if (service != null)
-            return service.findAllWorkflowNames();
+            return service.findAllDataModelNames();
+        else
+            return null;
+
+    }
+
+    public static XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName) {
+        IMDMRepositoryViewServiceExt service = getRepositoryViewService();
+        if (service != null)
+            return service.getDataModelXsd(pObject, filter, dataModelName);
+        else
+            return null;
+
+    }
+
+    public static IWorkbenchPartSite getMDMRepositoryViewSite() {
+        IMDMRepositoryViewServiceExt service = getRepositoryViewService();
+        if (service != null)
+            return service.getMDMRepositoryViewSite();
         else
             return null;
 

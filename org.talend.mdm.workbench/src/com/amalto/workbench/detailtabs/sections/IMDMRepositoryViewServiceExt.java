@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,6 +14,10 @@ package com.amalto.workbench.detailtabs.sections;
 
 import java.util.List;
 
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.xsd.XSDSchema;
+
+import com.amalto.workbench.models.TreeParent;
 
 public interface IMDMRepositoryViewServiceExt {
 
@@ -23,4 +27,7 @@ public interface IMDMRepositoryViewServiceExt {
 
     public List<String> findAllDataModelNames();
 
+    public XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName);
+
+    public IWorkbenchPartSite getMDMRepositoryViewSite();
 }

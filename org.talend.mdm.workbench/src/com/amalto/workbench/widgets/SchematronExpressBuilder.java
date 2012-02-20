@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -423,8 +423,14 @@ public class SchematronExpressBuilder {
     }
 
     protected XpathSelectDialog getXPathSelectDialog() {
-        return new XpathSelectDialog(parent.getShell(), treeParent, Messages.getString("SchematronExpressBuilder_selectXPath"),
+        if (treeParent != null)
+            return new XpathSelectDialog(parent.getShell(), treeParent, Messages
+                    .getString("SchematronExpressBuilder_selectXPath"), //$NON-NLS-1$
                 ServerView.show().getSite(), false, null,
                 isAbsoluteXPath);
+        else
+            return new XpathSelectDialog(parent.getShell(), treeParent, Messages
+                    .getString("SchematronExpressBuilder_selectXPath"), null, false, null, isAbsoluteXPath); //$NON-NLS-1$
+
     }
 }
