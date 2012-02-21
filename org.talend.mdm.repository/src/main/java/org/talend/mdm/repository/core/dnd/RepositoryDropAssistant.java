@@ -268,14 +268,25 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         if (viewPart != null && viewPart instanceof CommonNavigator) {
                             ((CommonNavigator) viewPart).getCommonViewer().refresh(viewObj);
                         }
+                        Item item = viewObj.getProperty().getItem();
+                        if (item instanceof ContainerItem) {
+                            ERepositoryObjectType repObjType = ((ContainerItem) item).getRepObjType();
+                            if(repObjType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2){
+                                 ContainerCacheService.refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_EVENTMANAGER,
+                                 ((CommonNavigator) viewPart).getCommonViewer());
+                            }
+                        }
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
                     }
                 }
             }
+
         });
 
     }
+
+
 
     public IRepositoryViewObject getParentRepositoryViewObject(IRepositoryViewObject dropViewObj) {
         Item dropItem = dropViewObj.getProperty().getItem();
