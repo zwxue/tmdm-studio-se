@@ -23,11 +23,9 @@ package org.talend.mdm.repository.ui.actions.process;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.graphics.Point;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -42,7 +40,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
-import org.talend.mdm.repository.ui.dialogs.ViewInputDialog2;
+import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -74,35 +72,19 @@ public class NewProcessAction extends AbstractSimpleAddAction {
             }
         }
         IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
-        ViewInputDialog2 vid = new ViewInputDialog2(site, getShell(), getDialogTitle(),
+        // wizard
+        NewProcessWizard newProcessWizard = new NewProcessWizard(site);
+        WizardDialog wizardDialog = new WizardDialog(getShell(), newProcessWizard);
+        wizardDialog.setPageSize(500, 240);
+        if (wizardDialog.open() == IDialogConstants.OK_ID) {
+            WSTransformerV2E newProcess = newProcessWizard.getNewProcess();
+            Item item = createServerObject(newProcess);
+            commonViewer.refresh(selectObj);
+            commonViewer.expandToLevel(selectObj, 1);
 
-        Messages.Common_inputName, "Smart_view_", new IInputValidator() {//$NON-NLS-1$
-
-                    public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0)
-                            return Messages.Common_nameCanNotBeEmpty;
-                        if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
-                            return Messages.Common_nameInvalid;
-                        }
-                        if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
-                            return Messages.Common_nameIsUsed;
-                        }
-                        return null;
-                    };
-                }, true);
-        vid.setBtnShow(false);
-        vid.create();
-        vid.getShell().setSize(new Point(500, 400));
-        vid.setBlockOnOpen(true);
-        if (vid.open() == Window.CANCEL)
-            return;
-        String key = vid.getValue();
-
-        Item item = createServerObject(key);
-        commonViewer.refresh(selectObj);
-        commonViewer.expandToLevel(selectObj, 1);
-
-        openEditor(item);
+            openEditor(item);
+        }
+       
     }
 
     private WSTransformerV2E newProcess(String key) {
@@ -167,4 +149,18 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         return item;
     }
 
+    protected Item createServerObject(WSTransformerV2E process) {
+
+        WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
+        ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
+        item.setState(itemState);
+        //
+        item.setWsTransformerV2(process);
+
+        if (parentItem != null) {
+            item.getState().setPath(parentItem.getState().getPath());
+            RepositoryResourceUtil.createItem(item, process.getName());
+        }
+        return item;
+    }
 }

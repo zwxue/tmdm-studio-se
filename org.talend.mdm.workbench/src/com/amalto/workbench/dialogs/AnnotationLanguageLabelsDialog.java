@@ -76,7 +76,9 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
     public AnnotationLanguageLabelsDialog(LinkedHashMap<String, String> descriptionsMap, SelectionListener caller,
             Shell parentShell, String title) {
         super(parentShell);
-        this.descriptionsMap = descriptionsMap;
+        if (descriptionsMap != null) {
+            this.descriptionsMap = descriptionsMap;
+        }
         this.caller = caller;
         this.title = title;
     }
@@ -331,8 +333,10 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
 
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
-        getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
-        getButton(IDialogConstants.CANCEL_ID).addSelectionListener(this.caller);
+        if (caller != null) {
+            getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
+            getButton(IDialogConstants.CANCEL_ID).addSelectionListener(this.caller);
+        }
     }
 
     @Override
@@ -340,6 +344,9 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         setReturnCode(OK);
         getButton(IDialogConstants.OK_ID).setData("dialog", AnnotationLanguageLabelsDialog.this);//$NON-NLS-1$
         // no close let Action Handler handle it
+        if (caller == null) {
+            close();
+        }
     }
 
     @Override
@@ -347,6 +354,9 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         setReturnCode(CANCEL);
         getButton(IDialogConstants.CANCEL_ID).setData("dialog", AnnotationLanguageLabelsDialog.this);//$NON-NLS-1$
         // no close let Action Handler handle it
+        if (caller == null) {
+            close();
+        }
     }
 
     /**************************************************************************************************

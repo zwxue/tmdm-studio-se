@@ -26,6 +26,8 @@ public class Messages extends NLS {
 
     public static String AbstractDeployAction_removeMessage;
 
+    public static String AbstractProcessTypeComposite_selectProcessType;
+
     public static String AbstractRepositoryAction_lockedObjMessage;
 
     public static String AbstractRepositoryAction_lockedObjTitle;
@@ -115,6 +117,8 @@ public class Messages extends NLS {
     public static String NewDataContainerAction_newDataContainer;
 
     public static String NewProcessAction_newProcess;
+
+    public static String NewProcessWizard_title;
 
     public static String NewViewAction_newView;
 
@@ -240,6 +244,26 @@ public class Messages extends NLS {
 
     public static String ImportObjectAction_label;
 
+    public static String ConfigRedirectURLPage_description;
+
+    public static String ConfigRedirectURLPage_enableRedirect;
+
+    public static String ConfigRedirectURLPage_pleaseInputUrl;
+
+    public static String ConfigRedirectURLPage_url;
+
+    public static String ConfigReturnMessagePage_description;
+
+    public static String ConfigReturnMessagePage_message;
+
+    public static String ConfigReturnMessagePage_pleaseInputMessage;
+
+    public static String ConfigReturnMessagePage_selectMessage;
+
+    public static String ConfigReturnMessagePage_setMessage;
+
+    public static String ConfigReturnMessagePage_type;
+
     public static String Confirm_Overwrite;
 
     public static String Confirm_Overwrite_Info;
@@ -338,6 +362,10 @@ public class Messages extends NLS {
 
     public static String BatchDeployJobCommand_title;
 
+    public static String BeforeProcessTypeComposite_createBeforeDeletingProcess;
+
+    public static String BeforeProcessTypeComposite_createBeforeSavingProcess;
+
     public static String BrowseViewAction_label;
 
     public static String WaitToDeployDialog_message;
@@ -358,6 +386,10 @@ public class Messages extends NLS {
     public static String RepositoryViewFilterDialog_btnSelectServer;
 
     public static String RepositoryViewObjectCheckedWidget_lock;
+
+    public static String RunnableTypeComposite_createRunnableProcess;
+
+    public static String RunnableTypeComposite_createStandaloneProcess;
 
     public static String EventManager_text;
     
@@ -384,9 +416,39 @@ public class Messages extends NLS {
 
     public static String ImportXSDSchema;
 
+    public static String InputProcessNamePage_description;
+
+    public static String InputProcessNamePage_enterName;
+
+    public static String InputProcessNamePage_inputName;
+
+    public static String InputProcessNamePage_processName;
+
+    public static String InputProcessNamePage_select;
+
+    public static String InputProcessNamePage_selectEntity;
+
     public static String BuildValidationRuleExpression;
 
     public static String SelectMultipleXPaths;
+
+    public static String SelectProcessTypePage_beforeProcessDesc;
+
+    public static String SelectProcessTypePage_createBeforeProcess;
+
+    public static String SelectProcessTypePage_createOtherProcess;
+
+    public static String SelectProcessTypePage_createRunnableProcess;
+
+    public static String SelectProcessTypePage_description;
+
+    public static String SelectProcessTypePage_descText;
+
+    public static String SelectProcessTypePage_otherProcessDesc;
+
+    public static String SelectProcessTypePage_runnableProcessDesc;
+
+    public static String SelectProcessTypePage_selectType;
 
     // //////////////////////////////////////////////////////////////////////////
     //
