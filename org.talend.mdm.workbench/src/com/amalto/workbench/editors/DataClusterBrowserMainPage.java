@@ -19,6 +19,7 @@ import java.rmi.ServerException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -341,6 +342,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         pageToolBar.getComposite().setVisible(true);
         pageToolBar.getComposite().layout(true);
         pageToolBar.getComposite().getParent().layout(true);
+                
+        doSearchSort();//
         readjustViewerHeight();
     }
 
@@ -458,6 +461,32 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         // return table;
     }
 
+    /**
+     * this method will be call when search action is activated or page is changed every time
+     */
+    private void doSearchSort() {
+        Table table = DataClusterBrowserMainPage.this.resultsViewer.getTable();
+        TableColumn sortColumn = table.getSortColumn();
+        if (sortColumn != null) {
+            List<TableColumn> columns = Arrays.asList(table.getColumns());
+            int index = columns.indexOf(sortColumn);
+            sort(index, sortColumn);
+        }
+    }
+    
+    private void sort(int index, TableColumn column) 
+    {
+        DataClusterBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(index, ascending[index]));
+        Table table = DataClusterBrowserMainPage.this.resultsViewer.getTable();
+        if (ascending[index]) {
+            table.setSortColumn(column);
+            table.setSortDirection(SWT.DOWN);
+        } else {
+            table.setSortColumn(column);
+            table.setSortDirection(SWT.UP);
+        }
+    }
+    
     @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
         // Everything is implemented in createFormContent
