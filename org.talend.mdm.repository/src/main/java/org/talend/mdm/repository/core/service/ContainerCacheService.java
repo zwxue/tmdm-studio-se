@@ -14,8 +14,10 @@ package org.talend.mdm.repository.core.service;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -135,4 +137,36 @@ public class ContainerCacheService {
         return get(type, path);
 
     }
+
+    public static void refreshRepositoryRoot(ERepositoryObjectType type, CommonViewer viewer) {
+        Object input = viewer.getInput();
+        if (input != null && input instanceof IRepositoryViewObject[]) {
+            for (IRepositoryViewObject viewObject : (IRepositoryViewObject[]) input) {
+                if (refreshRepositoryContainer(viewObject, type, viewer)) {
+                    return;
+                }
+                List<IRepositoryViewObject> children = viewObject.getChildren();
+                if (children != null) {
+                    for (IRepositoryViewObject child : children) {
+                        if (refreshRepositoryContainer(child, type, viewer)) {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean refreshRepositoryContainer(IRepositoryViewObject viewObj, ERepositoryObjectType type,
+            CommonViewer viewer) {
+        if (viewObj instanceof FolderRepositoryObject) {
+            FolderRepositoryObject containerRepositoryObject = (FolderRepositoryObject) viewObj;
+            if (containerRepositoryObject.getRepositoryObjectType().equals(type)) {
+                viewer.refresh(containerRepositoryObject);
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
