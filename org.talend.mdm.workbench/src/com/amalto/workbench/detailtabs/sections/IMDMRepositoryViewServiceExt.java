@@ -30,4 +30,6 @@ public interface IMDMRepositoryViewServiceExt {
     public XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName);
 
     public IWorkbenchPartSite getMDMRepositoryViewSite();
+
+    public void openJob(String jobName);
 }

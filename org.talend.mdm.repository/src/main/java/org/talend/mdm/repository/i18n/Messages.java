@@ -399,6 +399,10 @@ public class Messages extends NLS {
 
     public static String MDMOpenExistVersionProcessPage_lockedByUser;
 
+    public static String MDMRepositoryViewServiceExt_cannotFindJob;
+
+    public static String MDMRepositoryViewServiceExt_openJob;
+
     public static String Deploy_text;
     
     public static String Deploy_successfully_text;

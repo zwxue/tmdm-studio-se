@@ -15,10 +15,17 @@ package org.talend.mdm.repository.core.service;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDSchema;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
+import org.talend.mdm.repository.ui.actions.job.EditProcessAction;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
 import com.amalto.workbench.models.TreeParent;
@@ -60,6 +67,22 @@ public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt
             }
         }
         return xsd;
+    }
+
+    public void openJob(String jobName) {
+        List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findAllViewObjects(ERepositoryObjectType.PROCESS, true,
+                true);
+        for (IRepositoryViewObject viewObj : viewObjects) {
+            if (viewObj.getLabel().equals(jobName)) {
+                EditProcessAction action = new EditProcessAction();
+                action.selectionChanged(new StructuredSelection(viewObj));
+                action.run();
+                return;
+            }
+        }
+        MessageDialog.openInformation(null, Messages.MDMRepositoryViewServiceExt_openJob,
+                Messages.bind(Messages.MDMRepositoryViewServiceExt_cannotFindJob, jobName));
+
     }
 
 }
