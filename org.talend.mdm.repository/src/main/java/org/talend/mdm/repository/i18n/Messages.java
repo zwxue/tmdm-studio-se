@@ -454,6 +454,26 @@ public class Messages extends NLS {
 
     public static String SelectProcessTypePage_selectType;
 
+    public static String Property_name;
+
+    public static String Property_author;
+
+    public static String Property_purpose;
+
+    public static String Property_version;
+
+    public static String Property_status;
+
+    public static String Property_description;
+
+    public static String Property_creationdate;
+
+    public static String Property_modifydate;
+
+    public static String Property_creationdate_main;
+
+    public static String Property_modifydate_main;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

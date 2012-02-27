@@ -45,6 +45,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
@@ -68,7 +71,7 @@ import com.amalto.workbench.views.ServerView;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MDMRepositoryView extends CommonNavigator {
+public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
     private static final String VIEW_CONTEXT_ID = "org.talend.mdm.repository.context"; //$NON-NLS-1$
 
@@ -333,4 +336,15 @@ public class MDMRepositoryView extends CommonNavigator {
         CommandManager.getInstance().saveState(aMemento);
     }
 
+    @Override
+    public Object getAdapter(Class adapter) {
+        if (adapter == IPropertySheetPage.class) {
+            return new TabbedPropertySheetPage(this);
+        }
+        return super.getAdapter(adapter);
+    }
+
+    public String getContributorId() {
+        return "org.talend.mdm.repository.repositoryviewobjct.version.propertycontributer"; //$NON-NLS-1$
+    }
 }
