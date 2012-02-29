@@ -32,6 +32,8 @@ public class ProcessStepFactory {
 
     private static final String VAR_OUTPUT_URL = "output_url"; //$NON-NLS-1$
 
+    private static final String VAR_OUTPUT_REPORT = "output_report"; //$NON-NLS-1$
+
     private static final String VAR_ITEM_XML = "item_xml"; //$NON-NLS-1$
 
     private static final String VAR_XML = "xml"; //$NON-NLS-1$
@@ -171,11 +173,11 @@ public class ProcessStepFactory {
 
         outItems = new ArrayList<WSTransformerVariablesMappingE>();
         WSTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
-        outputLine.setPipelineVariable(VAR_OUTPUT_URL);
+        outputLine.setPipelineVariable(VAR_OUTPUT_REPORT);
         outputLine.setPluginVariable(VAR_TEXT);
         outItems.add(outputLine);
         step.setPluginJNDI(XSLT_PLUGIN);
-        step.setDescription("Redirect"); //$NON-NLS-1$
+        step.setDescription("Retrieve Message"); //$NON-NLS-1$
         step.setParameters(prefixParam + mulMessage + suffixParam);
         step.getInputMappings().addAll(inItems);
         step.getOutputMappings().addAll(outItems);
