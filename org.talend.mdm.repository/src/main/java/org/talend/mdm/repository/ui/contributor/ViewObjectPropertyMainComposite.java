@@ -101,6 +101,7 @@ public class ViewObjectPropertyMainComposite extends Composite {
         compositeData.bottom = new FormAttachment(100, 0);
         composite.setLayoutData(thisFormData);
 
+        composite.setLayout(new FormLayout());
         nameText = widgetFactory.createText(composite, ""); //$NON-NLS-1$
         FormData data = new FormData();
         data.left = new FormAttachment(0, AbstractPropertySection.STANDARD_LABEL_WIDTH);

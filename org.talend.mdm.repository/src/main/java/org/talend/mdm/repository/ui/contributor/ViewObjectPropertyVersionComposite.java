@@ -82,7 +82,10 @@ public class ViewObjectPropertyVersionComposite extends Composite {
         thisFormData.bottom = new FormAttachment(100, 0);
         setLayoutData(thisFormData);
 
-        tableViewer = new TableViewer(this, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+        Composite composite = widgetFactory.createFlatFormComposite(this);
+        composite.setLayoutData(thisFormData);
+
+        tableViewer = new TableViewer(composite, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
         final Table table = tableViewer.getTable();
         TableLayout tableLayout = new TableLayout();
         table.setLayout(tableLayout);
@@ -121,10 +124,10 @@ public class ViewObjectPropertyVersionComposite extends Composite {
         FormData formData = new FormData();
         formData.left = new FormAttachment(0);
         formData.top = new FormAttachment(0);
-        formData.right = new FormAttachment(100);
-        formData.bottom = new FormAttachment(100);
+        formData.right = new FormAttachment(100,0);
+        formData.bottom = new FormAttachment(100,0);
         table.setLayoutData(formData);
-
+        formData.height=80;
         tableViewer.setContentProvider(new IStructuredContentProvider() {
 
             public Object[] getElements(Object inputElement) {
