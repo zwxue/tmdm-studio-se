@@ -342,9 +342,7 @@ public class DescAnnotationComposite implements SelectionListener {
             AnnotationLanguageLabelsDialog dlg = (AnnotationLanguageLabelsDialog) ((Widget) e.getSource()).getData("dialog");//$NON-NLS-1$
             if (dlg.getReturnCode() == Window.OK) {
                 String outPut = "";//$NON-NLS-1$
-                for (Map.Entry<String, String> m : dataStore.entrySet()) {
-                    outPut += "[" + m.getKey().toUpperCase() + ":" + m.getValue() + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ 
-                }
+                outPut = DescAnnotationComposite.escapeMultiLanguageString(dataStore);
 
                 if (!outPut.equals(descriptionText.getText())) {
                     descriptionText.setText(outPut);
