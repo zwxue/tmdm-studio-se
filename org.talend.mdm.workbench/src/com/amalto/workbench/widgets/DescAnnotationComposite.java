@@ -343,9 +343,6 @@ public class DescAnnotationComposite implements SelectionListener {
             if (dlg.getReturnCode() == Window.OK) {
                 String outPut = "";//$NON-NLS-1$
                 outPut = DescAnnotationComposite.escapeMultiLanguageString(dataStore);
-                for (Map.Entry<String, String> m : dataStore.entrySet()) {
-                    outPut += "[" + m.getKey().toUpperCase() + ":" + m.getValue() + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ 
-                }
 
                 if (!outPut.equals(descriptionText.getText())) {
                     descriptionText.setText(outPut);
