@@ -15,7 +15,6 @@ package com.amalto.workbench.actions;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -25,6 +24,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
@@ -61,9 +62,10 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
                 // MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
                 boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.getString("SaveResource"), "'" //$NON-NLS-1$ //$NON-NLS-2$
                         + page.getXObject().getDisplayName() + "' " + Messages.getString("modifiedChanges")); //$NON-NLS-1$ //$NON-NLS-2$
-                if (save)
-                    page.SaveWithForce(new NullProgressMonitor());
-                else
+                if (save) {
+                    IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
+                } else
                     return Status.CANCEL_STATUS;
             }
             IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
