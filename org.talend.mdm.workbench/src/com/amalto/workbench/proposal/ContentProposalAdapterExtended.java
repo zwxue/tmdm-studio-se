@@ -1942,7 +1942,7 @@ public class ContentProposalAdapterExtended {
                 Point selection = text.getSelection();
                 String content = text.getText().substring(0, selection.x) + text.getText().substring(selection.y);
                 insertionPos = text.getSelection().x;
-                text.setText(content);
+                // text.setText(content);
             }
         } else if (control instanceof StyledText) {
             StyledText text = ((StyledText) control);
@@ -1950,7 +1950,7 @@ public class ContentProposalAdapterExtended {
                 Point selection = text.getSelection();
                 String content = text.getText().substring(0, selection.x) + text.getText().substring(selection.y);
                 insertionPos = text.getSelection().x;
-                text.setText(content);
+                // text.setText(content);
             }
         }
     }
