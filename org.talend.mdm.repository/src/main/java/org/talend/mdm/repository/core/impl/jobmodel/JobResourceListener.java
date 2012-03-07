@@ -107,7 +107,9 @@ public class JobResourceListener implements IResourceChangeListener {
             return;
         IResourceDelta delta = event.getDelta();
         try {
-            delta.accept(visitor);
+            if (delta != null) {
+                delta.accept(visitor);
+            }
         } catch (CoreException e) {
             log.error(e.getMessage(), e);
         }
