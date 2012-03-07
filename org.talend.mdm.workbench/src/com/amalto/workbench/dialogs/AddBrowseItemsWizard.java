@@ -54,6 +54,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 
+import com.amalto.workbench.Messages;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
@@ -107,7 +108,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     public AddBrowseItemsWizard(DataModelMainPage launchPage) {
         super();
-        setWindowTitle("Generate default Browse Items Views");
+        setWindowTitle(Messages.getString("GenerateBrowseViews")); //$NON-NLS-1$
         page = launchPage;
     }
 
@@ -239,7 +240,8 @@ public class AddBrowseItemsWizard extends Wizard {
                 newBrowseItemView(browse);
                 modifyRolesWithAttachedBrowseItem(browse, roles);
             } catch (RemoteException e) {
-                MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to save the browse view : "
+                MessageDialog.openError(page.getSite().getShell(), Messages.getString("Error.title"), Messages //$NON-NLS-1$
+                        .getString("ErrorOccuredSaveView") //$NON-NLS-1$
                         + e.getLocalizedMessage());
                 return false;
             }
@@ -255,9 +257,9 @@ public class AddBrowseItemsWizard extends Wizard {
         private ComplexTableViewer complexTableViewer;
 
         public ConfigureRolePage() {
-            super("Configure Browse items views");
-            setTitle("Configure Browse items views");
-            setDescription("Please configure the Browse items views");
+            super(Messages.getString("ConfigureBrowseViews")); //$NON-NLS-1$
+            setTitle(Messages.getString("ConfigureBrowseViews")); //$NON-NLS-1$
+            setDescription(Messages.getString("ConfigureTheBrowseViews")); //$NON-NLS-1$
 
             // Page isn't complete until an e-mail address has been added
             setPageComplete(true);
@@ -334,7 +336,15 @@ public class AddBrowseItemsWizard extends Wizard {
                     String tValue = value.toString().trim();
                     if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()//$NON-NLS-1$
                             || tValue.replaceAll("\\s", "").length() != tValue.length()) {//$NON-NLS-1$//$NON-NLS-2$
-                        MessageDialog.openInformation(null, "Warnning", "The name cannot contain the empty characters");
+                        MessageDialog.openInformation(null, Messages.getString("WarnningText"), Messages //$NON-NLS-1$
+                                .getString("NotContainEmpty")); //$NON-NLS-1$
+                        return;
+                    }
+
+                    if (!value.toString().startsWith(BROWSE_ITEMS)) {
+                        MessageDialog.openInformation(null, Messages.getString("WarnningText"), Messages //$NON-NLS-1$
+                                .getString("NameStartWith") //$NON-NLS-1$
+                                + BROWSE_ITEMS);
                         return;
                     }
 
@@ -344,7 +354,8 @@ public class AddBrowseItemsWizard extends Wizard {
                             if (theElem == elem)
                                 continue;
                             if ((BROWSE_ITEMS + theElem.getName()).equals(tValue)) {
-                                MessageDialog.openInformation(null, "Warnning", "The Browse Items name already exists");
+                                MessageDialog.openInformation(null, Messages.getString("WarnningText"), Messages //$NON-NLS-1$
+                                        .getString("BrowseNameExists")); //$NON-NLS-1$
                                 return;
                             }
                         }
@@ -390,7 +401,7 @@ public class AddBrowseItemsWizard extends Wizard {
             browseViewer.refresh();
             if (Util.IsEnterPrise()) {
                 Label infoLabel = new Label(composite, SWT.NONE);
-                infoLabel.setText("Role Access definition");
+                infoLabel.setText(Messages.getString("RoleAccessDefinition")); //$NON-NLS-1$
                 ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
                 ruleColumn.setColumnWidth(250);
                 // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
@@ -398,7 +409,7 @@ public class AddBrowseItemsWizard extends Wizard {
                 ruleColumn.setComboValues(roles.toArray(new String[] {}));
                 ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
                 acsColumn.setColumnWidth(250);
-                acsColumn.setComboValues(new String[] { "Read Only", "Read & Write" });
+                acsColumn.setComboValues(new String[] { Messages.getString("ReadOnly"), Messages.getString("ReadAndWrite") }); //$NON-NLS-1$//$NON-NLS-2$
                 complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns),
                         WidgetFactory.getWidgetFactory(), composite);
                 complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
@@ -422,8 +433,9 @@ public class AddBrowseItemsWizard extends Wizard {
         private void refreshRoleView(String browseItem) {
             if (complexTableViewer != null) {
                 List<Line> roles = browseItemToRoles.get(browseItem);
+                if (roles != null)
                 complexTableViewer.getViewer().setInput(roles);
-                complexTableViewer.getViewer().refresh();
+                // complexTableViewer.getViewer().refresh();
             }
         }
 
