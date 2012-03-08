@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -163,7 +164,9 @@ public class AddBrowseItemsWizard extends Wizard {
                 {
                     TreeObject obj = createNewTreeObject(decl, browseItem);
                     
-                    refreshEditorContent(obj);
+                    boolean objModified = refreshEditorContent(obj);
+                    if(objModified)
+                        obj = createNewTreeObject(decl, browseItem);
                     
                     TreeParent folder = obj.findServerFolder(obj.getType());
                     folder.addChild(obj);
@@ -226,15 +229,22 @@ public class AddBrowseItemsWizard extends Wizard {
         return obj;
     }
 
-    private void refreshEditorContent(TreeObject obj) throws RemoteException {
+    private boolean refreshEditorContent(TreeObject obj) throws RemoteException {
 
         IEditorInput xobjectEditorinput = new XObjectEditorInput(obj, obj.getDisplayName());
 
         final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        if (activePage.findEditor(xobjectEditorinput) != null) {
-            activePage.closeEditor(activePage.findEditor(xobjectEditorinput), true);
+        IEditorPart currentEditor = activePage.findEditor(xobjectEditorinput);
+        if (currentEditor != null) {
+            List<IEditorPart> editors = Arrays.asList(activePage.getDirtyEditors());
+            
+            activePage.closeEditor(currentEditor, true);
+            
+            if(editors.contains(currentEditor))
+                return true;
         }
 
+        return false;
     }
 
     protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) throws RemoteException {
