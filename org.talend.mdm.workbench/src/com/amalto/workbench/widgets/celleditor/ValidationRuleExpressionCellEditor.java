@@ -48,4 +48,8 @@ public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor
         return dialog.getExpression();
     }
     // The ending| bug:21784
+
+    public void setConceptName(String conceptName) {
+        this.conceptName = conceptName;        
+    }
 }

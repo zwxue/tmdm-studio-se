@@ -25,8 +25,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.ValidationRuleExcpressDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;

@@ -43,9 +43,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;

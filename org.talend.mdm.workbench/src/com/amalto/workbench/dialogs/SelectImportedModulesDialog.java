@@ -58,7 +58,7 @@ import org.eclipse.xsd.XSDSchemaContent;
 import org.eclipse.xsd.impl.XSDImportImpl;
 import org.eclipse.xsd.impl.XSDIncludeImpl;
 
-import com.amalto.workbench.Messages;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;

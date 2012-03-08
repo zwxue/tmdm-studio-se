@@ -43,8 +43,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.amalto.workbench.Messages;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.models.XPathFunc;

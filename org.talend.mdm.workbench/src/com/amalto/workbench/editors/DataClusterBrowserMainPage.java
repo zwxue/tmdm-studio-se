@@ -78,13 +78,13 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 
-import com.amalto.workbench.Messages;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.compare.CompareHeadInfo;
 import com.amalto.workbench.compare.CompareManager;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.DataModelSelectDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;

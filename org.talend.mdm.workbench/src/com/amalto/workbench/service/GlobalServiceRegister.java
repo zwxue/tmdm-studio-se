@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import com.amalto.workbench.Messages;
+import com.amalto.workbench.i18n.Messages;
 
 /**
  * DOC qian class global comment. A global service register provides the service registration and acquirement. <br/>
