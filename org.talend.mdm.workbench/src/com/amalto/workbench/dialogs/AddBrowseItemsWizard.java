@@ -58,8 +58,8 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 
-import com.amalto.workbench.Messages;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;

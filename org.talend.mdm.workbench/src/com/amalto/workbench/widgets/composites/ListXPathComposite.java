@@ -19,8 +19,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import com.amalto.workbench.Messages;
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
 public class ListXPathComposite extends ListStringContentsComposite {

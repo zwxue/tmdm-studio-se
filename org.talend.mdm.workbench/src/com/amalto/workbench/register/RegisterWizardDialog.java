@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-import com.amalto.workbench.Messages;
+import com.amalto.workbench.i18n.Messages;
 
 
 /**

@@ -14,7 +14,7 @@ package com.amalto.workbench.register;
 
 import org.eclipse.jface.wizard.Wizard;
 
-import com.amalto.workbench.Messages;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.service.GlobalServiceRegister;

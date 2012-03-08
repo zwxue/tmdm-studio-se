@@ -1,53 +1,60 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.i18n;
 
-import org.eclipse.osgi.util.NLS;
+import java.util.ResourceBundle;
 
-public class Messages extends NLS {
+import com.amalto.workbench.MDMWorbenchPlugin;
 
-    private static final String BUNDLE_NAME = "com.amalto.workbench.i18n.messages"; //$NON-NLS-1$
+/**
+ * Default implementation of MessageCore from org.talend.commons plug-in.<br/>
+ * 
+ * Developpers can copy this class in their plug-in and change :
+ * <ul>
+ * <li>the BUNDLE_NAME constant</li>
+ * </ul>
+ * 
+ * $Id: Messages.java 23594 2009-04-13 10:33:00Z nrousseau $
+ * 
+ */
+public class Messages extends MessagesCore {
 
-    public static String deactivateLabel;
+    private static final String BUNDLE_NAME = "com.amalto.workbench.messages"; //$NON-NLS-1$
 
-    public static String descriptionLabel;
+    private static final String PLUGIN_ID = MDMWorbenchPlugin.ID;
 
-    public static String documentionLabel;
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
 
-    public static String entityLabel;
-
-    public static String entitySelectLabel;
-
-    public static String errorCommitLabel;
-
-    public static String errorMsgLabel;
-
-    public static String errorSaveMsgLabel;
-
-    public static String errorSaveTitleLabel;
-
-    public static String executesynLabel;
-
-    public static String helpLabel;
-
-    public static String selectEntityLabel;
-
-    public static String serviceDetailLabel;
-
-    public static String serviceJndiLabel;
-
-    public static String serviceLabel;
-
-    public static String serviceParamLabel;
-
-    public static String triggerExpressionLabel;
-
-    public static String triggerLabel;
-    
-    
-    static {
-        // initialize resource bundle
-        NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+    /**
+     * Returns the i18n formatted message for <i>key</i> in the class bundle.
+     * 
+     * @param key - the key for the desired string
+     * @return the string for the given key in the class resource bundle
+     * @see MessagesCore#getString(String, ResourceBundle)
+     */
+    public static String getString(String key) {
+        return getString(key, PLUGIN_ID, resourceBundle);
     }
 
-    private Messages() {
+    /**
+     * Returns the i18n formatted message for <i>key</i> and <i>args</i> in the specified bundle.
+     * 
+     * @param key - the key for the desired string
+     * @param args - arg to include in the string
+     * @return the string for the given key in the given resource bundle
+     * @see MessagesCore#getString(String, ResourceBundle, Object[])
+     */
+    public static String getString(String key, Object... args) {
+        return getString(key, PLUGIN_ID, resourceBundle, args);
     }
 }

@@ -27,7 +27,7 @@ import org.eclipse.ui.internal.ide.EditorAreaDropAdapter;
 import sun.management.ManagementFactory;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
-import com.amalto.workbench.Messages;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.register.RegisterManagement;
 import com.amalto.workbench.register.RegisterWizard;
 import com.amalto.workbench.register.RegisterWizardDialog;
