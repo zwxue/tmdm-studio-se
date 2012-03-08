@@ -50,6 +50,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -60,6 +64,7 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSBoolean;
@@ -152,56 +157,84 @@ public class AddBrowseItemsWizard extends Wizard {
         for (XSDElementDeclaration decl : declList) {
             String fullName = BROWSE_ITEMS + decl.getName();
             if (fullName.equals(browseItem)) {
-                XtentisPort port = getXtentisPort();
-                WSView view = new WSView();
-                view.setIsTransformerActive(new WSBoolean(false));
-                view.setTransformerPK("");//$NON-NLS-1$
-                WSPutView wrap = new WSPutView();
-                view.setName(browseItem);
-                EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
-                List<String> keys = new ArrayList<String>();
-                for (XSDIdentityConstraintDefinition idty : idtylist) {
-                    EList<XSDXPathDefinition> xpathList = idty.getFields();
-                    for (XSDXPathDefinition path : xpathList) {
-                        String key = decl.getName();
-                        // remove
-                        key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
-                        key += "/" + path.getValue();//$NON-NLS-1$
-                        keys.add(key);
-                    }
-
+                
+                if (MessageDialog.openConfirm(this.getShell(), Messages.getString("AddBrowseItemsWizard_Warning"), //$NON-NLS-1$
+                        Messages.getString("AddBrowseItemsWizard_DuplicatedView"))) //$NON-NLS-1$
+                {
+                    TreeObject obj = createNewTreeObject(decl, browseItem);
+                    
+                    refreshEditorContent(obj);
+                    
+                    TreeParent folder = obj.findServerFolder(obj.getType());
+                    folder.addChild(obj);
                 }
-                view.setSearchableBusinessElements(keys.toArray(new String[] {}));
-                view.setViewableBusinessElements(keys.toArray(new String[] {}));
-                StringBuffer desc = new StringBuffer();
-                LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
-                if (decl.getAnnotation() != null)
-                    labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
-                if (labels.size() == 0)
-                    labels.put("EN", decl.getName());//$NON-NLS-1$
-                for (String lan : labels.keySet()) {
-                    desc.append("[" + lan.toUpperCase() + ":" + labels.get(lan) + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                }
-                view.setDescription(desc.toString());
-                wrap.setWsView(view);
-
-                WSViewPK viewPk = new WSViewPK();
-                viewPk.setPk(browseItem);
-
-                WSDeleteView delView = new WSDeleteView();
-                delView.setWsViewPK(viewPk);
-                WSGetView getView = new WSGetView();
-                getView.setWsViewPK(viewPk);
-                port.putView(wrap);
-                // add node in the root
-                TreeParent root = page.getXObject().getServerRoot();
-                TreeObject obj = new TreeObject(browseItem, root, TreeObject.VIEW, viewPk, null // no storage to save
-                // space
-                );
-                TreeParent folder = obj.findServerFolder(obj.getType());
-                folder.addChild(obj);
             }
         }
+    }
+
+    private TreeObject createNewTreeObject(XSDElementDeclaration decl, String browseItem) throws RemoteException {
+        XtentisPort port = getXtentisPort();
+        
+        WSView view = new WSView();
+        view.setIsTransformerActive(new WSBoolean(false));
+        view.setTransformerPK("");//$NON-NLS-1$        
+        view.setName(browseItem);
+        EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
+        List<String> keys = new ArrayList<String>();
+        for (XSDIdentityConstraintDefinition idty : idtylist) {
+            EList<XSDXPathDefinition> xpathList = idty.getFields();
+            for (XSDXPathDefinition path : xpathList) {
+                String key = decl.getName();
+                // remove
+                key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
+                key += "/" + path.getValue();//$NON-NLS-1$
+                keys.add(key);
+            }
+
+        }
+        view.setSearchableBusinessElements(keys.toArray(new String[] {}));
+        view.setViewableBusinessElements(keys.toArray(new String[] {}));
+        
+        StringBuffer desc = new StringBuffer();
+        LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
+        if (decl.getAnnotation() != null)
+            labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
+        if (labels.size() == 0)
+            labels.put("EN", decl.getName());//$NON-NLS-1$
+        for (String lan : labels.keySet()) {
+            desc.append("[" + lan.toUpperCase() + ":" + labels.get(lan) + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        }
+        view.setDescription(desc.toString());
+        
+        WSPutView wrap = new WSPutView();
+        wrap.setWsView(view);
+
+        WSViewPK viewPk = new WSViewPK();
+        viewPk.setPk(browseItem);
+
+        WSDeleteView delView = new WSDeleteView();
+        delView.setWsViewPK(viewPk);
+        WSGetView getView = new WSGetView();
+        getView.setWsViewPK(viewPk);
+        port.putView(wrap);
+        // add node in the root
+        TreeParent root = page.getXObject().getServerRoot();
+        TreeObject obj = new TreeObject(browseItem, root, TreeObject.VIEW, viewPk, null // no storage to save
+        // space
+        );
+
+        return obj;
+    }
+
+    private void refreshEditorContent(TreeObject obj) throws RemoteException {
+
+        IEditorInput xobjectEditorinput = new XObjectEditorInput(obj, obj.getDisplayName());
+
+        final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        if (activePage.findEditor(xobjectEditorinput) != null) {
+            activePage.closeEditor(activePage.findEditor(xobjectEditorinput), true);
+        }
+
     }
 
     protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) throws RemoteException {
