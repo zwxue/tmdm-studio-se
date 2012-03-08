@@ -18,7 +18,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 
 /**
  * DOC Administrator  class global comment. Detailled comment
@@ -34,7 +34,7 @@ public class RepositoryViewObjectFilter implements IFilter {
 		if(arg0 instanceof IRepositoryViewObject){
 	        try {
 	        	Item item=((IRepositoryViewObject)arg0).getProperty().getItem();
-	        	if(!(item instanceof MDMServerObjectItem)){
+	        	if(item.getProperty().getLabel()==null || item instanceof ContainerItem){
 	        		return false;
 	        	}
 	            if (!ProxyRepositoryFactory.getInstance().isLocalConnectionProvider()) {
