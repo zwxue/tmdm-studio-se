@@ -85,6 +85,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         }
 
         ERepositoryObjectType dragType = dragViewObj.getRepositoryObjectType();
+
         // can't support workflow and job object
         if (dragType == IServerObjectRepositoryType.TYPE_WORKFLOW || dragType == ERepositoryObjectType.PROCESS) {
             return false;
@@ -105,7 +106,8 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         }
         // can't move/copy to different node folder
         ERepositoryObjectType dropType = dropViewObj.getRepositoryObjectType();
-        if (!dragType.equals(dropType))
+
+        if (dragType!=null && !dragType.equals(dropType))
             return false;
         return true;
     }
