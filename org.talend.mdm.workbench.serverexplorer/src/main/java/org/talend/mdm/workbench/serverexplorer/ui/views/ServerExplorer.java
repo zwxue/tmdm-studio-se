@@ -65,6 +65,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.views.ServerView;
 
 /**
@@ -143,6 +144,22 @@ public class ServerExplorer extends ViewPart {
         refreshServerDefs();
 
         synchronizeMDMServerView();
+        reInputPassword();
+
+    }
+
+    private void reInputPassword() {
+        List<IRepositoryViewObject> viewObjects = ServerDefService.getAllServerDefViewObjects();
+
+        for (IRepositoryViewObject viewObj : viewObjects) {
+            MDMServerDefItem serverDefItem = getMDMItem(viewObj);
+            MDMServerDef serverDef = serverDefItem.getServerDef();
+            if (serverDef.getPasswd().equals("")) { //$NON-NLS-1$
+                MessageDialog.openInformation(null, Messages.ServerExplorer_WarningText, Messages.Reinput_Password + " " //$NON-NLS-1$
+                        + serverDef.getName());
+                editServerDef(viewObj);
+            }
+        }
     }
 
     public void dispose() {
@@ -199,6 +216,8 @@ public class ServerExplorer extends ViewPart {
             treeViewer.setInput(viewObjects);
         }
     }
+
+
 
     private void synchronizeMDMServerView() {
 
@@ -263,6 +282,21 @@ public class ServerExplorer extends ViewPart {
                 MDMServerDefItem mdmItem = getMDMItem(viewObject);
                 if (mdmItem != null) {
                     MDMServerDef serverDef = mdmItem.getServerDef();
+                    String password = serverDef.getPasswd();
+                    if (password.equals("")) { //$NON-NLS-1$
+                        serverDef.setPasswd(serverDef.getTempPasswd());
+                        boolean success = ServerDefService.checkMDMConnection(serverDef);
+                        String msg = success ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
+                        if (success) {
+                            MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
+                        } else {
+                            MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
+                        }
+                        serverDef.setPasswd(password);
+                    } else {
+                    String decryptedPassword = PasswordUtil.decryptPassword(password);
+                    serverDef.setPasswd(decryptedPassword);
+
                     boolean success = ServerDefService.checkMDMConnection(serverDef);
                     String msg = success ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
                     if (success) {
@@ -270,6 +304,9 @@ public class ServerExplorer extends ViewPart {
                     } else {
                         MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
                     }
+                        serverDef.setPasswd(password);
+                    }
+
                 }
             }
         }
@@ -360,6 +397,21 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
+    private void editServerDef(IRepositoryViewObject viewObject) {
+        if (viewObject != null) {
+            MDMServerDefItem mdmItem = getMDMItem(viewObject);
+            if (mdmItem != null) {
+                MDMServerDef serverDef = mdmItem.getServerDef();
+                ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), serverDef);
+                if (dialog.open() == IDialogConstants.OK_ID) {
+                    boolean result = ServerDefService.saveServeDef(mdmItem);
+                    if (result) {
+                        refreshServerDefs();
+                    }
+                }
+            }
+        }
+    }
     class DeleteServerDefAction extends Action {
 
         public DeleteServerDefAction() {

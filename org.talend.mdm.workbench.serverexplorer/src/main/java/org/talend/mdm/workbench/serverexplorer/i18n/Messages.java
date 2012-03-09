@@ -80,4 +80,13 @@ public class Messages extends NLS {
     public static String ServerExplorer_RemoveServer;
 
     public static String ServerExplorer_EventManager;
+
+    public static String ServerExplorer_WarningText;
+
+    public static String Reinput_Password;
+
+    public static String SharePassword;
+
+    public static String OnlyApplicableShared;
+
 }

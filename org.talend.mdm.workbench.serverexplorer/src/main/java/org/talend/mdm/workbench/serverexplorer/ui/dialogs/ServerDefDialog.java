@@ -24,8 +24,11 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -33,11 +36,15 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
@@ -64,6 +71,8 @@ public class ServerDefDialog extends TitleAreaDialog {
     boolean isEnterprise;
 
     boolean isUpdateServerDef;
+
+    Button sharePwdBtn;
 
     public boolean isUpdateServerDef() {
         return this.isUpdateServerDef;
@@ -148,8 +157,28 @@ public class ServerDefDialog extends TitleAreaDialog {
         passwordText = new Text(grpAuthentication, SWT.BORDER|SWT.PASSWORD);
 
         passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        // check Enterprise
 
+        sharePwdBtn = new Button(grpAuthentication, SWT.CHECK);
+        sharePwdBtn.setText(Messages.SharePassword);
+        sharePwdBtn.setToolTipText(Messages.OnlyApplicableShared);
+        // sharePwdBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+        sharePwdBtn.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                passwordText.setText(""); //$NON-NLS-1$
+            }
+
+        });
+
+        if (isLocalMode()) {
+            sharePwdBtn.setEnabled(false);
+            sharePwdBtn.setText(Messages.SharePassword);
+            sharePwdBtn.setToolTipText(Messages.OnlyApplicableShared);
+        }
+
+        // check Enterprise
         if (isEnterprise) {
             new Label(container, SWT.NONE).setText(Messages.ServerDefDialog_Version);
 
@@ -265,13 +294,23 @@ public class ServerDefDialog extends TitleAreaDialog {
             userNameText.setFocus();
             return false;
         }
-        if (serverDef.getPasswd().length() == 0) {
+        if (serverDef.getPasswd().length() == 0 && (serverDef.getTempPasswd() != null && serverDef.getTempPasswd().length() == 0)) {
             setErrorMessage(Messages.ServerDefDialog_PasswordCanNotBeEmpty);
             passwordText.setFocus();
             return false;
         }
         setErrorMessage(null);
         return true;
+    }
+
+    private boolean isLocalMode() {
+        IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+        try {
+            return factory.isLocalConnectionProvider();
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+        return false;
     }
 
     @Override
@@ -281,7 +320,14 @@ public class ServerDefDialog extends TitleAreaDialog {
                 return;
             serverDef.parse(urlText.getText());
             serverDef.setName(nameText.getText());
-            serverDef.setPasswd(passwordText.getText());
+
+            String encryptedPassword = PasswordUtil.encryptPassword(passwordText.getText());
+            serverDef.setPasswd(encryptedPassword);
+
+            if (!isLocalMode() && (!sharePwdBtn.getSelection())) {
+                    serverDef.setPasswd(""); //$NON-NLS-1$
+                    serverDef.setTempPasswd(passwordText.getText());
+                }
         }
         if (buttonId == CHECK_CONNECTION_ID) {
             if (!validateInput())
@@ -302,7 +348,26 @@ public class ServerDefDialog extends TitleAreaDialog {
         nameText.setText(serverDef.getName());
         urlText.setText(serverDef.getUrl());
         userNameText.setText(serverDef.getUser());
-        passwordText.setText(serverDef.getPasswd());
+        if (isLocalMode() && !(serverDef.getName().equals(""))) { //$NON-NLS-1$
+            String decryptedPassword = PasswordUtil.decryptPassword(serverDef.getPasswd());
+            passwordText.setText(decryptedPassword);
+
+        } else {
+            passwordText.setText(serverDef.getPasswd());
+        }
+        if (!isLocalMode() && (!serverDef.getPasswd().equals(""))) { //$NON-NLS-1$
+            String decryptedPassword = PasswordUtil.decryptPassword(serverDef.getPasswd());
+            passwordText.setText(decryptedPassword);
+        }
+
+        if (serverDef.getPasswd().equals("") && serverDef.getTempPasswd() != null) { //$NON-NLS-1$
+            passwordText.setText(serverDef.getTempPasswd());
+        }
+        sharePwdBtn.setSelection(!serverDef.getPasswd().equals("")); //$NON-NLS-1$
+
+        if (serverDef.getName().equals("")) { //$NON-NLS-1$
+            sharePwdBtn.setSelection(true);
+        }
         if (Util.IsEnterPrise()) {
             universeCombo.setText(serverDef.getUniverse());
         }
