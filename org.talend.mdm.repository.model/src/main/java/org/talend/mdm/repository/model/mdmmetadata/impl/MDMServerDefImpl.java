@@ -22,6 +22,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getHost <em>Host</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPasswd <em>Passwd</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getTempPasswd <em>Temp Passwd</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPath <em>Path</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getPort <em>Port</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.impl.MDMServerDefImpl#getUniverse <em>Universe</em>}</li>
@@ -75,6 +76,26 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * @ordered
      */
     protected String passwd = PASSWD_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getTempPasswd() <em>Temp Passwd</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTempPasswd()
+     * @generated
+     * @ordered
+     */
+    protected static final String TEMP_PASSWD_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getTempPasswd() <em>Temp Passwd</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTempPasswd()
+     * @generated
+     * @ordered
+     */
+    protected String tempPasswd = TEMP_PASSWD_EDEFAULT;
 
     /**
      * The default value of the '{@link #getPath() <em>Path</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
@@ -234,6 +255,27 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getTempPasswd() {
+        return tempPasswd;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setTempPasswd(String newTempPasswd) {
+        String oldTempPasswd = tempPasswd;
+        tempPasswd = newTempPasswd;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__TEMP_PASSWD, oldTempPasswd, tempPasswd));
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -380,6 +422,8 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
                 return getHost();
             case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
                 return getPasswd();
+            case MdmmetadataPackage.MDM_SERVER_DEF__TEMP_PASSWD:
+                return getTempPasswd();
             case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
                 return getPath();
             case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
@@ -406,6 +450,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
                 return;
             case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
                 setPasswd((String)newValue);
+                return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__TEMP_PASSWD:
+                setTempPasswd((String)newValue);
                 return;
             case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
                 setPath((String)newValue);
@@ -439,6 +486,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
             case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
                 setPasswd(PASSWD_EDEFAULT);
                 return;
+            case MdmmetadataPackage.MDM_SERVER_DEF__TEMP_PASSWD:
+                setTempPasswd(TEMP_PASSWD_EDEFAULT);
+                return;
             case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
                 setPath(PATH_EDEFAULT);
                 return;
@@ -469,6 +519,8 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
                 return HOST_EDEFAULT == null ? host != null : !HOST_EDEFAULT.equals(host);
             case MdmmetadataPackage.MDM_SERVER_DEF__PASSWD:
                 return PASSWD_EDEFAULT == null ? passwd != null : !PASSWD_EDEFAULT.equals(passwd);
+            case MdmmetadataPackage.MDM_SERVER_DEF__TEMP_PASSWD:
+                return TEMP_PASSWD_EDEFAULT == null ? tempPasswd != null : !TEMP_PASSWD_EDEFAULT.equals(tempPasswd);
             case MdmmetadataPackage.MDM_SERVER_DEF__PATH:
                 return PATH_EDEFAULT == null ? path != null : !PATH_EDEFAULT.equals(path);
             case MdmmetadataPackage.MDM_SERVER_DEF__PORT:
@@ -506,6 +558,8 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         result.append(host);
         result.append(", passwd: ");
         result.append(passwd);
+        result.append(", tempPasswd: ");
+        result.append(tempPasswd);
         result.append(", path: ");
         result.append(path);
         result.append(", port: ");

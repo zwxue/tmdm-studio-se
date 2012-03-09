@@ -18,6 +18,7 @@ import org.talend.core.model.metadata.builder.connection.AbstractMetadataObject;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getHost <em>Host</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getPasswd <em>Passwd</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getTempPasswd <em>Temp Passwd</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getPath <em>Path</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getPort <em>Port</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUniverse <em>Universe</em>}</li>
@@ -85,6 +86,32 @@ public interface MDMServerDef extends AbstractMetadataObject {
 	void setPasswd(String value);
 
 	/**
+     * Returns the value of the '<em><b>Temp Passwd</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Temp Passwd</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Temp Passwd</em>' attribute.
+     * @see #setTempPasswd(String)
+     * @see org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage#getMDMServerDef_TempPasswd()
+     * @model transient="true"
+     * @generated
+     */
+    String getTempPasswd();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getTempPasswd <em>Temp Passwd</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Temp Passwd</em>' attribute.
+     * @see #getTempPasswd()
+     * @generated
+     */
+    void setTempPasswd(String value);
+
+    /**
      * Returns the value of the '<em><b>Path</b></em>' attribute.
      * <!-- begin-user-doc -->
 	 * <p>

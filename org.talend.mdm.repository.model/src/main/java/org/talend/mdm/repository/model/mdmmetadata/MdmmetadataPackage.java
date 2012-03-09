@@ -322,13 +322,22 @@ public interface MdmmetadataPackage extends EPackage {
 	int MDM_SERVER_DEF__PASSWD = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+     * The feature id for the '<em><b>Temp Passwd</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_DEF__TEMP_PASSWD = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 2;
+
+    /**
      * The feature id for the '<em><b>Path</b></em>' attribute.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF__PATH = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 2;
+	int MDM_SERVER_DEF__PATH = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 3;
 
 	/**
      * The feature id for the '<em><b>Port</b></em>' attribute.
@@ -337,7 +346,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF__PORT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 3;
+	int MDM_SERVER_DEF__PORT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 4;
 
 	/**
      * The feature id for the '<em><b>Universe</b></em>' attribute.
@@ -346,7 +355,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF__UNIVERSE = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 4;
+	int MDM_SERVER_DEF__UNIVERSE = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 5;
 
 	/**
      * The feature id for the '<em><b>Url</b></em>' attribute.
@@ -355,7 +364,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF__URL = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 5;
+	int MDM_SERVER_DEF__URL = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 6;
 
 	/**
      * The feature id for the '<em><b>User</b></em>' attribute.
@@ -364,7 +373,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF__USER = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 6;
+	int MDM_SERVER_DEF__USER = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 7;
 
 	/**
      * The number of structural features of the '<em>MDM Server Def</em>' class.
@@ -373,7 +382,7 @@ public interface MdmmetadataPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int MDM_SERVER_DEF_FEATURE_COUNT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 7;
+	int MDM_SERVER_DEF_FEATURE_COUNT = ConnectionPackage.ABSTRACT_METADATA_OBJECT_FEATURE_COUNT + 8;
 
 
 	/**
@@ -409,6 +418,17 @@ public interface MdmmetadataPackage extends EPackage {
 	EAttribute getMDMServerDef_Passwd();
 
 	/**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getTempPasswd <em>Temp Passwd</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Temp Passwd</em>'.
+     * @see org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getTempPasswd()
+     * @see #getMDMServerDef()
+     * @generated
+     */
+    EAttribute getMDMServerDef_TempPasswd();
+
+    /**
      * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getPath <em>Path</em>}'.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -512,6 +532,14 @@ public interface MdmmetadataPackage extends EPackage {
 		EAttribute MDM_SERVER_DEF__PASSWD = eINSTANCE.getMDMServerDef_Passwd();
 
 		/**
+         * The meta object literal for the '<em><b>Temp Passwd</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MDM_SERVER_DEF__TEMP_PASSWD = eINSTANCE.getMDMServerDef_TempPasswd();
+
+        /**
          * The meta object literal for the '<em><b>Path</b></em>' attribute feature.
          * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->

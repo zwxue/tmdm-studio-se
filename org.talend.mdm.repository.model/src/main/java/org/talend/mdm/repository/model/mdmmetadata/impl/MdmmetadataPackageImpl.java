@@ -122,19 +122,19 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 
 	/**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getMDMServerDef_Path() {
+    public EAttribute getMDMServerDef_TempPasswd() {
         return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(2);
     }
 
-	/**
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getMDMServerDef_Port() {
+	public EAttribute getMDMServerDef_Path() {
         return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(3);
     }
 
@@ -143,7 +143,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getMDMServerDef_Universe() {
+	public EAttribute getMDMServerDef_Port() {
         return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(4);
     }
 
@@ -152,7 +152,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getMDMServerDef_Url() {
+	public EAttribute getMDMServerDef_Universe() {
         return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(5);
     }
 
@@ -161,8 +161,17 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getMDMServerDef_User() {
+	public EAttribute getMDMServerDef_Url() {
         return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(6);
+    }
+
+	/**
+     * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+     * @generated
+     */
+	public EAttribute getMDMServerDef_User() {
+        return (EAttribute)mdmServerDefEClass.getEStructuralFeatures().get(7);
     }
 
 	/**
@@ -196,6 +205,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
         mdmServerDefEClass = createEClass(MDM_SERVER_DEF);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__HOST);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__PASSWD);
+        createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__TEMP_PASSWD);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__PATH);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__PORT);
         createEAttribute(mdmServerDefEClass, MDM_SERVER_DEF__UNIVERSE);
@@ -240,6 +250,7 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
         initEClass(mdmServerDefEClass, MDMServerDef.class, "MDMServerDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getMDMServerDef_Host(), ecorePackage.getEString(), "host", "localhost", 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Passwd(), ecorePackage.getEString(), "passwd", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getMDMServerDef_TempPasswd(), ecorePackage.getEString(), "tempPasswd", null, 0, 1, MDMServerDef.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Path(), ecorePackage.getEString(), "path", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Port(), ecorePackage.getEString(), "port", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerDef_Universe(), ecorePackage.getEString(), "universe", null, 0, 1, MDMServerDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
