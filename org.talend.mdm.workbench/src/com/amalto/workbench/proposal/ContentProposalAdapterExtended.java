@@ -1910,9 +1910,7 @@ public class ContentProposalAdapterExtended {
             ((IControlContentAdapterExtended) controlContentAdapter).setUsedFilterValue(filterText);
         }
 
-        // Remove the selected text before applying proposal. See bug 0004266: Replace value with context value using
-        // CTRL+Space.
-        removeSelectedText();
+
         switch (proposalAcceptanceStyle) {
         case (PROPOSAL_REPLACE):
             setControlContent(proposal.getContent(), proposal.getCursorPosition());
@@ -1941,7 +1939,7 @@ public class ContentProposalAdapterExtended {
             if (text.getSelectionCount() > 0) {
                 Point selection = text.getSelection();
                 String content = text.getText().substring(0, selection.x) + text.getText().substring(selection.y);
-                insertionPos = text.getSelection().x;
+//                insertionPos = text.getSelection().x;
                 // text.setText(content);
             }
         } else if (control instanceof StyledText) {
@@ -1949,7 +1947,7 @@ public class ContentProposalAdapterExtended {
             if (text.getSelectionCount() > 0) {
                 Point selection = text.getSelection();
                 String content = text.getText().substring(0, selection.x) + text.getText().substring(selection.y);
-                insertionPos = text.getSelection().x;
+//                insertionPos = text.getSelection().x;
                 // text.setText(content);
             }
         }
