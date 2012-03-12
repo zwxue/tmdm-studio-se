@@ -386,7 +386,7 @@ public class ServerExplorer extends ViewPart {
             MDMServerDefItem mdmItem = getMDMItem(viewObject);
             if (mdmItem != null) {
                 MDMServerDef serverDef = mdmItem.getServerDef();
-                ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), serverDef);
+                ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), serverDef, true);
                 if (dialog.open() == IDialogConstants.OK_ID) {
                     boolean result = ServerDefService.saveServeDef(mdmItem);
                     if (result) {

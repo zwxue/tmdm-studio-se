@@ -84,6 +84,8 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     private static final int CHECK_CONNECTION_ID = 1024;
 
+    private boolean needDecrypted = false;
+
     public MDMServerDef getServerDef() {
         return this.serverDef;
     }
@@ -105,6 +107,11 @@ public class ServerDefDialog extends TitleAreaDialog {
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
         }
         isEnterprise = Util.IsEnterPrise();
+    }
+
+    public ServerDefDialog(Shell parentShell, MDMServerDef serverDef, boolean needDecrypted) {
+        this(parentShell, serverDef);
+        this.needDecrypted = needDecrypted;
     }
 
     /**
@@ -215,6 +222,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
             public void modifyText(ModifyEvent e) {
                 serverDef.setPasswd(passwordText.getText().trim());
+                needDecrypted = false;
             }
         });
         if (isEnterprise) {
@@ -332,8 +340,26 @@ public class ServerDefDialog extends TitleAreaDialog {
         if (buttonId == CHECK_CONNECTION_ID) {
             if (!validateInput())
                 return;
-            boolean check = ServerDefService.checkMDMConnection(serverDef);
-            String msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
+            boolean check = false;
+            String password = serverDef.getPasswd();
+
+            String msg = null;
+            if (needDecrypted) {
+                if (password.equals("")) { //$NON-NLS-1$
+                    serverDef.setPasswd(serverDef.getTempPasswd());
+                } else {
+                    String decryptedPassword = PasswordUtil.decryptPassword(password);
+                    serverDef.setPasswd(decryptedPassword);
+                }
+                check = ServerDefService.checkMDMConnection(serverDef);
+                msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
+                serverDef.setPasswd(password);
+            }
+            else {
+                check = ServerDefService.checkMDMConnection(serverDef);
+                msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
+            }
+
             if (check) {
                 setMessage(msg);
             } else {
