@@ -3128,6 +3128,9 @@ public class Util {
 
         XSDTypeDefinition baseType = type.getBaseType();
 
+        if (baseType == type.getBaseType()) {
+            return results;
+        }
         if (!results.contains(baseType))
             results.add(baseType);
 
