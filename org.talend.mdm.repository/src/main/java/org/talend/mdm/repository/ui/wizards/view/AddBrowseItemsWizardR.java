@@ -160,6 +160,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
                     int count = 0;
                     for (int k = 0; k < particles.size(); k++) {
                         count++;
+                        // for Christophe Toum's comment ,Only the top 5 elements
+                        // see TMDM-663 comment
                         if (count <= 5) {
                             XSDParticle xSDCom = particles.get(k);
                             if (((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
