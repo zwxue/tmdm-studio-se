@@ -147,35 +147,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             view.setTransformerPK(""); //$NON-NLS-1$
             view.setIsTransformerActive(wsBool);
             // SearchableBusinessElements & ViewableBusinessElements
-            List<String> keys = new ArrayList<String>();
-            if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-                String labelValue = null;
-                List childrenList = Util
-                        .getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) ((XSDElementDeclaration) decl)
-                                .getTypeDefinition());
-                for (int j = 0; j < childrenList.size(); j++) {
-                    List<XSDParticle> particles = new ArrayList<XSDParticle>();
-                    if (childrenList.get(j) instanceof XSDModelGroup)
-                        particles = ((XSDModelGroup) childrenList.get(j)).getParticles();
-                    int count = 0;
-                    for (int k = 0; k < particles.size(); k++) {
-                        count++;
-                        // for Christophe Toum's comment ,Only the top 5 elements
-                        // see TMDM-663 comment
-                        if (count <= 5) {
-                            XSDParticle xSDCom = particles.get(k);
-                            if (((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
-                                labelValue = ((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent()).getName();
-                                String key = decl.getName();
-                                // remove
-                                key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
-                                key += "/" + labelValue;//$NON-NLS-1$
-                                keys.add(key);
-                        }
-                        }
-                    }
-                }
-            }
+
+            List<String> keys = getKeysForViewElements(decl);
 
             view.getSearchableBusinessElements().addAll(keys);
             view.getViewableBusinessElements().addAll(keys);
@@ -183,6 +156,38 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         }
 
     };
+
+    public List<String> getKeysForViewElements(XSDElementDeclaration decl) {
+        List<String> keys = new ArrayList<String>();
+        if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+            String labelValue = null;
+            List childrenList = Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) ((XSDElementDeclaration) decl)
+                    .getTypeDefinition());
+            for (int j = 0; j < childrenList.size(); j++) {
+                List<XSDParticle> particles = new ArrayList<XSDParticle>();
+                if (childrenList.get(j) instanceof XSDModelGroup)
+                    particles = ((XSDModelGroup) childrenList.get(j)).getParticles();
+                int count = 0;
+                for (int k = 0; k < particles.size(); k++) {
+                    count++;
+                    // Only the top 5 attributes will be searchable and viewable when generating the default view
+                    if (count <= 5) {
+                        XSDParticle xSDCom = particles.get(k);
+                        if (((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
+                            labelValue = ((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent()).getName();
+                            String key = decl.getName();
+                            // remove
+                            key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
+                            key += "/" + labelValue;//$NON-NLS-1$
+                            keys.add(key);
+                        }
+                    }
+                }
+            }
+        }
+        return keys;
+
+    }
 
     @Override
     protected void newBrowseItemView(String browseItem) throws RemoteException {
