@@ -12,9 +12,10 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.view;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import junit.framework.TestCase;
+import java.util.List;
 
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
@@ -26,7 +27,7 @@ import com.amalto.workbench.utils.Util;
 /**
  * DOC Administrator  class global comment. Detailled comment
  */
-public class AddBrowseItemsWizardRTest extends TestCase {
+public class AddBrowseItemsWizardRTest {
 
     /**
      * Test method for
