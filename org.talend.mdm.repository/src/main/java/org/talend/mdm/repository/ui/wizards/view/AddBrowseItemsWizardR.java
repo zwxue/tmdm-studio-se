@@ -71,6 +71,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         super(launchPage);
     }
 
+
     @Override
     protected List<String> getAllRoleNames() {
         return RepositoryQueryService.findAllRoleNames();
@@ -157,23 +158,29 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     };
 
-    public List<String> getKeysForViewElements(XSDElementDeclaration decl) {
+    public static List<String> getKeysForViewElements(XSDElementDeclaration decl) {
         List<String> keys = new ArrayList<String>();
+        if (decl == null) {
+            return keys;
+        }
         if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             String labelValue = null;
             List childrenList = Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) ((XSDElementDeclaration) decl)
                     .getTypeDefinition());
+            if (childrenList == null) {
+                return keys;
+            }
             for (int j = 0; j < childrenList.size(); j++) {
                 List<XSDParticle> particles = new ArrayList<XSDParticle>();
                 if (childrenList.get(j) instanceof XSDModelGroup)
                     particles = ((XSDModelGroup) childrenList.get(j)).getParticles();
-                int count = 0;
-                for (int k = 0; k < particles.size(); k++) {
-                    count++;
+                if (particles != null) {
+                    for (int k = 0; k < particles.size(); k++) {
                     // Only the top 5 attributes will be searchable and viewable when generating the default view
-                    if (count <= 5) {
+                        if (k < 5) {
                         XSDParticle xSDCom = particles.get(k);
-                        if (((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
+                            if ((xSDCom != null && xSDCom.getContent() != null) && (xSDCom instanceof XSDParticle)
+                                    && ((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
                             labelValue = ((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent()).getName();
                             String key = decl.getName();
                             // remove
@@ -182,6 +189,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
                             keys.add(key);
                         }
                     }
+                }
                 }
             }
         }
