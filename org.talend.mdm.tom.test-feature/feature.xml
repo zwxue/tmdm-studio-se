@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.talend.mdm.tom.test_feature"
+      label="org.talend.mdm.tom.test.feature Feature"
+      version="1.0.0.qualifier">
+
+   <description>
+       Tests For Talend MDM in tom
+   </description>
+
+   <copyright>
+       Tests For Talend MDM in tom
+   </copyright>
+
+   <license>
+       Tests For Talend MDM in tom
+   </license>
+
+   <requires>
+      <import plugin="org.junit4" version="4.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xsd" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="org.talend.mdm.workbench" version="1.0.0" match="greaterOrEqual"/> 
+   </requires>
+
+   <plugin
+         id="org.talend.mdm.repository.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+</feature>
