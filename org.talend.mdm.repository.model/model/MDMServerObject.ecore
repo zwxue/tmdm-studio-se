@@ -33,6 +33,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="WSRoleE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="specification" upperBound="-1"
         eType="#//WSRoleSpecificationE" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="recordssecurity" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WSRoleSpecificationE">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="admin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>

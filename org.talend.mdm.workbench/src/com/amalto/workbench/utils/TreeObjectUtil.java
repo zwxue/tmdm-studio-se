@@ -215,7 +215,7 @@ public class TreeObjectUtil {
             XtentisPort originalPort = Util.getPort(new URL(object.getEndpointAddress()), object.getUniverse(),
                     object.getUsername(), object.getPassword());
             WSRole originalRole = originalPort.getRole(new WSGetRole(key));
-            WSRole newRole = new WSRole(newKey.getPk(), originalRole.getDescription(), originalRole.getSpecification());
+            WSRole newRole = new WSRole(newKey.getPk(), originalRole.getDescription(), originalRole.getSpecification(),null);
             // write the new model
             destPort.putRole(new WSPutRole(newRole));
             TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : object.getServerRoot(),

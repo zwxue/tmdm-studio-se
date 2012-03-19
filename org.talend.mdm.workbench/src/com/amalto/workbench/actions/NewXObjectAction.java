@@ -412,7 +412,7 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSRole role = new WSRole((String) key, "", null);//$NON-NLS-1$
+                WSRole role = new WSRole((String) key, "", null,null);//$NON-NLS-1$
 
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.ROLE, new WSRolePK((String) key),
                         role);
