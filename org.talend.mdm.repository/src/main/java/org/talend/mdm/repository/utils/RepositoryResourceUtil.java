@@ -39,15 +39,18 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
+import org.talend.core.model.properties.BusinessProcessItem;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
@@ -55,6 +58,7 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryEditorInput;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryObject;
 import org.talend.core.model.repository.RepositoryViewObject;
@@ -983,4 +987,47 @@ public class RepositoryResourceUtil {
         }
 
     }
+    
+    
+    public static boolean isOpenedItemInEditor(IRepositoryViewObject objectToMove) {
+        try {
+            if (objectToMove != null) {
+                IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+                if (activeWorkbenchWindow != null) {
+                    IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+                    if (activePage != null) {
+                        IEditorReference[] editorReferences = activePage.getEditorReferences();
+                        if (editorReferences != null) {
+                            for (IEditorReference editorReference : editorReferences) {
+                                IEditorInput editorInput = editorReference.getEditorInput();
+                                if ((editorInput != null && editorInput instanceof IRepositoryViewEditorInput)) {
+                                	IRepositoryViewEditorInput rInput = (IRepositoryViewEditorInput) editorInput;
+                                    Property openedProperty = rInput.getInputItem().getProperty();
+                                    if (openedProperty.getId().equals(objectToMove.getId())
+                                            && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
+                                        return true;
+                                    }
+                                } else if (objectToMove.getProperty().getItem() instanceof BusinessProcessItem) {
+                                    Object obj = editorInput.getAdapter(IRepositoryEditorInput.class);
+                                    if (obj instanceof IRepositoryEditorInput) {
+                                        IRepositoryEditorInput rInput = (IRepositoryEditorInput) obj;
+                                        Property openedProperty = rInput.getItem().getProperty();
+                                        if (openedProperty.getId().equals(objectToMove.getId())
+                                                && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
+                                            return true;
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (PartInitException e) {
+            ExceptionHandler.process(e);
+        }
+        return false;
+    }
+
 }

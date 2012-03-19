@@ -34,4 +34,14 @@ public class MDMOpenExistVersionProcessPage extends OpenExistVersionProcessPage 
         setMessage(Messages.MDMOpenExistVersionProcessPage_lockedByUser);
     }
 
+    /* (non-Javadoc)
+     * @see org.talend.designer.core.ui.wizards.OpenExistVersionProcessPage#isCreateNewVersionJob()
+     */
+    @Override
+    public boolean isCreateNewVersionJob() {
+    	if(versionText.getText().equals(getOriginVersion())){
+    		return false;
+    	}
+    	return true;
+    }
 }

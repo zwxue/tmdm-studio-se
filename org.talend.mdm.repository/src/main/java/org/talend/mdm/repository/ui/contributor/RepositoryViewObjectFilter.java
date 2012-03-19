@@ -25,25 +25,18 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
  */
 public class RepositoryViewObjectFilter implements IFilter {
 
-	Logger log=Logger.getLogger(RepositoryViewObjectFilter.class);
+
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.IFilter#select(java.lang.Object)
 	 */
 	public boolean select(Object arg0) {
 		if(arg0 instanceof IRepositoryViewObject){
-	        try {
 	        	Item item=((IRepositoryViewObject)arg0).getProperty().getItem();
 	        	if(item.getProperty().getLabel()==null || item instanceof ContainerItem){
 	        		return false;
 	        	}
-	            if (!ProxyRepositoryFactory.getInstance().isLocalConnectionProvider()) {
-	                return true;
-	            }
-	        } catch (PersistenceException e) {
-	            log.error(e);
-	            return false;
-	        }
+	        	return true;
 		}
 		return false;
 	}

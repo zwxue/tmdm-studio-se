@@ -17,6 +17,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.RepositoryManager;
 import org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
@@ -24,6 +25,8 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.RepositoryNode;
 
 
@@ -43,6 +46,12 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
      */
     public MDMOpenExistVersionProcessWizard(IRepositoryViewObject processObject) {
         super(processObject);
+
+        ERepositoryStatus status = processObject.getRepositoryStatus();
+        if ( status.equals(ERepositoryStatus.LOCK_BY_USER)
+                && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {        	
+        	alreadyEditedByUser = true;        
+        }
         this.viewObject = processObject;
     }
 
