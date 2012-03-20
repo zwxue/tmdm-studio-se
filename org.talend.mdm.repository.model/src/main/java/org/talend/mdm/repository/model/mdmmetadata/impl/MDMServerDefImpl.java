@@ -582,7 +582,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
 	 */
 	public MDMServerDef getDecryptedServerDef() {
 		MDMServerDef clone=EcoreUtil.copy(this);;
-		if(clone.getPasswd().trim().length()==0){
+        if (clone.getPasswd() == null || clone.getPasswd().trim().length() == 0) {
 			clone.setPasswd(getTempPasswd());
 		}else{
 			String decryptedPassword = PasswordUtil.decryptPassword(getPasswd());
