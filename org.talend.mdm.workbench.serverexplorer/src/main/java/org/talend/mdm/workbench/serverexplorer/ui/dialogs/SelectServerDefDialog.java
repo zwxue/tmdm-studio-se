@@ -90,6 +90,8 @@ public class SelectServerDefDialog extends TitleAreaDialog {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 IRepositoryViewObject viewObject = getCurSelectedViewObject();
+                if (viewObject == null)
+                    return;
                 MDMServerDefItem item = (MDMServerDefItem) viewObject.getProperty().getItem();
                 serverDef = item.getServerDef();
                 okBun.setEnabled(serverDef != null);
