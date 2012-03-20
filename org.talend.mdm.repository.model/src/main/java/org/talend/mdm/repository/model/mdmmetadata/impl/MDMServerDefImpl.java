@@ -11,9 +11,12 @@ import java.util.regex.Pattern;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.core.model.metadata.builder.connection.impl.AbstractMetadataObjectImpl;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
+
+import com.amalto.workbench.utils.PasswordUtil;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>MDM Server Def</b></em>'. <!-- end-user-doc -->
@@ -573,5 +576,19 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         result.append(')');
         return result.toString();
     }
+
+	/* (non-Javadoc)
+	 * @see org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getDecryptedServerDef()
+	 */
+	public MDMServerDef getDecryptedServerDef() {
+		MDMServerDef clone=EcoreUtil.copy(this);;
+		if(clone.getPasswd().trim().length()==0){
+			clone.setPasswd(getTempPasswd());
+		}else{
+			String decryptedPassword = PasswordUtil.decryptPassword(getPasswd());
+			clone.setPasswd(decryptedPassword);
+		}
+		return clone;
+	}
 
 } // MDMServerDefImpl
