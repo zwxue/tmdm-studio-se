@@ -341,19 +341,12 @@ public class ServerDefDialog extends TitleAreaDialog {
             if (!validateInput())
                 return;
             boolean check = false;
-            String password = serverDef.getPasswd();
 
             String msg = null;
             if (needDecrypted) {
-                if (password.equals("")) { //$NON-NLS-1$
-                    serverDef.setPasswd(serverDef.getTempPasswd());
-                } else {
-                    String decryptedPassword = PasswordUtil.decryptPassword(password);
-                    serverDef.setPasswd(decryptedPassword);
-                }
-                check = ServerDefService.checkMDMConnection(serverDef);
+                MDMServerDef serverDefinition = serverDef.getDecryptedServerDef();
+                check = ServerDefService.checkMDMConnection(serverDefinition);
                 msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
-                serverDef.setPasswd(password);
             }
             else {
                 check = ServerDefService.checkMDMConnection(serverDef);

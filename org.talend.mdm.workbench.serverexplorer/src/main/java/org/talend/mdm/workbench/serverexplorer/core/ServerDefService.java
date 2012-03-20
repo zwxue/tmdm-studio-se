@@ -38,7 +38,6 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.service.ILegendServerDefService;
-import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSPing;
@@ -229,18 +228,11 @@ public class ServerDefService implements ILegendServerDefService {
         if (servers != null) {
             for (MDMServerDef serverDef : servers) {
 
-                String password = serverDef.getPasswd();
-                if (password.equals("")) { //$NON-NLS-1$
-                    serverDef.setPasswd(serverDef.getTempPasswd());
-                } else {
-                    String decryptedPassword = PasswordUtil.decryptPassword(password);
-                    serverDef.setPasswd(decryptedPassword);
-                }
+                serverDef = serverDef.getDecryptedServerDef();
                 com.amalto.workbench.utils.MDMServerDef legendDef = com.amalto.workbench.utils.MDMServerDef.parse(
                         serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(),
                         serverDef.getName());
                 legendDefs.add(legendDef);
-                serverDef.setPasswd(password);
             }
 
         }

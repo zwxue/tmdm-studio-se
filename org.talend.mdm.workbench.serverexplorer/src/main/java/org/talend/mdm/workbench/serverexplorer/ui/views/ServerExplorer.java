@@ -70,7 +70,6 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.views.ServerView;
 
 /**
@@ -294,13 +293,7 @@ public class ServerExplorer extends ViewPart {
                         MDMServerDefItem mdmItem = getMDMItem(viewObject);
                         if (mdmItem != null) {
                             MDMServerDef serverDef = mdmItem.getServerDef();
-                            String password = serverDef.getPasswd();
-                            if (password.equals("")) { //$NON-NLS-1$
-                                serverDef.setPasswd(serverDef.getTempPasswd());
-                            } else {
-                                String decryptedPassword = PasswordUtil.decryptPassword(password);
-                                serverDef.setPasswd(decryptedPassword);
-                            }
+                            serverDef = serverDef.getDecryptedServerDef();
                             String returnMsg = null;
                             if (ServerDefService.checkMDMConnection(serverDef)) {
                                 returnMsg = ServerDefService.refreshServerCache(serverDef);
@@ -309,7 +302,7 @@ public class ServerExplorer extends ViewPart {
                             }
                             MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_RefreshServerCache,
                                     returnMsg);
-                            serverDef.setPasswd(password);
+
                         }
                     }
 
@@ -334,32 +327,14 @@ public class ServerExplorer extends ViewPart {
             if (viewObject != null) {
                 MDMServerDefItem mdmItem = getMDMItem(viewObject);
                 if (mdmItem != null) {
-                    MDMServerDef serverDef = mdmItem.getServerDef();
-                    String password = serverDef.getPasswd();
-                    if (password.equals("")) { //$NON-NLS-1$
-                        serverDef.setPasswd(serverDef.getTempPasswd());
-                        boolean success = ServerDefService.checkMDMConnection(serverDef);
-                        String msg = success ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
-                        if (success) {
-                            MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
-                        } else {
-                            MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
-                        }
-                        serverDef.setPasswd(password);
+                    MDMServerDef serverDef = mdmItem.getServerDef().getDecryptedServerDef();
+                    boolean success = ServerDefService.checkMDMConnection(serverDef);
+                    String msg = success ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
+                    if (success) {
+                        MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
                     } else {
-                        String decryptedPassword = PasswordUtil.decryptPassword(password);
-                        serverDef.setPasswd(decryptedPassword);
-
-                        boolean success = ServerDefService.checkMDMConnection(serverDef);
-                        String msg = success ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
-                        if (success) {
-                            MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
-                        } else {
-                            MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
-                        }
-                        serverDef.setPasswd(password);
+                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
                     }
-
                 }
             }
         }
