@@ -19,6 +19,8 @@ import java.util.List;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.SpagoBiServer;
 
+import com.amalto.workbench.utils.PasswordUtil;
+
 /**@deprecated
  * DOC cantoine class global comment. Detailled comment <br/>
  * 
@@ -75,11 +77,20 @@ public final class MDMServerHelper {
         final List<String> strings = new ArrayList<String>(list.size());
         for (SpagoBiServer spagoBiServer : list) {
             strings.add(getString(spagoBiServer.getShortDescription(), spagoBiServer.getHost(), spagoBiServer.getPort(),
-                    spagoBiServer.getLogin(), spagoBiServer.getPassword()));
+                    spagoBiServer.getLogin(), getPassword(spagoBiServer)));
         }
         return writeString(strings);
     }
 
+    private static String getPassword(SpagoBiServer spagoBiServer)
+    {
+        String decryptPassword = PasswordUtil.decryptPassword(spagoBiServer.getPassword());
+        if (decryptPassword == null || "".equals(decryptPassword.trim()))
+            decryptPassword = spagoBiServer.getPassword();
+
+        return decryptPassword;
+    }
+    
     public static final String getShortDescription(String value) {
         check(value);
         String[] index = value.split(ENGINE_DESCRIPTION_DELIMITER);
