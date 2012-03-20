@@ -63,7 +63,6 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
-import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -86,20 +85,10 @@ public class RepositoryWebServiceAdapter {
         try {
             if (serverDef == null)
                 return null;
-
-            String password = serverDef.getPasswd();
-
-            if (password.equals("")) { //$NON-NLS-1$
-                serverDef.setPasswd(serverDef.getTempPasswd());
-            } else {
-                String decryptedPassword = PasswordUtil.decryptPassword(password);
-                serverDef.setPasswd(decryptedPassword);
-
-            }
+            serverDef = serverDef.getDecryptedServerDef();
             XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(), serverDef
                     .getPasswd());
 
-            serverDef.setPasswd(password);
             return port;
         } catch (MalformedURLException e) {
             throw new XtentisException(Messages.bind(Messages.RepositoryWebServiceAdapter_InvalidEndpointAddress,

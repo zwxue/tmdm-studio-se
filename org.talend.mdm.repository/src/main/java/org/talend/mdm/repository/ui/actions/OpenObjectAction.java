@@ -55,7 +55,6 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
-import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 
@@ -249,23 +248,14 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     public boolean doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
         if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
             MDMServerDef serverDef = openServerDialog(serverObject.getLastServerDef());
-
-
             if (serverDef != null) {
-                 String password = serverDef.getPasswd();
-                                if (password.equals("")) { //$NON-NLS-1$
-                 serverDef.setPasswd(serverDef.getTempPasswd());
-                 } else {
-                 String decryptedPassword = PasswordUtil.decryptPassword(password);
-                 serverDef.setPasswd(decryptedPassword);
-                 }
+                serverDef = serverDef.getDecryptedServerDef();
                 XObjectBrowserInput input = (XObjectBrowserInput) editorInput;
                 TreeObject xobject = (TreeObject) input.getModel();
 
                 TreeParent serverRoot = getServerRoot(serverDef);
                 xobject.setWsKey(new WSDataClusterPK(xobject.getWsKey().toString()));
                 xobject.setServerRoot(serverRoot);
-                 serverDef.setPasswd(password);
                 return true;
             }
             return false;
