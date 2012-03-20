@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
@@ -33,6 +34,7 @@ import org.eclipse.xsd.impl.XSDParticleImpl;
 
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDNewComplexTypeDefinition;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.widgets.ConceptComposite;
 
 public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
@@ -128,6 +130,12 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         typeName = conceptPanel.getText();
         superTypeName = conceptPanel.getSuperName();
         isAbstract = conceptPanel.isAbstract();
+        if(superTypeName.equals(typeName)){
+            MessageDialog.openError(null, Messages.getString("Error.title"), Messages.getString("typeCannotExtendsItsself")); //$NON-NLS-1$//$NON-NLS-2$
+            setReturnCode(CANCEL);
+            return;
+        }
+        
         setReturnCode(OK);
         // no close let Action Handler handle it
     }
