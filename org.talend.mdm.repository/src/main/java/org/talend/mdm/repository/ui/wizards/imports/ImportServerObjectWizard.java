@@ -376,6 +376,9 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private boolean showLockedObjDialog(Object[] objs) {
+        if (objs == null) {
+            return true;
+        }
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : objs) {
             TreeObject treeObj = (TreeObject) obj;
@@ -736,6 +739,8 @@ public class ImportServerObjectWizard extends Wizard {
                     SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
                     if (dlg.open() == IDialogConstants.OK_ID) {
                         serverDef = dlg.getSelectedServerDef();
+                        if (serverDef == null)
+                            return;
                         txtServer.setText(serverDef.getUrl());
 
                         String url = serverDef.getUrl();
