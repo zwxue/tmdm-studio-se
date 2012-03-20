@@ -41,6 +41,8 @@ import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSPing;
+import com.amalto.workbench.webservices.WSRefreshCache;
+import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -193,6 +195,25 @@ public class ServerDefService implements ILegendServerDefService {
             log.error(e.getMessage(), e);
         }
         return false;
+    }
+
+    public static String refreshServerCache(MDMServerDef serverDef) {
+        String endpointaddress = serverDef.getUrl();
+        String username = serverDef.getUser();
+        String password = serverDef.getPasswd();
+        String universe = serverDef.getUniverse();
+        try {
+            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
+            WSString ret = port.refreshCache(new WSRefreshCache("ALL"));//$NON-NLS-1$
+            return ret.getValue();
+        } catch (RemoteException e) {
+            log.debug(e.getMessage(), e);
+        } catch (MalformedURLException e) {
+            log.error(e.getMessage(), e);
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     /*

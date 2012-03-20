@@ -29,7 +29,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -50,6 +54,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.progress.UIJob;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -78,6 +83,9 @@ public class ServerExplorer extends ViewPart {
 
     static final ImageDescriptor IMG_EVENTMANAGER = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
             MDMServerExplorerPlugin.PLUGIN_ID, "icons/sub_engine.png"); //$NON-NLS-1$
+
+    static final ImageDescriptor IMG_REFRESH = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
+            MDMServerExplorerPlugin.PLUGIN_ID, "icons/refresh.gif"); //$NON-NLS-1$
 
     public static final String ID = "org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"; //$NON-NLS-1$
 
@@ -178,6 +186,7 @@ public class ServerExplorer extends ViewPart {
         menuManager.add(new CheckConnectionAction());
         eventManagerAction = new EventManageAction();
         menuManager.add(eventManagerAction);
+        menuManager.add(new RefreshServerCacheAction());
 
         // Context
         Menu contextMenu = menuManager.createContextMenu(tree);
@@ -214,7 +223,6 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
-
     private MDMServerDefItem getMDMItem(IRepositoryViewObject viewObject) {
         if (viewObject != null) {
             return (MDMServerDefItem) (viewObject.getProperty().getItem());
@@ -248,6 +256,44 @@ public class ServerExplorer extends ViewPart {
                 synchronizeMDMServerView();
             }
         }
+    }
+
+    class RefreshServerCacheAction extends Action {
+
+        public RefreshServerCacheAction() {
+            setImageDescriptor(IMG_REFRESH);
+            setText(Messages.ServerExplorer_RefreshServerCache);
+        }
+
+        @Override
+        public void run() {
+            UIJob refreshServerJob = new UIJob(Messages.ServerExplorer_RefreshServerCache) {
+
+                @Override
+                public IStatus runInUIThread(IProgressMonitor monitor) {
+
+                    IRepositoryViewObject viewObject = getCurSelectedViewObject();
+                    if (viewObject != null) {
+                        MDMServerDefItem mdmItem = getMDMItem(viewObject);
+                        if (mdmItem != null) {
+                            MDMServerDef serverDef = mdmItem.getServerDef();
+                            String returnMsg = null;
+                            if (ServerDefService.checkMDMConnection(serverDef)) {
+                                returnMsg = ServerDefService.refreshServerCache(serverDef);
+                            } else {
+                                returnMsg = Messages.ServerExplorer_ConnectFailed;
+                            }
+                            MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_RefreshServerCache,
+                                    returnMsg);
+                        }
+                    }
+                    return Status.OK_STATUS;
+                }
+            };
+
+            refreshServerJob.run(new NullProgressMonitor());
+        }
+
     }
 
     class CheckConnectionAction extends Action {

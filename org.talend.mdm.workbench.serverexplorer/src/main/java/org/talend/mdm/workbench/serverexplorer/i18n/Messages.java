@@ -75,6 +75,8 @@ public class Messages extends NLS {
 
     public static String ServerExplorer_EditServer;
 
+    public static String ServerExplorer_RefreshServerCache;
+
     public static String ServerExplorer_RemoveConfirm;
 
     public static String ServerExplorer_RemoveServer;
