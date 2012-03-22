@@ -202,16 +202,20 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW,
                 browseItem);
         if (viewObject != null) {
-            boolean ok = MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizardR_warning,
-                    Messages.AddBrowseItemsWizardR_duplicatedView);
-            if (!ok)
-                return;
-            // delete the existed browse view
+            
+            IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObject);
+            if(ref != null) 
+            {
+                boolean ok = MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizardR_warning,
+                        Messages.AddBrowseItemsWizardR_duplicatedView);
+                if (!ok)
+                    return;
+                
+                // delete the existed browse view
+                RepositoryResourceUtil.closeEditor(ref, false);
+            }
+            
             try {
-                IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObject);
-                if (ref != null) {
-                    RepositoryResourceUtil.closeEditor(ref, true);
-                }
                 ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
