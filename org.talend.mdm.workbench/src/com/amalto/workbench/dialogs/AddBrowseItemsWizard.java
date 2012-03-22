@@ -157,20 +157,34 @@ public class AddBrowseItemsWizard extends Wizard {
     protected void newBrowseItemView(String browseItem) throws RemoteException {
         for (XSDElementDeclaration decl : declList) {
             String fullName = BROWSE_ITEMS + decl.getName();
-            if (fullName.equals(browseItem)) {
+            if (fullName.equals(browseItem)) { 
                 
-                if (MessageDialog.openConfirm(this.getShell(), Messages.getString("AddBrowseItemsWizard_Warning"), //$NON-NLS-1$
-                        Messages.getString("AddBrowseItemsWizard_DuplicatedView"))) //$NON-NLS-1$
-                {
-                    TreeObject obj = createNewTreeObject(decl, browseItem);
+                TreeParent serverRoot = page.getXObject().getServerRoot();
+                TreeParent serverFolder = serverRoot.findServerFolder(TreeObject.VIEW);
+                TreeObject obj = serverFolder.findObject(TreeObject.VIEW, browseItem);
+                
+                if(obj != null) {
                     
-                    boolean objModified = refreshEditorContent(obj);
-                    if(objModified)
-                        obj = createNewTreeObject(decl, browseItem);
+                    IEditorInput xobjectEditorinput = new XObjectEditorInput(obj, obj.getDisplayName());
+                    final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                    IEditorPart currentEditor = activePage.findEditor(xobjectEditorinput);
                     
-                    TreeParent folder = obj.findServerFolder(obj.getType());
-                    folder.addChild(obj);
+                    if (currentEditor != null) {// editor is opened
+                        if (MessageDialog.openConfirm(this.getShell(), Messages.getString("AddBrowseItemsWizard_Warning"), //$NON-NLS-1$
+                                Messages.getString("AddBrowseItemsWizard_DuplicatedView"))) //$NON-NLS-1$
+                        {
+                            refreshEditorContent(obj);
+                        } else {
+                            break;
+                        }
+                        
+                    }
                 }
+                
+                
+                obj = createNewTreeObject(decl, browseItem);
+                TreeParent folder = obj.findServerFolder(obj.getType());
+                folder.addChild(obj);
             }
         }
     }
@@ -238,7 +252,7 @@ public class AddBrowseItemsWizard extends Wizard {
         if (currentEditor != null) {
             List<IEditorPart> editors = Arrays.asList(activePage.getDirtyEditors());
             
-            activePage.closeEditor(currentEditor, true);
+            activePage.closeEditor(currentEditor, false);
             
             if(editors.contains(currentEditor))
                 return true;
