@@ -15,6 +15,8 @@ package org.talend.mdm.repository.ui.wizards.process.composite;
 import org.talend.mdm.repository.ui.wizards.process.IProcessTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 
+import com.amalto.workbench.utils.Util;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -39,6 +41,10 @@ public class OtherTypeComposite implements IProcessTypeComposite {
     }
 
     public String getConfigWizardPageId() {
+    	if(Util.IsEnterPrise()){
+    		//template job create page
+    		return "org.talend.mdm.repository.enterprise.ui.wizards.jobtemplate.CreateJobTemplateWizardPage"; //$NON-NLS-1$
+    	}
         return null;
     }
 

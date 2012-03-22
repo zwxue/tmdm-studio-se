@@ -19,6 +19,8 @@ import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMappingE;
 
+import com.amalto.workbench.utils.Util;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -30,9 +32,9 @@ public class ProcessStepFactory {
 
     private static final String VAR_CODEC_TEXT = "codec_text"; //$NON-NLS-1$
 
-    private static final String VAR_OUTPUT_URL = "output_url"; //$NON-NLS-1$
+    public static final String VAR_OUTPUT_URL = "output_url"; //$NON-NLS-1$
 
-    private static final String VAR_OUTPUT_REPORT = "output_report"; //$NON-NLS-1$
+    public static final String VAR_OUTPUT_REPORT = "output_report"; //$NON-NLS-1$
 
     private static final String VAR_ITEM_XML = "item_xml"; //$NON-NLS-1$
 
@@ -42,9 +44,13 @@ public class ProcessStepFactory {
 
     private static final String VAR_TEXT = "text"; //$NON-NLS-1$
 
+    private static final String VAR_RESULT = "result"; //$NON-NLS-1$
+    
     private static final String CODEC_PLUGIN = "amalto/local/transformer/plugin/codec"; //$NON-NLS-1$
 
     private static final String XSLT_PLUGIN = "amalto/local/transformer/plugin/xslt";//$NON-NLS-1$
+    
+    private static final String CALLJOB_PLUGIN = "amalto/local/transformer/plugin/callJob";//$NON-NLS-1$
 
     // step
     public static final int STEP_UPDATE_REPORT = 1;
@@ -55,16 +61,23 @@ public class ProcessStepFactory {
 
     public static final int STEP_RETURN_MESSAGE = 4;
 
-    public static WSTransformerProcessStepE createProcessStep(int type, Object param) {
+    public static WSTransformerProcessStepE createProcessStep(int type, Object param, String processName) {
+    	boolean isEnterprise=Util.IsEnterPrise();
         switch (type) {
         case STEP_UPDATE_REPORT:
             return createUpdateReportStep(param);
         case STEP_ESCAPE:
             return createEscapeStep(param);
         case STEP_REDIRECT:
-            return createRedirectStep(param);
+        	if(isEnterprise)
+        		return createCallJobStep(processName,VAR_OUTPUT_URL, VAR_DECODE_XML); //Runnable
+        	else
+        		return createRedirectStep(param);
         case STEP_RETURN_MESSAGE:
-            return createReturnMessageStep(param);
+        	if(isEnterprise)
+        		return createCallJobStep(processName, VAR_OUTPUT_REPORT, VAR_DEFAULT); //Before
+        	else
+        		return createReturnMessageStep(param);
         }
         return null;
     }
@@ -184,5 +197,35 @@ public class ProcessStepFactory {
         step.setDisabled(false);
         return step;
     }
+    
+    private static WSTransformerProcessStepE createCallJobStep(String jobName, String outputPipelineVariable, String pipleName){
+    	
+    	String parameters="<configuration><url>ltj://"+jobName+"/0.1</url>"+//$NON-NLS-1$ //$NON-NLS-2$
+    						"<contextParam><name>xmlInput</name><value>{"+pipleName+"}</value></contextParam></configuration>"; //$NON-NLS-1$ //$NON-NLS-2$
 
+        List<WSTransformerVariablesMappingE> inItems;
+        List<WSTransformerVariablesMappingE> outItems;
+        WSTransformerProcessStepE step = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
+        inItems = new ArrayList<WSTransformerVariablesMappingE>();
+        WSTransformerVariablesMappingE inputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
+        inputLine.setPipelineVariable(pipleName);
+        inputLine.setPluginVariable(VAR_TEXT);
+        inItems.add(inputLine);
+
+        outItems = new ArrayList<WSTransformerVariablesMappingE>();
+        WSTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
+        outputLine.setPipelineVariable(outputPipelineVariable);
+        outputLine.setPluginVariable(VAR_RESULT);
+        outItems.add(outputLine);
+        step.setPluginJNDI(CALLJOB_PLUGIN);
+        step.setDescription("Call Job"); //$NON-NLS-1$
+        step.setParameters(parameters);
+        step.getInputMappings().addAll(inItems);
+        step.getOutputMappings().addAll(outItems);
+        step.setDisabled(false);
+        
+        return step;
+    }
+
+ 
 }

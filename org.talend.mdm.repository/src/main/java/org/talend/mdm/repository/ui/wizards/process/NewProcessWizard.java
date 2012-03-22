@@ -17,11 +17,13 @@ import java.util.List;
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE;
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
+import org.talend.mdm.repository.utils.JobTemplateUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -57,6 +59,7 @@ public class NewProcessWizard extends Wizard {
 
     private WSTransformerV2E transformer;
 
+    List<IMDMJobTemplate> jobTemplates;
     public WSTransformerV2E getNewProcess() {
         return this.transformer;
     }
@@ -77,6 +80,14 @@ public class NewProcessWizard extends Wizard {
         addPage(inputProcessNamePage);
         addPage(configRedirectURLPage);
         addPage(configReturnMessagePage);
+        
+        //add job template generate page
+        jobTemplates=JobTemplateUtil.getJobTemplateGenPages();
+        for(IMDMJobTemplate jobPage:jobTemplates){
+        	if(jobPage instanceof WizardPage){
+        		addPage((WizardPage)jobPage);
+        	}
+        }
     }
 
     @Override
@@ -85,10 +96,14 @@ public class NewProcessWizard extends Wizard {
         int processType = inputProcessNamePage.getProcessType();
         transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
         transformer.setName(processName);
-        transformer.setDescription(""); //$NON-NLS-1$
+        String desc=processName + " template process";
+        transformer.setDescription(desc); 
         List<WSTransformerProcessStepE> steps = new ArrayList<WSTransformerProcessStepE>();
         createProcessStep(steps, processType);
         transformer.getProcessSteps().addAll(steps);
+        
+        //generate job template
+        generateJobTemplate();
         return true;
     }
 
@@ -108,45 +123,68 @@ public class NewProcessWizard extends Wizard {
      * @param processType
      */
     private void createProcessStep(List<WSTransformerProcessStepE> steps, int processType) {
+    	String processName=inputProcessNamePage.getProcessName();
         switch (processType) {
         case BEFORE_DELETING:
         case BEFORE_SAVING:
             String[] messageParams = configReturnMessagePage.getMessageParams();
             WSTransformerProcessStepE messageStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_RETURN_MESSAGE,
-                    messageParams);
+                    messageParams, processName);
             steps.add(messageStep);
             break;
         case RUNNABLE_RUNNABLE:
         case RUNNABLE_STANDALONE:
             WSTransformerProcessStepE updateStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
-                    null);
-            WSTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null);
+                    null, processName);
+            WSTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName);
             steps.add(updateStep);
             steps.add(escapeStep);
             boolean enableRedirect = configRedirectURLPage.isEnableRedirect();
             if (enableRedirect) {
                 String url = configRedirectURLPage.getUrl();
+                //job name can't contains #,$ etc
+                processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
                 WSTransformerProcessStepE redirectStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT,
-                        url);
+                        url, processName);
                 steps.add(redirectStep);
             }
             break;
         case OTHER_TYPE:
             WSTransformerProcessStepE updateStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
-                    null);
-            WSTransformerProcessStepE escapeStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null);
+                    null, processName);
+            WSTransformerProcessStepE escapeStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName);
             steps.add(updateStep2);
             steps.add(escapeStep2);
             break;
         default:
             break;
         }
-
     }
-
-
 
     public String getInputName() {
         return selectProcessTypePage.getInputName();
+    }
+    
+    public void generateJobTemplate(){
+    	
+		String[] messages=configReturnMessagePage.getMessageParams();		
+		int type= inputProcessNamePage.getProcessType();
+		String infoType=null;
+		String pMessage=null;
+		if(type==BEFORE_DELETING|| type==BEFORE_SAVING){
+			infoType=messages[0];
+			pMessage=messages[1];
+		}
+		if(type==RUNNABLE_RUNNABLE|| type==RUNNABLE_STANDALONE){
+			if(configRedirectURLPage.isEnableRedirect()){
+				pMessage="<results><item><attr>" +configRedirectURLPage.getUrl()+ //$NON-NLS-1$
+						 "</attr></item></results>";             //$NON-NLS-1$
+			}else{
+				pMessage=""; //$NON-NLS-1$
+			}
+		}		
+        for(IMDMJobTemplate job:jobTemplates){
+        	job.generateJobTemplate(type,inputProcessNamePage.getProcessName(), infoType, pMessage);
+        }
     }
 }

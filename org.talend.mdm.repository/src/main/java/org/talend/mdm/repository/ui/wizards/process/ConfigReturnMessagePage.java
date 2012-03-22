@@ -75,7 +75,8 @@ public class ConfigReturnMessagePage extends WizardPage {
 
         typeCombo = new Combo(container, SWT.READ_ONLY);
 
-        typeCombo.setItems(new String[] { "info", "warning", "error" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        typeCombo.setItems(new String[] { "error",
+        		"info" }); //$NON-NLS-1$ //$NON-NLS-2$ 
         typeCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
         typeCombo.select(0);
         typeCombo.addModifyListener(new ModifyListener() {

@@ -61,4 +61,5 @@ Export-Package: org.talend.mdm.repository.core,
  org.talend.mdm.repository.ui.editors,
  org.talend.mdm.repository.ui.navigator,
  org.talend.mdm.repository.ui.widgets,
+ org.talend.mdm.repository.ui.wizards.process,
  org.talend.mdm.repository.utils
