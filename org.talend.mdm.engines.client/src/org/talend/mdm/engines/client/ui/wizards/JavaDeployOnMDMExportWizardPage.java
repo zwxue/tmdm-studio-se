@@ -147,6 +147,9 @@ public class JavaDeployOnMDMExportWizardPage extends DeployOnMDMExportWizardPage
                 e.printStackTrace();
             }
             List<String> contextNames = manager.getJobContextsComboValue((ProcessItem) process[0].getItem());
+            if(contextNames.size()==0){
+            	contextNames.add("Default"); //$NON-NLS-1$
+            }
             contextCombo.setItems(contextNames.toArray(new String[contextNames.size()]));
             if (contextNames.size() > 0) {
                 contextCombo.select(0);
