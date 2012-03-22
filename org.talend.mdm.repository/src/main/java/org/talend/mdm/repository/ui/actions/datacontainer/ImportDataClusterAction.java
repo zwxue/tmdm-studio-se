@@ -86,7 +86,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
             //
             SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
             if (dialog.open() == IDialogConstants.OK_ID) {
-                MDMServerDef serverDef = dialog.getSelectedServerDef();
+                MDMServerDef serverDef = dialog.getSelectedServerDef().getDecryptedServerDef();
                 try {
 
                     XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
