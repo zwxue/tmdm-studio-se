@@ -139,15 +139,14 @@ public class NewProcessWizard extends Wizard {
             WSTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName);
             steps.add(updateStep);
             steps.add(escapeStep);
-            boolean enableRedirect = configRedirectURLPage.isEnableRedirect();
-            if (enableRedirect) {
-                String url = configRedirectURLPage.getUrl();
-                //job name can't contains #,$ etc
-                processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
-                WSTransformerProcessStepE redirectStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT,
-                        url, processName);
-                steps.add(redirectStep);
-            }
+                        
+            String url = configRedirectURLPage.getUrl();
+            //job name can't contains #,$ etc
+            processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
+            WSTransformerProcessStepE callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT,
+                    url, processName);
+            steps.add(callJobStep);
+            
             break;
         case OTHER_TYPE:
             WSTransformerProcessStepE updateStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
@@ -155,6 +154,13 @@ public class NewProcessWizard extends Wizard {
             WSTransformerProcessStepE escapeStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName);
             steps.add(updateStep2);
             steps.add(escapeStep2);
+            
+            //job name can't contains #,$ etc
+            processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
+            callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT,
+                    null, processName);
+            steps.add(callJobStep);
+            
             break;
         default:
             break;

@@ -134,7 +134,6 @@ public class InputProcessNamePage extends WizardPage {
             public void modifyText(ModifyEvent e) {
                 updateProcessNameLabel();
                 getWizard().getContainer().updateButtons();
-
             }
         });
 

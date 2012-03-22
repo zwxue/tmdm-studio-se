@@ -33,6 +33,8 @@ public class ProcessStepFactory {
     private static final String VAR_CODEC_TEXT = "codec_text"; //$NON-NLS-1$
 
     public static final String VAR_OUTPUT_URL = "output_url"; //$NON-NLS-1$
+    
+    public static final String VAR_OUTPUT = "output"; //$NON-NLS-1$
 
     public static final String VAR_OUTPUT_REPORT = "output_report"; //$NON-NLS-1$
 
@@ -69,8 +71,12 @@ public class ProcessStepFactory {
         case STEP_ESCAPE:
             return createEscapeStep(param);
         case STEP_REDIRECT:
-        	if(isEnterprise)
-        		return createCallJobStep(processName,VAR_OUTPUT_URL, VAR_DECODE_XML); //Runnable
+        	if(isEnterprise){
+        	    if(param==null ||param.toString().length()==0)        	        
+        	        return createCallJobStep(processName,VAR_OUTPUT, VAR_DECODE_XML); //Runnable
+        	    else
+        	        return createCallJobStep(processName,VAR_OUTPUT_URL, VAR_DECODE_XML); //Runnable
+        	}
         	else
         		return createRedirectStep(param);
         case STEP_RETURN_MESSAGE:
