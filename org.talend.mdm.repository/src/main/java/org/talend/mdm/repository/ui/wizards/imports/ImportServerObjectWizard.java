@@ -156,7 +156,9 @@ public class ImportServerObjectWizard extends Wizard {
             return false;
         }
         try {
-            doImport();
+            if (selectedObjects != null) {
+                doImport();
+            }
         } catch (InvocationTargetException e) {
             log.error(e);
             return false;
