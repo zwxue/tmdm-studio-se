@@ -408,7 +408,7 @@ public class PasteXObjectAction extends Action {
                                 xobject.getUsername(), xobject.getPassword());
                         WSRole originalRole = originalPort.getRole(new WSGetRole(key));
                         WSRole newRole = new WSRole(newKey.getPk(), originalRole.getDescription(),
-                                originalRole.getSpecification(),null);
+                                originalRole.getSpecification());
                         // write the new model
                         destPort.putRole(new WSPutRole(newRole));
                         TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()

@@ -32,7 +32,6 @@
     </genClasses>
     <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleE">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//WSRoleE/specification"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleE/recordssecurity"/>
     </genClasses>
     <genClasses ecoreClass="MDMServerObject.ecore#//WSRoleSpecificationE">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSRoleSpecificationE/admin"/>

@@ -17,7 +17,6 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleE#getSpecification <em>Specification</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSRoleE#getRecordssecurity <em>Recordssecurity</em>}</li>
  * </ul>
  * </p>
  *
@@ -27,35 +26,19 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface WSRoleE extends MDMServerObject {
     /**
-	 * Returns the value of the '<em><b>Specification</b></em>' containment reference list.
-	 * The list contents are of type {@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE}.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Specification</b></em>' containment reference list.
+     * The list contents are of type {@link org.talend.mdm.repository.model.mdmserverobject.WSRoleSpecificationE}.
+     * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Specification</em>' reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-	 * @return the value of the '<em>Specification</em>' containment reference list.
-	 * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSRoleE_Specification()
-	 * @model containment="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Specification</em>' containment reference list.
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSRoleE_Specification()
+     * @model containment="true"
+     * @generated
+     */
     EList<WSRoleSpecificationE> getSpecification();
-
-				/**
-	 * Returns the value of the '<em><b>Recordssecurity</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Recordssecurity</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Recordssecurity</em>' attribute list.
-	 * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSRoleE_Recordssecurity()
-	 * @model
-	 * @generated
-	 */
-	EList<String> getRecordssecurity();
 
 } // WSRoleE
