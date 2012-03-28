@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -53,6 +54,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.exolab.castor.xml.Marshaller;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.ResourcesUtil;
@@ -137,9 +139,19 @@ public class ExportItemsWizard extends Wizard {
             }
             exportFolder = tempFile.getAbsolutePath();
             zipfile = zip.getText().getText();
+            if(zipfile!=null && new File(zipfile).exists()){
+                if(!MessageDialog.openConfirm(null,"Warning", Messages.getString("ExportItemsWizard.overridefile", zipfile))){//$NON-NLS-1$//$NON-NLS-2$
+                    return false;
+                }
+            }
         }
         if (folderBtn.getSelection()) {
             exportFolder = folder.getText().getText();
+            if(exportFolder!=null && new File(exportFolder).list().length>0){
+                if(!MessageDialog.openConfirm(null,"Warning", Messages.getString("ExportItemsWizard.overridefolder", exportFolder))){//$NON-NLS-1$//$NON-NLS-2$
+                    return false;
+                }
+            }
         }
 
         final Object[] objs = getCheckedObjects();
@@ -154,7 +166,7 @@ public class ExportItemsWizard extends Wizard {
                     log.error(e.getMessage(), e);
                     return Status.CANCEL_STATUS;
                 } finally {
-                    if (zipfile != null && new File(exportFolder).exists()) {
+                    if (zipfile != null && zipfile.length()>0 && new File(exportFolder).exists()) {
                         try {
                             ZipToFile.zipFile(exportFolder, zipfile);
                         } catch (Exception e) {
