@@ -75,4 +75,7 @@ public class BeforeProcessTypeComposite extends AbstractProcessTypeComposite {
         return ConfigReturnMessagePage.PAGE_ID;
     }
 
+    public String getDesc() {
+        return null;
+    }
 }

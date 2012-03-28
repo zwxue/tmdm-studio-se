@@ -27,5 +27,11 @@ public interface IMDMJobTemplate {
 	 */
 	public void generateJobTemplate(int processType, String processName,String infoType, String processMessage);
 	
-	
+
+	/**
+	 * 
+	 * create job or not
+	 * @return
+	 */
+	public boolean createJob();
 }

@@ -41,11 +41,14 @@ public class OtherTypeComposite implements IProcessTypeComposite {
     }
 
     public String getConfigWizardPageId() {
-    	if(Util.IsEnterPrise()){
-    		//template job create page
-    		return "org.talend.mdm.repository.enterprise.ui.wizards.jobtemplate.CreateJobTemplateWizardPage"; //$NON-NLS-1$
-    	}
+        if (Util.IsEnterPrise()) {
+            // template job create page
+            return "org.talend.mdm.repository.enterprise.ui.wizards.jobtemplate.CreateJobTemplateWizardPage"; //$NON-NLS-1$
+        }
         return null;
     }
 
+    public String getDesc() {
+        return null;
+    }
 }

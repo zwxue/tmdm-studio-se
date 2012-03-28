@@ -84,6 +84,7 @@ public class ConfigRedirectURLPage extends WizardPage {
         lblNewLabel.setText(Messages.ConfigRedirectURLPage_url);
 
         urlText = new Text(container, SWT.BORDER);
+        urlText.setText("http://www.talend.com"); //$NON-NLS-1$
         urlText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
@@ -128,7 +129,7 @@ public class ConfigRedirectURLPage extends WizardPage {
 
     @Override
     public IWizardPage getNextPage() {
-        return null;
+        //get jobtemplate page
+        return getWizard().getPage("org.talend.mdm.repository.enterprise.ui.wizards.jobtemplate.CreateJobTemplateWizardPage");//$NON-NLS-1$
     }
-
 }

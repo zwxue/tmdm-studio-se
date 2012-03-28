@@ -51,11 +51,16 @@ public class InputProcessNamePage extends WizardPage {
 
     private String processName;
 
+    private String processDesc;
+
     public String getProcessName() {
         return this.processName;
     }
 
-    
+    public String getProcessDesc() {
+        return this.processDesc;
+    }
+
     public int getProcessType() {
         return this.processType;
     }
@@ -95,8 +100,6 @@ public class InputProcessNamePage extends WizardPage {
     private Button selectEntityBun;
 
     private Label inputLabel;
-
-
 
     private Composite typeComposite;
 
@@ -142,7 +145,8 @@ public class InputProcessNamePage extends WizardPage {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                XpathSelectDialog2 dlg = new XpathSelectDialog2(getShell(), Messages.InputProcessNamePage_selectEntity, site, false, null);
+                XpathSelectDialog2 dlg = new XpathSelectDialog2(getShell(), Messages.InputProcessNamePage_selectEntity, site,
+                        false, null);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
 
@@ -234,6 +238,7 @@ public class InputProcessNamePage extends WizardPage {
             setErrorMessage(null);
             processName = name;
             processType = curProcessTypeComposite.getCurrentProcessType();
+            processDesc = curProcessTypeComposite.getDesc();
             result = true;
         }
         return result;

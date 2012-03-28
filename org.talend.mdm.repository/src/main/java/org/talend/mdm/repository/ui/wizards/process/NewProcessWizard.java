@@ -94,10 +94,14 @@ public class NewProcessWizard extends Wizard {
     public boolean performFinish() {
         String processName = inputProcessNamePage.getProcessName();
         int processType = inputProcessNamePage.getProcessType();
+        String processdesc=inputProcessNamePage.getProcessDesc();
         transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
         transformer.setName(processName);
-        String desc=processName + " template process";
-        transformer.setDescription(desc); 
+        if(processdesc==null|| processdesc.length()==0){
+            processdesc=processName + " template process";
+        }
+        transformer.setDescription(processdesc); 
+       
         List<WSTransformerProcessStepE> steps = new ArrayList<WSTransformerProcessStepE>();
         createProcessStep(steps, processType);
         transformer.getProcessSteps().addAll(steps);
@@ -124,19 +128,24 @@ public class NewProcessWizard extends Wizard {
      */
     private void createProcessStep(List<WSTransformerProcessStepE> steps, int processType) {
     	String processName=inputProcessNamePage.getProcessName();
+    	boolean createJob=false;    	
+    	if(jobTemplates !=null && jobTemplates.size()>0){
+    	    IMDMJobTemplate jobtemplate= jobTemplates.get(0);
+    	    createJob=jobtemplate.createJob();
+    	}
         switch (processType) {
         case BEFORE_DELETING:
         case BEFORE_SAVING:
             String[] messageParams = configReturnMessagePage.getMessageParams();
             WSTransformerProcessStepE messageStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_RETURN_MESSAGE,
-                    messageParams, processName);
+                    messageParams, processName, createJob);
             steps.add(messageStep);
             break;
         case RUNNABLE_RUNNABLE:
         case RUNNABLE_STANDALONE:
             WSTransformerProcessStepE updateStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
-                    null, processName);
-            WSTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName);
+                    null, processName, createJob);
+            WSTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName, createJob);
             steps.add(updateStep);
             steps.add(escapeStep);
                         
@@ -144,21 +153,21 @@ public class NewProcessWizard extends Wizard {
             //job name can't contains #,$ etc
             processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
             WSTransformerProcessStepE callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT,
-                    url, processName);
+                    url, processName, createJob);
             steps.add(callJobStep);
             
             break;
         case OTHER_TYPE:
             WSTransformerProcessStepE updateStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
-                    null, processName);
-            WSTransformerProcessStepE escapeStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName);
+                    null, processName, createJob);
+            WSTransformerProcessStepE escapeStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName, createJob);
             steps.add(updateStep2);
             steps.add(escapeStep2);
             
             //job name can't contains #,$ etc
             processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
             callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT,
-                    null, processName);
+                    null, processName, createJob);
             steps.add(callJobStep);
             
             break;

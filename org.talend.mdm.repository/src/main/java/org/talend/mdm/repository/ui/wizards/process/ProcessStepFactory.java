@@ -63,7 +63,7 @@ public class ProcessStepFactory {
 
     public static final int STEP_RETURN_MESSAGE = 4;
 
-    public static WSTransformerProcessStepE createProcessStep(int type, Object param, String processName) {
+    public static WSTransformerProcessStepE createProcessStep(int type, Object param, String processName, boolean createJob) {
     	boolean isEnterprise=Util.IsEnterPrise();
         switch (type) {
         case STEP_UPDATE_REPORT:
@@ -71,7 +71,7 @@ public class ProcessStepFactory {
         case STEP_ESCAPE:
             return createEscapeStep(param);
         case STEP_REDIRECT:
-        	if(isEnterprise){
+        	if(isEnterprise && createJob){
         	    if(param==null ||param.toString().length()==0)        	        
         	        return createCallJobStep(processName,VAR_OUTPUT, VAR_DECODE_XML); //Runnable
         	    else
@@ -80,7 +80,7 @@ public class ProcessStepFactory {
         	else
         		return createRedirectStep(param);
         case STEP_RETURN_MESSAGE:
-        	if(isEnterprise)
+        	if(isEnterprise && createJob)
         		return createCallJobStep(processName, VAR_OUTPUT_REPORT, VAR_DEFAULT); //Before
         	else
         		return createReturnMessageStep(param);

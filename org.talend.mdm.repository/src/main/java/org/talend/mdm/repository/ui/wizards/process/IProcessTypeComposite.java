@@ -24,4 +24,6 @@ public interface IProcessTypeComposite {
     public String getProcessPrefix();
 
     public String getConfigWizardPageId();
+
+    public String getDesc();
 }
