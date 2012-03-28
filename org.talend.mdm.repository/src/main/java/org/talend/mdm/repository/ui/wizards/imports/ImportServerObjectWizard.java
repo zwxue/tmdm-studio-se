@@ -126,6 +126,7 @@ public class ImportServerObjectWizard extends Wizard {
     private MDMServerDef decryptedServerDef;
 
     private MDMServerDef serverDef;
+
     private LabelCombo comboVersion;
 
     private Text txtServer;
@@ -257,61 +258,57 @@ public class ImportServerObjectWizard extends Wizard {
         HttpGet httpget = new HttpGet(workflowURL);
         // System.out.println("executing request" + httpget.getRequestLine());
         HttpResponse response = httpclient.execute(httpget);
-        HttpEntity entity = response.getEntity();
+        if (response.getStatusLine().getStatusCode() == 200) {
+            HttpEntity entity = response.getEntity();
 
-        String encodedID = URLEncoder.encode(treeObj.getDisplayName(), "UTF-8");//$NON-NLS-1$
-        File tempFolder = IOUtil.getTempFolder();
-        String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
-        InputStream is = entity.getContent();
-        OutputStream os = null;
-        try {
+            String encodedID = URLEncoder.encode(treeObj.getDisplayName(), "UTF-8");//$NON-NLS-1$
+            File tempFolder = IOUtil.getTempFolder();
+            String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
+            InputStream is = entity.getContent();
+            OutputStream os = null;
             File barFile = new File(filename);
-            os = new FileOutputStream(barFile);
-            IOUtils.copy(is, os);
-            byte[] procBytes = extractBar(barFile);
-            if (procBytes != null) {
-                WSWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWSWorkflowE();
-                workflow.setName(wsKey.getProcessName());
-                workflow.setFileContent(procBytes);
-                return workflow;
+            try {
+
+                os = new FileOutputStream(barFile);
+                int copy = IOUtils.copy(is, os);
+
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                return null;
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (Exception e) {
+                    }
+                }
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (Exception e) {
+                    }
+                }
+
             }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            if (is != null) {
+            if (barFile.exists()) {
                 try {
-                    is.close();
-                } catch (Exception e) {
+                    byte[] procBytes = extractBar(barFile);
+                    if (procBytes != null) {
+                        WSWorkflowE workflow = MdmserverobjectFactory.eINSTANCE.createWSWorkflowE();
+                        workflow.setName(wsKey.getProcessName());
+                        workflow.setFileContent(procBytes);
+                        return workflow;
+                    }
+                } finally {
+                    IOUtil.cleanFolder(tempFolder);
                 }
             }
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (Exception e) {
-                }
-            }
-            IOUtil.cleanFolder(tempFolder);
+
         }
         return null;
     }
 
     private byte[] extractBar(File barFile) {
-        // BusinessArchive archive = BusinessArchiveFactory.getBusinessArchive(barFile);
-        //
-        // ProcessDefinitionUUID uuid = archive.getProcessUUID();
-        //
-        // String procFileName = RepositoryWorkflowUtil.getProcFileName(uuid.getProcessName(),
-        // uuid.getProcessVersion());
-        // IFolder folder = RepositoryResourceUtil.getFolder(IServerObjectRepositoryType.TYPE_WORKFLOW);
-        // IFile procFile = folder.getFile(procFileName);
-        // Set<String> barResources = archive.getResources().keySet();
-        // byte[] bytes = new byte[0];
-        // for (String barResource : barResources) {
-        //            if (barResource.endsWith(".proc")) { //$NON-NLS-1$
-        // bytes = archive.getResources().get(barResource);
-        // break;
-        // }
-        // }
         ZipFile zipFile = null;
         InputStream entryInputStream = null;
         byte[] processBytes = null;
@@ -391,7 +388,7 @@ public class ImportServerObjectWizard extends Wizard {
                 String uniqueName = getUniqueName(treeObj, treeObjName);
                 IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(type, uniqueName);
                 if (viewObject != null)
-                viewObjs.add(viewObject);
+                    viewObjs.add(viewObject);
             }
         }
         LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.ImportServerObjectWizard_lockedObjectMessage,
@@ -732,7 +729,6 @@ public class ImportServerObjectWizard extends Wizard {
             txtServer.setEnabled(false);
 
             btnSel.addSelectionListener(new SelectionAdapter() {
-
 
                 /*
                  * (non-Javadoc)
