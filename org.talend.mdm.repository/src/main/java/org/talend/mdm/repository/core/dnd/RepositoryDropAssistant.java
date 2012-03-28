@@ -12,13 +12,20 @@
 // ============================================================================
 package org.talend.mdm.repository.core.dnd;
 
+import java.io.ByteArrayInputStream;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,6 +47,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
+import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -107,7 +115,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         // can't move/copy to different node folder
         ERepositoryObjectType dropType = dropViewObj.getRepositoryObjectType();
 
-        if (dragType!=null && !dragType.equals(dropType))
+        if (dragType != null && !dragType.equals(dropType))
             return false;
         return true;
     }
@@ -196,33 +204,56 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
             if (newName != null) {
                 String pathStr = dropProp.getItem().getState().getPath();
                 IPath path = new Path(pathStr);
-                IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-                Item copy = null;
-                try {
-                    copy = factory.copy(item, path, true);
-                    if (factory.isEditableAndLockIfPossible(copy)) {
-                        if (copy instanceof MDMServerObjectItem) {
-                            ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
-                            ((MDMServerObjectItem) copy).getMDMServerObject().setLastServerDef(null);
-                            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, copy.getProperty().getId(), newName);
+                ERepositoryObjectType type = dropViewObj.getRepositoryObjectType();
+                if (type == IServerObjectRepositoryType.TYPE_WORKFLOW) {
+                    EList refFiles = item.getReferenceResources();
+                    if (!refFiles.isEmpty()) {
+                        ReferenceFileItem refFileItem = (ReferenceFileItem) refFiles.get(0);
+                        byte[] content = refFileItem.getContent().getInnerContent();
+                        IFolder folder = RepositoryResourceUtil.getFolder(type);
+                        String fileName = refFileItem.getName().replace(name, newName);
+                        IFile file = folder.getFile(fileName);
+                        try {
+                            if (!file.exists())
+                                file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
+                            else
+                                file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
+                            file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
+                            return true;
+                        } catch (CoreException e) {
+                            log.error(e.getMessage(), e);
                         }
-                        copy.getProperty().setLabel(newName);
-                        RepositoryResourceUtil.setLastServerDef(copy, null);
-                        factory.save(copy);
-                        return true;
                     }
-                } catch (PersistenceException e) {
-                    log.error(e.getMessage(), e);
-                } catch (BusinessException e) {
-                    log.error(e.getMessage(), e);
-                } finally {
 
+                } else {
+                    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+                    Item copy = null;
                     try {
-                        factory.unlock(copy);
+                        copy = factory.copy(item, path, true);
+                        if (factory.isEditableAndLockIfPossible(copy)) {
+                            if (copy instanceof MDMServerObjectItem) {
+                                ((MDMServerObjectItem) copy).getMDMServerObject().setName(newName);
+                                ((MDMServerObjectItem) copy).getMDMServerObject().setLastServerDef(null);
+                                CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, copy.getProperty().getId(), newName);
+                            }
+                            copy.getProperty().setLabel(newName);
+                            RepositoryResourceUtil.setLastServerDef(copy, null);
+                            factory.save(copy);
+                            return true;
+                        }
                     } catch (PersistenceException e) {
                         log.error(e.getMessage(), e);
-                    } catch (LoginException e) {
+                    } catch (BusinessException e) {
                         log.error(e.getMessage(), e);
+                    } finally {
+
+                        try {
+                            factory.unlock(copy);
+                        } catch (PersistenceException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (LoginException e) {
+                            log.error(e.getMessage(), e);
+                        }
                     }
                 }
             }
@@ -273,9 +304,9 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         Item item = viewObj.getProperty().getItem();
                         if (item instanceof ContainerItem) {
                             ERepositoryObjectType repObjType = ((ContainerItem) item).getRepObjType();
-                            if(repObjType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2){
-                                 ContainerCacheService.refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_EVENTMANAGER,
-                                 ((CommonNavigator) viewPart).getCommonViewer());
+                            if (repObjType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
+                                ContainerCacheService.refreshRepositoryRoot(IServerObjectRepositoryType.TYPE_EVENTMANAGER,
+                                        ((CommonNavigator) viewPart).getCommonViewer());
                             }
                         }
                     } catch (Exception e) {
@@ -287,8 +318,6 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         });
 
     }
-
-
 
     public IRepositoryViewObject getParentRepositoryViewObject(IRepositoryViewObject dropViewObj) {
         Item dropItem = dropViewObj.getProperty().getItem();
