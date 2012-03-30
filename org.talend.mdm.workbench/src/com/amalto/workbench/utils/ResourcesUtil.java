@@ -118,7 +118,7 @@ public class ResourcesUtil {
         return null;
     }
 
-    public static String getXMLString(String uri, TreeObject treeObject) {
+    private static String getXMLString(String uri, TreeObject treeObject) {
         DefaultHttpClient httpclient = new DefaultHttpClient();
 
         httpclient.getCredentialsProvider().setCredentials(
@@ -256,7 +256,7 @@ public class ResourcesUtil {
         httpclient.getConnectionManager().shutdown();
     }
 
-    public static Document parsXMLString(String responseBody) {
+    private static Document parsXMLString(String responseBody) {
         SAXReader saxReader = new SAXReader();
         Document document = null;
         try {
