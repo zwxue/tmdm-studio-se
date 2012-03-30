@@ -118,7 +118,7 @@ public class ResourcesUtil {
         return null;
     }
 
-    private static String getXMLString(String uri, TreeObject treeObject) {
+    public static String getXMLString(String uri, TreeObject treeObject) {
         DefaultHttpClient httpclient = new DefaultHttpClient();
 
         httpclient.getCredentialsProvider().setCredentials(
@@ -173,6 +173,7 @@ public class ResourcesUtil {
         for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {//$NON-NLS-1$
             Element element = (Element) iterator.next();
             Element nameElement = element.element("name");//$NON-NLS-1$
+            
             if (nameElement != null) {
                 nameList.add(nameElement.getStringValue());
             } else {
@@ -255,7 +256,7 @@ public class ResourcesUtil {
         httpclient.getConnectionManager().shutdown();
     }
 
-    private static Document parsXMLString(String responseBody) {
+    public static Document parsXMLString(String responseBody) {
         SAXReader saxReader = new SAXReader();
         Document document = null;
         try {

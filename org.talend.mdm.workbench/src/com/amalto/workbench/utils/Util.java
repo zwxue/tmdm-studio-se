@@ -828,6 +828,10 @@ public class Util {
             File file = new File(localFilename);
             if (!"".equalsIgnoreCase(localFilename))
                 mppost.addParameter("imageFile", file);//$NON-NLS-1$
+            
+            String fileName = localFilename.substring(localFilename.lastIndexOf("\\")+1);
+            mppost.addParameter("changeFileName", "false");
+            mppost.addParameter("fileName", fileName.substring(0, fileName.lastIndexOf(".")));
 
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {
