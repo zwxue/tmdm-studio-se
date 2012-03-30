@@ -55,7 +55,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
         IFile referenceFile = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, fileExtension);
         String path = referenceFile.getLocation().toOSString();
         try {
-            String fileName = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", path//$NON-NLS-1$
+            String fileName = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", path//$NON-NLS-1$
                     , serverDef.getUser(), serverDef.getPasswd(), null);
             return true;
         } catch (XtentisException e) {

@@ -41,6 +41,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.actions.CopyUrlAction;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.DeployToAction;
@@ -102,6 +103,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     private IStructuredSelection selection;
 
+    private AbstractRepositoryAction copyUrlAction;
+
     public void initCommonViewer(CommonViewer commonViewer) {
         importObjectAction = initRepositoryAction(new ImportObjectAction(), commonViewer);
 
@@ -120,6 +123,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         //
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
+        copyUrlAction = initRepositoryAction(new CopyUrlAction(), commonViewer); 
 
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
         // action provider
@@ -169,6 +173,12 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
+                
+                //temporarily added constraint
+                if (viewObj.getRepositoryObjectType() != null
+                        && IServerObjectRepositoryType.TYPE_RESOURCE.equals(viewObj.getRepositoryObjectType())){
+                    actions.add(copyUrlAction);
+                }
             } else if (item instanceof WorkspaceRootItem) { // fix bug TMDM-3168
                 actions.add(importObjectAction);
             }
