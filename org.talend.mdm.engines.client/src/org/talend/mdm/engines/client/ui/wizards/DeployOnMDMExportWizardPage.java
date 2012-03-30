@@ -70,7 +70,6 @@ import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManag
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager.ExportChoice;
 
 import com.amalto.workbench.utils.MDMServerDef;
-import com.amalto.workbench.utils.PasswordUtil;
 
 /**
  * Page of the Job Scripts Export Wizard. <br/>
@@ -450,10 +449,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 }
             }
         } else {
-            String mdmServerPassword = getPassword();
-           
             server = new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(),
-                    MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServerPassword, ""); //$NON-NLS-1$
+                    MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), ""); //$NON-NLS-1$
         }
 
         String user = server.getUser();
@@ -484,13 +481,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return ok;
     }
 
-    private String getPassword() {
-        String decryptPassword = PasswordUtil.decryptPassword(mdmServer.getPassword());
-        if (decryptPassword == null || "".equals(decryptPassword.trim()))
-            decryptPassword = mdmServer.getPassword();
-
-        return decryptPassword;
-    }
 
     /**
      * 
