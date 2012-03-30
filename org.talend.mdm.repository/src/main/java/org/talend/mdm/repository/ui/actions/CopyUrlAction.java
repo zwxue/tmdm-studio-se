@@ -9,11 +9,14 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -56,6 +59,7 @@ public class CopyUrlAction extends AbstractRepositoryAction {
             String fileName = viewObject.getLabel();
             String version = viewObject.getVersion();
             
+            
             String repositoryName = fileName+"_"+version+"."+fileExtension; 
             
             //MDMServerDef thing
@@ -65,45 +69,12 @@ public class CopyUrlAction extends AbstractRepositoryAction {
             
             serverDef = serverDef.getDecryptedServerDef();
             
-            
-            // server root
-            String universe = serverDef.getUniverse();
-            String wsObject = ("".equals(universe) ? "" : universe + "/") + serverDef.getUser() + ":" + serverDef.getPasswd();            
-            TreeParent serverRoot = new TreeParent(serverDef.getName(), null, TreeObject._SERVER_, serverDef.getUrl(), wsObject);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-
-            UserInfo user = new UserInfo();
-            user.setUsername(serverDef.getUser());
-            user.setPassword(serverDef.getPasswd());
-            user.setServerUrl(serverDef.getUrl());
-            user.setUniverse(serverDef.getUniverse());
-            serverRoot.setUser(user);
-            
             //all picture url string
             String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort();
 
-            TreeParent picturesResources = new TreeParent(EXtentisObjects.PICTURESRESOURCE.getDisplayName(), serverRoot,
-                    TreeObject.PICTURES_RESOURCE, null, null);
-            String responseBody = ResourcesUtil.getXMLString(uripre + TreeObject.PICTURES_URI, picturesResources);
-            Document document = ResourcesUtil.parsXMLString(responseBody);
-
-            String urlLast = "";
-            for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {//$NON-NLS-1$
-                Element element = (Element) iterator.next();
-                Element uriElement = element.element(picEntry);
-
-                String urlString = "";
-                if (uriElement != null) {
-                    urlString = uriElement.getStringValue();
-                    int lastIndex = urlString.lastIndexOf("=");
-                    urlString = urlString.substring(lastIndex + 1);
-                    if (repositoryName.equals(urlString)) {
-                        urlLast = uriElement.getStringValue();
-                        result.append(uripre+urlLast + "\r\n");
-                        break;
-                    }
-                }
-            }
-            
+            result.append(uripre);
+            result.append("/imageserver/locator?imgId="+repositoryName);
+            result.append("\n");
         }
         
         
