@@ -263,4 +263,11 @@ public interface MDMServerDef extends AbstractMetadataObject {
      * @return
      */
     MDMServerDef getDecryptedServerDef();
+
+    /**
+     * return a new encrypted serverDef
+     * 
+     * @return
+     */
+    MDMServerDef getEncryptedServerDef();
 } // MDMServerDef

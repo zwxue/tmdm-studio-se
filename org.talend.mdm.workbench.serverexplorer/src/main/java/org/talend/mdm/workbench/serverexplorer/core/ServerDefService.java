@@ -56,6 +56,11 @@ public class ServerDefService implements ILegendServerDefService {
     public static ERepositoryObjectType REPOSITORY_TYPE_SERVER_DEF = DynaEnum.valueOf(ERepositoryObjectType.class,
             "MDM.ServerDef"); //$NON-NLS-1$
 
+    /**
+     * Warning: the return result is a encrypted List
+     * 
+     * @return
+     */
     public static List<IRepositoryViewObject> getAllServerDefViewObjects() {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
@@ -67,6 +72,11 @@ public class ServerDefService implements ILegendServerDefService {
         return null;
     }
 
+    /**
+     * Warning: the return result is a decrypted serverDef
+     * 
+     * @return
+     */
     public static List<MDMServerDef> getAllServerDefs() {
         List<IRepositoryViewObject> viewObjects = getAllServerDefViewObjects();
         if (viewObjects != null) {
@@ -75,7 +85,7 @@ public class ServerDefService implements ILegendServerDefService {
                 Item item = viewObj.getProperty().getItem();
                 MDMServerDef serverDef = ((MDMServerDefItem) item).getServerDef();
                 if (serverDef != null) {
-                    serverDefs.add(serverDef);
+                    serverDefs.add(serverDef.getDecryptedServerDef());
                 }
             }
             return serverDefs;
@@ -116,6 +126,11 @@ public class ServerDefService implements ILegendServerDefService {
         return false;
     }
 
+    /**
+     * 
+     * @param name
+     * @return a decrypted serverDef
+     */
     public static MDMServerDef findServerDefByName(String name) {
         if (name == null)
             throw new IllegalArgumentException();
@@ -177,6 +192,12 @@ public class ServerDefService implements ILegendServerDefService {
         return false;
     }
 
+    /**
+     * check connection
+     * 
+     * @param serverDef need a decrypted serverDef
+     * @return
+     */
     public static boolean checkMDMConnection(MDMServerDef serverDef) {
         return checkMDMConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
     }
@@ -227,8 +248,6 @@ public class ServerDefService implements ILegendServerDefService {
 
         if (servers != null) {
             for (MDMServerDef serverDef : servers) {
-
-                serverDef = serverDef.getDecryptedServerDef();
                 com.amalto.workbench.utils.MDMServerDef legendDef = com.amalto.workbench.utils.MDMServerDef.parse(
                         serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(),
                         serverDef.getName());

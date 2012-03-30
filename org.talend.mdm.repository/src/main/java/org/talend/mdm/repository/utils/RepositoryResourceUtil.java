@@ -945,6 +945,11 @@ public class RepositoryResourceUtil {
 
     private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
+    /**
+     * 
+     * @param viewObj
+     * @return A decrypted serverDef
+     */
     public static MDMServerDef getLastServerDef(IRepositoryViewObject viewObj) {
         if (viewObj != null) {
             Item item = viewObj.getProperty().getItem();
@@ -953,10 +958,17 @@ public class RepositoryResourceUtil {
         return null;
     }
 
+    /**
+     * 
+     * @param item
+     * @return A decrypted serverDef
+     */
     public static MDMServerDef getLastServerDef(Item item) {
         if (item != null) {
             if (item instanceof MDMServerObjectItem) {
-                return ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
+                MDMServerDef lastServerDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
+                if (lastServerDef != null)
+                    return lastServerDef.getDecryptedServerDef();
             }
             Property property = item.getProperty();
             if (property != null) {
@@ -969,12 +981,20 @@ public class RepositoryResourceUtil {
         return null;
     }
 
+    /**
+     * 
+     * @param item
+     * @param def need A decrypted serverDef
+     */
     @SuppressWarnings("unchecked")
     public static void setLastServerDef(Item item, MDMServerDef def) {
         if (item == null)
             return;
         if (item instanceof MDMServerObjectItem) {
-            ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(def);
+            if (def != null) {
+                MDMServerDef encryptedServerDef = def.getEncryptedServerDef();
+                ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(encryptedServerDef);
+            }
             return;
         }
         Property property = item.getProperty();
@@ -987,8 +1007,7 @@ public class RepositoryResourceUtil {
         }
 
     }
-    
-    
+
     public static boolean isOpenedItemInEditor(IRepositoryViewObject objectToMove) {
         try {
             if (objectToMove != null) {
@@ -1001,7 +1020,7 @@ public class RepositoryResourceUtil {
                             for (IEditorReference editorReference : editorReferences) {
                                 IEditorInput editorInput = editorReference.getEditorInput();
                                 if ((editorInput != null && editorInput instanceof IRepositoryViewEditorInput)) {
-                                	IRepositoryViewEditorInput rInput = (IRepositoryViewEditorInput) editorInput;
+                                    IRepositoryViewEditorInput rInput = (IRepositoryViewEditorInput) editorInput;
                                     Property openedProperty = rInput.getInputItem().getProperty();
                                     if (openedProperty.getId().equals(objectToMove.getId())
                                             && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {

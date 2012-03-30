@@ -249,7 +249,6 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
             MDMServerDef serverDef = openServerDialog(serverObject.getLastServerDef());
             if (serverDef != null) {
-                serverDef = serverDef.getDecryptedServerDef();
                 XObjectBrowserInput input = (XObjectBrowserInput) editorInput;
                 TreeObject xobject = (TreeObject) input.getModel();
 
@@ -263,6 +262,12 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         return true;
     }
 
+    /**
+     * return a decrypted server def
+     * 
+     * @param serverObject
+     * @return a decrypted server def
+     */
     public MDMServerDef openServerDialog(MDMServerDef serverObject) {
         SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
         dlg.create();

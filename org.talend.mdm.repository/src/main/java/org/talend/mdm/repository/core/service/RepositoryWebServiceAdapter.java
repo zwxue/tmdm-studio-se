@@ -81,11 +81,17 @@ public class RepositoryWebServiceAdapter {
 
     private static Map<String, AbstractGetDocument> documentServiceMap;
 
+    /**
+     * Warning: the param ServerDef must a decrypted serverDef
+     * 
+     * @param serverDef
+     * @return
+     * @throws XtentisException
+     */
     public static XtentisPort getXtentisPort(MDMServerDef serverDef) throws XtentisException {
         try {
             if (serverDef == null)
                 return null;
-            serverDef = serverDef.getDecryptedServerDef();
             XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(), serverDef
                     .getPasswd());
 

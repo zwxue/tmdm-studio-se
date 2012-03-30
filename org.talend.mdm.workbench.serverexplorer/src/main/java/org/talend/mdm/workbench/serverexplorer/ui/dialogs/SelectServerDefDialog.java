@@ -54,8 +54,12 @@ public class SelectServerDefDialog extends TitleAreaDialog {
 
 
 
+    /**
+     * 
+     * @return a decrypted serverDef
+     */
     public MDMServerDef getSelectedServerDef() {
-        return this.serverDef;
+        return this.serverDef.getDecryptedServerDef();
     }
 
     /**

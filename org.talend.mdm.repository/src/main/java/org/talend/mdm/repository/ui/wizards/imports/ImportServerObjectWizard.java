@@ -123,8 +123,6 @@ public class ImportServerObjectWizard extends Wizard {
 
     private TreeObject serverRoot;
 
-    private MDMServerDef decryptedServerDef;
-
     private MDMServerDef serverDef;
 
     private LabelCombo comboVersion;
@@ -363,7 +361,7 @@ public class ImportServerObjectWizard extends Wizard {
             resource.setName(fileName);
             resource.setFileExtension(fileExtension);
             StringBuffer strBuf = new StringBuffer();
-            strBuf.append("http://").append(decryptedServerDef.getHost()).append(":").append(decryptedServerDef.getPort()) //$NON-NLS-1$ //$NON-NLS-2$
+            strBuf.append("http://").append(serverDef.getHost()).append(":").append(serverDef.getPort()) //$NON-NLS-1$ //$NON-NLS-2$
                     .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             String url = strBuf.toString();
             byte[] bytes = Util.downloadFile(url);
@@ -433,7 +431,7 @@ public class ImportServerObjectWizard extends Wizard {
                         continue;
                     eobj = (MDMServerObject) Bean2EObjUtil.getInstance().convertFromBean2EObj(treeObj.getWsObject(), null);
                 }
-                eobj.setLastServerDef(serverDef);
+                eobj.setLastServerDef(serverDef.getEncryptedServerDef());
 
                 ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
                 String uniqueName = getUniqueName(treeObj, treeObjName);
@@ -602,8 +600,8 @@ public class ImportServerObjectWizard extends Wizard {
 
         private void retrieverCustomForms(TreeParent parent, IProgressMonitor monitor) {
             try {
-                XtentisPort port = Util.getPort(new URL(decryptedServerDef.getUrl()), decryptedServerDef.getUniverse(),
-                        decryptedServerDef.getUser(), decryptedServerDef.getPasswd());
+                XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
+                        serverDef.getPasswd());
                 // Data Models
                 TreeParent models = new TreeParent(Messages.ImportServerObjectWizard_customForm, parent, TreeObject.CUSTOM_FORM,
                         null, null);
@@ -640,9 +638,8 @@ public class ImportServerObjectWizard extends Wizard {
          */
         public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
 
-            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(decryptedServerDef.getName(),
-                    decryptedServerDef.getUrl(), decryptedServerDef.getUser(), decryptedServerDef.getPasswd(),
-                    decryptedServerDef.getUniverse(), null);
+            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
+                    serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), null);
             final IProgressMonitor monitor = m;
             retriever.setRetriveWSObject(true);
             retriever.run(monitor);
@@ -678,7 +675,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private void retriveServerRoot() {
-        if (decryptedServerDef != null) {
+        if (serverDef != null) {
             try {
                 getContainer().run(true, false, new RetriveProcess());
             } catch (InvocationTargetException e) {
@@ -742,12 +739,11 @@ public class ImportServerObjectWizard extends Wizard {
                         serverDef = dlg.getSelectedServerDef();
                         if (serverDef == null)
                             return;
-                        decryptedServerDef = serverDef.getDecryptedServerDef();
-                        txtServer.setText(decryptedServerDef.getUrl());
+                        txtServer.setText(serverDef.getUrl());
 
-                        String url = decryptedServerDef.getUrl();
-                        String user = decryptedServerDef.getUser();
-                        String password = decryptedServerDef.getPasswd();
+                        String url = serverDef.getUrl();
+                        String user = serverDef.getUser();
+                        String password = serverDef.getPasswd();
                         if (Util.IsEnterPrise()) {
                             try {
                                 // get Version
@@ -783,7 +779,7 @@ public class ImportServerObjectWizard extends Wizard {
                 comboVersion.getCombo().addModifyListener(new ModifyListener() {
 
                     public void modifyText(ModifyEvent e) {
-                        decryptedServerDef.setUniverse(comboVersion.getCombo().getText());
+                        serverDef.setUniverse(comboVersion.getCombo().getText());
                         retriveServerRoot();
 
                     }

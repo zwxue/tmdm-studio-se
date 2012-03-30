@@ -48,7 +48,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         IRepositoryViewObject viewObj = cmd.getViewObject();
-        MDMServerDef serverDef = cmd.getServerDef().getDecryptedServerDef();
+        MDMServerDef serverDef = cmd.getServerDef();
         String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$
         Item item = viewObj.getProperty().getItem();
         String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
