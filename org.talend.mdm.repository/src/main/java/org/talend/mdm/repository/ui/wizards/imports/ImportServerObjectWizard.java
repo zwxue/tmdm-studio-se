@@ -47,8 +47,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.Wizard;
@@ -803,13 +807,16 @@ public class ImportServerObjectWizard extends Wizard {
             treeViewer.getViewer().setInput(null);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 5));
             treeViewer.setItemText(Messages.Select_Items_To_Imports);
-            treeViewer.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-
-                public void selectionChanged(SelectionChangedEvent arg0) {
+            
+            CheckboxTreeViewer checkboxViewer = (CheckboxTreeViewer) treeViewer.getViewer();
+            checkboxViewer.addCheckStateListener(new ICheckStateListener() {
+                
+                public void checkStateChanged(CheckStateChangedEvent checkstatechangedevent) {
                     updateSelectedObjects();
                     checkCompleted();
                 }
             });
+            
             treeViewer.getViewer().addFilter(new ViewerFilter() {
 
                 @Override

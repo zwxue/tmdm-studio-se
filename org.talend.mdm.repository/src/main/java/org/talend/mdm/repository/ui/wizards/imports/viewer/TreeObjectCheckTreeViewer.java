@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -111,12 +113,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
     protected void filterCheckedObjects(Object[] selected, List<Object> ret) {
 
         for (int i = 0; i < selected.length; i++) {
-            if (selected[i] instanceof TreeObject) {
-                TreeObject node = (TreeObject) selected[i];
-                if (node.isXObject()) {
-                    ret.add(node);
-                }
-            }
+            ret.add(selected[i]);
         }
     }
 
