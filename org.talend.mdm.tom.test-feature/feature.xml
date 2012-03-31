@@ -22,12 +22,5 @@
       <import plugin="org.talend.mdm.workbench" version="1.0.0" match="greaterOrEqual"/> 
    </requires>
 
-   <plugin
-         id="org.talend.mdm.repository.test"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
 
 </feature>
