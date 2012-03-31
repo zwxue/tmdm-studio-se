@@ -82,6 +82,11 @@ public class JobResourceListener implements IResourceChangeListener {
     };
 
     private boolean isOpenInEditor(IRepositoryViewObject vObj) {
+        if (!ProxyRepositoryFactory.getInstance().isFullLogonFinished())
+            return false;
+        if(PlatformUI.getWorkbench()==null || PlatformUI.getWorkbench().getActiveWorkbenchWindow()==null ||PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()==null){
+            return false;
+        }
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         IEditorReference[] editorReferences = activePage.getEditorReferences();
         for (IEditorReference ref : editorReferences) {
