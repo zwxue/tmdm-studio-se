@@ -482,7 +482,8 @@ public class ImportServerObjectWizard extends Wizard {
                     handlePath(itemState, type);
                     item.setState(itemState);
                     String version = getVersion(treeObj);
-                    RepositoryResourceUtil.createItem(item, uniqueName, version, false);
+                    
+                    RepositoryResourceUtil.createItem(item, treeObj.getName(), version, false);
 
                 }
             } catch (IOException e) {
