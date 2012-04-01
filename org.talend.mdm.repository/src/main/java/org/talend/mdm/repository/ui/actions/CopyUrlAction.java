@@ -67,8 +67,6 @@ public class CopyUrlAction extends AbstractRepositoryAction {
             if(serverDef == null)
                 continue;
             
-            serverDef = serverDef.getDecryptedServerDef();
-            
             //all picture url string
             String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort();
 
