@@ -25,6 +25,8 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.utils.JobTemplateUtil;
 
+import com.amalto.workbench.utils.Util;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -142,7 +144,6 @@ public class NewProcessWizard extends Wizard {
             steps.add(messageStep);
             break;
         case RUNNABLE_RUNNABLE:
-        case RUNNABLE_STANDALONE:
             WSTransformerProcessStepE updateStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
                     null, processName, createJob);
             WSTransformerProcessStepE escapeStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null, processName, createJob);
@@ -154,6 +155,27 @@ public class NewProcessWizard extends Wizard {
             processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
             WSTransformerProcessStepE callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT,
                     url, processName, createJob);
+            steps.add(callJobStep);
+            
+            break;            
+        case RUNNABLE_STANDALONE:                        
+            //job name can't contains #,$ etc
+            processName=processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
+            boolean isEnterprise=Util.IsEnterPrise();
+            url = configRedirectURLPage.getUrl();
+            if(isEnterprise && createJob){
+                if(url!=null && url.length()>0){
+                    callJobStep = ProcessStepFactory.createCallJobStep(processName, ProcessStepFactory.VAR_OUTPUT_URL, ProcessStepFactory.VAR_DEFAULT);
+                }else{
+                    callJobStep = ProcessStepFactory.createCallJobStep(processName, ProcessStepFactory.VAR_OUTPUT, ProcessStepFactory.VAR_DEFAULT);
+                }
+            }else{
+                if(url!=null && url.length()>0){
+                    callJobStep=ProcessStepFactory.createRedirectStep(url, ProcessStepFactory.VAR_OUTPUT_URL);
+                }else{
+                    callJobStep=ProcessStepFactory.createRedirectStep(url, ProcessStepFactory.VAR_OUTPUT);
+                }
+            }
             steps.add(callJobStep);
             
             break;

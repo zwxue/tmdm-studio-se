@@ -43,7 +43,10 @@ public class ConfigRedirectURLPage extends WizardPage {
     private String url;
 
     public String getUrl() {
-        return this.url;
+        if(enableButton.getSelection())
+            return this.url;
+        else
+            return "";//$NON-NLS-1$
     }
 
     private boolean enableRedirect;

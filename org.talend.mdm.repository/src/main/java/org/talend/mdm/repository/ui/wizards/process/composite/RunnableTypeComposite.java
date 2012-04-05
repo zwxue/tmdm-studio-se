@@ -97,20 +97,6 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
         standaloneBun.setText(Messages.RunnableTypeComposite_createStandaloneProcess);
         standaloneBun.addSelectionListener(selectionListener);
 
-        runnableBun.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                descContainer.setVisible(true);
-            }
-        });
-        standaloneBun.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                descContainer.setVisible(false);
-            }
-        });
     }
 
     public int getCurrentProcessType() {
@@ -122,10 +108,7 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
     }
 
     public String getDesc() {
-        if (descContainer.isVisible())
-            return messageText.getText();
-        else
-            return null;
+        return messageText.getText();
     }
 
     public boolean needShowSelectEntityBun() {

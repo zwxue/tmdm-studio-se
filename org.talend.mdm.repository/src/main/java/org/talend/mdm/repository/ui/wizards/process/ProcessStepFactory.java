@@ -42,7 +42,7 @@ public class ProcessStepFactory {
 
     private static final String VAR_XML = "xml"; //$NON-NLS-1$
 
-    private static final String VAR_DEFAULT = "_DEFAULT_"; //$NON-NLS-1$
+    public static final String VAR_DEFAULT = "_DEFAULT_"; //$NON-NLS-1$
 
     private static final String VAR_TEXT = "text"; //$NON-NLS-1$
 
@@ -77,8 +77,12 @@ public class ProcessStepFactory {
         	    else
         	        return createCallJobStep(processName,VAR_OUTPUT_URL, VAR_DECODE_XML); //Runnable
         	}
-        	else
-        		return createRedirectStep(param);
+        	else{
+        	    if(param==null ||param.toString().length()==0)
+        	        return createRedirectStep(param, VAR_OUTPUT);
+        	    else
+        	        return createRedirectStep(param, VAR_OUTPUT_URL);
+        	}
         case STEP_RETURN_MESSAGE:
         	if(isEnterprise && createJob)
         		return createCallJobStep(processName, VAR_OUTPUT_REPORT, VAR_DEFAULT); //Before
@@ -88,7 +92,7 @@ public class ProcessStepFactory {
         return null;
     }
 
-    private static WSTransformerProcessStepE createRedirectStep(Object param) {
+    public static WSTransformerProcessStepE createRedirectStep(Object param, String outputPipleVariable) {
         if (param == null || !(param instanceof String))
             throw new IllegalArgumentException();
         String prefixParam = "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\" version=\"1.0\">\n" //$NON-NLS-1$
@@ -106,7 +110,7 @@ public class ProcessStepFactory {
 
         outItems = new ArrayList<WSTransformerVariablesMappingE>();
         WSTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
-        outputLine.setPipelineVariable(VAR_OUTPUT_URL);
+        outputLine.setPipelineVariable(outputPipleVariable);
         outputLine.setPluginVariable(VAR_TEXT);
         outItems.add(outputLine);
         step.setPluginJNDI(XSLT_PLUGIN);
@@ -204,7 +208,7 @@ public class ProcessStepFactory {
         return step;
     }
     
-    private static WSTransformerProcessStepE createCallJobStep(String jobName, String outputPipelineVariable, String pipleName){
+    public static WSTransformerProcessStepE createCallJobStep(String jobName, String outputPipelineVariable, String pipleName){
     	
     	String parameters="<configuration><url>ltj://"+jobName+"/0.1</url>"+//$NON-NLS-1$ //$NON-NLS-2$
     						"<contextParam><name>xmlInput</name><value>{"+pipleName+"}</value></contextParam></configuration>"; //$NON-NLS-1$ //$NON-NLS-2$
