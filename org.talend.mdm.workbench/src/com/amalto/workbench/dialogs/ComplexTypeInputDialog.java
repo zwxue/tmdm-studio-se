@@ -130,7 +130,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         typeName = conceptPanel.getText();
         superTypeName = conceptPanel.getSuperName();
         isAbstract = conceptPanel.isAbstract();
-        if(superTypeName.equals(typeName)){
+        if(superTypeName.equals(typeName) && (!superTypeName.equals(""))){//$NON-NLS-1$
             MessageDialog.openError(null, Messages.getString("Error.title"), Messages.getString("typeCannotExtendsItsself")); //$NON-NLS-1$//$NON-NLS-2$
             setReturnCode(CANCEL);
             return;
