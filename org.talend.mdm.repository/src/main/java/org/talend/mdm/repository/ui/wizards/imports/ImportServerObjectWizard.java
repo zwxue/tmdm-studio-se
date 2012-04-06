@@ -781,15 +781,13 @@ public class ImportServerObjectWizard extends Wizard {
                 comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
                 comboVersion.getCombo().setEditable(false);
 
-                comboVersion.getCombo().addModifyListener(new ModifyListener() {
-
-                    public void modifyText(ModifyEvent e) {
-                        serverDef.setUniverse(comboVersion.getCombo().getText());
-                        retriveServerRoot();
-
-                    }
-                });
-
+                comboVersion.getCombo().addSelectionListener(new SelectionAdapter() {
+                	@Override
+                	public void widgetSelected(SelectionEvent e) {
+                		 serverDef.setUniverse(comboVersion.getCombo().getText());
+                         retriveServerRoot();
+                	}
+				});
                 toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
             }
             // create viewer
