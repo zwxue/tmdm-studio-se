@@ -829,12 +829,14 @@ public class Util {
             if (!"".equalsIgnoreCase(localFilename))
                 mppost.addParameter("imageFile", file);//$NON-NLS-1$
             
-          //fileName can't has suffix
+          //fileName can't has suffix and version
             String filename=file.getName();
             int pos=filename.lastIndexOf('.');
             if(pos!=-1){
                 filename=filename.substring(0,pos);
-            }
+            }            
+            filename = filename.substring(0, filename.lastIndexOf("_"));
+            
             mppost.addParameter("fileName", filename);
 
             client.executeMethod(mppost);
