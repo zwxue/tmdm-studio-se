@@ -483,7 +483,7 @@ public class ImportServerObjectWizard extends Wizard {
                     item.setState(itemState);
                     String version = getVersion(treeObj);
                     
-                    RepositoryResourceUtil.createItem(item, treeObj.getName(), version, false);
+                    RepositoryResourceUtil.createItem(item, uniqueName, version, false);
 
                 }
             } catch (IOException e) {
@@ -602,7 +602,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     class RetriveProcess implements IRunnableWithProgress {
-
+        
         private void retrieverCustomForms(TreeParent parent, IProgressMonitor monitor) {
             try {
                 XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
@@ -645,14 +645,14 @@ public class ImportServerObjectWizard extends Wizard {
 
             final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverDef.getName(),
                     serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(), null);
-            final IProgressMonitor monitor = m;
+
             retriever.setRetriveWSObject(true);
-            retriever.run(monitor);
+            retriever.run(m);
             serverRoot = retriever.getServerRoot();
             //
             retrieverCustomForms((TreeParent) serverRoot, m);
             //
-            Display.getDefault().asyncExec(new Runnable() {
+            Display.getDefault().syncExec(new Runnable() {
 
                 public void run() {
                     try {
@@ -781,12 +781,12 @@ public class ImportServerObjectWizard extends Wizard {
                 comboVersion = new LabelCombo(toolkit, serverGroup, Messages.Version, SWT.BORDER, 2);
                 comboVersion.getCombo().setEditable(false);
 
-                comboVersion.getCombo().addModifyListener(new ModifyListener() {
-
-                    public void modifyText(ModifyEvent e) {
+                comboVersion.getCombo().addSelectionListener(new SelectionAdapter() {
+  
+                    @Override
+                    public void widgetSelected(SelectionEvent e) {
                         serverDef.setUniverse(comboVersion.getCombo().getText());
                         retriveServerRoot();
-
                     }
                 });
 
@@ -801,7 +801,6 @@ public class ImportServerObjectWizard extends Wizard {
                     updateSelectedObjects();
                     checkCompleted();
                 }
-
             });
             Composite itemcom = treeViewer.createItemList(composite);
             treeViewer.getViewer().setInput(null);
