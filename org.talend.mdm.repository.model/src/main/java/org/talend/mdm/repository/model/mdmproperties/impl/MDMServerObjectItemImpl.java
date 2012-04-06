@@ -1,30 +1,28 @@
 /**
- * <copyright>
- * </copyright>
- *
+ * <copyright> </copyright>
+ * 
  * $Id$
  */
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>MDM Server Object Item</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>MDM Server Object Item</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * </p>
- *
+ * 
  * @generated
  */
 public class MDMServerObjectItemImpl extends MDMItemImpl implements MDMServerObjectItem {
+
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     protected MDMServerObjectItemImpl() {
@@ -32,8 +30,8 @@ public class MDMServerObjectItemImpl extends MDMItemImpl implements MDMServerObj
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -42,19 +40,23 @@ public class MDMServerObjectItemImpl extends MDMItemImpl implements MDMServerObj
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated not
      */
-    public MDMServerObject getMDMServerObject() {
-        // TODO: implement this method
-        // Ensure that you remove @generated or mark it @generated NOT
+    synchronized public MDMServerObject getMDMServerObject() {
+        // synchronized (eResource().getURI()) {
+        return doGetMDMServerObject();
+        // }
+    }
+
+    public MDMServerObject doGetMDMServerObject() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setMDMServerObject(MDMServerObject serverObj) {
@@ -63,4 +65,4 @@ public class MDMServerObjectItemImpl extends MDMItemImpl implements MDMServerObj
         throw new UnsupportedOperationException();
     }
 
-} //MDMServerObjectItemImpl
+} // MDMServerObjectItemImpl

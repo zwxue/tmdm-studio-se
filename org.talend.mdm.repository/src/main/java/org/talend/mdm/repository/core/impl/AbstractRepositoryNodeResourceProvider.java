@@ -42,6 +42,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -55,7 +56,8 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
 
     Logger log = Logger.getLogger(AbstractRepositoryNodeResourceProvider.class);
 
-    protected XmiResourceManager xmiResourceManager = new XmiResourceManager();
+    protected XmiResourceManager xmiResourceManager = ProxyRepositoryFactory.getInstance().getRepositoryFactoryFromProvider()
+            .getResourceManager();
 
     protected Resource createCommonItemResource(IProject project, Item item, ERepositoryObjectType repositoryType, IPath path)
             throws PersistenceException {

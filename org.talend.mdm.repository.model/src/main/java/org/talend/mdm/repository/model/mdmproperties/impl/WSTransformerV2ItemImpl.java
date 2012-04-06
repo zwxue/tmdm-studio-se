@@ -6,9 +6,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -57,12 +61,26 @@ public class WSTransformerV2ItemImpl extends MDMServerObjectItemImpl implements 
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
+     * 
+     * @generated not
      */
     public WSTransformerV2E getWsTransformerV2() {
         if (wsTransformerV2 != null && wsTransformerV2.eIsProxy()) {
             InternalEObject oldWsTransformerV2 = (InternalEObject)wsTransformerV2;
             wsTransformerV2 = (WSTransformerV2E)eResolveProxy(oldWsTransformerV2);
+            if (wsTransformerV2.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsTransformerV2);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSTransformerV2E) {
+                        wsTransformerV2 = (WSTransformerV2E) object;
+                        break;
+                    }
+                }
+            }
             if (wsTransformerV2 != oldWsTransformerV2) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_TRANSFORMER_V2_ITEM__WS_TRANSFORMER_V2, oldWsTransformerV2, wsTransformerV2));
@@ -146,7 +164,7 @@ public class WSTransformerV2ItemImpl extends MDMServerObjectItemImpl implements 
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getWsTransformerV2();
     }
 

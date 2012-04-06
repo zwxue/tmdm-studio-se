@@ -6,9 +6,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSSynchronizationPlanItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -57,12 +61,26 @@ public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl imple
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
+     * 
+     * @generated not
      */
     public WSSynchronizationPlanE getWsSynchronizationPlan() {
         if (wsSynchronizationPlan != null && wsSynchronizationPlan.eIsProxy()) {
             InternalEObject oldWsSynchronizationPlan = (InternalEObject)wsSynchronizationPlan;
             wsSynchronizationPlan = (WSSynchronizationPlanE)eResolveProxy(oldWsSynchronizationPlan);
+            if (wsSynchronizationPlan.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsSynchronizationPlan);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSSynchronizationPlanE) {
+                        wsSynchronizationPlan = (WSSynchronizationPlanE) object;
+                        break;
+                    }
+                }
+            }
             if (wsSynchronizationPlan != oldWsSynchronizationPlan) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_SYNCHRONIZATION_PLAN_ITEM__WS_SYNCHRONIZATION_PLAN, oldWsSynchronizationPlan, wsSynchronizationPlan));
@@ -146,7 +164,7 @@ public class WSSynchronizationPlanItemImpl extends MDMServerObjectItemImpl imple
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getWsSynchronizationPlan();
     }
 

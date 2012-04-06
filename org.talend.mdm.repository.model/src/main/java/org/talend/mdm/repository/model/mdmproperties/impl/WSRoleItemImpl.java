@@ -6,9 +6,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -56,12 +60,26 @@ public class WSRoleItemImpl extends MDMServerObjectItemImpl implements WSRoleIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
+     * 
+     * @generated not
      */
     public WSRoleE getWsRole() {
         if (wsRole != null && wsRole.eIsProxy()) {
             InternalEObject oldWsRole = (InternalEObject)wsRole;
             wsRole = (WSRoleE)eResolveProxy(oldWsRole);
+            if (wsRole.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsRole);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSRoleE) {
+                        wsRole = (WSRoleE) object;
+                        break;
+                    }
+                }
+            }
             if (wsRole != oldWsRole) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_ROLE_ITEM__WS_ROLE, oldWsRole, wsRole));
@@ -145,7 +163,7 @@ public class WSRoleItemImpl extends MDMServerObjectItemImpl implements WSRoleIte
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getWsRole();
     }
 
