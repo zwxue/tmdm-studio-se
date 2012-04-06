@@ -801,11 +801,13 @@ public class RepositoryResourceUtil {
     }
 
     public static Item getItemFromRepViewObj(Object element) {
-        if (element instanceof IRepositoryViewObject) {
-            Item item = ((IRepositoryViewObject) element).getProperty().getItem();
-            return item;
+        synchronized (element) {
+            if (element instanceof IRepositoryViewObject) {
+                Item item = ((IRepositoryViewObject) element).getProperty().getItem();
+                return item;
+            }
+            return null;
         }
-        return null;
     }
 
     public static boolean hasContainerItem(Object obj, FolderType... fTypes) {

@@ -6,9 +6,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -56,12 +60,26 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
+     * 
+     * @generated not
      */
     public WSMenuE getWsMenu() {
         if (wsMenu != null && wsMenu.eIsProxy()) {
             InternalEObject oldWsMenu = (InternalEObject)wsMenu;
             wsMenu = (WSMenuE)eResolveProxy(oldWsMenu);
+            if (wsMenu.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsMenu);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSMenuE) {
+                        wsMenu = (WSMenuE) object;
+                        break;
+                    }
+                }
+            }
             if (wsMenu != oldWsMenu) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_MENU_ITEM__WS_MENU, oldWsMenu, wsMenu));
@@ -145,7 +163,7 @@ public class WSMenuItemImpl extends MDMServerObjectItemImpl implements WSMenuIte
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getWsMenu();
     }
 

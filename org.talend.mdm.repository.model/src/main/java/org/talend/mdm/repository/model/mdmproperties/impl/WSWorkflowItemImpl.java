@@ -7,9 +7,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -59,14 +63,27 @@ public class WSWorkflowItemImpl extends MDMServerObjectItemImpl implements WSWor
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated not
      */
     public WSWorkflowE getWsWorkflow() {
         if (wsWorkflow != null && wsWorkflow.eIsProxy()) {
             InternalEObject oldWsWorkflow = (InternalEObject)wsWorkflow;
             wsWorkflow = (WSWorkflowE)eResolveProxy(oldWsWorkflow);
+            if (wsWorkflow.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsWorkflow);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSWorkflowE) {
+                        wsWorkflow = (WSWorkflowE) object;
+                        break;
+                    }
+                }
+            }
             if (wsWorkflow != oldWsWorkflow) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_WORKFLOW_ITEM__WS_WORKFLOW, oldWsWorkflow, wsWorkflow));
@@ -156,8 +173,8 @@ public class WSWorkflowItemImpl extends MDMServerObjectItemImpl implements WSWor
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
-        return getWsWorkflow();
+    public MDMServerObject doGetMDMServerObject() {
+            return getWsWorkflow();
     }
 
     @Override

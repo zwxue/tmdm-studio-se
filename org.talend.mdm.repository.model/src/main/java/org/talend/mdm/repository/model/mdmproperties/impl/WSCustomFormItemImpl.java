@@ -69,12 +69,7 @@ public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSC
             InternalEObject oldCustomForm = (InternalEObject) customForm;
             customForm = (WSCustomFormE) eResolveProxy(oldCustomForm);
 
-            if (customForm != oldCustomForm) {
-                if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-                            MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM, oldCustomForm, customForm));
-            }
-        }
+
         if (customForm.eResource() == null && eResource() != null) {
             URI uri = EcoreUtil.getURI(customForm);
             if (uri.hasFragment()) {
@@ -86,6 +81,12 @@ public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSC
                     customForm = (WSCustomFormE) object;
                     break;
                 }
+            }
+        }
+            if (customForm != oldCustomForm) {
+                if (eNotificationRequired())
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+                            MdmpropertiesPackage.WS_CUSTOM_FORM_ITEM__CUSTOM_FORM, oldCustomForm, customForm));
             }
         }
         return customForm;
@@ -166,7 +167,7 @@ public class WSCustomFormItemImpl extends MDMServerObjectItemImpl implements WSC
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getCustomForm();
     }
 

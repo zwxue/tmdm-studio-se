@@ -1,20 +1,17 @@
 /**
- * <copyright>
- * </copyright>
- *
+ * <copyright> </copyright>
+ * 
  * $Id$
  */
 package org.talend.mdm.repository.model.mdmproperties;
 
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
-
 /**
- * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>MDM Server Object Item</b></em>'.
- * <!-- end-user-doc -->
- *
- *
+ * <!-- begin-user-doc --> A representation of the model object '<em><b>MDM Server Object Item</b></em>'. <!--
+ * end-user-doc -->
+ * 
+ * 
  * @see org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage#getMDMServerObjectItem()
  * @model
  * @generated
@@ -22,16 +19,18 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 public interface MDMServerObjectItem extends MDMItem {
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @model kind="operation"
      * @generated
      */
     MDMServerObject getMDMServerObject();
 
+    MDMServerObject doGetMDMServerObject();
+
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @model
      * @generated
      */

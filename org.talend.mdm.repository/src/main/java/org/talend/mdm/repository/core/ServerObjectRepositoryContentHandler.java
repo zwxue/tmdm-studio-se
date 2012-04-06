@@ -12,6 +12,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryContentHandler;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -19,7 +20,8 @@ import org.talend.repository.model.RepositoryNode;
 
 public class ServerObjectRepositoryContentHandler implements IRepositoryContentHandler, IServerObjectRepositoryType {
 
-    private XmiResourceManager xmiResourceManager = new XmiResourceManager();
+    private XmiResourceManager xmiResourceManager = ProxyRepositoryFactory.getInstance().getRepositoryFactoryFromProvider()
+            .getResourceManager();
 
     public ServerObjectRepositoryContentHandler() {
     }

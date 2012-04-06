@@ -7,9 +7,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSJobModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -59,14 +63,27 @@ public class WSJobModelItemImpl extends MDMServerObjectItemImpl implements WSJob
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated not
      */
     public WSJobModelE getWsJobModelItem() {
         if (wsJobModelItem != null && wsJobModelItem.eIsProxy()) {
             InternalEObject oldWsJobModelItem = (InternalEObject)wsJobModelItem;
             wsJobModelItem = (WSJobModelE)eResolveProxy(oldWsJobModelItem);
+            if (wsJobModelItem.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsJobModelItem);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSJobModelE) {
+                        wsJobModelItem = (WSJobModelE) object;
+                        break;
+                    }
+                }
+            }
             if (wsJobModelItem != oldWsJobModelItem) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_JOB_MODEL_ITEM__WS_JOB_MODEL_ITEM, oldWsJobModelItem, wsJobModelItem));
@@ -156,7 +173,7 @@ public class WSJobModelItemImpl extends MDMServerObjectItemImpl implements WSJob
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getWsJobModelItem();
     }
 

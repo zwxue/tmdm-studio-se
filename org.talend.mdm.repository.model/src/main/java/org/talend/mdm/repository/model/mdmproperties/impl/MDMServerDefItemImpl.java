@@ -7,9 +7,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
@@ -57,15 +61,28 @@ public class MDMServerDefItemImpl extends MDMItemImpl implements MDMServerDefIte
         return MdmpropertiesPackage.Literals.MDM_SERVER_DEF_ITEM;
     }
 
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated not
      */
 	public MDMServerDef getServerDef() {
         if (serverDef != null && serverDef.eIsProxy()) {
             InternalEObject oldServerDef = (InternalEObject)serverDef;
             serverDef = (MDMServerDef)eResolveProxy(oldServerDef);
+            if (serverDef.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(serverDef);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof MDMServerDef) {
+                        serverDef = (MDMServerDef) object;
+                        break;
+                    }
+                }
+            }
             if (serverDef != oldServerDef) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.MDM_SERVER_DEF_ITEM__SERVER_DEF, oldServerDef, serverDef));

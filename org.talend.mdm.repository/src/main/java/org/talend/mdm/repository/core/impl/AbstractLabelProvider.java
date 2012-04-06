@@ -95,11 +95,14 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
             Property property = ((IRepositoryViewObject) anElement).getProperty();
             Item item = property.getItem();
             if (item instanceof MDMServerObjectItem) {
-                return getServerObjectItemText(item);
-            } else {
-                String label = property.getLabel();
-                return label;
+                String label = getServerObjectItemText(item);
+                if (label != null) {
+                    return label;
+                }
             }
+            String label = property.getLabel();
+            return label;
+
         }
         return null;
     }
@@ -147,16 +150,21 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
                 return true;
             }
             if (item instanceof MDMServerObjectItem) {
-                MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                return serverObject.isSystem();
+
+                    MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                    if (serverObject != null)
+                        return serverObject.isSystem();
+
             }
         }
         return false;
     }
 
     protected String getServerObjectItemText(Item item) {
-        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        return serverObject.getName();
+            MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+            if (serverObject != null)
+                return serverObject.getName();
+        return null;
     }
 
     public abstract Image getCategoryImage(Item item);

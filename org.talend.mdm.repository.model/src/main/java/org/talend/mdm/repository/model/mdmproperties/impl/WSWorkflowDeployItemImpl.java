@@ -6,9 +6,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSWorkflowDeployItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -20,10 +24,11 @@ import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowDeployE;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSWorkflowDeployItemImpl#getWsWorkflowDeploy <em>Ws Workflow Deploy</em>}</li>
+ * <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.WSWorkflowDeployItemImpl#getWsWorkflowDeploy <em>Ws
+ * Workflow Deploy</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class WSWorkflowDeployItemImpl extends MDMServerObjectItemImpl implements WSWorkflowDeployItem {
@@ -40,6 +45,7 @@ public class WSWorkflowDeployItemImpl extends MDMServerObjectItemImpl implements
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     protected WSWorkflowDeployItemImpl() {
@@ -48,6 +54,7 @@ public class WSWorkflowDeployItemImpl extends MDMServerObjectItemImpl implements
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -57,15 +64,31 @@ public class WSWorkflowDeployItemImpl extends MDMServerObjectItemImpl implements
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
+     * 
+     * @generated not
      */
     public WSWorkflowDeployE getWsWorkflowDeploy() {
         if (wsWorkflowDeploy != null && wsWorkflowDeploy.eIsProxy()) {
-            InternalEObject oldWsWorkflowDeploy = (InternalEObject)wsWorkflowDeploy;
-            wsWorkflowDeploy = (WSWorkflowDeployE)eResolveProxy(oldWsWorkflowDeploy);
+            InternalEObject oldWsWorkflowDeploy = (InternalEObject) wsWorkflowDeploy;
+            wsWorkflowDeploy = (WSWorkflowDeployE) eResolveProxy(oldWsWorkflowDeploy);
+            if (wsWorkflowDeploy.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsWorkflowDeploy);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSWorkflowDeployE) {
+                        wsWorkflowDeploy = (WSWorkflowDeployE) object;
+                        break;
+                    }
+                }
+            }
             if (wsWorkflowDeploy != oldWsWorkflowDeploy) {
                 if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY, oldWsWorkflowDeploy, wsWorkflowDeploy));
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+                            MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY, oldWsWorkflowDeploy,
+                            wsWorkflowDeploy));
             }
         }
         return wsWorkflowDeploy;
@@ -73,6 +96,7 @@ public class WSWorkflowDeployItemImpl extends MDMServerObjectItemImpl implements
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public WSWorkflowDeployE basicGetWsWorkflowDeploy() {
@@ -81,72 +105,79 @@ public class WSWorkflowDeployItemImpl extends MDMServerObjectItemImpl implements
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public void setWsWorkflowDeploy(WSWorkflowDeployE newWsWorkflowDeploy) {
         WSWorkflowDeployE oldWsWorkflowDeploy = wsWorkflowDeploy;
         wsWorkflowDeploy = newWsWorkflowDeploy;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY, oldWsWorkflowDeploy, wsWorkflowDeploy));
+            eNotify(new ENotificationImpl(this, Notification.SET,
+                    MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY, oldWsWorkflowDeploy, wsWorkflowDeploy));
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
-                if (resolve) return getWsWorkflowDeploy();
-                return basicGetWsWorkflowDeploy();
+        case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
+            if (resolve)
+                return getWsWorkflowDeploy();
+            return basicGetWsWorkflowDeploy();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
-                setWsWorkflowDeploy((WSWorkflowDeployE)newValue);
-                return;
+        case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
+            setWsWorkflowDeploy((WSWorkflowDeployE) newValue);
+            return;
         }
         super.eSet(featureID, newValue);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
-                setWsWorkflowDeploy((WSWorkflowDeployE)null);
-                return;
+        case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
+            setWsWorkflowDeploy((WSWorkflowDeployE) null);
+            return;
         }
         super.eUnset(featureID);
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
-                return wsWorkflowDeploy != null;
+        case MdmpropertiesPackage.WS_WORKFLOW_DEPLOY_ITEM__WS_WORKFLOW_DEPLOY:
+            return wsWorkflowDeploy != null;
         }
         return super.eIsSet(featureID);
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getWsWorkflowDeploy();
     }
 

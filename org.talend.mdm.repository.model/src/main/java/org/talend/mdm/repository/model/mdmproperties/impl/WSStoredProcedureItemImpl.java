@@ -6,9 +6,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSStoredProcedureItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -57,12 +61,26 @@ public class WSStoredProcedureItemImpl extends MDMServerObjectItemImpl implement
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * @generated
+     * 
+     * @generated not
      */
     public WSStoredProcedureE getWsStoredProcedure() {
         if (wsStoredProcedure != null && wsStoredProcedure.eIsProxy()) {
             InternalEObject oldWsStoredProcedure = (InternalEObject)wsStoredProcedure;
             wsStoredProcedure = (WSStoredProcedureE)eResolveProxy(oldWsStoredProcedure);
+            if (wsStoredProcedure.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(wsStoredProcedure);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource resource = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : resource.getContents()) {
+                    if (object instanceof WSStoredProcedureE) {
+                        wsStoredProcedure = (WSStoredProcedureE) object;
+                        break;
+                    }
+                }
+            }
             if (wsStoredProcedure != oldWsStoredProcedure) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_STORED_PROCEDURE_ITEM__WS_STORED_PROCEDURE, oldWsStoredProcedure, wsStoredProcedure));
@@ -146,7 +164,7 @@ public class WSStoredProcedureItemImpl extends MDMServerObjectItemImpl implement
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getWsStoredProcedure();
     }
 

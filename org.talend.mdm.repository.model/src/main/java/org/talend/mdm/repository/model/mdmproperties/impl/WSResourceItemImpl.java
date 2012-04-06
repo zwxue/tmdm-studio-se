@@ -7,9 +7,13 @@
 package org.talend.mdm.repository.model.mdmproperties.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -59,14 +63,27 @@ public class WSResourceItemImpl extends MDMServerObjectItemImpl implements WSRes
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated not
      */
     public WSResourceE getResource() {
         if (resource != null && resource.eIsProxy()) {
             InternalEObject oldResource = (InternalEObject)resource;
             resource = (WSResourceE)eResolveProxy(oldResource);
+            if (resource.eResource() == null && eResource() != null) {
+                URI uri = EcoreUtil.getURI(resource);
+                if (uri.hasFragment()) {
+                    uri = uri.trimFragment();
+                }
+                Resource res = eResource().getResourceSet().getResource(uri, true);
+                for (EObject object : res.getContents()) {
+                    if (object instanceof WSResourceE) {
+                        resource = (WSResourceE) object;
+                        break;
+                    }
+                }
+            }
             if (resource != oldResource) {
                 if (eNotificationRequired())
                     eNotify(new ENotificationImpl(this, Notification.RESOLVE, MdmpropertiesPackage.WS_RESOURCE_ITEM__RESOURCE, oldResource, resource));
@@ -156,7 +173,7 @@ public class WSResourceItemImpl extends MDMServerObjectItemImpl implements WSRes
     }
 
     @Override
-    public MDMServerObject getMDMServerObject() {
+    public MDMServerObject doGetMDMServerObject() {
         return getResource();
     }
 
