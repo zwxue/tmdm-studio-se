@@ -29,6 +29,7 @@ import org.eclipse.ui.internal.PerspectiveBarManager;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.WorkbenchWindow;
 import org.eclipse.ui.internal.util.PrefUtil;
+import org.talend.repository.ui.views.IRepositoryView;
 
 /**
  * DOC yhch class global comment. Detailled comment
@@ -60,7 +61,7 @@ public final class PerspectiveReviewUtil {
 
     static String codeId = "org.talend.designer.core.codeView"; //$NON-NLS-1$
 
-    static String repositoryId = "org.talend.repository.views.repository"; //$NON-NLS-1$
+    static String repositoryId = IRepositoryView.VIEW_ID;
 
     static String runProcessViewId = "org.talend.designer.runprocess.ui.views.processview"; //$NON-NLS-1$
 
