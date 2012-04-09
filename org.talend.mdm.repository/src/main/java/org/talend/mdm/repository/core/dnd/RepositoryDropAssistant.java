@@ -212,6 +212,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         byte[] content = refFileItem.getContent().getInnerContent();
                         IFolder folder = RepositoryResourceUtil.getFolder(type);
                         String fileName = refFileItem.getName().replace(name, newName);
+                        fileName=  fileName.replace("#", "$");  //$NON-NLS-1$ //$NON-NLS-2$
                         IFile file = folder.getFile(fileName);
                         try {
                             if (!file.exists())

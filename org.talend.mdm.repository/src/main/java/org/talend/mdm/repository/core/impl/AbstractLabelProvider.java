@@ -107,7 +107,7 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         return null;
     }
 
-    private String getText(Item item) {
+    protected String getText(Item item) {
         if (item instanceof ContainerItem) {
             return getConainerItemText(item);
         }
