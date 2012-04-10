@@ -57,7 +57,7 @@ public class InputProcessNamePage extends WizardPage {
         return this.processName;
     }
 
-    public String getProcessDesc() {
+    public String getProcessDesc() {        
         return this.processDesc;
     }
 
@@ -257,6 +257,8 @@ public class InputProcessNamePage extends WizardPage {
     @Override
     public IWizardPage getNextPage() {
         if (curProcessTypeComposite != null) {
+            processType = curProcessTypeComposite.getCurrentProcessType();
+            processDesc = curProcessTypeComposite.getDesc();
             String pageId = curProcessTypeComposite.getConfigWizardPageId();
             if (pageId != null) {
                 return getWizard().getPage(pageId);
