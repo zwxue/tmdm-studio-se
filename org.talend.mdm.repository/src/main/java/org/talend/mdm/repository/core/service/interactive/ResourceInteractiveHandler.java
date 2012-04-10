@@ -47,21 +47,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
-        IRepositoryViewObject viewObj = cmd.getViewObject();
-        MDMServerDef serverDef = cmd.getServerDef();
-        String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$
-        Item item = viewObj.getProperty().getItem();
-        String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
-        IFile referenceFile = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, fileExtension);
-        String path = referenceFile.getLocation().toOSString();
-        try {
-            String fileName = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", path//$NON-NLS-1$
-                    , serverDef.getUser(), serverDef.getPasswd(), null);
-            return true;
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
-        return false;
+        return processImage(cmd, false);
     }
 
     @Override
@@ -76,8 +62,28 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
-        // Now unsupport remove
-        return true;
+        return processImage(cmd, true);
     }
-
+    
+    private boolean processImage(AbstractDeployCommand cmd, boolean deleteFile){
+        IRepositoryViewObject viewObj = cmd.getViewObject();
+        MDMServerDef serverDef = cmd.getServerDef();
+        String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$
+        Item item = viewObj.getProperty().getItem();
+        String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
+        IFile referenceFile = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, fileExtension);
+        String path = referenceFile.getLocation().toOSString();
+        try {
+            String url="/imageserver/secure/ImageUploadServlet";//$NON-NLS-1$
+            if(deleteFile){
+                url="/imageserver/secure/ImageUploadServlet?deleteFile="+deleteFile;//$NON-NLS-1$
+            }
+            Util.uploadImageFile(uripre + url, path//$NON-NLS-1$
+                    , serverDef.getUser(), serverDef.getPasswd(), null);
+            return true;
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return false;
+    }
 }
