@@ -44,10 +44,10 @@ public class MDMServerObjectItemImpl extends MDMItemImpl implements MDMServerObj
      * 
      * @generated not
      */
-    synchronized public MDMServerObject getMDMServerObject() {
-        // synchronized (eResource().getURI()) {
-        return doGetMDMServerObject();
-        // }
+    public MDMServerObject getMDMServerObject() {
+        synchronized (MDMServerObjectItem.class) {
+            return doGetMDMServerObject();
+        }
     }
 
     public MDMServerObject doGetMDMServerObject() {
