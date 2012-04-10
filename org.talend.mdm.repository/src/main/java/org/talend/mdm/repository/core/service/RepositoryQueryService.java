@@ -106,7 +106,11 @@ public class RepositoryQueryService {
     public static List<String> findAllUniverseNames() {
         return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_UNIVERSE);
     }
-
+    
+    public static List<String> findAllCustomFormNames() {
+        return findAllServerObjectNames(IServerObjectRepositoryType.TYPE_CUSTOM_FORM);
+    }
+    
     /**
      * this method is compatible with Util.getDataModel, but for Repository view
      * 
