@@ -59,7 +59,7 @@ public final class DeployOnMDMAction extends AContextualAction {
             setEnabled(false);
             return;
         }
-        if(MDMServerHelper.getServers().size()==0){
+        if (MDMServerHelper.getServers().size() == 0) {
             setEnabled(false);
             return;
         }
@@ -89,7 +89,7 @@ public final class DeployOnMDMAction extends AContextualAction {
 
     protected void doRun() {
         DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
-        IWorkbench workbench = this.getViewPart().getViewSite().getWorkbenchWindow().getWorkbench();
+        IWorkbench workbench = getWorkbench();
         publishWizard.setWindowTitle(EXPORTJOBSCRIPTS); //$NON-NLS-1$
         publishWizard.init(workbench, (IStructuredSelection) this.getSelection());
 
