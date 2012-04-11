@@ -15,8 +15,12 @@ package org.talend.mdm.repository.ui.wizards.exports;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,10 +28,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.TreeItem;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.local.ExportItemUtil;
@@ -105,9 +113,108 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.setItemText(Messages.MDMExportRepositoryItemsWizard_exportItem);
-        ((CheckboxTreeViewer) checkTreeViewer.getViewer()).setAllChecked(true);
-        ((CheckboxTreeViewer) checkTreeViewer.getViewer()).expandToLevel(2);
+        
+        initCheckState();
         return returnComposite;
     }
 
+    private void initCheckState() {
+        CheckboxTreeViewer tv =  (CheckboxTreeViewer) checkTreeViewer.getViewer();
+        tv.expandAll();
+        
+        List<IRepositoryViewObject> leafItems = new ArrayList<IRepositoryViewObject>();
+        getCheckedViewObjects(sel, leafItems, new ArrayList<IRepositoryViewObject>());        
+        
+        recursiveExpand(tv.getTree().getItems(), leafItems);
+        ((CheckboxTreeViewer) checkTreeViewer.getViewer()).setCheckedElements(leafItems.toArray());
+    }
+        
+    
+    private boolean recursiveExpand(TreeItem[] items, List<IRepositoryViewObject> leafItems) {
+        boolean expanda = false;
+        for (TreeItem item:items) {
+            IRepositoryViewObject viewObj = (IRepositoryViewObject) item.getData();
+            
+            if(leafItems.contains(viewObj)) {
+                expanda =  true;
+                break;
+            }
+            
+            if(viewObj instanceof FolderRepositoryObject)
+            {
+                boolean expand = recursiveExpand(item.getItems(), leafItems);
+                item.setExpanded(expand);
+                if(expand) {
+                    expanda =  true;
+                }
+            }
+        }
+        
+        return expanda;
+    }
+    private void getCheckedViewObjects(IStructuredSelection sel, List<IRepositoryViewObject> leafItems, List<IRepositoryViewObject> noneLeafItems) {
+
+        Map<String, List<IRepositoryViewObject>> viewObjTypeMap = new TreeMap<String, List<IRepositoryViewObject>>();        
+        Map<String, List<String>> pathMap = new HashMap<String, List<String>>();
+        Map<String, ERepositoryObjectType> types = new HashMap<String, ERepositoryObjectType>(); 
+
+        List<IRepositoryViewObject> seList = sel.toList();
+        for (Iterator<IRepositoryViewObject> iterator = seList.iterator(); iterator.hasNext();) {
+            IRepositoryViewObject viewObj = (IRepositoryViewObject) iterator.next();
+            ERepositoryObjectType repositoryObjectType = viewObj.getRepositoryObjectType();
+            
+            List<IRepositoryViewObject> list = viewObjTypeMap.get(repositoryObjectType.name());
+            List<String> typePaths = pathMap.get(repositoryObjectType.name());
+            if (list == null) {
+                list = new LinkedList<IRepositoryViewObject>();
+                viewObjTypeMap.put(repositoryObjectType.name(), list);
+                
+                typePaths = new LinkedList<String>();
+                pathMap.put(repositoryObjectType.name(), typePaths);
+                
+                types.put(repositoryObjectType.name(), repositoryObjectType);
+            }
+            list.add(viewObj);            
+            typePaths.add(viewObj.getPath());
+        }
+
+        
+        List<IRepositoryViewObject> childs = new LinkedList<IRepositoryViewObject>();
+        
+        for(Iterator<String> iterator = types.keySet().iterator(); iterator.hasNext(); )
+        {
+            String etype = iterator.next();
+            List<IRepositoryViewObject> viewObjectsWithDeleted = RepositoryResourceUtil.findAllViewObjectsWithDeleted(types.get(etype));
+            for(IRepositoryViewObject vObject:viewObjectsWithDeleted)
+            {
+                List<String> pathList = pathMap.get(etype);
+                for (int i = 0; i < pathList.size(); i++) {
+                    if (vObject.getPath().equals(pathList.get(i))) {
+                        IRepositoryViewObject vo = viewObjTypeMap.get(etype).get(i);
+                        if (vo instanceof FolderRepositoryObject && !(vObject instanceof FolderRepositoryObject)) {
+                            childs.add(vObject);
+                            break;
+                        } 
+                    } else if (vObject.getPath().contains(pathList.get(i)) && viewObjTypeMap.get(etype).get(i) instanceof FolderRepositoryObject) {
+                        childs.add(vObject);
+                        break;
+                    }
+
+                }
+            }
+            
+        }
+        
+        childs.addAll(seList);
+        
+        for(int i=0; i<childs.size(); i++)
+        {
+            if(childs.get(i) instanceof FolderRepositoryObject)
+                noneLeafItems.add(childs.get(i));
+            else {
+                leafItems.add(childs.get(i));
+            }
+        }
+    }
+    
 }
