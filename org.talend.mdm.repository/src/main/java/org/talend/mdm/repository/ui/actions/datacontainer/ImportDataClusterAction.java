@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.actions.datacontainer;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.MultiStatus;
@@ -35,6 +36,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -76,7 +78,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                 try {
 
                     XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-
+                    port.ping(new WSPing(Messages.ImportDataClusterAction_importTitle));
                     if (!dataClusterService.isExistDataCluster(port, dName)) {
                         if (MessageDialog.openQuestion(getShell(), Messages.ImportDataClusterAction_createDataClusterTitle,
                                 Messages.bind(Messages.ImportDataClusterAction_createConfirm, dName))) {
@@ -108,6 +110,9 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                     }
                 } catch (XtentisException e) {
                     log.error(e.getMessage(), e);
+                } catch (RemoteException e) {
+                    MessageDialog.openError(getShell(), Messages.ImportDataClusterAction_importTitle,
+                            Messages.AbstractDataClusterAction_ConnectFailed);
                 } finally {
                     IOUtil.cleanFolder(tempFolder);
                 }
@@ -115,5 +120,4 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
             }
         }
     }
-
 }

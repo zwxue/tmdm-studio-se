@@ -18,6 +18,8 @@ public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
+    public static String AbstractDataClusterAction_ConnectFailed;
+
     public static String AbstractDataClusterAction_zipContentFile;
 
     public static String AbstractDeployAction_deployMessage;
