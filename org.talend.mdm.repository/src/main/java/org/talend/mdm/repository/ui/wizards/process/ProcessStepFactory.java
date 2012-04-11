@@ -79,7 +79,7 @@ public class ProcessStepFactory {
         	}
         	else{
         	    if(param==null ||param.toString().length()==0)
-        	        return createRedirectStep(param, VAR_OUTPUT);
+        	        return createRedirectStep("", VAR_OUTPUT); //$NON-NLS-1$
         	    else
         	        return createRedirectStep(param, VAR_OUTPUT_URL);
         	}
