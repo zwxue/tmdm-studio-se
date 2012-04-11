@@ -181,6 +181,7 @@
     <genClasses ecoreClass="MDMServerObject.ecore#//WSResourceE">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSResourceE/fileExtension"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSResourceE/fileContent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSResourceE/imageCatalog"/>
     </genClasses>
     <genClasses ecoreClass="MDMServerObject.ecore#//WSCustomFormE">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/filename"/>

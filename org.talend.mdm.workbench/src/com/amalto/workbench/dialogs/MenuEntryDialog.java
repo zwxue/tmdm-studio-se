@@ -406,19 +406,20 @@ public class MenuEntryDialog extends Dialog {
                 // if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
                 if (wsMenuEntry.getIcon() != null) {
                     if (!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())) {
-                        Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",//$NON-NLS-1$//$NON-NLS-2$
+                        Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",null,null,//$NON-NLS-1$//$NON-NLS-2$
                                 treeObject.getUsername(), treeObject.getPassword(), null);
                         if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
                             icon = Util.uploadImageFile(
                                     uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText()//$NON-NLS-1$
-                                            .getText(), treeObject.getUsername(), treeObject.getPassword(), null);
+                                            .getText(),null, null, treeObject.getUsername(), treeObject.getPassword(), null);
                         getIconPathText().setText(icon);
                     }
-                } else if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
+                } else if (!"".equalsIgnoreCase(getIconPathText().getText())){//$NON-NLS-1$
                     icon = Util.uploadImageFile(
-                            uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText().getText(),//$NON-NLS-1$
+                            uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText().getText(),null,null,//$NON-NLS-1$
                             treeObject.getUsername(), treeObject.getPassword(), null);
-                getIconPathText().setText(icon);
+                    getIconPathText().setText(icon);
+                }
                 // ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);

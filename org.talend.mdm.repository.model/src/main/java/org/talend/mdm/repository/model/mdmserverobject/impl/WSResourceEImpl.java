@@ -18,6 +18,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl#getFileExtension <em>File Extension</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl#getFileContent <em>File Content</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSResourceEImpl#getImageCatalog <em>Image Catalog</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +65,26 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
      * @ordered
      */
     protected byte[] fileContent = FILE_CONTENT_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getImageCatalog() <em>Image Catalog</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getImageCatalog()
+     * @generated
+     * @ordered
+     */
+    protected static final String IMAGE_CATALOG_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getImageCatalog() <em>Image Catalog</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getImageCatalog()
+     * @generated
+     * @ordered
+     */
+    protected String imageCatalog = IMAGE_CATALOG_EDEFAULT;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -125,6 +146,27 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getImageCatalog() {
+        return imageCatalog;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setImageCatalog(String newImageCatalog) {
+        String oldImageCatalog = imageCatalog;
+        imageCatalog = newImageCatalog;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.WS_RESOURCE_E__IMAGE_CATALOG, oldImageCatalog, imageCatalog));
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -135,6 +177,8 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
                 return getFileExtension();
             case MdmserverobjectPackage.WS_RESOURCE_E__FILE_CONTENT:
                 return getFileContent();
+            case MdmserverobjectPackage.WS_RESOURCE_E__IMAGE_CATALOG:
+                return getImageCatalog();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -151,6 +195,9 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
                 return;
             case MdmserverobjectPackage.WS_RESOURCE_E__FILE_CONTENT:
                 setFileContent((byte[])newValue);
+                return;
+            case MdmserverobjectPackage.WS_RESOURCE_E__IMAGE_CATALOG:
+                setImageCatalog((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -169,6 +216,9 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
             case MdmserverobjectPackage.WS_RESOURCE_E__FILE_CONTENT:
                 setFileContent(FILE_CONTENT_EDEFAULT);
                 return;
+            case MdmserverobjectPackage.WS_RESOURCE_E__IMAGE_CATALOG:
+                setImageCatalog(IMAGE_CATALOG_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -184,6 +234,8 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
                 return FILE_EXTENSION_EDEFAULT == null ? fileExtension != null : !FILE_EXTENSION_EDEFAULT.equals(fileExtension);
             case MdmserverobjectPackage.WS_RESOURCE_E__FILE_CONTENT:
                 return FILE_CONTENT_EDEFAULT == null ? fileContent != null : !FILE_CONTENT_EDEFAULT.equals(fileContent);
+            case MdmserverobjectPackage.WS_RESOURCE_E__IMAGE_CATALOG:
+                return IMAGE_CATALOG_EDEFAULT == null ? imageCatalog != null : !IMAGE_CATALOG_EDEFAULT.equals(imageCatalog);
         }
         return super.eIsSet(featureID);
     }
@@ -201,6 +253,8 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
         result.append(fileExtension);
         result.append(", fileContent: ");
         result.append(fileContent);
+        result.append(", imageCatalog: ");
+        result.append(imageCatalog);
         result.append(')');
         return result.toString();
     }

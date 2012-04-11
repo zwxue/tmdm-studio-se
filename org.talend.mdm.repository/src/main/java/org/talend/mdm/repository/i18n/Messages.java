@@ -473,6 +473,10 @@ public class Messages extends NLS {
     public static String Property_creationdate_main;
 
     public static String Property_modifydate_main;
+    
+    public static String MdmPropertiesWizard_lockedByOther;
+    
+    public static String MdmPropertiesWizard_imageCatalog;
 
     // //////////////////////////////////////////////////////////////////////////
     //

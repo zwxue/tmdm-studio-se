@@ -370,7 +370,9 @@ public class ImportServerObjectWizard extends Wizard {
             String url = strBuf.toString();
             byte[] bytes = Util.downloadFile(url);
             resource.setFileContent(bytes);
-
+            //add imageCatalog
+            resource.setImageCatalog(dirName);
+            
             treeObj.setName(fileName);
             return resource;
         }

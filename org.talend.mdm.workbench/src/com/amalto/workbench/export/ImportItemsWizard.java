@@ -609,7 +609,7 @@ public class ImportItemsWizard extends Wizard {
                 for (String subItem : subItems) {
                     try {
                         Util.uploadImageFile(serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",//$NON-NLS-1$
-                                importFolder + "/" + subItem, serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);//$NON-NLS-1$
+                                importFolder + "/" + subItem, subItem,null,serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);//$NON-NLS-1$
                     } catch (Exception e2) {
                         log.error(e2.getMessage(), e2);
                     }

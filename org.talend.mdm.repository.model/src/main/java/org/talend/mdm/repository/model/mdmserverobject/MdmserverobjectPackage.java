@@ -2393,13 +2393,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_RESOURCE_E__FILE_CONTENT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
 
     /**
+     * The feature id for the '<em><b>Image Catalog</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__IMAGE_CATALOG = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
+
+    /**
      * The number of structural features of the '<em>WS Resource E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_RESOURCE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
+    int WS_RESOURCE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 3;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSCustomFormEImpl <em>WS Custom Form E</em>}' class.
@@ -4003,6 +4012,17 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSResourceE_FileContent();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getImageCatalog <em>Image Catalog</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Image Catalog</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getImageCatalog()
+     * @see #getWSResourceE()
+     * @generated
+     */
+    EAttribute getWSResourceE_ImageCatalog();
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE <em>WS Custom Form E</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5274,6 +5294,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_RESOURCE_E__FILE_CONTENT = eINSTANCE.getWSResourceE_FileContent();
+
+        /**
+         * The meta object literal for the '<em><b>Image Catalog</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_RESOURCE_E__IMAGE_CATALOG = eINSTANCE.getWSResourceE_ImageCatalog();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSCustomFormEImpl <em>WS Custom Form E</em>}' class.

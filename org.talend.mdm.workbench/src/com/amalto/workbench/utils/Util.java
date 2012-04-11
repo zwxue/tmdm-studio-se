@@ -807,7 +807,7 @@ public class Util {
         return null;
     }
 
-    public static String uploadImageFile(String URL, String localFilename, String username, String password,
+    public static String uploadImageFile(String URL, String localFilename, String filename,String imageCatalog, String username, String password,
             HashMap<String, String> picturePathMap) throws XtentisException {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");//$NON-NLS-1$//$NON-NLS-2$
@@ -828,16 +828,17 @@ public class Util {
             File file = new File(localFilename);
             if (!"".equalsIgnoreCase(localFilename))
                 mppost.addParameter("imageFile", file);//$NON-NLS-1$
-            
+            if(imageCatalog!=null){
+                mppost.addParameter("catalogName", imageCatalog);//$NON-NLS-1$
+            }
           //fileName can't has suffix and version
-            String filename=file.getName();
-            int pos=filename.lastIndexOf('.');
-            if(pos!=-1){
-                filename=filename.substring(0,pos);
-            }            
-            filename = filename.substring(0, filename.lastIndexOf("_"));
-            
-            mppost.addParameter("fileName", filename);
+            if(filename!=null){
+                int pos=filename.lastIndexOf('.');
+                if(pos!=-1){
+                    filename=filename.substring(0,pos);
+                }                      
+                mppost.addParameter("fileName", filename);//$NON-NLS-1$
+            }
 
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {

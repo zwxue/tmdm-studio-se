@@ -1646,6 +1646,15 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getWSResourceE_ImageCatalog() {
+        return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getWSCustomFormE() {
         return wsCustomFormEEClass;
     }
@@ -1898,6 +1907,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsResourceEEClass = createEClass(WS_RESOURCE_E);
         createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILE_EXTENSION);
         createEAttribute(wsResourceEEClass, WS_RESOURCE_E__FILE_CONTENT);
+        createEAttribute(wsResourceEEClass, WS_RESOURCE_E__IMAGE_CATALOG);
 
         wsCustomFormEEClass = createEClass(WS_CUSTOM_FORM_E);
         createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__FILENAME);
@@ -2134,6 +2144,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEClass(wsResourceEEClass, WSResourceE.class, "WSResourceE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSResourceE_FileExtension(), ecorePackage.getEString(), "fileExtension", null, 0, 1, WSResourceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSResourceE_FileContent(), ecorePackage.getEByteArray(), "fileContent", null, 0, 1, WSResourceE.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getWSResourceE_ImageCatalog(), ecorePackage.getEString(), "imageCatalog", null, 0, 1, WSResourceE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(wsCustomFormEEClass, WSCustomFormE.class, "WSCustomFormE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSCustomFormE_Filename(), ecorePackage.getEString(), "filename", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

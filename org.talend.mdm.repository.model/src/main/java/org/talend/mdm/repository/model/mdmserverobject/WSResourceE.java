@@ -17,6 +17,7 @@ package org.talend.mdm.repository.model.mdmserverobject;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFileExtension <em>File Extension</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getFileContent <em>File Content</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getImageCatalog <em>Image Catalog</em>}</li>
  * </ul>
  * </p>
  *
@@ -76,5 +77,31 @@ public interface WSResourceE extends MDMServerObject {
      * @generated
      */
     void setFileContent(byte[] value);
+
+    /**
+     * Returns the value of the '<em><b>Image Catalog</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Image Catalog</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Image Catalog</em>' attribute.
+     * @see #setImageCatalog(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSResourceE_ImageCatalog()
+     * @model
+     * @generated
+     */
+    String getImageCatalog();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.WSResourceE#getImageCatalog <em>Image Catalog</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Image Catalog</em>' attribute.
+     * @see #getImageCatalog()
+     * @generated
+     */
+    void setImageCatalog(String value);
 
 } // WSResourceE

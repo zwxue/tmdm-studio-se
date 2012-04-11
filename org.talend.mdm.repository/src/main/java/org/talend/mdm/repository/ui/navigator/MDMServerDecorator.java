@@ -14,6 +14,7 @@ import org.talend.mdm.repository.core.command.CommandStack;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -74,15 +75,22 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
 
     private void decorateRepositoryObject(Item item, IDecoration decoration) {
         if (item != null) {
+            
+            String version = item.getProperty().getVersion();
+            if(item instanceof WSResourceItem){
+                //resource image show catalog
+                WSResourceItem ritem=(WSResourceItem)item;
+                String imageCatalog=ritem.getResource().getImageCatalog();
+                if(imageCatalog!=null)
+                    decoration.addSuffix(" " + imageCatalog); //$NON-NLS-1$
+            }else if (version != null){
+                decoration.addSuffix(" " + version); //$NON-NLS-1$
+            }
             MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(item);
             if (serverDef != null) {
                 decoration.addOverlay(IMG_SERVER, IDecoration.TOP_RIGHT);
                 decoration.addSuffix(" " + serverDef.getName()); //$NON-NLS-1$
             }
-            
-            String version = item.getProperty().getVersion();
-            if (version != null)
-                decoration.addSuffix(" " + version); //$NON-NLS-1$
         }
     }
 

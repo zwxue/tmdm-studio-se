@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.service.interactive;
 
 import java.rmi.RemoteException;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -24,6 +25,7 @@ import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.utils.Util;
@@ -52,11 +54,6 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public Object convert(Item item, MDMServerObject serverObj) {
-        // WSDataModel dataModel = (WSDataModel) super.convert(item, serverObj);
-        // IFile file = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, FILE_EXTENSION);
-        // String schema = RepositoryResourceUtil.getTextFileContent(file, ENCODE);
-        // dataModel.setXsdSchema(schema);
-        // return dataModel;
         return null;
     }
 
@@ -70,16 +67,30 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
         MDMServerDef serverDef = cmd.getServerDef();
         String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$
         Item item = viewObj.getProperty().getItem();
-        String fileExtension = ((WSResourceItem) item).getResource().getFileExtension();
+        WSResourceE rs=((WSResourceItem) item).getResource();
+        String fileExtension = rs.getFileExtension();
+        String imageCatalog=rs.getImageCatalog();
+        String name=rs.getUniqueName();
         IFile referenceFile = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, fileExtension);
         String path = referenceFile.getLocation().toOSString();
         try {
             String url="/imageserver/secure/ImageUploadServlet";//$NON-NLS-1$
             if(deleteFile){
-                url="/imageserver/secure/ImageUploadServlet?deleteFile="+deleteFile;//$NON-NLS-1$
+                if(imageCatalog!=null){
+                    String uri="upload/"+imageCatalog+'/'+name;//$NON-NLS-1$
+                    url="/imageserver/secure/ImageDeleteServlet?uri="+uri;//$NON-NLS-1$
+                }else{
+                    return false;
+                }
             }
-            Util.uploadImageFile(uripre + url, path//$NON-NLS-1$
+            String imageUri=Util.uploadImageFile(uripre + url, path, name, imageCatalog
                     , serverDef.getUser(), serverDef.getPasswd(), null);
+            if(imageUri!=null && imageUri.length()>0){
+                String[] strs=imageUri.split("/");//$NON-NLS-1$
+                if(strs.length==3){//the second one is imagecatalog
+                    rs.setImageCatalog(strs[1]);
+                }
+            }
             return true;
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
