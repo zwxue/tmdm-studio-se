@@ -207,8 +207,8 @@ public class FilteredCheckboxTree extends Composite {
         patternFilter = filter;
         showFilterControls = PlatformUI.getPreferenceStore().getBoolean(IWorkbenchPreferenceConstants.SHOW_FILTERED_TEXTS);
         createControl(parent, treeStyle);
-        createRefreshJob();
         setInitialText(WorkbenchMessages.FilteredTree_FilterMessage);
+        createRefreshJob();
         setFont(parent.getFont());
     }
 
@@ -601,8 +601,10 @@ public class FilteredCheckboxTree extends Composite {
         // narrowingDown = previousFilterText==null || getFilterString().startsWith(previousFilterText);
         previousFilterText = getFilterString();
         // cancel currently running job first, to prevent unnecessary redraw
-        refreshJob.cancel();
-        refreshJob.schedule(200);
+        if(refreshJob != null) {
+            refreshJob.cancel();
+            refreshJob.schedule(200);
+        }
     }
 
     @SuppressWarnings("unchecked")
