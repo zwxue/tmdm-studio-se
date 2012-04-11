@@ -120,15 +120,10 @@ public abstract class AbstractDataClusterAction extends AbstractRepositoryAction
         return GROUP_EXPORT;
     }
 
-    protected boolean isExistDataCluster(XtentisPort port, String dName) {
-        try {
+    protected boolean isExistDataCluster(XtentisPort port, String dName) throws RemoteException {
             WSExistsDataCluster wsExistsDataCluster = new WSExistsDataCluster(new WSDataClusterPK(dName));
             WSBoolean wsBoolean = port.existsDataCluster(wsExistsDataCluster);
             return wsBoolean.is_true();
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
-        }
-        return false;
     }
 
     protected boolean createDataCluster(XtentisPort port, String dName) {

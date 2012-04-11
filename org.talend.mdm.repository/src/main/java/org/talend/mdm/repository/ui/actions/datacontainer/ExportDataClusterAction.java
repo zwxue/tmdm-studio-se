@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,7 @@ import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -84,6 +86,7 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                     String fPath = fd.open();
                     if (fPath != null) {
                         XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+                        port.ping(new WSPing( Messages.ExportDataClusterAction_exportContent));
                         if (isExistDataCluster(port, dName)) {
                             File tempFolder = IOUtil.getTempFolder();
                             String tempFolderPath = tempFolder.getAbsolutePath();
@@ -107,7 +110,10 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                     }
                 } catch (XtentisException e) {
                     log.error(e.getMessage(), e);
-                }
+                } catch (RemoteException e) {
+                    MessageDialog.openError(getShell(), Messages.ExportDataClusterAction_exportContent,
+                            Messages.AbstractDataClusterAction_ConnectFailed);
+				}
             }
         }
     }

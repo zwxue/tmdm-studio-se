@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,6 +51,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSItem;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -90,7 +92,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                 try {
 
                     XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-
+                    port.ping(new WSPing( Messages.ImportDataClusterAction_importTitle));
                     if (!isExistDataCluster(port, dName)) {
                         if (MessageDialog.openQuestion(getShell(), Messages.ImportDataClusterAction_createDataClusterTitle,
                                 Messages.bind(Messages.ImportDataClusterAction_createConfirm, dName))) {
@@ -120,7 +122,10 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                     }
                 } catch (XtentisException e) {
                     log.error(e.getMessage(), e);
-                } finally {
+                } catch (RemoteException e) {
+                    MessageDialog.openError(getShell(), Messages.ImportDataClusterAction_importTitle,
+                           Messages.AbstractDataClusterAction_ConnectFailed);
+				} finally {
                     IOUtil.cleanFolder(tempFolder);
                 }
 
