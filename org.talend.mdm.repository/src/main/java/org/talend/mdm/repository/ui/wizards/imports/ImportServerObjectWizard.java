@@ -40,6 +40,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -264,7 +265,12 @@ public class ImportServerObjectWizard extends Wizard {
             HttpEntity entity = response.getEntity();
 
             String encodedID = URLEncoder.encode(treeObj.getDisplayName(), "UTF-8");//$NON-NLS-1$
-            File tempFolder = IOUtil.getTempFolder();
+            String usrDir =  ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString().substring(0,2) ;
+            File tempFolder = new File(usrDir + File.separator + System.currentTimeMillis());
+            if (!tempFolder.exists()) {
+            	tempFolder.mkdirs();
+            }
+            
             String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
             InputStream is = entity.getContent();
             OutputStream os = null;
@@ -303,6 +309,7 @@ public class ImportServerObjectWizard extends Wizard {
                     }
                 } finally {
                     IOUtil.cleanFolder(tempFolder);
+                    new File(usrDir).delete();
                 }
             }
 
