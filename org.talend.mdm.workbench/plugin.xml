@@ -7,22 +7,6 @@
    <extension-point id="repositoryViewService" name="repositoryViewService" schema="schema/repositoryViewService.exsd"/>
 
    <extension
-         point="org.eclipse.ui.views">
-      <category
-            name="Talend"
-            id="org.talend.core.root">
-      </category>
-      <view
-            allowMultiple="true"
-            category="org.talend.core.root"
-            class="com.amalto.workbench.views.ServerView"
-            icon="icons/appli_16x16.gif"
-            id="org.talend.mdm.workbench.views.ServerView"
-            name="MDM Server [deprecated]">
-            <!--name="Talend MDM Server View"-->
-      </view>
-   </extension>
-   <extension
          point="org.eclipse.ui.editors">
       <editor
             class="com.amalto.workbench.editors.XObjectEditor"
