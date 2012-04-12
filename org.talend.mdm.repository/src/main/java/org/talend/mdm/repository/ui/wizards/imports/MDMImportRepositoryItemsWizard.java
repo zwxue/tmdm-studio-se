@@ -223,7 +223,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
         selectedItems.addAll(items);
 
-        if (this.importServerItem(items)) {
+        if (this.noVaildItems(items)) {
             Display.getDefault().syncExec(new Runnable() {
 
                 public void run() {
@@ -311,20 +311,20 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         return returnComposite;
     }
 
-    private boolean importServerItem(Collection<ItemRecord> items) {
+    private boolean noVaildItems(Collection<ItemRecord> items) {
 
         if (items.size() == 0) {
             return true;
         }
         Iterator<ItemRecord> itemIt = items.iterator();
-        while (itemIt.hasNext()) {
+        while (itemIt.hasNext()) {// channged by hqzhang, if there are any valid items, then can import
             ItemRecord itemRecord = itemIt.next();
-            if (itemRecord.getExistingItemWithSameId() == null && itemRecord.getErrors() != null
-                    && itemRecord.getErrors().size() > 0) {
-                return true;
+            if (!(itemRecord.getExistingItemWithSameId() == null && itemRecord.getErrors() != null && itemRecord.getErrors()
+                    .size() > 0)) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
 }
