@@ -204,6 +204,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.EntityMainSection"
               id="org.talend.mdm.workbench.properties.entity.section.main"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.entity.tab.main">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -213,6 +214,7 @@
               afterSection="org.talend.mdm.workbench.properties.entity.section.main"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.entity.section.main.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.entity.tab.main">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -221,6 +223,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.PrsentationLabelSection"
               id="org.talend.mdm.workbench.properties.entity.section.presentation.label"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.entity.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -230,6 +233,7 @@
               afterSection="org.talend.mdm.workbench.properties.entity.section.presentation.label"
               class="com.amalto.workbench.detailtabs.sections.PresentationDescriptionSection"
               id="org.talend.mdm.workbench.properties.entity.section.presentation.description"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.entity.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -239,6 +243,7 @@
               afterSection="org.talend.mdm.workbench.properties.entity.section.presentation.description"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.entity.section.presentation.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.entity.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -247,6 +252,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.LookupFieldsSection"
               id="org.talend.mdm.workbench.properties.entity.section.extra.lookupfields"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.entity.tab.extra">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -256,6 +262,7 @@
                       afterSection="org.talend.mdm.workbench.properties.entity.section.extra.lookupfields"
                       class="com.amalto.workbench.detailtabs.sections.EntityPKInfosSection"
                       id="org.talend.mdm.workbench.properties.entity.section.extra.pkinfos"
+                      enablesFor="1"
                       tab="org.talend.mdm.workbench.properties.entity.tab.extra">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -265,6 +272,7 @@
               afterSection="org.talend.mdm.workbench.properties.entity.section.extra.pkinfos"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.entity.section.extra.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.entity.tab.extra">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
@@ -280,6 +288,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.ElementFKSection"
               id="org.talend.mdm.workbench.properties.element.section.relationship.fk"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.relationship">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -289,6 +298,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.relationship.fk"
               class="com.amalto.workbench.detailtabs.sections.ElementFKFilterSection"
               id="org.talend.mdm.workbench.properties.element.section.relationship.fkfilter"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.relationship">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -298,6 +308,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.relationship.fkfilter"
               class="com.amalto.workbench.detailtabs.sections.ElementFKInfosSection"
               id="org.talend.mdm.workbench.properties.element.section.relationship.fkinfos"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.relationship">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -307,6 +318,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.relationship.fkinfos"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.element.section.relationship.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.relationship">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -315,6 +327,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.PrsentationLabelSection"
               id="org.talend.mdm.workbench.properties.element.section.presentation.label"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -324,6 +337,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.presentation.label"
               class="com.amalto.workbench.detailtabs.sections.PresentationDescriptionSection"
               id="org.talend.mdm.workbench.properties.element.section.presentation.description"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -333,6 +347,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.presentation.description"
               class="com.amalto.workbench.detailtabs.sections.PresentationFacetMsgSection"
               id="org.talend.mdm.workbench.properties.element.section.presentation.facetmsg"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -342,6 +357,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.presentation.facetmsg"
               class="com.amalto.workbench.detailtabs.sections.PresentationDisplayFormatSection"
               id="org.talend.mdm.workbench.properties.element.section.presentation.displayformat"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -351,6 +367,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.presentation.displayformat"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.element.section.presentation.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -359,6 +376,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.ElementMainSection"
               id="org.talend.mdm.workbench.properties.element.section.main"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.main">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -368,6 +386,7 @@
               afterSection="org.talend.mdm.workbench.properties.element.section.main"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.element.section.main.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.element.tab.main">
            <input
                  type="org.eclipse.xsd.XSDParticle">
@@ -384,6 +403,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.SimpleTypeMainSection"
               id="org.talend.mdm.workbench.properties.simpletype.section.main"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.simpletype.tab.main">
            <input
                  type="org.eclipse.xsd.XSDSimpleTypeDefinition">
@@ -393,6 +413,7 @@
               afterSection="org.talend.mdm.workbench.properties.simpletype.section.main"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.simpletype.section.main.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.simpletype.tab.main">
            <input
                  type="org.eclipse.xsd.XSDSimpleTypeDefinition">
@@ -408,6 +429,7 @@
         <propertySection
               class="com.amalto.workbench.detailtabs.sections.ComplexTypeMainSection"
               id="org.talend.mdm.workbench.properties.complextype.section.main"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.complextype.tab.main">
            <input
                  type="org.eclipse.xsd.XSDComplexTypeDefinition">
@@ -417,6 +439,7 @@
               afterSection="org.talend.mdm.workbench.properties.complextype.section.main"
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.complextype.section.main.commit"
+              enablesFor="1"
               tab="org.talend.mdm.workbench.properties.complextype.tab.main">
            <input
                  type="org.eclipse.xsd.XSDComplexTypeDefinition">
