@@ -547,6 +547,7 @@
          <propertySection
                class="org.talend.mdm.repository.ui.contributor.ViewObjectPropertyMainSection"
                id="section.main"
+               enablesFor="1"
                filter="org.talend.mdm.repository.ui.contributor.RepositoryViewObjectFilter"
                tab="tab.main">
             <input
@@ -558,6 +559,7 @@
          <propertySection
                class="org.talend.mdm.repository.ui.contributor.ViewObjectPropertyVersionSection"
                id="section.version"
+               enablesFor="1"
                filter="org.talend.mdm.repository.ui.contributor.RepositoryViewObjectFilter"
                tab="tab.version">
             <input
