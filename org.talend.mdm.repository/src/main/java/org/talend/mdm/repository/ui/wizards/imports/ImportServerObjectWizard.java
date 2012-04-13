@@ -40,7 +40,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -51,17 +50,12 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -265,12 +259,7 @@ public class ImportServerObjectWizard extends Wizard {
             HttpEntity entity = response.getEntity();
 
             String encodedID = URLEncoder.encode(treeObj.getDisplayName(), "UTF-8");//$NON-NLS-1$
-            String usrDir =  ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString().substring(0,2) ;
-            File tempFolder = new File(usrDir + File.separator + System.currentTimeMillis());
-            if (!tempFolder.exists()) {
-            	tempFolder.mkdirs();
-            }
-            
+            File tempFolder = IOUtil.getWorkspaceTempFolder();
             String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
             InputStream is = entity.getContent();
             OutputStream os = null;
@@ -309,7 +298,6 @@ public class ImportServerObjectWizard extends Wizard {
                     }
                 } finally {
                     IOUtil.cleanFolder(tempFolder);
-                    new File(usrDir).delete();
                 }
             }
 
