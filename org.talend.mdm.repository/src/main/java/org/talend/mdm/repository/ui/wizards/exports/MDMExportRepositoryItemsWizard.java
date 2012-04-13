@@ -113,80 +113,79 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.setItemText(Messages.MDMExportRepositoryItemsWizard_exportItem);
-        
+
         initCheckState();
         return returnComposite;
     }
 
     private void initCheckState() {
-        CheckboxTreeViewer tv =  (CheckboxTreeViewer) checkTreeViewer.getViewer();
+        CheckboxTreeViewer tv = (CheckboxTreeViewer) checkTreeViewer.getViewer();
         tv.expandAll();
-        
+
         List<IRepositoryViewObject> leafItems = new ArrayList<IRepositoryViewObject>();
-        getCheckedViewObjects(sel, leafItems, new ArrayList<IRepositoryViewObject>());        
-        
+        getCheckedViewObjects(sel, leafItems, new ArrayList<IRepositoryViewObject>());
+
         recursiveExpand(tv.getTree().getItems(), leafItems);
         ((CheckboxTreeViewer) checkTreeViewer.getViewer()).setCheckedElements(leafItems.toArray());
     }
-        
-    
+
     private boolean recursiveExpand(TreeItem[] items, List<IRepositoryViewObject> leafItems) {
         boolean expanda = false;
-        for (TreeItem item:items) {
+        for (TreeItem item : items) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) item.getData();
-            
-            if(leafItems.contains(viewObj)) {
-                expanda =  true;
+
+            if (leafItems.contains(viewObj)) {
+                expanda = true;
                 break;
             }
-            
-            if(viewObj instanceof FolderRepositoryObject)
-            {
+
+            if (viewObj instanceof FolderRepositoryObject) {
                 boolean expand = recursiveExpand(item.getItems(), leafItems);
                 item.setExpanded(expand);
-                if(expand) {
-                    expanda =  true;
+                if (expand) {
+                    expanda = true;
                 }
             }
         }
-        
+
         return expanda;
     }
-    private void getCheckedViewObjects(IStructuredSelection sel, List<IRepositoryViewObject> leafItems, List<IRepositoryViewObject> noneLeafItems) {
 
-        Map<String, List<IRepositoryViewObject>> viewObjTypeMap = new TreeMap<String, List<IRepositoryViewObject>>();        
+    private void getCheckedViewObjects(IStructuredSelection sel, List<IRepositoryViewObject> leafItems,
+            List<IRepositoryViewObject> noneLeafItems) {
+
+        Map<String, List<IRepositoryViewObject>> viewObjTypeMap = new TreeMap<String, List<IRepositoryViewObject>>();
         Map<String, List<String>> pathMap = new HashMap<String, List<String>>();
-        Map<String, ERepositoryObjectType> types = new HashMap<String, ERepositoryObjectType>(); 
+        Map<String, ERepositoryObjectType> types = new HashMap<String, ERepositoryObjectType>();
 
         List<IRepositoryViewObject> seList = sel.toList();
         for (Iterator<IRepositoryViewObject> iterator = seList.iterator(); iterator.hasNext();) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) iterator.next();
             ERepositoryObjectType repositoryObjectType = viewObj.getRepositoryObjectType();
-            
-            List<IRepositoryViewObject> list = viewObjTypeMap.get(repositoryObjectType.name());
-            List<String> typePaths = pathMap.get(repositoryObjectType.name());
-            if (list == null) {
-                list = new LinkedList<IRepositoryViewObject>();
-                viewObjTypeMap.put(repositoryObjectType.name(), list);
-                
-                typePaths = new LinkedList<String>();
-                pathMap.put(repositoryObjectType.name(), typePaths);
-                
-                types.put(repositoryObjectType.name(), repositoryObjectType);
+            if (repositoryObjectType != null) {
+                List<IRepositoryViewObject> list = viewObjTypeMap.get(repositoryObjectType.name());
+                List<String> typePaths = pathMap.get(repositoryObjectType.name());
+                if (list == null) {
+                    list = new LinkedList<IRepositoryViewObject>();
+                    viewObjTypeMap.put(repositoryObjectType.name(), list);
+
+                    typePaths = new LinkedList<String>();
+                    pathMap.put(repositoryObjectType.name(), typePaths);
+
+                    types.put(repositoryObjectType.name(), repositoryObjectType);
+                }
+                list.add(viewObj);
+                typePaths.add(viewObj.getPath());
             }
-            list.add(viewObj);            
-            typePaths.add(viewObj.getPath());
         }
 
-        
         List<IRepositoryViewObject> childs = new LinkedList<IRepositoryViewObject>();
-        
-        for(Iterator<String> iterator = types.keySet().iterator(); iterator.hasNext(); )
-        {
+
+        for (Iterator<String> iterator = types.keySet().iterator(); iterator.hasNext();) {
             String etype = iterator.next();
-            List<IRepositoryViewObject> viewObjectsWithDeleted = RepositoryResourceUtil.findAllViewObjectsWithDeleted(types.get(etype));
-            for(IRepositoryViewObject vObject:viewObjectsWithDeleted)
-            {
+            List<IRepositoryViewObject> viewObjectsWithDeleted = RepositoryResourceUtil.findAllViewObjectsWithDeleted(types
+                    .get(etype));
+            for (IRepositoryViewObject vObject : viewObjectsWithDeleted) {
                 List<String> pathList = pathMap.get(etype);
                 for (int i = 0; i < pathList.size(); i++) {
                     if (vObject.getPath().equals(pathList.get(i))) {
@@ -194,27 +193,27 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
                         if (vo instanceof FolderRepositoryObject && !(vObject instanceof FolderRepositoryObject)) {
                             childs.add(vObject);
                             break;
-                        } 
-                    } else if (vObject.getPath().contains(pathList.get(i)) && viewObjTypeMap.get(etype).get(i) instanceof FolderRepositoryObject) {
+                        }
+                    } else if (vObject.getPath().contains(pathList.get(i))
+                            && viewObjTypeMap.get(etype).get(i) instanceof FolderRepositoryObject) {
                         childs.add(vObject);
                         break;
                     }
 
                 }
             }
-            
+
         }
-        
+
         childs.addAll(seList);
-        
-        for(int i=0; i<childs.size(); i++)
-        {
-            if(childs.get(i) instanceof FolderRepositoryObject)
+
+        for (int i = 0; i < childs.size(); i++) {
+            if (childs.get(i) instanceof FolderRepositoryObject)
                 noneLeafItems.add(childs.get(i));
             else {
                 leafItems.add(childs.get(i));
             }
         }
     }
-    
+
 }
