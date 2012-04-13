@@ -14,11 +14,17 @@ package org.talend.mdm.repository.utils;
 
 import java.io.File;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public class IOUtil {
 
+    /**
+     * 
+     */
+    private static final String TEMP_Folder_NAME = "temp"; //$NON-NLS-1$
     public static File getTempFolder() {
         String usrDir = System.getProperty("java.io.tmpdir");//$NON-NLS-1$
 
@@ -31,6 +37,15 @@ public class IOUtil {
 
     }
 
+    public static File getWorkspaceTempFolder() {
+        String usrDir = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
+        File tempFolder = new File(usrDir + File.separator + TEMP_Folder_NAME + File.separator + System.currentTimeMillis());
+        if (!tempFolder.exists()) {
+            tempFolder.mkdirs();
+        }
+        return tempFolder;
+
+    }
     public static void cleanFolder(File folder) {
         if (folder != null && folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles();
