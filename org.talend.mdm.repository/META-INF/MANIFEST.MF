@@ -36,7 +36,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.mdm.repository.model,
  org.talend.mdm.workbench,
  org.talend.mdm.workbench.serverexplorer,
- org.junit
+ org.junit,
+ org.eclipse.emf.ecore.xmi,
+ org.bonitasoft.studio.model
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging

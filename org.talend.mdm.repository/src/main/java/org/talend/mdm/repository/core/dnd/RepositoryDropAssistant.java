@@ -13,9 +13,18 @@
 package org.talend.mdm.repository.core.dnd;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.bonitasoft.studio.model.process.MainProcess;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -26,6 +35,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -61,8 +73,11 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.ProcessUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
+
+import com.amalto.workbench.models.Line;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -214,12 +229,17 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         String fileName = refFileItem.getName().replace(name, newName);
                         fileName=  fileName.replace("#", "$");  //$NON-NLS-1$ //$NON-NLS-2$
                         IFile file = folder.getFile(fileName);
+                        
+                        InputStream inputStream = new ByteArrayInputStream(content);
                         try {
                             if (!file.exists())
                                 file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
                             else
                                 file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
                             file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
+                            
+                            updateWorkflowContent(newName,fileName,inputStream,dragParentViewObj);
+                           
                             return true;
                         } catch (CoreException e) {
                             log.error(e.getMessage(), e);
@@ -247,7 +267,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                     } catch (BusinessException e) {
                         log.error(e.getMessage(), e);
                     } finally {
-
+                    	
                         try {
                             factory.unlock(copy);
                         } catch (PersistenceException e) {
@@ -262,7 +282,37 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         return false;
     }
 
-    private String showPasteDlg(final ERepositoryObjectType type, final ContainerItem parentItem, String initLabel) {
+ 
+
+	private void updateWorkflowContent(String newName, String fileName, InputStream inputStream, IRepositoryViewObject dragParentViewObj) { 
+    	 XMIResource resource = new XMIResourceImpl(); 
+         try { 
+              resource.load(inputStream, null);
+              List<Line> fields = new ArrayList<Line>();
+              List<Line> roles = new ArrayList<Line>();
+              ProcessUtil.updateMainProcess((MainProcess)resource.getContents().get(0), fields, roles, newName);
+              ProcessUtil.updateDiagram((Diagram) resource.getContents().get(1), newName);
+            
+              File proFile = new File(ProcessUtil.getWorkspaceWorkflowPath(dragParentViewObj)+fileName);
+              OutputStream fos = new FileOutputStream(proFile);
+              resource.save(fos, null);
+              OutputStreamWriter osw = new OutputStreamWriter(fos);
+              osw.flush();
+              osw.close();
+              fos.close();
+         } catch (IOException e1) {
+             log.error(e1.getMessage(), e1);
+         } finally {
+             if (inputStream != null)
+                 try {
+                 	inputStream.close();
+                 } catch (Exception e) {
+                 }
+         }
+		
+	}
+
+	private String showPasteDlg(final ERepositoryObjectType type, final ContainerItem parentItem, String initLabel) {
         InputDialog dlg = new InputDialog(getShell(), Messages.RepositoryDropAssistant_pasteObject, Messages.Common_inputName,
                 initLabel, new IInputValidator() {
 
