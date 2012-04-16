@@ -40,7 +40,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
 
     protected void doRun() {
 
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+        doSaveEditorsThing();
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
         LockedObjectDialog dialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,

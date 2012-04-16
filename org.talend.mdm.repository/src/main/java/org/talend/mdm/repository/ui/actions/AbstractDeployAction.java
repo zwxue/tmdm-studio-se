@@ -18,6 +18,10 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
@@ -26,6 +30,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
+import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -92,4 +97,29 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         }
         return viewObjs;
     }
+    
+    protected void doSaveEditorsThing() {
+        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
+        
+        boolean isEditing = false;
+        
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        try {
+            for (IEditorReference editorReference : activePage.getEditorReferences()) {
+                IRepositoryViewObject viewObject = ((IRepositoryViewEditorInput) editorReference.getEditorInput()).getViewObject();
+                if (viewObjs.contains(viewObject))
+                {
+                    isEditing = true;
+                    break;
+                }
+            }
+            
+            if (isEditing) {
+                activePage.saveAllEditors(true);
+            }
+        } catch (PartInitException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 }

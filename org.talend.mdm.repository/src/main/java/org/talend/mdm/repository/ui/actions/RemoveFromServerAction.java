@@ -46,7 +46,7 @@ public class RemoveFromServerAction extends AbstractDeployAction {
     }
 
     protected void doRun() {
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+        doSaveEditorsThing();
 
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
