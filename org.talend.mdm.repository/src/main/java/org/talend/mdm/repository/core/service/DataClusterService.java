@@ -26,8 +26,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -206,31 +209,27 @@ public class DataClusterService {
             String userName = serverDef.getUser();
             String password = serverDef.getPasswd();
             Reader reader = null;
-            InputStream is = null;
             MultiStatus ms = new MultiStatus(RepositoryPlugin.PLUGIN_ID, IStatus.ERROR,
                     Messages.ImportDataClusterAction_errorTitle, null);
             File[] files = new File(path).listFiles();
             monitor.beginTask(Messages.ImportDataClusterAction_importProcessTitle, files.length + 10);
+            Map<String, List<String>> conceptMap = new HashMap<String, List<String>>();
+            
             for (File file : files) {
                 String concept = ""; //$NON-NLS-1$
                 try {
                     reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$ 
                     WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
-
-                    // store the items to db using bulkloadclient
-                    concept = wsItem.getConceptName();
-                    BulkloadClient bulkloadClient = new BulkloadClient(url, userName, password, null, dName, concept,
-                            wsItem.getDataModelName());
-                    bulkloadClient.setOptions(new BulkloadOptions(false, false, 500));
-                    InputStreamMerger manager = bulkloadClient.load();
-                    String content = wsItem.getContent() + "\n"; //$NON-NLS-1$
-                    if (content != null) {
-                        is = new ByteArrayInputStream(content.getBytes("utf-8")); //$NON-NLS-1$
-                        manager.push(is);
-                        // bulkloadClient.load(sb.toString());
-                        manager.close();
+                    String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
+                    + wsItem.getDataModelName();
+                    List<String> list = null;
+                    list = conceptMap.get(key);
+                    if (list == null) {
+                        list = new ArrayList<String>();
+                        conceptMap.put(key, list);
                     }
-
+                    String content = wsItem.getContent();
+                    list.add(content);
                 } catch (XMLException e) {
                     log.error(e.getMessage(), e);
                 } catch (IOException e) {
@@ -240,19 +239,46 @@ public class DataClusterService {
                             e.getLocalizedMessage());
                     IStatus errStatus = new Status(IStatus.ERROR, RepositoryPlugin.PLUGIN_ID, msg, e);
                     ms.add(errStatus);
-
+                    return ms;
                 } finally {
                     try {
                         if (reader != null)
                             reader.close();
                     } catch (Exception e) {
-                    }
-                    try {
-                        if (is != null)
-                            is.close();
-                    } catch (Exception e) {
-                    }
+                    }                    
                 }
+                monitor.worked(1);
+            }
+            // store the items to db using bulkloadclient
+            for (Entry<String, List<String>> entry : conceptMap.entrySet()) {
+                String[] keys = entry.getKey().split("##");//$NON-NLS-1$
+                String cluster = keys[0];
+                String concept = keys[1];
+                String datamodel = keys[2];
+                BulkloadClient bulkloadClient = new BulkloadClient(url, userName, password, null, cluster,
+                        concept, datamodel);
+                bulkloadClient.setOptions(new BulkloadOptions(false, false, 500));
+
+                StringBuilder sb = new StringBuilder();
+                for (String xml : entry.getValue()) {
+                    sb.append(xml).append("\n"); //$NON-NLS-1$
+                }
+                try {
+                    InputStreamMerger manager = bulkloadClient.load();
+                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));
+                    manager.push(bin);
+                    // bulkloadClient.load(sb.toString());
+                    manager.close();
+                } catch (XMLException e) {
+                    log.error(e.getMessage(), e);
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                } catch (Exception e) {
+                    String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
+                            e.getLocalizedMessage());
+                    IStatus errStatus = new Status(IStatus.ERROR, RepositoryPlugin.PLUGIN_ID, msg, e);
+                    ms.add(errStatus);
+                } 
                 monitor.worked(1);
             }
             monitor.done();
