@@ -74,7 +74,7 @@ public class WSResourceEImpl extends MDMServerObjectImpl implements WSResourceE 
      * @generated
      * @ordered
      */
-    protected static final String IMAGE_CATALOG_EDEFAULT = null;
+    protected static final String IMAGE_CATALOG_EDEFAULT = "Default_Catalog";
 
     /**
      * The cached value of the '{@link #getImageCatalog() <em>Image Catalog</em>}' attribute.

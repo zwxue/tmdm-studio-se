@@ -80,6 +80,7 @@ public interface WSResourceE extends MDMServerObject {
 
     /**
      * Returns the value of the '<em><b>Image Catalog</b></em>' attribute.
+     * The default value is <code>"Default_Catalog"</code>.
      * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Image Catalog</em>' attribute isn't clear,
@@ -89,7 +90,7 @@ public interface WSResourceE extends MDMServerObject {
      * @return the value of the '<em>Image Catalog</em>' attribute.
      * @see #setImageCatalog(String)
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getWSResourceE_ImageCatalog()
-     * @model
+     * @model default="Default_Catalog"
      * @generated
      */
     String getImageCatalog();
