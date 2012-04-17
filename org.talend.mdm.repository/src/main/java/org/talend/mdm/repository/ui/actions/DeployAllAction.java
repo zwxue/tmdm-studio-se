@@ -47,8 +47,6 @@ public class DeployAllAction extends AbstractDeployAction {
     }
 
     protected void doRun() {
-        doSaveEditorsThing();
-        
         if (isDeployAll) {
             runWithType(null);
         } else {
