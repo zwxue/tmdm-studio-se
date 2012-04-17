@@ -40,8 +40,8 @@ public class DeployToAction extends AbstractDeployAction {
     }
 
     protected void doRun() {
+    	doSaveEditorsThing();
 
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
         LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
                 Messages.DeployAction_singleLockedObjectMessage, viewObjs);

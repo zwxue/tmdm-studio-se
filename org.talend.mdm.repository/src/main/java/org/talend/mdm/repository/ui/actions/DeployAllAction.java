@@ -63,7 +63,12 @@ public class DeployAllAction extends AbstractDeployAction {
     }
 
     public void runWithType(ERepositoryObjectType type) {
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+    	if(isDeployAll)
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
+        else {
+            doSaveEditorsThing();
+        }
+    	
         DeployAllDialog dialog = new DeployAllDialog(getShell(), type);
         if (dialog.open() == IDialogConstants.OK_ID) {
             List<AbstractDeployCommand> selectededCommands = dialog.getSelectedCommands();
