@@ -34,6 +34,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
@@ -183,8 +184,8 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
         for (Iterator<String> iterator = types.keySet().iterator(); iterator.hasNext();) {
             String etype = iterator.next();
-            List<IRepositoryViewObject> viewObjectsWithDeleted = RepositoryResourceUtil.findAllViewObjectsWithDeleted(types
-                    .get(etype));
+            
+            List<IRepositoryViewObject> viewObjectsWithDeleted = getAllViewObjectByType(types.get(etype));
             for (IRepositoryViewObject vObject : viewObjectsWithDeleted) {
                 List<String> pathList = pathMap.get(etype);
                 for (int i = 0; i < pathList.size(); i++) {
@@ -214,6 +215,28 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
                 leafItems.add(childs.get(i));
             }
         }
+    }
+    
+    private List<IRepositoryViewObject> getAllViewObjectByType(ERepositoryObjectType eType) {
+        List<IRepositoryViewObject> viewObjectsWithDeleted = null;
+
+        if (eType == IServerObjectRepositoryType.TYPE_EVENTMANAGER) {
+
+            viewObjectsWithDeleted = new LinkedList<IRepositoryViewObject>();
+            List<IRepositoryViewObject> aViewObjects = RepositoryResourceUtil
+                    .findAllViewObjects(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+            List<IRepositoryViewObject> bViewObjects = RepositoryResourceUtil
+                    .findAllViewObjects(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+
+            viewObjectsWithDeleted.addAll(aViewObjects);
+            viewObjectsWithDeleted.addAll(bViewObjects);
+
+        } else {
+
+            viewObjectsWithDeleted = RepositoryResourceUtil.findAllViewObjectsWithDeleted(eType);
+        }
+
+        return viewObjectsWithDeleted;
     }
 
 }
