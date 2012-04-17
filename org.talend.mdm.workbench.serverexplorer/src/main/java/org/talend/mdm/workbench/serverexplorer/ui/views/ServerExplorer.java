@@ -215,7 +215,7 @@ public class ServerExplorer extends ViewPart {
 
     @Override
     public void setFocus() {
-        // Set the focus
+        refreshServerDefs();
     }
 
     public void refreshServerDefs() {
@@ -265,8 +265,12 @@ public class ServerExplorer extends ViewPart {
         public void run() {
             ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), null);
             if (dialog.open() == IDialogConstants.OK_ID) {
-                boolean result = ServerDefService.createServerDef(dialog.getServerDef());
-                if (result) {
+                MDMServerDef serverDef = dialog.getServerDef();
+                String id = ServerDefService.createServerDef(serverDef);
+
+                if (id != null) {
+                    String tempPasswd = serverDef.getTempPasswd();
+                    ServerDefService.updateTempPassword(id, tempPasswd);
                     refreshServerDefs();
                 }
                 synchronizeMDMServerView();
@@ -414,8 +418,11 @@ public class ServerExplorer extends ViewPart {
             MDMServerDefItem mdmItem = getMDMItem(viewObject);
             if (mdmItem != null) {
                 MDMServerDef serverDef = mdmItem.getServerDef();
-                ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), serverDef, true);
+                ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), serverDef);
                 if (dialog.open() == IDialogConstants.OK_ID) {
+                    String tempPasswd = serverDef.getTempPasswd();
+                    ServerDefService.updateTempPassword(viewObject.getId(), tempPasswd);
+
                     boolean result = ServerDefService.saveServeDef(mdmItem);
                     if (result) {
                         refreshServerDefs();
@@ -432,6 +439,8 @@ public class ServerExplorer extends ViewPart {
                 MDMServerDef serverDef = mdmItem.getServerDef();
                 ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), serverDef);
                 if (dialog.open() == IDialogConstants.OK_ID) {
+                    String tempPasswd = serverDef.getTempPasswd();
+                    ServerDefService.updateTempPassword(viewObject.getId(), tempPasswd);
                     boolean result = ServerDefService.saveServeDef(mdmItem);
                     if (result) {
                         refreshServerDefs();

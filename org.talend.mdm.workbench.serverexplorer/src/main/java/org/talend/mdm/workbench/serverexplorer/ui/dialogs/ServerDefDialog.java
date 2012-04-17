@@ -80,11 +80,17 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     private MDMServerDef serverDef;
 
-    private String newName = ""; //$NON-NLS-1$
+    private String newName = null;
+
+    private String newPassword = null;
+
+    private String newUserName = null;
+
+    private String newUniverse = ""; //$NON-NLS-1$
+
+    private String newUrl = null;
 
     private static final int CHECK_CONNECTION_ID = 1024;
-
-    private boolean needDecrypted = false;
 
     public MDMServerDef getServerDef() {
         return this.serverDef;
@@ -97,21 +103,16 @@ public class ServerDefDialog extends TitleAreaDialog {
      */
     public ServerDefDialog(Shell parentShell, MDMServerDef serverDef) {
         super(parentShell);
-        
+
         //
         this.serverDef = serverDef;
         isUpdateServerDef = serverDef != null;
-        if ( isUpdateServerDef){
-            newName=serverDef.getName();
-        }else{
+        if (isUpdateServerDef) {
+            newName = serverDef.getName();
+        } else {
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
         }
         isEnterprise = Util.IsEnterPrise();
-    }
-
-    public ServerDefDialog(Shell parentShell, MDMServerDef serverDef, boolean needDecrypted) {
-        this(parentShell, serverDef);
-        this.needDecrypted = needDecrypted;
     }
 
     /**
@@ -121,9 +122,9 @@ public class ServerDefDialog extends TitleAreaDialog {
      */
     @Override
     protected Control createDialogArea(Composite parent) {
-        if (isUpdateServerDef){
+        if (isUpdateServerDef) {
             setTitle(Messages.ServerDefDialog_UpdateServer);
-        }else{
+        } else {
             setTitle(Messages.ServerDefDialog_AddServer);
             this.serverDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
         }
@@ -161,7 +162,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
         new Label(grpAuthentication, SWT.NONE).setText(Messages.ServerDefDialog_Password);
 
-        passwordText = new Text(grpAuthentication, SWT.BORDER|SWT.PASSWORD);
+        passwordText = new Text(grpAuthentication, SWT.BORDER | SWT.PASSWORD);
 
         passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
@@ -174,7 +175,8 @@ public class ServerDefDialog extends TitleAreaDialog {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                passwordText.setText(""); //$NON-NLS-1$
+                // TODO
+                //                passwordText.setText(""); //$NON-NLS-1$
             }
 
         });
@@ -209,27 +211,26 @@ public class ServerDefDialog extends TitleAreaDialog {
         urlText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                serverDef.setUrl(urlText.getText().trim());
+                newUrl = urlText.getText().trim();
             }
         });
         userNameText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                serverDef.setUser(userNameText.getText().trim());
+                newUserName = userNameText.getText().trim();
             }
         });
         passwordText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                serverDef.setPasswd(passwordText.getText().trim());
-                needDecrypted = false;
+                newPassword = passwordText.getText().trim();
             }
         });
         if (isEnterprise) {
             universeCombo.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    serverDef.setUniverse(universeCombo.getText().trim());
+                    newUniverse = universeCombo.getText().trim();
                 }
             });
 
@@ -287,22 +288,22 @@ public class ServerDefDialog extends TitleAreaDialog {
                 return false;
             }
         }
-        if (urlText.getText().trim().length() == 0) {
+        if (newUrl == null || newUrl.length() == 0) {
             setErrorMessage(Messages.ServerDefDialog_ServerCanNotBeEmpty);
             urlText.setFocus();
             return false;
         }
-        if (!serverDef.validate(serverDef.getUrl())) {
+        if (!serverDef.validate(newUrl)) {
             setErrorMessage(Messages.ServerDefDialog_ServerInvalid);
             urlText.setFocus();
             return false;
         }
-        if (serverDef.getUser().length() == 0) {
+        if (newUserName == null || newUserName.length() == 0) {
             setErrorMessage(Messages.ServerDefDialog_UsernameCanNotBeEmpty);
             userNameText.setFocus();
             return false;
         }
-        if (serverDef.getPasswd().length() == 0 && (serverDef.getTempPasswd() != null && serverDef.getTempPasswd().length() == 0)) {
+        if (newPassword == null || newPassword.length() == 0) {
             setErrorMessage(Messages.ServerDefDialog_PasswordCanNotBeEmpty);
             passwordText.setFocus();
             return false;
@@ -326,16 +327,7 @@ public class ServerDefDialog extends TitleAreaDialog {
         if (buttonId == IDialogConstants.OK_ID) {
             if (!validateInput())
                 return;
-            serverDef.parse(urlText.getText());
-            serverDef.setName(nameText.getText());
-
-            String encryptedPassword = PasswordUtil.encryptPassword(passwordText.getText());
-            serverDef.setPasswd(encryptedPassword);
-
-            if (!isLocalMode() && (!sharePwdBtn.getSelection())) {
-                    serverDef.setPasswd(""); //$NON-NLS-1$
-                    serverDef.setTempPasswd(passwordText.getText());
-                }
+            updateUI2Model(serverDef);
         }
         if (buttonId == CHECK_CONNECTION_ID) {
             if (!validateInput())
@@ -343,15 +335,11 @@ public class ServerDefDialog extends TitleAreaDialog {
             boolean check = false;
 
             String msg = null;
-            if (needDecrypted) {
-                MDMServerDef serverDefinition = serverDef.getDecryptedServerDef();
-                check = ServerDefService.checkMDMConnection(serverDefinition);
-                msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
-            }
-            else {
-                check = ServerDefService.checkMDMConnection(serverDef);
-                msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
-            }
+            MDMServerDef tmpServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
+            updateUI2Model(tmpServerDef);
+
+            check = ServerDefService.checkMDMConnection(tmpServerDef.getDecryptedServerDef());
+            msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
 
             if (check) {
                 setMessage(msg);
@@ -362,33 +350,61 @@ public class ServerDefDialog extends TitleAreaDialog {
         super.buttonPressed(buttonId);
     }
 
-
-    private void initValue() {
-        nameText.setText(serverDef.getName());
-        urlText.setText(serverDef.getUrl());
-        userNameText.setText(serverDef.getUser());
-        if (isLocalMode() && !(serverDef.getName().equals(""))) { //$NON-NLS-1$
-            String decryptedPassword = PasswordUtil.decryptPassword(serverDef.getPasswd());
-            passwordText.setText(decryptedPassword);
-
+    private void updateUI2Model(MDMServerDef serverDef) {
+        serverDef.parse(newUrl);
+        serverDef.setName(newName);
+        serverDef.setUser(newUserName);
+        serverDef.setPasswd(newPassword);
+        if (!sharePwdBtn.getSelection()) {
+            serverDef.setPasswd(null);
+            serverDef.setTempPasswd(newPassword);
         } else {
-            passwordText.setText(serverDef.getPasswd());
-        }
-        if (!isLocalMode() && (!serverDef.getPasswd().equals(""))) { //$NON-NLS-1$
-            String decryptedPassword = PasswordUtil.decryptPassword(serverDef.getPasswd());
-            passwordText.setText(decryptedPassword);
-        }
-
-        if (serverDef.getPasswd().equals("") && serverDef.getTempPasswd() != null) { //$NON-NLS-1$
-            passwordText.setText(serverDef.getTempPasswd());
-        }
-        sharePwdBtn.setSelection(!serverDef.getPasswd().equals("")); //$NON-NLS-1$
-
-        if (serverDef.getName().equals("")) { //$NON-NLS-1$
-            sharePwdBtn.setSelection(true);
+            String encryptedPassword = PasswordUtil.encryptPassword(newPassword);
+            serverDef.setPasswd(encryptedPassword);
+            serverDef.setTempPasswd(null);
         }
         if (Util.IsEnterPrise()) {
-            universeCombo.setText(serverDef.getUniverse());
+            serverDef.setUniverse(newUniverse);
+        }
+    }
+
+    private void initValue() {
+        newName = serverDef.getName();
+        nameText.setText(newName);
+
+        newUrl = serverDef.getUrl();
+        urlText.setText(newUrl);
+
+        newUserName = serverDef.getUser();
+        userNameText.setText(newUserName);
+
+        String passwd = serverDef.getPasswd();
+        if (passwd != null && passwd.length() > 0) {
+            passwordText.setText(PasswordUtil.decryptPassword(passwd));
+            sharePwdBtn.setSelection(true);
+        } else {
+            if (isLocalMode()) {
+                passwordText.setText(""); //$NON-NLS-1$
+                sharePwdBtn.setSelection(true);
+            } else {
+                passwd = serverDef.getTempPasswd();
+                if (passwd != null && passwd.length() > 0) {
+                    passwordText.setText(passwd);
+                } else {
+                    passwordText.setText(""); //$NON-NLS-1$
+                }
+                sharePwdBtn.setSelection(false);
+            }
+        }
+
+        newPassword = passwordText.getText().trim();
+
+        if (Util.IsEnterPrise()) {
+            newUniverse = serverDef.getUniverse();
+            universeCombo.setText(newUniverse);
+        }
+        if (!isUpdateServerDef) {
+            sharePwdBtn.setSelection(true);
         }
     }
 
@@ -404,11 +420,11 @@ public class ServerDefDialog extends TitleAreaDialog {
         createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
     }
 
-//    /**
-//     * Return the initial size of the dialog.
-//     */
-//    @Override
-//    protected Point getInitialSize() {
-//        return new Point(483, 300);
-//    }
+    // /**
+    // * Return the initial size of the dialog.
+    // */
+    // @Override
+    // protected Point getInitialSize() {
+    // return new Point(483, 300);
+    // }
 }

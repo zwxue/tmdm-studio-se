@@ -16,8 +16,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
@@ -53,6 +55,23 @@ public class ServerDefService implements ILegendServerDefService {
 
     private static Logger log = Logger.getLogger(ServerDefService.class);
 
+    private static Map<String, String> tmpPasswordCache = new HashMap<String, String>();
+
+    public static void updateTempPassword(String id, String password) {
+        if (id == null)
+            throw new IllegalArgumentException();
+        if (password != null && password.length() > 0)
+            tmpPasswordCache.put(id, password);
+        else
+            tmpPasswordCache.remove(id);
+    }
+
+    public static String getTempPassword(String id) {
+        if (id == null)
+            throw new IllegalArgumentException();
+        return tmpPasswordCache.get(id);
+    }
+
     public static ERepositoryObjectType REPOSITORY_TYPE_SERVER_DEF = DynaEnum.valueOf(ERepositoryObjectType.class,
             "MDM.ServerDef"); //$NON-NLS-1$
 
@@ -64,7 +83,21 @@ public class ServerDefService implements ILegendServerDefService {
     public static List<IRepositoryViewObject> getAllServerDefViewObjects() {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
-            return factory.getAll(REPOSITORY_TYPE_SERVER_DEF);
+            List<IRepositoryViewObject> viewObjects = factory.getAll(REPOSITORY_TYPE_SERVER_DEF);
+            if (viewObjects != null) {
+                for (IRepositoryViewObject viewObj : viewObjects) {
+                    if (tmpPasswordCache.containsKey(viewObj.getId())) {
+                        String tmpPasswd = tmpPasswordCache.get(viewObj.getId());
+                        Item item = viewObj.getProperty().getItem();
+                        MDMServerDef serverDef = ((MDMServerDefItem) item).getServerDef();
+                        if (serverDef != null) {
+                            serverDef.setTempPasswd(tmpPasswd);
+                        }
+                    }
+                }
+                return viewObjects;
+            }
+            return null;
 
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -168,7 +201,7 @@ public class ServerDefService implements ILegendServerDefService {
         return false;
     }
 
-    public static boolean createServerDef(MDMServerDef serverDef) {
+    public static String createServerDef(MDMServerDef serverDef) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         RepositoryContext context = factory.getRepositoryContext();
 
@@ -185,11 +218,11 @@ public class ServerDefService implements ILegendServerDefService {
             property.setAuthor(context.getUser());
             property.setLabel(item.getServerDef().getName());
             factory.create(item, new Path("")); //$NON-NLS-1$
-            return true;
+            return nextId;
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         }
-        return false;
+        return null;
     }
 
     /**
