@@ -553,7 +553,8 @@ public class ImportServerObjectWizard extends Wizard {
             }
             String[] fileInfo = getPicResourceFileInfo(name);
             if (fileInfo != null) {
-                return fileInfo[3] + "." + fileInfo[2]; //$NON-NLS-1$
+                //return fileInfo[3] + "." + fileInfo[2]; //$NON-NLS-1$
+                return fileInfo[3];
             }
         }
         if (type == TreeObject.WORKFLOW_PROCESS) {
