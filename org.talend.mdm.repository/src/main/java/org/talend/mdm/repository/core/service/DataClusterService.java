@@ -229,11 +229,7 @@ public class DataClusterService {
                         conceptMap.put(key, list);
                     }
                     String content = wsItem.getContent();
-                    list.add(content);
-                } catch (XMLException e) {
-                    log.error(e.getMessage(), e);
-                } catch (IOException e) {
-                    log.error(e.getMessage(), e);
+                    list.add(content);    
                 } catch (Exception e) {
                     String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
                             e.getLocalizedMessage());
@@ -268,11 +264,7 @@ public class DataClusterService {
                     InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));
                     manager.push(bin);
                     // bulkloadClient.load(sb.toString());
-                    manager.close();
-                } catch (XMLException e) {
-                    log.error(e.getMessage(), e);
-                } catch (IOException e) {
-                    log.error(e.getMessage(), e);
+                    manager.close(); 
                 } catch (Exception e) {
                     String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
                             e.getLocalizedMessage());
