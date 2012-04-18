@@ -568,6 +568,12 @@
          </propertySection>         
       </propertySections>
    </extension>
+   <extension
+         point="org.talend.repository.after_import_project_action">
+      <action
+            class="org.talend.mdm.repository.ui.actions.importproject.MarkNodeAsNewAction">
+      </action>
+   </extension>
    
    
    
