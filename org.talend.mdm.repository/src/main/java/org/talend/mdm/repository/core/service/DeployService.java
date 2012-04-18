@@ -169,8 +169,7 @@ public class DeployService {
         } else {
             boolean warnUser = PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_WARN_USER_AUTO_DEPLOY);
             if (warnUser)
-                MessageDialog.openWarning(shell, Messages.Warning_text,
-                        Messages.bind(Messages.NeverDeploy_text, viewObj.getLabel()));
+                MessageDialog.openWarning(shell, Messages.Warning_text, Messages.NeverDeploy_text);
         }
     }
 
