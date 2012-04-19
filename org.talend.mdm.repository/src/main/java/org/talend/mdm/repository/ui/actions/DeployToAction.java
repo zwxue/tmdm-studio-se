@@ -24,6 +24,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
@@ -40,18 +41,18 @@ public class DeployToAction extends AbstractDeployAction {
     }
 
     protected void doRun() {
-    	doSaveEditorsThing();
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
-                Messages.DeployAction_singleLockedObjectMessage, viewObjs);
-        if (lockDialog.needShowDialog() && lockDialog.open() == IDialogConstants.CANCEL_ID) {
-            return;
-        }
-        if (!lockDialog.canContinueRestOperation())
-            return;
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
+            // save editors
+            LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
+                    Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
+            if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+                return;
+            }
+            lockDirtyDialog.saveDirtyObjects();
+            // deploy
             MDMServerDef serverDef = dialog.getSelectedServerDef();
 
             IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY);

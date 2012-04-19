@@ -12,13 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -28,6 +28,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployAllDialog;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
 /**
@@ -63,16 +64,19 @@ public class DeployAllAction extends AbstractDeployAction {
     }
 
     public void runWithType(ERepositoryObjectType type) {
-    	if(isDeployAll)
-            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveAllEditors(true);
-        else {
-            doSaveEditorsThing();
-        }
     	
         DeployAllDialog dialog = new DeployAllDialog(getShell(), type);
         if (dialog.open() == IDialogConstants.OK_ID) {
             List<AbstractDeployCommand> selectededCommands = dialog.getSelectedCommands();
             if (selectededCommands.size() >= 0) {
+                // save editors
+                LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
+                        Messages.AbstractDeployAction_promptToSaveEditors, getDeployViewObject(selectededCommands));
+                if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+                    return;
+                }
+                lockDirtyDialog.saveDirtyObjects();
+
                 MDMServerDef serverDef = dialog.getServerDef();
                 IStatus status = DeployService.getInstance().runCommands(selectededCommands, serverDef);
 
@@ -85,7 +89,16 @@ public class DeployAllAction extends AbstractDeployAction {
         }
         commonViewer.refresh();
     }
-
+    
+    private List<IRepositoryViewObject> getDeployViewObject(List<AbstractDeployCommand> selectededCommands) {
+        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>(selectededCommands.size());
+        for (AbstractDeployCommand command : selectededCommands) {
+            IRepositoryViewObject viewObject = command.getViewObject();
+            if (viewObject != null && !viewObjs.contains(viewObject))
+                viewObjs.add(viewObject);
+        }
+        return viewObjs;
+    }
     protected void refreshParent(Object object) {
         if (object instanceof IRepositoryViewObject) {
             IRepositoryViewObject parent = ContainerCacheService.getParent((IRepositoryViewObject) object);

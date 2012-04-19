@@ -30,6 +30,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -46,10 +47,17 @@ public class RemoveFromServerAction extends AbstractDeployAction {
     }
 
     protected void doRun() {
-    	doSaveEditorsThing();
 
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
+            // save editors
+            LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
+                    Messages.AbstractDeployAction_promptToSaveEditors, getSelectedRepositoryViewObject());
+            if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+                return;
+            }
+            lockDirtyDialog.saveDirtyObjects();
+            // remove
             MDMServerDef serverDef = dialog.getSelectedServerDef();
             List<AbstractDeployCommand> commands = new LinkedList<AbstractDeployCommand>();
             CommandManager commandManager = CommandManager.getInstance();
@@ -65,48 +73,10 @@ public class RemoveFromServerAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
         }
-        // SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
-        // dialog.create();
-        // List<Object> list = getSelectedObject();
-        // if (list.size() > 0) {
-        // IRepositoryViewObject viewObj = (IRepositoryViewObject) list.get(0);
-        // Item item = viewObj.getProperty().getItem();
-        // MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        // dialog.setSelectServer(serverObject.getLastServerDef());
-        // }
-        // if (dialog.open() == IDialogConstants.OK_ID) {
-        // MDMServerDef serverDef = dialog.getSelectedServerDef();
-        // List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
-        // for (Object obj : getSelectedObject()) {
-        // viewObjs.add((IRepositoryViewObject) obj);
-        // }
-        // //
-        // IStatus status = remove(serverDef, viewObjs);
-        // if (status.isMultiStatus()) {
-        // for (IStatus childStatus : status.getChildren()) {
-        // RemoveService.RemoveStatus removeStatus = (RemoveStatus) childStatus;
-        // if (removeStatus.isOK()) {
-        // if (removeStatus.getItem() instanceof MDMServerObjectItem)
-        // removeLastServer((MDMServerObjectItem) removeStatus.getItem(), serverDef);
-        // }
-        // }
-        // showRemoveStatus(status);
-        // }
-        //
-        // }
-
+     
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private void removeLastServer(MDMServerObjectItem item, MDMServerDef serverDef) {
-        MDMServerObject mdmServerObject = item.getMDMServerObject();
-        mdmServerObject.setLastServerDef(null);
-        try {
-            factory.save(item);
-            refreshParent();
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
+    
 }

@@ -74,7 +74,7 @@ public class LockedObjectDialog extends Dialog {
 
     private TreeViewer treeViewer;
 
-    private List<IRepositoryViewObject> lockedObjs;
+    protected List<IRepositoryViewObject> lockedObjs;
 
     private final String mutliObjAlertMsg;
 
@@ -149,7 +149,7 @@ public class LockedObjectDialog extends Dialog {
         continueRestOperation = false;
     }
 
-    private void initInput(List<IRepositoryViewObject> inputObjs) {
+    protected void initInput(List<IRepositoryViewObject> inputObjs) {
         lockedObjs = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryViewObject viewObject : inputObjs) {
             if (RepositoryResourceUtil.isLockedAndEdited(viewObject)) {

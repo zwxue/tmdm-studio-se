@@ -290,7 +290,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
                         if (r) {
                             updateServerDef(viewObj);
-                            updateLockedObject(viewObj);
+//                            updateLockedObject(viewObj);
                             result = true;
                         }
                     }

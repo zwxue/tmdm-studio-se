@@ -88,23 +88,12 @@ public class UpdateLastServerCommand extends AbstractCommand {
         return Status.OK_STATUS;
     }
 
-    private void saveLastServer(Item item, MDMServerDef serverDef) {
-
-        if (factory.isEditableAndLockIfPossible(item)) {
-            RepositoryResourceUtil.setLastServerDef(item, serverDef);
-            try {
-                factory.save(item);
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            } finally {
-                try {
-                    factory.unlock(item);
-                } catch (PersistenceException e) {
-                    log.error(e.getMessage(), e);
-                } catch (LoginException e) {
-                    log.error(e.getMessage(), e);
-                }
-            }
-        }
-    }
+	private void saveLastServer(Item item, MDMServerDef serverDef) {
+		RepositoryResourceUtil.setLastServerDef(item, serverDef);
+		try {
+			factory.save(item);
+		} catch (PersistenceException e) {
+			log.error(e.getMessage(), e);
+		}
+	}
 }
