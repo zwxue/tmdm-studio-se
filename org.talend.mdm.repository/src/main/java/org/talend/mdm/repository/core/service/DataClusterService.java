@@ -231,6 +231,7 @@ public class DataClusterService {
                     String content = wsItem.getContent();
                     list.add(content);    
                 } catch (Exception e) {
+                    log.error(e.getLocalizedMessage(),e);
                     String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
                             e.getLocalizedMessage());
                     IStatus errStatus = new Status(IStatus.ERROR, RepositoryPlugin.PLUGIN_ID, msg, e);
@@ -266,6 +267,7 @@ public class DataClusterService {
                     // bulkloadClient.load(sb.toString());
                     manager.close(); 
                 } catch (Exception e) {
+                    log.error(e.getLocalizedMessage(),e);
                     String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
                             e.getLocalizedMessage());
                     IStatus errStatus = new Status(IStatus.ERROR, RepositoryPlugin.PLUGIN_ID, msg, e);
