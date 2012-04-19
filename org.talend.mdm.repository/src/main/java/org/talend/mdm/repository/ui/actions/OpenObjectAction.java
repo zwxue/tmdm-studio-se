@@ -251,7 +251,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             if (serverDef != null) {
                 XObjectBrowserInput input = (XObjectBrowserInput) editorInput;
                 TreeObject xobject = (TreeObject) input.getModel();
-                if (xobject != null) {
+                if (xobject != null && xobject.getWsKey() != null) {
                     TreeParent serverRoot = getServerRoot(serverDef);
                     xobject.setWsKey(new WSDataClusterPK(xobject.getWsKey().toString()));
                     xobject.setServerRoot(serverRoot);
