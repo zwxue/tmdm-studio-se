@@ -352,6 +352,7 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     private void updateUI2Model(MDMServerDef serverDef) {
         serverDef.parse(newUrl);
+        serverDef.setUrl(newUrl);
         serverDef.setName(newName);
         serverDef.setUser(newUserName);
         serverDef.setPasswd(newPassword);
