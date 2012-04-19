@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -90,21 +89,11 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     private void saveLastServer(Item item, MDMServerDef serverDef) {
 
-        if (factory.isEditableAndLockIfPossible(item)) {
-            RepositoryResourceUtil.setLastServerDef(item, serverDef);
-            try {
-                factory.save(item);
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            } finally {
-                try {
-                    factory.unlock(item);
-                } catch (PersistenceException e) {
-                    log.error(e.getMessage(), e);
-                } catch (LoginException e) {
-                    log.error(e.getMessage(), e);
-                }
-            }
+        RepositoryResourceUtil.setLastServerDef(item, serverDef);
+        try {
+            factory.save(item);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
         }
     }
 }

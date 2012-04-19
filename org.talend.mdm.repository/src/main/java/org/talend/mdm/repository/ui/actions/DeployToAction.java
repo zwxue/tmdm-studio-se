@@ -17,16 +17,11 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
-import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 /**
@@ -41,19 +36,19 @@ public class DeployToAction extends AbstractDeployAction {
 
     protected void doRun() {
 
-        doSaveEditorsThing();
-        
+
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        
-        LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
-                Messages.DeployAction_singleLockedObjectMessage, viewObjs);
-        if (lockDialog.needShowDialog() && lockDialog.open() == IDialogConstants.CANCEL_ID) {
-            return;
-        }
-        if (!lockDialog.canContinueRestOperation())
-            return;
+
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
+            // save editors
+            LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
+                    Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
+            if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+                return;
+            }
+            lockDirtyDialog.saveDirtyObjects();
+            // deploy
             MDMServerDef serverDef = dialog.getSelectedServerDef();
 
             IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY);
@@ -66,29 +61,5 @@ public class DeployToAction extends AbstractDeployAction {
         }
 
     }
-
-//    private void doSaveEditorsThing() {
-//        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-//        
-//        boolean isEditing = false;
-//        
-//        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-//        try {
-//            for (IEditorReference editorReference : activePage.getEditorReferences()) {
-//                IRepositoryViewObject viewObject = ((IRepositoryViewEditorInput) editorReference.getEditorInput()).getViewObject();
-//                if (viewObjs.contains(viewObject))
-//                {
-//                    isEditing = true;
-//                    break;
-//                }
-//            }
-//            
-//            if (isEditing) {
-//                activePage.saveAllEditors(true);
-//            }
-//        } catch (PartInitException e1) {
-//            e1.printStackTrace();
-//        }
-//    }
 
 }

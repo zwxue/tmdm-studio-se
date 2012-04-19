@@ -143,7 +143,7 @@ public class DeployService {
     }
 
     public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
-        return deploy(serverDef, viewObjs, defaultCmdType, true);
+        return deploy(serverDef, viewObjs, defaultCmdType, false);
     }
 
     private void removeLockedViewObj(List<IRepositoryViewObject> viewObjs) {

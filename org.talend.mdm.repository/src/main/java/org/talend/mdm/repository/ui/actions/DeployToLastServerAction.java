@@ -17,7 +17,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
@@ -39,8 +38,6 @@ public class DeployToLastServerAction extends AbstractDeployAction {
     }
 
     protected void doRun() {
-
-        doSaveEditorsThing();
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
         LockedObjectDialog dialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
