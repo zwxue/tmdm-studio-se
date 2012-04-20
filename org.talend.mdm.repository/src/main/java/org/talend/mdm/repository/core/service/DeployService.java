@@ -15,6 +15,7 @@ package org.talend.mdm.repository.core.service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,10 +27,16 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.CompoundCommand;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.command.common.PushCmdCommand;
+import org.talend.mdm.repository.core.command.common.UpdateLastServerCommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.command.deploy.DeployCompoundCommand;
+import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -221,4 +228,103 @@ public class DeployService {
         }
         return Status.CANCEL_STATUS;
     }
+
+	public void updateLastServer(IProgressMonitor monitor) {
+		CommandManager manager = CommandManager.getInstance();
+		Map<String, List<ICommand>> commandMap = manager
+				.getAllCommandsByPhase(ICommand.PHASE_AFTER_DEPLOY);
+		for (String id : commandMap.keySet()) {
+			List<ICommand> cmds = commandMap.get(id);
+			for (ICommand cmd : cmds) {
+				cmd.execute(null, monitor);
+			}
+			manager.removeCommandStack(id, ICommand.PHASE_AFTER_DEPLOY);
+		}
+	}
+
+	public void updateChangedStatus(IStatus status) {
+		updateChangedStatus(status, true);
+	}
+
+	public void updateChangedStatus(IStatus status, boolean isUpdateServer) {
+		if (status.isMultiStatus()) {
+			for (IStatus childStatus : status.getChildren()) {
+				DeployStatus deployStatus = null;
+				if (childStatus instanceof DeployStatus) {
+					deployStatus = (DeployStatus) childStatus;
+				} else if (childStatus instanceof MultiStatus) {
+					deployStatus = (DeployStatus) ((MultiStatus) childStatus)
+							.getChildren()[0];
+				}
+
+				if (deployStatus.isOK()) {
+					ICommand command = deployStatus.getCommand();
+					CommandManager manager = CommandManager.getInstance();
+					manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
+					if (isUpdateServer) {
+						MDMServerDef serverDef = null;
+						if (command instanceof AbstractDeployCommand) {
+							serverDef = ((AbstractDeployCommand) command)
+									.getServerDef();
+						} else if (command instanceof DeployCompoundCommand) {
+							serverDef = ((DeployCompoundCommand) command)
+									.getServerDef();
+						}
+						if (command instanceof BatchDeployJobCommand) {
+							BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) command;
+							pushRestoreCommand(manager,
+									deployJobCommand.getSubCmds(), serverDef);
+							pushRestoreCommand(manager,
+									deployJobCommand.getSubDeleteCmds(),
+									serverDef);
+						} else {
+							// updateserver
+							pushRestoreCommand(manager, command, serverDef);
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	private void pushRestoreCommand(CommandManager manager,
+			List<ICommand> subCmds, MDMServerDef serverDef) {
+		if (subCmds != null && subCmds.size() > 0) {
+			for (ICommand command : subCmds) {
+				pushRestoreCommand(manager, command, serverDef);
+			}
+		}
+	}
+
+	private void pushRestoreCommand(CommandManager manager, ICommand command,
+			MDMServerDef serverDef) {
+		// updateserver
+		if (command.getCommandType() != ICommand.CMD_DELETE) {
+			Item item = command.getViewObject().getProperty().getItem();
+			UpdateLastServerCommand updateLastServerCommand = new UpdateLastServerCommand(
+					item, serverDef);
+			updateLastServerCommand.setToRunPhase(ICommand.PHASE_AFTER_DEPLOY);
+			updateLastServerCommand.init(command.getCommandId(),
+					command.getObjLastName());
+			manager.pushCommand(updateLastServerCommand);
+		}
+		//
+		if (command.getCommandType() == ICommand.CMD_DELETE
+				&& !(command instanceof CompoundCommand)) {
+
+			UpdateLastServerCommand emptyLastServerCommand = new UpdateLastServerCommand();
+			PushCmdCommand pushCmd = new PushCmdCommand();
+			pushCmd.setPushCmdType(ICommand.CMD_ADD);
+			pushRestoreCommand(manager, command, emptyLastServerCommand);
+			pushRestoreCommand(manager, command, pushCmd);
+		}
+	}
+
+	private void pushRestoreCommand(CommandManager manager, ICommand command,
+			ICommand cmd) {
+		cmd.init(command.getCommandId(), command.getObjLastName());
+		cmd.setToRunPhase(ICommand.PHASE_RESTORE);
+		manager.pushCommand(cmd);
+	}
 }

@@ -19,10 +19,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
-import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -40,22 +41,21 @@ public class DeployToLastServerAction extends AbstractDeployAction {
     protected void doRun() {
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        LockedObjectDialog dialog = new LockedObjectDialog(getShell(), Messages.DeployAction_lockedObjectMessage,
-                Messages.DeployAction_singleLockedObjectMessage, viewObjs);
-        if (dialog.needShowDialog() && dialog.open() == IDialogConstants.CANCEL_ID) {
+        LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
+                Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
+        if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
             return;
         }
-        if (!dialog.canContinueRestOperation())
-            return;
+        lockDirtyDialog.saveDirtyObjects();
+        // deploy
         IRepositoryViewObject viewObj = viewObjs.get(0);
         MDMServerDef currentServerDef = RepositoryResourceUtil.getLastServerDef(viewObj);
         //
         IStatus status = deploy(currentServerDef, viewObjs, ICommand.CMD_MODIFY);
-        updateChangedStatus(status);
         if (status.isMultiStatus()) {
             showDeployStatus(status);
         }
-
+        DeployService.getInstance().updateChangedStatus(status, false);
         for (IRepositoryViewObject viewObject : viewObjs) {
             commonViewer.refresh(viewObject);
         }

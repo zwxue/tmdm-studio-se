@@ -91,84 +91,13 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     protected void updateChangedStatus(IStatus status) {
-        if (status.isMultiStatus()) {
-            for (IStatus childStatus : status.getChildren()) {
-                DeployStatus deployStatus = null;
-                if (childStatus instanceof DeployStatus) {
-                    deployStatus = (DeployStatus) childStatus;
-                } else if (childStatus instanceof MultiStatus) {
-                    deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
-                }
-
-                if (deployStatus.isOK()) {
-                    ICommand command = deployStatus.getCommand();
-                    CommandManager manager = CommandManager.getInstance();
-                    manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
-                    MDMServerDef serverDef = null;
-                    if (command instanceof AbstractDeployCommand) {
-                        serverDef = ((AbstractDeployCommand) command).getServerDef();
-                    } else if (command instanceof DeployCompoundCommand) {
-                        serverDef = ((DeployCompoundCommand) command).getServerDef();
-                    }
-                    if (command instanceof BatchDeployJobCommand) {
-                        BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) command;
-                        pushRestoreCommand(manager, deployJobCommand.getSubCmds(), serverDef);
-                        pushRestoreCommand(manager, deployJobCommand.getSubDeleteCmds(), serverDef);
-                    } else {
-                        // updateserver
-                        pushRestoreCommand(manager, command, serverDef);
-                    }
-                }
-
-            }
-        }
+    	 DeployService.getInstance().updateChangedStatus(status);
     }
 
-    private void pushRestoreCommand(CommandManager manager, List<ICommand> subCmds, MDMServerDef serverDef) {
-        if (subCmds != null && subCmds.size() > 0) {
-            for (ICommand command : subCmds) {
-                pushRestoreCommand(manager, command, serverDef);
-            }
-        }
-    }
-
-    private void pushRestoreCommand(CommandManager manager, ICommand command, MDMServerDef serverDef) {
-        // updateserver
-        if (command.getCommandType() != ICommand.CMD_DELETE) {
-            Item item = command.getViewObject().getProperty().getItem();
-            UpdateLastServerCommand updateLastServerCommand = new UpdateLastServerCommand(item, serverDef);
-            updateLastServerCommand.setToRunPhase(ICommand.PHASE_AFTER_DEPLOY);
-            updateLastServerCommand.init(command.getCommandId(), command.getObjLastName());
-            manager.pushCommand(updateLastServerCommand);
-        }
-        //
-        if (command.getCommandType() == ICommand.CMD_DELETE && !(command instanceof CompoundCommand)) {
-
-            UpdateLastServerCommand emptyLastServerCommand = new UpdateLastServerCommand();
-            PushCmdCommand pushCmd = new PushCmdCommand();
-            pushCmd.setPushCmdType(ICommand.CMD_ADD);
-            pushRestoreCommand(manager, command, emptyLastServerCommand);
-            pushRestoreCommand(manager, command, pushCmd);
-        }
-    }
-
-    private void pushRestoreCommand(CommandManager manager, ICommand command, ICommand cmd) {
-        cmd.init(command.getCommandId(), command.getObjLastName());
-        cmd.setToRunPhase(ICommand.PHASE_RESTORE);
-        manager.pushCommand(cmd);
-    }
+    
 
     protected void updateLastServer(IProgressMonitor monitor) {
-        CommandManager manager = CommandManager.getInstance();
-        Map<String, List<ICommand>> commandMap = manager.getAllCommandsByPhase(ICommand.PHASE_AFTER_DEPLOY);
-        for (String id : commandMap.keySet()) {
-            List<ICommand> cmds = commandMap.get(id);
-            for (ICommand cmd : cmds) {
-                cmd.execute(null, monitor);
-            }
-            manager.removeCommandStack(id, ICommand.PHASE_AFTER_DEPLOY);
-        }
-
+        DeployService.getInstance().updateLastServer(monitor);
         commonViewer.refresh();
     }
 
@@ -182,28 +111,5 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         }
         return viewObjs;
     }
-    
-    protected void doSaveEditorsThing() {
-        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        
-        boolean isEditing = false;
-        
-        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        try {
-            for (IEditorReference editorReference : activePage.getEditorReferences()) {
-                IRepositoryViewObject viewObject = ((IRepositoryViewEditorInput) editorReference.getEditorInput()).getViewObject();
-                if (viewObjs.contains(viewObject))
-                {
-                    isEditing = true;
-                    break;
-                }
-            }
-            
-            if (isEditing) {
-                activePage.saveAllEditors(true);
-            }
-        } catch (PartInitException e1) {
-            e1.printStackTrace();
-        }
-    }
+   
 }
