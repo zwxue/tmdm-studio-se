@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.dnd;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -55,6 +56,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.core.service.MDMRepositoryEnterpriseService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -214,12 +216,15 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         String fileName = refFileItem.getName().replace(name, newName);
                         fileName=  fileName.replace("#", "$");  //$NON-NLS-1$ //$NON-NLS-2$
                         IFile file = folder.getFile(fileName);
+                        InputStream inputStream = new ByteArrayInputStream(content);
                         try {
                             if (!file.exists())
                                 file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
                             else
                                 file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
                             file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
+                            
+                            MDMRepositoryEnterpriseService.getRepositoryEnterpriseService().updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);      
                             return true;
                         } catch (CoreException e) {
                             log.error(e.getMessage(), e);
