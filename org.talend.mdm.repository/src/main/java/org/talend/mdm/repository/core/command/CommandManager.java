@@ -112,7 +112,10 @@ public class CommandManager implements IMementoAware {
 
     public void fillViewObjectToCommand(ICommand cmd) {
         try {
-            IRepositoryViewObject viewObject = factory.getLastVersion(cmd.getCommandId());
+            IRepositoryViewObject viewObject=cmd.getViewObject();        
+            if(viewObject==null){
+                viewObject = factory.getLastVersion(cmd.getCommandId());
+            }
             cmd.updateViewObject(viewObject);
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);

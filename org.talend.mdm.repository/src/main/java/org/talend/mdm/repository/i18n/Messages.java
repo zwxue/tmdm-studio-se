@@ -92,6 +92,10 @@ public class Messages extends NLS {
 
     public static String DeployToAction_deployTo;
 
+    public static String DeployAnotherVersionAction_deployAnother;
+    
+    public static String DeployAnotherVersionAction_selectAnother;
+    
     public static String DeployToLastServerAction_deployToLastServer;
 
     public static String DuplicateAction_duplicate;
