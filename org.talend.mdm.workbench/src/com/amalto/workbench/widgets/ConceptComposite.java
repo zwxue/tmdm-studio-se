@@ -137,7 +137,7 @@ public class ConceptComposite {
         label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         label.setText("This complex-type extends another complex-type:");
 
-        superTypeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER);
+        superTypeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY);
         superTypeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
 
         if (!typeNames.contains("")) {//$NON-NLS-1$
