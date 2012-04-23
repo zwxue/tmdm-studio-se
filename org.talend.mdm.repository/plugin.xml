@@ -4,6 +4,7 @@
 >
    <extension-point id="repositoryConfiguration" name="repositoryConfiguration" schema="schema/repositoryConfiguration.exsd"/>
    <extension-point id="actionProviderConfiguration" name="actionProviderConfiguration" schema="schema/actionProviderConfiguration.exsd"/>
+   <extension-point id="repoEnterpriseService" name="repoEnterpriseService" schema="schema/repoEnterpriseService.exsd"/>
    <extension
          point="org.eclipse.ui.contexts">
       <context
