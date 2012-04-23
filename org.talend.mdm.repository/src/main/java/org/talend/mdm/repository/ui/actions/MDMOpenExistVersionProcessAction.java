@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryObject;
@@ -53,23 +54,16 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
             Object obj = ((IStructuredSelection) selection).getFirstElement();
             RepositoryNode node = (RepositoryNode) obj;
 
-            IPath path = RepositoryNodeUtilities.getPath(node);
-            String originalName = node.getObject().getLabel();
-
             RepositoryObject repositoryObj = new RepositoryObject(node.getObject().getProperty());
             repositoryObj.setRepositoryNode(node.getObject().getRepositoryNode());
-            OpenExistVersionProcessWizard wizard = new MDMOpenExistVersionProcessWizard(repositoryObj);
+            MDMOpenExistVersionProcessWizard wizard = new MDMOpenExistVersionProcessWizard(repositoryObj);
             PropertyManagerWizardDialog dialog = new PropertyManagerWizardDialog(Display.getCurrent().getActiveShell(), wizard);
             dialog.setPageSize(300, 250);
-            if (dialog.open() == Dialog.OK) {
-                refresh(node);
-                // refresh the corresponding editor's name
-                IEditorPart part = getCorrespondingEditor(node);
-                if (part != null && part instanceof IUIRefresher) {
-                    ((IUIRefresher) part).refreshName();
-                } else {
-                    processRoutineRenameOperation(originalName, node, path);
+            if (dialog.open() == Dialog.OK) {    
+                if(wizard.getViewObj()!=null){
+                    obj=wizard.getViewObj();
                 }
+                MDMRepositoryView.show().getCommonViewer().refresh(obj);                
             }
         }
 

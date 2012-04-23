@@ -44,6 +44,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.CopyUrlAction;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
+import org.talend.mdm.repository.ui.actions.DeployAnotherVersionAction;
 import org.talend.mdm.repository.ui.actions.DeployToAction;
 import org.talend.mdm.repository.ui.actions.DeployToLastServerAction;
 import org.talend.mdm.repository.ui.actions.DuplicateAction;
@@ -78,6 +79,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     protected static AbstractRepositoryAction importObjectAction;
 
     protected static AbstractRepositoryAction deployToAction;
+    protected static AbstractRepositoryAction deployAnotherToAction;
 
     protected static AbstractRepositoryAction deployToLastServerAction;
 
@@ -114,6 +116,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         renameAction = initRepositoryAction(new RenameObjectAction(), commonViewer);
         duplicateAction = initRepositoryAction(new DuplicateAction(), commonViewer);
         deployToAction = initRepositoryAction(new DeployToAction(), commonViewer);
+        deployAnotherToAction = initRepositoryAction(new DeployAnotherVersionAction(), commonViewer);
         deployToLastServerAction = initRepositoryAction(new DeployToLastServerAction(), commonViewer);
         deployAllAction = initRepositoryAction(new DeployAllAction(false), commonViewer);
         emAction = initRepositoryAction(new MDMEventManagerAction(), commonViewer);

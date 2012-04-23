@@ -15,7 +15,6 @@ package org.talend.mdm.repository.ui.actions;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -33,7 +32,6 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
  */
 public class RemoveFromServerAction extends AbstractDeployAction {
 
-    private static Logger log = Logger.getLogger(DeployToAction.class);
 
     public RemoveFromServerAction() {
         super(Messages.RemoveFromServerAction_removeFromServer);

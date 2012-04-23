@@ -15,18 +15,23 @@ package org.talend.mdm.repository.ui.wizards;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryManager;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.service.IMDMSVNProviderService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.ERepositoryStatus;
+import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.RepositoryNode;
 
 
@@ -78,17 +83,48 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
             IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();
             if (actionProvider != null) {
                 IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
+                editorInput.setReadOnly(readonly);
                 if (editorInput != null) {
 
                     IWorkbenchPage page = MDMRepositoryView.show().getCommonViewer().getCommonNavigator().getSite()
                             .getWorkbenchWindow().getActivePage();
                     try {
+                        updateEditorInputVersionInfo(editorInput, viewObject);
                         page.openEditor(editorInput, editorInput.getEditorId(), readonly);
+                        this.viewObject=viewObject;
                     } catch (PartInitException e) {
                         log.error(e.getMessage(), e);
                     }
                 }
             }
         }
+    }
+    
+    private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
+        String version = viewObject.getVersion();
+        try {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            if (!factory.isLocalConnectionProvider()) {
+                IMDMSVNProviderService service = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
+                        IMDMSVNProviderService.class);
+                if (service != null) {
+                    if (service.isProjectInSvnMode()) {
+                        String revisionNumStr = service.getCurrentSVNRevision(viewObject);
+                        if (revisionNumStr != null) {
+                            revisionNumStr = ".r" + revisionNumStr; //$NON-NLS-1$
+                            version += revisionNumStr;
+                        }
+                    }
+                }
+
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        editorInput.setVersion(version);
+    }    
+    public IRepositoryViewObject getViewObj(){
+        return this.viewObject;
     }
 }

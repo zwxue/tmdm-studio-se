@@ -62,6 +62,7 @@ public class StoredProcedureActionProvider extends RepositoryNodeActionProviderA
             actions.add(renameAction);
             // deploy
             actions.add(deployToAction);
+            actions.add(deployAnotherToAction);
             addAction(actions, deployToLastServerAction, viewObj);
         }
         actions.add(deployAllAction);
