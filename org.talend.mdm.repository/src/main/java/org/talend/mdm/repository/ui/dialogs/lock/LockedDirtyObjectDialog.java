@@ -93,7 +93,7 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
                         id = ((ProcessEditorInput) editorInput).getItem().getProperty().getId();
                     }
                     IEditorPart editor = ref.getEditor(false);
-                    if (id != null && editor != null && editor.isDirty()) {
+                    if (id != null && editor != null && editor.isDirty() && id.equals(viewObj.getId())) {
                         editorRefMap.put(id, editor);
                     }
                 } catch (PartInitException e) {
