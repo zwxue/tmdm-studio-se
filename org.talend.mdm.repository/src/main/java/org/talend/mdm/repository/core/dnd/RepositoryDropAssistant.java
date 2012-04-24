@@ -45,6 +45,7 @@ import org.eclipse.ui.navigator.CommonNavigator;
 import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
@@ -56,7 +57,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
-import org.talend.mdm.repository.core.service.MDMRepositoryEnterpriseService;
+import org.talend.mdm.repository.core.service.IMDMRepositoryEnterpriseServiceExt;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -224,7 +225,12 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                                 file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
                             file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
                             
-                            MDMRepositoryEnterpriseService.getRepositoryEnterpriseService().updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);      
+                            IMDMRepositoryEnterpriseServiceExt service = (IMDMRepositoryEnterpriseServiceExt) GlobalServiceRegister.getDefault().getService(
+                            		IMDMRepositoryEnterpriseServiceExt.class);
+                            if (service != null) {
+                                 service.updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);
+                            }
+                            
                             return true;
                         } catch (CoreException e) {
                             log.error(e.getMessage(), e);

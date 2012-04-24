@@ -14,9 +14,10 @@ package org.talend.mdm.repository.core.service;
 
 import java.io.InputStream;
 
+import org.talend.core.IService;
 import org.talend.core.model.repository.IRepositoryViewObject;
 
-public interface IMDMRepositoryEnterpriseServiceExt {
+public interface IMDMRepositoryEnterpriseServiceExt extends IService{
 	
 	 public void updateWorkflowContent(String newName, String fileName, InputStream inputStream, IRepositoryViewObject dragParentViewObj) ;
 
