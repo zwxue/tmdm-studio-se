@@ -94,7 +94,6 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
         sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_UNIVERSE));
         sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_VIEW));
         sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_WORKFLOW));
-        sortedViewObjs.add(categoryViewObjects[5]);
         return (IRepositoryViewObject[]) sortedViewObjs.toArray(new IRepositoryViewObject[0]);
     }
 
