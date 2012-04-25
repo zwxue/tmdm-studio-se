@@ -97,7 +97,10 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     }
 
     protected Shell getShell() {
-        return commonViewer.getControl().getShell();
+        if(commonViewer!=null)
+            return commonViewer.getControl().getShell();
+        else
+            return MDMRepositoryView.show().getCommonViewer().getControl().getShell();
     }
 
     public boolean isVisible(IRepositoryViewObject viewObj) {
