@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -46,6 +47,7 @@ import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -128,33 +130,51 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     @Override
     public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
         ImportService.setImporting(true);
+        monitor.beginTask("Import MDM object", toImportItemRecords.size() * 3); //$NON-NLS-1$
+        for (ItemRecord itemRec : toImportItemRecords) {
+
+            Property property = itemRec.getProperty();
+            Item item = property.getItem();
+            if (item instanceof MDMServerObjectItem) {
+                MDMServerObject serverObj = null;
+                serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                if (serverObj.getLastServerDef() != null) {
+                    serverObj.setLastServerDef(null);
+                }
+
+            } else {
+                EMap additionalProperties = property.getAdditionalProperties();
+                if (additionalProperties != null)
+                    additionalProperties.remove(RepositoryResourceUtil.PROP_LAST_SERVER_DEF);
+            }
+            monitor.worked(1);
+        }
 
         repositoryUtil.importItemRecords(manager, toImportItemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
-
         for (ItemRecord itemRec : toImportItemRecords) {
-            MDMServerObject serverObj = null;
-            try {
-                ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
-                for (IRepositoryViewObject object : factory.getAllVersion(itemRec.getItemId())) {
-                    if (object.getVersion() != null && object.getVersion().equals(itemRec.getItemVersion())) {
-                        if (object.getProperty().getItem() instanceof MDMServerObjectItem) {
-                            Item item = object.getProperty().getItem();
-                            serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-                            if (serverObj.getLastServerDef() != null) {
-                                serverObj.setLastServerDef(null);
-                                factory.save(item);
-                            }
-                            String name = serverObj.getName() == null ? item.getProperty().getLabel() : serverObj.getName();
-                            // flagged as new
-                            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, item.getProperty().getId(), name);
-                        }
-                    }
+            if (itemRec.isValid()) {
+
+                String[] split = itemRec.getLabel().split(" ");
+                String name = split.length > 0 ? split[0] : null;
+
+                // // flagged as new
+                if (name != null) {
+                    CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, itemRec.getItemId(), name);
                 }
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
             }
+            monitor.worked(1);
         }
+
+        monitor.done();
+
         ImportService.setImporting(false);
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                MDMRepositoryView.show().getCommonViewer().refresh();
+            }
+        });
+
     }
 
     protected void createOverwriteBtn(Composite composite) {

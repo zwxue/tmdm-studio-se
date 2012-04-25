@@ -945,7 +945,7 @@ public class RepositoryResourceUtil {
         return typePathMap.get(path);
     }
 
-    private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
+    public static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /**
      * 
