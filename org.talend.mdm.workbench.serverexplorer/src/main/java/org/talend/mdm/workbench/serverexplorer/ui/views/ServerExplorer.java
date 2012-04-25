@@ -25,14 +25,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -55,13 +50,15 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
+import org.talend.core.GlobalServiceRegister;
+import org.talend.core.IService;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
-import org.talend.mdm.workbench.serverexplorer.ui.actions.IEventMgrAction;
+import org.talend.mdm.workbench.serverexplorer.ui.actions.IEventMgrService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.ServerDefDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.ServerSorter;
 import org.talend.mdm.workbench.serverexplorer.ui.providers.TreeContentProvider;
@@ -321,14 +318,8 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
+
     public class EventManageAction extends Action {
-
-        private static final String PLUGIN = "org.talend.mdm.workbench.serverexplorer"; //$NON-NLS-1$
-
-        private static final String EXTENSION_POINT = "emAction"; //$NON-NLS-1$
-
-        private static final String PROP_CLASS = "class"; //$NON-NLS-1$
-
         public EventManageAction() {
             setImageDescriptor(IMG_EVENTMANAGER);
             setText(Messages.ServerExplorer_EventManager);
@@ -339,35 +330,13 @@ public class ServerExplorer extends ViewPart {
         }
 
         private void doOpenEventManagerAction() {
-            IExtensionRegistry registry = Platform.getExtensionRegistry();
-            IExtensionPoint extensionPoint = registry.getExtensionPoint(PLUGIN, EXTENSION_POINT);
-            if (extensionPoint != null && extensionPoint.isValid()) {
-                IExtension[] extensions = extensionPoint.getExtensions();
-                for (IExtension s : extensions) {
-                    IConfigurationElement[] elements = s.getConfigurationElements();
-                    for (IConfigurationElement element : elements) {
-                        if (element.getAttribute(PROP_CLASS) != null) {
-                            try {
-                                IEventMgrAction emAction = (IEventMgrAction) element.createExecutableExtension(PROP_CLASS);
-                                IRepositoryViewObject viewObject = getCurSelectedViewObject();
-                                if (viewObject != null) {
-                                    MDMServerDefItem mdmItem = getMDMItem(viewObject);
-                                    if (mdmItem != null) {
-                                        MDMServerDef serverDef = mdmItem.getServerDef();
-                                        emAction.setMDMServerDef(serverDef);
-                                    }
-                                }
-                                emAction.run();
-                            } catch (Exception e) {
-                                log.error(e.getMessage(), e);
-                            }
-                        }
-                    }
-                }
-            }
+           IService service= GlobalServiceRegister.getDefault().getService(IEventMgrService.class);
+           if(service!=null){
+               IEventMgrService mgr=(IEventMgrService)service;
+               mgr.run();
+           }
         }
     }
-
     class EditServerDefAction extends Action {
 
         public EditServerDefAction() {

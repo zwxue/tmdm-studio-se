@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,12 +12,9 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.ui.actions;
 
-import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.core.IService;
 
 
-public interface IEventMgrAction {
-
-    public void run();
-
-    public void setMDMServerDef(MDMServerDef def);
+public interface IEventMgrService extends IService {
+    void run();
 }

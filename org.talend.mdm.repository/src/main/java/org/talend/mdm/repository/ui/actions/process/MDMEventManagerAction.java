@@ -25,9 +25,10 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.editors.XObjectBrowser2;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.mdm.workbench.serverexplorer.ui.actions.IEventMgrService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
-public class MDMEventManagerAction extends AbstractRepositoryAction {
+public class MDMEventManagerAction extends AbstractRepositoryAction  implements IEventMgrService{
 
     private static Log log = LogFactory.getLog(MDMEventManagerAction.class);
 
