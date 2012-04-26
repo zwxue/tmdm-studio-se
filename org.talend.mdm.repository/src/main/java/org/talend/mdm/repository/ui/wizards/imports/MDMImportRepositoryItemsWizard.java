@@ -131,40 +131,57 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
         ImportService.setImporting(true);
         monitor.beginTask("Import MDM object", toImportItemRecords.size() * 3); //$NON-NLS-1$
-        for (ItemRecord itemRec : toImportItemRecords) {
-
-            Property property = itemRec.getProperty();
-            Item item = property.getItem();
-            if (item instanceof MDMServerObjectItem) {
-                MDMServerObject serverObj = null;
-                serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-                if (serverObj.getLastServerDef() != null) {
-                    serverObj.setLastServerDef(null);
-                }
-
-            } else {
-                EMap additionalProperties = property.getAdditionalProperties();
-                if (additionalProperties != null)
-                    additionalProperties.remove(RepositoryResourceUtil.PROP_LAST_SERVER_DEF);
-            }
-            monitor.worked(1);
-        }
 
         repositoryUtil.importItemRecords(manager, toImportItemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
+
         for (ItemRecord itemRec : toImportItemRecords) {
-            if (itemRec.isValid()) {
+            MDMServerObject serverObj = null;
+            try {
+                ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+                List<IRepositoryViewObject> allVersion = factory.getAllVersion(itemRec.getItemId());
+                for (IRepositoryViewObject object : allVersion) {
+                    if (object.getVersion() != null && object.getVersion().equals(itemRec.getItemVersion())) {
+                        Property property = object.getProperty();
+                        Item item = property.getItem();
+                        boolean needSave = false;
+                        if (item instanceof MDMServerObjectItem) {
 
-                String[] split = itemRec.getLabel().split(" ");
-                String name = split.length > 0 ? split[0] : null;
+                            serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                            if (serverObj.getLastServerDef() != null) {
+                                serverObj.setLastServerDef(null);
+                                needSave = true;
+                            }
 
-                // // flagged as new
-                if (name != null) {
-                    CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, itemRec.getItemId(), name);
+                        } else {
+                            EMap additionalProperties = property.getAdditionalProperties();
+                            if (additionalProperties != null) {
+                                additionalProperties.remove(RepositoryResourceUtil.PROP_LAST_SERVER_DEF);
+                                needSave = true;
+                            }
+                        }
+                        try {
+                            if (needSave) {
+                                factory.save(item);
+                            }
+                            if (itemRec.isValid()) {
+
+                                String[] split = itemRec.getLabel().split(" "); //$NON-NLS-1$
+                                String name = split.length > 0 ? split[0] : null;
+
+                                // // flagged as new
+                                if (name != null) {
+                                    CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, itemRec.getItemId(), name);
+                                }
+                            }
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
                 }
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
             }
-            monitor.worked(1);
         }
-
         monitor.done();
 
         ImportService.setImporting(false);
