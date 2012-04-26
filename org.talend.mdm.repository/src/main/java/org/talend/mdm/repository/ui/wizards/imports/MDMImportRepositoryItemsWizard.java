@@ -45,6 +45,7 @@ import org.eclipse.ui.internal.wizards.datatransfer.TarFile;
 import org.eclipse.ui.internal.wizards.datatransfer.TarLeveledStructureProvider;
 import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
+import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
@@ -60,6 +61,7 @@ import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.ImportRepositoryObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.RepositoryWorkUnit;
 import org.talend.repository.imports.ImportItemUtil;
 import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
@@ -128,60 +130,67 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     }
 
     @Override
-    public void doImport(Object[] selectedObjs, IProgressMonitor monitor) {
+    public void doImport(final Object[] selectedObjs, final IProgressMonitor monitor) {
         ImportService.setImporting(true);
         monitor.beginTask("Import MDM object", toImportItemRecords.size() * 3); //$NON-NLS-1$
 
-        repositoryUtil.importItemRecords(manager, toImportItemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
+        RepositoryWorkUnit rwu = new RepositoryWorkUnit("MDM Import Items") { //$NON-NLS-1$
 
-        for (ItemRecord itemRec : toImportItemRecords) {
-            MDMServerObject serverObj = null;
-            try {
-                ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
-                List<IRepositoryViewObject> allVersion = factory.getAllVersion(itemRec.getItemId());
-                for (IRepositoryViewObject object : allVersion) {
-                    if (object.getVersion() != null && object.getVersion().equals(itemRec.getItemVersion())) {
-                        Property property = object.getProperty();
-                        Item item = property.getItem();
-                        boolean needSave = false;
-                        if (item instanceof MDMServerObjectItem) {
+            @Override
+            protected void run() throws LoginException, PersistenceException {
+                repositoryUtil.importItemRecords(manager, toImportItemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
 
-                            serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
-                            if (serverObj.getLastServerDef() != null) {
-                                serverObj.setLastServerDef(null);
-                                needSave = true;
-                            }
+                for (ItemRecord itemRec : toImportItemRecords) {
+                    MDMServerObject serverObj = null;
+                    try {
+                        ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+                        List<IRepositoryViewObject> allVersion = factory.getAllVersion(itemRec.getItemId());
+                        for (IRepositoryViewObject object : allVersion) {
+                            if (object.getVersion() != null && object.getVersion().equals(itemRec.getItemVersion())) {
+                                Property property = object.getProperty();
+                                Item item = property.getItem();
+                                boolean needSave = false;
+                                if (item instanceof MDMServerObjectItem) {
 
-                        } else {
-                            EMap additionalProperties = property.getAdditionalProperties();
-                            if (additionalProperties != null) {
-                                additionalProperties.remove(RepositoryResourceUtil.PROP_LAST_SERVER_DEF);
-                                needSave = true;
-                            }
-                        }
-                        try {
-                            if (needSave) {
-                                factory.save(item);
-                            }
-                            if (itemRec.isValid()) {
+                                    serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                                    if (serverObj.getLastServerDef() != null) {
+                                        serverObj.setLastServerDef(null);
+                                        needSave = true;
+                                    }
 
-                                String[] split = itemRec.getLabel().split(" "); //$NON-NLS-1$
-                                String name = split.length > 0 ? split[0] : null;
+                                } else {
+                                    EMap additionalProperties = property.getAdditionalProperties();
+                                    if (additionalProperties != null) {
+                                        additionalProperties.remove(RepositoryResourceUtil.PROP_LAST_SERVER_DEF);
+                                        needSave = true;
+                                    }
+                                }
+                                try {
+                                    if (needSave) {
+                                        factory.save(item);
+                                    }
+                                    if (itemRec.isValid()) {
 
-                                // // flagged as new
-                                if (name != null) {
-                                    CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, itemRec.getItemId(), name);
+                                        String[] split = itemRec.getLabel().split(" "); //$NON-NLS-1$
+                                        String name = split.length > 0 ? split[0] : null;
+
+                                        // // flagged as new
+                                        if (name != null) {
+                                            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, itemRec.getItemId(), name);
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    log.error(e.getMessage(), e);
                                 }
                             }
-                        } catch (Exception e) {
-                            log.error(e.getMessage(), e);
                         }
+                    } catch (PersistenceException e) {
+                        log.error(e.getMessage(), e);
                     }
                 }
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
             }
-        }
+        };
+        ProxyRepositoryFactory.getInstance().executeRepositoryWorkUnit(rwu);
         monitor.done();
 
         ImportService.setImporting(false);
