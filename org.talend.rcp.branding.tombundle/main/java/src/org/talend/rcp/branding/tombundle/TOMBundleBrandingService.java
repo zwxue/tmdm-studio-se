@@ -67,7 +67,7 @@ public class TOMBundleBrandingService extends AbstractTalendBrandingService {
     }
 
     public String getAcronym() {
-        return "tmc"; //$NON-NLS-1$
+        return "tos_mdm"; //$NON-NLS-1$
     }
 
     public String getProductName() {
