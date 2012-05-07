@@ -188,7 +188,10 @@ public class ServerDefService implements ILegendServerDefService {
             port.ping(new WSPing("ServerExplorer")); //$NON-NLS-1$
             return true;
         } catch (RemoteException e) {
-            log.debug(e.getMessage(), e);
+            if(log.isDebugEnabled())
+                log.debug(e.getMessage(), e);
+            else
+                log.info(e.getMessage());
         } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
         } catch (XtentisException e) {

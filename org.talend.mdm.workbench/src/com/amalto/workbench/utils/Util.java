@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -363,8 +364,6 @@ public class Util {
         }
     }
 
-    // public static XtentisPort getPort(String endpointAddress, String username, String password) throws
-    // XtentisException{
     public static XtentisPort getPort(URL url, String universe, String username, String password) throws XtentisException {
 
         try {
@@ -408,19 +407,18 @@ public class Util {
             if (password != null)
                 stub._setProperty(Stub.PASSWORD_PROPERTY, password);
 
+            // Attempt to reset the JDK Authenticator before a web service call is made.
+            // However due to JDK Authenticator bad design, it does not prevent any other code or thread to change it.
+            // FIXME Rely on different SOAP stack to be able to use different HTTP implementation such the Apache
+            // HttpClient.
+            Authenticator.setDefault(null);
+
             return (XtentisPort) stub;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new XtentisException("Unable to access endpoint at: " + url + ": " + e.getLocalizedMessage());
         }
     }
-
-    /*
-     * public static WSDataModel[] getAllDataModels(URL url, String username, String password) throws XtentisException{
-     * try { XtentisPort port = Util.getPort(url,username,password); return port.getDataModels(new
-     * WSRegexDataModels("*")).getWsDataModels(); } catch (Exception e) {log.error(e.getMessage(), e); throw new
-     * XtentisException( "Unable to retrieve all Data Models" +": "+e.getLocalizedMessage()); } }
-     */
 
     public static WSDataModelPK[] getAllDataModelPKs(URL url, String universe, String username, String password)
             throws XtentisException {
@@ -740,11 +738,6 @@ public class Util {
             log.error(e.getMessage(), e);
             throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        String url = "http://localhost:8080/imageserver/upload/c201108/di_perspective_16x16.png.png";
-        downloadFile(url, "/tmp");
     }
 
     public static OutputStream downloadFile(String url, String downloadFolder) {
@@ -2669,7 +2662,7 @@ public class Util {
                 String name = ((XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition()).getDerivationMethod()
                         .getName();
                 if (name.equals("restriction")) //$NON-NLS-1$
-                list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) complexTypeDefinition
+                    list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) complexTypeDefinition
                             .getBaseTypeDefinition()));
             }
         }
@@ -3071,6 +3064,7 @@ public class Util {
         }
         return false;
     }
+
     public static boolean isCustomrType(XSDSchema schema, String typeName) {
         return getAllCustomTypeNames(schema).contains(typeName);
     }
