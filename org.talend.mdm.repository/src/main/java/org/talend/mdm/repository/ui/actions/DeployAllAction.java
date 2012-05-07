@@ -84,7 +84,7 @@ public class DeployAllAction extends AbstractDeployAction {
                 if (status.isMultiStatus()) {
                     showDeployStatus(status);
                 }
-                updateLastServer(new NullProgressMonitor());
+                updateLastServer(status, new NullProgressMonitor());
             }
         }
         commonViewer.refresh();

@@ -23,7 +23,6 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 /**
@@ -59,7 +58,7 @@ public class DeployToAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
 
-            updateLastServer(new NullProgressMonitor());
+            updateLastServer(status, new NullProgressMonitor());
         }
 
     }

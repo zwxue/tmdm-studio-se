@@ -24,7 +24,6 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.dialogs.SelectVersionDialog;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
-import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 
@@ -71,7 +70,7 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
 
-            updateLastServer(new NullProgressMonitor());
+            updateLastServer(status, new NullProgressMonitor());
         }        
     }
     

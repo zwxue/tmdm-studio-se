@@ -82,8 +82,8 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         DeployService.getInstance().updateChangedStatus(status);
     }
 
-    protected void updateLastServer(IProgressMonitor monitor) {
-        DeployService.getInstance().updateLastServer(monitor);
+    protected void updateLastServer(IStatus status, IProgressMonitor monitor) {
+        DeployService.getInstance().updateLastServer(status, monitor);
         commonViewer.refresh();
     }
 
