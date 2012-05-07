@@ -645,7 +645,9 @@ public class ImportServerObjectWizard extends Wizard {
             retriever.run(monitor);
             serverRoot = retriever.getServerRoot();
             //
-            retrieverCustomForms((TreeParent) serverRoot, m);
+            if (Util.IsEnterPrise()) {
+                retrieverCustomForms((TreeParent) serverRoot, m);
+            }
             //
             Display.getDefault().asyncExec(new Runnable() {
 
