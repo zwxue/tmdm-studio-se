@@ -257,8 +257,6 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         exchangeDwnTable.setSortColumn(column1);
         exchangeDwnTable.setSortDirection(SWT.UP);
 
-        fillInTable();
-
         return composite;
     }
 
@@ -286,7 +284,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         return idRevisonMap;
     }
 
-    private void fillInTable() {
+    public void fillInTable() {
         exchangeDwnTable.removeAll();
         HttpClient client = new HttpClient();
         String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -374,5 +372,5 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             dialog.open();
         }
     }
-
+ 
 }

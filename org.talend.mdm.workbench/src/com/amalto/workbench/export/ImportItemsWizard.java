@@ -151,7 +151,7 @@ public class ImportItemsWizard extends Wizard {
 
     protected String importFolder;
 
-    private StringBuffer zipFileRepository = new StringBuffer();;
+    protected StringBuffer zipFileRepository = new StringBuffer();;
 
     protected FileSelectWidget folder;
 
@@ -1280,9 +1280,7 @@ public class ImportItemsWizard extends Wizard {
 
                 public void widgetSelected(SelectionEvent e) {
 
-                    FormToolkit toolkit = WidgetFactory.getWidgetFactory();
-                    ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(zipBtn.getShell(), toolkit, true,
-                            zipFileRepository);
+                    ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
                     dlg.setBlockOnOpen(true);
                     if (dlg.open() == Window.OK) {
                         zip.getText().setText(zipFileRepository.toString());
@@ -1348,5 +1346,14 @@ public class ImportItemsWizard extends Wizard {
 
     protected void createViewer() {
         treeViewer = new RepositoryCheckTreeViewer(sel);
+    }
+
+    protected ImportExchangeOptionsDialog getExchangeOptionsDialog() {
+        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
+        ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(zipBtn.getShell(), toolkit, true, zipFileRepository);
+        dlg.create();
+        dlg.fillInTable();
+
+        return dlg;
     }
 }
