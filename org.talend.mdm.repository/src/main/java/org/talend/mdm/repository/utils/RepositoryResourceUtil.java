@@ -866,9 +866,11 @@ public class RepositoryResourceUtil {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
-                        IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
-                        if (vObj != null && vObj.equals(viewObj)) {
-                            return ref;
+                        if(inputItem!=null){
+                            IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
+                            if (vObj != null && vObj.equals(viewObj)) {
+                                return ref;
+                            }
                         }
                     }
                 } catch (PartInitException e) {
@@ -896,9 +898,11 @@ public class RepositoryResourceUtil {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
-                        IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
-                        if (vObj != null && vObj.equals(viewObj)) {
-                            activePage.closeEditors(new IEditorReference[] { ref }, save);
+                        if(inputItem!=null){
+                            IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());                        
+                            if (vObj != null && vObj.equals(viewObj)) {
+                                activePage.closeEditors(new IEditorReference[] { ref }, save);
+                            }
                         }
                     }
                 } catch (PartInitException e) {
@@ -1023,19 +1027,23 @@ public class RepositoryResourceUtil {
                                 IEditorInput editorInput = editorReference.getEditorInput();
                                 if ((editorInput != null && editorInput instanceof IRepositoryViewEditorInput)) {
                                     IRepositoryViewEditorInput rInput = (IRepositoryViewEditorInput) editorInput;
-                                    Property openedProperty = rInput.getInputItem().getProperty();
-                                    if (openedProperty.getId().equals(objectToMove.getId())
-                                            && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
-                                        return true;
+                                    if(rInput!=null){
+                                        Property openedProperty = rInput.getInputItem().getProperty();
+                                        if (openedProperty.getId().equals(objectToMove.getId())
+                                                && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
+                                            return true;
+                                        }
                                     }
                                 } else if (objectToMove.getProperty().getItem() instanceof BusinessProcessItem) {
                                     Object obj = editorInput.getAdapter(IRepositoryEditorInput.class);
                                     if (obj instanceof IRepositoryEditorInput) {
                                         IRepositoryEditorInput rInput = (IRepositoryEditorInput) obj;
-                                        Property openedProperty = rInput.getItem().getProperty();
-                                        if (openedProperty.getId().equals(objectToMove.getId())
-                                                && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
-                                            return true;
+                                        if(rInput!=null){
+                                            Property openedProperty = rInput.getItem().getProperty();
+                                            if (openedProperty.getId().equals(objectToMove.getId())
+                                                    && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
+                                                return true;
+                                            }
                                         }
                                     }
 
