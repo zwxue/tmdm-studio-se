@@ -2369,6 +2369,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         public void doubleClick(DoubleClickEvent event) {
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
+            if (selection.isEmpty())
+                return;
             int elem = getElementType(selection.getFirstElement());
             // available models
             java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
