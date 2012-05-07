@@ -21,7 +21,9 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 /**
@@ -36,10 +38,10 @@ public class DeployToAction extends AbstractDeployAction {
 
     protected void doRun() {
 
-
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
 
-        SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
+        SelectServerDefDialog dialog = getSelectServerDefDialog(viewObjs);
+        
         if (dialog.open() == IDialogConstants.OK_ID) {
             // save editors
             LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
@@ -62,4 +64,47 @@ public class DeployToAction extends AbstractDeployAction {
 
     }
 
+    private SelectServerDefDialog getSelectServerDefDialog(List<IRepositoryViewObject> viewObjs) {
+        SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
+        
+        initializeSelection(viewObjs, dialog);
+        return dialog;
+    }
+
+    /**
+     * set the default selection in SelectServerDefDialog
+     * @param viewObjs current selected view objects
+     * @param dialog
+     */
+    private void initializeSelection(List<IRepositoryViewObject> viewObjs, SelectServerDefDialog dialog) {
+        MDMServerDef defServer = null;
+        for (IRepositoryViewObject viewObject : viewObjs) {
+            MDMServerObjectItem serverDefItem = (MDMServerObjectItem) viewObject.getProperty().getItem();
+            MDMServerDef tmpServer = serverDefItem.getMDMServerObject().getLastServerDef();
+            if (defServer == null) {
+                defServer = tmpServer;
+            } else if (tmpServer != null && !isSameMDMServerDef(defServer, tmpServer)) {
+                defServer = null;
+                break;
+            }
+        }
+
+        dialog.create();
+        dialog.setSelectServer(defServer);
+    }
+    
+    private boolean isSameMDMServerDef(MDMServerDef aServerDef, MDMServerDef bServerDef) {
+        if (aServerDef == null && bServerDef == null)
+            return true;
+
+        if (aServerDef != null && bServerDef != null) {
+            if (aServerDef.getName().equals(bServerDef.getName())
+            // && aServerDef.getUrl().equals(bServerDef.getUrl())
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
