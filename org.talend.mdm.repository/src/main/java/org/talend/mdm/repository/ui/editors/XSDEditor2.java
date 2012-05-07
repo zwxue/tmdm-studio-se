@@ -47,6 +47,10 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     private IEditorInput xobjectEditorinput;
 
+    private DataModelMainPage2 dMainPage;
+
+    private CTabFolder folder;
+
     @Override
     protected void createPages() {
 
@@ -60,7 +64,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        DataModelMainPage2 dMainPage = new DataModelMainPage2(treeObject, xsdFile);
+        dMainPage = new DataModelMainPage2(treeObject, xsdFile);
         try {
             addPage(dMainPage, xobjectEditorinput);
         } catch (PartInitException e) {
@@ -83,14 +87,12 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         setXSDInput(xobjectEditorinput);
         setXObject(treeObject);
         //
-        CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
+        folder = (CTabFolder) dMainPage.getMainControl().getParent();
         folder.getItem(2).setText(treeObject.getDisplayName() + " " + Util.getRevision(treeObject));//$NON-NLS-1$
         folder.getItem(0).setText(Messages.XSDEditor2_schemaDesign);
         folder.getItem(1).setText(Messages.XSDEditor2_schemaSource);
-        //
-        setActiveEditor(dMainPage);
         // default use
-
+        setActiveEditor(dMainPage);
         if (hasSvnHistory()) {
             curContributionID = CONTRUIBUTIONID_SVNHISTORY;
         }
@@ -111,6 +113,14 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     public boolean isReadOnly() {
         IRepositoryViewEditorInput editorInput = (IRepositoryViewEditorInput) this.getEditorInput();
         return editorInput.isReadOnly();
+    }
+
+    @Override
+    public void setFocus() {
+        super.setFocus();
+        if (folder != null) {
+            folder.setFocus();
+        }
     }
 
     /*
