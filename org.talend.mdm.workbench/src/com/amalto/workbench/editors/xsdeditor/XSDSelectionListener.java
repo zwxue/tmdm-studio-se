@@ -24,15 +24,18 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTerm;
 
+import com.amalto.workbench.editors.DataModelMainPage;
+
 public class XSDSelectionListener implements ISelectionChangedListener {
 
     XSDEditor editor;
 
-    XSDSchema xsdSchema;
+    private final DataModelMainPage dataModelMainPage;
 
-    public XSDSelectionListener(XSDEditor editor, XSDSchema xsdSchema) {
+
+    public XSDSelectionListener(XSDEditor editor, DataModelMainPage dataModelMainPage) {
         this.editor = editor;
-        this.xsdSchema = xsdSchema;
+        this.dataModelMainPage = dataModelMainPage;
     }
 
     public void selectionChanged(SelectionChangedEvent event) {
@@ -65,7 +68,9 @@ public class XSDSelectionListener implements ISelectionChangedListener {
                     return;
                 // find the element in Design page' xsdSchema according to DataModelMainPage's selection element
                 XSDElementDeclaration sel = null;
-                for (XSDElementDeclaration el : editor.getXSDSchema().getElementDeclarations()) {
+                XSDSchema xsdSchema = dataModelMainPage.getXSDSchema();
+
+                for (XSDElementDeclaration el : xsdSchema.getElementDeclarations()) {
                     if (el.getName().equals(element.getName())) {
                         sel = el;
                         break;
