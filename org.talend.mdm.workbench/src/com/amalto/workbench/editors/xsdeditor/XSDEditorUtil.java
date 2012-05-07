@@ -152,7 +152,7 @@ public class XSDEditorUtil {
         part.getSite().setSelectionProvider(dMainPage.getSelectionProvider());
 
         // add XSDSelectionListener
-        XSDSelectionListener xsdListener = new XSDSelectionListener(part, dMainPage.getXSDSchema());
+        XSDSelectionListener xsdListener = new XSDSelectionListener(part, dMainPage);
         dMainPage.getTypesViewer().addSelectionChangedListener(xsdListener);
         dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
        

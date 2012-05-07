@@ -13,14 +13,24 @@
 package com.amalto.workbench.editors.xsdeditor;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
@@ -32,9 +42,17 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xsd.ui.internal.adapters.CategoryAdapter;
+import org.eclipse.wst.xsd.ui.internal.adapters.RedefineCategoryAdapter;
+import org.eclipse.wst.xsd.ui.internal.adapters.XSDBaseAdapter;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
+import org.eclipse.xsd.XSDComponent;
+import org.eclipse.xsd.XSDConcreteComponent;
+import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
+import org.w3c.dom.Node;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.IServerObjectEditorState;
@@ -58,6 +76,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     protected TreeObject xobject;
 
+    private XSDSelectionManagerSelectionListener fXSDSelectionListener;
+
     public void setXSDInput(IEditorInput input) {
         this.xsdInput = input;
     }
@@ -68,7 +88,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     public String getPartName() {
-        
+
         String part = super.getPartName();
         if (part.endsWith(".xsd")) {//$NON-NLS-1$
             return part.substring(0, part.length() - 4);
@@ -85,9 +105,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     protected void superDoSave(IProgressMonitor monitor) {
         super.doSave(monitor);
     }
+
     @Override
     public void doSave(IProgressMonitor monitor) {
-        
+
         super.doSave(monitor);
         try {
             if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
@@ -99,8 +120,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 file.setCharset("utf-8", null);//$NON-NLS-1$
                 file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
             } // save the file's contents to DataModelMainPage
-
-            // InputStream in = XSDEditorUtil.createFile(xobject).getContents(true);
 
             IDocument doc = getTextEditor().getTextViewer().getDocument();
             String xsd = doc.get();
@@ -121,7 +140,19 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     protected IFile getXSDFile(TreeObject xobject) throws Exception {
         return XSDEditorUtil.createFile(xobject);
     }
-    public void pageChang(){
+
+    boolean doUpdateSourceLocation = false;
+
+    protected void pageChange(int newPageIndex) {
+        super.pageChange(newPageIndex);
+        doUpdateSourceLocation = newPageIndex == SOURCE_PAGE_INDEX;
+
+        if (doUpdateSourceLocation && fXSDSelectionListener != null)
+            fXSDSelectionListener.doSetSelection();
+
+    }
+
+    public void pageChang() {
         if (xobject != null) {
             try {
                 if (getSelectedPage() instanceof DataModelMainPage) {// save the file's contents to
@@ -174,6 +205,114 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         }
     }
 
+    private class XSDSelectionManagerSelectionListener implements ISelectionChangedListener {
+
+        /**
+         * Determines DOM node based on object (xsd node)
+         * 
+         * @param object
+         * @return
+         */
+        private Object getObjectForOtherModel(Object object) {
+            Node node = null;
+            if (object instanceof Node) {
+                node = (Node) object;
+            } else if (object instanceof XSDComponent) {
+                if (object instanceof XSDElementDeclaration) {
+                    String name = ((XSDElementDeclaration) object).getName();
+                    for (XSDElementDeclaration elem : getXSDSchema().getElementDeclarations()) {
+                        if (elem.getName().equals(name)) {
+                            node = elem.getElement();
+                        }
+                    }
+                } else {
+                    node = ((XSDComponent) object).getElement();
+                }
+            } else if (object instanceof RedefineCategoryAdapter) {
+                RedefineCategoryAdapter category = (RedefineCategoryAdapter) object;
+                node = category.getXSDRedefine().getElement();
+            } else if (object instanceof CategoryAdapter) {
+                node = ((CategoryAdapter) object).getXSDSchema().getElement();
+            } else if (object instanceof XSDBaseAdapter) {
+                if (((XSDBaseAdapter) object).getTarget() instanceof XSDConcreteComponent) {
+                    node = ((XSDConcreteComponent) ((XSDBaseAdapter) object).getTarget()).getElement();
+                }
+            } else if (object instanceof String) {
+                // This case was added to make the F3/hyperlink navigation work when an
+                // inline schema from a WSDL document is opened in the schema editor.
+                // The string is expected to be a URI fragment used to identify an XSD
+                // component in the context of the enclosing WSDL resource.
+
+                String uriFragment = (String) object;
+                Resource resource = getXSDSchema().eResource();
+                EObject modelObject = resource.getEObject(uriFragment);
+
+                if (modelObject != null && modelObject instanceof XSDComponent) {
+                    XSDComponent component = (XSDComponent) modelObject;
+                    node = component.getElement();
+                }
+            }
+
+            // the text editor can only accept sed nodes!
+            //
+            if (!(node instanceof IDOMNode)) {
+                node = null;
+            }
+            return node;
+        }
+
+        public void selectionChanged(SelectionChangedEvent event) {
+            // do not fire selection in source editor if the current active page is the InternalXSDMultiPageEditor
+            // (source)
+            // We only want to make source selections if the active page is either the outline or properties (a modify
+            // has been done via the outline or properties and not the source view). We don't want to be selecting
+            // and unselecting things in the source when editing in the source!!
+            boolean makeSelection = true;
+            if (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() != null) {
+                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                if (page.getActivePart() instanceof InternalXSDMultiPageEditor) {
+                    if (getActiveEditor() instanceof StructuredTextEditor) {
+                        makeSelection = false;
+                    }
+                }
+            }
+
+            // do not fire selection in source editor if selection event came
+            // from source editor
+            if (event.getSource() != getTextEditor().getSelectionProvider() && makeSelection) {
+                ISelection selection = event.getSelection();
+                if (selection instanceof IStructuredSelection) {
+                    List otherModelObjectList = new ArrayList();
+                    for (Iterator i = ((IStructuredSelection) selection).iterator(); i.hasNext();) {
+                        Object modelObject = i.next();
+                        Object otherModelObject = getObjectForOtherModel(modelObject);
+                        if (otherModelObject != null) {
+                            otherModelObjectList.add(otherModelObject);
+                        }
+                    }
+                    if (!otherModelObjectList.isEmpty()) {
+                        if (getActivePage() == SOURCE_PAGE_INDEX) {
+                            StructuredSelection nodeSelection = new StructuredSelection(otherModelObjectList);
+                            getTextEditor().getSelectionProvider().setSelection(nodeSelection);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void doSetSelection() {
+            ISelection iSelection = getSelectionManager().getSelection();
+            if (iSelection != null) {
+                Object firstElement = ((StructuredSelection) iSelection).getFirstElement();
+                Object otherModelObject = getObjectForOtherModel(firstElement);
+                if (otherModelObject != null) {
+                    StructuredSelection nodeSelection = new StructuredSelection(otherModelObject);
+                    getTextEditor().getSelectionProvider().setSelection(nodeSelection);
+                }
+            }
+        }
+    }
+
     private void updatePageReadOnly(Object pageObj) {
         if (isReadOnly()) {
             if (pageObj instanceof DataModelMainPage) {
@@ -191,9 +330,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             }
         }
     }
+
     @Override
     protected void createPages() {
-        
+
         super.createPages();
         addPageChangedListener(new IPageChangedListener() {
 
@@ -201,8 +341,13 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 pageChang();
             }
         });
+        fXSDSelectionListener = new XSDSelectionManagerSelectionListener();
+        getSelectionManager().addSelectionChangedListener(fXSDSelectionListener);
     }
 
+
+
+ 
     @Override
     public String getContributorId() {
         return curContributionID;

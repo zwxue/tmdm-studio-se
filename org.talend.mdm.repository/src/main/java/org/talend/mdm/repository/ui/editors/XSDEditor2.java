@@ -75,7 +75,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         getSite().setSelectionProvider(dMainPage.getSelectionProvider());
 
         // add XSDSelectionListener
-        XSDSelectionListener xsdListener = new XSDSelectionListener(this, dMainPage.getXSDSchema());
+        XSDSelectionListener xsdListener = new XSDSelectionListener(this, dMainPage);
         dMainPage.getTypesViewer().addSelectionChangedListener(xsdListener);
         dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
         //
