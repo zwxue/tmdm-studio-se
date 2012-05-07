@@ -71,7 +71,7 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
                 showDeployStatus(status);
             }
 
-            updateLastServer(new NullProgressMonitor());
+            updateLastServer(status,new NullProgressMonitor());
         }        
     }
     

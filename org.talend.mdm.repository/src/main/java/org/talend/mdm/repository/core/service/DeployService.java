@@ -14,8 +14,10 @@ package org.talend.mdm.repository.core.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -229,19 +231,53 @@ public class DeployService {
         return Status.CANCEL_STATUS;
     }
 
-	public void updateLastServer(IProgressMonitor monitor) {
-		CommandManager manager = CommandManager.getInstance();
-		Map<String, List<ICommand>> commandMap = manager
-				.getAllCommandsByPhase(ICommand.PHASE_AFTER_DEPLOY);
-		for (String id : commandMap.keySet()) {
-			List<ICommand> cmds = commandMap.get(id);
-			for (ICommand cmd : cmds) {
-				cmd.execute(null, monitor);
-			}
-			manager.removeCommandStack(id, ICommand.PHASE_AFTER_DEPLOY);
-		}
-	}
+    public void updateLastServer(IStatus status, IProgressMonitor monitor) {
+        CommandManager manager = CommandManager.getInstance();
+        Map<String, List<ICommand>> commandMap = manager.getAllCommandsByPhase(ICommand.PHASE_AFTER_DEPLOY);
+        Set<String> ids = getValidUpdateIds(status);
+        for (String id : commandMap.keySet()) {
+            boolean canRun = false;
+            if (ids == null) {
+                canRun = true;
+            } else {
+                canRun = ids.contains(id);
+            }
+            if (canRun) {
+                List<ICommand> cmds = commandMap.get(id);
+                for (ICommand cmd : cmds) {
+                    cmd.execute(null, monitor);
+                }
+                manager.removeCommandStack(id, ICommand.PHASE_AFTER_DEPLOY);
+            }
+        }
+    }
+    
+    private Set<String> getValidUpdateIds(IStatus status) {
+        if (status == null || !(status.isMultiStatus()))
+            return null;
+        Set<String> ids = new HashSet<String>();
+        for (IStatus childStatus : status.getChildren()) {
+            DeployStatus deployStatus = null;
 
+            if (childStatus instanceof DeployStatus) {
+                deployStatus = (DeployStatus) childStatus;
+            } else if (childStatus instanceof MultiStatus) {
+                deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
+            }
+            if (deployStatus.isOK()) {
+                ICommand command = deployStatus.getCommand();
+                if (command instanceof BatchDeployJobCommand) {
+                    BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) command;
+                    for (ICommand subCmd : deployJobCommand.getSubCmds()) {
+                        ids.add(subCmd.getCommandId());
+                    }
+                } else {
+                    ids.add(command.getCommandId());
+                }
+            }
+        }
+        return ids;
+    }
 	public void updateChangedStatus(IStatus status) {
 		updateChangedStatus(status, true);
 	}
