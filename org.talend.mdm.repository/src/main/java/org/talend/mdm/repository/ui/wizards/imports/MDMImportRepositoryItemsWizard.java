@@ -37,6 +37,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
@@ -67,7 +68,9 @@ import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
 import org.talend.repository.imports.ResourcesManagerFactory;
 
+import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
 import com.amalto.workbench.export.ImportItemsWizard;
+import com.amalto.workbench.widgets.WidgetFactory;
 
 /**
  * DOC hywang class global comment. Detailled comment
@@ -215,6 +218,15 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             }
 
         });
+    }
+    
+    @Override
+    protected ImportExchangeOptionsDialog getExchangeOptionsDialog() {
+        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
+        ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(getShell(), toolkit, true, zipFileRepository);
+        dlg.create();
+
+        return dlg;
     }
 
     @Override
