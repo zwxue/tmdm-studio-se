@@ -862,10 +862,13 @@ public class RepositoryResourceUtil {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
-                        IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
-                        if (vObj != null && vObj.equals(viewObj)) {
-                            return ref;
-                        }
+						if (inputItem != null) {
+							IRepositoryViewObject vObj = ContainerCacheService
+									.get(inputItem.getProperty());
+							if (vObj != null && vObj.equals(viewObj)) {
+								return ref;
+							}
+						}
                     }
                 } catch (PartInitException e) {
                     log.error(e.getMessage(), e);
@@ -892,10 +895,14 @@ public class RepositoryResourceUtil {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
-                        IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
-                        if (vObj != null && vObj.equals(viewObj)) {
-                            activePage.closeEditors(new IEditorReference[] { ref }, save);
-                        }
+						if (inputItem != null) {
+							IRepositoryViewObject vObj = ContainerCacheService
+									.get(inputItem.getProperty());
+							if (vObj != null && vObj.equals(viewObj)) {
+								activePage.closeEditors(
+										new IEditorReference[] { ref }, save);
+							}
+						}
                     }
                 } catch (PartInitException e) {
                     log.error(e.getMessage(), e);
