@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -363,8 +364,6 @@ public class Util {
         }
     }
 
-    // public static XtentisPort getPort(String endpointAddress, String username, String password) throws
-    // XtentisException{
     public static XtentisPort getPort(URL url, String universe, String username, String password) throws XtentisException {
 
         try {
@@ -408,19 +407,18 @@ public class Util {
             if (password != null)
                 stub._setProperty(Stub.PASSWORD_PROPERTY, password);
 
+            // Attempt to reset the JDK Authenticator before a web service call is made.
+            // However due to JDK Authenticator bad design, it does not prevent any other code or thread to change it.
+            // FIXME Rely on different SOAP stack to be able to use different HTTP implementation such the Apache
+            // HttpClient.
+            Authenticator.setDefault(null);
+
             return (XtentisPort) stub;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new XtentisException("Unable to access endpoint at: " + url + ": " + e.getLocalizedMessage());
         }
     }
-
-    /*
-     * public static WSDataModel[] getAllDataModels(URL url, String username, String password) throws XtentisException{
-     * try { XtentisPort port = Util.getPort(url,username,password); return port.getDataModels(new
-     * WSRegexDataModels("*")).getWsDataModels(); } catch (Exception e) {log.error(e.getMessage(), e); throw new
-     * XtentisException( "Unable to retrieve all Data Models" +": "+e.getLocalizedMessage()); } }
-     */
 
     public static WSDataModelPK[] getAllDataModelPKs(URL url, String universe, String username, String password)
             throws XtentisException {
@@ -742,11 +740,6 @@ public class Util {
         }
     }
 
-    public static void main(String[] args) {
-        String url = "http://localhost:8080/imageserver/upload/c201108/di_perspective_16x16.png.png";
-        downloadFile(url, "/tmp");
-    }
-
     public static OutputStream downloadFile(String url, String downloadFolder) {
         try {
             URL urlFile = new URL(url);
@@ -807,8 +800,8 @@ public class Util {
         return null;
     }
 
-    public static String uploadImageFile(String URL, String localFilename, String filename,String imageCatalog, String username, String password,
-            HashMap<String, String> picturePathMap) throws XtentisException {
+    public static String uploadImageFile(String URL, String localFilename, String filename, String imageCatalog, String username,
+            String password, HashMap<String, String> picturePathMap) throws XtentisException {
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");//$NON-NLS-1$//$NON-NLS-2$
         /*
@@ -828,15 +821,15 @@ public class Util {
             File file = new File(localFilename);
             if (!"".equalsIgnoreCase(localFilename))
                 mppost.addParameter("imageFile", file);//$NON-NLS-1$
-            if(imageCatalog!=null){
+            if (imageCatalog != null) {
                 mppost.addParameter("catalogName", imageCatalog);//$NON-NLS-1$
             }
-          //fileName can't has suffix and version
-            if(filename!=null){
-                int pos=filename.lastIndexOf('.');
-                if(pos!=-1){
-                    filename=filename.substring(0,pos);
-                }                      
+            // fileName can't has suffix and version
+            if (filename != null) {
+                int pos = filename.lastIndexOf('.');
+                if (pos != -1) {
+                    filename = filename.substring(0, pos);
+                }
                 mppost.addParameter("fileName", filename);//$NON-NLS-1$
             }
 
@@ -2680,7 +2673,7 @@ public class Util {
                 String name = ((XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition()).getDerivationMethod()
                         .getName();
                 if (name.equals("restriction")) //$NON-NLS-1$
-                list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) complexTypeDefinition
+                    list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) complexTypeDefinition
                             .getBaseTypeDefinition()));
             }
         }
@@ -3082,6 +3075,7 @@ public class Util {
         }
         return false;
     }
+
     public static boolean isCustomrType(XSDSchema schema, String typeName) {
         return getAllCustomTypeNames(schema).contains(typeName);
     }
