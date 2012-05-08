@@ -109,13 +109,9 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                         customTypes.add(type.getName());
                 }
             }
-            ArrayList builtInTypes = new ArrayList();
-            for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-                if (type instanceof XSDSimpleTypeDefinition)
-                    builtInTypes.add(type.getName());
-            }
-
+            ArrayList<String> builtInTypes = new ArrayList<String>();
+            initBuiltInTypesWithSelectedTypes(builtInTypes); 
+            
             if (showDlg) {
                 dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, "Make Simple Type", customTypes,
                         builtInTypes);
@@ -220,7 +216,62 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
         return Status.OK_STATUS;
     }
 
-    public void runWithEvent(Event event) {
+    private void initBuiltInTypesWithSelectedTypes(ArrayList<String> builtInTypes) {
+    	
+    	builtInTypes.add("anyURI");              //$NON-NLS-1$
+    	builtInTypes.add("base64Binary");              //$NON-NLS-1$
+    	builtInTypes.add("boolean");              //$NON-NLS-1$
+    	builtInTypes.add("byte");              //$NON-NLS-1$
+    	builtInTypes.add("date");              //$NON-NLS-1$
+    	builtInTypes.add("dateTime");              //$NON-NLS-1$
+    	builtInTypes.add("decimal");              //$NON-NLS-1$
+    	builtInTypes.add("double");              //$NON-NLS-1$
+    	builtInTypes.add("duration");              //$NON-NLS-1$
+    	builtInTypes.add("float");              //$NON-NLS-1$
+    	builtInTypes.add("gDay");              //$NON-NLS-1$
+    	builtInTypes.add("gDay");              //$NON-NLS-1$
+    	builtInTypes.add("gMonth");              //$NON-NLS-1$
+    	builtInTypes.add("gMonthDay");              //$NON-NLS-1$
+    	builtInTypes.add("gYear");              //$NON-NLS-1$
+    	builtInTypes.add("gYearMonth");              //$NON-NLS-1$
+    	builtInTypes.add("hexBinary");              //$NON-NLS-1$
+    	builtInTypes.add("int");              //$NON-NLS-1$
+    	builtInTypes.add("integer");              //$NON-NLS-1$
+    	builtInTypes.add("language");              //$NON-NLS-1$
+    	builtInTypes.add("long");              //$NON-NLS-1$
+    	builtInTypes.add("negativeInteger");              //$NON-NLS-1$
+    	builtInTypes.add("nonNegativeInteger");              //$NON-NLS-1$
+    	builtInTypes.add("nonPositiveInteger");              //$NON-NLS-1$
+    	builtInTypes.add("normalizedString");              //$NON-NLS-1$
+    	builtInTypes.add("positiveInteger");              //$NON-NLS-1$
+    	builtInTypes.add("short");              //$NON-NLS-1$
+    	builtInTypes.add("string");              //$NON-NLS-1$
+    	builtInTypes.add("time");              //$NON-NLS-1$
+    	builtInTypes.add("token");              //$NON-NLS-1$
+    	builtInTypes.add("unsignedByte");              //$NON-NLS-1$
+    	builtInTypes.add("unsignedInt");              //$NON-NLS-1$
+    	builtInTypes.add("unsignedLong");              //$NON-NLS-1$
+    	builtInTypes.add("unsignedShort");              //$NON-NLS-1$
+
+
+    	builtInTypes.add("ENTITIES");              //$NON-NLS-1$
+    	builtInTypes.add("ENTITY");              //$NON-NLS-1$
+    	builtInTypes.add("ID");              //$NON-NLS-1$
+    	builtInTypes.add("IDREF");              //$NON-NLS-1$
+    	builtInTypes.add("IDREFS");              //$NON-NLS-1$
+    	builtInTypes.add("NCName");              //$NON-NLS-1$
+    	builtInTypes.add("NMTOKEN");              //$NON-NLS-1$
+    	builtInTypes.add("NMTOKENS");              //$NON-NLS-1$
+    	builtInTypes.add("NOTATION");              //$NON-NLS-1$
+    	builtInTypes.add("Name");              //$NON-NLS-1$
+    	builtInTypes.add("QName");              //$NON-NLS-1$
+
+
+	}
+
+ 
+
+	public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
 
