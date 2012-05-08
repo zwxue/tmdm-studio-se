@@ -213,19 +213,18 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 if (parent != null && decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
                     // complexType = (XSDComplexTypeDefinition) parent.getTypeDefinition();
                     complexType = (XSDComplexTypeDefinition) decl.getTypeDefinition();
-                if (complexType != null && complexType.getName() == null) {
+                if (complexType != null && complexType.getSchema() != null && complexType.getName() == null) {
                     alreadyExists = true;
                 }
                 if (decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
                     alreadyExists = false;
             }
-            // partCnt.setMaxOccurs(1);
-         // Modified by hbhong,to fix bug 0021725
-//            if (complexType != null) {
-            if (parent != null && complexType != null) {   
-           // The ending| bug:0021725
+
+            if (parent != null && complexType != null && complexType.getSchema() != null) {
+
                 XSDParticleImpl partCnt = (XSDParticleImpl) complexType.getContentType();
                 XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
+                if (mdlGrp.getSchema() != null) {
                 if (isChoice)
                     mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
                 else if (isAll) {
@@ -233,6 +232,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
                 } else {
                     mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                    }
                 }
                 partCnt.unsetMaxOccurs();
                 partCnt.unsetMinOccurs();

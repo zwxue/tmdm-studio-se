@@ -1185,13 +1185,10 @@ public class Util {
         }
 
         XSDElementDeclaration elem = null;
-        // if (son instanceof XSDParticle) {
-        // elem = (XSDElementDeclaration) ((XSDParticle) son).getContent();
-        // } else if (son instanceof XSDElementDeclaration) {
-        // elem = (XSDElementDeclaration) son;
-        // }
-        elem = (XSDElementDeclaration) son;
 
+        elem = (XSDElementDeclaration) son;
+        if (elem.getSchema() == null)
+            return null;
         EList<XSDSchemaContent> parentList = elem.getSchema().getContents();
         ArrayList<Object> list = new ArrayList<Object>();
         for (XSDSchemaContent top : parentList) {
@@ -1201,7 +1198,6 @@ public class Util {
             }
             if (top instanceof XSDElementDeclaration) {
                 XSDElementDeclaration decl = (XSDElementDeclaration) top;
-                // if (decl == son) return list;
                 if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
 
                     String primaryKey = getTopElement(decl, elem, (XSDComplexTypeDefinition) decl.getTypeDefinition());

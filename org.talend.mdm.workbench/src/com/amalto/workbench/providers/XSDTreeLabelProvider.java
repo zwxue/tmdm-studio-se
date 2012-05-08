@@ -34,6 +34,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDParticleContent;
+import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDVariety;
@@ -113,8 +114,12 @@ public class XSDTreeLabelProvider extends LabelProvider {
                 name += (particle.getMaxOccurs() == -1) ? "many" : "" + particle.getMaxOccurs();//$NON-NLS-1$//$NON-NLS-2$
                 name += "]";//$NON-NLS-1$
             }
-            String tail = particle.getSchema().getTargetNamespace() == null ? "" : " : "//$NON-NLS-1$//$NON-NLS-2$
-                    + particle.getSchema().getTargetNamespace();
+            XSDSchema schema = particle.getSchema();
+            String tail = ""; //$NON-NLS-1$
+            if (schema != null && schema.getTargetNamespace() != null) {
+                tail = " : "//$NON-NLS-1$
+                        + schema.getTargetNamespace();
+            }
             return name + tail;
 
         }
@@ -196,7 +201,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
                             // add by ymli; bugId 0009157
-                        }else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
+                        } else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
                             return "Auto Expand : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.startsWith("X_Facet")) {//$NON-NLS-1$
                             return source.substring(2, 7) + "_Msg_" + source.substring(8) + ": "
@@ -219,8 +224,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
                             return "Foreign Key integrity:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
                             return "Foreign Key integrity override:  " + e.getChildNodes().item(0).getNodeValue();
-                        }                        
-                        
+                        }
+
                         if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
                             return "Foreign Key Filter:  " + e.getChildNodes().item(0).getNodeValue();
                         } else {
@@ -434,7 +439,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                             return ImageCache.getCreatedImage(EImage.ROUTINE.getPath());
                         } else if (source.equals("X_Workflow")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.WORKFLOW_PROCESS.getPath());
-                        }else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
+                        } else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.DEFAULT.getPath());
                         }
                         if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
