@@ -203,6 +203,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                             IFile file = getXSDFile(xobject);
                             file.setCharset("utf-8", null);//$NON-NLS-1$
                             file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
+                            
+                            initializeGraphicalViewer();
                         }
 
                     }
