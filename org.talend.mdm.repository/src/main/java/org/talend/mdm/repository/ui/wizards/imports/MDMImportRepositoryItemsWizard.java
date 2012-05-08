@@ -58,6 +58,7 @@ import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.dialogs.importexchange.ImportExchangeOptionsDialogR;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.imports.viewer.ImportRepositoryObjectCheckTreeViewer;
@@ -223,7 +224,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     @Override
     protected ImportExchangeOptionsDialog getExchangeOptionsDialog() {
         FormToolkit toolkit = WidgetFactory.getWidgetFactory();
-        ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(getShell(), toolkit, true, zipFileRepository);
+        ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialogR(getShell(), toolkit, true, zipFileRepository);
         dlg.create();
 
         return dlg;

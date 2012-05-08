@@ -285,7 +285,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
     }
 
     public void fillInTable() {
-        exchangeDwnTable.removeAll();
+        clearTable();
         HttpClient client = new HttpClient();
         String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
         GetMethod get = new GetMethod(url);
@@ -373,4 +373,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         }
     }
  
+    protected void clearTable() {
+        exchangeDwnTable.removeAll();
+    }
 }
