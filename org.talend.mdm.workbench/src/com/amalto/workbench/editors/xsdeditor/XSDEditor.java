@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
@@ -76,6 +77,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     protected TreeObject xobject;
 
+    private boolean editorSaved = false;
+    
     private XSDSelectionManagerSelectionListener fXSDSelectionListener;
 
     public void setXSDInput(IEditorInput input) {
@@ -84,6 +87,13 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public void setXObject(TreeObject xobject) {
         this.xobject = xobject;
+        
+        try {//temporarily store the file data for restore
+            IFile file = getXSDFile(xobject);
+            fileContents = IOUtils.toByteArray(file.getContents());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -130,6 +140,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 mainPage.save(xsd);
             }
 
+            editorSaved = true;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -401,5 +412,21 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public void setName(String name) {
         setPartName(name);
+    }
+    
+    private byte[] fileContents = null;
+    @Override
+    public void dispose() {
+        try {
+            if (!editorSaved) {
+                IFile file = getXSDFile(xobject);
+                file.setCharset("utf-8", null);//$NON-NLS-1$
+                file.setContents(new ByteArrayInputStream(fileContents), IFile.FORCE, null);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            super.dispose();
+        }
     }
 }
