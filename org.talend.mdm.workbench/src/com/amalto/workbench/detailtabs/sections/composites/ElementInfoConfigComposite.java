@@ -344,7 +344,8 @@ public class ElementInfoConfigComposite extends Composite {
 
 		if (curXSDParticle == null)
 			return elementDeclarations.toArray(new String[0]);
-
+        if (curXSDParticle.getSchema() == null)
+            return new String[0];
 		for (XSDElementDeclaration eachXSDEleDeclaration : curXSDParticle
 				.getSchema().getElementDeclarations()) {
 			if (eachXSDEleDeclaration.getTargetNamespace() != null

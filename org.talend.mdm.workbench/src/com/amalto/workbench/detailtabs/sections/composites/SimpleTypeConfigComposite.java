@@ -184,11 +184,11 @@ public class SimpleTypeConfigComposite extends Composite {
     	     allCustomTypeNames = Util.getAllCustomTypeNames(xsdSimpleType.getSchema());
     	}
         
-        if(xsdSimpleType.getName() != null){
+        if (xsdSimpleType.getName() != null && allCustomTypeNames != null) {
             allCustomTypeNames.remove(xsdSimpleType.getName());
         }
-       
-        comboCustomTypes.setInput(allCustomTypeNames);
+        if (allCustomTypeNames != null)
+            comboCustomTypes.setInput(allCustomTypeNames);
         if(xsdSimpleType.getBaseType() != null ){
         comboCustomTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType().getName()));
 
