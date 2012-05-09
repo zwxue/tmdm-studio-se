@@ -382,6 +382,8 @@ public class Messages extends NLS {
     public static String Create_successfully_text;
 
     public static String Deploy_fail_text;
+    
+    public static String Deploy_cancel_text;
 
     public static String Deploy_notSupport_text;
 

@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
@@ -49,7 +50,9 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
                 else
                     return DeployStatus.getErrorStatus(this, Messages.Deploy_fail_text + " " + typeLabel + " \"" + objectName);
 
-            } catch (RemoteException e) {
+            } catch (OperationCanceledException e) {
+            	 return DeployStatus.getInfoStatus(this, Messages.Deploy_cancel_text + " " + typeLabel + " \"" + objectName+ "\"");
+            }   catch (RemoteException e) {
                 return DeployStatus.getErrorStatus(this, Messages.Deploy_fail_text + " " + typeLabel + " \"" + objectName + "\","
                         + Messages.Causeis_text + ":" + e.getMessage(), e);
             } catch (XtentisException e) {
