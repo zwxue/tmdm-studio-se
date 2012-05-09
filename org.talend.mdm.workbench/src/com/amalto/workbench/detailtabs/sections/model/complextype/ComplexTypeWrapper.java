@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.detailtabs.sections.model.complextype;
 
+import java.util.List;
+
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDDerivationMethod;
@@ -21,6 +23,7 @@ import org.eclipse.xsd.XSDParticle;
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.ComplexTypeWrapperCommitHandler;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
+import com.amalto.workbench.utils.Util;
 
 public class ComplexTypeWrapper implements ISubmittable {
 
@@ -77,6 +80,8 @@ public class ComplexTypeWrapper implements ISubmittable {
         curXSDComplexType.setName(newTypeName);
         curXSDComplexType.updateElement();
 
+        Util.updateChildrenReference(curXSDComplexType);
+        
         return true;
     }
 
