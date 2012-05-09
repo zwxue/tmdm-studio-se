@@ -229,7 +229,6 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
     	builtInTypes.add("duration");              //$NON-NLS-1$
     	builtInTypes.add("float");              //$NON-NLS-1$
     	builtInTypes.add("gDay");              //$NON-NLS-1$
-    	builtInTypes.add("gDay");              //$NON-NLS-1$
     	builtInTypes.add("gMonth");              //$NON-NLS-1$
     	builtInTypes.add("gMonthDay");              //$NON-NLS-1$
     	builtInTypes.add("gYear");              //$NON-NLS-1$
