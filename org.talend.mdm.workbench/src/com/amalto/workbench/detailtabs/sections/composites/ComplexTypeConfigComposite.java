@@ -117,12 +117,12 @@ public class ComplexTypeConfigComposite extends Composite {
     private void initUIContents() {
 
         fillUIContentsInTxtName();
+        
+        initUIContentsInGroup();
 
         initUIContentsInComboExtends();
 
-        initUIContentsInGroup();
-
-        refresh();
+        refreshAll();
     }
 
     private void initUIContentsInGroup() {
@@ -150,15 +150,9 @@ public class ComplexTypeConfigComposite extends Composite {
 
     private void initUIContentsInComboExtends() {
         fillCandidatsInComboExtends();
-
-        comboExtends.setSelection(new StructuredSelection(""));//$NON-NLS-1$
-        if (complexType.getBaseType() != null)
-            comboExtends.setSelection(new StructuredSelection(complexType.getBaseType()));
     }
 
     private void fillCandidatsInComboExtends() {
-
-        ISelection oldSection = comboExtends.getSelection();
 
         List<Object> allExtends = new ArrayList<Object>();
         for (XSDComplexTypeDefinition eachComplexType : Util.getComplexTypes(complexType.getSchema())) {
@@ -179,7 +173,16 @@ public class ComplexTypeConfigComposite extends Composite {
         }
         allExtends.add(0, "");//$NON-NLS-1$
         comboExtends.setInput(allExtends);
-        comboExtends.setSelection(oldSection);
+        
+        refreshComboSelection();
+    }
+    
+    private void refreshComboSelection() {
+        if (complexType.getBaseTypeDefinition() != null)
+            comboExtends.setSelection(new StructuredSelection(complexType.getBaseTypeDefinition()));
+        else {
+            comboExtends.setSelection(new StructuredSelection(""));
+        }
     }
 
     private void initUIListener() {
@@ -207,14 +210,14 @@ public class ComplexTypeConfigComposite extends Composite {
     	txtName.removeModifyListener(nameTxtListener);
     }
     private void initUIListenerForComboExtends() {
-
         comboExtends.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
-                refresh();                
+                refreshRadGroupEnable();
+                if(section!=null)
+                    section.autoCommit();
             }
         });
-        
     }
 
     private void initUIListenerForRadGroupTypes() {
@@ -237,9 +240,10 @@ public class ComplexTypeConfigComposite extends Composite {
 
                 fillCandidatsInComboExtends();
 
-                refresh();
-                if(section!=null && getGroupTypeCompositor()!=Util.getComplexTypeGroupType(complexType))
-                section.autoCommit();
+                refreshComboEnable();
+                
+                if (section != null && getGroupTypeCompositor() != Util.getComplexTypeGroupType(complexType))
+                    section.autoCommit();
             }
 
         };
@@ -292,13 +296,20 @@ public class ComplexTypeConfigComposite extends Composite {
         return XSDCompositor.ALL_LITERAL;
     }
 
-    private void refresh() {
-
-        XSDTypeDefinition selectedExtends = getExtends();
-
+    private void refreshAll() {
+        refreshRadGroupEnable();
+        refreshRadGroupSelection();
+        refreshComboEnable();
+    }
+    
+    private void refreshRadGroupEnable() {
         radGroupAll.setEnabled(!isExtendsSelected());
         radGroupSequence.setEnabled(!isExtendsSelected());
         radGroupChoice.setEnabled(!isExtendsSelected());
+    }
+    
+    private void refreshRadGroupSelection() {
+        XSDTypeDefinition selectedExtends = getExtends();
 
         if (!getDefaultExtends().equals(selectedExtends) && selectedExtends instanceof XSDComplexTypeDefinition
                 && !Util.isAllComplexType((XSDComplexTypeDefinition) selectedExtends)) {
@@ -306,7 +317,9 @@ public class ComplexTypeConfigComposite extends Composite {
             radGroupSequence.setSelection(Util.isSequenceComplexType((XSDComplexTypeDefinition) selectedExtends));
             radGroupChoice.setSelection(Util.isChoiceComplexType((XSDComplexTypeDefinition) selectedExtends));
         }
-
+    }
+    
+    private void refreshComboEnable() {
         comboExtends.getCombo().setEnabled(!isGroupAll());
     }
 
