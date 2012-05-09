@@ -227,6 +227,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                             
                             IMDMRepositoryEnterpriseServiceExt service = (IMDMRepositoryEnterpriseServiceExt) GlobalServiceRegister.getDefault().getService(
                             		IMDMRepositoryEnterpriseServiceExt.class);
+                            newName = newName.replace("#", "$"); //$NON-NLS-1$//$NON-NLS-2$
                             if (service != null) {
                                  service.updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);
                             }
