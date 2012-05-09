@@ -3110,6 +3110,22 @@ public class Util {
         return group.getCompositor();
     }
 
+    /**
+     * update reference from child to this XSDComplexTypeDefinition
+     */
+    public static void updateChildrenReference(XSDTypeDefinition type) {
+        List<XSDComplexTypeDefinition> complexTypes = Util.getComplexTypes(type.getSchema());
+        for (XSDComplexTypeDefinition complexType : complexTypes) {
+            if (complexType.equals(type))
+                continue;
+      
+            if (Util.getParentTypes(complexType).contains(type)) {
+                complexType.setBaseTypeDefinition(type);
+                continue;
+            }
+        }
+    }
+    
     public static List<XSDTypeDefinition> getParentTypes(XSDTypeDefinition type) {
         return getParentTypes(type, new ArrayList<XSDTypeDefinition>());
     }
@@ -3118,7 +3134,7 @@ public class Util {
 
         XSDTypeDefinition baseType = type.getBaseType();
 
-        if (baseType == type.getBaseType()) {
+        if (baseType == type) {
             return results;
         }
         if (!results.contains(baseType))

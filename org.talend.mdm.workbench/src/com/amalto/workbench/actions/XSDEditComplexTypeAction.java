@@ -13,6 +13,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
@@ -28,6 +29,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDDerivationMethod;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
@@ -83,6 +85,8 @@ public class XSDEditComplexTypeAction extends UndoAction {
                 return Status.CANCEL_STATUS;
             }
             decl.setName(id.getValue().trim());
+            
+            Util.updateChildrenReference(decl);
 
             Util.updateComplexType(page.getSite(), decl, provider);
             page.refresh();
