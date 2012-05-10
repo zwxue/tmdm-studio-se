@@ -197,26 +197,27 @@ public class ServerDefDialog extends TitleAreaDialog {
             });
 
             FocusListener listener = new FocusAdapter() {
-                
+
                 @Override
-                public void focusGained(FocusEvent e) {
+                public void focusLost(FocusEvent e) {
                     updateUniverseValues();
                 }
             };
-            
-            universeCombo.addFocusListener(listener);
+            urlText.addFocusListener(listener);
+            userNameText.addFocusListener(listener);
+            passwordText.addFocusListener(listener);
         }
-        
     }
 
     private void updateUniverseValues() {
-        if (newUserName.equals("") || newPassword.equals("")) //$NON-NLS-1$ //$NON-NLS-2$
+
+        if (serverDef.getUser().equals("") || serverDef.getPasswd().equals("")) //$NON-NLS-1$ //$NON-NLS-2$
             return;
 
         if (Util.IsEnterPrise()) {
 
             try {
-                XtentisPort port = Util.getPort(new URL(newUrl), null, newUserName, newPassword);
+                XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), null, serverDef.getUser(), serverDef.getPasswd());
                 WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
                 universeCombo.removeAll();
                 universeCombo.add(""); //$NON-NLS-1$
@@ -229,8 +230,6 @@ public class ServerDefDialog extends TitleAreaDialog {
             } catch (Exception e) {
                 if (log.isDebugEnabled())
                     log.debug(e.getMessage(), e);
-                
-                nameText.setFocus();//transfer focus,preventing recursive handling in this method
                 universeCombo.removeAll();
             }
         }
