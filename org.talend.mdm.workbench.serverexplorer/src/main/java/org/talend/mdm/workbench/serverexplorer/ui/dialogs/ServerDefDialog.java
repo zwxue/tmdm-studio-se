@@ -71,7 +71,15 @@ public class ServerDefDialog extends TitleAreaDialog {
 
     private MDMServerDef serverDef;
 
-    private String newName = ""; //$NON-NLS-1$
+    private String newName = null;
+
+    private String newPassword = null;
+
+    private String newUserName = null;
+
+    private String newUniverse = ""; //$NON-NLS-1$
+
+    private String newUrl = null;
 
     private static final int CHECK_CONNECTION_ID = 1024;
 
@@ -167,57 +175,56 @@ public class ServerDefDialog extends TitleAreaDialog {
         nameText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                newName = nameText.getText().trim();
+            	newName = nameText.getText().trim();
             }
         });
         urlText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                serverDef.setUrl(urlText.getText().trim());
+            	newUrl = urlText.getText().trim();
             }
         });
         userNameText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                serverDef.setUser(userNameText.getText().trim());
+            	newUserName = userNameText.getText().trim();
             }
         });
         passwordText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                serverDef.setPasswd(passwordText.getText().trim());
+            	newPassword = passwordText.getText().trim();
             }
         });
         if (isEnterprise) {
             universeCombo.addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
-                    serverDef.setUniverse(universeCombo.getText().trim());
+                	newUniverse = universeCombo.getText().trim();
                 }
             });
 
-            FocusListener listener = new FocusAdapter() {
+			FocusListener listener = new FocusAdapter() {
 
-                @Override
-                public void focusLost(FocusEvent e) {
-                    updateUniverseValues();
-                }
-            };
-            urlText.addFocusListener(listener);
-            userNameText.addFocusListener(listener);
-            passwordText.addFocusListener(listener);
+				@Override
+				public void focusGained(FocusEvent e) {
+					updateUniverseValues();
+				}
+			};
+
+			universeCombo.addFocusListener(listener);
         }
     }
 
     private void updateUniverseValues() {
 
-        if (serverDef.getUser().equals("") || serverDef.getPasswd().equals("")) //$NON-NLS-1$ //$NON-NLS-2$
+    	if (newUserName.equals("") || newPassword.equals("")) //$NON-NLS-1$ //$NON-NLS-2$
             return;
 
         if (Util.IsEnterPrise()) {
 
             try {
-                XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), null, serverDef.getUser(), serverDef.getPasswd());
+                XtentisPort port = Util.getPort(new URL(newUrl), null, newUserName, newPassword);
                 WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
                 universeCombo.removeAll();
                 universeCombo.add(""); //$NON-NLS-1$
@@ -230,6 +237,8 @@ public class ServerDefDialog extends TitleAreaDialog {
             } catch (Exception e) {
                 if (log.isDebugEnabled())
                     log.debug(e.getMessage(), e);
+                
+                nameText.setFocus();//transfer focus,preventing recursive handling in this method
                 universeCombo.removeAll();
             }
         }
@@ -250,22 +259,22 @@ public class ServerDefDialog extends TitleAreaDialog {
                 return false;
             }
         }
-        if (urlText.getText().trim().length() == 0) {
+        if (newUrl == null || newUrl.length() == 0) {
             setErrorMessage(Messages.ServerDefDialog_ServerCanNotBeEmpty);
             urlText.setFocus();
             return false;
         }
-        if (!serverDef.validate(serverDef.getUrl())) {
+        if (!serverDef.validate(newUrl)) {
             setErrorMessage(Messages.ServerDefDialog_ServerInvalid);
             urlText.setFocus();
             return false;
         }
-        if (serverDef.getUser().length() == 0) {
+        if (newUserName == null || newUserName.length() == 0) {
             setErrorMessage(Messages.ServerDefDialog_UsernameCanNotBeEmpty);
             userNameText.setFocus();
             return false;
         }
-        if (serverDef.getPasswd().length() == 0) {
+        if (newPassword == null || newPassword.length() == 0) {
             setErrorMessage(Messages.ServerDefDialog_PasswordCanNotBeEmpty);
             passwordText.setFocus();
             return false;
@@ -279,9 +288,7 @@ public class ServerDefDialog extends TitleAreaDialog {
         if (buttonId == IDialogConstants.OK_ID) {
             if (!validateInput())
                 return;
-            serverDef.parse(urlText.getText());
-            serverDef.setName(nameText.getText());
-            serverDef.setPasswd(passwordText.getText());
+            updateUI2Model(serverDef);
         }
         if (buttonId == CHECK_CONNECTION_ID) {
             if (!validateInput())
@@ -297,14 +304,34 @@ public class ServerDefDialog extends TitleAreaDialog {
         super.buttonPressed(buttonId);
     }
 
+    private void updateUI2Model(MDMServerDef serverDef) {
+    	serverDef.parse(newUrl);
+    	serverDef.setUrl(newUrl);
+        serverDef.setName(newName);
+        serverDef.setUser(newUserName);
+        serverDef.setPasswd(newPassword);
+        if (Util.IsEnterPrise()) {
+            serverDef.setUniverse(newUniverse);
+        }
+    }
 
     private void initValue() {
-        nameText.setText(serverDef.getName());
-        urlText.setText(serverDef.getUrl());
-        userNameText.setText(serverDef.getUser());
-        passwordText.setText(serverDef.getPasswd());
+    	 newName = serverDef.getName();
+         nameText.setText(newName);
+
+         newUrl = serverDef.getUrl();
+         urlText.setText(newUrl);
+
+         newUserName = serverDef.getUser();
+         userNameText.setText(newUserName);
+         
+
+         newPassword = serverDef.getPasswd();
+         passwordText.setText(newPassword);
+         
         if (Util.IsEnterPrise()) {
-            universeCombo.setText(serverDef.getUniverse());
+        	newUniverse = serverDef.getUniverse();
+            universeCombo.setText(newUniverse);
         }
     }
 
