@@ -77,8 +77,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     protected TreeObject xobject;
 
-    private boolean editorSaved = false;
-    
     private XSDSelectionManagerSelectionListener fXSDSelectionListener;
 
     public void setXSDInput(IEditorInput input) {
@@ -140,7 +138,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 mainPage.save(xsd);
             }
 
-            editorSaved = true;
+            fileContents = xsd.getBytes("utf-8");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -420,7 +418,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     @Override
     public void dispose() {
         try {
-            if (!editorSaved) {
+            if (isDirty()) {
                 IFile file = getXSDFile(xobject);
                 file.setCharset("utf-8", null);//$NON-NLS-1$
                 file.setContents(new ByteArrayInputStream(fileContents), IFile.FORCE, null);
