@@ -48,16 +48,16 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
                             + Messages.Create_successfully_text);
                 }
                 else
-                    return DeployStatus.getErrorStatus(this, Messages.Deploy_fail_text + " " + typeLabel + " \"" + objectName);
+                    return DeployStatus.getErrorStatus(this, Messages.bind(Messages.Deploy_fail_text, typeLabel, objectName));
 
             } catch (OperationCanceledException e) {
-            	 return DeployStatus.getInfoStatus(this, Messages.Deploy_cancel_text + " " + typeLabel + " \"" + objectName+ "\"");
+                return DeployStatus.getInfoStatus(this, Messages.bind(Messages.Deploy_cancel_text, typeLabel, objectName));
             }   catch (RemoteException e) {
-                return DeployStatus.getErrorStatus(this, Messages.Deploy_fail_text + " " + typeLabel + " \"" + objectName + "\","
-                        + Messages.Causeis_text + ":" + e.getMessage(), e);
+                return DeployStatus.getErrorStatus(this, Messages.bind(Messages.Deploy_fail_cause_text, typeLabel, objectName, e
+                        .getMessage()), e);
             } catch (XtentisException e) {
-                return DeployStatus.getErrorStatus(this, Messages.Deploy_fail_text + " " + typeLabel + " \"" + objectName + "\","
-                        + Messages.Causeis_text + ":" + e.getMessage(), e);
+                return DeployStatus.getErrorStatus(this, Messages.bind(Messages.Deploy_fail_cause_text, typeLabel, objectName, e
+                        .getMessage()), e);
             }
         } else {
             return DeployStatus.getErrorStatus(this, Messages.Deploy_notSupport_text + " \"" + objectName + "\"");
