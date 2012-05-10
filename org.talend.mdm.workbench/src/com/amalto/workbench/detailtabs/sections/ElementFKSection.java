@@ -32,11 +32,15 @@ public class ElementFKSection extends XSDComponentSection {
 
     private String xpath = "";//$NON-NLS-1$
 
+    private String fksep;
+
 	private FKIntegrityComposite fkIntegrityConfig;
 
     @Override
     public void refresh() {
         compSimpleXPath.setXPath(xpath);
+        if (fksep != null)
+            compSimpleXPath.setFKSep(Boolean.valueOf(fksep));
         fkIntegrityConfig.setXSDComponent(curXSDComponent);
     }
 
@@ -47,7 +51,7 @@ public class ElementFKSection extends XSDComponentSection {
         xpath = new XSDAnnotationsStructure(curXSDComponent).getForeignKey();
         if (xpath == null)
             xpath = "";//$NON-NLS-1$
-
+        fksep = new XSDAnnotationsStructure(curXSDComponent).getForeignKeySep();
         dataModelHolder.setDefaultDataModel(getDataModelName());
         compSimpleXPath.setDefaultDataModelForSelect(getDataModelName());
         dataModelHolder.setDefaultEntity(getEntityName());
@@ -55,7 +59,7 @@ public class ElementFKSection extends XSDComponentSection {
 
     @Override
     protected ISubmittable getSubmittedObj() {
-        return new ForeignKeyAnnoInfo(curXSDComponent, compSimpleXPath.getXPath());
+        return new ForeignKeyAnnoInfo(curXSDComponent, compSimpleXPath.getXPath(), compSimpleXPath.getFKSep());
     }
 
     @Override

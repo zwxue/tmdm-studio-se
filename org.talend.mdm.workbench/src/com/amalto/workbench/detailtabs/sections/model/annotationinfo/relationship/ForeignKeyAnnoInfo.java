@@ -16,11 +16,11 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.ElementForeighKeyCommitHandler;
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.SingleContentAnnotationInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.ListContentsAnnotationInfo;
 
-public class ForeignKeyAnnoInfo extends SingleContentAnnotationInfo {
+public class ForeignKeyAnnoInfo extends ListContentsAnnotationInfo {
 
-    public ForeignKeyAnnoInfo(XSDComponent sourceXSDComponent, String xpath) {
+    public ForeignKeyAnnoInfo(XSDComponent sourceXSDComponent, String... xpath) {
         super(sourceXSDComponent, xpath);
     }
 

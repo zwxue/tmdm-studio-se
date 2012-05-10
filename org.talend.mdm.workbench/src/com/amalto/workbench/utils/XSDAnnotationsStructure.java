@@ -348,6 +348,16 @@ public class XSDAnnotationsStructure {
         return getAppInfoValue("X_ForeignKey");//$NON-NLS-1$
     }
 
+    public boolean setForeignKeySep(Boolean sep) {
+        boolean somethingChanged = setAppInfo("X_ForeignKey_Sep", sep.toString(), true);//$NON-NLS-1$
+        hasChanged = hasChanged | somethingChanged;
+        return somethingChanged;
+    }
+
+    public String getForeignKeySep() {
+        return getAppInfoValue("X_ForeignKey_Sep");//$NON-NLS-1$
+    }
+
     /****************************************************************************
      * Visible Rule
      ****************************************************************************/

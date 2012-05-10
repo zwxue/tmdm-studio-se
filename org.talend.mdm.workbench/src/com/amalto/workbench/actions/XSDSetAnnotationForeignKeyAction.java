@@ -86,7 +86,10 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             }
 
             sxid = getNewSimpleXpathInputDlg(struc.getForeignKey());
-
+            String fksep = struc.getForeignKeySep();
+            if (fksep != null) {
+                sxid.setFkSep(Boolean.valueOf(fksep));
+            }
             sxid.setBlockOnOpen(true);
             int ret = sxid.open();
             if (ret == Window.CANCEL) {
@@ -101,6 +104,8 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
                 Util.getForeignKeys().add(Util.getConceptFromPath(fk));
             }
             struc.setForeignKey(fk);
+            Boolean sep = sxid.getSepFk();
+            struc.setForeignKeySep(sep);
             if (struc.hasChanged()) {
                 page.refresh();
                 page.getTreeViewer().expandToLevel(xSDCom, 2);
