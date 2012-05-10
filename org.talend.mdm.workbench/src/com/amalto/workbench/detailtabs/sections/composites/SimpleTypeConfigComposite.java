@@ -189,9 +189,8 @@ public class SimpleTypeConfigComposite extends Composite {
         }
         if (allCustomTypeNames != null)
             comboCustomTypes.setInput(allCustomTypeNames);
-        if(xsdSimpleType.getBaseType() != null ){
-        comboCustomTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType().getName()));
-
+        if(xsdSimpleType.getBaseType() != null && xsdSimpleType.getBaseType().getName() != null){ 
+               comboCustomTypes.setSelection(new StructuredSelection(xsdSimpleType.getBaseType().getName()));
         }
         radCustomTypes.setSelection(!comboCustomTypes.getSelection().isEmpty());
         comboCustomTypes.addSelectionChangedListener(customChangedListener);
