@@ -13,6 +13,7 @@
 package com.amalto.workbench.editors.xsdeditor;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -85,10 +86,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public void setXObject(TreeObject xobject) {
         this.xobject = xobject;
-        
-        try {//temporarily store the file data for restore
+
+        try {// temporarily store the file data for restore
             IFile file = getXSDFile(xobject);
-            fileContents = IOUtils.toByteArray(file.getContents());
+            fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -201,7 +202,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                             IFile file = getXSDFile(xobject);
                             file.setCharset("utf-8", null);//$NON-NLS-1$
                             file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
-                            
+
                             initializeGraphicalViewer();
                         }
 
@@ -356,9 +357,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         getSelectionManager().addSelectionChangedListener(fXSDSelectionListener);
     }
 
-
-
- 
     @Override
     public String getContributorId() {
         return curContributionID;
@@ -413,8 +411,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     public void setName(String name) {
         setPartName(name);
     }
-    
+
     private byte[] fileContents = null;
+
     @Override
     public void dispose() {
         try {
