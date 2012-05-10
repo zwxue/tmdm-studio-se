@@ -356,6 +356,7 @@ public class Messages extends NLS {
 
     public static String WSRootLabelProvider_svn;
 
+    public static String Deploy_fail_cause_text;
 
     public static String NeverDeploy_text;
     public static String RepositoryViewFilterDialog_groupNamePattern;
