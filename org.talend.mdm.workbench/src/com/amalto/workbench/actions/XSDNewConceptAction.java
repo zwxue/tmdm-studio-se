@@ -14,6 +14,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,15 +58,15 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 
     public IStatus doAction() {
         try {
-            ArrayList customTypes = new ArrayList();
-            for (Iterator iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
+            List<String> customTypes = new ArrayList<String>();
+            for (Iterator<XSDTypeDefinition> iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
                 XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
                     customTypes
                             .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
             }
-            ArrayList builtInTypes = new ArrayList();
-            for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
+            List<String>builtInTypes = new ArrayList<String>();
+            for (Iterator<XSDTypeDefinition> iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
                 XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
                     builtInTypes.add(type.getName());

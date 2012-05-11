@@ -34,14 +34,7 @@ public class SimpleTypeNameCommitHandler extends CommitHandler<SimpleTypeWrapper
 
     @Override
     protected boolean doSubmit() throws CommitException {
-
-        if (getCommitedObj().getNewTypeName().trim().equals(getCommitedObj().getOldTypeName()))
-            return false;
-
-        getCommitedObj().getXSDSimpleType().setName(getCommitedObj().getNewTypeName().trim());
-        getCommitedObj().getXSDSimpleType().updateElement();
-
-        return true;
+        return getCommitedObj().changeTypeName();
     }
 
 }
