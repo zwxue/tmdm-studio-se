@@ -655,7 +655,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // is war do nothing
         if (exportTypeCombo.getSelectionIndex() == 0)
             return;
-        else {
+        else if (resourcesToExport != null) {
             for (ExportFileResource fileResource : resourcesToExport) {
                 String directory = fileResource.getDirectoryName();
                 fileResource.setDirectoryName(topFolder + "/" + directory); //$NON-NLS-1$
