@@ -189,12 +189,15 @@ public class DeployService {
                 if (childStatus instanceof DeployStatus) {
                     deployStatus = (DeployStatus) childStatus;
                 } else if (childStatus instanceof MultiStatus) {
-                    deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
+					if (((MultiStatus) childStatus).getChildren().length > 0)
+						deployStatus = (DeployStatus) ((MultiStatus) childStatus)
+								.getChildren()[0];
                 }
-
-                ICommand command = deployStatus.getCommand();
-                CommandManager manager = CommandManager.getInstance();
-                manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
+				if (deployStatus != null) {
+					ICommand command = deployStatus.getCommand();
+					CommandManager manager = CommandManager.getInstance();
+					manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
+				}
 
             }
         }
@@ -262,9 +265,11 @@ public class DeployService {
             if (childStatus instanceof DeployStatus) {
                 deployStatus = (DeployStatus) childStatus;
             } else if (childStatus instanceof MultiStatus) {
-                deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
+				if (((MultiStatus) childStatus).getChildren().length > 0)
+					deployStatus = (DeployStatus) ((MultiStatus) childStatus)
+							.getChildren()[0];
             }
-            if (deployStatus.isOK()) {
+			if (deployStatus != null && deployStatus.isOK()) {
                 ICommand command = deployStatus.getCommand();
                 if (command instanceof BatchDeployJobCommand) {
                     BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) command;
@@ -289,11 +294,12 @@ public class DeployService {
 				if (childStatus instanceof DeployStatus) {
 					deployStatus = (DeployStatus) childStatus;
 				} else if (childStatus instanceof MultiStatus) {
-					deployStatus = (DeployStatus) ((MultiStatus) childStatus)
-							.getChildren()[0];
+					if (((MultiStatus) childStatus).getChildren().length > 0)
+						deployStatus = (DeployStatus) ((MultiStatus) childStatus)
+								.getChildren()[0];
 				}
 
-				if (deployStatus.isOK()) {
+				if (deployStatus != null && deployStatus.isOK()) {
 					ICommand command = deployStatus.getCommand();
 					CommandManager manager = CommandManager.getInstance();
 					manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
