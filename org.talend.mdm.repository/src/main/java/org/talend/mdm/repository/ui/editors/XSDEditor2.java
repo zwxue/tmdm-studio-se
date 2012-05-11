@@ -30,6 +30,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.editors.xsdeditor.XSDSelectionListener;
 import com.amalto.workbench.models.TreeObject;
@@ -157,4 +158,9 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         }
     }
 
+    @Override
+    public DataModelMainPage getdMainPage() {
+        return dMainPage;
+    }
+    
 }
