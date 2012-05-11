@@ -34,6 +34,7 @@ import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.Util;
 
 public class XPathTreeContentProvider extends XSDTreeContentProvider {
 
@@ -266,15 +267,17 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
         // Attributes
         if (complexTypeDefinition.getAttributeContents() != null) {
             list.addAll(complexTypeDefinition.getAttributeContents());
-            XSDTypeDefinition baseTypeDef = complexTypeDefinition.getBaseTypeDefinition();
-            while (baseTypeDef instanceof XSDComplexTypeDefinition
-                    && (baseTypeDef.getTargetNamespace() == null || !baseTypeDef.getTargetNamespace().equals(
-                            XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))) {
-                XSDComplexTypeDefinition parentType = (XSDComplexTypeDefinition) baseTypeDef;
-                list.addAll(((XSDComplexTypeDefinition) baseTypeDef).getAttributeContents());
-                list.addAll(getComplexTypeDefinitionChildren(parentType));
-                baseTypeDef = baseTypeDef.getBaseType();
-            }
+            // XSDTypeDefinition baseTypeDef = complexTypeDefinition.getBaseTypeDefinition();
+            // while (baseTypeDef instanceof XSDComplexTypeDefinition
+            // && (baseTypeDef.getTargetNamespace() == null || !baseTypeDef.getTargetNamespace().equals(
+            // XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))) {
+            // XSDComplexTypeDefinition parentType = (XSDComplexTypeDefinition) baseTypeDef;
+            // list.addAll(((XSDComplexTypeDefinition) baseTypeDef).getAttributeContents());
+            // list.addAll(getComplexTypeDefinitionChildren(parentType));
+            // baseTypeDef = baseTypeDef.getBaseType();
+            // }
+            list.addAll(Util.getComplexTypeDefinitionChildren(complexTypeDefinition, true));
+            return list;
         }
 
         // //Annotations
@@ -289,18 +292,18 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
             return list;
         }
 
-        // xsd Particle: we have a model group
-        if (xsdComplexTypeContent instanceof XSDParticle) {
-            // System.out.println("Model Group?: "+((XSDParticle)xsdComplexTypeContent).getTerm());
-            if (((XSDParticle) xsdComplexTypeContent).getTerm() instanceof XSDModelGroup) {
-                // return the model group
-                list.add(((XSDParticle) xsdComplexTypeContent).getTerm());
-                return list;
-            } else { // wild card or element declaration '?)
-                list.add(((XSDParticle) xsdComplexTypeContent).getTerm());
-                return list;
-            }
-        }
+        // // xsd Particle: we have a model group
+        // if (xsdComplexTypeContent instanceof XSDParticle) {
+        // // System.out.println("Model Group?: "+((XSDParticle)xsdComplexTypeContent).getTerm());
+        // if (((XSDParticle) xsdComplexTypeContent).getTerm() instanceof XSDModelGroup) {
+        // // return the model group
+        // list.add(((XSDParticle) xsdComplexTypeContent).getTerm());
+        // return list;
+        // } else { // wild card or element declaration '?)
+        // list.add(((XSDParticle) xsdComplexTypeContent).getTerm());
+        // return list;
+        // }
+        // }
 
         // what else could it be ?
         list.add(xsdComplexTypeContent);
