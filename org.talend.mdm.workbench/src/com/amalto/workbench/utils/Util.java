@@ -1346,17 +1346,24 @@ public class Util {
 
     }
 
-    public static void updateComplexType(Object elem, Object newType, IStructuredContentProvider provider) {
-        if (!(newType instanceof XSDComplexTypeDefinition)) {
-            return;
+    /**
+     * update reference to newType
+     * @param elem
+     * @param newType
+     * @param provider
+     */
+    public static void updateReferenceToXSDTypeDefinition(Object elem, XSDTypeDefinition newType, IStructuredContentProvider provider) {
+        if(newType instanceof XSDComplexTypeDefinition) {
+            updateChildrenReferenceToComplexType((XSDComplexTypeDefinition)newType);
         }
-        ArrayList<Object> objList = new ArrayList<Object>();
+        
+        List<Object> objList = new ArrayList<Object>();
         Object[] allNodes = getAllObject(elem, objList, provider);
         for (Object node : allNodes) {
             if (node instanceof XSDElementDeclaration) {
                 XSDElementDeclaration xsdElem = (XSDElementDeclaration) node;
                 if (xsdElem.getTypeDefinition() == newType) {
-                    xsdElem.setTypeDefinition((XSDComplexTypeDefinition) newType);
+                    xsdElem.setTypeDefinition(newType);
                 }
             } else if (node instanceof XSDParticle) {
                 XSDParticle particle = (XSDParticle) node;
@@ -1366,14 +1373,14 @@ public class Util {
                     for (XSDParticle pt : elist) {
                         if (pt.getContent() instanceof XSDElementDeclaration)
                             if (((XSDElementDeclaration) pt.getContent()).getTypeDefinition() == newType) {
-                                ((XSDElementDeclaration) pt.getContent()).setTypeDefinition((XSDComplexTypeDefinition) newType);
+                                ((XSDElementDeclaration) pt.getContent()).setTypeDefinition(newType);
                             }
 
                     }
                 } else if (particle.getTerm() instanceof XSDElementDeclaration) {
                     XSDElementDeclaration xsdElem = (XSDElementDeclaration) particle.getTerm();
                     if (xsdElem.getTypeDefinition() == newType) {
-                        xsdElem.setTypeDefinition((XSDComplexTypeDefinition) newType);
+                        xsdElem.setTypeDefinition(newType);
                     }
                 }
             }
@@ -3125,8 +3132,8 @@ public class Util {
     /**
      * update reference from child to this XSDComplexTypeDefinition
      */
-    public static void updateChildrenReference(XSDTypeDefinition type) {
-        List<XSDComplexTypeDefinition> complexTypes = Util.getComplexTypes(type.getSchema());
+    public static void updateChildrenReferenceToComplexType(XSDComplexTypeDefinition type) {
+        List<XSDComplexTypeDefinition> complexTypes = getComplexTypes(type.getSchema());
         for (XSDComplexTypeDefinition complexType : complexTypes) {
             if (complexType.equals(type))
                 continue;

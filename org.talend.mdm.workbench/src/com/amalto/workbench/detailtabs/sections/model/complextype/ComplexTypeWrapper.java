@@ -12,8 +12,10 @@
 // ============================================================================
 package com.amalto.workbench.detailtabs.sections.model.complextype;
 
-import java.util.List;
-
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDDerivationMethod;
@@ -23,6 +25,8 @@ import org.eclipse.xsd.XSDParticle;
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.ComplexTypeWrapperCommitHandler;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
+import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.utils.Util;
 
 public class ComplexTypeWrapper implements ISubmittable {
@@ -80,7 +84,16 @@ public class ComplexTypeWrapper implements ISubmittable {
         curXSDComplexType.setName(newTypeName);
         curXSDComplexType.updateElement();
 
-        Util.updateChildrenReference(curXSDComplexType);
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IEditorPart activeEditor = activePage.getActiveEditor();
+        
+        if(activeEditor instanceof XSDEditor) {
+            XSDEditor editor = (XSDEditor) activeEditor;
+            DataModelMainPage page = editor.getdMainPage();
+            IStructuredContentProvider provider = (IStructuredContentProvider) page.getSchemaContentProvider();
+            Util.updateReferenceToXSDTypeDefinition(page.getSite(), curXSDComplexType, provider);
+        }
+        
         
         return true;
     }

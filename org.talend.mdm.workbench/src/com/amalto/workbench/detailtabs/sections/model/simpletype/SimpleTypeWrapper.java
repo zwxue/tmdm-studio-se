@@ -15,12 +15,19 @@ package com.amalto.workbench.detailtabs.sections.model.simpletype;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.SimpleTypeWrapperCommitHandler;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
+import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
+import com.amalto.workbench.utils.Util;
 
 public class SimpleTypeWrapper implements ISubmittable {
 
@@ -79,6 +86,26 @@ public class SimpleTypeWrapper implements ISubmittable {
         return xsdSimpleType.getSchema();
     }
 
+    public boolean changeTypeName() {
+        if (getNewTypeName().trim().equals(getOldTypeName()))
+            return false;
+
+        xsdSimpleType.setName(getNewTypeName().trim());
+        xsdSimpleType.updateElement();
+        
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IEditorPart activeEditor = activePage.getActiveEditor();        
+        if(activeEditor instanceof XSDEditor) {
+            XSDEditor editor = (XSDEditor) activeEditor;
+            DataModelMainPage page = editor.getdMainPage();
+            IStructuredContentProvider provider = (IStructuredContentProvider) page.getSchemaContentProvider();
+            
+            Util.updateReferenceToXSDTypeDefinition(page.getSite(), xsdSimpleType, provider);
+        }
+
+        return true;
+    }
+    
     public boolean isBaseTypeExists() {
         return newBaseTypeName.equals(newBaseType.getName());
     }

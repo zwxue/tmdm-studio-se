@@ -428,4 +428,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             super.dispose();
         }
     }
+    
+
+    public DataModelMainPage getdMainPage() {
+        return null;
+    }
 }
