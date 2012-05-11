@@ -165,8 +165,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         }
         if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             String labelValue = null;
-            List childrenList = Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) ((XSDElementDeclaration) decl)
-                    .getTypeDefinition());
+            List childrenList = Util.getComplexTypeDefinitionChildren(
+                    (XSDComplexTypeDefinition) ((XSDElementDeclaration) decl).getTypeDefinition(), true);
             if (childrenList == null) {
                 return keys;
             }

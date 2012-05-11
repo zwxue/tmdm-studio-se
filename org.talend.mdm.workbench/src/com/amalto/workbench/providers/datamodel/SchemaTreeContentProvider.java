@@ -261,7 +261,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
         // handle extensions and restrictions directly
         if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-            list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) parent.getTypeDefinition()));
+            list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) parent.getTypeDefinition(), true));
         else
             list.add(parent.getTypeDefinition());
 

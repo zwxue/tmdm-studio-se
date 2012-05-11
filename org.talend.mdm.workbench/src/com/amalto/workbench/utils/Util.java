@@ -1642,9 +1642,9 @@ public class Util {
     public static List<String> getChildElementNames(String parentxpath, XSDComplexTypeDefinition ctype) throws Exception {
         List<String> childNames = new ArrayList<String>();
         XSDTypeDefinition baseType = ctype.getBaseType();
-        if (baseType instanceof XSDComplexTypeDefinition) {
+        if (baseType instanceof XSDComplexTypeDefinition && baseType != ctype) {
             XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) baseType;
-            childNames.addAll(getComplexChilds(parentxpath, cmpType));
+            childNames.addAll(getChildElementNames(parentxpath, cmpType));
         }
 
         childNames.addAll(getComplexChilds(parentxpath, ctype));
@@ -1658,7 +1658,12 @@ public class Util {
         XSDTypeDefinition type = decl.getTypeDefinition();
         if (type instanceof XSDComplexTypeDefinition) {
             XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) type;
-            return getChildElementNames(parentxpath, cmpType);
+            List<String> childElementNames = getChildElementNames(parentxpath, cmpType);
+            for (String name : childElementNames) {
+                if (!childNames.contains(name)) {
+                    childNames.add(name);
+                }
+            }
         }
         return childNames;
     }
@@ -2645,6 +2650,11 @@ public class Util {
     }
 
     public static ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
+        return getComplexTypeDefinitionChildren(complexTypeDefinition, false);
+    }
+
+    public static ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition,
+            boolean ignoreRestriction) {
 
         XSDComplexTypeContent xsdComplexTypeContent = complexTypeDefinition.getContent();
         ArrayList<Object> list = new ArrayList<Object>();
@@ -2668,9 +2678,11 @@ public class Util {
             if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
                 String name = ((XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition()).getDerivationMethod()
                         .getName();
-                if (name.equals("restriction")) //$NON-NLS-1$
-                    list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) complexTypeDefinition
-                            .getBaseTypeDefinition()));
+                if (name.equals("restriction") || ignoreRestriction) //$NON-NLS-1$
+                    list.addAll(getComplexTypeDefinitionChildren(
+                            (XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition(), ignoreRestriction));
+                //
+
             }
         }
 

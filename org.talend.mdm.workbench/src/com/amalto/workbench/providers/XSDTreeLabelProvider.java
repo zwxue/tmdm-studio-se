@@ -37,6 +37,7 @@ import org.eclipse.xsd.XSDParticleContent;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -103,7 +104,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
         if (obj instanceof XSDModelGroup) {
             // return the name of the complex type definition
             XSDParticle particle = (XSDParticle) (((XSDModelGroup) obj).getContainer());
-            String name = ((XSDComplexTypeDefinition) particle.getContainer()).getName();
+            XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) particle.getContainer();
+            String name = complexTypeDefinition.getName();
             if (name == null)
                 name = "anonymous type ";//$NON-NLS-1$
             // return the occurence
@@ -114,13 +116,19 @@ public class XSDTreeLabelProvider extends LabelProvider {
                 name += (particle.getMaxOccurs() == -1) ? "many" : "" + particle.getMaxOccurs();//$NON-NLS-1$//$NON-NLS-2$
                 name += "]";//$NON-NLS-1$
             }
+            // get extend type
+            XSDTypeDefinition extendType = complexTypeDefinition.getBaseTypeDefinition();
+            String extendTypeName = ""; //$NON-NLS-1$
+            if (extendType != null && extendType != complexTypeDefinition && !"anyType".equals(extendType.getName())) { //$NON-NLS-1$
+                extendTypeName = ":" + extendType.getName(); //$NON-NLS-1$
+            }
             XSDSchema schema = particle.getSchema();
             String tail = ""; //$NON-NLS-1$
             if (schema != null && schema.getTargetNamespace() != null) {
                 tail = " : "//$NON-NLS-1$
                         + schema.getTargetNamespace();
             }
-            return name + tail;
+            return name + tail + extendTypeName;
 
         }
 
