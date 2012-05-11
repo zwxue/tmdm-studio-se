@@ -17,12 +17,14 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 /**
@@ -79,8 +81,7 @@ public class DeployToAction extends AbstractDeployAction {
     private void initializeSelection(List<IRepositoryViewObject> viewObjs, SelectServerDefDialog dialog) {
         MDMServerDef defServer = null;
         for (IRepositoryViewObject viewObject : viewObjs) {
-            MDMServerObjectItem serverDefItem = (MDMServerObjectItem) viewObject.getProperty().getItem();
-            MDMServerDef tmpServer = serverDefItem.getMDMServerObject().getLastServerDef();
+            MDMServerDef tmpServer = RepositoryResourceUtil.getLastServerDef(viewObject);
             if (defServer == null) {
                 defServer = tmpServer;
             } else if (tmpServer != null && !isSameMDMServerDef(defServer, tmpServer)) {
