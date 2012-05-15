@@ -527,6 +527,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     private String validateDiagnoses(String msg_omit[]) {
 
         xsdSchema.clearDiagnostics();
+        xsdSchema.getAllDiagnostics().clear();
         xsdSchema.validate();
         EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
         String error = "";//$NON-NLS-1$
