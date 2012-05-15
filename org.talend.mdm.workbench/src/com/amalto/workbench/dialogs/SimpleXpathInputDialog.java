@@ -48,7 +48,7 @@ public class SimpleXpathInputDialog extends Dialog {
 
     private String xpath = "";//$NON-NLS-1$
 
-    private boolean sepFk = true;
+    private boolean sepFk = false;
 
     private String dataModelName;
 

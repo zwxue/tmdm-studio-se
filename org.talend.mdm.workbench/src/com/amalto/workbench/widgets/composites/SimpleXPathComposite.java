@@ -50,9 +50,9 @@ public class SimpleXPathComposite extends Composite {
 
     private Button btnSep;
 
-    private Boolean sepFk = true;
+    private Boolean sepFk = false;
     public SimpleXPathComposite(Composite parent, int style, String title, IAllDataModelHolder allDataModelHolder,
-            String defaultDataModelForSelect,final BasePropertySection section) {
+            String defaultDataModelForSelect, final BasePropertySection section, boolean btnsp) {
         super(parent, style);
         this.section=section;
         this.defaultDataModelForSelect = defaultDataModelForSelect;
@@ -98,18 +98,18 @@ public class SimpleXPathComposite extends Composite {
         btnSelectXPath = new Button(composite, SWT.NONE);
         btnSelectXPath.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
         btnSelectXPath.setToolTipText(Messages.getString("SchematronExpressBuilder_selectXPath"));
+        if (btnsp) {
+            btnSep = new Button(composite, SWT.CHECK);
+            btnSep.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+            btnSep.setText(Messages.getString("SimpleXpathInputDialog_sepFkTabPanel"));//$NON-NLS-1$
+            btnSep.addSelectionListener(new SelectionAdapter() {
 
-        btnSep = new Button(composite, SWT.CHECK);
-        btnSep.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
-        btnSep.setText(Messages.getString("SimpleXpathInputDialog_sepFkTabPanel"));//$NON-NLS-1$
-        btnSep.addSelectionListener(new SelectionAdapter() {
-
-            public void widgetSelected(SelectionEvent e) {
-                sepFk = btnSep.getSelection();
-                section.autoCommit();
-            }
-        });
-
+                public void widgetSelected(SelectionEvent e) {
+                    sepFk = btnSep.getSelection();
+                    section.autoCommit();
+                }
+            });
+        }
         initUIListeners();
     }
     public String getXPath() {
@@ -122,7 +122,9 @@ public class SimpleXPathComposite extends Composite {
 
     public void setFKSep(Boolean sepFk) {
         this.sepFk = sepFk;
-        btnSep.setSelection(sepFk);
+        if (btnSep != null) {
+            btnSep.setSelection(sepFk);
+        }
     }
     public void setXPath(String xpath) {
         txtXPath.setText(xpath);
