@@ -49,6 +49,9 @@ public class NewProcessWizard extends Wizard {
     // OTHER
     public static final int OTHER_TYPE = 7;
 
+    // SMARTVIEW
+    public static final int SMARTVIEW_TYPE = 8;
+
     private SelectProcessTypePage selectProcessTypePage;
 
     private InputProcessNamePage inputProcessNamePage;
@@ -193,6 +196,10 @@ public class NewProcessWizard extends Wizard {
             steps.add(callJobStep);
             
             break;
+        case SMARTVIEW_TYPE:
+            WSTransformerProcessStepE xsltStep = ProcessStepFactory.createSmartViewStep();
+            steps.add(xsltStep);
+            break;
         default:
             break;
         }
@@ -203,9 +210,10 @@ public class NewProcessWizard extends Wizard {
     }
     
     public void generateJobTemplate(){
-    	
+        int type = inputProcessNamePage.getProcessType();
+        if (type == SMARTVIEW_TYPE)// don't create job if smartview
+            return;
 		String[] messages=configReturnMessagePage.getMessageParams();		
-		int type= inputProcessNamePage.getProcessType();
 		String infoType=null;
 		String pMessage=null;
 		if(type==BEFORE_DELETING|| type==BEFORE_SAVING){

@@ -38,6 +38,7 @@ import org.talend.mdm.repository.ui.wizards.process.composite.AbstractProcessTyp
 import org.talend.mdm.repository.ui.wizards.process.composite.BeforeProcessTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.OtherTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.RunnableTypeComposite;
+import org.talend.mdm.repository.ui.wizards.process.composite.SmartviewProcessTypeComposite;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -92,6 +93,8 @@ public class InputProcessNamePage extends WizardPage {
     IProcessTypeComposite runnableProcessComposite;
 
     IProcessTypeComposite otherProcessComposite;
+
+    IProcessTypeComposite smartviewProcessComposite;
 
     private Text nameText;
 
@@ -186,7 +189,11 @@ public class InputProcessNamePage extends WizardPage {
                 otherProcessComposite = new OtherTypeComposite();
             }
             return otherProcessComposite;
-
+        case NewProcessWizard.SMARTVIEW_TYPE:
+            if (smartviewProcessComposite == null) {
+                smartviewProcessComposite = new SmartviewProcessTypeComposite();
+            }
+            return smartviewProcessComposite;
         }
 
         return null;

@@ -92,6 +92,36 @@ public class ProcessStepFactory {
         return null;
     }
 
+    public static WSTransformerProcessStepE createSmartViewStep() {
+        final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"//$NON-NLS-1$
+                + "   <xsl:output method='html' indent='yes' omit-xml-declaration='yes'/>\n"//$NON-NLS-1$
+                + "   <xsl:template match='/'>\n" + "       <html>\n"//$NON-NLS-1$//$NON-NLS-2$
+                + "          <head><title>Smart View</title></head>\n" + "          <body>\n"//$NON-NLS-1$//$NON-NLS-2$ 
+                + "            <h1>This is the default Smart View for: <xsl:value-of select='./text()'/></h1>\n"//$NON-NLS-1$
+                + "            <xsl:copy-of select='.'/>\n" + "            <!-- Customize the stylesheet -->\n"//$NON-NLS-1$//$NON-NLS-2$
+                + "          </body>\n" + "       </html>\n" + "    </xsl:template>" + "</xsl:stylesheet>";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+        List<WSTransformerVariablesMappingE> inItems;
+        List<WSTransformerVariablesMappingE> outItems;
+        WSTransformerProcessStepE step = MdmserverobjectFactory.eINSTANCE.createWSTransformerProcessStepE();
+        inItems = new ArrayList<WSTransformerVariablesMappingE>();
+        WSTransformerVariablesMappingE inputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
+        inputLine.setPipelineVariable(VAR_DEFAULT);
+        inputLine.setPluginVariable(VAR_XML);
+        inItems.add(inputLine);
+
+        outItems = new ArrayList<WSTransformerVariablesMappingE>();
+        WSTransformerVariablesMappingE outputLine = MdmserverobjectFactory.eINSTANCE.createWSTransformerVariablesMappingE();
+        outputLine.setPipelineVariable("html");//$NON-NLS-1$
+        outputLine.setPluginVariable(VAR_TEXT);
+        outItems.add(outputLine);
+        step.setPluginJNDI(XSLT_PLUGIN);
+        step.setDescription("Stylesheet");
+        step.setParameters(parameters);
+        step.getInputMappings().addAll(inItems);
+        step.getOutputMappings().addAll(outItems);
+        step.setDisabled(false);
+        return step;
+    }
     public static WSTransformerProcessStepE createRedirectStep(Object param, String outputPipleVariable) {
         if (param == null || !(param instanceof String))
             throw new IllegalArgumentException();

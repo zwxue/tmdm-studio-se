@@ -87,6 +87,17 @@ public class SelectProcessTypePage extends WizardPage {
                 updateAll();
             }
         });
+        Button btnSmartView = new Button(typeGroup, SWT.RADIO);
+        btnSmartView.setText(Messages.SelectProcessTypePage_createSmartViewProcess);
+        btnSmartView.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                currentSelectedType = NewProcessWizard.SMARTVIEW_TYPE;
+                updateAll();
+            }
+        });
+
         Button btnTypeOther = new Button(typeGroup, SWT.RADIO);
         btnTypeOther.setText(Messages.SelectProcessTypePage_createOtherProcess);
         btnTypeOther.addSelectionListener(new SelectionAdapter() {
@@ -147,6 +158,9 @@ public class SelectProcessTypePage extends WizardPage {
 
         case NewProcessWizard.OTHER_TYPE:
             desc = Messages.SelectProcessTypePage_otherProcessDesc;
+            break;
+        case NewProcessWizard.SMARTVIEW_TYPE:
+            desc = Messages.SelectProcessTypePage_smartviewProcessDesc;
             break;
         }
         return desc;

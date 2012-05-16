@@ -453,6 +453,8 @@ public class Messages extends NLS {
 
     public static String SelectProcessTypePage_createOtherProcess;
 
+    public static String SelectProcessTypePage_createSmartViewProcess;
+
     public static String SelectProcessTypePage_createRunnableProcess;
 
     public static String SelectProcessTypePage_description;
@@ -462,6 +464,8 @@ public class Messages extends NLS {
     public static String SelectProcessTypePage_otherProcessDesc;
 
     public static String SelectProcessTypePage_runnableProcessDesc;
+
+    public static String SelectProcessTypePage_smartviewProcessDesc;
 
     public static String SelectProcessTypePage_selectType;
 
