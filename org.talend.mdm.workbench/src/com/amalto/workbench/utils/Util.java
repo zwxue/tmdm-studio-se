@@ -86,6 +86,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -114,6 +115,7 @@ import org.eclipse.xsd.XSDNamedComponent;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
+import org.eclipse.xsd.XSDSchemaDirective;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
@@ -1359,15 +1361,17 @@ public class Util {
 
     /**
      * update reference to newType
+     * 
      * @param elem
      * @param newType
      * @param provider
      */
-    public static void updateReferenceToXSDTypeDefinition(Object elem, XSDTypeDefinition newType, IStructuredContentProvider provider) {
-        if(newType instanceof XSDComplexTypeDefinition) {
-            updateChildrenReferenceToComplexType((XSDComplexTypeDefinition)newType);
+    public static void updateReferenceToXSDTypeDefinition(Object elem, XSDTypeDefinition newType,
+            IStructuredContentProvider provider) {
+        if (newType instanceof XSDComplexTypeDefinition) {
+            updateChildrenReferenceToComplexType((XSDComplexTypeDefinition) newType);
         }
-        
+
         List<Object> objList = new ArrayList<Object>();
         Object[] allNodes = getAllObject(elem, objList, provider);
         for (Object node : allNodes) {
@@ -1762,41 +1766,23 @@ public class Util {
     }
 
     public static boolean IsAImporedElement(XSDConcreteComponent component, XSDSchema schema) {
-        if (component == null)
-            return true;
-        String componentName = getComponentName(component);
-        if (componentName == null)
-            return true;
-        try {
-            String xsd = nodeToString(schema.getDocument().getDocumentElement());
-            // if(true){
-            // return false;
-            // }
-
-            if (xsd.indexOf(componentName) != -1) {
+        EObject parent = null;
+        EObject obj = component;
+        do {
+            parent = obj.eContainer();
+            obj = parent;
+        } while (!(parent instanceof XSDSchema));
+        if (parent != null && parent instanceof XSDSchema) {
+            if (parent.equals(schema))
                 return false;
+            try {
+                EList<XSDSchemaDirective> referencingDirectives = ((XSDSchema) parent).getReferencingDirectives();
+                return !referencingDirectives.isEmpty();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            log.error(e.getMessage(), e);
         }
-        // List<String> buffer = new ArrayList<String>();
-        // buffer = retrieveXSDComponentPath(component, schema, buffer);
-        // String path = "";
-        // for (int i = buffer.size() -1; i >= 0; i--)
-        // {
-        // if(path.lastIndexOf(buffer.get(i)) == -1)
-        // path += buffer.get(i);
-        // }
-        //
-        // try {
-        // NodeList l = Util.getNodeList(schema.getDocument(), path);
-        // if(l.getLength() > 0)
-        // return false;
-        // } catch (Exception e) {
-        // log.error(e.getMessage(), e);
-        // }
-        return true;
+        return false;
     }
 
     public static boolean IsAImporedElement(XSDConcreteComponent component, String schema) {
@@ -3148,14 +3134,14 @@ public class Util {
         for (XSDComplexTypeDefinition complexType : complexTypes) {
             if (complexType.equals(type))
                 continue;
-      
+
             if (Util.getParentTypes(complexType).contains(type)) {
                 complexType.setBaseTypeDefinition(type);
                 continue;
             }
         }
     }
-    
+
     public static List<XSDTypeDefinition> getParentTypes(XSDTypeDefinition type) {
         return getParentTypes(type, new ArrayList<XSDTypeDefinition>());
     }
