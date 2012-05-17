@@ -53,6 +53,9 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
+import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -71,7 +74,6 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         super(launchPage);
     }
 
-
     @Override
     protected List<String> getAllRoleNames() {
         return RepositoryQueryService.findAllRoleNames();
@@ -85,8 +87,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             MDMServerObjectItem roleItem = RepositoryQueryService.findServerObjectItemByName(
                     IServerObjectRepositoryType.TYPE_ROLE, roleName);
             if (roleItem != null) {
-            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, roleItem.getProperty().getId(),
-                    roleItem.getMDMServerObject().getName());
+                CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, roleItem.getProperty().getId(),
+                        roleItem.getMDMServerObject().getName());
             }
             if (roleItem != null) {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
@@ -134,7 +136,6 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
             XSDElementDeclaration decl = getXSDElementDeclaration();
 
-
             if (decl.getAnnotation() != null)
                 labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
             if (labels.size() == 0)
@@ -148,27 +149,53 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             view.setTransformerPK(""); //$NON-NLS-1$
             view.setIsTransformerActive(wsBool);
             // SearchableBusinessElements & ViewableBusinessElements
+            List<String> idList = getKeyElements(page.getDataModel().getName(), decl.getName());
 
-            List<String> keys = getKeysForViewElements(decl);
-
-            view.getSearchableBusinessElements().addAll(keys);
-            view.getViewableBusinessElements().addAll(keys);
+            List<String> fields = getFieldsForViewElements(decl, idList);
+            fields.addAll(0, idList);
+            view.getSearchableBusinessElements().addAll(fields);
+            view.getViewableBusinessElements().addAll(fields);
             return view;
         }
 
     };
 
-    public static List<String> getKeysForViewElements(XSDElementDeclaration decl) {
-        List<String> keys = new ArrayList<String>();
+    private static List<String> getKeyElements(String datamodel, String concept) {
+        java.util.List<String> idList = new ArrayList<String>();
+        WSGetBusinessConceptKey wsGetBusinessConceptKey = new WSGetBusinessConceptKey(new WSDataModelPK(datamodel), concept);
+        WSConceptKey wsConceptKey;
+        try {
+            wsConceptKey = RepositoryResourceUtil.getBusinessConceptKey(wsGetBusinessConceptKey);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return idList;
+        }
+        String[] ids = wsConceptKey.getFields();
+        for (int i = 0; i < ids.length; i++) {
+            String id = ids[i];
+
+            // need to care about more case
+            if (id.startsWith("/")) {//$NON-NLS-1$
+                id = id.substring(1);
+            } else if (id.startsWith("//")) {//$NON-NLS-1$
+                id = id.substring(2);
+            }
+            idList.add(concept + '/' + id);
+        }
+        return idList;
+    }
+
+    public static List<String> getFieldsForViewElements(XSDElementDeclaration decl, List<String> idList) {
+        List<String> fields = new ArrayList<String>();
         if (decl == null) {
-            return keys;
+            return fields;
         }
         if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             String labelValue = null;
             List childrenList = Util.getComplexTypeDefinitionChildren(
                     (XSDComplexTypeDefinition) ((XSDElementDeclaration) decl).getTypeDefinition(), true);
             if (childrenList == null) {
-                return keys;
+                return fields;
             }
             for (int j = 0; j < childrenList.size(); j++) {
                 List<XSDParticle> particles = new ArrayList<XSDParticle>();
@@ -176,24 +203,27 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
                     particles = ((XSDModelGroup) childrenList.get(j)).getParticles();
                 if (particles != null) {
                     for (int k = 0; k < particles.size(); k++) {
-                    // Only the top 5 attributes will be searchable and viewable when generating the default view
-                        if (k < 5) {
+                        // Only the top 5 attributes will be searchable and viewable when generating the default view
+
                         XSDParticle xSDCom = particles.get(k);
-                            if ((xSDCom != null && xSDCom.getContent() != null) && (xSDCom instanceof XSDParticle)
-                                    && ((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
+                        if ((xSDCom != null && xSDCom.getContent() != null) && (xSDCom instanceof XSDParticle)
+                                && ((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
                             labelValue = ((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent()).getName();
-                            String key = decl.getName();
-                            // remove
-                            key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
-                            key += "/" + labelValue;//$NON-NLS-1$
-                            keys.add(key);
+                            String field = decl.getName();
+                            field = field.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
+                            field += "/" + labelValue;//$NON-NLS-1$
+                            if (!idList.contains(field)) {
+                                fields.add(field);
+                            }
+                        }
+                        if (idList.size() + fields.size() == 5) {
+                            break;
                         }
                     }
                 }
-                }
             }
         }
-        return keys;
+        return fields;
 
     }
 
@@ -202,19 +232,18 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW,
                 browseItem);
         if (viewObject != null) {
-            
+
             IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObject);
-            if(ref != null) 
-            {
+            if (ref != null) {
                 boolean ok = MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizardR_warning,
                         Messages.AddBrowseItemsWizardR_duplicatedView);
                 if (!ok)
                     return;
-                
+
                 // delete the existed browse view
                 RepositoryResourceUtil.closeEditor(ref, false);
             }
-            
+
             try {
                 ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
             } catch (PersistenceException e) {

@@ -53,7 +53,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
@@ -89,7 +88,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     private static Log log = LogFactory.getLog(AddBrowseItemsWizard.class);
 
-    private DataModelMainPage page;
+    protected DataModelMainPage page;
 
     private XtentisPort port;
 
