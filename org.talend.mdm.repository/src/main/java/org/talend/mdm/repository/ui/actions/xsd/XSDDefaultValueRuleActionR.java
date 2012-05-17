@@ -43,7 +43,7 @@ public class XSDDefaultValueRuleActionR extends XSDDefaultValueRuleAction {
     @Override
     protected ValidationRuleExcpressDialog getExpressDialog() {
         return new ValidationRuleExcpressDialog2(page.getSite().getShell(), getTreeParent(),
-                "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, false, false);
+                "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, true, false);
     }
 
 }
