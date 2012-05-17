@@ -162,15 +162,18 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     private void openServiceConfig(MDMServerDef serverDef) {
         TreeParent serverRoot = getServerRoot(serverDef);
-        TreeObject xobject = new TreeObject(EXtentisObjects.ServiceConfiguration.getDisplayName(), serverRoot,
-                TreeObject.SERVICE_CONFIGURATION, null, null);
-        try {
-            if (page == null)
-                this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
-            page.openEditor(new XObjectEditorInput(xobject, xobject.getDisplayName()),
-                    "com.amalto.workbench.editors.XObjectEditor"); //$NON-NLS-1$
-        } catch (PartInitException e) {
-            log.error(e.getMessage(), e);
+            
+        if (!isNull(serverRoot)) {
+            TreeObject xobject = new TreeObject(EXtentisObjects.ServiceConfiguration.getDisplayName(), serverRoot,
+                    TreeObject.SERVICE_CONFIGURATION, null, null);
+            try {
+                if (page == null)
+                    this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                page.openEditor(new XObjectEditorInput(xobject, xobject.getDisplayName()),
+                        "com.amalto.workbench.editors.XObjectEditor"); //$NON-NLS-1$
+            } catch (PartInitException e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -228,6 +231,9 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     }
 
     public TreeParent getServerRoot(MDMServerDef serverDef) {
+        if(isNull(serverDef))
+            return null;
+        
         String serverName = serverDef.getHost();
         String universe = serverDef.getUniverse();
         String username = serverDef.getUser();
@@ -272,6 +278,10 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             return serverDef;
         }
         return null;
+    }
+    
+    private boolean isNull(Object obj) {
+        return obj == null;
     }
 
 }
