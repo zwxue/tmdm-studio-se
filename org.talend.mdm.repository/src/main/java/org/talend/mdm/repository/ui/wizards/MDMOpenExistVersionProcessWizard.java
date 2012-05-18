@@ -12,14 +12,20 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.model.repository.RepositoryManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
@@ -126,5 +132,31 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
     }    
     public IRepositoryViewObject getViewObj(){
         return this.viewObject;
+    }
+
+    @Override
+    protected boolean refreshNewJob() {
+        IFolder folder = RepositoryResourceUtil.getFolder(getViewObj());
+        if (folder != null && folder.exists()) {
+            try {
+                final List<String> paths = new ArrayList<String>();
+                folder.accept(new IResourceVisitor() {
+
+                    public boolean visit(IResource e) throws CoreException {
+                        if (e.getLocation().toOSString().endsWith(".bak")) {//$NON-NLS-1$
+                            paths.add(e.getName());
+                        }
+                        return true;
+                    }
+                });
+                // delete all .bak files
+                for (String path : paths) {
+                    folder.getFile(path).delete(true, null);
+                }
+            } catch (CoreException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return super.refreshNewJob();
     }
 }
