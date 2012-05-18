@@ -29,6 +29,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
@@ -44,7 +45,6 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.CopyUrlAction;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
-import org.talend.mdm.repository.ui.actions.DeployAnotherVersionAction;
 import org.talend.mdm.repository.ui.actions.DeployToAction;
 import org.talend.mdm.repository.ui.actions.DeployToLastServerAction;
 import org.talend.mdm.repository.ui.actions.DuplicateAction;
@@ -79,7 +79,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     protected static AbstractRepositoryAction importObjectAction;
 
     protected static AbstractRepositoryAction deployToAction;
-    //protected static AbstractRepositoryAction deployAnotherToAction;
+
+    // protected static AbstractRepositoryAction deployAnotherToAction;
 
     protected static AbstractRepositoryAction deployToLastServerAction;
 
@@ -116,7 +117,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         renameAction = initRepositoryAction(new RenameObjectAction(), commonViewer);
         duplicateAction = initRepositoryAction(new DuplicateAction(), commonViewer);
         deployToAction = initRepositoryAction(new DeployToAction(), commonViewer);
-        //deployAnotherToAction = initRepositoryAction(new DeployAnotherVersionAction(), commonViewer);
+        // deployAnotherToAction = initRepositoryAction(new DeployAnotherVersionAction(), commonViewer);
         deployToLastServerAction = initRepositoryAction(new DeployToLastServerAction(), commonViewer);
         deployAllAction = initRepositoryAction(new DeployAllAction(false), commonViewer);
         emAction = initRepositoryAction(new MDMEventManagerAction(), commonViewer);
@@ -126,7 +127,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         //
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
-        copyUrlAction = initRepositoryAction(new CopyUrlAction(), commonViewer); 
+        copyUrlAction = initRepositoryAction(new CopyUrlAction(), commonViewer);
 
         pasteAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.PASTE);
         // action provider
@@ -164,7 +165,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
                 case FolderType.FOLDER:
                     actions.add(createFolderAction);
-                    actions.add(removeFromRepositoryAction);
+                    if (!((ContainerItem) item).getRepObjType().equals(ERepositoryObjectType.PROCESS)) {
+                        actions.add(removeFromRepositoryAction);
+                    }
                     addAction(actions, pasteAction, viewObj);
                     break;
                 }
@@ -176,10 +179,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
                 actions.add(duplicateAction);
-                
-                //temporarily added constraint
+
+                // temporarily added constraint
                 if (viewObj.getRepositoryObjectType() != null
-                        && IServerObjectRepositoryType.TYPE_RESOURCE.equals(viewObj.getRepositoryObjectType())){
+                        && IServerObjectRepositoryType.TYPE_RESOURCE.equals(viewObj.getRepositoryObjectType())) {
                     actions.add(copyUrlAction);
                 }
             } else if (item instanceof WorkspaceRootItem) { // fix bug TMDM-3168
