@@ -187,7 +187,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     public static List<String> getFieldsForViewElements(XSDElementDeclaration decl, List<String> idList) {
         List<String> fields = new ArrayList<String>();
-        if (decl == null) {
+        if (decl == null || idList.size() >= 5) {
             return fields;
         }
         if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
