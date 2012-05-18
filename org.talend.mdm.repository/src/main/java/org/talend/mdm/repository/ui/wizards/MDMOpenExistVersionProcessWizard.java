@@ -12,13 +12,10 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -139,19 +136,15 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         IFolder folder = RepositoryResourceUtil.getFolder(getViewObj());
         if (folder != null && folder.exists()) {
             try {
-                final List<String> paths = new ArrayList<String>();
-                folder.accept(new IResourceVisitor() {
-
-                    public boolean visit(IResource e) throws CoreException {
-                        if (e.getLocation().toOSString().endsWith(".bak")) {//$NON-NLS-1$
-                            paths.add(e.getName());
+                for (IResource r : folder.members()) {
+                    if (r instanceof IFile) {
+                        if (r.getFileExtension().equalsIgnoreCase("bak")) {//$NON-NLS-1$
+                            IFile file = (IFile) r;
+                            if (file.exists()) {
+                                file.delete(true, null);
+                            }
                         }
-                        return true;
                     }
-                });
-                // delete all .bak files
-                for (String path : paths) {
-                    folder.getFile(path).delete(true, null);
                 }
             } catch (CoreException e) {
                 log.error(e.getMessage(), e);
