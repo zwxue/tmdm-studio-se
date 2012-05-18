@@ -21,10 +21,10 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.recyclebin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -54,11 +54,15 @@ import org.talend.repository.model.IProxyRepositoryFactory;
  */
 public class RecycleBinContentProvider extends AbstractContentProvider {
 
-    private static final String PREFIX = "MDM"; //$NON-NLS-1$
+    private static final String MDM_PREFIX = "MDM"; //$NON-NLS-1$
+
+    private static final String JOB_PREFIX = "process"; //$NON-NLS-1$
 
     private Map<ERepositoryObjectType, Map<String, FolderRepositoryObject>> containerMap = new HashMap<ERepositoryObjectType, Map<String, FolderRepositoryObject>>();
 
-    private static final Pattern pattern = Pattern.compile("(MDM/\\w*+)((/(\\w*))+)"); //$NON-NLS-1$
+    private static final Pattern mdmPattern = Pattern.compile("(MDM/\\w*+)((/(\\w*))+)"); //$NON-NLS-1$
+
+    private static final Pattern jobPattern = Pattern.compile("(process)((/(\\w*))+)"); //$NON-NLS-1$
 
     private static Logger log = Logger.getLogger(RecycleBinContentProvider.class);
 
@@ -75,8 +79,8 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
     }
 
     private void buildAllDeletedFolders(FolderRepositoryObject rootViewObj) {
-        List<String> deletedFolderPaths = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
-        deletedFolderPaths = sortFolderPath(deletedFolderPaths);
+        List<String> paths = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
+        String[] deletedFolderPaths = sortFolderPath(paths);
         // System.out.println("Deleted Folders:");
         // for (Object obj : deletedFolderPaths) {
         // System.out.println(obj);
@@ -85,8 +89,13 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
         rootViewObj.getChildren().clear();
 
         for (String path : deletedFolderPaths) {
-            Matcher matcher = pattern.matcher(path);
-            if (matcher.find()) {
+            Matcher matcher = null;
+            if (path.startsWith(MDM_PREFIX)) {
+                matcher = mdmPattern.matcher(path);
+            } else if (path.startsWith(JOB_PREFIX)) {
+                matcher = jobPattern.matcher(path);
+            }
+            if (matcher != null && matcher.find()) {
                 String parentFolder = matcher.group(1);
                 String itemPath = matcher.group(2);
                 String folderName = matcher.group(4);
@@ -177,22 +186,18 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
         return null;
     }
 
-    private List<String> sortFolderPath(List folderPaths) {
+    private String[] sortFolderPath(List folderPaths) {
         Iterator il = folderPaths.iterator();
-        List<String> result = new LinkedList<String>();
+        List<String> result = new ArrayList<String>(folderPaths.size());
         while (il.hasNext()) {
             String path = (String) il.next();
-            if (path.startsWith(PREFIX)) {
+            if (path.startsWith(MDM_PREFIX) || path.startsWith(JOB_PREFIX)) {
                 result.add(path);
             }
         }
         String[] objs = result.toArray(new String[0]);
         Arrays.sort(objs);
-        result.clear();
-        for (String obj : objs) {
-            result.add(obj);
-        }
-        return result;
+        return objs;
     }
 
 }

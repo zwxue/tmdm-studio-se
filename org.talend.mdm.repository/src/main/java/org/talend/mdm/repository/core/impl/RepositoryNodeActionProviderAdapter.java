@@ -29,6 +29,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
@@ -43,7 +44,6 @@ import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
-import org.talend.mdm.repository.ui.actions.DeployAnotherVersionAction;
 import org.talend.mdm.repository.ui.actions.DeployToAction;
 import org.talend.mdm.repository.ui.actions.DeployToLastServerAction;
 import org.talend.mdm.repository.ui.actions.DuplicateAction;
@@ -156,7 +156,9 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
                 case FolderType.FOLDER:
                     actions.add(createFolderAction);
-                    actions.add(removeFromRepositoryAction);
+                    if (!((ContainerItem) item).getRepObjType().equals(ERepositoryObjectType.PROCESS)) {
+                        actions.add(removeFromRepositoryAction);
+                    }
                     addAction(actions, pasteAction, viewObj);
                     break;
                 }
