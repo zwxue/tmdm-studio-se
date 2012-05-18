@@ -1121,7 +1121,8 @@ public class Util {
         } else if (son instanceof XSDElementDeclaration) {
             elem = (XSDElementDeclaration) son;
         }
-
+        if (elem == null || elem.getSchema() == null)
+            return null;
         EList<XSDSchemaContent> parentList = elem.getSchema().getContents();
         ArrayList<Object> list = new ArrayList<Object>();
         for (XSDSchemaContent top : parentList) {
