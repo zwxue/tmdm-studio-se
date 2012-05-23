@@ -30,7 +30,7 @@ public class MDMServerDecorator implements ILightweightLabelDecorator {
             "icons/new_resource.gif"); //$NON-NLS-1$
 
     private static final ImageDescriptor IMG_DELETE = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
-            "icons/DELETED.gif"); //$NON-NLS-1$
+            "icons/deleted.gif"); //$NON-NLS-1$
 
     public void decorate(Object element, IDecoration decoration) {
         IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
