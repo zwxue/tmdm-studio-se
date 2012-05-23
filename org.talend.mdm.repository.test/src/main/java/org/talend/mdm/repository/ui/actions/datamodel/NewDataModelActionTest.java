@@ -32,8 +32,6 @@ public class NewDataModelActionTest extends AbstractSimpleAddActionTest {
 
     @Test
     public void testCreateServerObject() throws Exception {
-
-        mockSimpleAddActionClass();
         //
         ContainerItem newItem = MdmpropertiesFactory.eINSTANCE.createContainerItem();
         ContainerItem mockContainerItem = spy(newItem);
