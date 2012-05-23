@@ -271,7 +271,7 @@ public class DescAnnotationComposite implements SelectionListener {
                     if (Util.iso2lang.get(k) != null) {
 
                         resultBuffer.append('[');
-                        resultBuffer.append(k);
+                        resultBuffer.append(k.toUpperCase());
                         resultBuffer.append(':');
 
                         if (v != null) {

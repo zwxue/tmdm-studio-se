@@ -110,7 +110,7 @@ public class MenuEntryDialog extends Dialog {
         WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
             for (int i = 0; i < descriptions.length; i++) {
-                descriptionsMap.put(descriptions[i].getLanguage(), descriptions[i].getLabel());
+                descriptionsMap.put(descriptions[i].getLanguage().toLowerCase(), descriptions[i].getLabel());
             }
         }
     }
@@ -129,7 +129,7 @@ public class MenuEntryDialog extends Dialog {
         WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
         if (descriptions != null) {
             for (int i = 0; i < descriptions.length; i++) {
-                descriptionsMap.put(descriptions[i].getLanguage(), descriptions[i].getLabel());
+                descriptionsMap.put(descriptions[i].getLanguage().toLowerCase(), descriptions[i].getLabel());
             }
         }
     }

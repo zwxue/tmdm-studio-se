@@ -370,7 +370,7 @@ public class MenuMainPage extends AMainPageV2 {
                 for (Iterator iter = isoCodes.iterator(); iter.hasNext();) {
                     String isoCode = (String) iter.next();
                     wsDescriptions[i] = new WSMenuMenuEntriesDescriptions();
-                    wsDescriptions[i].setLanguage(isoCode);
+                    wsDescriptions[i].setLanguage(isoCode.toUpperCase());
                     wsDescriptions[i].setLabel(descriptions.get(isoCode));
                     i++;
                 }
