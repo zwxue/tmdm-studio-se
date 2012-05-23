@@ -22,7 +22,6 @@ import java.util.Set;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfoCollection;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 abstract class LanguageInfoCommitHandler<T extends LanguageInfoCollection> extends AnnotationInfoCommitHandler<T> {
@@ -45,11 +44,6 @@ abstract class LanguageInfoCommitHandler<T extends LanguageInfoCollection> exten
             throw new CommitValidationException("The content of " + validatedLanguageInfo.getLanguage() + " can not be empty");
         }
 
-        if (!Util.lang2iso.get(validatedLanguageInfo.getLanguage()).equals(validatedLanguageInfo.getLanguageISOCode())
-                || !Util.iso2lang.get(validatedLanguageInfo.getLanguageISOCode()).equals(validatedLanguageInfo.getLanguage())) {
-            throw new CommitValidationException("The language and code is not match : " + validatedLanguageInfo.getLanguage()
-                    + " <> " + validatedLanguageInfo.getLanguageISOCode());
-        }
     }
 
     @Override
