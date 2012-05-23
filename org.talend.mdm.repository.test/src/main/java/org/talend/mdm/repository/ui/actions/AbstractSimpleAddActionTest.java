@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.junit.Before;
 import org.powermock.api.mockito.PowerMockito;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
@@ -39,11 +40,13 @@ import org.talend.repository.model.IProxyRepositoryFactory;
 import com.amalto.workbench.image.ImageCache;
 
 /**
- * DOC hbhong  class global comment. Detailled comment
+ * DOC hbhong class global comment. Detailled comment
  */
 public class AbstractSimpleAddActionTest {
 
-    protected void mockSimpleAddActionClass() throws Exception {
+    @Before
+    public void setUp() throws Exception {
+
         PowerMockito.mockStatic(JFaceResources.class);
         ImageRegistry registry = mock(ImageRegistry.class);
         when(JFaceResources.getImageRegistry()).thenReturn(registry);
