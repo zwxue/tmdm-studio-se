@@ -23,7 +23,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -40,8 +41,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
-import org.talend.core.model.properties.FolderItem;
-import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.Property;
@@ -60,7 +59,6 @@ import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -71,15 +69,16 @@ import com.amalto.workbench.image.ImageCache;
  * DOC hbhong class global comment. Detailled comment
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ RemoveFromRepositoryAction.class, ImageDescriptor.class, JFaceResources.class, ImageCache.class,
-        ItemState.class, CoreRuntimePlugin.class, ProjectManager.class, RepositoryNodeConfigurationManager.class,
-        ProxyRepositoryFactory.class, MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
-        ERepositoryObjectType.class })
-public class RemoveFromRepositoryActionTest {
+@PrepareForTest({ RenameObjectAction.class, ImageDescriptor.class, JFaceResources.class, ImageCache.class, ItemState.class,
+        CoreRuntimePlugin.class, ProjectManager.class, RepositoryNodeConfigurationManager.class, ProxyRepositoryFactory.class,
+        MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class, ERepositoryObjectType.class })
+public class RenameObjectActionTest {
 
     private IProxyRepositoryFactory repositoryFactory;
 
     private Project projectM;
+
+    private IRepositoryNodeResourceProvider resourceProviderM;
 
     @Before
     public void setUp() throws Exception {
@@ -127,45 +126,47 @@ public class RemoveFromRepositoryActionTest {
         IRepositoryNodeConfiguration rncMock = mock(IRepositoryNodeConfiguration.class);
         when(RepositoryNodeConfigurationManager.getConfiguration((Item) anyObject())).thenReturn(rncMock);
 
-        IRepositoryNodeResourceProvider resourceProviderM = mock(IRepositoryNodeResourceProvider.class);
+        resourceProviderM = mock(IRepositoryNodeResourceProvider.class);
         when(rncMock.getResourceProvider()).thenReturn(resourceProviderM);
 
-        when(resourceProviderM.needSaveReferenceFile()).thenReturn(true);
         when(repositoryFactory.isEditableAndLockIfPossible((Item) anyObject())).thenReturn(true);
 
     }
 
     @Test
     public void doRunTest() throws Exception {
-        RemoveFromRepositoryAction removeAction = new RemoveFromRepositoryAction();
-        RemoveFromRepositoryAction removeActionM = spy(removeAction);
+        RenameObjectAction renameAction = new RenameObjectAction();
+        RenameObjectAction renameActionM = spy(renameAction);
         CommonViewer commonViewerM = mock(CommonViewer.class);
-        Whitebox.setInternalState(removeActionM, "commonViewer", commonViewerM); //$NON-NLS-1$
+        Whitebox.setInternalState(renameActionM, "commonViewer", commonViewerM); //$NON-NLS-1$
         // mock a mdm repositoryViewObject
         IRepositoryViewObject objectRVO = mock(IRepositoryViewObject.class);
+        IRepositoryViewObject parentRVO = mock(IRepositoryViewObject.class);
         MDMServerObjectItem mdmItemM = mock(MDMServerObjectItem.class);
+        ContainerItem parentItemM = mock(ContainerItem.class);
         Property propertyM = mock(Property.class);
+        Property parentPropertyM = mock(Property.class);
+        MDMServerObject mdmServerObjectM = mock(MDMServerObject.class);
+        ItemState itemStateM = mock(ItemState.class);
 
+        //
         when(objectRVO.getProperty()).thenReturn(propertyM);
         when(propertyM.getItem()).thenReturn(mdmItemM);
+        when(mdmItemM.getMDMServerObject()).thenReturn(mdmServerObjectM);
+        when(mdmItemM.getState()).thenReturn(itemStateM);
+        when(itemStateM.getPath()).thenReturn(""); //$NON-NLS-1$
+        //
+        when(parentRVO.getProperty()).thenReturn(parentPropertyM);
+        when(parentPropertyM.getItem()).thenReturn(parentItemM);
+        //
 
-        // mock a FolderRepositoryObject
-        FolderRepositoryObject folderRO = mock(FolderRepositoryObject.class);
-        Property foldePropertyM = mock(Property.class);
-        ContainerItem containerItem = mock(ContainerItem.class);
-        when(folderRO.getProperty()).thenReturn(foldePropertyM);
-        when(foldePropertyM.getItem()).thenReturn(containerItem);
-        ItemState itemState = mock(ItemState.class);
-        when(containerItem.getState()).thenReturn(itemState);
-        when(itemState.getPath()).thenReturn(""); //$NON-NLS-1$
         Method initMethod = Whitebox.getMethod(ERepositoryObjectType.class, "initDynamicNodes", Class.class); //$NON-NLS-1$
         PowerMockito.suppress(initMethod);
         ERepositoryObjectType typeM = ERepositoryObjectType.PROCESS;
-        when(containerItem.getRepObjType()).thenReturn(typeM);
-
-        MDMServerObject mdmServerObjectM = mock(MDMServerObject.class);
-        when(mdmItemM.getMDMServerObject()).thenReturn(mdmServerObjectM);
-
+        when(resourceProviderM.getRepositoryObjectType(mdmItemM)).thenReturn(typeM);
+        //
+        PowerMockito.mockStatic(ContainerCacheService.class);
+        when(ContainerCacheService.get(eq(typeM), eq(""))).thenReturn(parentRVO);
         Shell shellM = mock(Shell.class);
         Control controlM = mock(Control.class);
         when(commonViewerM.getControl()).thenReturn(controlM);
@@ -173,22 +174,15 @@ public class RemoveFromRepositoryActionTest {
 
         List<Object> selectedObjects = new ArrayList<Object>();
         selectedObjects.add(objectRVO);
-        selectedObjects.add(folderRO);
+        //
+        when(renameActionM.getSelectedObject()).thenReturn(selectedObjects);
 
-        when(removeActionM.getSelectedObject()).thenReturn(selectedObjects);
+        InputDialog inputDialogM = mock(InputDialog.class);
+        PowerMockito.whenNew(InputDialog.class).withArguments(eq(shellM), anyString(), anyString(), anyString(), anyObject())
+                .thenReturn(inputDialogM);
+        when(inputDialogM.open()).thenReturn(IDialogConstants.OK_ID);
+        when(inputDialogM.getValue()).thenReturn("NewName");
 
-        PowerMockito.mockStatic(MessageDialog.class);
-        when(MessageDialog.openConfirm((Shell) anyObject(), anyString(), anyString())).thenReturn(true);
-
-        PowerMockito.mockStatic(RepositoryResourceUtil.class);
-        when(RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) anyObject())).thenReturn(null);
-        when(RepositoryResourceUtil.hasContainerItem(anyObject(), eq(FolderType.FOLDER_LITERAL))).thenReturn(true);
-
-        PowerMockito.mockStatic(ContainerCacheService.class);
-        FolderItem folderItemM = mock(FolderItem.class);
-        when(repositoryFactory.getFolderItem(eq(projectM), eq(typeM), (IPath) anyObject())).thenReturn(folderItemM);
-        when(folderItemM.getState()).thenReturn(itemState);
-
-        removeActionM.doRun();
+        renameActionM.doRun();
     }
 }
