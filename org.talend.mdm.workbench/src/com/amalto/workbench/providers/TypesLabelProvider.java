@@ -183,6 +183,8 @@ public class TypesLabelProvider extends LabelProvider {
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
                             return "Foreign Key:  " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_ForeignKey_Sep")) {//$NON-NLS-1$
+                            return "Foreign Key Separate tab panel:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return "Foreign Key Info:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$

@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -47,7 +48,11 @@ public class SimpleXpathInputDialog extends Dialog {
 
     private String xpath = "";//$NON-NLS-1$
 
+    private boolean sepFk = true;
+
     private String dataModelName;
+
+    private Button btnSep;
 
     /**
      * @param parentShell
@@ -63,6 +68,9 @@ public class SimpleXpathInputDialog extends Dialog {
         this.dataModelName = dataModelName;
     }
 
+    public void setFkSep(boolean sepFk) {
+        this.sepFk = sepFk;
+    }
     protected Control createDialogArea(Composite parent) {
         // Should not really be here but well,....
         parent.getShell().setText(this.title);
@@ -82,14 +90,14 @@ public class SimpleXpathInputDialog extends Dialog {
 
             public void modifyText(ModifyEvent e) {
                 SimpleXpathInputDialog.this.xpath = textControl.getText();
+                btnSep.setEnabled(xpath != null && xpath.length() > 0);
             }
-
         });
 
         Button xpathButton = new Button(composite, SWT.PUSH | SWT.CENTER);
         xpathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-        xpathButton.setToolTipText("Select xpath");
+        xpathButton.setToolTipText(Messages.getString("SchematronExpressBuilder_selectXPath"));//$NON-NLS-1$
         xpathButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -110,9 +118,19 @@ public class SimpleXpathInputDialog extends Dialog {
 
         textControl.forceFocus();
 
+        btnSep = new Button(composite, SWT.CHECK);
+        btnSep.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+        btnSep.setText(Messages.getString("SimpleXpathInputDialog_sepFkTabPanel"));//$NON-NLS-1$
+        btnSep.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                sepFk = btnSep.getSelection();
+            }
+        });
+
         // init value
         textControl.setText(initialValue == null ? "" : initialValue);//$NON-NLS-1$
-
+        btnSep.setSelection(sepFk);
         return composite;
     }
 
@@ -144,4 +162,7 @@ public class SimpleXpathInputDialog extends Dialog {
         return xpath;
     }
 
+    public boolean getSepFk() {
+        return sepFk;
+    }
 }

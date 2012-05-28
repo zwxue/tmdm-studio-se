@@ -28,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.dialogs.datamodel.SelectXPathDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
@@ -44,8 +45,12 @@ public class SimpleXPathComposite extends Composite {
 
     private IAllDataModelHolder allDataModelHolder;
 
-    public static final String DEFAULTTITLE = "Enter an xPath for the Foreign Key - Leave BLANK to delete the Foreign Key";
+    public static final String DEFAULTTITLE = Messages.getString("EnterXpathForeignKey");//$NON-NLS-1$
     protected BasePropertySection section;
+
+    private Button btnSep;
+
+    private Boolean sepFk = true;
     public SimpleXPathComposite(Composite parent, int style, String title, IAllDataModelHolder allDataModelHolder,
             String defaultDataModelForSelect,final BasePropertySection section) {
         super(parent, style);
@@ -92,14 +97,33 @@ public class SimpleXPathComposite extends Composite {
         });
         btnSelectXPath = new Button(composite, SWT.NONE);
         btnSelectXPath.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-        btnSelectXPath.setToolTipText("Select Xpath");
+        btnSelectXPath.setToolTipText(Messages.getString("SchematronExpressBuilder_selectXPath"));
+
+        btnSep = new Button(composite, SWT.CHECK);
+        btnSep.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+        btnSep.setText(Messages.getString("SimpleXpathInputDialog_sepFkTabPanel"));//$NON-NLS-1$
+        btnSep.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                sepFk = btnSep.getSelection();
+                section.autoCommit();
+            }
+        });
+
         initUIListeners();
     }
-
     public String getXPath() {
         return txtXPath.getText().trim().replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
     }
 
+    public String getFKSep() {
+        return sepFk.toString();
+    }
+
+    public void setFKSep(Boolean sepFk) {
+        this.sepFk = sepFk;
+        btnSep.setSelection(sepFk);
+    }
     public void setXPath(String xpath) {
         txtXPath.setText(xpath);
     }

@@ -21,7 +21,7 @@ public abstract class ListContentsAnnotationInfo extends AnnotaionInfo {
 
     protected List<String> infos = new ArrayList<String>();
 
-    public ListContentsAnnotationInfo(XSDComponent sourceComponent, String[] infos) {
+    public ListContentsAnnotationInfo(XSDComponent sourceComponent, String... infos) {
         super(sourceComponent);
 
         for (String eachInfo : infos) {
@@ -33,4 +33,7 @@ public abstract class ListContentsAnnotationInfo extends AnnotaionInfo {
         return infos.toArray(new String[0]);
     }
 
+    public String[] getValues() {
+        return getInfos();
+    }
 }

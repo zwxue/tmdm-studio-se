@@ -43,13 +43,16 @@ public class ElementForeighKeyCommitHandler extends ListContentsCommitHandler<Fo
     protected boolean doSubmit() throws CommitException {
 
         XSDAnnotationsStructure xsdAnnoStruct = getXSDAnnotationStruct();
-
-        if (Util.getForeignKeys() != null && getCommitedObj().getValue() != null) {
+        String[] values = getCommitedObj().getValues();
+        if (Util.getForeignKeys() != null && values != null) {
             if (xsdAnnoStruct.getForeignKey() != null)
                 Util.getForeignKeys().remove(Util.getConceptFromPath(xsdAnnoStruct.getForeignKey()));
-            Util.getForeignKeys().add(Util.getConceptFromPath(getCommitedObj().getValue()));
+            Util.getForeignKeys().add(Util.getConceptFromPath(values[0]));
         }
 
-        return xsdAnnoStruct.setForeignKey(getCommitedObj().getValue());
+        if (values.length > 1) {
+            xsdAnnoStruct.setForeignKeySep(Boolean.valueOf(values[1]));
+        }
+        return xsdAnnoStruct.setForeignKey(values[0]);
     }
 }
