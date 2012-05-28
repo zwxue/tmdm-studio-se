@@ -51,7 +51,7 @@ public class ElementFKSection extends XSDComponentSection {
         xpath = new XSDAnnotationsStructure(curXSDComponent).getForeignKey();
         if (xpath == null)
             xpath = "";//$NON-NLS-1$
-        fksep = new XSDAnnotationsStructure(curXSDComponent).getForeignKeySep();
+        fksep = new XSDAnnotationsStructure(curXSDComponent).getForeignKeyNotSep();
         dataModelHolder.setDefaultDataModel(getDataModelName());
         compSimpleXPath.setDefaultDataModelForSelect(getDataModelName());
         dataModelHolder.setDefaultEntity(getEntityName());
@@ -67,7 +67,7 @@ public class ElementFKSection extends XSDComponentSection {
     	compSectionClient.setLayout(new GridLayout());
         dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
         compSimpleXPath = new SimpleXPathComposite(compSectionClient, SWT.NONE, SimpleXPathComposite.DEFAULTTITLE,
-                dataModelHolder, dataModelHolder.getDefaultDataModel(),this);//$NON-NLS-1$
+                dataModelHolder, dataModelHolder.getDefaultDataModel(), this, true);
         fkIntegrityConfig = new FKIntegrityComposite(compSectionClient, SWT.NONE, curXSDComponent, this); 
     }
 

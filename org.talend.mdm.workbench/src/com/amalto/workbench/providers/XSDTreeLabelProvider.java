@@ -179,8 +179,9 @@ public class XSDTreeLabelProvider extends LabelProvider {
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
                             return "Foreign Key:  " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_ForeignKey_Sep")) {//$NON-NLS-1$
-                            return "Foreign Key Separate tab panel:  " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_ForeignKey_NotSep")) {//$NON-NLS-1$
+                            Boolean v = Boolean.valueOf(e.getChildNodes().item(0).getNodeValue());
+                            return "Does render the FK within the main tab?: " + v;
                         } else if (source.equals("X_Visible_Rule")) {//$NON-NLS-1$
                             return "Visible Rule:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Default_Value_Rule")) {//$NON-NLS-1$

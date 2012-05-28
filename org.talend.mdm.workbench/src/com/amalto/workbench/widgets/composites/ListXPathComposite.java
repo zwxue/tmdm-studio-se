@@ -77,10 +77,8 @@ public class ListXPathComposite extends ListStringContentsComposite {
 	@Override
 	protected void createCandidateInfoUIArea(Composite parent) {
 
-		compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE,
-				xpathAreaTitle, allDataModelHolder, "", section);//$NON-NLS-1$
-		compSimpleXPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false));
+        compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE, xpathAreaTitle, allDataModelHolder, "", section, false);//$NON-NLS-1$
+        compSimpleXPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 	}
 
