@@ -26,7 +26,7 @@ public class Messages extends NLS {
     }
 
     public static String bind(String message, String... bindings) {
-        return bind(message, bindings);
+        return NLS.bind(message, bindings);
     }
 
     public static String SelectServerDefDialog_selectServerLocation;
