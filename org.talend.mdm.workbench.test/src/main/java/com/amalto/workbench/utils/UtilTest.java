@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils;
 
 import static org.junit.Assert.assertEquals;
@@ -106,14 +118,18 @@ public class UtilTest {
 
     private XSDSchema getXSDSchema()throws Exception {
         InputStream in= UtilTest.class.getResourceAsStream("TestGetComplexTypeDefinitionChildren_0.1.xsd");
-        byte[] buf=new byte[in.available()];
-        IOUtils.readFully(in, buf);
-        String xsdString = new String(buf);
-        if (xsdString != null) {            
-            XSDSchema xsdSchema = Util.getXSDSchema(xsdString);
-            return xsdSchema;            
+        try {
+            byte[] buf = new byte[in.available()];
+            IOUtils.readFully(in, buf);
+            String xsdString = new String(buf);
+            if (xsdString != null) {
+                XSDSchema xsdSchema = Util.getXSDSchema(xsdString);
+                return xsdSchema;
+            }
+            return null;
+        } finally {
+            in.close();
         }
-        return null;
     }
 
 	@Test
