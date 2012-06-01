@@ -62,6 +62,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
+import org.talend.mdm.repository.core.impl.recyclebin.RecycleBinNodeConfiguration;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
@@ -158,7 +159,6 @@ public class RepositoryResourceUtilTest {
         }
     }
 
-    @Ignore
     @Test
     public void testIsLockedItem() {
         Item mockItem = mock(Item.class);
@@ -191,7 +191,10 @@ public class RepositoryResourceUtilTest {
 
     @Test
     public void testSaveItem() throws Exception {
-
+        //following two lines code is handling errors when mockStatic class "RepositoryNodeConfigurationManager"
+        RecycleBinNodeConfiguration mockRBNConf = mock(RecycleBinNodeConfiguration.class);
+        PowerMockito.whenNew(RecycleBinNodeConfiguration.class).withNoArguments().thenReturn(mockRBNConf);
+        
         PowerMockito.mockStatic(RepositoryNodeConfigurationManager.class);
         Item mockItem = mock(Item.class);
         IRepositoryNodeConfiguration mockConf = mock(IRepositoryNodeConfiguration.class);
@@ -212,9 +215,8 @@ public class RepositoryResourceUtilTest {
         verify(repositoryFactory, Mockito.times(1)).save(mockItem);
     }
 
-    @Ignore
     @Test
-    public void testCreateItemWith2Args() throws PersistenceException, LoginException {
+    public void testCreateItemWith2Args() throws Exception {
         String propLabel = "this is propLabel";
         String nextId = "UUID_NEXT";
 
@@ -244,6 +246,11 @@ public class RepositoryResourceUtilTest {
         User user = mock(User.class);
         when(mockContext.getUser()).thenReturn(user);
 
+      //following two lines code is handling errors when mockStatic class "RepositoryNodeConfigurationManager"
+        RecycleBinNodeConfiguration mockRBNConf = mock(RecycleBinNodeConfiguration.class);
+        PowerMockito.whenNew(RecycleBinNodeConfiguration.class).withNoArguments().thenReturn(mockRBNConf);
+        
+        
         PowerMockito.mockStatic(RepositoryNodeConfigurationManager.class);
         IRepositoryNodeConfiguration mockConfManager = mock(IRepositoryNodeConfiguration.class);
         when(RepositoryNodeConfigurationManager.getConfiguration(Mockito.any(Item.class))).thenReturn(mockConfManager);
@@ -266,7 +273,6 @@ public class RepositoryResourceUtilTest {
         assertTrue(createItem);
     }
 
-    @Ignore
     @Test
     public void testGetVersionFileName() {
         String version = "0.1";
@@ -284,7 +290,6 @@ public class RepositoryResourceUtilTest {
         assertEquals(firstF, versionFileName);
     }
 
-    @Ignore
     @Test
     public void testCopyOSFileTOProject() throws Exception {
         String path = "srcpath";
@@ -365,7 +370,6 @@ public class RepositoryResourceUtilTest {
     /**
      * Test for: getFolder(ERepositoryObjectType type, Item item)
      */
-    @Ignore
     @Test
     public void testGetFolder2Args() throws PersistenceException {
         PowerMockito.mockStatic(ProjectManager.class);
@@ -395,7 +399,6 @@ public class RepositoryResourceUtilTest {
         
     }
     
-    @Ignore
     @Test
     public void testGetTextFileContent() throws Exception {
         String encode = "UTF-8";
@@ -430,7 +433,6 @@ public class RepositoryResourceUtilTest {
     /**
      * Test for: getFolder(ERepositoryObjectType type)
      */
-    @Ignore
     @Test
     public void testGetFolder() throws Exception {
 
@@ -476,7 +478,6 @@ public class RepositoryResourceUtilTest {
         assertFalse(result);
     }
     
-    @Ignore
     @Test
     public void testCreateFolderViewObject() throws Exception {
         boolean isSystem = false;
@@ -515,7 +516,6 @@ public class RepositoryResourceUtilTest {
         
     }
 
-    @Ignore
     @Test
     public void testCreateDeletedFolderViewObject() throws Exception {
         ERepositoryObjectType type = null;
@@ -540,7 +540,6 @@ public class RepositoryResourceUtilTest {
     /**
      * Test for: getCategoryViewObject(IRepositoryNodeConfiguration conf)
      */
-    @Ignore
     @Test
     public void testGetCategoryViewObject() throws Exception {
         IRepositoryNodeConfiguration mockConfiguration = mock(IRepositoryNodeConfiguration.class);
@@ -562,7 +561,6 @@ public class RepositoryResourceUtilTest {
         assertNotNull(categoryViewObject);
     }
 
-    @Ignore
     @Test
     public void testRemoveViewObjectPhysically() throws PersistenceException {
         String name = "mockname";
@@ -630,7 +628,6 @@ public class RepositoryResourceUtilTest {
     /**
      * Test for: findAllViewObjects(ERepositoryObjectType type, boolean useRepositoryViewObject, boolean withDeleted)
      */
-    @Ignore
     @Test
     public void testFindAllViewObjects() throws Exception {
         boolean withDeleted = false;
@@ -681,7 +678,6 @@ public class RepositoryResourceUtilTest {
      * Test for: findViewObjects(ERepositoryObjectType type, Item parentItem, boolean useRepositoryViewObject, boolean
      * withDeleted)
      */
-    @Ignore
     @Test
     public void testFindViewObjects4Args() throws Exception {
         boolean withDeleted = false;
@@ -735,7 +731,6 @@ public class RepositoryResourceUtilTest {
      * Test for: findViewObjects(ERepositoryObjectType type, Item parentItem, IFolder folder,
      *      boolean useRepositoryViewObject, boolean withDeleted)
      */
-    @Ignore
     @Test
     public void testFindViewObjects5Args() throws Exception {
         boolean withDeleted = false;
@@ -783,7 +778,6 @@ public class RepositoryResourceUtilTest {
      * Test for: findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem, boolean useRepositoryViewObject,
      * boolean withDeleted)
      */
-    @Ignore
     @Test
     public void testFindViewObjectsInFolder() throws Exception {
         boolean withDeleted = false;
@@ -829,7 +823,7 @@ public class RepositoryResourceUtilTest {
                 mockParentItem, useRepositoryViewObject, withDeleted);
         assertEquals(1, allViewObjectsInFolder.size());
     }
-    @Ignore
+    
     @Test
     public void testConvertToNode() throws Exception {
         IRepositoryViewObject mockViewObject = mock(IRepositoryViewObject.class);
@@ -857,7 +851,6 @@ public class RepositoryResourceUtilTest {
         assertEquals(mockType, node.getProperties(EProperties.CONTENT_TYPE));
     }
 
-    @Ignore
     @Test
     public void testGetBusinessConceptKey() throws Exception {
         String pk = "mockPK";
