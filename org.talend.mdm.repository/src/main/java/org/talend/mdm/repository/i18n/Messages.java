@@ -492,6 +492,8 @@ public class Messages extends NLS {
     public static String MdmPropertiesWizard_lockedByOther;
     
     public static String MdmPropertiesWizard_imageCatalog;
+    
+    public static String Server_cannot_connected;
 
     // //////////////////////////////////////////////////////////////////////////
     //
