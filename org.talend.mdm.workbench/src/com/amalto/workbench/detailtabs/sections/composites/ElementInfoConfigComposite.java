@@ -13,6 +13,7 @@
 package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -57,9 +58,10 @@ public class ElementInfoConfigComposite extends Composite {
 
 	public ElementInfoConfigComposite(Composite parent, int style,
 			BasePropertySection section, XSDParticle curXSDParticle) {
-		this(parent, style);
+        this(parent, style);
 		this.section = section;
 		this.curXSDParticle = curXSDParticle;
+
 	}
 
 	public ElementInfoConfigComposite(Composite parent, int style) {
@@ -111,6 +113,8 @@ public class ElementInfoConfigComposite extends Composite {
 		refreshCardinalityArea();
 
 		refreshNameArea();
+
+        refreshPK();
 	}
 
 	private void refreshCardinalityArea() {
@@ -213,6 +217,18 @@ public class ElementInfoConfigComposite extends Composite {
 
 		refresh();
 	}
+
+    private void refreshPK() {
+        if (curXSDParticle != null) {
+        this.section.getTreeObject();
+        XSDElementDeclaration decl = (XSDElementDeclaration) curXSDParticle.getContent();
+        List<Object> keyInfo = Util.getKeyInfo(decl);
+        boolean isPK = keyInfo != null && keyInfo.size() > 0;
+        comboReference.setEnabled(!isPK);
+        spinMin.setEnabled(!isPK);
+        spinMax.setEnabled(!isPK);
+        }
+    }
 
 	private void initUIContents() {
 

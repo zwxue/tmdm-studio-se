@@ -106,7 +106,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             elementDeclarations.add("");
 
             dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), "Add a new Business Element", null, null,
-                    elementDeclarations, 0, 1, true);
+                    elementDeclarations, 0, 1, true, false);
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();
             if (ret == Dialog.CANCEL) {
