@@ -17,11 +17,11 @@
    </license>
 
    <requires>
-      <import plugin="org.junit4" version="4.5.0" match="greaterOrEqual"/>
+      <import plugin="org.junit4"/>
       <import plugin="org.talend.mdm.test.library"/>
       <import plugin="org.talend.mdm.repository"/>
-      <import plugin="org.eclipse.xsd" version="2.6.0" match="greaterOrEqual"/>
-      <import plugin="org.talend.mdm.workbench" version="3.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xsd"/>
+      <import plugin="org.talend.mdm.workbench"/>
    </requires>
 
 
