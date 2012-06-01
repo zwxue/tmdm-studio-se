@@ -398,6 +398,8 @@ public class Messages extends NLS {
     public static String BuildValidationRuleExpression;
 
     public static String SelectMultipleXPaths;
+    
+    public static String Server_cannot_connected;
 
     // //////////////////////////////////////////////////////////////////////////
     //

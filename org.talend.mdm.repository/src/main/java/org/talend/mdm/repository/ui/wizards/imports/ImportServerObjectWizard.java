@@ -93,6 +93,7 @@ import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeVi
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -739,6 +740,12 @@ public class ImportServerObjectWizard extends Wizard {
                     SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
                     if (dlg.open() == IDialogConstants.OK_ID) {
                         serverDef = dlg.getSelectedServerDef();
+                        boolean success = ServerDefService.checkMDMConnection(serverDef);
+                        if (!success) {
+                            MessageDialog.openWarning(getShell(), Messages.Common_Warning, Messages.bind(
+                                    Messages.Server_cannot_connected, serverDef.getName()));
+                            return;
+                        }
                         if (serverDef == null)
                             return;
                         txtServer.setText(serverDef.getUrl());
@@ -767,8 +774,9 @@ public class ImportServerObjectWizard extends Wizard {
                                 comboVersion.getCombo().removeAll();
                             }
                         }
+                        retriveServerRoot();
                     }
-                    retriveServerRoot();
+                   
                     treeViewer.refresh();
                     updateSelectedObjects();
                     checkCompleted();
