@@ -72,18 +72,29 @@ public class BusinessElementInputDialog extends Dialog {
         this.inherit = inherit;
     }
 
+    // fix TMDM-3726
+    private boolean isPK = false;
+
+    public boolean isPK() {
+        return isPK;
+    }
+
+    public void setPK(boolean isPK) {
+        this.isPK = isPK;
+    }
+
     /**
      * @param parentShell
      */
     public BusinessElementInputDialog(SelectionListener caller, Shell parentShell, String title, boolean isNew) {
-        this(caller, parentShell, title, "", "", new ArrayList<String>(), 0, 1, isNew);//$NON-NLS-1$//$NON-NLS-2$
+        this(caller, parentShell, title, "", "", new ArrayList<String>(), 0, 1, isNew, false);//$NON-NLS-1$//$NON-NLS-2$
     }
 
     /**
      * @param parentShell
      */
     public BusinessElementInputDialog(SelectionListener caller, Shell parentShell, String title, String elementName,
-            String refName, Collection<String> decls, int minOccurs, int maxOccurs, boolean isNew) {
+            String refName, Collection<String> decls, int minOccurs, int maxOccurs, boolean isNew, boolean isPK) {
         super(parentShell);
         this.caller = caller;
         this.title = title;
@@ -93,6 +104,7 @@ public class BusinessElementInputDialog extends Dialog {
         this.minOccurs = minOccurs;
         this.maxOccurs = maxOccurs;
         this.isNew = isNew;
+        this.isPK = isPK;
     }
 
     protected Control createDialogArea(Composite parent) {
@@ -184,7 +196,10 @@ public class BusinessElementInputDialog extends Dialog {
             checkBox.setSelection(inherit);
             checkBox.setText(" Inherit the security annotations");
         }
-
+        // check pk can't edit Maximum/Minimum
+        minOccursText.setEditable(!isPK);
+        maxOccursText.setEditable(!isPK);
+        refCombo.setEnabled(!isPK);
         return composite;
     }
 

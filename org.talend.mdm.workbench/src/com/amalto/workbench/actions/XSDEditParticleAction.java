@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
@@ -99,26 +98,28 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             }
             elementDeclarations.add("");
 
-            IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
-
             XSDIdentityConstraintDefinition identify = null;
+
             XSDXPathDefinition keyPath = null;
             List<Object> keyInfo = Util.getKeyInfo(decl);
+            boolean isPK = false;
             if (keyInfo != null && keyInfo.size() > 0) {
                 identify = (XSDIdentityConstraintDefinition) keyInfo.get(0);
                 keyPath = (XSDXPathDefinition) keyInfo.get(1);
-                identify.getFields().remove(keyPath);
+                isPK = true;
             }
             initEleName = decl.getName();
             dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), "Edit Business Element", decl.getName(),
                     ref == null ? null : ref.getQName(), elementDeclarations, selParticle.getMinOccurs(),
-                    selParticle.getMaxOccurs(), false);
+                    selParticle.getMaxOccurs(), false, isPK);
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();
             if (ret == Window.CANCEL) {
                 return Status.CANCEL_STATUS;
             }
-
+            if (keyPath != null) {
+                identify.getFields().remove(keyPath);
+            }
             // find reference
             XSDElementDeclaration newRef = null;
             if (!"".equals(refName.trim())) {
