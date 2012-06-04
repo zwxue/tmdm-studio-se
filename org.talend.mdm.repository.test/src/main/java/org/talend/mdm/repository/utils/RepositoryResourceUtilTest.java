@@ -850,47 +850,5 @@ public class RepositoryResourceUtilTest {
         assertEquals(mockType, node.getProperties(EProperties.LABEL));
         assertEquals(mockType, node.getProperties(EProperties.CONTENT_TYPE));
     }
-
-    @Test
-    public void testGetBusinessConceptKey() throws Exception {
-        String pk = "mockPK";
-        String concept = "mockConcept";
-        String schema = "schemaString";
-        String pathDefValue = "path definition value";
-
-        WSGetBusinessConceptKey mockConceptKey = mock(WSGetBusinessConceptKey.class);
-        WSDataModelPK mockDataModelPK = mock(WSDataModelPK.class);
-        when(mockConceptKey.getWsDataModelPK()).thenReturn(mockDataModelPK);
-        when(mockDataModelPK.getPk()).thenReturn(pk);
-
-        when(mockConceptKey.getConcept()).thenReturn(concept);
-
-        PowerMockito.mockStatic(RepositoryQueryService.class);
-        WSDataModelE mockDataModelE = mock(WSDataModelE.class);
-        when(RepositoryQueryService.findDataModelByName(pk)).thenReturn(mockDataModelE);
-        when(mockDataModelE.getXsdSchema()).thenReturn(schema);
-
-        PowerMockito.mockStatic(Util.class);
-        XSDSchema mockSchema = mock(XSDSchema.class);
-        when(Util.getXSDSchema(schema)).thenReturn(mockSchema);
-
-        EList<XSDIdentityConstraintDefinition> definitions = new BasicEList<XSDIdentityConstraintDefinition>();
-        XSDIdentityConstraintDefinition mockXSDDef = mock(XSDIdentityConstraintDefinition.class);
-        definitions.add(mockXSDDef);
-
-        when(mockSchema.getIdentityConstraintDefinitions()).thenReturn(definitions);
-        when(mockXSDDef.getName()).thenReturn(concept);
-        XSDXPathDefinition mockXSDPathDefinition = mock(XSDXPathDefinition.class);
-        when(mockXSDPathDefinition.getValue()).thenReturn(pathDefValue);
-        when(mockXSDDef.getSelector()).thenReturn(mockXSDPathDefinition);
-
-        EList<XSDXPathDefinition> fields = new BasicEList<XSDXPathDefinition>();
-        when(mockXSDDef.getFields()).thenReturn(fields);
-
-        WSConceptKey conceptKey = RepositoryResourceUtil.getBusinessConceptKey(mockConceptKey);
-        assertNotNull(conceptKey.getSelector());
-        assertSame(mockXSDPathDefinition.getValue(), conceptKey.getSelector());
-        assertEquals(0, conceptKey.getFields().length);
-    }
-
+    
 }
