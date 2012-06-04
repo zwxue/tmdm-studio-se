@@ -293,8 +293,15 @@ public class ServerDefDialog extends TitleAreaDialog {
         if (buttonId == CHECK_CONNECTION_ID) {
             if (!validateInput())
                 return;
-            boolean check = ServerDefService.checkMDMConnection(serverDef);
-            String msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
+            
+            boolean check = false;
+            String msg = null;
+            
+            MDMServerDef tmpServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
+            updateUI2Model(tmpServerDef);
+            
+            check = ServerDefService.checkMDMConnection(tmpServerDef);
+            msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
             if (check) {
                 setMessage(msg);
             } else {
