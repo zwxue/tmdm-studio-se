@@ -93,7 +93,6 @@ import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeVi
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -682,8 +681,12 @@ public class ImportServerObjectWizard extends Wizard {
             try {
                 getContainer().run(true, false, new RetriveProcess());
             } catch (InvocationTargetException e) {
+                MessageDialog.openWarning(getShell(), Messages.Common_Warning, Messages.bind(Messages.Server_cannot_connected,
+                        serverDef.getName()));
                 log.error(e);
             } catch (InterruptedException e) {
+                MessageDialog.openWarning(getShell(), Messages.Common_Warning, Messages.bind(Messages.Server_cannot_connected,
+                        serverDef.getName()));
                 log.error(e);
             }
         }
@@ -740,12 +743,6 @@ public class ImportServerObjectWizard extends Wizard {
                     SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
                     if (dlg.open() == IDialogConstants.OK_ID) {
                         serverDef = dlg.getSelectedServerDef();
-                        boolean success = ServerDefService.checkMDMConnection(serverDef);
-                        if (!success) {
-                            MessageDialog.openWarning(getShell(), Messages.Common_Warning, Messages.bind(
-                                    Messages.Server_cannot_connected, serverDef.getName()));
-                            return;
-                        }
                         if (serverDef == null)
                             return;
                         txtServer.setText(serverDef.getUrl());
@@ -771,6 +768,7 @@ public class ImportServerObjectWizard extends Wizard {
                                 }
 
                             } catch (Exception e1) {
+                                log.error(e1.getMessage(), e1);
                                 comboVersion.getCombo().removeAll();
                             }
                         }
