@@ -65,7 +65,12 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
@@ -711,20 +716,19 @@ public class Util {
          */
 
         HttpClient client = new HttpClient();
-        MultipartPostMethod mppost = new MultipartPostMethod(URL);
+        PostMethod mppost = new PostMethod(URL);
         String response = null;
         String fileName = localFilename;
         try {
-
-            client.setConnectionTimeout(60000);
-            client.getState().setAuthenticationPreemptive(true);
-            client.getState().setCredentials(null, null, new UsernamePasswordCredentials(username, password));
+            client.getHttpConnectionManager().getParams().setConnectionTimeout(60000);
+            client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
             // if delete a job, mppost will not addParameter, otherwise there is an exception.
             if (URL.indexOf("deletefile") == -1) {//$NON-NLS-1$
                 if (URL.indexOf("deployjob") != -1) {//$NON-NLS-1$
                     fileName = URL.substring(URL.indexOf("=") + 1);//$NON-NLS-1$
                 }
-                mppost.addParameter(fileName, new File(localFilename));
+                Part[] parts = { new FilePart(fileName, new File(localFilename)) };
+                mppost.setRequestEntity(new MultipartRequestEntity(parts, mppost.getParams()));
             }
             // mppost.addParameter(info.getJobname()+"_"+info.getJobversion()+".war",new File(localFilename));
 
