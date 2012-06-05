@@ -19,8 +19,8 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryViewFilter;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.utils.PreferenceUtil;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -44,8 +44,8 @@ public class LastServerViewFilter extends ViewerFilter implements IRepositoryVie
             if (item != null) {
                 if (item instanceof FolderItem) {
                     return true;
-                } else if (item instanceof MDMServerObjectItem) {
-                    MDMServerDef lastServerDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
+                } else {
+                    MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(item);
                     return isEnableServerObject(lastServerDef);
                 }
             }
