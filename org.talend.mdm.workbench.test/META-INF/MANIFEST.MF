@@ -6,3 +6,4 @@ Fragment-Host: org.talend.mdm.workbench
 Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit4;bundle-version="4.8.1"
+Export-Package: com.amalto.workbench.utils
