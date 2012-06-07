@@ -21,8 +21,19 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.navigator;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
@@ -52,10 +63,13 @@ import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
@@ -86,8 +100,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         registerEditorListener();
         contributeToActionBars();
         activateContext();
-        
-        //new added
+
+        // new added
         regisitPerspectiveBarSelectListener();
     }
 
@@ -140,11 +154,74 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
      * DOC hbhong Comment method "initInput".
      */
     private void initInput() {
+        copyDataModelFiles();
+
         IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjectsWithRecycle();
 
         getCommonViewer().setInput(categoryViewObjects);
         // getCommonViewer().addFilter(filter);
         getCommonViewer().expandToLevel(2);
+    }
+
+    /**
+     * Just copy the default DataModel Data to current workspace
+     */
+    private void copyDataModelFiles() {
+        final String resourceFolder = "resources\\system\\datamodel";
+        ERepositoryObjectType type = IServerObjectRepositoryType.TYPE_DATAMODEL;
+        
+        IFolder folder2 = createTargetSystemFolder(type);
+        String resourcePath = getAbsoluteResourcePath(resourceFolder);
+        copyToFolder(folder2, resourcePath);
+    }
+
+    private String getAbsoluteResourcePath(final String resourceFolder) {
+        final String prefix = "reference:file:/";
+        
+        final String pluginPlace = RepositoryPlugin.getDefault().getBundle().getLocation();
+        
+        String resourcePath = pluginPlace;
+
+        int index = resourcePath.indexOf(prefix);
+        if (index != -1) {
+            resourcePath = resourcePath.substring(index + prefix.length()) + resourceFolder;
+        }
+        
+        return resourcePath;
+    }
+
+    private void copyToFolder(IFolder targetFolder, final String resourcePath) {
+        File file = new File(resourcePath);
+        File[] files = file.listFiles();
+        try {
+            
+            List<IResource> asList = Arrays.asList(targetFolder.members());
+            for (int i = 0; i < files.length; i++) {
+
+                IFile ifile = targetFolder.getFile(files[i].getName());
+                if (!asList.contains(ifile)) {
+                    ifile.create(new FileInputStream(files[i]), IFile.FORCE, new NullProgressMonitor());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            log.error("file not found.", e);
+        } catch (CoreException e) {
+            log.error("create model file failed.", e);
+        }
+    }
+
+    private IFolder createTargetSystemFolder(ERepositoryObjectType type) {
+        IFolder typeFolder = RepositoryResourceUtil.getFolder(type);
+        
+        IFolder systemFolder = typeFolder.getFolder("System");
+        if (!systemFolder.exists()) {
+            try {
+                systemFolder.create(0, true, new NullProgressMonitor());
+            } catch (CoreException e) {
+                log.error("create System folder error", e);
+            }
+        }
+        return systemFolder;
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
@@ -222,10 +299,10 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         }
     };
 
+    private IPerspectiveDescriptor activePerspective;// record current activated perspective for temp use
 
-    private IPerspectiveDescriptor activePerspective;//record current activated perspective for temp use
-    private IPerspectiveDescriptor deactivePerspective;//record current deactivated perspective for temp use
-    
+    private IPerspectiveDescriptor deactivePerspective;// record current deactivated perspective for temp use
+
     /**
      * Register one perspective selection listener
      */
@@ -236,15 +313,15 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
                 activePerspective = perspective;
             }
-            
+
             @Override
             public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
                 deactivePerspective = perspective;
             }
-            
+
         });
     }
-    
+
     IPartListener editorListener = new IPartListener() {
 
         public void partActivated(IWorkbenchPart part) {
