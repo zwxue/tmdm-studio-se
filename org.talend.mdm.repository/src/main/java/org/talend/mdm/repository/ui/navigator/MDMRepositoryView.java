@@ -24,6 +24,8 @@ package org.talend.mdm.repository.ui.navigator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +35,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
@@ -171,42 +176,45 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         ERepositoryObjectType type = IServerObjectRepositoryType.TYPE_DATAMODEL;
         
         IFolder folder2 = createTargetSystemFolder(type);
-        String resourcePath = getAbsoluteResourcePath(resourceFolder);
-        copyToFolder(folder2, resourcePath);
+        File resourceFile = getResourceFolder(resourceFolder);
+        copyToFolder(folder2, resourceFile);
     }
 
-    private String getAbsoluteResourcePath(final String resourceFolder) {
-        final String prefix = "reference:file:/";
-        
-        final String pluginPlace = RepositoryPlugin.getDefault().getBundle().getLocation();
-        
-        String resourcePath = pluginPlace;
-
-        int index = resourcePath.indexOf(prefix);
-        if (index != -1) {
-            resourcePath = resourcePath.substring(index + prefix.length()) + resourceFolder;
-        }
-        
-        return resourcePath;
-    }
-
-    private void copyToFolder(IFolder targetFolder, final String resourcePath) {
-        File file = new File(resourcePath);
-        File[] files = file.listFiles();
+    private File getResourceFolder(final String resourceFolder) {
+        File file = null;
         try {
-            
-            List<IResource> asList = Arrays.asList(targetFolder.members());
-            for (int i = 0; i < files.length; i++) {
+            File bundleFile = FileLocator.getBundleFile(RepositoryPlugin.getDefault().getBundle());
+            file = new File(bundleFile, resourceFolder);
+        } catch (IOException e) {
+            log.error("resolve bundle file error.", e);
+        }
 
-                IFile ifile = targetFolder.getFile(files[i].getName());
-                if (!asList.contains(ifile)) {
-                    ifile.create(new FileInputStream(files[i]), IFile.FORCE, new NullProgressMonitor());
+        return file;
+    }
+
+    private void copyToFolder(IFolder targetFolder, File resourceFile) {
+        if(resourceFile != null) {
+            File file = resourceFile;
+            File[] files = file.listFiles();
+            System.out.println("all files need to copy :" + files);
+            try {
+                
+                List<IResource> asList = Arrays.asList(targetFolder.members());
+                for (int i = 0; i < files.length; i++) {
+                    if(files[i].getName().equals(".svn"))
+                        continue;
+                    
+                    IFile ifile = targetFolder.getFile(files[i].getName());
+                    if (!asList.contains(ifile)) {
+                        System.out.println("create file " + files[i].getName());
+                        ifile.create(new FileInputStream(files[i]), IFile.FORCE, new NullProgressMonitor());
+                    }
                 }
+            } catch (FileNotFoundException e) {
+                log.error("file not found.", e);
+            } catch (CoreException e) {
+                log.error("create model file failed.", e);
             }
-        } catch (FileNotFoundException e) {
-            log.error("file not found.", e);
-        } catch (CoreException e) {
-            log.error("create model file failed.", e);
         }
     }
 
