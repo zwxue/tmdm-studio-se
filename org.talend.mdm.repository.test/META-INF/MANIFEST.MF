@@ -1,13 +1,21 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: test
+Bundle-Name: org.talend.mdm.repository.test
 Bundle-SymbolicName: org.talend.mdm.repository.test
 Bundle-Version: 1.0.0.qualifier
 Fragment-Host: org.talend.mdm.repository
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit4,
- org.talend.mdm.test.library
-Bundle-ClassPath: .
+ org.mockito,
+ org.hamcrest,
+ org.eclipse.osgi.services
+Bundle-ClassPath: .,
+ libs/powermock-classloading-base-1.4.11.jar,
+ libs/powermock-classloading-objenesis-1.4.11.jar,
+ libs/powermock-classloading-xstream-1.4.11.jar,
+ libs/powermock-mockito-1.4.11-full.jar,
+ libs/powermock-module-junit4-rule-1.4.11.jar,
+ libs/powermock-module-junit4-rule-agent-1.4.11.jar
 Export-Package: org.talend.mdm.repository.ui.actions,
  org.talend.mdm.repository.ui.actions.datacontainer,
  org.talend.mdm.repository.ui.actions.datamodel,
