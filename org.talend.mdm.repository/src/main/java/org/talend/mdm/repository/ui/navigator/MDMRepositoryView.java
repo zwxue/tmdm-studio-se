@@ -172,9 +172,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
      * Just copy the default DataModel Data to current workspace
      */
     private void copyDataModelFiles() {
-        final String resourceFolder = "resources\\system\\datamodel";
+        final String resourceFolder = "resources\\system\\datamodel";//$NON-NLS-1$
         ERepositoryObjectType type = IServerObjectRepositoryType.TYPE_DATAMODEL;
-        
+
         IFolder folder2 = createTargetSystemFolder(type);
         File resourceFile = getResourceFolder(resourceFolder);
         copyToFolder(folder2, resourceFile);
@@ -186,45 +186,50 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             File bundleFile = FileLocator.getBundleFile(RepositoryPlugin.getDefault().getBundle());
             file = new File(bundleFile, resourceFolder);
         } catch (IOException e) {
-            log.error("resolve bundle file error.", e);
+            log.error("resolve bundle file error.", e);//$NON-NLS-1$
         }
 
         return file;
     }
 
     private void copyToFolder(IFolder targetFolder, File resourceFile) {
-        if(resourceFile != null) {
+        if (resourceFile != null) {
             File file = resourceFile;
             File[] files = file.listFiles();
             try {
-                
-                List<IResource> asList = Arrays.asList(targetFolder.members());
                 for (int i = 0; i < files.length; i++) {
-                    if(files[i].getName().equals(".svn"))
+                    if (files[i].getName().equals(".svn")) //$NON-NLS-1$
                         continue;
-                    
+
                     IFile ifile = targetFolder.getFile(files[i].getName());
-                    if (!asList.contains(ifile)) {
-                        ifile.create(new FileInputStream(files[i]), IFile.FORCE, new NullProgressMonitor());
+                    String fileExtension = ifile.getFileExtension();
+
+                    if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension)) //$NON-NLS-1$
+                    {
+                        File sunfile = ifile.getLocation().toFile();
+                        if (!sunfile.exists()) {
+                            ifile.create(new FileInputStream(files[i]), IFile.FORCE, new NullProgressMonitor());
+                        }
                     }
+
                 }
             } catch (FileNotFoundException e) {
-                log.error("file not found.", e);
+                log.error("file not found.", e);//$NON-NLS-1$
             } catch (CoreException e) {
-                log.error("create model file failed.", e);
+                log.error("create model file failed.", e);//$NON-NLS-1$
             }
         }
     }
 
     private IFolder createTargetSystemFolder(ERepositoryObjectType type) {
         IFolder typeFolder = RepositoryResourceUtil.getFolder(type);
-        
-        IFolder systemFolder = typeFolder.getFolder("System");
+
+        IFolder systemFolder = typeFolder.getFolder("System");//$NON-NLS-1$
         if (!systemFolder.exists()) {
             try {
                 systemFolder.create(0, true, new NullProgressMonitor());
             } catch (CoreException e) {
-                log.error("create System folder error", e);
+                log.error("create System folder error", e);//$NON-NLS-1$
             }
         }
         return systemFolder;
