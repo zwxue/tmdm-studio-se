@@ -196,7 +196,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         if(resourceFile != null) {
             File file = resourceFile;
             File[] files = file.listFiles();
-            System.out.println("all files need to copy :" + files);
             try {
                 
                 List<IResource> asList = Arrays.asList(targetFolder.members());
@@ -206,7 +205,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     
                     IFile ifile = targetFolder.getFile(files[i].getName());
                     if (!asList.contains(ifile)) {
-                        System.out.println("create file " + files[i].getName());
                         ifile.create(new FileInputStream(files[i]), IFile.FORCE, new NullProgressMonitor());
                     }
                 }
