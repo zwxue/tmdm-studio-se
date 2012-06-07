@@ -8,3 +8,13 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.junit4,
  org.talend.mdm.test.library
 Bundle-ClassPath: .
+Export-Package: org.talend.mdm.repository.ui.actions,
+ org.talend.mdm.repository.ui.actions.datacontainer,
+ org.talend.mdm.repository.ui.actions.datamodel,
+ org.talend.mdm.repository.ui.actions.menu,
+ org.talend.mdm.repository.ui.actions.process,
+ org.talend.mdm.repository.ui.actions.serviceconfiguration,
+ org.talend.mdm.repository.ui.actions.storedprocedure,
+ org.talend.mdm.repository.ui.actions.trigger,
+ org.talend.mdm.repository.ui.actions.view,
+ org.talend.mdm.repository.utils
