@@ -208,7 +208,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     {
                         File sunfile = ifile.getLocation().toFile();
                         if (!sunfile.exists()) {
-                            ifile.create(new FileInputStream(files[i]), IFile.FORCE, new NullProgressMonitor());
+                            FileInputStream fileInputStream = new FileInputStream(files[i]);
+                            ifile.create(fileInputStream, IFile.FORCE, new NullProgressMonitor());
+                            fileInputStream.close();
                         }
                     }
 
@@ -217,6 +219,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 log.error("file not found.", e);//$NON-NLS-1$
             } catch (CoreException e) {
                 log.error("create model file failed.", e);//$NON-NLS-1$
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
             }
         }
     }
