@@ -172,12 +172,12 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
      * Just copy the default DataModel Data to current workspace
      */
     private void copyDataModelFiles() {
-        final String resourceFolder = "resources\\system\\datamodel";//$NON-NLS-1$
+        final String resourceFolder = "resources/system/datamodel";//$NON-NLS-1$
         ERepositoryObjectType type = IServerObjectRepositoryType.TYPE_DATAMODEL;
 
-        IFolder folder2 = createTargetSystemFolder(type);
+        IFolder targetFolder = createTargetSystemFolder(type);
         File resourceFile = getResourceFolder(resourceFolder);
-        copyToFolder(folder2, resourceFile);
+        copyToFolder(targetFolder, resourceFile);
     }
 
     private File getResourceFolder(final String resourceFolder) {
@@ -192,35 +192,37 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         return file;
     }
 
-    private void copyToFolder(IFolder targetFolder, File resourceFile) {
-        if (resourceFile != null) {
-            File file = resourceFile;
+    private void copyToFolder(IFolder targetFolder, File resourceFolder) {
+        if (resourceFolder != null && resourceFolder.exists()) {
+            File file = resourceFolder;
             File[] files = file.listFiles();
-            try {
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].getName().equals(".svn")) //$NON-NLS-1$
-                        continue;
-
-                    IFile ifile = targetFolder.getFile(files[i].getName());
-                    String fileExtension = ifile.getFileExtension();
-
-                    if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension)) //$NON-NLS-1$
-                    {
-                        File sunfile = ifile.getLocation().toFile();
-                        if (!sunfile.exists()) {
-                            FileInputStream fileInputStream = new FileInputStream(files[i]);
-                            ifile.create(fileInputStream, IFile.FORCE, new NullProgressMonitor());
-                            fileInputStream.close();
+            if(files != null) {
+                try {
+                    for (int i = 0; i < files.length; i++) {
+                        if (files[i].getName().equals(".svn")) //$NON-NLS-1$
+                            continue;
+                        
+                        IFile ifile = targetFolder.getFile(files[i].getName());
+                        String fileExtension = ifile.getFileExtension();
+                        
+                        if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension)) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                        {
+                            File sunfile = ifile.getLocation().toFile();
+                            if (!sunfile.exists()) {
+                                FileInputStream fileInputStream = new FileInputStream(files[i]);
+                                ifile.create(fileInputStream, IFile.FORCE, new NullProgressMonitor());
+                                fileInputStream.close();
+                            }
                         }
+                        
                     }
-
+                } catch (FileNotFoundException e) {
+                    log.error("file not found.", e);//$NON-NLS-1$
+                } catch (CoreException e) {
+                    log.error("create model file failed.", e);//$NON-NLS-1$
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
                 }
-            } catch (FileNotFoundException e) {
-                log.error("file not found.", e);//$NON-NLS-1$
-            } catch (CoreException e) {
-                log.error("create model file failed.", e);//$NON-NLS-1$
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
             }
         }
     }
