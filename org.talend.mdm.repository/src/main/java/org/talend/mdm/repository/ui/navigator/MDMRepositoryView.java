@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -175,9 +176,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         final String resourceFolder = "resources/system/datamodel";//$NON-NLS-1$
         ERepositoryObjectType type = IServerObjectRepositoryType.TYPE_DATAMODEL;
 
-        IFolder targetFolder = createTargetSystemFolder(type);
         File resourceFile = getResourceFolder(resourceFolder);
-        copyToFolder(targetFolder, resourceFile);
+        copyToFolder(resourceFile, type);
     }
 
     private File getResourceFolder(final String resourceFolder) {
@@ -192,36 +192,44 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         return file;
     }
 
-    private void copyToFolder(IFolder targetFolder, File resourceFolder) {
+    private void copyToFolder(File resourceFolder, ERepositoryObjectType dataType) {
         if (resourceFolder != null && resourceFolder.exists()) {
+            IFolder targetFolder = createTargetSystemFolder(dataType);
+
             File file = resourceFolder;
             File[] files = file.listFiles();
-            if(files != null) {
-                try {
-                    for (int i = 0; i < files.length; i++) {
-                        if (files[i].getName().equals(".svn")) //$NON-NLS-1$
-                            continue;
-                        
-                        IFile ifile = targetFolder.getFile(files[i].getName());
-                        String fileExtension = ifile.getFileExtension();
-                        
-                        if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension)) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                        {
-                            File sunfile = ifile.getLocation().toFile();
-                            if (!sunfile.exists()) {
-                                FileInputStream fileInputStream = new FileInputStream(files[i]);
+            if (files != null) {
+
+                for (int i = 0; i < files.length; i++) {
+                    if (files[i].getName().equals(".svn")) //$NON-NLS-1$
+                        continue;
+
+                    IFile ifile = targetFolder.getFile(files[i].getName());
+                    String fileExtension = ifile.getFileExtension();
+
+                    if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension)) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    {
+                        FileInputStream fileInputStream = null;
+                        File sunfile = ifile.getLocation().toFile();
+                        if (!sunfile.exists()) {
+                            try {
+                                fileInputStream = new FileInputStream(files[i]);
                                 ifile.create(fileInputStream, IFile.FORCE, new NullProgressMonitor());
-                                fileInputStream.close();
+                            } catch (FileNotFoundException e) {
+                                log.error("file not found.", e);//$NON-NLS-1$
+                            } catch (CoreException e) {
+                                log.error("create model file failed.", e);//$NON-NLS-1$
+                            } finally {
+                                if (fileInputStream != null) {
+                                    try {
+                                        fileInputStream.close();
+                                    } catch (IOException e) {
+                                        log.error(e.getMessage(), e);
+                                    }
+                                }
                             }
                         }
-                        
                     }
-                } catch (FileNotFoundException e) {
-                    log.error("file not found.", e);//$NON-NLS-1$
-                } catch (CoreException e) {
-                    log.error("create model file failed.", e);//$NON-NLS-1$
-                } catch (IOException e) {
-                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -231,7 +239,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         IFolder typeFolder = RepositoryResourceUtil.getFolder(type);
 
         IFolder systemFolder = typeFolder.getFolder("System");//$NON-NLS-1$
-        if (!systemFolder.exists()) {
+        File folderFile = systemFolder.getLocation().toFile();
+        if (!folderFile.exists()) {
             try {
                 systemFolder.create(0, true, new NullProgressMonitor());
             } catch (CoreException e) {
