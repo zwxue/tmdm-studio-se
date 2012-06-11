@@ -13,8 +13,12 @@
 package com.amalto.workbench.providers.datamodel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDNamedComponent;
 import org.eclipse.xsd.XSDParticle;
@@ -41,21 +45,27 @@ public class TypesTreeContentProvider extends SchemaTreeContentProvider {
 
     protected Object[] getXSDComplexTypeDefinitionChildren(XSDComplexTypeDefinition parent) {
 
-        ArrayList<Object> list = new ArrayList<Object>();
+        List<Object> list = new ArrayList<Object>();
         list.addAll(parent.getAttributeContents());
-
+        
+        EList<XSDAnnotation> annotations = parent.getAnnotations();
+        if (annotations != null)
+            list.addAll(Arrays.asList(annotations.toArray()));
+        
         if (parent.getContent() == null) {
             list.add(parent.getBaseTypeDefinition());
-            return list.toArray(new Object[list.size()]);
         } else if (parent.getContent() instanceof XSDSimpleTypeDefinition) {
             list.add(parent.getContent());
-            return list.toArray(new Object[list.size()]);
         } else if (parent.getContent() instanceof XSDParticle) {
-            return getXSDParticleChildren((XSDParticle) parent.getContent());
+            list.removeAll(parent.getAttributeContents());
+            
+            Object[] xsdParticleChildren = getXSDParticleChildren((XSDParticle) parent.getContent());
+            list.addAll(Arrays.asList(xsdParticleChildren));
         } else {
             list.add(parent.getContent());
-            return list.toArray(new Object[list.size()]);
         }
+        
+        return list.toArray();
     }
 
     @Override
