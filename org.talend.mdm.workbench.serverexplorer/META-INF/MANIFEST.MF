@@ -18,6 +18,7 @@ Require-Bundle: org.eclipse.ui,
  org.talend.mdm.workbench,
  org.apache.log4j
 Bundle-ActivationPolicy: lazy
+Eclipse-RegisterBuddy: org.mockito
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.talend.mdm.workbench.serverexplorer.core,
  org.talend.mdm.workbench.serverexplorer.ui.actions,
