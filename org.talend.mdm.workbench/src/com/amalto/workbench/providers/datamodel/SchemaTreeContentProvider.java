@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -190,16 +191,32 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
     protected Object[] getXSDSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition parent) {
 
+        List<Object> resultList = new ArrayList<Object>();
+        if (!Util.isBuildInType(parent)){
+            if(parent.getAnnotations() != null) {
+                EList<XSDAnnotation> annotations = parent.getAnnotations();
+                resultList.addAll(Arrays.asList(annotations.toArray()));
+            }
+        }
+        
+        Object[] result = null;
         switch (parent.getVariety()) {
         case ATOMIC_LITERAL:
-            return getXSDSimpleTypeDefinitionChildren_ATOMIC(parent);
+            result = getXSDSimpleTypeDefinitionChildren_ATOMIC(parent);
+            break;
         case LIST_LITERAL:
-            return getXSDSimpleTypeDefinitionChildren_LIST(parent);
+            result = getXSDSimpleTypeDefinitionChildren_LIST(parent);
+            break;
         case UNION_LITERAL:
-            return getXSDSimpleTypeDefinitionChildren_UNION(parent);
+            result = getXSDSimpleTypeDefinitionChildren_UNION(parent);
+            break;
         default:
-            return new Object[0];
+            result = new Object[0];
         }
+        
+        resultList.addAll(Arrays.asList(result));
+        
+        return resultList.toArray();
     }
 
     private Object[] getXSDSimpleTypeDefinitionChildren_UNION(XSDSimpleTypeDefinition parent) {
