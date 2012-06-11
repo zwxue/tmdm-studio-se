@@ -9,15 +9,15 @@ Require-Bundle: org.junit4,
  org.mockito,
  org.hamcrest,
  org.eclipse.osgi.services
-Bundle-ClassPath: .,
- libs/powermock-classloading-base-1.4.11.jar,
- libs/powermock-classloading-objenesis-1.4.11.jar,
- libs/powermock-classloading-xstream-1.4.11.jar,
- libs/powermock-mockito-1.4.11-full.jar,
- libs/powermock-module-junit4-rule-1.4.11.jar,
- libs/powermock-module-junit4-rule-agent-1.4.11.jar
+Bundle-ClassPath: .
 Export-Package: org.talend.mdm.repository.ui.actions,
  org.talend.mdm.repository.ui.actions.datacontainer,
  org.talend.mdm.repository.ui.actions.datamodel,
+ org.talend.mdm.repository.ui.actions.menu,
+ org.talend.mdm.repository.ui.actions.process,
+ org.talend.mdm.repository.ui.actions.serviceconfiguration,
+ org.talend.mdm.repository.ui.actions.storedprocedure,
+ org.talend.mdm.repository.ui.actions.trigger,
+ org.talend.mdm.repository.ui.actions.view,
  org.talend.mdm.repository.ui.wizards.view,
  org.talend.mdm.repository.utils
