@@ -473,9 +473,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             // contains the other xsd ,
                             // and in the case of deleting the included xsd
                             setXsdSchema(xsdSchema);
-                            commit();
                             refreshData();
-                            XSDSchema mc = xsdSchema;
                             MessageDialog.openInformation(getSite().getShell(), Messages.getString("ImportXSDSche"), Messages //$NON-NLS-1$
                                     .getString("ImportingXSDSchemaCompleted")); //$NON-NLS-1$
                         } catch (Exception ex) {
