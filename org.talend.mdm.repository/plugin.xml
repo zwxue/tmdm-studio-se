@@ -521,4 +521,11 @@
                   label="mdm repository service"> 
  	         </repositoryViewService> 
    </extension>
+   <extension
+         point="org.talend.core.runtime.service">
+      <Service
+            class="org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction"
+            serviceId="IEventMgrService">
+      </Service>
+   </extension>
 </plugin>

@@ -16,6 +16,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -60,6 +62,15 @@ public class MDMEventManagerAction extends AbstractRepositoryAction  implements 
 
     public String getGroupName() {
         return GROUP_COMMON;
+    }
+    
+    @Override
+    protected Shell getShell() {
+    	Shell shell = super.getShell();
+    	if(shell == null)
+    		shell = new Shell(Display.getCurrent());
+    	
+		return shell;
     }
 
 }

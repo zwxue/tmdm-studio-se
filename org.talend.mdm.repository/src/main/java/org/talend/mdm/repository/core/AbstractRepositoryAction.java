@@ -97,7 +97,11 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     }
 
     protected Shell getShell() {
-        return commonViewer.getControl().getShell();
+    	Shell shell = null;
+    	if(commonViewer != null)
+    		shell = commonViewer.getControl().getShell();
+    	
+		return shell;
     }
 
     public boolean isVisible(IRepositoryViewObject viewObj) {
