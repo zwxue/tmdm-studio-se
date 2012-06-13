@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.actions.datacontainer;
 
 import org.apache.log4j.Logger;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 
 /**
@@ -41,7 +42,10 @@ public abstract class AbstractDataClusterAction extends AbstractRepositoryAction
         return GROUP_EXPORT;
     }
 
-
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
 
 
 }
