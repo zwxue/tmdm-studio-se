@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.repository.utils.ZipFileUtils;
@@ -137,6 +138,8 @@ public abstract class AbstractDataClusterAction extends AbstractRepositoryAction
         }
     }
 
-
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
 
 }

@@ -62,13 +62,11 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
             actions.add(addAction);
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-            actions.add(renameAction);
+        	addAction(actions, renameAction, viewObj); 
             actions.add(deployToAction);
-            //actions.add(deployAnotherToAction);
             addAction(actions, deployToLastServerAction, viewObj);
-            actions.add(exportDataClusterAction);
-            // fix bug TMDM-3168
-            actions.add(importDataClusterAction);
+            addAction(actions, exportDataClusterAction, viewObj); 
+            addAction(actions, importDataClusterAction, viewObj); 
         }
         actions.add(deployAllAction);
 
