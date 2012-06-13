@@ -165,10 +165,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
             } else if (item instanceof MDMServerObjectItem) {
                 actions.add(removeFromRepositoryAction);
-                actions.add(mdmEditPropertyAction);
+                addAction(actions, mdmEditPropertyAction, viewObj);
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
-                actions.add(duplicateAction);
+                addAction(actions, duplicateAction, viewObj);
             } else if (item instanceof WorkspaceRootItem) { // fix bug TMDM-3168
                 actions.add(importObjectAction);
             }

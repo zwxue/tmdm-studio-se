@@ -58,4 +58,7 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
 
     }
 
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
 }
