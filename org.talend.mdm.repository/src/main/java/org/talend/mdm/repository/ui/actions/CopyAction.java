@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.actions;
 
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.i18n.Messages;
@@ -47,4 +48,7 @@ public class CopyAction extends AbstractRepositoryAction {
         LocalSelectionTransfer.getTransfer().setSelection(selection);
     }
 
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
 }

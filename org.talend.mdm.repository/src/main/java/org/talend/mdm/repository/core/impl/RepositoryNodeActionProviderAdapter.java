@@ -174,11 +174,11 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
             } else if (item instanceof MDMServerObjectItem) {
                 actions.add(removeFromRepositoryAction);
-                actions.add(mdmEditPropertyAction);
-                actions.add(openVersionAction);
+                addAction(actions, mdmEditPropertyAction, viewObj);
+                addAction(actions, openVersionAction, viewObj);
                 addAction(actions, copyAction, viewObj);
                 addAction(actions, pasteAction, viewObj);
-                actions.add(duplicateAction);
+                addAction(actions, duplicateAction, viewObj);
 
                 // temporarily added constraint
                 if (viewObj.getRepositoryObjectType() != null

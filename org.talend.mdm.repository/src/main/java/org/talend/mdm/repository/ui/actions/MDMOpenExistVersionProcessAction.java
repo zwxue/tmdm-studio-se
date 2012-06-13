@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.actions;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -21,12 +20,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryObject;
-import org.talend.core.ui.IUIRefresher;
-import org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
@@ -35,7 +31,6 @@ import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.MDMOpenExistVersionProcessWizard;
 import org.talend.repository.model.RepositoryNode;
-import org.talend.repository.model.RepositoryNodeUtilities;
 
 
 /**
@@ -112,4 +107,7 @@ public class MDMOpenExistVersionProcessAction extends AbstractBridgeRepositoryAc
         return GROUP_COMMON;
     }
 
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
 }

@@ -75,4 +75,7 @@ public class DuplicateAction extends AbstractRepositoryAction {
         return (IRepositoryViewObject) getSelectedObject().get(0);
     }
 
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
 }
