@@ -74,4 +74,19 @@ public class TypesTreeContentProvider extends SchemaTreeContentProvider {
                 new XSDNamedComponent[schema.getTypeDefinitions().size()]));
     }
 
+    @Override
+    protected Object[] getXSDSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition parent) {
+        List<Object> resultList = new ArrayList<Object>();
+        if (!Util.isBuildInType(parent)){
+            if(parent.getAnnotations() != null) {
+                EList<XSDAnnotation> annotations = parent.getAnnotations();
+                resultList.addAll(Arrays.asList(annotations.toArray()));
+            }
+        }
+        
+        Object[] xsdSimpleTypeDefinition = super.getXSDSimpleTypeDefinitionChildren(parent);
+        resultList.addAll(Arrays.asList(xsdSimpleTypeDefinition));
+        
+        return resultList.toArray();
+    }
 }
