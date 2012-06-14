@@ -190,16 +190,8 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     }
 
     protected Object[] getXSDSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition parent) {
-
-        List<Object> resultList = new ArrayList<Object>();
-        if (!Util.isBuildInType(parent)){
-            if(parent.getAnnotations() != null) {
-                EList<XSDAnnotation> annotations = parent.getAnnotations();
-                resultList.addAll(Arrays.asList(annotations.toArray()));
-            }
-        }
-        
         Object[] result = null;
+        
         switch (parent.getVariety()) {
         case ATOMIC_LITERAL:
             result = getXSDSimpleTypeDefinitionChildren_ATOMIC(parent);
@@ -214,9 +206,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
             result = new Object[0];
         }
         
-        resultList.addAll(Arrays.asList(result));
-        
-        return resultList.toArray();
+        return result;
     }
 
     private Object[] getXSDSimpleTypeDefinitionChildren_UNION(XSDSimpleTypeDefinition parent) {
