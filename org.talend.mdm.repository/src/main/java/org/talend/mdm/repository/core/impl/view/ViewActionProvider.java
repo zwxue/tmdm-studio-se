@@ -59,7 +59,7 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
 
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-            actions.add(renameAction);
+            addAction(actions, renameAction, viewObj);
             actions.add(browseViewAction);
             // deploy
             actions.add(deployToAction);
