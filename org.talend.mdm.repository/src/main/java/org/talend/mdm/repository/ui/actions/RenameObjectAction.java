@@ -139,4 +139,9 @@ public class RenameObjectAction extends AbstractRepositoryAction {
         return dlg.getValue();
 
     }
+
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
 }

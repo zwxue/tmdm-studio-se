@@ -65,7 +65,7 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
             actions.add(addAction);
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-            actions.add(renameAction);
+            addAction(actions, renameAction, viewObj);
             // deploy
             actions.add(deployToAction);
             //actions.add(deployAnotherToAction);
