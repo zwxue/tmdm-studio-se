@@ -144,4 +144,13 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     }
 
+	@Override
+	public boolean isVisible(IRepositoryViewObject viewObj) {
+		String path=viewObj.getPath();
+		if(path!=null&&path.equalsIgnoreCase("system")){
+			return false;
+		}
+		return true;
+	}
+
 }

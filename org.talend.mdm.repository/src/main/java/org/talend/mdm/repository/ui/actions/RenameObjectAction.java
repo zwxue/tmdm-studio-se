@@ -45,102 +45,124 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class RenameObjectAction extends AbstractRepositoryAction {
 
-    static Logger log = Logger.getLogger(RenameObjectAction.class);
+	static Logger log = Logger.getLogger(RenameObjectAction.class);
 
-    IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+	IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance()
+			.getProxyRepositoryFactory();
 
-    /**
-     * DOC hbhong RemoveFromRepositoryAction constructor comment.
-     * 
-     * @param text
-     */
-    public RenameObjectAction() {
-        super(Messages.RenameObjectAction_rename);
-        setImageDescriptor(ImageCache.getImage(EImage.RENAME.getPath()));
-    }
+	/**
+	 * DOC hbhong RemoveFromRepositoryAction constructor comment.
+	 * 
+	 * @param text
+	 */
+	public RenameObjectAction() {
+		super(Messages.RenameObjectAction_rename);
+		setImageDescriptor(ImageCache.getImage(EImage.RENAME.getPath()));
+	}
 
-    @Override
-    public String getGroupName() {
-        return GROUP_EDIT;
-    }
+	@Override
+	public String getGroupName() {
+		return GROUP_EDIT;
+	}
 
-    protected boolean needValidateLockedObject() {
-        return true;
-    }
-    protected void doRun() {
-        Object obj = getSelectedObject().get(0);
-        if (obj instanceof IRepositoryViewObject) {
-            IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+	protected boolean needValidateLockedObject() {
+		return true;
+	}
 
-            MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
-            MDMServerObject serverObject = item.getMDMServerObject();
-            IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
-            if (configuration != null) {
-                ERepositoryObjectType type = configuration.getResourceProvider().getRepositoryObjectType(item);
-                IRepositoryViewObject parentViewObj = ContainerCacheService.get(type, item.getState().getPath());
+	protected void doRun() {
+		Object obj = getSelectedObject().get(0);
+		if (obj instanceof IRepositoryViewObject) {
+			IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
 
-                try {
-                    if (serverObject != null) {
-                        String oldName = serverObject.getName();
-                        String newName = showRenameDlg(type, (ContainerItem) parentViewObj.getProperty().getItem(), oldName);
-                        if (newName != null && factory.isEditableAndLockIfPossible(item)) {
-                            serverObject.setName(newName);
-                            viewObj.getProperty().setLabel(newName);
-                            factory.save(viewObj.getProperty().getItem(), false);
-                            if (serverObject.getLastServerDef() != null) {
-                                CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
-                                        new String[] { oldName, newName });
-                            }
-                        }
-                    }
-                    commonViewer.refresh(obj);
-                } catch (PersistenceException e) {
-                    log.error(e.getMessage(), e);
-                } finally {
-                    try {
-                        factory.unlock(item);
-                    } catch (PersistenceException e) {
-                        log.error(e.getMessage(), e);
-                    } catch (LoginException e) {
-                        log.error(e.getMessage(), e);
-                    }
-                }
-            }
-        }
+			MDMServerObjectItem item = (MDMServerObjectItem) viewObj
+					.getProperty().getItem();
+			MDMServerObject serverObject = item.getMDMServerObject();
+			IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager
+					.getConfiguration(item);
+			if (configuration != null) {
+				ERepositoryObjectType type = configuration
+						.getResourceProvider().getRepositoryObjectType(item);
+				IRepositoryViewObject parentViewObj = ContainerCacheService
+						.get(type, item.getState().getPath());
 
-    }
+				try {
+					if (serverObject != null) {
+						String oldName = serverObject.getName();
+						String newName = showRenameDlg(type,
+								(ContainerItem) parentViewObj.getProperty()
+										.getItem(), oldName);
+						if (newName != null
+								&& factory.isEditableAndLockIfPossible(item)) {
+							serverObject.setName(newName);
+							viewObj.getProperty().setLabel(newName);
+							factory.save(viewObj.getProperty().getItem(), false);
+							if (serverObject.getLastServerDef() != null) {
+								CommandManager.getInstance().pushCommand(
+										ICommand.CMD_RENAME, viewObj.getId(),
+										new String[] { oldName, newName });
+							}
+						}
+					}
+					commonViewer.refresh(obj);
+				} catch (PersistenceException e) {
+					log.error(e.getMessage(), e);
+				} finally {
+					try {
+						factory.unlock(item);
+					} catch (PersistenceException e) {
+						log.error(e.getMessage(), e);
+					} catch (LoginException e) {
+						log.error(e.getMessage(), e);
+					}
+				}
+			}
+		}
 
-    private String showRenameDlg(final ERepositoryObjectType type, final ContainerItem parentItem, final String originalName) {
+	}
 
-        InputDialog dlg = new InputDialog(getShell(), Messages.RenameObjectAction_rename, Messages.Common_rename, originalName,
-                new IInputValidator() {
+	private String showRenameDlg(final ERepositoryObjectType type,
+			final ContainerItem parentItem, final String originalName) {
 
-                    public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0)
-                            return Messages.Common_nameCanNotBeEmpty;
-                        if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
-                                || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
-                            if (!Pattern.matches("\\w*(#|\\.|\\w*)+(#|\\w+)", newText)) {//$NON-NLS-1$
-                                return Messages.Common_nameInvalid;
-                            }
-                        } else if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
-                            return Messages.Common_nameInvalid;
-                        }
-                        //
-                        if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
-                            return Messages.Common_nameIsUsed;
-                        }
-                        return null;
-                    };
-                });
-        dlg.setBlockOnOpen(true);
-        if (dlg.open() == Window.CANCEL)
-            return null;
-        return dlg.getValue();
+		InputDialog dlg = new InputDialog(getShell(),
+				Messages.RenameObjectAction_rename, Messages.Common_rename,
+				originalName, new IInputValidator() {
 
-    }
-    
-    public boolean isVisible(IRepositoryViewObject viewObj) {
-        return getSelectedObject().size() == 1;
-    }
+					public String isValid(String newText) {
+						if (newText == null || newText.trim().length() == 0)
+							return Messages.Common_nameCanNotBeEmpty;
+						if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
+								|| type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
+							if (!Pattern.matches(
+									"\\w*(#|\\.|\\w*)+(#|\\w+)", newText)) {//$NON-NLS-1$
+								return Messages.Common_nameInvalid;
+							}
+						} else if (!Pattern.matches(
+								"\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+							return Messages.Common_nameInvalid;
+						}
+						//
+						if (RepositoryResourceUtil.isExistByName(
+								parentItem.getRepObjType(), newText.trim())) {
+							return Messages.Common_nameIsUsed;
+						}
+						return null;
+					};
+				});
+		dlg.setBlockOnOpen(true);
+		if (dlg.open() == Window.CANCEL)
+			return null;
+		return dlg.getValue();
+
+	}
+
+	public boolean isVisible(IRepositoryViewObject viewObj) {
+		if (getSelectedObject().size() == 1) {
+			String path = viewObj.getPath();
+			if (path != null && path.equalsIgnoreCase("system")) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
 }
