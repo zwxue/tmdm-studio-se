@@ -36,7 +36,9 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.RepositoryNode;
 
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -111,5 +113,26 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         spagoBiServer.setLogin(serverDef.getUser());
         spagoBiServer.setPassword(serverDef.getPasswd());
         return spagoBiServer;
+    }
+    
+    @Override
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+        MDMServerDef serverDef = cmd.getServerDef();
+        String name = cmd.getObjName();
+        String version = cmd.getViewObject().getVersion();
+
+
+        // delete server bar file
+        String filename = name + "_" + version + ".zip"; //$NON-NLS-1$ //$NON-NLS-2$
+        String uploadURL = "http://" + serverDef.getHost() + ":"//$NON-NLS-1$//$NON-NLS-2$
+                + serverDef.getPort() + "/datamanager/uploadFile?deletefile=" + filename;//$NON-NLS-1$
+        Util.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());
+
+        filename = name + "_" + version + ".war"; //$NON-NLS-1$ //$NON-NLS-2$
+        uploadURL = "http://" + serverDef.getHost() + ":"//$NON-NLS-1$//$NON-NLS-2$
+                + serverDef.getPort() + "/datamanager/uploadFile?deletefile=" + filename;//$NON-NLS-1$
+        Util.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());
+
+        return true;
     }
 }
