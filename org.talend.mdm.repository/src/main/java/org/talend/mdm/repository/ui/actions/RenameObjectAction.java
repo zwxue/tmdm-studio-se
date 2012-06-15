@@ -140,8 +140,14 @@ public class RenameObjectAction extends AbstractRepositoryAction {
 
     }
 
-    @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
-        return getSelectedObject().size() == 1;
+        if (getSelectedObject().size() == 1) {
+            String path = viewObj.getPath();
+            if (path != null && path.equalsIgnoreCase("system")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }

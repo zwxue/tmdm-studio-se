@@ -173,7 +173,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 }
 
             } else if (item instanceof MDMServerObjectItem) {
-                actions.add(removeFromRepositoryAction);
+                addAction(actions, removeFromRepositoryAction, viewObj);
                 addAction(actions, mdmEditPropertyAction, viewObj);
                 addAction(actions, openVersionAction, viewObj);
                 addAction(actions, copyAction, viewObj);
