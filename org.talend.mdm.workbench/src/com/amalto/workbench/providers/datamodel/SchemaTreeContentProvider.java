@@ -159,8 +159,17 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     }
 
     protected Object[] getXSDSchemaChildren(XSDSchema schema) {
-        return Util.filterOutDuplicatedElems(schema.getElementDeclarations().toArray(
-                new XSDNamedComponent[schema.getElementDeclarations().size()]));
+    	List<XSDElementDeclaration> declarations = new ArrayList<XSDElementDeclaration>();
+    	
+    	EList<XSDElementDeclaration> elementDeclarations = schema.getElementDeclarations();
+    	for(XSDElementDeclaration declaration:elementDeclarations) {
+    		if(declaration.eContainer().equals(schema))
+    			declarations.add(declaration);
+    	}
+    	
+        Object[] schemaChildren = Util.filterOutDuplicatedElems(declarations.toArray(new XSDNamedComponent[declarations.size()]));
+        
+		return schemaChildren;
     }
 
     protected Object[] getXSDAttributeGroupDefinitionChildren(XSDAttributeGroupDefinition parent) {
