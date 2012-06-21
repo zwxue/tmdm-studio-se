@@ -17,6 +17,8 @@ import java.util.List;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.webservices.XtentisPort;
@@ -41,7 +43,14 @@ class RepositoryProcessesNamesHolder extends RepositoryExternalInfoHolder<String
         int i = 0;
         for (IRepositoryViewObject viewObj : viewObjs) {
             Property prop = viewObj.getProperty();
-            names[i] = prop.getLabel();
+            if (prop.getItem() instanceof MDMServerObjectItem) {
+                MDMServerObject serverObject = ((MDMServerObjectItem) prop.getItem()).getMDMServerObject();
+                if (serverObject != null) {
+                    names[i] = serverObject.getName();
+                }
+            } else {
+                names[i] = prop.getLabel();
+            }
             i++;
         }
 
