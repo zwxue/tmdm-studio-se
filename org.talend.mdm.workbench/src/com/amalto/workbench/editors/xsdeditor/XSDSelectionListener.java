@@ -51,10 +51,6 @@ public class XSDSelectionListener implements ISelectionChangedListener {
                     makeSelection = false;
                 }
             }
-            // switch to datamodel contributor
-            if ("org.talend.mdm.repository.svn.history.propertycontributer".equals(editor.curContributionID)) {
-                editor.pageChang();
-            }
         }
 
         // do not fire selection in source editor if selection event came

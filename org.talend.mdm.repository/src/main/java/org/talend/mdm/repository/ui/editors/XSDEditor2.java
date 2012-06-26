@@ -94,10 +94,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         folder.getItem(1).setText(Messages.XSDEditor2_schemaSource);
         // default use
         setActiveEditor(dMainPage);
-        if (hasSvnHistory()) {
-            curContributionID = CONTRUIBUTIONID_SVNHISTORY;
-        }
-
     }
 
     @Override
@@ -124,22 +120,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.ui.editors.ISvnHistory#hasSvnHistory()
-     */
-    public boolean hasSvnHistory() {
-        try {
-            if (ProxyRepositoryFactory.getInstance().isLocalConnectionProvider()) {
-                return false;
-            }
-        } catch (PersistenceException e) {
-            log.error(e);
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public void doSave(IProgressMonitor monitor) {

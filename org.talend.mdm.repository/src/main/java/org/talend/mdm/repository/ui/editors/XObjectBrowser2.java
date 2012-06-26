@@ -36,44 +36,15 @@ import com.amalto.workbench.views.MDMPerspective;
 /**
  * DOC achen  class global comment. Detailled comment
  */
-public class XObjectBrowser2 extends XObjectBrowser implements ITabbedPropertySheetPageContributor, ISvnHistory {
+public class XObjectBrowser2 extends XObjectBrowser implements ISvnHistory {
 
     static Logger log = Logger.getLogger(XObjectBrowser2.class);
 
     public static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XObjectBrowser2"; //$NON-NLS-1$
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor#getContributorId()
-     */
-    public String getContributorId() {
-        if (hasSvnHistory())
-            return CONTRUIBUTIONID_SVNHISTORY;
-        return null;
-    }
 
-    public Object getAdapter(Class adapter) {
-        if (adapter == IPropertySheetPage.class && hasSvnHistory())
-            return new TabbedPropertySheetPage(this);
-        return super.getAdapter(adapter);
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.forms.editor.FormEditor#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
-     */
-    @Override
-    public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-        // TODO Auto-generated method stub
-        super.init(site, input);
-        if (hasSvnHistory()) {
-            IRepositoryViewEditorInput editorInput = (IRepositoryViewEditorInput) input;
-            SvnHistorySelectionProvider provider = new SvnHistorySelectionProvider(editorInput);
-            site.setSelectionProvider(provider);
-        }
-    }
+ 
 
     private void refreshPropertyView() throws PartInitException {
 
@@ -124,23 +95,6 @@ public class XObjectBrowser2 extends XObjectBrowser implements ITabbedPropertySh
             break;
 
         }// switch
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.ui.editors.ISvnHistory#hasSvnHistory()
-     */
-    public boolean hasSvnHistory() {
-        try {
-            if (ProxyRepositoryFactory.getInstance().isLocalConnectionProvider()) {
-                return false;
-            }
-        } catch (PersistenceException e) {
-            log.error(e);
-            return false;
-        }
-        return true;
     }
 
     public boolean isLocalInput() {
