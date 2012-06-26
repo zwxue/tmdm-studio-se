@@ -437,7 +437,7 @@ public class MDMRepositoryView extends CommonNavigator implements
 	@Override
 	public Object getAdapter(Class type) {
 
-		if (type == IPropertySheetPage.class && hasSvnHistory()) {
+		if (type == IPropertySheetPage.class) {
 			return new TabbedPropertySheetPage(this);
 		}
 		return super.getAdapter(type);
@@ -447,16 +447,4 @@ public class MDMRepositoryView extends CommonNavigator implements
 		return ISvnHistory.CONTRUIBUTIONID_SVNHISTORY;
 	}
 
-	private boolean hasSvnHistory() {
-		try {
-			if (ProxyRepositoryFactory.getInstance()
-					.isLocalConnectionProvider()) {
-				return false;
-			}
-		} catch (PersistenceException e) {
-			log.error(e);
-			return false;
-		}
-		return true;
-	}
 }
