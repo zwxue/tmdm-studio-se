@@ -25,21 +25,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
@@ -62,12 +54,16 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -79,6 +75,7 @@ import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.ui.editors.ISvnHistory;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -88,7 +85,8 @@ import com.amalto.workbench.views.ServerView;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class MDMRepositoryView extends CommonNavigator {
+public class MDMRepositoryView extends CommonNavigator implements
+		ITabbedPropertySheetPageContributor {
 
     private static final String VIEW_CONTEXT_ID = "org.talend.mdm.repository.context"; //$NON-NLS-1$
 
@@ -435,5 +433,30 @@ public class MDMRepositoryView extends CommonNavigator {
         super.saveState(aMemento);
         CommandManager.getInstance().saveState(aMemento);
     }
+    
+	@Override
+	public Object getAdapter(Class type) {
 
+		if (type == IPropertySheetPage.class && hasSvnHistory()) {
+			return new TabbedPropertySheetPage(this);
+		}
+		return super.getAdapter(type);
+	}
+
+	public String getContributorId() {
+		return ISvnHistory.CONTRUIBUTIONID_SVNHISTORY;
+	}
+
+	private boolean hasSvnHistory() {
+		try {
+			if (ProxyRepositoryFactory.getInstance()
+					.isLocalConnectionProvider()) {
+				return false;
+			}
+		} catch (PersistenceException e) {
+			log.error(e);
+			return false;
+		}
+		return true;
+	}
 }
