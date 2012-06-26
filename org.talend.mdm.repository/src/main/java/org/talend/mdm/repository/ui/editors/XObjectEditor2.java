@@ -52,7 +52,7 @@ import com.amalto.workbench.views.MDMPerspective;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertySheetPageContributor, ISvnHistory {
+public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
 
     static Logger log = Logger.getLogger(XObjectEditor2.class);
 
@@ -212,33 +212,6 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
         return editorInput.isReadOnly();
     }
 
-    public String getContributorId() {
-        if (hasSvnHistory())
-            return CONTRUIBUTIONID_SVNHISTORY;
-        return null;
-    }
-
-    public Object getAdapter(Class adapter) {
-        if (adapter == IPropertySheetPage.class && hasSvnHistory())
-            return new TabbedPropertySheetPage(this);
-        return super.getAdapter(adapter);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.forms.editor.FormEditor#init(org.eclipse.ui.IEditorSite, org.eclipse.ui.IEditorInput)
-     */
-    @Override
-    public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-        // TODO Auto-generated method stub
-        super.init(site, input);
-        if (hasSvnHistory()) {
-            IRepositoryViewEditorInput editorInput = (IRepositoryViewEditorInput) input;
-            SvnHistorySelectionProvider provider = new SvnHistorySelectionProvider(editorInput);
-            site.setSelectionProvider(provider);
-        }
-    }
 
     /*
      * (non-Javadoc)
@@ -268,20 +241,5 @@ public class XObjectEditor2 extends XObjectEditor implements ITabbedPropertyShee
         page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.ui.editors.ISvnHistory#hasSvnHistory()
-     */
-    public boolean hasSvnHistory() {
-        try {
-            if (ProxyRepositoryFactory.getInstance().isLocalConnectionProvider()) {
-                return false;
-            }
-        } catch (PersistenceException e) {
-            log.error(e);
-            return false;
-        }
-        return true;
-    }
+ 
 }
