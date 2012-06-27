@@ -299,27 +299,21 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             // if editor is talend job editor, switch to org.talend.rcp.perspective
             if (partRef.getId().equals("org.talend.designer.core.ui.MultiPageTalendEditor")) {//$NON-NLS-1$
 
-                String perspectiveId = "org.talend.rcp.perspective";
+                String perspectiveId = "org.talend.rcp.perspective";//$NON-NLS-1$
 
-                if (activePerspective != null && deactivePerspective != null) {
-                    if (!activePerspective.equals(deactivePerspective)) {
-                        perspectiveId = activePerspective.getId();
-                    }
-                }
+                if (deactivePerspective != null && deactivePerspective.getId().equals(perspectiveId))
+                    return;
 
                 IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-                        .findPerspectiveWithId(perspectiveId); //$NON-NLS-1$
+                        .findPerspectiveWithId(perspectiveId);
                 if (perspective != null) {
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
                 }
             }
 
-            activePerspective = null;
             deactivePerspective = null;
         }
     };
-
-    private IPerspectiveDescriptor activePerspective;// record current activated perspective for temp use
 
     private IPerspectiveDescriptor deactivePerspective;// record current deactivated perspective for temp use
 
@@ -328,11 +322,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
      */
     private void regisitPerspectiveBarSelectListener() {
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
-
-            @Override
-            public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-                activePerspective = perspective;
-            }
 
             @Override
             public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
