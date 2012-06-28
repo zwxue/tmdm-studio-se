@@ -277,6 +277,7 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
             // baseTypeDef = baseTypeDef.getBaseType();
             // }
             list.addAll(Util.getComplexTypeDefinitionChildren(complexTypeDefinition, true));
+            list.removeAll(complexTypeDefinition.getAnnotations());
             return list;
         }
 
