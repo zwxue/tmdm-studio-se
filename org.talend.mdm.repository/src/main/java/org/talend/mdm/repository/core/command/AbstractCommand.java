@@ -35,6 +35,8 @@ public abstract class AbstractCommand implements ICommand {
 
     protected int runPhase = -1;
 
+    private String version;
+
     public int getToRunPhase() {
 
         return runPhase;
@@ -127,6 +129,14 @@ public abstract class AbstractCommand implements ICommand {
 
     public void updateViewObject(IRepositoryViewObject viewObj) {
         this.viewObject = viewObj;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
 }

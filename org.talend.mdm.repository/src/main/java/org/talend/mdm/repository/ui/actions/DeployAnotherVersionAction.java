@@ -16,19 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.dialogs.SelectVersionDialog;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
-
 /**
- * DOC Administrator  class global comment. Detailled comment
+ * DOC Administrator class global comment. Detailled comment
  */
 public class DeployAnotherVersionAction extends AbstractDeployAction {
 
@@ -39,18 +37,19 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
     protected void doRun() {
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        if(viewObjs.size()==0)
+        if (viewObjs.size() == 0)
             return;
-        //open the version dialog
-        SelectVersionDialog versionDialog=new SelectVersionDialog(getShell(), Messages.DeployAnotherVersionAction_selectAnother, viewObjs.get(0));
-        versionDialog.create();       
-        if(versionDialog.open()==IDialogConstants.OK_ID) {
-            if(versionDialog.getSelection()!=null){
-                viewObjs=new ArrayList<IRepositoryViewObject>();
+        // open the version dialog
+        SelectVersionDialog versionDialog = new SelectVersionDialog(getShell(),
+                Messages.DeployAnotherVersionAction_selectAnother, viewObjs.get(0));
+        versionDialog.create();
+        if (versionDialog.open() == IDialogConstants.OK_ID) {
+            if (versionDialog.getSelection() != null) {
+                viewObjs = new ArrayList<IRepositoryViewObject>();
                 viewObjs.add(versionDialog.getSelection());
             }
-        }else{
-            return ;
+        } else {
+            return;
         }
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         if (dialog.open() == IDialogConstants.OK_ID) {
@@ -63,15 +62,16 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
             lockDirtyDialog.saveDirtyObjects();
             // deploy
             MDMServerDef serverDef = dialog.getSelectedServerDef();
-
-            IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY);
-            updateChangedStatus(status);
+            IStatus status = DeployService.getInstance().deployAnotherVersion(serverDef, viewObjs);
             if (status.isMultiStatus()) {
                 showDeployStatus(status);
             }
-
-            updateLastServer(status, new NullProgressMonitor());
-        }        
+        }
     }
-    
+
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        return getSelectedObject().size() == 1;
+    }
+
 }

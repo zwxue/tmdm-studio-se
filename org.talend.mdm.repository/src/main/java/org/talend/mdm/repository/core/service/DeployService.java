@@ -144,6 +144,12 @@ public class DeployService {
         return runCommands(commands, serverDef);
     }
 
+    public IStatus deployAnotherVersion(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
+        CommandManager manager = CommandManager.getInstance();
+        List<AbstractDeployCommand> commands = manager.getDeployCommandsWithoutHistory(viewObjs);
+        return runCommands(commands, serverDef);
+    }
+
     public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
         return deploy(serverDef, viewObjs, defaultCmdType, false);
     }
