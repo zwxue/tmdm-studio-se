@@ -86,4 +86,8 @@ public interface ICommand extends IMementoAware {
     public IStatus execute(Object params, IProgressMonitor monitor);
 
     public void updateViewObject(IRepositoryViewObject viewObj);
+
+    public String getVersion();
+
+    public void setVersion(String version);
 }

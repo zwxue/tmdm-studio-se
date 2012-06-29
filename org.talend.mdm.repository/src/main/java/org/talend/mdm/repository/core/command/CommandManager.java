@@ -112,9 +112,14 @@ public class CommandManager implements IMementoAware {
 
     public void fillViewObjectToCommand(ICommand cmd) {
         try {
-            IRepositoryViewObject viewObject=cmd.getViewObject();        
-            if(viewObject==null){
-                viewObject = factory.getLastVersion(cmd.getCommandId());
+            IRepositoryViewObject viewObject = cmd.getViewObject();
+            if (viewObject == null) {
+                String version = cmd.getVersion();
+                if (version == null) {
+                    viewObject = factory.getLastVersion(cmd.getCommandId());
+                } else {
+                    viewObject = factory.getSpecificVersion(cmd.getCommandId(), version, true);
+                }
             }
             cmd.updateViewObject(viewObject);
         } catch (PersistenceException e) {
@@ -295,6 +300,18 @@ public class CommandManager implements IMementoAware {
                     }
                 }
             }
+        }
+        return cmds;
+    }
+
+    public List<AbstractDeployCommand> getDeployCommandsWithoutHistory(List<IRepositoryViewObject> viewObjs) {
+        List<AbstractDeployCommand> cmds = new LinkedList<AbstractDeployCommand>();
+        for (IRepositoryViewObject viewObj : viewObjs) {
+            ICommand cmd = getNewCommand(ICommand.CMD_MODIFY);
+            cmd.setVersion(viewObj.getVersion());
+            cmd.init(viewObj);
+            if (cmd instanceof AbstractDeployCommand)
+                cmds.add((AbstractDeployCommand) cmd);
         }
         return cmds;
     }

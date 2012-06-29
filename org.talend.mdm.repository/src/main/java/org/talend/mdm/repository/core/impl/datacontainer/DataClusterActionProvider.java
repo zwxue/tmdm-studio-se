@@ -66,6 +66,7 @@ public class DataClusterActionProvider extends RepositoryNodeActionProviderAdapt
             actions.add(deployToAction);
 
             addAction(actions, deployToLastServerAction, viewObj);
+            addAction(actions, deployAnotherToAction, viewObj);
             addAction(actions, exportDataClusterAction, viewObj);
             addAction(actions, importDataClusterAction, viewObj);
         }
