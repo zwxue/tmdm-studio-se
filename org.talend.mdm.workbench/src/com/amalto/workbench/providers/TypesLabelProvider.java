@@ -44,6 +44,7 @@ import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -185,7 +186,7 @@ public class TypesLabelProvider extends LabelProvider {
                             return "Foreign Key:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey_NotSep")) {//$NON-NLS-1$
                             Boolean v = Boolean.valueOf(e.getChildNodes().item(0).getNodeValue());
-                            return "Does render the FK within the main tab?: " + v;
+                            return Messages.getString("SimpleXpathInputDialog_sepFkTabPanel")+": " + v;
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return "Foreign Key Info:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
