@@ -2706,6 +2706,18 @@ public class Util {
         list.add(xsdComplexTypeContent);
         return list;
     }
+    
+    public static List<Object> getSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition simpleTypeDefinition) {
+        List<Object> result = new ArrayList<Object>();
+        
+        // Annotations
+        if (simpleTypeDefinition.getAnnotations() != null)
+            result.addAll(simpleTypeDefinition.getAnnotations());
+        
+        result.add(simpleTypeDefinition);
+        
+        return result;
+    }
 
     public static List<String> getConcepts(XSDSchema schema) {
         EList xsdElementDeclarations = schema.getElementDeclarations();
