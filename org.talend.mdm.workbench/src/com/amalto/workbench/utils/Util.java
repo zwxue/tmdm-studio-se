@@ -2722,8 +2722,10 @@ public class Util {
         List<Object> result = new ArrayList<Object>();
         
         // Annotations
-        if (simpleTypeDefinition.getAnnotations() != null)
-            result.addAll(simpleTypeDefinition.getAnnotations());
+        if(!isBuildInType(simpleTypeDefinition)) {
+            if (simpleTypeDefinition.getAnnotations() != null)
+                result.addAll(simpleTypeDefinition.getAnnotations());
+        }
         
         result.add(simpleTypeDefinition);
         
