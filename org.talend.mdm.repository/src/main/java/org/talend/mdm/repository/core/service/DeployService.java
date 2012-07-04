@@ -341,7 +341,7 @@ public class DeployService {
         }
     }
 
-    private void pushRestoreCommand(CommandManager manager, ICommand command, MDMServerDef serverDef) {
+    public void pushRestoreCommand(CommandManager manager, ICommand command, MDMServerDef serverDef) {
         // updateserver
         if (command.getCommandType() != ICommand.CMD_DELETE) {
             Item item = command.getViewObject().getProperty().getItem();

@@ -38,14 +38,14 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
         IInteractiveHandler handler = InteractiveService.findHandler(type);
         if (handler != null) {
             String typeLabel = handler.getLabel();
-            monitor.subTask(Messages.Deploy_text + typeLabel + "...");
+            monitor.subTask(Messages.bind(Messages.Deploy_text, typeLabel));
             try {
                 if (handler.deploy(this)) {
                     if (getCommandType() == CMD_MODIFY)
-                        return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\""
-                                + " " + Messages.Deploy_successfully_text);
-                    return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " "
-                            + Messages.Create_successfully_text);
+                        return DeployStatus.getOKStatus(this,
+                                Messages.bind(Messages.Deploy_successfully_text, typeLabel, objectName));
+                    return DeployStatus
+                            .getOKStatus(this, Messages.bind(Messages.Create_successfully_text, typeLabel, objectName));
                 }
                 else
                     return DeployStatus.getErrorStatus(this, Messages.bind(Messages.Deploy_fail_text, typeLabel, objectName));
@@ -60,7 +60,7 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
                         .getMessage()), e);
             }
         } else {
-            return DeployStatus.getErrorStatus(this, Messages.Deploy_notSupport_text + " \"" + objectName + "\"");
+            return DeployStatus.getErrorStatus(this, Messages.bind(Messages.Deploy_notSupport_text, objectName));
         }
 
     }
