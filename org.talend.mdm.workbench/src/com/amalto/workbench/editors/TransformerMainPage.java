@@ -87,6 +87,7 @@ import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.dialogs.VariableDefinitionDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
@@ -933,6 +934,31 @@ public class TransformerMainPage extends AMainPageV2 {
         windowTarget.dispose();
     }
 
+    @Override
+    public boolean beforeDoSave() {
+        String[] splits = getTitle().split(" ");
+        
+        if(splits[1].startsWith("beforeSaving_")) {//$NON-NLS-1$
+            boolean has = false;
+            
+            WSTransformerProcessStep processStep = stepWidget.getProcessStep();
+            WSTransformerVariablesMapping[] outputMappings = processStep.getOutputMappings();
+            for (WSTransformerVariablesMapping map : outputMappings) {
+                if ("output_report".equals(map.getPipelineVariable())) {//$NON-NLS-1$
+                    has = true;
+                    break;
+                }
+            }
+            
+            if (!has) {
+                MessageDialog.openWarning(getSite().getShell(), Messages.getString("TransformerMainPage_warning"),
+                        Messages.getString("TransformerMainPage_message", splits[1]));
+            }
+        }
+
+        return super.beforeDoSave();
+    }
+    
     @Override
     public void doSave(IProgressMonitor monitor) {
         super.doSave(monitor);
