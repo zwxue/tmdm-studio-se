@@ -936,9 +936,9 @@ public class TransformerMainPage extends AMainPageV2 {
 
     @Override
     public boolean beforeDoSave() {
-        String[] splits = getTitle().split(" ");
+        String processName = getXObject().getName();
         
-        if(splits[1].startsWith("beforeSaving_")) {//$NON-NLS-1$
+        if(processName.startsWith("beforeSaving_")) {//$NON-NLS-1$
             boolean has = false;
             
             WSTransformerProcessStep processStep = stepWidget.getProcessStep();
@@ -952,7 +952,7 @@ public class TransformerMainPage extends AMainPageV2 {
             
             if (!has) {
                 MessageDialog.openWarning(getSite().getShell(), Messages.getString("TransformerMainPage_warning"),
-                        Messages.getString("TransformerMainPage_message", splits[1]));
+                        Messages.getString("TransformerMainPage_message", processName));
             }
         }
 
