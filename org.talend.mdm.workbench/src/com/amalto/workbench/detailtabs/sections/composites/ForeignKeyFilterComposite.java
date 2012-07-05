@@ -14,12 +14,15 @@ package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,7 +43,8 @@ import com.amalto.workbench.widgets.celleditor.XPathCellEditor;
 import com.amalto.workbench.widgets.composites.ComplexAnnotaionInfoComposite;
 
 public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<ForeignKeyFilterAnnoInfoDefUnit> {
-
+    private final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
+    
     private Text txtCustomFilter;
 
     private IAllDataModelHolder dataModelHolder;
@@ -75,6 +79,21 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         GridData gdTxtCustomFilter = new GridData(SWT.FILL, SWT.FILL, true, true);
         gdTxtCustomFilter.heightHint = 35;
         txtCustomFilter.setLayoutData(gdTxtCustomFilter);
+        txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
+    }
+    
+    private ModifyListener modifyListener;
+    private ModifyListener getCustomFilterModifyListener() {
+        if(modifyListener == null) {
+            modifyListener = new ModifyListener() {
+                public void modifyText(ModifyEvent e) {
+                    if (section != null)
+                        section.autoCommit();
+                }
+            };
+        }
+        
+        return modifyListener;
     }
 
     @Override
@@ -167,8 +186,15 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     public void setFilter(String filterExpression) {
     	String filter=ForeignKeyFilterAnnoInfo.getCustomFilterInfo(filterExpression);
-    	if(section!=null && !txtCustomFilter.getText().equals(filter))section.autoCommit();
+    	if (filter.startsWith(CUSTOM_FILTERS_PREFIX)) {
+            filter = StringEscapeUtils.unescapeXml(filter).substring(6);
+        }
+        
+        txtCustomFilter.removeModifyListener(getCustomFilterModifyListener());
+        
         txtCustomFilter.setText(filter);
+        
+        txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
         setInfos(ForeignKeyFilterAnnoInfo.getFKFilterCfgInfos(filterExpression));
         
     }
