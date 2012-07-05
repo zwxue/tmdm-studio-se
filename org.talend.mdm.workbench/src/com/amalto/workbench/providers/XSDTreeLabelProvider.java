@@ -14,6 +14,7 @@ package com.amalto.workbench.providers;
 
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.EList;
@@ -239,7 +240,11 @@ public class XSDTreeLabelProvider extends LabelProvider {
                         }
 
                         if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
-                            return "Foreign Key Filter:  " + e.getChildNodes().item(0).getNodeValue();
+                            String nodeValue = e.getChildNodes().item(0).getNodeValue();
+                            if(nodeValue.startsWith("$CFFP:")) {//$NON-NLS-1$
+                                nodeValue = StringEscapeUtils.unescapeXml(nodeValue).substring(6);
+                            }
+                            return "Foreign Key Filter:  " + nodeValue;
                         } else {
                             return source + ": " + Util.nodeToString((Element) obj);//$NON-NLS-1$
                         }
