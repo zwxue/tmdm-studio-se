@@ -1077,6 +1077,13 @@
 		<part name="wsRoutingOrderArray" element="tns:WSRoutingOrderV2Array"/>
 	</message>
 	
+	<message name="getRoutingOrderV2ByCriteriaWithPagingRequest">
+        <part name="wsGetRoutingOrderV2ByCriteriaWithPaging" element="tns:WSGetRoutingOrderV2ByCriteriaWithPaging"/>
+    </message>
+    <message name="getRoutingOrderV2ByCriteriaWithPagingResponse">
+        <part name="wsRoutingOrderArray" element="tns:WSRoutingOrderV2Array"/>
+    </message>
+	
 
 	<!-- ************************ Routing Engine V2  *************************** -->
 	
@@ -2117,6 +2124,10 @@
 			<input message="tns:getRoutingOrderV2sByCriteriaRequest"/>
 			<output message="tns:getRoutingOrderV2sByCriteriaResponse"/>
 		</operation>		
+		<operation name="getRoutingOrderV2ByCriteriaWithPaging">
+            <input message="tns:getRoutingOrderV2ByCriteriaWithPagingRequest"/>
+            <output message="tns:getRoutingOrderV2ByCriteriaWithPagingResponse"/>
+        </operation>
 		
 		<!-- *************** R O U T I N G    E N G I N E    V 2   ********************** -->
 		
@@ -3188,6 +3199,11 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
+		<operation name="getRoutingOrderV2ByCriteriaWithPaging">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
 		
 		
 		<!-- ********************* Routing Engine V2  ************************ -->
