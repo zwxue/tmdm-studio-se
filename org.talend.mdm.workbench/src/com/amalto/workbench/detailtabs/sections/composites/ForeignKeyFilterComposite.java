@@ -35,6 +35,8 @@ import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfoDefUnit;
 import com.amalto.workbench.detailtabs.sections.providers.ForeignKeyFilterCellModifier;
+import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.ColumnTextExtractor;
 import com.amalto.workbench.providers.CommonTableLabelProvider;
@@ -192,7 +194,8 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         
         txtCustomFilter.removeModifyListener(getCustomFilterModifyListener());
         
-        txtCustomFilter.setText(filter);
+        if(!filter.equals(txtCustomFilter.getText()))
+            txtCustomFilter.setText(filter);
         
         txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
         setInfos(ForeignKeyFilterAnnoInfo.getFKFilterCfgInfos(filterExpression));
