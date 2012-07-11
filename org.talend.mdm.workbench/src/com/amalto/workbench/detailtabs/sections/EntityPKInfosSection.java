@@ -21,6 +21,7 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.PrimaryKeyInfosAnnoInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.XSDComponentChildElementsHolder;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.widgets.composites.SelectElementsOfEntityComposite;
@@ -58,12 +59,15 @@ public class EntityPKInfosSection extends XSDComponentSection {
 
     @Override
     protected String getSectionTitle() {
-        return "Primary Key Infos";
+        return Messages.getString("EntityPKInfosSection_pkInfoTitle"); //$NON-NLS-1$
     }
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, "XPaths", null,this);
+        compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, "XPaths", null, this); //$NON-NLS-1$
+        String tooltips = Messages.getString("EntityPKInfosSection_pkInfoTooltips");//$NON-NLS-1$
+        compElements.getInfosTreeViewer().getTree().setToolTipText(tooltips);
+        compElements.getInfosComboViewer().getCombo().setToolTipText(tooltips);
     }
 
 }

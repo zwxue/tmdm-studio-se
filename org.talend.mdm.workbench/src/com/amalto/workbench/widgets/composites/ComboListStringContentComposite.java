@@ -28,6 +28,10 @@ public abstract class ComboListStringContentComposite extends ListStringContents
 
     protected ComboViewer comboInfos;
 
+    public ComboViewer getInfosComboViewer() {
+        return this.comboInfos;
+    }
+
     public ComboListStringContentComposite(Composite parent, int style, Object[] initParas,BasePropertySection section) {
         super(parent, style, initParas,section);
     }        
@@ -75,6 +79,7 @@ public abstract class ComboListStringContentComposite extends ListStringContents
     protected void initCandidateInfoUIArea() {
         comboInfos.setSelection(null);
     }
+
 
     protected abstract String[] getAllInfosInCombo();
 }

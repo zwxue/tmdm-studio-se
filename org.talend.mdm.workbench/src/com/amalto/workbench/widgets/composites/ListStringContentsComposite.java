@@ -38,6 +38,10 @@ public abstract class ListStringContentsComposite extends Composite {
 
     protected TreeViewer tvInfos;
 
+    public TreeViewer getInfosTreeViewer() {
+        return this.tvInfos;
+    }
+
     protected Button btnAdd;
 
     protected Button btnUp;
