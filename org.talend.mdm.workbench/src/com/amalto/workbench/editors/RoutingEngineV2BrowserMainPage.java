@@ -83,22 +83,24 @@ import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteRoutingOrderV2;
 import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously;
 import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously;
-import com.amalto.workbench.webservices.WSGetRoutingOrderV2SByCriteria;
+import com.amalto.workbench.webservices.WSGetRoutingOrderV2ByCriteriaWithPaging;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSRoutingEngineV2Action;
 import com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode;
 import com.amalto.workbench.webservices.WSRoutingEngineV2Status;
 import com.amalto.workbench.webservices.WSRoutingOrderV2;
 import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
-import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria;
+import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteriaWithPaging;
 import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
+import com.amalto.workbench.widgets.IPagingListener;
+import com.amalto.workbench.widgets.PageingToolBar;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjectModelListener {
+public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjectModelListener,IPagingListener {
 
     private static Log log = LogFactory.getLog(RoutingEngineV2BrowserMainPage.class);
 
@@ -125,6 +127,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     protected ListViewer wcListViewer;
 
     protected Button suspendButton;
+    
+    private PageingToolBar pageToolBar;
 
     protected boolean[] ascending = { true, false, false, false };
 
@@ -213,8 +217,6 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label routingOrdersLabel = toolkit.createLabel(firstLineComposite, "Routing Orders ", SWT.NULL);
             routingOrdersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 9, 1));
 
-            final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
-
             // from
             Label fromLabel = toolkit.createLabel(firstLineComposite, "From", SWT.NULL);
             fromLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -238,7 +240,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
-                        RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
+                        doSearch();
                     }
                 }// keyReleased
             }// keyListener
@@ -256,7 +258,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             bSearch.addListener(SWT.Selection, new Listener() {
 
                 public void handleEvent(Event event) {
-                    RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
+                    pageToolBar.reset();
+                    doSearch();
                 };
             });
 
@@ -279,7 +282,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
-                        RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
+                        doSearch();
                     }
                 }// keyReleased
             }// keyListener
@@ -297,7 +300,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
-                        RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
+                        doSearch();
                     }
                 }// keyReleased
             }// keyListener
@@ -316,7 +319,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
-                        RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
+                        doSearch();
                     }
                 }// keyReleased
             }// keyListener
@@ -351,11 +354,17 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
-                        RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
+                        doSearch();
                     }
                 }// keyReleased
             }// keyListener
                     );
+
+            //pageToolBar
+            pageToolBar = new PageingToolBar(composite);
+            pageToolBar.getComposite().setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 9, 1));
+            pageToolBar.getComposite().setVisible(false);
+            pageToolBar.setPageingListener(this);
 
             final Table table = createTable(composite);
 
@@ -581,7 +590,42 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         return;
     }
+    
+    public void doSearch() {
+        resultsViewer.setInput(getResults());
+        pageToolBar.getComposite().setVisible(true);
+        pageToolBar.getComposite().layout(true);
+        pageToolBar.getComposite().getParent().layout(true);
+        
+        doSearchSort();//
+    }
 
+    /**
+     * this method will be call when search action is activated or page is changed every time
+     */
+    private void doSearchSort() {
+        Table table = resultsViewer.getTable();
+        TableColumn sortColumn = table.getSortColumn();
+        if (sortColumn != null) {
+            List<TableColumn> columns = Arrays.asList(table.getColumns());
+            int index = columns.indexOf(sortColumn);
+            sort(index, sortColumn);
+        }
+    }
+    
+    private void sort(int index, TableColumn column) 
+    {
+        resultsViewer.setSorter(new TableSorter(index, ascending[index]));
+        Table table = resultsViewer.getTable();
+        if (ascending[index]) {
+            table.setSortColumn(column);
+            table.setSortDirection(SWT.DOWN);
+        } else {
+            table.setSortColumn(column);
+            table.setSortDirection(SWT.UP);
+        }
+    }
+    
     protected WSRoutingOrderV2[] getResults() {
 
         Cursor waitCursor = null;
@@ -659,22 +703,41 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             if ("".equals(serviceJNDI))
                 serviceJNDI = null;
 
-            WSRoutingOrderV2[] results = port.getRoutingOrderV2SByCriteria(
-                    new WSGetRoutingOrderV2SByCriteria(new WSRoutingOrderV2SearchCriteria(status, "*".equals(anyFieldText//$NON-NLS-1$
-                            .getText()) || "".equals(anyFieldText.getText()) ? null : anyFieldText.getText(), null,//$NON-NLS-1$
-                            timeCreatedMin, timeCreatedMax, timeScheduledMin, timeScheduledMax, timeLastRunStartedMin,
-                            timeLastRunStartedMax, timeLastRunCompletedMin, timeLastRunCompletedMax, "*".equals(documentTypeText//$NON-NLS-1$
-                                    .getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), "*"//$NON-NLS-1$//$NON-NLS-2$
-                                    .equals(idText.getText())
-                                    || "".equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$
-                            serviceJNDI, null, null))).getWsRoutingOrder();
-
-            if (results == null) {
+            int start = pageToolBar.getStart();
+            int limit = pageToolBar.getLimit();
+            WSRoutingOrderV2[] wsRoutingOrder = port
+                    .getRoutingOrderV2ByCriteriaWithPaging(new WSGetRoutingOrderV2ByCriteriaWithPaging(
+                            new WSRoutingOrderV2SearchCriteriaWithPaging(
+                                    status,
+                                    "*".equals(anyFieldText.getText()) || "".equals(anyFieldText.getText()) ? null : anyFieldText.getText(), null,//$NON-NLS-1$//$NON-NLS-2$
+                                    timeCreatedMin,
+                                    timeCreatedMax,
+                                    timeScheduledMin,
+                                    timeScheduledMax,
+                                    timeLastRunStartedMin,
+                                    timeLastRunStartedMax,
+                                    timeLastRunCompletedMin,
+                                    timeLastRunCompletedMax,
+                                    "*".equals(documentTypeText.getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$
+                                    "*".equals(idText.getText()) || "".equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$//$NON-NLS-2$
+                                    serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
+            
+            
+            if (wsRoutingOrder.length == 1) {
                 MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
                 return new WSRoutingOrderV2[0];
             }
+            
 
-            return results;
+            int totalSize = Integer.parseInt(wsRoutingOrder[0].getName());
+           
+            pageToolBar.setTotalsize(totalSize);
+            pageToolBar.refreshUI();
+            
+            WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.length-1];
+            System.arraycopy(wsRoutingOrder, 1, resultOrderV2s, 0, resultOrderV2s.length);
+            
+            return resultOrderV2s;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
