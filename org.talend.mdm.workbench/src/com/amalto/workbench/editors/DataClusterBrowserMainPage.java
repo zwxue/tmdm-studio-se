@@ -825,7 +825,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 final WSItem wsItem = port.getItem(new WSGetItem(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), li
                         .getConcept().trim(), li.getIds())));
-                String xml = wsItem.getContent();
+                String xml = Util.formatXsdSource(wsItem.getContent());
 
                 WSDataModelPK[] dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
                 ArrayList<String> dataModels = new ArrayList<String>();
