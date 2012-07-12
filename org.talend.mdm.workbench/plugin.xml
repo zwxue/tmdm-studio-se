@@ -262,7 +262,7 @@
                       class="com.amalto.workbench.detailtabs.sections.EntityPKInfosSection"
                       id="org.talend.mdm.workbench.properties.entity.section.extra.pkinfos"
                       enablesFor="1"
-                      tab="org.talend.mdm.workbench.properties.entity.tab.extra">
+                      tab="org.talend.mdm.workbench.properties.entity.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
            </input>
