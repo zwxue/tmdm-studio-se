@@ -22,4 +22,5 @@ Eclipse-RegisterBuddy: org.mockito
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.talend.mdm.workbench.serverexplorer.core,
  org.talend.mdm.workbench.serverexplorer.ui.actions,
- org.talend.mdm.workbench.serverexplorer.ui.dialogs
+ org.talend.mdm.workbench.serverexplorer.ui.dialogs,
+ org.talend.mdm.workbench.serverexplorer.ui.views

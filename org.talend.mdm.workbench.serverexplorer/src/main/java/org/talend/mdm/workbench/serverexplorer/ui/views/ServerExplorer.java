@@ -217,6 +217,9 @@ public class ServerExplorer extends ViewPart {
 
     @Override
     public void setFocus() {
+        if(treeViewer != null)
+            treeViewer.getTree().setFocus();
+        
         refreshServerDefs();
     }
 

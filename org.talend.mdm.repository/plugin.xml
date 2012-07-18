@@ -592,6 +592,15 @@
             serviceId="IEventMgrService">
       </Service>
    </extension>
+   <extension
+        point="org.eclipse.ui.editors">
+     <editor
+           class="org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor"
+           default="false"
+           id="org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor"
+           name="starting">
+     </editor>
+  </extension>
       
    
 </plugin>

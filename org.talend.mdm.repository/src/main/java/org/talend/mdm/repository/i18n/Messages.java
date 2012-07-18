@@ -12,11 +12,23 @@
 // ============================================================================
 package org.talend.mdm.repository.i18n;
 
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 import org.eclipse.osgi.util.NLS;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
 
 public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
+    
+    private static final String PLUGIN_ID = RepositoryPlugin.PLUGIN_ID;
+    
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
+    
+    public static final String KEY_NOT_FOUND_PREFIX = "!!!"; //$NON-NLS-1$
+
+    public static final String KEY_NOT_FOUND_SUFFIX = "!!!"; //$NON-NLS-1$
 
     public static String AbstractDataClusterAction_ConnectFailed;
 
@@ -507,7 +519,23 @@ public class Messages extends NLS {
     public static String bind(String message, String... bindings) {
         return NLS.bind(message, bindings);
     }
+    
+    public static String getString(String key) {
+        return getString(key, PLUGIN_ID, resourceBundle);
+    }
 
+    private static String getString(String key, String pluginId, ResourceBundle resourceBundle) {
+        if (resourceBundle == null) {
+            return KEY_NOT_FOUND_PREFIX + key + KEY_NOT_FOUND_SUFFIX;
+        }
+        try {
+            return resourceBundle.getString(key);
+
+        } catch (MissingResourceException e) {
+            return KEY_NOT_FOUND_PREFIX + key + KEY_NOT_FOUND_SUFFIX;
+        }
+    }
+    
     // //////////////////////////////////////////////////////////////////////////
     //
     // Class initialization

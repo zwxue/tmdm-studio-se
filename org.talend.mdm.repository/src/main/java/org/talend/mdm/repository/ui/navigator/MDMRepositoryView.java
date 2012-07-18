@@ -60,11 +60,13 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.core.ui.branding.IBrandingService;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
@@ -76,9 +78,12 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.ISvnHistory;
+import org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor;
+import org.talend.mdm.repository.ui.starting.editor.MDMStartingEditorInput;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.views.MDMPerspective;
 import com.amalto.workbench.views.ServerView;
 
 /**
@@ -101,6 +106,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         contributeToActionBars();
         activateContext();
 
+//        activateWelcomeEditor();
         // new added
         regisitPerspectiveBarSelectListener();
     }
@@ -112,6 +118,32 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     private void activateContext() {
         IContextService contextService = (IContextService) getSite().getService(IContextService.class);
         contextService.activateContext(VIEW_CONTEXT_ID);
+    }
+
+    private void activateWelcomeEditor() {
+        if(!isWorkbenchCreated())
+            return;
+        
+        try {
+            org.talend.core.ui.branding.IBrandingService service = null;
+            service = (IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class);
+            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            activePage.openEditor(new MDMStartingEditorInput(service), MDMStartingEditor.ID);
+        } catch (Exception e) {
+            e.printStackTrace();
+//            log.error(e.getMessage(), e);
+        }
+    }
+    
+    private boolean isWorkbenchCreated() {
+        boolean isHere = false;
+        try {
+            isHere = PlatformUI.getWorkbench() != null;
+        } catch (Exception e) {
+            isHere = false;
+        }
+        
+        return isHere;        
     }
 
     @Override
@@ -131,7 +163,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         manager.add(new Separator());
         manager.add(refreshViewAction);
         manager.add(new Separator());
-        DeployAllAction deployAll = new DeployAllAction(true);
+        deployAll = new DeployAllAction(true);
         deployAll.initCommonViewer(((CommonNavigator) this).getCommonViewer());
         manager.add(deployAll);
         manager.add(new Separator());
@@ -150,6 +182,10 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     }
 
+    public DeployAllAction getDeployAllAction() {
+        return deployAll;
+    }
+    
     /**
      * DOC hbhong Comment method "initInput".
      */
@@ -329,7 +365,20 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             }
 
         });
+        
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
+            @Override
+            public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+                if(first) {
+                    first = false;
+                    if(MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
+                        activateWelcomeEditor();
+                    }
+                }
+            }
+        });
     }
+    private static boolean first = true;
 
     IPartListener editorListener = new IPartListener() {
 
@@ -398,6 +447,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         }
 
     };
+
+    private DeployAllAction deployAll;
 
     private void registerEditorListener() {
 

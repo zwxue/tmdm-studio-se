@@ -55,15 +55,21 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
     protected abstract String getDialogTitle();
 
     protected void doRun() {
-        parentItem = null;
-        selectObj = getSelectedObject().get(0);
-        if (selectObj instanceof IRepositoryViewObject) {
-            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
-            if (pItem instanceof ContainerItem) {
-                parentItem = (ContainerItem) pItem;
+        getParentItem();
+
+        String key = getInputName();
+        if (key != null) {
+            Item item = createServerObject(key);
+            commonViewer.refresh(selectObj);
+            commonViewer.expandToLevel(selectObj, 1);
+            if (runOpenActionAfterCreation(item)) {
+                openEditor(item);
             }
         }
+        
+    }
 
+    private String getInputName() {
         InputDialog dlg = new InputDialog(getShell(), getDialogTitle(), Messages.Common_inputName, null, new IInputValidator() {
 
             public String isValid(String newText) {
@@ -80,14 +86,19 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
         });
         dlg.setBlockOnOpen(true);
         if (dlg.open() == Window.CANCEL)
-            return;
+            return null;
+        
         String key = dlg.getValue();
-        if (key != null) {
-            Item item = createServerObject(key);
-            commonViewer.refresh(selectObj);
-            commonViewer.expandToLevel(selectObj, 1);
-            if (runOpenActionAfterCreation(item)) {
-                openEditor(item);
+        return key;
+    }
+
+    protected void getParentItem() {
+        parentItem = null;
+        selectObj = getSelectedObject().get(0);
+        if (selectObj instanceof IRepositoryViewObject) {
+            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
+            if (pItem instanceof ContainerItem) {
+                parentItem = (ContainerItem) pItem;
             }
         }
     }

@@ -25,6 +25,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -79,6 +80,20 @@ public class NewDataModelAction extends AbstractSimpleAddAction {
             RepositoryResourceUtil.createItem(item, key);
         }
         return item;
+    }
+    
+    private boolean noSelection = false; 
+    public void setParentItem(ContainerItem parentItem) {
+        this.parentItem = parentItem;
+        noSelection = true;
+    }
+    
+    @Override
+    protected void getParentItem() {
+        if(noSelection)
+            return;
+        
+        super.getParentItem();
     }
 
 }
