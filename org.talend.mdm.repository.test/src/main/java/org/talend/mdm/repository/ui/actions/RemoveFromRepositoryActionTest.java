@@ -18,10 +18,13 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.support.membermodification.MemberMatcher.method;
+import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -32,12 +35,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
+import org.talend.commons.i18n.internal.DefaultMessagesImpl;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.FolderItem;
@@ -70,23 +74,29 @@ import com.amalto.workbench.image.ImageCache;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ RemoveFromRepositoryAction.class, ImageDescriptor.class, JFaceResources.class, ImageCache.class,
-        ItemState.class, CoreRuntimePlugin.class, ProjectManager.class, RepositoryNodeConfigurationManager.class,
-        ProxyRepositoryFactory.class, MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
-        ERepositoryObjectType.class })
+// @RunWith(PowerMockRunner.class)
+@PrepareForTest({ RemoveFromRepositoryAction.class, ImageDescriptor.class, JFaceResources.class, DefaultMessagesImpl.class,
+        ImageCache.class, ItemState.class, CoreRuntimePlugin.class, ProjectManager.class,
+        RepositoryNodeConfigurationManager.class, IProxyRepositoryFactory.class, ProxyRepositoryFactory.class,
+        MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class })
 public class RemoveFromRepositoryActionTest {
 
-    private IProxyRepositoryFactory repositoryFactory;
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
+
+    private ProxyRepositoryFactory repositoryFactory;
 
     private Project projectM;
 
     @Before
     public void setUp() throws Exception {
-
+        ResourceBundle rb = mock(ResourceBundle.class);
+        stub(method(ResourceBundle.class, "getBundle", String.class)).toReturn(rb); //$NON-NLS-1$
         PowerMockito.mockStatic(JFaceResources.class);
         ImageRegistry registry = mock(ImageRegistry.class);
         when(JFaceResources.getImageRegistry()).thenReturn(registry);
+        PowerMockito.mockStatic(DefaultMessagesImpl.class);
+        when(DefaultMessagesImpl.getString(anyString())).thenReturn("anyString()");
 
         PowerMockito.mockStatic(ImageCache.class);
         ImageDescriptor imgDesc = mock(ImageDescriptor.class);
@@ -96,11 +106,8 @@ public class RemoveFromRepositoryActionTest {
         PowerMockito.mockStatic(CoreRuntimePlugin.class);
         CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
         when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
-        repositoryFactory = mock(IProxyRepositoryFactory.class);
-        when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
 
         RepositoryContext contextMock = mock(RepositoryContext.class);
-        when(repositoryFactory.getRepositoryContext()).thenReturn(contextMock);
 
         PowerMockito.mockStatic(ProjectManager.class);
         ProjectManager pmMock = mock(ProjectManager.class);
@@ -112,14 +119,17 @@ public class RemoveFromRepositoryActionTest {
         when(ProjectManager.getInstance()).thenReturn(pmMock);
         when(contextMock.getUser()).thenReturn(userMock);
 
+        repositoryFactory = mock(ProxyRepositoryFactory.class);
+
         RecycleBinNodeConfiguration recycleBinNodeConfiguration = mock(RecycleBinNodeConfiguration.class);
         PowerMockito.whenNew(RecycleBinNodeConfiguration.class).withNoArguments().thenReturn(recycleBinNodeConfiguration);
 
-        PowerMockito.mockStatic(ProxyRepositoryFactory.class);
-        ProxyRepositoryFactory proxyRepositoryFactory = mock(ProxyRepositoryFactory.class);
-        when(ProxyRepositoryFactory.getInstance()).thenReturn(proxyRepositoryFactory);
+        stub(method(ProxyRepositoryFactory.class, "getInstance")).toReturn(repositoryFactory);
+
+        when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
+
         IRepositoryFactory repositoryFactoryMock = mock(IRepositoryFactory.class);
-        when(proxyRepositoryFactory.getRepositoryFactoryFromProvider()).thenReturn(repositoryFactoryMock);
+        when(repositoryFactory.getRepositoryFactoryFromProvider()).thenReturn(repositoryFactoryMock);
         XmiResourceManager xmiResourceManager = mock(XmiResourceManager.class);
         when(repositoryFactoryMock.getResourceManager()).thenReturn(xmiResourceManager);
 
@@ -131,8 +141,8 @@ public class RemoveFromRepositoryActionTest {
         when(rncMock.getResourceProvider()).thenReturn(resourceProviderM);
 
         when(resourceProviderM.needSaveReferenceFile()).thenReturn(true);
+        when(repositoryFactory.getRepositoryContext()).thenReturn(contextMock);
         when(repositoryFactory.isEditableAndLockIfPossible((Item) anyObject())).thenReturn(true);
-
     }
 
     @Test

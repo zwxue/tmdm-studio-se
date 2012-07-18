@@ -8,10 +8,10 @@ import static org.mockito.Mockito.when;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -25,10 +25,12 @@ import org.talend.repository.ProjectManager;
 
 import com.amalto.workbench.image.ImageCache;
 
-@RunWith(PowerMockRunner.class)
 @PrepareForTest({ ImageDescriptor.class, JFaceResources.class, ImageCache.class, ItemState.class, CoreRuntimePlugin.class,
         ProjectManager.class, RepositoryNodeConfigurationManager.class, ProxyRepositoryFactory.class })
 public class NewMenuActionTest extends AbstractSimpleAddActionTest {
+
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Test
     public void testCreateServerObject() throws Exception {
