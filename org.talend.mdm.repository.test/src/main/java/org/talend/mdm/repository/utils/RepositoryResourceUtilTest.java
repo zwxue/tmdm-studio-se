@@ -8,11 +8,14 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.support.membermodification.MemberMatcher.method;
+import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,30 +24,28 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang.math.RandomUtils;
-import org.apache.regexp.recompile;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.ui.IEditorReference;
-import org.eclipse.xsd.XSDIdentityConstraintDefinition;
-import org.eclipse.xsd.XSDSchema;
-import org.eclipse.xsd.XSDXPathDefinition;
-import org.junit.Ignore;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
-import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.i18n.internal.DefaultMessagesImpl;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
 import org.talend.core.context.RepositoryContext;
@@ -69,7 +70,6 @@ import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.ERepositoryStatus;
@@ -78,16 +78,39 @@ import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
 
-import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSConceptKey;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
+import com.amalto.workbench.image.ImageCache;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ RepositoryResourceUtil.class, ProjectManager.class, CoreRuntimePlugin.class, InteractiveService.class,
-        ResourceModelUtils.class, ERepositoryObjectType.class, FolderType.class, RepositoryNodeConfigurationManager.class,
-        ResourceUtils.class, ContainerCacheService.class, RepositoryQueryService.class, Util.class})
+// @RunWith(PowerMockRunner.class)
+@PrepareForTest({ RepositoryResourceUtil.class, ImageDescriptor.class, JFaceResources.class, DefaultMessagesImpl.class,
+        ImageCache.class, ItemState.class, ProjectManager.class, CoreRuntimePlugin.class, InteractiveService.class,
+        ResourceModelUtils.class, FolderType.class, RepositoryNodeConfigurationManager.class, ResourceUtils.class,
+        ContainerCacheService.class, RepositoryQueryService.class })
 public class RepositoryResourceUtilTest {
+
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
+
+    @Before
+    public void setUp() throws Exception {
+        ResourceBundle rb = mock(ResourceBundle.class);
+        stub(method(ResourceBundle.class, "getBundle", String.class)).toReturn(rb); //$NON-NLS-1$
+        PowerMockito.mockStatic(JFaceResources.class);
+        ImageRegistry registry = mock(ImageRegistry.class);
+        when(JFaceResources.getImageRegistry()).thenReturn(registry);
+        PowerMockito.mockStatic(DefaultMessagesImpl.class);
+        when(DefaultMessagesImpl.getString(anyString())).thenReturn("anyString()");
+
+        PowerMockito.mockStatic(ImageCache.class);
+        ImageDescriptor imgDesc = mock(ImageDescriptor.class);
+        when(ImageCache.getImage(anyString())).thenReturn(imgDesc);
+        //
+
+        PowerMockito.mockStatic(CoreRuntimePlugin.class);
+        CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
+        when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
+
+
+    }
 
     @Test
     public void testIsLockedViewObject() {
@@ -137,9 +160,10 @@ public class RepositoryResourceUtilTest {
         assertTrue(islockedViewObject);
 
         when(repositoryFactory.getStatus(mockViewObject)).thenReturn(ERepositoryStatus.LOCK_BY_USER);
-        
+
         PowerMockito.mockStatic(RepositoryResourceUtil.class);
-        PowerMockito.doCallRealMethod().when(RepositoryResourceUtil.class, "isLockedAndEdited",(IRepositoryViewObject) Mockito.anyObject());
+        PowerMockito.doCallRealMethod().when(RepositoryResourceUtil.class, "isLockedAndEdited",
+                (IRepositoryViewObject) Mockito.anyObject());
         when(RepositoryResourceUtil.isOpenedInEditor(mockViewObject)).thenReturn(mock(IEditorReference.class));
         islockedViewObject = RepositoryResourceUtil.isLockedAndEdited(mockViewObject);
         assertTrue(islockedViewObject);
@@ -191,15 +215,15 @@ public class RepositoryResourceUtilTest {
 
     @Test
     public void testSaveItem() throws Exception {
-        //following two lines code is handling errors when mockStatic class "RepositoryNodeConfigurationManager"
+        // following two lines code is handling errors when mockStatic class "RepositoryNodeConfigurationManager"
         RecycleBinNodeConfiguration mockRBNConf = mock(RecycleBinNodeConfiguration.class);
         PowerMockito.whenNew(RecycleBinNodeConfiguration.class).withNoArguments().thenReturn(mockRBNConf);
-        
+
         PowerMockito.mockStatic(RepositoryNodeConfigurationManager.class);
         Item mockItem = mock(Item.class);
         IRepositoryNodeConfiguration mockConf = mock(IRepositoryNodeConfiguration.class);
         when(RepositoryNodeConfigurationManager.getConfiguration(mockItem)).thenReturn(mockConf);
-        
+
         IRepositoryNodeResourceProvider mockResourceProvider = mock(IRepositoryNodeResourceProvider.class);
         when(mockConf.getResourceProvider()).thenReturn(mockResourceProvider);
         when(mockResourceProvider.needSaveReferenceFile()).thenReturn(true);
@@ -246,11 +270,10 @@ public class RepositoryResourceUtilTest {
         User user = mock(User.class);
         when(mockContext.getUser()).thenReturn(user);
 
-      //following two lines code is handling errors when mockStatic class "RepositoryNodeConfigurationManager"
+        // following two lines code is handling errors when mockStatic class "RepositoryNodeConfigurationManager"
         RecycleBinNodeConfiguration mockRBNConf = mock(RecycleBinNodeConfiguration.class);
         PowerMockito.whenNew(RecycleBinNodeConfiguration.class).withNoArguments().thenReturn(mockRBNConf);
-        
-        
+
         PowerMockito.mockStatic(RepositoryNodeConfigurationManager.class);
         IRepositoryNodeConfiguration mockConfManager = mock(IRepositoryNodeConfiguration.class);
         when(RepositoryNodeConfigurationManager.getConfiguration(Mockito.any(Item.class))).thenReturn(mockConfManager);
@@ -329,14 +352,15 @@ public class RepositoryResourceUtilTest {
         when(ProjectManager.getInstance()).thenReturn(mockProjectManager);
         Project mockProject = mock(Project.class);
         when(ProjectManager.getInstance().getCurrentProject()).thenReturn(mockProject);
-        
+
         PowerMockito.mockStatic(ResourceModelUtils.class);
         when(ResourceModelUtils.getProject(mockProject)).thenReturn(mockIProject);
-        
+
         String invalidPath = "mm:\\ss";
         when(desFolder.exists()).thenReturn(true);
-        
-        IFile copyOfFile = RepositoryResourceUtil.copyOSFileTOProject(null, invalidPath, desFolder, version, overwrite, progressMonitor);
+
+        IFile copyOfFile = RepositoryResourceUtil.copyOSFileTOProject(null, invalidPath, desFolder, version, overwrite,
+                progressMonitor);
         PowerMockito.verifyStatic(Mockito.atLeastOnce());
         ProjectManager.getInstance();
         ResourceModelUtils.getProject(Mockito.any(Project.class));
@@ -344,7 +368,7 @@ public class RepositoryResourceUtilTest {
 
         // verify if the file that defined by second parameter does not exist, return null
         String validPath = "d:\\ss";
-        
+
         File file = new File(validPath);
         File spyFile = Mockito.spy(file);
         PowerMockito.whenNew(File.class).withArguments(validPath).thenReturn(spyFile);
@@ -355,15 +379,14 @@ public class RepositoryResourceUtilTest {
         IPath mockIPath = mock(IPath.class);
         when(mockIFile.getLocation()).thenReturn(mockIPath);
         when(mockIPath.toOSString()).thenReturn(validPath);
-        
+
         FileInputStream inputStream = mock(FileInputStream.class);
         PowerMockito.whenNew(FileInputStream.class).withArguments(spyFile).thenReturn(inputStream);
-        
-        
+
         IFile copiedFile = RepositoryResourceUtil.copyOSFileTOProject(mockIProject, validPath, desFolder, version, overwrite,
                 progressMonitor);
         assertNotNull(copiedFile);
-        
+
         verify(inputStream, Mockito.times(1)).close();
     }
 
@@ -377,11 +400,11 @@ public class RepositoryResourceUtilTest {
         when(ProjectManager.getInstance()).thenReturn(mockProjectManager);
         Project mockProject = mock(Project.class);
         when(ProjectManager.getInstance().getCurrentProject()).thenReturn(mockProject);
-        
+
         PowerMockito.mockStatic(ResourceModelUtils.class);
         IProject mockIProject = mock(IProject.class);
         when(ResourceModelUtils.getProject(mockProject)).thenReturn(mockIProject);
-        
+
         Item mockItem = mock(Item.class);
         ItemState mockState = mock(ItemState.class);
         when(mockItem.getState()).thenReturn(mockState);
@@ -390,15 +413,15 @@ public class RepositoryResourceUtilTest {
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         PowerMockito.mockStatic(ERepositoryObjectType.class);
         when(ERepositoryObjectType.getFolderName(mockType)).thenReturn("mockPath");
-        
+
         IFolder mockFolder = mock(IFolder.class);
         when(mockIProject.getFolder(Mockito.anyString())).thenReturn(mockFolder);
-        
+
         IFolder folder = RepositoryResourceUtil.getFolder(mockType, mockItem);
         assertEquals(mockFolder, folder);
-        
+
     }
-    
+
     @Test
     public void testGetTextFileContent() throws Exception {
         String encode = "UTF-8";
@@ -446,38 +469,36 @@ public class RepositoryResourceUtilTest {
         PowerMockito.mockStatic(ResourceModelUtils.class);
         when(ResourceModelUtils.getProject(Mockito.any(Project.class))).thenReturn(mockIProject);
 
-        String folder = "folderA";
-        PowerMockito.mockStatic(ERepositoryObjectType.class);
-        when(ERepositoryObjectType.getFolderName((ERepositoryObjectType)Mockito.any(ERepositoryObjectType.class))).thenReturn(folder);
-
         PowerMockito.mockStatic(ResourceUtils.class);
-        when(ResourceUtils.getFolder(mockIProject, folder, true)).thenReturn(mock(IFolder.class));
+        IFolder mockFolder = mock(IFolder.class);
+        when(ResourceUtils.getFolder(mockIProject, ERepositoryObjectType.PROCESS.getFolder(), true)).thenReturn(mockFolder);
 
-        RepositoryResourceUtil.getFolder(mock(ERepositoryObjectType.class));
+        IFolder folder = RepositoryResourceUtil.getFolder(ERepositoryObjectType.PROCESS);
+        assertEquals(mockFolder, folder);
     }
 
     @Test
     public void testIsSystemFolder() throws Exception {
         String folderName = "system";
-        FolderType[] folderTypes = {FolderType.FOLDER_LITERAL, FolderType.STABLE_SYSTEM_FOLDER_LITERAL};
-        
+        FolderType[] folderTypes = { FolderType.FOLDER_LITERAL, FolderType.STABLE_SYSTEM_FOLDER_LITERAL };
+
         ContainerItem mockContainerItem = mock(ContainerItem.class);
-        
+
         when(mockContainerItem.getType()).thenReturn(FolderType.SYSTEM_FOLDER_LITERAL);
         boolean result = Whitebox.invokeMethod(RepositoryResourceUtil.class, "isSystemFolder", mockContainerItem, folderName);
         assertTrue(result);
-        
-        for(int i=0; i<folderTypes.length; i++) {
+
+        for (int i = 0; i < folderTypes.length; i++) {
             when(mockContainerItem.getType()).thenReturn(folderTypes[i]);
             result = Whitebox.invokeMethod(RepositoryResourceUtil.class, "isSystemFolder", mockContainerItem, folderName);
             assertFalse(result);
         }
-        
+
         Item mockItem = mock(Item.class);
         result = Whitebox.invokeMethod(RepositoryResourceUtil.class, "isSystemFolder", mockItem, folderName);
         assertFalse(result);
     }
-    
+
     @Test
     public void testCreateFolderViewObject() throws Exception {
         boolean isSystem = false;
@@ -501,19 +522,16 @@ public class RepositoryResourceUtilTest {
         ItemState mockItemState = mock(ItemState.class);
         when(mockItemState.getPath()).thenReturn("mocked_path");
 
-        PowerMockito.mockStatic(ERepositoryObjectType.class);
-        when(ERepositoryObjectType.getFolderName(Mockito.any(ERepositoryObjectType.class))).thenReturn(folderName);
-
         Item mockParentItem = mock(Item.class);
         when(mockParentItem.getState()).thenReturn(mockItemState);
-        IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(null, folderName, mockParentItem,
-                isSystem);
+        IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(ERepositoryObjectType.PROCESS,
+                folderName, mockParentItem, isSystem);
 
         assertNotNull(folderViewObject);
-        
+
         PowerMockito.verifyStatic(Mockito.times(1));
         ResourceUtils.createFolder(mockFolder);
-        
+
     }
 
     @Test
@@ -548,14 +566,16 @@ public class RepositoryResourceUtilTest {
         when(mockConfiguration.getResourceProvider()).thenReturn(mockResourceProvider);
 
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
-        when(mockConfiguration.getResourceProvider().getRepositoryObjectType((Item)Mockito.any(Item.class))).thenReturn(mockType);
+        when(mockConfiguration.getResourceProvider().getRepositoryObjectType((Item) Mockito.any(Item.class)))
+                .thenReturn(mockType);
 
         IRepositoryNodeLabelProvider mockLabelProvider = mock(IRepositoryNodeLabelProvider.class);
         when(mockConfiguration.getLabelProvider()).thenReturn(mockLabelProvider);
         when(mockLabelProvider.getCategoryLabel(Mockito.any(ERepositoryObjectType.class))).thenReturn("anystring");
 
         PowerMockito.mockStatic(ContainerCacheService.class);
-        PowerMockito.doNothing().when(ContainerCacheService.class, "putContainer", (IRepositoryViewObject)Mockito.any(IRepositoryViewObject.class));
+        PowerMockito.doNothing().when(ContainerCacheService.class, "putContainer",
+                (IRepositoryViewObject) Mockito.any(IRepositoryViewObject.class));
 
         IRepositoryViewObject categoryViewObject = RepositoryResourceUtil.getCategoryViewObject(mockConfiguration);
         assertNotNull(categoryViewObject);
@@ -728,8 +748,8 @@ public class RepositoryResourceUtilTest {
     }
 
     /**
-     * Test for: findViewObjects(ERepositoryObjectType type, Item parentItem, IFolder folder,
-     *      boolean useRepositoryViewObject, boolean withDeleted)
+     * Test for: findViewObjects(ERepositoryObjectType type, Item parentItem, IFolder folder, boolean
+     * useRepositoryViewObject, boolean withDeleted)
      */
     @Test
     public void testFindViewObjects5Args() throws Exception {
@@ -754,8 +774,8 @@ public class RepositoryResourceUtilTest {
         PowerMockito.doReturn(false).when(RepositoryResourceUtil.class, "isSVNFolder", mockResources[1]);
         PowerMockito.doReturn(false).when(RepositoryResourceUtil.class, "isSVNFolder", mockResources[2]);
         IRepositoryViewObject mock1ViewObject = mock(IRepositoryViewObject.class);
-        when(RepositoryResourceUtil.createFolderViewObject(mockType, "folder", mockParentItem, false)).thenReturn(
-                mock1ViewObject);
+        when(RepositoryResourceUtil.createFolderViewObject(mockType, "folder", mockParentItem, false))
+                .thenReturn(mock1ViewObject);
 
         List<IRepositoryViewObject> mockViewObjects = new ArrayList<IRepositoryViewObject>();
         mockViewObjects.add(mock(IRepositoryViewObject.class));
@@ -823,7 +843,7 @@ public class RepositoryResourceUtilTest {
                 mockParentItem, useRepositoryViewObject, withDeleted);
         assertEquals(1, allViewObjectsInFolder.size());
     }
-    
+
     @Test
     public void testConvertToNode() throws Exception {
         IRepositoryViewObject mockViewObject = mock(IRepositoryViewObject.class);
@@ -850,5 +870,7 @@ public class RepositoryResourceUtilTest {
         assertEquals(mockType, node.getProperties(EProperties.LABEL));
         assertEquals(mockType, node.getProperties(EProperties.CONTENT_TYPE));
     }
-    
+
+
+
 }

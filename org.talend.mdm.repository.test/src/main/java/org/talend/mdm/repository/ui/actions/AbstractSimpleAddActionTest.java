@@ -16,12 +16,18 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.support.membermodification.MemberMatcher.method;
+import static org.powermock.api.support.membermodification.MemberModifier.stub;
+
+import java.util.ResourceBundle;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.junit.Before;
+import org.junit.Rule;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
@@ -44,8 +50,13 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class AbstractSimpleAddActionTest {
 
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
+
     @Before
     public void setUp() throws Exception {
+        ResourceBundle rb = mock(ResourceBundle.class);
+        stub(method(ResourceBundle.class, "getBundle", String.class)).toReturn(rb); //$NON-NLS-1$
 
         PowerMockito.mockStatic(JFaceResources.class);
         ImageRegistry registry = mock(ImageRegistry.class);

@@ -5,13 +5,15 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.support.membermodification.MemberMatcher.method;
+import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
@@ -23,15 +25,21 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddActionTest;
 import org.talend.repository.ProjectManager;
 
+import com.amalto.workbench.editors.ServiceConfigrationMainPage;
 import com.amalto.workbench.image.ImageCache;
 
-@RunWith(PowerMockRunner.class)
 @PrepareForTest({ ImageDescriptor.class, JFaceResources.class, ImageCache.class, ItemState.class, CoreRuntimePlugin.class,
         ProjectManager.class, RepositoryNodeConfigurationManager.class, ProxyRepositoryFactory.class })
 public class NewServiceConfigurationActionTest extends AbstractSimpleAddActionTest {
 
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
+
     @Test
     public void testCreateServerObject() throws Exception {
+        stub(method(ServiceConfigrationMainPage.class, "checkValidXML")).toReturn(null);
+
+        stub(method(ServiceConfigrationMainPage.class, "formartXml", String.class)).toReturn("");
         //
         ContainerItem newItem = MdmpropertiesFactory.eINSTANCE.createContainerItem();
         ContainerItem mockContainerItem = spy(newItem);
