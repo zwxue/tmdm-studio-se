@@ -16,44 +16,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.collections.bidimap.DualHashBidiMap;
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.EClassImpl;
-import org.eclipse.emf.ecore.util.EContentsEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectEList;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.PowerMockUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.powermock.reflect.Whitebox;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
-import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
@@ -64,67 +41,51 @@ import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Bean2EObjUtil.class ,System.class, IOUtil.class})
+@PrepareForTest({ Bean2EObjUtil.class, System.class, IOUtil.class })
 public class Bean2EObjUtilTest {
+
+    @Rule
+    public PowerMockRule powerMockRule = new PowerMockRule();
 
     @Test
     public void testPrivateConstructor() throws ClassNotFoundException {
-        Class<?>  utilClass = Class.forName(Bean2EObjUtil.class.getCanonicalName());
+        Class<?> utilClass = Class.forName(Bean2EObjUtil.class.getCanonicalName());
         Constructor<?>[] constructors = utilClass.getConstructors();
         assertNotNull(constructors);
         assertEquals(1, constructors.length);
         assertFalse(constructors[0].isAccessible());
     }
-    
+
     @Test
     public void testGetInstance() {
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
         util = Bean2EObjUtil.getInstance();
         assertNotNull(util);
     }
-    
+
     /**
      * Test method for {@link Bean2EObjUtil#registerClassMap(java.lang.Class)}.
-     * @throws Exception 
+     * 
+     * @throws Exception
      */
     @Test
     public void testRegisterClassMap() throws Exception {
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
         Bean2EObjUtil spyUtil = PowerMockito.spy(util);
         spyUtil.registerClassMap(WSMenu.class);
-        
+
         PowerMockito.verifyPrivate(spyUtil, Mockito.times(1)).invoke("guessEClassByClassName", Mockito.any(Class.class));
     }
-    
+
     @Test
     public void testGuessEClassByClassName() throws Exception {
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
         Bean2EObjUtil spyUtil = PowerMockito.spy(util);
-        
-        Class<?> clazz = WSDataModel.class; 
+
+        Class<?> clazz = WSDataModel.class;
         Object eClass = Whitebox.invokeMethod(spyUtil, "guessEClassByClassName", clazz);
         PowerMockito.verifyPrivate(spyUtil).invoke("guessEClassByClassName", clazz);
         assertNotNull(eClass);
-    }
-    
-    @Test
-    public void testGuessField() throws Exception {
-        Map<Field, EStructuralFeature> fieldMap = new HashMap<Field, EStructuralFeature>();
-        Map<Field, EStructuralFeature> spyMap = PowerMockito.spy(fieldMap);
-        PowerMockito.whenNew(HashMap.class).withNoArguments().thenReturn((HashMap) spyMap);
-        
-        Class<?> clazz = WSDataModel.class; 
-        
-        Bean2EObjUtil util = Bean2EObjUtil.getInstance();
-        Bean2EObjUtil spyUtil = PowerMockito.spy(util);
-        
-        spyUtil.beanClassUtil.refactorClassStructure(clazz);
-        Object eClass = Whitebox.invokeMethod(spyUtil, "guessEClassByClassName", clazz);
-        if(eClass != null) {
-            Whitebox.invokeMethod(spyUtil, "guessField", clazz, eClass);
-            assertTrue(spyMap.size() > 0);
-        }
     }
 
     /**
@@ -134,11 +95,11 @@ public class Bean2EObjUtilTest {
     public void testConvertFromBean2EObj() {
         WSMenu menu = new WSMenu();
         initBean(menu);
-        
+
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
         EObject eObject = util.convertFromBean2EObj(menu, null);
         assertNotNull(eObject);
-        
+
         WSMenuE menuE = (WSMenuE) eObject;
         //
         assertEquals(menu.getName(), menuE.getName());
@@ -200,11 +161,10 @@ public class Bean2EObjUtilTest {
         initEObject(menuE);
         //
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
-        WSMenu menu = (WSMenu) util.convertFromEObj2Bean(null);
-        assertNull(menu);
-        
-        menu = (WSMenu) util.convertFromEObj2Bean(menuE);
+        WSMenu menu = (WSMenu) util.convertFromEObj2Bean(menuE);
         assertNotNull(menu);
+
+
         //
         assertEquals(menu.getName(), menuE.getName());
         assertEquals(menu.getDescription(), menuE.getDescription());
@@ -214,7 +174,6 @@ public class Bean2EObjUtilTest {
             checkMenuEntry(menuEntries[i], menuEntriesE.get(i));
         }
     }
-    
 
     private void initEObject(WSMenuE menuE) {
         menuE.setDescription("this is a description"); //$NON-NLS-1$
@@ -242,7 +201,7 @@ public class Bean2EObjUtilTest {
         ds.setLanguage("En"); //$NON-NLS-1$
         wsMenuEntry.getDescriptions().add(ds);
     }
-    
+
     /**
      * test wrapEObjWithTreeObject with two input parameters
      */
@@ -254,7 +213,7 @@ public class Bean2EObjUtilTest {
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
         TreeObject treeObject = util.wrapEObjWithTreeObject(eobj, wsObj);
         assertNull(treeObject);
-        
+
         MDMServerObject mdmServerObject = PowerMockito.mock(MDMServerObject.class);
         when(mdmServerObject.getName()).thenReturn("name");
         when(mdmServerObject.getType()).thenReturn(2);
@@ -268,7 +227,7 @@ public class Bean2EObjUtilTest {
         assertEquals("name", treeObject.getName());
         assertEquals(2, treeObject.getType());
     }
-    
+
     /**
      * test wrapEObjWithTreeObject with one input parameter
      */
@@ -279,7 +238,7 @@ public class Bean2EObjUtilTest {
         Bean2EObjUtil util = Bean2EObjUtil.getInstance();
         TreeObject treeObject = util.wrapEObjWithTreeObject(eobj);
         assertNull(treeObject);
-        
+
         MDMServerObject mdmServerObject = PowerMockito.mock(MDMServerObject.class);
         when(mdmServerObject.getName()).thenReturn("name");
         when(mdmServerObject.getType()).thenReturn(2);
