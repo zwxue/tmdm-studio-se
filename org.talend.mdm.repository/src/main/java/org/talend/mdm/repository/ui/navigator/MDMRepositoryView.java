@@ -60,13 +60,11 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.core.ui.branding.IBrandingService;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
@@ -78,13 +76,11 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.ISvnHistory;
-import org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor;
-import org.talend.mdm.repository.ui.starting.editor.MDMStartingEditorInput;
+import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.views.MDMPerspective;
-import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -94,7 +90,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     private static final String VIEW_CONTEXT_ID = "org.talend.mdm.repository.context"; //$NON-NLS-1$
 
-    private static final Log log = LogFactory.getLog(ServerView.class);
+    private static final Log log = LogFactory.getLog(MDMRepositoryView.class);
 
     public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-1$
 
@@ -106,7 +102,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         contributeToActionBars();
         activateContext();
 
-//        activateWelcomeEditor();
         // new added
         regisitPerspectiveBarSelectListener();
     }
@@ -118,32 +113,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     private void activateContext() {
         IContextService contextService = (IContextService) getSite().getService(IContextService.class);
         contextService.activateContext(VIEW_CONTEXT_ID);
-    }
-
-    private void activateWelcomeEditor() {
-        if(!isWorkbenchCreated())
-            return;
-        
-        try {
-            org.talend.core.ui.branding.IBrandingService service = null;
-            service = (IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class);
-            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-            activePage.openEditor(new MDMStartingEditorInput(service), MDMStartingEditor.ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-//            log.error(e.getMessage(), e);
-        }
-    }
-    
-    private boolean isWorkbenchCreated() {
-        boolean isHere = false;
-        try {
-            isHere = PlatformUI.getWorkbench() != null;
-        } catch (Exception e) {
-            isHere = false;
-        }
-        
-        return isHere;        
     }
 
     @Override
@@ -372,7 +341,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 if(first) {
                     first = false;
                     if(MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
-                        activateWelcomeEditor();
+                        ShowWelcomeEditor.showWelcomeEditor();
                     }
                 }
             }

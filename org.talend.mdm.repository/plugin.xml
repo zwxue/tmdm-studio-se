@@ -601,6 +601,21 @@
            name="starting">
      </editor>
   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="com.talend.mdm.repository.welcomeeditorextension"
+            label="for welcome editor"
+            visible="true">
+         <action
+               class="org.talend.mdm.repository.ui.starting.ShowWelcomeEditorAction"
+               id="com.talend.mdm.repository.welcomeeditor"
+               label="Get Started With Talend MDM"
+               menubarPath="help/welcome"
+               style="push">
+         </action>
+      </actionSet>
+   </extension>
       
    
 </plugin>
