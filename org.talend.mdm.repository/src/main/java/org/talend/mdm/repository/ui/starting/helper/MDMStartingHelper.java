@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2012 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.mdm.repository.ui.starting.helper;
 
 import java.io.File;
@@ -79,9 +91,9 @@ public class MDMStartingHelper {
     @SuppressWarnings("restriction")
     private String resolveHtmlContent(String externalFileName) {
         if (externalFileName == null)
-            return "";
+            return "";//$NON-NLS-1$
 
-        String content = "";
+        String content = "";//$NON-NLS-1$
         IntroContentParser parser = new IntroContentParser(externalFileName);
         Document dom = parser.getDocument();
         if (dom != null) {
@@ -123,7 +135,7 @@ public class MDMStartingHelper {
         File file = null;
         try {
             File bundleFile = FileLocator.getBundleFile(getRepositoryBundle());
-            String resourceFolder = "icons/server_export.png";
+            String resourceFolder = "icons/server_export.png";//$NON-NLS-1$
             file = new File(bundleFile, resourceFolder );
         } catch (IOException e) {
             log.error("resolve bundle file error.", e);//$NON-NLS-1$
