@@ -187,6 +187,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
+import com.amalto.workbench.actions.XSDSkipToFKAction;
 import com.amalto.workbench.actions.XSDVisibleRuleAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
@@ -284,6 +285,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private XSDSetAnnotationForeignKeyAction setAnnotationForeignKeyAction = null;
 
+    private XSDSkipToFKAction skipToFKAction = null;
+
     private XSDVisibleRuleAction visibleRuleAction;
 
     private XSDDefaultValueRuleAction defaultValueRuleAction;
@@ -346,7 +349,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected TreeViewer targetTreeViewer;
 
-
     private SashForm sash;
 
     private TreeViewer typesViewer;
@@ -360,8 +362,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     private String modelName = "";//$NON-NLS-1$
 
     private boolean isChange = false;
-
-
 
     protected String uriPre;
 
@@ -432,7 +432,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             gLayout.horizontalSpacing = 20;
             gLayout.verticalSpacing = 0;
             btnCmp.setLayout(gLayout);
-
 
             xsdSchema = getXSDSchema(wsObject.getXsdSchema());
             createSash(mainComposite);
@@ -630,7 +629,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private void setLabel(XSDAnnotationsStructure struc, String labelValue, boolean isAdd) {
 
-
     }
 
     private void createSchemaTreeComp(Composite parent) {
@@ -670,7 +668,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         viewer = new TreeViewer(compSchemaTree, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
 
         addToolItems2SchemaTreeToolBar(toolBarSchemaTree);
         toolBarSchemaTree.pack();
@@ -1018,6 +1015,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.setAnnotationLabelAction = new XSDSetAnnotationLabelAction(this);
         this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
         this.setAnnotationForeignKeyAction = (XSDSetAnnotationForeignKeyAction) getAdapter(XSDSetAnnotationForeignKeyAction.class);
+        this.skipToFKAction = new XSDSkipToFKAction(this);
         visibleRuleAction = (XSDVisibleRuleAction) getAdapter(XSDVisibleRuleAction.class);
         defaultValueRuleAction = (XSDDefaultValueRuleAction) getAdapter(XSDDefaultValueRuleAction.class);
         this.setAnnotationFKFilterAction = (XSDSetAnnotationFKFilterAction) getAdapter(XSDSetAnnotationFKFilterAction.class);
@@ -1337,8 +1335,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         }
                         manager.add(deleteParticleAction);
                         // edit by ymli. fix the bug:0011523
-                        XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, Messages
-                                .getString("CopyElementText")); //$NON-NLS-1$
+                        XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,
+                                Messages.getString("CopyElementText")); //$NON-NLS-1$
                         manager.add(copyConceptAction);
 
                         manager.add(new Separator());
@@ -1347,20 +1345,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         // add by fliu, see bugID:0009157
 
                         manager.add(new Separator());
-                        if (term instanceof XSDElementDeclaration) {
-                            // Annotations
-                            XSDTypeDefinition type = ((XSDElementDeclaration) term).getTypeDefinition();
-                            setAnnotationActions(obj, manager);
-                            // }
-                            if (((XSDElementDeclaration) term).getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
-                                manager.add(setFacetMsgAction);
-                                manager.add(setAnnotationDisplayFomatAction);
-                            }
-                            // Xpath
-                            manager.add(new Separator());
-                            manager.add(getXPathAction);
 
+                        // Annotations
+                        XSDTypeDefinition type = ((XSDElementDeclaration) term).getTypeDefinition();
+                        setAnnotationActions(obj, manager);
+
+                        if (((XSDElementDeclaration) term).getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
+                            manager.add(setFacetMsgAction);
+                            manager.add(setAnnotationDisplayFomatAction);
                         }
+                        // Xpath
+                        manager.add(new Separator());
+                        manager.add(getXPathAction);
+
                     }
                 }
             }
@@ -1410,7 +1407,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         .getName() == null)) {
             XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
 
-
             manager.add(changeBaseTypeAction);
             manager.add(new Separator());
             if (typedef.getBaseTypeDefinition() != null) {
@@ -1422,7 +1418,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
 
         }
-
 
         if (selectedObjs.length > 1 && deleteConceptWrapAction.checkInDeletableType(selectedObjs)) {
             deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
@@ -1453,7 +1448,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(newParticleFromParticleAction);
             }
 
-
         }
 
         // add by ymli. fix bug 0009771
@@ -1474,6 +1468,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(new Separator());
             }
         }
+        //
 
         manager.add(new Separator());
 
@@ -1489,14 +1484,25 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationDescriptionsAction);
             manager.add(setAnnotationLookupFieldsAction);
             manager.add(setAnnotationPrimaryKeyInfoAction);
+
         }
         if (obj instanceof XSDParticle) {
             manager.add(setAnnotationDescriptionsAction);
             manager.add(setAnnotationLabelAction);
+            XSDTerm term = ((XSDParticle) obj).getTerm();
+
+            if (term instanceof XSDElementDeclaration) {
+                String fkValue = skipToFKAction.getFKInfo((XSDElementDeclaration) term);
+                if (fkValue != null) {
+                    manager.add(skipToFKAction);
+                }
+            }
             manager.add(setAnnotationForeignKeyAction);
             manager.add(setAnnotationFKFilterAction);
             manager.add(setAnnotationForeignKeyInfoAction);
+
         }
+
         if (Util.IsEnterPrise()) {
             manager.add(new Separator());
             manager.add(setAnnotationWriteAction);
@@ -1506,7 +1512,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             if (obj instanceof XSDParticle) {
                 XSDAnnotationsStructure struc = getStructureByActiveItem();
                 manager.add(visibleRuleAction);
-                if (struc != null){
+                if (struc != null) {
 
                     if (struc.getVisibleRule() != null) {
                         XSDVisibleRuleAction deleteVisibleRuleAction = new XSDVisibleRuleAction(this, dataModelName, true);
@@ -1885,7 +1891,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 tail = Messages.getString("SimpleText"); //$NON-NLS-1$
             }
             if (typeCntMap.get(type.getName() + tail + type.getTargetNamespace()) == Boolean.TRUE) {
-                
+
             }
             typeCntMap.put(type.getName() + tail + type.getTargetNamespace(), Boolean.TRUE);
         }

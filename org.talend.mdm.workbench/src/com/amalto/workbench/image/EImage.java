@@ -218,6 +218,7 @@ public enum EImage {
     STARTSERVERACTION("icons/startserveraction.gif"), //$NON-NLS-1$
     STEP_CURRENT("icons/step_current.gif"), //$NON-NLS-1$
     STEP_DONE("icons/step_done.gif"), //$NON-NLS-1$
+    STEP_INTO("icons/stepinto.gif"), //$NON-NLS-1$
     STORED_PROCEDURE("icons/stored_procedure.gif"), //$NON-NLS-1$
     SUBMENU("icons/submenu.gif"), //$NON-NLS-1$
     SUBSCRIPTION_ENGINE("icons/sub_engine.png"), //$NON-NLS-1$
