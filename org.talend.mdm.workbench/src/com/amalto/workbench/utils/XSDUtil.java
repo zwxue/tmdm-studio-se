@@ -23,6 +23,8 @@ import org.w3c.dom.NodeList;
  */
 public class XSDUtil {
 
+    private static final String X_FOREIGN_KEY = "X_ForeignKey"; //$NON-NLS-1$
+
     public static String getAnnotationValue(XSDElementDeclaration elementDesc, String key) {
         XSDAnnotation annotation = elementDesc.getAnnotation();
         for (Element element : annotation.getApplicationInformation()) {
@@ -40,5 +42,10 @@ public class XSDUtil {
             }
         }
         return null;
+    }
+
+    public static boolean hasFKInfo(XSDElementDeclaration elementDeclaration) {
+        String value = XSDUtil.getAnnotationValue(elementDeclaration, X_FOREIGN_KEY);
+        return value != null;
     }
 }

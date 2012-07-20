@@ -50,6 +50,7 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class XSDTreeLabelProvider extends LabelProvider {
 
@@ -302,13 +303,13 @@ public class XSDTreeLabelProvider extends LabelProvider {
                 // get Type of Parent Group
                 if (Util.getKeyInfo(xsdTerm) != null && Util.getKeyInfo(xsdTerm).size() > 0)
                     return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
+                if (XSDUtil.hasFKInfo((XSDElementDeclaration) xsdTerm)) {
+                    return ImageCache.getCreatedImage(EImage.FK_OBJ.getPath());
+                }
+                
                 XSDConcreteComponent xsdConcreteComponent = xsdParticle.getContainer();
                 if (xsdConcreteComponent instanceof XSDModelGroup) {
-                    // if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
-                    // return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_CHOICE.getPath());
-                    // else if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.SEQUENCE_LITERAL)
-                    // return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_SEQUENCE.getPath());
-                    return ImageCache.getCreatedImage(EImage.SCHEMAELEMENT.getPath());
+                        return ImageCache.getCreatedImage(EImage.SCHEMAELEMENT.getPath());
                 }
                 /*
                  * if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof
@@ -420,7 +421,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                         if (source.startsWith("X_Label_")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.LABEL.getPath());
                         } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
-                            return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
+                            return ImageCache.getCreatedImage(EImage.FK_OBJ.getPath());
                         } else if (source.equals("X_Visible_Rule")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.ROUTINE.getPath());
                         } else if (source.equals("X_Default_Value_Rule")) {//$NON-NLS-1$
