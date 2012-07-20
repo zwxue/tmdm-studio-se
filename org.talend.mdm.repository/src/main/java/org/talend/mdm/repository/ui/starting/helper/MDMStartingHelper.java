@@ -28,13 +28,14 @@ import org.eclipse.ui.intro.config.IIntroContentProviderSite;
 import org.eclipse.ui.intro.config.IIntroXHTMLContentProvider;
 import org.osgi.framework.Bundle;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.starting.MDMStartingConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.amalto.workbench.i18n.Messages;
 
 public class MDMStartingHelper {
     private static Logger log = Logger.getLogger(MDMStartingHelper.class);

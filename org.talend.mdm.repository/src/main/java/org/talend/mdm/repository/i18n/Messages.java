@@ -520,22 +520,6 @@ public class Messages extends NLS {
         return NLS.bind(message, bindings);
     }
     
-    public static String getString(String key) {
-        return getString(key, PLUGIN_ID, resourceBundle);
-    }
-
-    private static String getString(String key, String pluginId, ResourceBundle resourceBundle) {
-        if (resourceBundle == null) {
-            return KEY_NOT_FOUND_PREFIX + key + KEY_NOT_FOUND_SUFFIX;
-        }
-        try {
-            return resourceBundle.getString(key);
-
-        } catch (MissingResourceException e) {
-            return KEY_NOT_FOUND_PREFIX + key + KEY_NOT_FOUND_SUFFIX;
-        }
-    }
-    
     // //////////////////////////////////////////////////////////////////////////
     //
     // Class initialization

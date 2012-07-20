@@ -24,7 +24,6 @@ public class ShowWelcomeEditorAction implements IWorkbenchWindowActionDelegate {
     }
 
     public void selectionChanged(IAction arg0, ISelection arg1) {
-        System.out.println();
     }
 
     public void dispose() {
