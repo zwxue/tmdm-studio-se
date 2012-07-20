@@ -597,6 +597,7 @@
      <editor
            class="org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor"
            default="false"
+           icon="icons/default.gif"
            id="org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor"
            name="starting">
      </editor>

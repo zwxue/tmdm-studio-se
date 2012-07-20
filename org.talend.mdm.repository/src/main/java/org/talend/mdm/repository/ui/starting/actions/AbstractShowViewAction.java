@@ -33,6 +33,8 @@ public abstract class AbstractShowViewAction {
             serverExplorer = (ServerExplorer) activePage.showView(ServerExplorer.ID);
         }
         
+        activePage.activate(serverExplorer);
+        
         serverExplorer.setFocus();
         return serverExplorer;
     }
@@ -42,6 +44,8 @@ public abstract class AbstractShowViewAction {
         MDMRepositoryView findView = (MDMRepositoryView) activePage.findView(MDMRepositoryView.VIEW_ID);
         if(findView == null)
             findView = (MDMRepositoryView) activePage.showView(MDMRepositoryView.VIEW_ID);
+        
+        activePage.activate(findView);
         
         findView.setFocus();
         
