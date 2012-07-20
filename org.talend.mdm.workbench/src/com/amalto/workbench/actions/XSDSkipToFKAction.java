@@ -39,6 +39,10 @@ public class XSDSkipToFKAction extends Action {
     /**
      * 
      */
+    private static final String FK_SEPERATOR = "/"; //$NON-NLS-1$
+    /**
+     * 
+     */
     private static final String X_FOREIGN_KEY = "X_ForeignKey"; //$NON-NLS-1$
     private final DataModelMainPage page;
 
@@ -71,7 +75,7 @@ public class XSDSkipToFKAction extends Action {
                 if (rootContainer instanceof XSDSchema) {
                     EList<XSDElementDeclaration> elementDeclarations = ((XSDSchema) rootContainer).getElementDeclarations();
                     for (XSDElementDeclaration elementDeclaration : elementDeclarations) {
-                        String name = elementDeclaration.getName();
+                        String name = elementDeclaration.getName() + FK_SEPERATOR;
                         if (fkPath.startsWith(name)) {
                             StructuredSelection fkSelection = new StructuredSelection(elementDeclaration);
                             treeViewer.setSelection(fkSelection);

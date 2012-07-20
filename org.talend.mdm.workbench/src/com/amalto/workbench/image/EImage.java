@@ -109,6 +109,7 @@ public enum EImage {
     FILTER_PS("icons/filter_ps.gif"), //$NON-NLS-1$
     FLATLAYOUT("icons/flatLayout.gif"), //$NON-NLS-1$
     FLDR_OBJ("icons/fldr_obj.gif"), //$NON-NLS-1$
+    FK_OBJ("icons/fk.png"), //$NON-NLS-1$
     FONT("icons/font.gif"), //$NON-NLS-1$
     FORWARD_NAV("icons/forward_nav.gif"), //$NON-NLS-1$
     FORDER("icons/folder.gif"), //$NON-NLS-1$

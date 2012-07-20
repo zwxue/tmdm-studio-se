@@ -48,7 +48,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
 
     public XSDSetAnnotationForeignKeyAction(DataModelMainPage page, String dataModelName) {
         super(page);
-        setImageDescriptor(ImageCache.getImage(EImage.PRIMARYKEY.getPath()));
+        setImageDescriptor(ImageCache.getImage(EImage.FK_OBJ.getPath()));
         setText(Messages.getString("SetForeignKey")); //$NON-NLS-1$
         setToolTipText(Messages.getString("SetForeignKey")); //$NON-NLS-1$
         this.dataModelName = dataModelName;
