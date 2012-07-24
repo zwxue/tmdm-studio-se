@@ -1494,12 +1494,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationLabelAction);
             XSDTerm term = ((XSDParticle) obj).getTerm();
 
-            if (term instanceof XSDElementDeclaration) {
-                String fkValue = skipToFKAction.getFKInfo((XSDElementDeclaration) term);
-                if (fkValue != null) {
-                    manager.add(skipToFKAction);
-                }
-            }
+//            if (term instanceof XSDElementDeclaration) {
+//                String fkValue = skipToFKAction.getFKInfo((XSDElementDeclaration) term);
+//                if (fkValue != null) {
+//                    manager.add(skipToFKAction);
+//                }
+//            }
             manager.add(setAnnotationForeignKeyAction);
             manager.add(setAnnotationFKFilterAction);
             manager.add(setAnnotationForeignKeyInfoAction);
@@ -1610,9 +1610,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void createActionItems(IMenuManager menu) {
-        menu.add(getAddComplexTypeElementAction());
-        menu.add(new Separator());
-        
         String[] types = XSDTypes.getXSDSimpleType(null);
         XSDNewParticleFromParticleAction xsdNewElementAction = null;
         for (String type : types) {
@@ -1620,6 +1617,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             menu.add(xsdNewElementAction);
         }
         
+        menu.add(new Separator());
+        menu.add(getAddComplexTypeElementAction());
     }
 
     private XSDAddComplexTypeElementAction getAddComplexTypeElementAction() {
