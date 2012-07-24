@@ -19,10 +19,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTerm;
 
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -40,10 +38,12 @@ public class XSDSkipToFKAction extends Action {
      * 
      */
     private static final String FK_SEPERATOR = "/"; //$NON-NLS-1$
+
     /**
      * 
      */
     private static final String X_FOREIGN_KEY = "X_ForeignKey"; //$NON-NLS-1$
+
     private final DataModelMainPage page;
 
     public XSDSkipToFKAction(DataModelMainPage page) {
@@ -71,21 +71,31 @@ public class XSDSkipToFKAction extends Action {
                                     Messages.getString("XSDSkipToFKAction.actionTitle"), Messages.getString("XSDSkipToFKAction.NotFoundFkInfo")); //$NON-NLS-1$ //$NON-NLS-2$
                     return;
                 }
-                XSDConcreteComponent rootContainer = element.getRootContainer();
-                if (rootContainer instanceof XSDSchema) {
-                    EList<XSDElementDeclaration> elementDeclarations = ((XSDSchema) rootContainer).getElementDeclarations();
-                    for (XSDElementDeclaration elementDeclaration : elementDeclarations) {
-                        String name = elementDeclaration.getName() + FK_SEPERATOR;
-                        if (fkPath.startsWith(name)) {
-                            StructuredSelection fkSelection = new StructuredSelection(elementDeclaration);
-                            treeViewer.setSelection(fkSelection);
-                            break;
-                        }
+                String entityName = getEntityName(fkPath);
+
+                EList<XSDElementDeclaration> elementDeclarations = page.getXSDSchema().getElementDeclarations();
+                for (XSDElementDeclaration elementDeclaration : elementDeclarations) {
+                    String name = elementDeclaration.getName();
+                    if (entityName.equals(name)) {
+                        StructuredSelection fkSelection = new StructuredSelection(elementDeclaration);
+                        page.getElementsViewer().setSelection(fkSelection);
+                        break;
                     }
                 }
+
             }
         }
 
+    }
+
+    private String getEntityName(String fkDef) {
+        if (fkDef == null)
+            return null;
+        int index = fkDef.indexOf(FK_SEPERATOR);
+        if (index > 0) {
+            return fkDef.substring(0, index);
+        }
+        return fkDef;
     }
 
     public String getFKInfo(XSDElementDeclaration element) {
