@@ -46,12 +46,15 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
     private String superTypeName = "";//$NON-NLS-1$
 
     private boolean isAbstract;
+    private boolean isAll;
+    private boolean isChoice;
+    private boolean isSequence;
 
     private ConceptComposite conceptPanel = null;
 
     List<XSDComplexTypeDefinition> types;
 
-    private XSDSchema xsdSchema;
+    protected XSDSchema xsdSchema;
 
     private boolean isXSDModelGroup = false;
 
@@ -59,13 +62,19 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
 
     private XSDCompositor superTypeComposite;
 
+    private String title;
+
     /**
      * @param parentShell
      * @param isXSDModelGroup
      */
-    public ComplexTypeInputDialog(SelectionListener caller, Shell parentShell, XSDSchema schema,
+    public ComplexTypeInputDialog(SelectionListener caller, Shell parentShell, String title, XSDSchema schema,
             XSDTypeDefinition typeDefinition, List<XSDComplexTypeDefinition> types, boolean isXSDModelGroup) {
         super(parentShell);
+        this.title = title;
+        if(title == null || title.equals(""))
+            this.title = "Complex Type Properties";//$NON-NLS-1$
+            
         this.caller = caller;
         this.types = types;
         this.isXSDModelGroup = isXSDModelGroup;
@@ -94,15 +103,13 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         // Should not really be here but well,....
         final Composite composite = (Composite) super.createDialogArea(parent);
 
+        createTopPart(composite);
         // encapsulate all widgets into the ConceptComposite which can be applied to several cases
+        parent.getShell().setText(title);
+        
         if (caller instanceof XSDNewComplexTypeDefinition) {
-            parent.getShell().setText("Complex Type Properties");
             conceptPanel = new ConceptComposite(composite, false, types, true);
         } else {
-            if (isXSDModelGroup)
-                parent.getShell().setText("Complex Type Properties");
-            else
-                parent.getShell().setText("Complex Type Properties");
             conceptPanel = new ConceptComposite(composite, false, types, false);
             conceptPanel.setText(typeName);
             if (superTypeName != null && !"anyType".equalsIgnoreCase(superTypeName))//$NON-NLS-1$
@@ -118,7 +125,10 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
             conceptPanel.setAbstract(isAbstract);
         }
         conceptPanel.getTypeCombo().addModifyListener(this);
-        return conceptPanel.getComposite();
+        return composite;
+    }
+
+    protected void createTopPart(Composite parent) {
     }
 
     protected void createButtonsForButtonBar(Composite parent) {
@@ -130,6 +140,10 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         typeName = conceptPanel.getText();
         superTypeName = conceptPanel.getSuperName();
         isAbstract = conceptPanel.isAbstract();
+        isAll = conceptPanel.isAll();
+        isChoice = conceptPanel.isChoice();
+        isSequence = conceptPanel.isSequence();
+        
         if(superTypeName.equals(typeName) && (!superTypeName.equals(""))){//$NON-NLS-1$
             MessageDialog.openError(null, Messages.getString("Error.title"), Messages.getString("typeCannotExtendsItsself")); //$NON-NLS-1$//$NON-NLS-2$
             setReturnCode(CANCEL);
@@ -137,6 +151,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         }
         
         setReturnCode(OK);
+//        super.okPressed();
         // no close let Action Handler handle it
     }
 
@@ -175,23 +190,23 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
     }
 
     public boolean isSequence() {
-        return conceptPanel.isSequence();
+        return isSequence;
     }
 
     public boolean isChoice() {
-        return conceptPanel.isChoice();
+        return isChoice;
     }
 
     public boolean isAll() {
-        return conceptPanel.isAll();
+        return isAll;
     }
 
     public boolean isAbstract() {
-        return conceptPanel.isAbstract();
+        return isAbstract;
     }
 
     public String getSuperName() {
-        return conceptPanel.getSuperName();
+        return superTypeName;
     }
 
     public String getTypeName() {

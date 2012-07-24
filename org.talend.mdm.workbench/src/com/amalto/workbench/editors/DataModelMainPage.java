@@ -143,6 +143,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.amalto.workbench.actions.XSDAddComplexTypeElementAction;
 import com.amalto.workbench.actions.XSDAnnotationLookupFieldsAction;
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
@@ -1205,6 +1206,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         else {
             manager.add(newComplexTypeAction);
             manager.add(newSimpleTypeAction);
+
             // add by ymli; fix the bug:0012228. Made the multiple types can be deleted.
             XSDDeleteTypeDefinition deleteTypeDefinition1;
             if (selectedObjs.length > 1)
@@ -1328,7 +1330,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 if (term instanceof XSDElementDeclaration) {
                     manager.add(editParticleAction);
                     if (!Util.IsAImporedElement(term, xsdSchema) || term.getContainer() instanceof XSDSchema) {
-                        manager.add(newParticleFromParticleAction);
+                        
+                        manager.add(getSubmenuForSimpleType("AddAfterID", "Add Element(after)"));
                         if (term instanceof XSDModelGroup) {
                             manager.add(newParticleFromTypeAction);
                             manager.add(newGroupFromTypeAction);
@@ -1596,6 +1599,31 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
         }
 
+    }
+
+    private IMenuManager getSubmenuForSimpleType(String menuId, String menuName) {
+        IMenuManager menu = new MenuManager(menuName, ImageCache.getImage(EImage.ADD_OBJ.getPath()), menuId);
+
+        createActionItems(menu);
+
+        return menu;
+    }
+
+    private void createActionItems(IMenuManager menu) {
+        menu.add(getAddComplexTypeElementAction());
+        menu.add(new Separator());
+        
+        String[] types = XSDTypes.getXSDSimpleType(null);
+        XSDNewParticleFromParticleAction xsdNewElementAction = null;
+        for (String type : types) {
+            xsdNewElementAction = new XSDNewParticleFromParticleAction(this, type);
+            menu.add(xsdNewElementAction);
+        }
+        
+    }
+
+    private XSDAddComplexTypeElementAction getAddComplexTypeElementAction() {
+        return new XSDAddComplexTypeElementAction(this);  
     }
 
     private boolean checkMandatoryElement(Object obj) {

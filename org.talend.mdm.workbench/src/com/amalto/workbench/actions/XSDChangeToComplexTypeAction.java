@@ -47,6 +47,7 @@ import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
+import com.amalto.workbench.dialogs.ComplexTypeInputDialogR;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -160,7 +161,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                                 types.remove(type);
                         }
                     }
-                dialog = new ComplexTypeInputDialog(this, page.getSite().getShell(), schema, decl.getTypeDefinition(), types,
+                dialog = new ComplexTypeInputDialog(this, page.getSite().getShell(), "", schema, decl.getTypeDefinition(), types,//$NON-NLS-1$
                         isXSDModelGroup);
 
                 dialog.setBlockOnOpen(true);

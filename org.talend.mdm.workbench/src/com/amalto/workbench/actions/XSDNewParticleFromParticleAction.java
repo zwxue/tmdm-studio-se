@@ -44,8 +44,6 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -66,11 +64,20 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 
     private int maxOccurs;
 
+    private String simpleTypeName;
+    
     public XSDNewParticleFromParticleAction(DataModelMainPage page) {
         super(page);
-        setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("Add Element (after)");
-        setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");
+        this.simpleTypeName = "string";//$NON-NLS-1$
+        setText("Add string Element");//$NON-NLS-1$//$NON-NLS-2$
+        setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");//$NON-NLS-1$
+    }
+    
+    public XSDNewParticleFromParticleAction(DataModelMainPage page, String simpleType) {
+        super(page);
+        this.simpleTypeName = simpleType;
+        setText("Add "+ simpleType + " Element");//$NON-NLS-1$//$NON-NLS-2$
+        setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");//$NON-NLS-1$
     }
 
     public IStatus doAction() {
@@ -86,7 +93,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             // get position of the selected particle in the container
             int index = 0;
             int i = 0;
-            for (Iterator iter = group.getContents().iterator(); iter.hasNext();) {
+            for (Iterator<XSDParticle> iter = group.getContents().iterator(); iter.hasNext();) {
                 XSDParticle p = (XSDParticle) iter.next();
                 if (p.equals(selParticle)) {
                     index = i;
@@ -96,8 +103,8 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             }
 
             EList<XSDElementDeclaration> eDecls = schema.getElementDeclarations();
-            ArrayList<String> elementDeclarations = new ArrayList<String>();
-            for (Iterator iter = eDecls.iterator(); iter.hasNext();) {
+            List<String> elementDeclarations = new ArrayList<String>();
+            for (Iterator<XSDElementDeclaration> iter = eDecls.iterator(); iter.hasNext();) {
                 XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
                 if (d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))
                     continue;
@@ -128,7 +135,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
                     decl.setResolvedElementDeclaration(ref);
                 }
             } else {
-                decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
+                decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), simpleTypeName));
             }
 
             XSDParticle particle = factory.createXSDParticle();
@@ -195,11 +202,11 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
     }
 
     public void addAnnotion(XSDAnnotationsStructure struc, XSDAnnotation xsdannotationparent) {
-        Map infor = new HashMap<String, ArrayList<String>>();
+        Map<String, List<String>> infor = new HashMap<String, List<String>>();
         infor = cloneXSDAnnotation(xsdannotationparent);
-        Set keys = infor.keySet();
+        Set<String> keys = infor.keySet();
         for (int i = 0; i < infor.size(); i++) {
-            ArrayList<String> lists = (ArrayList<String>) infor.get(keys.toArray()[i]);
+            List<String> lists = (List<String>) infor.get(keys.toArray()[i]);
             try {
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
@@ -209,9 +216,8 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
         }
     }
 
-    public Map cloneXSDAnnotation(XSDAnnotation oldAnn) {
-        XSDAnnotation xsdannotation = XSDFactory.eINSTANCE.createXSDAnnotation();
-        Map infor = new HashMap<String, List>();
+    public Map<String, List<String>> cloneXSDAnnotation(XSDAnnotation oldAnn) {
+        Map<String, List<String>> infor = new HashMap<String, List<String>>();
         try {
             if (oldAnn != null) {
                 for (int i = 0; i < oldAnn.getApplicationInformation().size(); i++) {
@@ -220,11 +226,11 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
                     // X_Write,X_Hide,X_Workflow
                     if (type.equals("X_Write") || type.equals("X_Hide") || type.equals("X_Workflow")) {
                         if (!infor.containsKey(type)) {
-                            List typeList = new ArrayList<String>();
+                            List<String> typeList = new ArrayList<String>();
                             typeList.add(oldElem.getFirstChild().getNodeValue());
                             infor.put(type, typeList);
                         } else {
-                            ((List) infor.get(type)).add(oldElem.getFirstChild().getNodeValue());
+                            (infor.get(type)).add(oldElem.getFirstChild().getNodeValue());
                         }
                     }
                 }
@@ -255,7 +261,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
         // check that this element does not already exist
         XSDModelGroup group = (XSDModelGroup) selParticle.getContainer();
         // get position of the selected particle in the container
-        for (Iterator iter = group.getContents().iterator(); iter.hasNext();) {
+        for (Iterator<XSDParticle> iter = group.getContents().iterator(); iter.hasNext();) {
             XSDParticle p = (XSDParticle) iter.next();
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
