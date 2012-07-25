@@ -1494,12 +1494,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationLabelAction);
             XSDTerm term = ((XSDParticle) obj).getTerm();
 
-//            if (term instanceof XSDElementDeclaration) {
-//                String fkValue = skipToFKAction.getFKInfo((XSDElementDeclaration) term);
-//                if (fkValue != null) {
-//                    manager.add(skipToFKAction);
-//                }
-//            }
+            if (term instanceof XSDElementDeclaration) {
+                String fkValue = skipToFKAction.getFKInfo((XSDElementDeclaration) term);
+                if (fkValue != null) {
+                    manager.add(skipToFKAction);
+                }
+            }
             manager.add(setAnnotationForeignKeyAction);
             manager.add(setAnnotationFKFilterAction);
             manager.add(setAnnotationForeignKeyInfoAction);
