@@ -79,6 +79,7 @@ import org.talend.mdm.repository.ui.editors.ISvnHistory;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.views.MDMPerspective;
 import com.amalto.workbench.views.ServerView;
 
 /**
@@ -328,6 +329,10 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 deactivePerspective = perspective;
             }
 
+            public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+                if(MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) 
+                    getCommonViewer().refresh();
+            }
         });
     }
 
@@ -350,11 +355,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                                     }
                                 }
                             });
-
                         }
-                        
-                        if(MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) 
-                            getCommonViewer().refresh();
                     }
                 }
             }
