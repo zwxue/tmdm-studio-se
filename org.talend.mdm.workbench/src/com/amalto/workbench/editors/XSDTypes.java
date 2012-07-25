@@ -23,7 +23,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 
 public class XSDTypes {
 
-    private static final String[] types = { "string", "boolean", "short", "int", "long", "integer", "float", "double", "byte", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+    private static final String[] types = { "string", "boolean", "short", "int", "long", "integer", "float", "double", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
             "decimal", "date", "dateTime", "time"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     
     public static String[] getXSDSimpleType(XSDSchema xsdSchema) {
