@@ -24,7 +24,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.mdm.engines.client.i18n.Messages;
@@ -39,7 +38,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
 
     private IStructuredSelection selection;
 
-    private WizardFileSystemResourceExportPage1 mainPage;
+    private DeployOnMDMExportWizardPage mainPage;
 
     private SpagoBiServer mdmServer = null;
 
@@ -92,7 +91,10 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
      * (non-Javadoc) Method declared on IWizard.
      */
     public boolean performFinish() {
-        return mainPage.finish();
+        boolean finish = mainPage.finish();
+        setMdmServer(mainPage.getMdmServer());
+        
+        return finish;
     }
 
     public SpagoBiServer getMdmServer() {
