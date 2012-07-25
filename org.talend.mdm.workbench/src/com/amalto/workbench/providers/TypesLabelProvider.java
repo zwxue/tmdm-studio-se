@@ -48,6 +48,7 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class TypesLabelProvider extends LabelProvider {
 
@@ -269,13 +270,12 @@ public class TypesLabelProvider extends LabelProvider {
                 if (Util.getKeyInfo(xsdTerm) != null && Util.getKeyInfo(xsdTerm).size() > 0)
                     return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
                 XSDConcreteComponent xsdConcreteComponent = xsdParticle.getContainer();
+                if (XSDUtil.hasFKInfo((XSDElementDeclaration) xsdTerm)) {
+                    return ImageCache.getCreatedImage(EImage.FK_OBJ.getPath());
+                }
+
                 if (xsdConcreteComponent instanceof XSDModelGroup) {
-                    /*
-                     * if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL) return
-                     * ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_CHOICE.getPath()); else if
-                     * (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.SEQUENCE_LITERAL) return
-                     * ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_SEQUENCE.getPath());
-                     */
+
                     return ImageCache.getCreatedImage(EImage.SCHEMAELEMENT.getPath());
                 }
                 /*
@@ -386,7 +386,7 @@ public class TypesLabelProvider extends LabelProvider {
                         if (source.startsWith("X_Label_")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.LABEL.getPath());
                         } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
-                            return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
+                            return ImageCache.getCreatedImage(EImage.FK_OBJ.getPath());
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
                         } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
