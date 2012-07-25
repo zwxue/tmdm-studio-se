@@ -50,6 +50,7 @@ import org.talend.core.language.ECodeLanguage;
 import org.talend.core.language.LanguageManager;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
+import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.prefs.ITalendCorePrefConstants;
@@ -58,6 +59,7 @@ import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.proxy.ProxyUtil;
+import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
@@ -360,7 +362,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     @Override
     public boolean finish() {
-
         Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap();
         boolean canExport = false;
         for (ExportChoice choice : ExportChoice.values()) {
@@ -390,10 +391,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         }
         if (exportTypeCombo.getSelectionIndex() == 1) {// zip
             manager = new JobJavaScriptsManager(exportChoiceMap, contextCombo.getText(), JobScriptsManager.ALL_ENVIRONMENTS,
-                    IProcessor.NO_STATISTICS,
-                    IProcessor.NO_TRACES);
+                    IProcessor.NO_STATISTICS, IProcessor.NO_TRACES);
         }
-        
+
         List<ExportFileResource> resourcesToExport = null;
         try {
             resourcesToExport = getExportResources();
@@ -435,7 +435,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // added by xie to fix bug 20084
         setDesValueForJob();
         processForEachJob();
-        
+
         // retrieve user, password, host, port from selected server
         MDMServerDef server = null;
         if (mdmServer == null) {
@@ -445,6 +445,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             for (MDMServerDef serv : listServerSapgo) {
                 if (selectedSpagoBiEngineName.equals(serv.getName())) {
                     server = serv;
+                    mdmServer = toSpagoBiServer(server);
                     break;
                 }
             }
@@ -480,7 +481,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 Messages.getString("DeployOnMDMExportWizardPage.publishJobSuccess")); //$NON-NLS-1$
         return ok;
     }
-
+    
 
     /**
      * 
@@ -844,6 +845,17 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         optionsGroup.setFont(parent.getFont());
         createOptionsGroupButtons(optionsGroup);
 
+    }
+
+    private SpagoBiServer toSpagoBiServer(MDMServerDef serverDef) {
+        SpagoBiServer spagoBiServer = PropertiesFactory.eINSTANCE.createSpagoBiServer();
+        spagoBiServer.setShortDescription(serverDef.getName());
+        spagoBiServer.setHost(serverDef.getHost());
+        spagoBiServer.setPort(serverDef.getPort());
+        spagoBiServer.setLogin(serverDef.getUser());
+        spagoBiServer.setPassword(serverDef.getPasswd());
+        
+        return spagoBiServer;
     }
 
     /*

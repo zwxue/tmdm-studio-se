@@ -14,20 +14,36 @@ package org.talend.mdm.engines.client.ui.actions;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.CommonNavigator;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.EImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.core.CorePlugin;
 import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.language.ECodeLanguage;
+import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
+import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
+import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.repository.model.IProxyRepositoryFactory;
+import org.talend.repository.model.IRepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
@@ -42,8 +58,10 @@ import com.amalto.workbench.utils.MDMServerHelper;
  * 
  */
 public final class DeployOnMDMAction extends AContextualAction {
-
-    private static final String EXPORTJOBSCRIPTS = "Deploy to Talend MDM";
+    private static Logger log = Logger.getLogger(DeployOnMDMAction.class);
+    
+    private static final String EXPORTJOBSCRIPTS = "Deploy to Talend MDM"; //$NON-NLS-1$
+    private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /*
      * (non-Javadoc)
@@ -89,12 +107,73 @@ public final class DeployOnMDMAction extends AContextualAction {
 
     protected void doRun() {
         DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
-        IWorkbench workbench = getWorkbench();
         publishWizard.setWindowTitle(EXPORTJOBSCRIPTS); //$NON-NLS-1$
-        publishWizard.init(workbench, (IStructuredSelection) this.getSelection());
+        publishWizard.init(getWorkbench(), (IStructuredSelection) this.getSelection());
 
         Shell activeShell = Display.getCurrent().getActiveShell();
         WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-        dialog.open();
+        int returnCode = dialog.open();
+        
+        if(returnCode == IDialogConstants.OK_ID) {
+            
+            SpagoBiServer spagoBiServer = publishWizard.getMdmServer();
+            MDMServerDef mdmServer = getMdmServer(spagoBiServer);
+            
+            IRepositoryViewObject viewObj = getSelectedViewObject();
+            Item item = viewObj.getProperty().getItem();            
+            Property property = item.getProperty();
+            
+            if (item instanceof MDMServerObjectItem) {
+                MDMServerDef encryptedServerDef = mdmServer.getEncryptedServerDef();
+                ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(encryptedServerDef);
+            } else if (property != null) {
+                property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, mdmServer.getName());
+            }
+            
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+            try {
+                factory.save(item);
+                refreshMdmRepositoryViewTree();
+                
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
+    
+    private IRepositoryViewObject getSelectedViewObject() {
+        IStructuredSelection sel = (IStructuredSelection) getSelection();
+        IRepositoryViewObject viewObj = null;
+        if(sel.getFirstElement() instanceof IRepositoryNode) {
+            IRepositoryNode node = (IRepositoryNode) sel.getFirstElement();
+            viewObj = node.getObject();
+        }
+        
+        return viewObj;
+    }
+
+    private MDMServerDef getMdmServer(SpagoBiServer spagoBiServer) {
+        MDMServerDef mdmServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
+        
+        mdmServerDef.setName(spagoBiServer.getShortDescription());
+        mdmServerDef.setHost(spagoBiServer.getHost());
+        mdmServerDef.setPort(spagoBiServer.getPort());
+        mdmServerDef.setUser(spagoBiServer.getLogin());
+        mdmServerDef.setPasswd(spagoBiServer.getPassword());
+
+        return mdmServerDef;
+    }
+    
+
+    /**
+     * If the MDM Repository View is showing,refresh the navigator tree in it.
+     */
+    private void refreshMdmRepositoryViewTree() {
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IViewPart mdmRepositoryView = activePage.findView("org.talend.mdm.repository.ui.navigator.MDMRepositoryView");//$NON-NLS-1$
+        if(mdmRepositoryView instanceof CommonNavigator) {
+            CommonNavigator cNavigator = (CommonNavigator) mdmRepositoryView;
+            cNavigator.getCommonViewer().refresh();
+        }
     }
 }
