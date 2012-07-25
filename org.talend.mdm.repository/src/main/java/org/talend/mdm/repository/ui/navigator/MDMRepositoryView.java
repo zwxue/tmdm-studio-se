@@ -352,6 +352,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                             });
 
                         }
+                        
+                        if(MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) 
+                            getCommonViewer().refresh();
                     }
                 }
             }
