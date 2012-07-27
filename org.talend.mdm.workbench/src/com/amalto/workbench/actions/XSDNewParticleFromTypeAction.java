@@ -43,6 +43,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -64,11 +65,21 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
 
     private XSDComplexTypeDefinition ctd;
 
+    private String simpleTypeName;
+    
     public XSDNewParticleFromTypeAction(DataModelMainPage page) {
         super(page);
+        this.simpleTypeName = "string";//$NON-NLS-1$
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("Add Element");
-        setToolTipText("Add a new Business Element at the top of the Business Elements");
+        setText(Messages.getString("_AddStringElement")); //$NON-NLS-1$
+        setToolTipText(Messages.getString("_AddABusinessElementTop")); //$NON-NLS-1$
+    }
+    
+    public XSDNewParticleFromTypeAction(DataModelMainPage page, String simpleType) {
+        super(page);
+        this.simpleTypeName = simpleType;
+        setText(Messages.getString("_Add")+ simpleType + Messages.getString("_Element")); //$NON-NLS-1$ //$NON-NLS-2$
+        setToolTipText(Messages.getString("_AddFromTypeFirstPos")); //$NON-NLS-1$
     }
 
     public IStatus doAction() {
@@ -88,12 +99,12 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             } else if (selection.getFirstElement() instanceof XSDModelGroup) {
                 group = (XSDModelGroup) selection.getFirstElement();
             } else {
-                log.info("UNKNOWN SELECTION: " + selection.getFirstElement().getClass().getName() + "  --  "
+                log.info(Messages.getString("_UnkownSection") + selection.getFirstElement().getClass().getName() + "  --  " //$NON-NLS-1$ //$NON-NLS-2$
                         + selection.getFirstElement());
                 return Status.CANCEL_STATUS;
             }
 
-            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), "Add a new Business Element", true);
+            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), Messages.getString("_AddANewBusinessElement"), true); //$NON-NLS-1$
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();
             if (ret == Dialog.CANCEL) {
@@ -104,7 +115,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
 
             XSDElementDeclaration decl = factory.createXSDElementDeclaration();
             decl.setName(this.elementName);
-            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
+            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), simpleTypeName));
 
             XSDParticle particle = factory.createXSDParticle();
             particle.setContent(decl);
@@ -145,8 +156,8 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
+                    Messages.getString("_ErrorCreatBusinessElement") + e.getLocalizedMessage()); //$NON-NLS-1$
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -157,9 +168,9 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
     }
 
     public void addAnnotion(XSDAnnotationsStructure struc, XSDAnnotation xsdannotationparent) {
-        Map infor = new HashMap<String, ArrayList<String>>();
+        Map<String, List<String>> infor = new HashMap<String, List<String>>();
         infor = cloneXSDAnnotation(xsdannotationparent);
-        Set keys = infor.keySet();
+        Set<String> keys = infor.keySet();
         for (int i = 0; i < infor.size(); i++) {
             ArrayList<String> lists = (ArrayList<String>) infor.get(keys.toArray()[i]);
             try {
@@ -171,9 +182,8 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
         }
     }
 
-    public Map cloneXSDAnnotation(XSDAnnotation oldAnn) {
-        XSDAnnotation xsdannotation = XSDFactory.eINSTANCE.createXSDAnnotation();
-        Map infor = new HashMap<String, List>();
+    public Map<String, List<String>> cloneXSDAnnotation(XSDAnnotation oldAnn) {
+        Map<String, List<String>> infor = new HashMap<String, List<String>>();
         try {
             if (oldAnn != null) {
                 for (int i = 0; i < oldAnn.getApplicationInformation().size(); i++) {
@@ -182,11 +192,11 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
                     // X_Write,X_Hide,X_Workflow
                     if (type.equals("X_Write") || type.equals("X_Hide") || type.equals("X_Workflow")) {//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         if (!infor.containsKey(type)) {
-                            List typeList = new ArrayList<String>();
+                            List<String> typeList = new ArrayList<String>();
                             typeList.add(oldElem.getFirstChild().getNodeValue());
                             infor.put(type, typeList);
                         } else {
-                            ((List) infor.get(type)).add(oldElem.getFirstChild().getNodeValue());
+                            (infor.get(type)).add(oldElem.getFirstChild().getNodeValue());
                         }
                     }
                 }
@@ -194,8 +204,8 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.page.getSite().getShell(), "Error",
-                    "An error occured trying to paste Entities: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
+                    Messages.getString("_ErrorPasteEntity") + e.getLocalizedMessage()); //$NON-NLS-1$
         }
         return infor;
     }
@@ -215,13 +225,13 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
 
         // check that this element does not already exist
         // get position of the selected particle in the container
-        for (Iterator iter = group.getContents().iterator(); iter.hasNext();) {
+        for (Iterator<XSDParticle> iter = group.getContents().iterator(); iter.hasNext();) {
             XSDParticle p = (XSDParticle) iter.next();
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
                 if (thisDecl.getName().equals(elementName)) {
-                    MessageDialog.openError(page.getSite().getShell(), "Error", "The Business Element " + elementName
-                            + " already exists.");
+                    MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_TheBusinessElement") + elementName //$NON-NLS-1$ //$NON-NLS-2$
+                            + Messages.getString("_AlreadyExist")); //$NON-NLS-1$
                     return;
                 }
             }

@@ -232,6 +232,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private static Log log = LogFactory.getLog(DataModelMainPage.class);
 
+    private final String ADDELEMENT_MENU_ID = "AddAfterID"; //$NON-NLS-1$
+
     protected Text descriptionText;
 
     protected TreeViewer viewer;
@@ -254,9 +256,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private XSDDeleteParticleAction deleteParticleAction = null;
 
-    private XSDNewParticleFromTypeAction newParticleFromTypeAction = null;
+    private List<XSDNewParticleFromTypeAction> newParticleFromTypeActions = null;
 
-    private XSDNewParticleFromParticleAction newParticleFromParticleAction = null;
+    private List<XSDNewParticleFromParticleAction> newParticleFromParticleActions = null;
 
     private XSDNewGroupFromTypeAction newGroupFromTypeAction = null;
 
@@ -997,8 +999,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this, false);
         this.changeSubElementGroupAction = new XSDChangeToComplexTypeAction(this, true);
         this.deleteParticleAction = new XSDDeleteParticleAction(this);
-        this.newParticleFromTypeAction = new XSDNewParticleFromTypeAction(this);
-        this.newParticleFromParticleAction = new XSDNewParticleFromParticleAction(this);
         this.newGroupFromTypeAction = new XSDNewGroupFromTypeAction(this);
 
         this.editParticleAction = new XSDEditParticleAction(this);
@@ -1319,7 +1319,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         // add by rhou.fix bug 0012073: Enable to create element from sub element group
         if (obj instanceof XSDModelGroup) {
             manager.add(new Separator());
-            manager.add(newParticleFromTypeAction);
+            manager.add(getAddElementMenuForTypeClass(XSDModelGroup.class, Messages.getString("_AddElement"))); //$NON-NLS-1$
             manager.add(new Separator());
             manager.add(changeSubElementGroupAction);
         }
@@ -1330,10 +1330,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 if (term instanceof XSDElementDeclaration) {
                     manager.add(editParticleAction);
                     if (!Util.IsAImporedElement(term, xsdSchema) || term.getContainer() instanceof XSDSchema) {
-                        
-                        manager.add(getSubmenuForSimpleType("AddAfterID", "Add Element(after)"));
+
+                        manager.add(getAddElementMenuForTypeClass(XSDParticle.class, Messages.getString("_AddElementAfter"))); //$NON-NLS-1$
                         if (term instanceof XSDModelGroup) {
-                            manager.add(newParticleFromTypeAction);
+                            manager.add(getAddElementMenuForTypeClass(XSDModelGroup.class, Messages.getString("_AddElement"))); //$NON-NLS-1$
                             manager.add(newGroupFromTypeAction);
                         }
                         manager.add(deleteParticleAction);
@@ -1369,14 +1369,14 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1
                 && ((XSDComplexTypeDefinition) obj).getTargetNamespace() == null) {
             if (!isType && !Util.IsAImporedElement((XSDParticle) obj, xsdSchema)) {
-                manager.add(newParticleFromTypeAction);
+                manager.add(getAddElementMenuForTypeClass(XSDComplexTypeDefinition.class, Messages.getString("_AddElement"))); //$NON-NLS-1$
                 manager.add(newGroupFromTypeAction);
             }
             String ns = ((XSDComplexTypeDefinition) obj).getTargetNamespace();
             if (ns == null && !Util.IsAImporedElement((XSDComplexTypeDefinition) obj, xsdSchema)) {
                 // add by rhou.fix bug 0012073: Enable to create element from sub element group
                 manager.add(new Separator());
-                manager.add(newParticleFromTypeAction);
+                manager.add(getAddElementMenuForTypeClass(XSDComplexTypeDefinition.class, Messages.getString("_AddElement"))); //$NON-NLS-1$
                 manager.add(new Separator());
                 manager.add(editComplexTypeAction);
             }
@@ -1448,7 +1448,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
             // add by ymli; fix bug:0016645
             if (selectedObjs.length > 1 && isXSDParticles(selectedObjs)) {
-                manager.add(newParticleFromParticleAction);
+                manager.add(getAddElementMenuForTypeClass(XSDParticle.class, Messages.getString("_AddElementAfter"))); //$NON-NLS-1$
             }
 
         }
@@ -1601,28 +1601,52 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     }
 
-    private IMenuManager getSubmenuForSimpleType(String menuId, String menuName) {
-        IMenuManager menu = new MenuManager(menuName, ImageCache.getImage(EImage.ADD_OBJ.getPath()), menuId);
+    private IMenuManager getAddElementMenuForTypeClass(Class<?> typeClass, String menuName) {
+        IMenuManager menu = new MenuManager(menuName, ImageCache.getImage(EImage.ADD_OBJ.getPath()), ADDELEMENT_MENU_ID);
 
-        createActionItems(menu);
+        createActionItems(typeClass, menu);
 
         return menu;
     }
 
-    private void createActionItems(IMenuManager menu) {
+    private void createActionItems(Class<?> typeClass, IMenuManager menu) {
         String[] types = XSDTypes.getXSDSimpleType(null);
-        XSDNewParticleFromParticleAction xsdNewElementAction = null;
-        for (String type : types) {
-            xsdNewElementAction = new XSDNewParticleFromParticleAction(this, type);
-            menu.add(xsdNewElementAction);
+
+        if (typeClass == XSDParticle.class) {
+            if (newParticleFromParticleActions == null) {
+                newParticleFromParticleActions = new ArrayList<XSDNewParticleFromParticleAction>();
+
+                XSDNewParticleFromParticleAction xsdNewElementAction = null;
+                for (String type : types) {
+                    xsdNewElementAction = new XSDNewParticleFromParticleAction(this, type);
+                    newParticleFromParticleActions.add(xsdNewElementAction);
+                }
+            }
+
+            for (XSDNewParticleFromParticleAction xsdNewElementAction : newParticleFromParticleActions)
+                menu.add(xsdNewElementAction);
+
+        } else if (typeClass == XSDComplexTypeDefinition.class || typeClass == XSDModelGroup.class) {
+            if (newParticleFromTypeActions == null) {
+                newParticleFromTypeActions = new ArrayList<XSDNewParticleFromTypeAction>();
+
+                XSDNewParticleFromTypeAction xsdNewElementAction = null;
+                for (String type : types) {
+                    xsdNewElementAction = new XSDNewParticleFromTypeAction(this, type);
+                    newParticleFromTypeActions.add(xsdNewElementAction);
+                }
+            }
+
+            for (XSDNewParticleFromTypeAction xsdNewElementAction : newParticleFromTypeActions)
+                menu.add(xsdNewElementAction);
         }
-        
+
         menu.add(new Separator());
         menu.add(getAddComplexTypeElementAction());
     }
 
     private XSDAddComplexTypeElementAction getAddComplexTypeElementAction() {
-        return new XSDAddComplexTypeElementAction(this);  
+        return new XSDAddComplexTypeElementAction(this);
     }
 
     private boolean checkMandatoryElement(Object obj) {

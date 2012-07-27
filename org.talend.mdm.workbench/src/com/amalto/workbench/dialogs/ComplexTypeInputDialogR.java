@@ -62,14 +62,14 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
 
     private boolean isPK = false;
 
-    private XSDParticle selParticle;
+    private XSDModelGroup group;
     
-    public ComplexTypeInputDialogR(Shell parentShell, String title, XSDParticle selParticle, XSDSchema schema,
+    public ComplexTypeInputDialogR(Shell parentShell, String title, XSDModelGroup modelGroup, XSDSchema schema,
             List<XSDComplexTypeDefinition> types, XSDTypeDefinition typeDefinition, boolean isPK, boolean isXSDModelGroup) {
 
         super(null, parentShell, title, schema, typeDefinition, types, isXSDModelGroup);
 
-        this.selParticle = selParticle;
+        this.group = modelGroup;
         this.isPK = isPK;
     }
     
@@ -151,7 +151,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
     
     private boolean valid() {
         elementName = elementNameText.getText().trim();
-        if (((elementName == null) || ("".equals(elementName))) && ((refName == null) || "".equals(refName))) {//$NON-NLS-1$//$NON-NLS-2$
+        if (((elementName == null) || ("".equals(elementName)))) {//$NON-NLS-1$
             MessageDialog.openError(this.getShell(), Messages.getString("_Error"), //$NON-NLS-1$
                     Messages.getString("_BusinessNameCannotEmpty")); //$NON-NLS-1$
             setReturnCode(-1);
@@ -202,7 +202,6 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
         }
         
         // check that this element does not already exist
-        XSDModelGroup group = (XSDModelGroup) selParticle.getContainer();
         // get position of the selected particle in the container
         for (Iterator<XSDParticle> iter = group.getContents().iterator(); iter.hasNext();) {
             XSDParticle p = (XSDParticle) iter.next();
@@ -245,10 +244,6 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
 
     public int getMinOccurs() {
         return minOccurs;
-    }
-
-    public String getRefName() {
-        return refName;
     }
    
     public boolean isInherit() {
