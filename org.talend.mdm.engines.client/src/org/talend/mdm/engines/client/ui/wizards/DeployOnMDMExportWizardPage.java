@@ -445,7 +445,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             for (MDMServerDef serv : listServerSapgo) {
                 if (selectedSpagoBiEngineName.equals(serv.getName())) {
                     server = serv;
-                    mdmServer = toSpagoBiServer(server);
                     break;
                 }
             }
@@ -476,6 +475,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             }
 
         }
+        
+        mdmServer = toSpagoBiServer(server);
 
         MessageDialog.openInformation(getContainer().getShell(), Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
                 Messages.getString("DeployOnMDMExportWizardPage.publishJobSuccess")); //$NON-NLS-1$

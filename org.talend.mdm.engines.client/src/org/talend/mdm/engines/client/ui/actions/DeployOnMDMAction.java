@@ -49,6 +49,7 @@ import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.ui.actions.AContextualAction;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.MDMServerHelper;
 
 /**
@@ -60,7 +61,7 @@ import com.amalto.workbench.utils.MDMServerHelper;
 public final class DeployOnMDMAction extends AContextualAction {
     private static Logger log = Logger.getLogger(DeployOnMDMAction.class);
     
-    private static final String EXPORTJOBSCRIPTS = "Deploy to Talend MDM"; //$NON-NLS-1$
+    private static final String EXPORTJOBSCRIPTS = Messages.getString("DeployOnMDMAction_DeployToMDM"); //$NON-NLS-1$
     private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /*
@@ -100,6 +101,7 @@ public final class DeployOnMDMAction extends AContextualAction {
 
     public DeployOnMDMAction() {
         super();
+        
         this.setText(EXPORTJOBSCRIPTS);
         this.setToolTipText(EXPORTJOBSCRIPTS);
         this.setImageDescriptor(ImageProvider.getImageDesc(EImage.EXPORT_ICON));
@@ -123,10 +125,7 @@ public final class DeployOnMDMAction extends AContextualAction {
             Item item = viewObj.getProperty().getItem();            
             Property property = item.getProperty();
             
-            if (item instanceof MDMServerObjectItem) {
-                MDMServerDef encryptedServerDef = mdmServer.getEncryptedServerDef();
-                ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(encryptedServerDef);
-            } else if (property != null) {
+            if (property != null) {
                 property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, mdmServer.getName());
             }
             
