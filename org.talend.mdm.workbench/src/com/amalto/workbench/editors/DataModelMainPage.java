@@ -482,14 +482,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             log.error(ex.getMessage(), ex);
                             String detail = "";//$NON-NLS-1$
                             if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
-                                detail += " , " + Messages.getString("Dueto") + "\n" + ex.getMessage(); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+                                detail += " , " + Messages.getString("Dueto", ex.getMessage()); //$NON-NLS-1$//$NON-NLS-2$
                             }
                             setXsdSchema(schemaCpy);
                             commit();
                             refresh();
                             MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), Messages //$NON-NLS-1$
-                                    .getString("ImportingXSDSchemaFailed") //$NON-NLS-1$
-                                    + detail);
+                                    .getString("ImportingXSDSchemaFailed", detail)); //$NON-NLS-1$
                         }
                     }
                 });
@@ -1925,7 +1924,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         EList<XSDElementDeclaration> elems = xsdSchema.getElementDeclarations();
         for (XSDElementDeclaration elem : elems) {
             if (elemCntMap.get(elem.getName()) == Boolean.TRUE) {
-                throw new IllegalAccessException(Messages.getString("XSDDuplicateName") + elem.getName()); //$NON-NLS-1$
+                throw new IllegalAccessException(Messages.getString("XSDDuplicateName", elem.getName())); //$NON-NLS-1$
             }
             elemCntMap.put(elem.getName(), Boolean.TRUE);
         }

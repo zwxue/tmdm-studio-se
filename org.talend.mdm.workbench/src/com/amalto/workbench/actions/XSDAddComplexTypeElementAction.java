@@ -58,6 +58,8 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
 public class XSDAddComplexTypeElementAction extends UndoAction {
 
     private static Log log = LogFactory.getLog(XSDAddComplexTypeElementAction.class);
+    
+    private final String defaultTypeName = "string"; //$NON-NLS-1$
 
     private XSDParticle selParticle = null;
     
@@ -83,7 +85,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
     public XSDAddComplexTypeElementAction(DataModelMainPage page) {
         super(page);
-        setText("Add Complex Type Element"); //$NON-NLS-1$
+        setText(Messages.getString("_AddCType")); //$NON-NLS-1$
     }
 
     public void updateElementFields() {
@@ -124,8 +126,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             } else if (selection.getFirstElement() instanceof XSDModelGroup) {
                 modelGroup = (XSDModelGroup) selection.getFirstElement();
             } else {
-                log.info("UNKNOWN SELECTION: " + selection.getFirstElement().getClass().getName() + "  --  "
-                        + selection.getFirstElement());
+                log.info(Messages.getString("_UnkownSection", selection.getFirstElement().getClass().getName(), selection.getFirstElement().toString())); //$NON-NLS-1$
                 return Status.CANCEL_STATUS;
             }
         }
@@ -156,7 +157,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_CreateCTypeError") + e.getLocalizedMessage()); //$NON-NLS-1$
+                    Messages.getString("_CreateCTypeError", e.getLocalizedMessage())); //$NON-NLS-1$
             return Status.CANCEL_STATUS;
         }
 
@@ -165,10 +166,10 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
     private int openDialog() {
         XSDSimpleTypeDefinition simpleTypeDefinition = schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(),
-                "string"); //$NON-NLS-1$
+                defaultTypeName);
         List<XSDComplexTypeDefinition> types = Util.getComplexTypes(schema);
 
-        dialogR = new ComplexTypeInputDialogR(page.getSite().getShell(), Messages.getString("_AddCTypeError"), modelGroup, schema, types, //$NON-NLS-1$
+        dialogR = new ComplexTypeInputDialogR(page.getSite().getShell(), Messages.getString("_AddCType"), modelGroup, schema, types, //$NON-NLS-1$
                 simpleTypeDefinition, false, false);
 
         dialogR.setBlockOnOpen(true);
@@ -185,7 +186,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         resultElementDeclaration.setName(elementName);
         
         resultElementDeclaration.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(),
-                "string")); //$NON-NLS-1$
+                defaultTypeName));
 
         XSDParticle resultParticle = factory.createXSDParticle();
         resultParticle.setContent(resultElementDeclaration);
@@ -269,7 +270,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_PasteError") + e.getLocalizedMessage()); //$NON-NLS-1$
+                    Messages.getString("_PasteError", e.getLocalizedMessage())); //$NON-NLS-1$
         }
         return infor;
     }
@@ -368,7 +369,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             // add an element declaration
             subElement = factory.createXSDElementDeclaration();
             subElement.setName("subelement");//$NON-NLS-1$
-            subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
+            subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), defaultTypeName));
 
             subParticle = factory.createXSDParticle();
             subParticle.unsetMaxOccurs();

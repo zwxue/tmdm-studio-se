@@ -44,6 +44,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -69,15 +70,15 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
     public XSDNewParticleFromParticleAction(DataModelMainPage page) {
         super(page);
         this.simpleTypeName = "string";//$NON-NLS-1$
-        setText("Add string Element");//$NON-NLS-1$//$NON-NLS-2$
-        setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");//$NON-NLS-1$
+        setText(Messages.getString("_AddStringElement")); //$NON-NLS-1$
+        setToolTipText(Messages.getString("_AddBusinessElementTip")); //$NON-NLS-1$
     }
     
     public XSDNewParticleFromParticleAction(DataModelMainPage page, String simpleType) {
         super(page);
         this.simpleTypeName = simpleType;
-        setText("Add "+ simpleType + " Element");//$NON-NLS-1$//$NON-NLS-2$
-        setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");//$NON-NLS-1$
+        setText(Messages.getString("_AddTypeElement", simpleType)); //$NON-NLS-1$ //$NON-NLS-2$
+        setToolTipText(Messages.getString("_AddBusinessElementTip")); //$NON-NLS-1$
     }
 
     public IStatus doAction() {
@@ -108,11 +109,11 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
                 XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
                 if (d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))
                     continue;
-                elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
+                elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));//$NON-NLS-1$//$NON-NLS-2$
             }
-            elementDeclarations.add("");
+            elementDeclarations.add("");//$NON-NLS-1$
 
-            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), "Add a new Business Element", null, null,
+            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), Messages.getString("_AddANewBusinessElement"), null, null, //$NON-NLS-1$
                     elementDeclarations, 0, 1, true, false);
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();
@@ -129,7 +130,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 
             XSDElementDeclaration decl = factory.createXSDElementDeclaration();
             decl.setName(this.elementName);
-            if (!refName.equals("")) {
+            if (!refName.equals("")) {//$NON-NLS-1$
                 XSDElementDeclaration ref = Util.findReference(refName, schema);
                 if (ref != null) {
                     decl.setResolvedElementDeclaration(ref);
@@ -188,8 +189,8 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
+                    Messages.getString("_ErrorCreatBusinessElement", e.getLocalizedMessage())); //$NON-NLS-1$
 
             return Status.CANCEL_STATUS;
         }
@@ -222,9 +223,9 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             if (oldAnn != null) {
                 for (int i = 0; i < oldAnn.getApplicationInformation().size(); i++) {
                     Element oldElem = oldAnn.getApplicationInformation().get(i);
-                    String type = oldElem.getAttributes().getNamedItem("source").getNodeValue();
+                    String type = oldElem.getAttributes().getNamedItem("source").getNodeValue();//$NON-NLS-1$
                     // X_Write,X_Hide,X_Workflow
-                    if (type.equals("X_Write") || type.equals("X_Hide") || type.equals("X_Workflow")) {
+                    if (type.equals("X_Write") || type.equals("X_Hide") || type.equals("X_Workflow")) {//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         if (!infor.containsKey(type)) {
                             List<String> typeList = new ArrayList<String>();
                             typeList.add(oldElem.getFirstChild().getNodeValue());
@@ -238,8 +239,8 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.page.getSite().getShell(), "Error",
-                    "An error occured trying to paste Entities: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
+                    Messages.getString("_ErrorPasteEntity", e.getLocalizedMessage())); //$NON-NLS-1$
         }
         return infor;
     }
@@ -266,8 +267,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
                 if (thisDecl.getName().equals(elementName)) {
-                    MessageDialog.openError(page.getSite().getShell(), "Error", "The Business Element " + elementName
-                            + " already exists.");
+                    MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_TheBusinessElement", elementName)); //$NON-NLS-1$ //$NON-NLS-2$
                     return;
                 }
             }

@@ -52,8 +52,6 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
 
     private String elementName = "";//$NON-NLS-1$
 
-    private String refName = "";//$NON-NLS-1$
-
     private int minOccurs = 0;
 
     private int maxOccurs = 1;
@@ -208,8 +206,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
                 if (thisDecl.getName().equals(elementName)) {
-                    MessageDialog.openError(getShell(), Messages.getString("_Error"), Messages.getString("_BusinessEle") + elementName  //$NON-NLS-1$ //$NON-NLS-2$
-                            + Messages.getString("_AlreadyExist")); //$NON-NLS-1$
+                    MessageDialog.openError(getShell(), Messages.getString("_Error"), Messages.getString("_BusinessEle", elementName));  //$NON-NLS-1$ //$NON-NLS-2$
                     return  false;
                 }
             }
@@ -224,8 +221,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
                 XSDTypeDefinition td = iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDSimpleTypeDefinition) {
-                        MessageDialog.openError(getShell(), Messages.getString("_Error"), Messages.getString("_ThisType") + typeName  //$NON-NLS-1$ //$NON-NLS-2$
-                                + Messages.getString("_ExistAsSimpleType")); //$NON-NLS-1$
+                        MessageDialog.openError(getShell(), Messages.getString("_Error"), Messages.getString("_ThisType", typeName));  //$NON-NLS-1$ //$NON-NLS-2$
                         return false;
                     }
                 }

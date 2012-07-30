@@ -72,8 +72,8 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
             XSDTypeDefinition typeDefinition, List<XSDComplexTypeDefinition> types, boolean isXSDModelGroup) {
         super(parentShell);
         this.title = title;
-        if(title == null || title.equals(""))
-            this.title = "Complex Type Properties";//$NON-NLS-1$
+        if(title == null || title.equals("")) //$NON-NLS-1$
+            this.title = Messages.getString("_ComplexTypeProp"); //$NON-NLS-1$
             
         this.caller = caller;
         this.types = types;
@@ -157,13 +157,13 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
 
     public void modifyText(ModifyEvent e) {
         getButton(IDialogConstants.OK_ID).setEnabled(true);
-        conceptPanel.setMessage("");
+        conceptPanel.setMessage("");//$NON-NLS-1$
 
         String type = conceptPanel.getText();
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
                 || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
-            conceptPanel.setMessage("The name cannot contain the empty characters");
+            conceptPanel.setMessage(Messages.getString("_NameWithEmptyCharacters")); //$NON-NLS-1$
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         }
@@ -178,10 +178,10 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
             }
             if (typeToCompare.equals(type)) {
                 if (caller instanceof XSDNewComplexTypeDefinition) {
-                    conceptPanel.setMessage("The same Type name already exists");
+                    conceptPanel.setMessage(Messages.getString("_SameTypeNameExists")); //$NON-NLS-1$
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                 } else if (caller instanceof XSDChangeToComplexTypeAction && specType instanceof XSDSimpleTypeDefinition) {
-                    conceptPanel.setMessage("The same Type name already exists");
+                    conceptPanel.setMessage(Messages.getString("_SameTypeNameExists")); //$NON-NLS-1$
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                 }
                 break;

@@ -78,13 +78,12 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
     public XSDNewParticleFromTypeAction(DataModelMainPage page, String simpleType) {
         super(page);
         this.simpleTypeName = simpleType;
-        setText(Messages.getString("_Add")+ simpleType + Messages.getString("_Element")); //$NON-NLS-1$ //$NON-NLS-2$
+        setText(Messages.getString("_AddTypeElement", simpleType)); //$NON-NLS-1$ //$NON-NLS-2$
         setToolTipText(Messages.getString("_AddFromTypeFirstPos")); //$NON-NLS-1$
     }
 
     public IStatus doAction() {
         try {
-
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             if (selection.getFirstElement() instanceof XSDComplexTypeDefinition) {
                 ctd = (XSDComplexTypeDefinition) selection.getFirstElement();
@@ -99,8 +98,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             } else if (selection.getFirstElement() instanceof XSDModelGroup) {
                 group = (XSDModelGroup) selection.getFirstElement();
             } else {
-                log.info(Messages.getString("_UnkownSection") + selection.getFirstElement().getClass().getName() + "  --  " //$NON-NLS-1$ //$NON-NLS-2$
-                        + selection.getFirstElement());
+                log.info(Messages.getString("_UnkownSection", selection.getFirstElement().getClass().getName(), selection.getFirstElement().toString()));
                 return Status.CANCEL_STATUS;
             }
 
@@ -157,7 +155,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_ErrorCreatBusinessElement") + e.getLocalizedMessage()); //$NON-NLS-1$
+                    Messages.getString("_ErrorCreatBusinessElement", e.getLocalizedMessage())); //$NON-NLS-1$
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -205,7 +203,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_ErrorPasteEntity") + e.getLocalizedMessage()); //$NON-NLS-1$
+                    Messages.getString("_ErrorPasteEntity", e.getLocalizedMessage())); //$NON-NLS-1$
         }
         return infor;
     }
@@ -230,8 +228,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
                 if (thisDecl.getName().equals(elementName)) {
-                    MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_TheBusinessElement") + elementName //$NON-NLS-1$ //$NON-NLS-2$
-                            + Messages.getString("_AlreadyExist")); //$NON-NLS-1$
+                    MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_TheBusinessElement", elementName)); //$NON-NLS-1$ //$NON-NLS-2$
                     return;
                 }
             }

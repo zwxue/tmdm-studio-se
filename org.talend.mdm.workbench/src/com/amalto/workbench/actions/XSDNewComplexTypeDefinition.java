@@ -38,6 +38,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -60,8 +61,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
     public XSDNewComplexTypeDefinition(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("Create a Complex Type");
-        setToolTipText("Create a new Complex Type which can be referred to by Elements or Entities");
+        setText(Messages.getString("_CreateAComplexType")); //$NON-NLS-1$
+        setToolTipText(Messages.getString("_CreateAComplexTypeCanBeRefered")); //$NON-NLS-1$
         setDescription(getToolTipText());
     }
 
@@ -87,8 +88,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
         XSDElementDeclaration subElement = null;
 
         subElement = factory.createXSDElementDeclaration();
-        subElement.setName("subelement");
-        subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+        subElement.setName("subelement");//$NON-NLS-1$
+        subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
 
         subParticle = factory.createXSDParticle();
         subParticle.unsetMaxOccurs();
@@ -152,8 +153,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
         if (term instanceof XSDModelGroup) {
             XSDModelGroup group = (XSDModelGroup) term;
             if (group.getCompositor() == XSDCompositor.ALL_LITERAL) {
-                if (MessageDialog.openConfirm(null, "Change to sequence type",
-                        "The complex type will be changed to sequence in response to extend parent type")) {
+                if (MessageDialog.openConfirm(null, Messages.getString("_ChangeToSequenceType"), //$NON-NLS-1$
+                        Messages.getString("_ComplexTypeToSequence"))) { //$NON-NLS-1$
                     group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
                     complexType.updateElement();
                     currentGroup.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
@@ -187,20 +188,19 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
     }
 
     private boolean validateType() {
-        if (!"".equals(typeName)) {
-            EList list = schema.getTypeDefinitions();
-            for (Iterator iter = list.iterator(); iter.hasNext();) {
+        if (!"".equals(typeName)) {//$NON-NLS-1$
+            EList<XSDTypeDefinition> list = schema.getTypeDefinitions();
+            for (Iterator<XSDTypeDefinition> iter = list.iterator(); iter.hasNext();) {
                 XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDComplexTypeDefinition) {
-                        MessageDialog.openError(page.getSite().getShell(), "Error", "This type \"" + typeName
-                                + "\" already exists as a Complex Type");
+                        MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_ThisTypeHead", typeName)); //$NON-NLS-1$ //$NON-NLS-2$
                         return false;
                     }
                 }
             }// for
         } else {
-            MessageDialog.openError(page.getSite().getShell(), "Error", "Please enter the Complex Type name");
+            MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_PleaseEnterCTypeName")); //$NON-NLS-1$ //$NON-NLS-2$
             return false;
         }
         return true;
