@@ -12,19 +12,11 @@
 // ============================================================================
 package org.talend.mdm.repository.i18n;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 import org.eclipse.osgi.util.NLS;
-import org.talend.mdm.repository.plugin.RepositoryPlugin;
 
 public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
-    
-    private static final String PLUGIN_ID = RepositoryPlugin.PLUGIN_ID;
-    
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
     
     public static final String KEY_NOT_FOUND_PREFIX = "!!!"; //$NON-NLS-1$
 
