@@ -164,8 +164,8 @@ public class ServerExplorer extends ViewPart {
             MDMServerDefItem serverDefItem = getMDMItem(viewObj);
             MDMServerDef serverDef = serverDefItem.getServerDef();
             if (serverDef.getPasswd().equals("")) { //$NON-NLS-1$
-                MessageDialog.openInformation(null, Messages.ServerExplorer_WarningText, Messages.Reinput_Password + " " //$NON-NLS-1$
-                        + serverDef.getName());
+                MessageDialog.openInformation(null, Messages.ServerExplorer_WarningText,
+                        Messages.bind(Messages.Reinput_Password, serverDef.getName()));
                 editServerDef(viewObj);
             }
         }
@@ -217,9 +217,9 @@ public class ServerExplorer extends ViewPart {
 
     @Override
     public void setFocus() {
-        if(treeViewer != null)
+        if (treeViewer != null)
             treeViewer.getTree().setFocus();
-        
+
         refreshServerDefs();
     }
 
@@ -350,6 +350,7 @@ public class ServerExplorer extends ViewPart {
     }
 
     public class EventManageAction extends Action {
+
         public EventManageAction() {
             setImageDescriptor(IMG_EVENTMANAGER);
             setText(Messages.ServerExplorer_EventManager);
@@ -360,11 +361,11 @@ public class ServerExplorer extends ViewPart {
         }
 
         private void doOpenEventManagerAction() {
-           IService service= GlobalServiceRegister.getDefault().getService(IEventMgrService.class);
-           if(service!=null){
-               IEventMgrService mgr=(IEventMgrService)service;
-               mgr.run();
-           }
+            IService service = GlobalServiceRegister.getDefault().getService(IEventMgrService.class);
+            if (service != null) {
+                IEventMgrService mgr = (IEventMgrService) service;
+                mgr.run();
+            }
         }
     }
 

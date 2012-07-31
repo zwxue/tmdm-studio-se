@@ -39,7 +39,7 @@ public class ViewerLabelProvider extends LabelProvider {
             MDMServerDefItem mdmItem = getMDMItem((IRepositoryViewObject) element);
             if (mdmItem != null) {
                 MDMServerDef serverDef = mdmItem.getServerDef();
-                return serverDef.getName() + " (" + serverDef.getHost() + ":" + serverDef.getPort() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+                return serverDef.getName() + " (" + serverDef.getHost() + ":" + serverDef.getPort() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
         }
         return ""; //$NON-NLS-1$
