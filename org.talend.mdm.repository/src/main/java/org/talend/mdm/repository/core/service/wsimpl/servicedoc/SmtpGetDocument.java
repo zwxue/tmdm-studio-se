@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -33,29 +35,29 @@ public class SmtpGetDocument extends AbstractGetDocument {
 
     @Override
     public String getDescription() {
-        return "This service sends an email through the SMTP connector.\n"
-                + "It cantains the following configurations:\n"
-                + "  host:         mandatory; the smtp server host name.\n"
-                + "  port:         mandatory; the smtp server port.\n"
-                + "  username:     mandatory; the smtp server username.\n"
-                + "  password:     mandatory; the smtp server password.\n"
-                + "  from:         mandatory; the email address of the sender.\n"
-                + "  to:           mandatory; the email addresses of the recipients,separated by commas.\n"
-                + "  permanentbcc: optional;  the permanent blind copied recipients.\n"
-                + "  subjectprefix:optional;  a sentence inserted at the beginning of the subject line.\n"
-                + "  logfilename:  optional;  the full path of a log file that records the mails sent.\n"
-                + "  process:      optional;  an optional process.When no process is supplied,the item xml will be used as the body "
-                + "of the mail.When a process is supplied,the following variables,including \'recipients\',\'subject\',\'body\'and \'contenttype\',will be extracted from the pipeline after the "
-                + "process is run.";
+        return Messages.SmtpGetDocument_Desc0
+                + Messages.SmtpGetDocument_Desc1
+                + Messages.SmtpGetDocument_Desc2
+                + Messages.SmtpGetDocument_Desc3
+                + Messages.SmtpGetDocument_Desc4
+                + Messages.SmtpGetDocument_Desc5
+                + Messages.SmtpGetDocument_Desc6
+                + Messages.SmtpGetDocument_Desc7
+                + Messages.SmtpGetDocument_Desc8
+                + Messages.SmtpGetDocument_Desc9
+                + Messages.SmtpGetDocument_Desc10
+                + Messages.SmtpGetDocument_Desc11
+                + Messages.SmtpGetDocument_Desc12
+                + Messages.SmtpGetDocument_Desc13;
     }
 
     @Override
     public String getDocument() {
-        return "There are two type parameters,\n\n" + "One(Example) :\n"
-                + "from=***@***.com&to=###@###.com&subjectprefix=MDM Logging Event" + "\n\n\n" + "Two(Example) :\n"
-                + "<parameters>\n" + "  <from>***@***.com</from>\n" + " <to>###@###.com</to>\n" + " <cc></cc>\n"
-                + " <bcc></bcc>\n" + "  <subjectprefix></subjectprefix>\n" + "  <logfilename></logfilename>\n"
-                + " <process></process>\n" + "</parameters>\n";
+        return "There are two type parameters,\n\n" + "One(Example) :\n" //$NON-NLS-1$ //$NON-NLS-2$
+                + "from=***@***.com&to=###@###.com&subjectprefix=MDM Logging Event" + "\n\n\n" + "Two(Example) :\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                + "<parameters>\n" + "  <from>***@***.com</from>\n" + " <to>###@###.com</to>\n" + " <cc></cc>\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                + " <bcc></bcc>\n" + "  <subjectprefix></subjectprefix>\n" + "  <logfilename></logfilename>\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                + " <process></process>\n" + "</parameters>\n"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

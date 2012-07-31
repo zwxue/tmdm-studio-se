@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 
 /**
  * DOC hbhong  class global comment. Detailled comment
@@ -34,14 +36,14 @@ public class SVNGetDocument extends AbstractGetDocument {
 
     @Override
     public String getDescription() {
-        return "N/A";
+        return "N/A"; //$NON-NLS-1$
     }
 
     @Override
     public String getDocument() {
-        if ("fr".matches(twoLettersLanguageCode.toLowerCase()))
-            return "Ce service interagit avec le connecteur Subversion";
-        return "This service interacts with the Subversion connector";
+        if ("fr".matches(twoLettersLanguageCode.toLowerCase())) //$NON-NLS-1$
+            return Messages.SVNGetDocument_SVNGetDocumentA;
+        return Messages.SVNGetDocument_SVNGetDocumentB;
     }
 
 }

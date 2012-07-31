@@ -21,6 +21,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -56,7 +57,7 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Custom Layout";
+        return Messages._CustomeLayout;
     }
 
     public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {

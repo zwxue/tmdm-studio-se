@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.xsd;
 
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.ValidationRuleExcpressDialog2;
 
 import com.amalto.workbench.actions.XSDVisibleRuleAction;
@@ -41,7 +42,7 @@ public class XSDVisibleRuleActionR extends XSDVisibleRuleAction {
      */
     @Override
     protected ValidationRuleExcpressDialog getExpressDialog() {
-        return new ValidationRuleExcpressDialog2(page.getSite().getShell(), getTreeParent(), "Build Validation Rule Expression ",
+        return new ValidationRuleExcpressDialog2(page.getSite().getShell(), getTreeParent(), Messages.XSDVisibleXXR_BuildvalidationExpress,
                 struc.getVisibleRule(), conceptName, true, false);
     }
 }

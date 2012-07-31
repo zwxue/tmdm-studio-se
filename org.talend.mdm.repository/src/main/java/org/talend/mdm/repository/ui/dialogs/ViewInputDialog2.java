@@ -17,6 +17,7 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
 import com.amalto.workbench.dialogs.ViewInputDialog;
@@ -44,7 +45,7 @@ public class ViewInputDialog2 extends ViewInputDialog {
     }
 
     public void widgetSelected(SelectionEvent e) {
-        dlg = new XpathSelectDialog2(getParentShell(), "Select one Entity", site, false, null);
+        dlg = new XpathSelectDialog2(getParentShell(), Messages.ViewInputDialog2_SelectOneEntity, site, false, null);
         dlg.setBlockOnOpen(true);
         dlg.open();
 

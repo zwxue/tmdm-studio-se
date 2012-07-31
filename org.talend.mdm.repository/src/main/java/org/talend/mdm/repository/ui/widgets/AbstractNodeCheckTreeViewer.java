@@ -43,6 +43,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
@@ -204,7 +205,7 @@ public abstract class AbstractNodeCheckTreeViewer {
         GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(400, 300).applyTo(itemComposite);
 
         itemLabel = new Label(itemComposite, SWT.NONE);
-        itemLabel.setText("Select Items to Tag");
+        itemLabel.setText(Messages.AbstractXXViewer_SelectItem);
         GridDataFactory.swtDefaults().span(2, 1).applyTo(itemLabel);
 
         createTreeViewer(itemComposite);
@@ -232,7 +233,7 @@ public abstract class AbstractNodeCheckTreeViewer {
         Button hide = new Button(buttonComposite, SWT.PUSH);
         hide.setVisible(false);
         Button selectAll = new Button(buttonComposite, SWT.PUSH);
-        selectAll.setText("Select All");
+        selectAll.setText(Messages.AbstractXXViewer_SelectAll);
         selectAll.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -242,7 +243,7 @@ public abstract class AbstractNodeCheckTreeViewer {
         });
 
         Button deselectAll = new Button(buttonComposite, SWT.PUSH);
-        deselectAll.setText("Deselect all");
+        deselectAll.setText(Messages.AbstractXXViewer_DeselectAll);
         deselectAll.addSelectionListener(new SelectionAdapter() {
 
             @Override

@@ -20,6 +20,7 @@ import java.util.List;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
@@ -31,7 +32,7 @@ import com.amalto.workbench.image.ImageCache;
 public class CopyUrlAction extends AbstractRepositoryAction {
     
     public CopyUrlAction() {
-        super("Copy Url");
+        super(Messages.CopyUrlAction_CopyUrl);
         setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
     }
 

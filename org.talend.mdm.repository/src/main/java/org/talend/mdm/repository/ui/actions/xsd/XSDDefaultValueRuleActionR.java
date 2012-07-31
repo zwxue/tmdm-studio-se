@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.xsd;
 
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.ValidationRuleExcpressDialog2;
 
 import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
@@ -43,7 +44,7 @@ public class XSDDefaultValueRuleActionR extends XSDDefaultValueRuleAction {
     @Override
     protected ValidationRuleExcpressDialog getExpressDialog() {
         return new ValidationRuleExcpressDialog2(page.getSite().getShell(), getTreeParent(),
-                "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName, true, false);
+                Messages.XSDDefaultXXR_BuildExpression, struc.getDefaultValueRule(), conceptName, true, false);
     }
 
 }

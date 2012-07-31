@@ -143,7 +143,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
     public boolean isVisible(IRepositoryViewObject viewObj) {
         if (getSelectedObject().size() == 1) {
             String path = viewObj.getPath();
-            if (path != null && path.equalsIgnoreCase("system")) {
+            if (path != null && path.equalsIgnoreCase("system")) {//$NON-NLS-1$
                 return false;
             }
             return true;

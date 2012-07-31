@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 
 /**
  * DOC hbhong  class global comment. Detailled comment
@@ -34,17 +36,17 @@ public class ItemDispatcherGetDocument extends AbstractGetDocument {
 
     @Override
     public String getDescription() {
-        return "This service dispatch an item to target systems automatically, according to the DataModel annotation.";
+        return Messages.ItemDispatcherXX_desc;
     }
 
     @Override
     public String getDocument() {
-        return "There are two cases of using parameters,\n\n" + "One(Example) :\n" + "<parameters>\n" + "   <transformer>\n"
-                + "     <!-- OPTIONAL DEFAULT 'true'-->\n" + "     <allInOne>true</allInOne>\n"
-                + "     <assignTo>transformer1</assignTo>\n" + "   </transformer>\n" + "</parameters>\n" + "Two(Example) :\n"
-                + "<parameters>\n" + "   <transformer>\n" + "     <allInOne>false</allInOne>\n" + "     <assignTo>\n"
-                + "             {\n" + "             0:transformer1," + "\n" + "             1:transformer2" + "\n"
-                + "             }\n" + "     </assignTo>\n" + "   </transformer>\n" + "</parameters>\n";
+        return "There are two cases of using parameters,\n\n" + "One(Example) :\n" + "<parameters>\n" + "   <transformer>\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                + "     <!-- OPTIONAL DEFAULT 'true'-->\n" + "     <allInOne>true</allInOne>\n" //$NON-NLS-1$ //$NON-NLS-2$
+                + "     <assignTo>transformer1</assignTo>\n" + "   </transformer>\n" + "</parameters>\n" + "Two(Example) :\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                + "<parameters>\n" + "   <transformer>\n" + "     <allInOne>false</allInOne>\n" + "     <assignTo>\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                + "             {\n" + "             0:transformer1," + "\n" + "             1:transformer2" + "\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                + "             }\n" + "     </assignTo>\n" + "   </transformer>\n" + "</parameters>\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
 
 }

@@ -124,7 +124,7 @@ public class FileInputDialog extends Dialog {
                 }
             }
         });
-        selFileBun.setText("...");
+        selFileBun.setText("..."); //$NON-NLS-1$
         errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
         GridData gd_errorMessageText = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
         gd_errorMessageText.horizontalSpan = 2;

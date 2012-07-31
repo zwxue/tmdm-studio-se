@@ -15,6 +15,8 @@ package org.talend.mdm.repository.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -139,6 +141,6 @@ public class CustomFormElement {
     }
 
     public String toString() {
-        return "Name=" + name + "  canMove=" + canMove + "  type=" + type + "  XPath=" + getXpath(); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        return Messages.bind(Messages.CustomFormElement_ToString, name, Boolean.toString(canMove), type, getXpath());
     }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
@@ -53,7 +54,7 @@ public class AnnotationOrderedListsDialogR extends AnnotationOrderedListsDialog 
 
     @Override
     protected XpathSelectDialog getNewXpathSelectDialog(DataModelMainPage parentPage, String dataModelName) {
-        return new XpathSelectDialog2(parentPage.getSite().getShell(), "Select Xpath ...", parentPage.getSite(), false,
+        return new XpathSelectDialog2(parentPage.getSite().getShell(), Messages.AnnotationXXDialogR_SelectXPath, parentPage.getSite(), false,
                 dataModelName);
     }
 

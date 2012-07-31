@@ -12,13 +12,15 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 
 /**
  * DOC hbhong  class global comment. Detailled comment
  */
 public class CallTransformerGetDocument extends AbstractGetDocument {
 
-    private static final String Param_Transformer_Name = "process";
+    private static final String Param_Transformer_Name = "process"; //$NON-NLS-1$
     /**
      * DOC hbhong CallTransformerGetDocument constructor comment.
      * 
@@ -36,17 +38,17 @@ public class CallTransformerGetDocument extends AbstractGetDocument {
 
     @Override
     public String getDescription() {
-        if ("fr".matches(twoLettersLanguageCode.toLowerCase()))
-            return "Service qui appelle des processus";
+        if ("fr".matches(twoLettersLanguageCode.toLowerCase())) //$NON-NLS-1$
+            return Messages.CallTransformerGetDocument_FrenchDesc;
 
-        return "The service call process";
+        return Messages.CallTransformerGetDocument_EnglishDesc;
     }
 
     @Override
     public String getDocument() {
-        return "This service takes a single parameter: \n" + "process: the name of the process. \n\n"
-                + "The process should expect to receive the content of the Item sent to the process in the DEFAULT variable \n"
-                + "with a content-type of text/xml. \n\n" + "Example: " + Param_Transformer_Name + "=tiscall_test";
+        return "This service takes a single parameter: \n" + "process: the name of the process. \n\n" //$NON-NLS-1$ //$NON-NLS-2$
+                + "The process should expect to receive the content of the Item sent to the process in the DEFAULT variable \n" //$NON-NLS-1$
+                + "with a content-type of text/xml. \n\n" + "Example: " + Param_Transformer_Name + "=tiscall_test"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
 }

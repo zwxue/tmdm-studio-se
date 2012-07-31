@@ -45,7 +45,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
     static Logger log = Logger.getLogger(GenerateJobTriggerAction.class);
 
     public GenerateJobTriggerAction() {
-        super("Generate Talend Job Caller Trigger"); //$NON-NLS-1$
+        super(Messages.GenerateJobXX_GenTJobTrigger);
         setImageDescriptor(ImageProvider.getImageDesc(ECoreImage.PROCESS_ICON));
     }
 
@@ -97,13 +97,13 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             String server = "http://localhost:8180"; //$NON-NLS-1$
 
             Execution execution = dialog.getExecution();
-            String url = "";
+            String url = ""; //$NON-NLS-1$
     		switch (execution) {
     		case EMBEDDED:
-    			url = "ltj://" + jobName + "/" + jobVersion;
+    			url = "ltj://" + jobName + "/" + jobVersion; //$NON-NLS-1$ //$NON-NLS-2$
     			break;
     		case WEB_SERVICE:
-    			url = server + "/" + jobName + "_" + jobVersion + "/services/" + jobName;
+    			url = Messages.bind(Messages.GenerateJobXX_UrlString, server, jobName,jobVersion, jobName);
     			break;
     		}
             
@@ -116,7 +116,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
 				+ "</configuration>\n";//$NON-NLS-1$
 				break;
 			case INTEGRATED:
-				parameter = "<configuration>\n" + "<url>" + url + "</url>" 
+				parameter = "<configuration>\n" + "<url>" + url + "</url>"  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ "</configuration>\n";//$NON-NLS-1$
 				break;
 			}

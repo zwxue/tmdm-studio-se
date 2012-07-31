@@ -16,11 +16,29 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 
-    private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages_en"; //$NON-NLS-1$
     
     public static final String KEY_NOT_FOUND_PREFIX = "!!!"; //$NON-NLS-1$
 
     public static final String KEY_NOT_FOUND_SUFFIX = "!!!"; //$NON-NLS-1$
+
+    public static String _CamelProcessItem;
+
+    public static String _CustomeLayout;
+
+    public static String _DumpToConsoleDescription;
+
+    public static String _ErrorStatusMsg1;
+
+    public static String _ErrorStatusMsg2;
+
+    public static String _LoggingSmtpDesc;
+
+    public static String _OkStatusMsg;
+
+    public static String _Resource;
+
+    public static String _SubTaskTitle;
 
     public static String AbstractDataClusterAction_ConnectFailed;
 
@@ -40,11 +58,21 @@ public class Messages extends NLS {
 
     public static String AbstractRepositoryAction_lockedObjTitle;
 
+    public static String AbstractXXViewer_DeselectAll;
+
+    public static String AbstractXXViewer_SelectAll;
+
+    public static String AbstractXXViewer_SelectItem;
+
     public static String AddBrowseItemsWizardR_duplicatedView;
 
 	public static String AddBrowseItemsWizardR_warning;
+
+    public static String AnnotationXXDialogR_SelectXPath;
 	
-	public static String Common_inputName;
+	public static String CodeProjectXX_PluginUsedText;
+
+    public static String Common_inputName;
     
     public static String Common_rename;
 
@@ -55,6 +83,8 @@ public class Messages extends NLS {
     public static String Common_nameIsUsed;
 
     public static String CopyAction_copy;
+
+    public static String CopyUrlAction_CopyUrl;
 
     public static String CreateFolderAction_createCategory;
 
@@ -104,6 +134,8 @@ public class Messages extends NLS {
     
     public static String DeployToLastServerAction_deployToLastServer;
 
+    public static String DumpAndGoPluginDetail_PlugDesc;
+
     public static String DuplicateAction_duplicate;
 
     public static String NewDataModelAction_newDataModel;
@@ -112,6 +144,8 @@ public class Messages extends NLS {
 
     public static String NewServiceConfigurationAction_newServiceConfiguration;
 
+    public static String JdbcGetDocument_ServiceHandleJdbcDesc;
+
     public static String JobInteractiveHandler_label;
 
     public static String JobInteractiveHandler_skipToDeploy;
@@ -119,6 +153,20 @@ public class Messages extends NLS {
     public static String JobInteractiveHandler_sucessToDeploy;
 
     public static String JobInteractiveHandler_wizardTitle;
+
+    public static String JobOptionsDialog_Embedded;
+
+    public static String JobOptionsDialog_Generate;
+
+    public static String JobOptionsDialog_Integrated;
+
+    public static String JobOptionsDialog_SelectExeStyle;
+
+    public static String JobOptionsDialog_SelectHowToPass;
+
+    public static String JobOptionsDialog_ThroughContextVariable;
+
+    public static String JobOptionsDialog_WebService;
 
     public static String JobProcesssOptionsDialogTitle_title;
 
@@ -145,6 +193,8 @@ public class Messages extends NLS {
     public static String RefreshAction_Refresh_All;
 
     public static String RefreshAction_Refresh_All_tooltip;
+
+    public static String RemoveFromRepositoryAction_0;
 
     public static String RemoveFromRepositoryAction_confirm;
 
@@ -199,6 +249,8 @@ public class Messages extends NLS {
     public static String XObjectEditor2_saving;
 
     public static String XObjectEditor2_unableOpenEditor;
+
+    public static String XSDDefaultXXR_BuildExpression;
 
     public static String XSDEditor2_schemaDesign;
 
@@ -328,6 +380,8 @@ public class Messages extends NLS {
     public static String ExportObjectAction_error;
 
     public static String XSDSetAnnotationRoles;
+
+    public static String XSDVisibleXXR_BuildvalidationExpress;
     public static String ExportObjectAction_exportRepositoryItems;
 
     public static String ExportObjectAction_hasError;
@@ -350,6 +404,8 @@ public class Messages extends NLS {
 
     public static String VersionInteractiveHandler_label;
 
+    public static String ViewInputDialog2_SelectOneEntity;
+
     public static String ViewInteractiveHandler_label;
 
     public static String Select_Items_To_Imports;
@@ -359,6 +415,8 @@ public class Messages extends NLS {
     public static String SimpleXpathInputDialogR_title;
 
     public static String SynchronizationPlanInteractiveHandler_label;
+
+    public static String SynchronizationXX_Desc;
 
     public static String Overwrite_Exists_Items;
 
@@ -374,6 +432,10 @@ public class Messages extends NLS {
 
     public static String BatchDeployJobCommand_title;
 
+    public static String BatchProjectXX_BatchToDataManager;
+
+    public static String BatchProjectXX_UNSupportedLan;
+
     public static String BeforeProcessTypeComposite_createBeforeDeletingProcess;
 
     public static String BeforeProcessTypeComposite_createBeforeSavingProcess;
@@ -383,6 +445,10 @@ public class Messages extends NLS {
     public static String WaitToDeployDialog_message;
 
     public static String Warning_text;
+
+    public static String WorkflowGetDocument_ServiceDescription;
+
+    public static String WorkflowTriggerXX_PressItem;
 
     public static String WSRootLabelProvider_localRepository;
 
@@ -428,7 +494,13 @@ public class Messages extends NLS {
 
     public static String Deploy_notSupport_text;
 
+    public static String CallTransformerGetDocument_EnglishDesc;
+
+    public static String CallTransformerGetDocument_FrenchDesc;
+
     public static String Causeis_text;
+
+    public static String CustomFormElement_ToString;
 
     public static String SchematronExpressBuilder_selectXPath;
     public static String AutoDeployPreferencePage_btnCheckButton_text;
@@ -447,7 +519,15 @@ public class Messages extends NLS {
 
     public static String InputProcessNamePage_selectEntity;
 
+    public static String ItemDispatcherXX_desc;
+
     public static String BuildValidationRuleExpression;
+
+    public static String GenerateJobXX_UrlString;
+
+    public static String LoggingGetDocument_Desc1;
+
+    public static String LoggingGetDocument_Desc2;
 
     public static String SelectMultipleXPaths;
 
@@ -472,6 +552,42 @@ public class Messages extends NLS {
     public static String SelectProcessTypePage_smartviewProcessDesc;
 
     public static String SelectProcessTypePage_selectType;
+
+    public static String ProcessViewXX_CreateBeforeDelProcess;
+
+    public static String ProcessViewXX_CreateBeforeProcess;
+
+    public static String ProcessViewXX_CreateNormalProcess;
+
+    public static String ProcessViewXX_CreateRunnableProcess;
+
+    public static String ProcessViewXX_CreateSmartProcess;
+
+    public static String ProcessViewXX_CreateStandloneProcess;
+
+    public static String ProcessViewXX_LabelEnterName;
+
+    public static String ProcessViewXX_LabelEnterNameDel;
+
+    public static String ProcessViewXX_LabelEnterNameFlowRunnable;
+
+    public static String ProcessViewXX_LabelEnterNameRunnable;
+
+    public static String ProcessViewXX_LabelText;
+
+    public static String ProcessViewXX_SelectOneEntity;
+
+    public static String ProcessViewXX_SelectOneType;
+
+    public static String ProcessXpathXX_Add;
+
+    public static String ProcessXpathXX_DataModels;
+
+    public static String ProcessXpathXX_Filter;
+
+    public static String ProcessXpathXX_SelectXPath;
+
+    public static String ProcessXpathXX_XPath;
 
     public static String Property_name;
 
@@ -498,6 +614,50 @@ public class Messages extends NLS {
     public static String MdmPropertiesWizard_imageCatalog;
 
     public static String Server_cannot_connected;
+
+    public static String SmtpGetDocument_Desc0;
+
+    public static String SmtpGetDocument_Desc1;
+
+    public static String SmtpGetDocument_Desc10;
+
+    public static String SmtpGetDocument_Desc11;
+
+    public static String SmtpGetDocument_Desc12;
+
+    public static String SmtpGetDocument_Desc13;
+
+    public static String SmtpGetDocument_Desc2;
+
+    public static String SmtpGetDocument_Desc3;
+
+    public static String SmtpGetDocument_Desc4;
+
+    public static String SmtpGetDocument_Desc5;
+
+    public static String SmtpGetDocument_Desc6;
+
+    public static String SmtpGetDocument_Desc7;
+
+    public static String SmtpGetDocument_Desc8;
+
+    public static String SmtpGetDocument_Desc9;
+
+    public static String SVNGetDocument_SVNGetDocumentA;
+
+    public static String SVNGetDocument_SVNGetDocumentB;
+    
+    public static String NewProcessWizard_TemplateProcess;
+    
+    public static String GenerateJobXX_GenTJobTrigger;
+    
+    public static String GenerateJobXX_GenTJobProcess;
+    
+    public static String GenerateJobXX_UNSupportedType;
+    
+    public static String GenerateJobXX_ProcessCallJob;
+
+    public static String GroovyPluginDetail_PluginCallScript;
 
     // //////////////////////////////////////////////////////////////////////////
     //

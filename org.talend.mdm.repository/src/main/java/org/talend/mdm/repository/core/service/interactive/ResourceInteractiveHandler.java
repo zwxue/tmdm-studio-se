@@ -22,6 +22,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -44,7 +45,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
 
     public String getLabel() {
 
-        return "Resource";
+        return Messages._Resource;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
     private boolean processImage(AbstractDeployCommand cmd, boolean deleteFile){
         IRepositoryViewObject viewObj = cmd.getViewObject();
         MDMServerDef serverDef = cmd.getServerDef();
-        String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$
+        String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$ //$NON-NLS-2$
         Item item = viewObj.getProperty().getItem();
         WSResourceE rs=((WSResourceItem) item).getResource();
         String fileExtension = rs.getFileExtension();

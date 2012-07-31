@@ -18,6 +18,7 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
+import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -38,18 +39,17 @@ public class DeleteCommand extends AbstractDeployCommand {
         String objectName = getObjLastName();
         if (handler != null) {
             String typeLabel = handler.getLabel();
-            monitor.subTask("Deleting " + typeLabel + "...");
+            monitor.subTask(Messages.bind(Messages._SubTaskTitle, typeLabel));
             try {
                 handler.remove(this);
-                return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was deleted successfully");
+                return DeployStatus.getOKStatus(this, Messages.bind(Messages._OkStatusMsg, typeLabel, objectName));
 
             } catch (Exception e) {
                 return DeployStatus.getErrorStatus(null,
-                        "Fail to delete " + typeLabel + " \"" + objectName + "\",Cause is:" + e.getMessage(), e);
+                        Messages.bind(Messages._ErrorStatusMsg1, typeLabel, objectName, e.getMessage()));
             }
         } else {
-            return DeployStatus.getErrorStatus(null, "Not support for deploying \"" + objectName + "\"");
+            return DeployStatus.getErrorStatus(null, Messages.bind(Messages._ErrorStatusMsg2, objectName));
         }
     }
-
 }

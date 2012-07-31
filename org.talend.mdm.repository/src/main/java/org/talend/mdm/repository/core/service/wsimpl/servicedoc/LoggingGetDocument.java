@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 
 /**
  * DOC hbhong  class global comment. Detailled comment
@@ -34,15 +36,15 @@ public class LoggingGetDocument extends AbstractGetDocument {
 
     @Override
     public String getDescription() {
-        if ("fr".matches(twoLettersLanguageCode.toLowerCase()))
-            return "Le service de logging";
-        return "The logging service";
+        if ("fr".matches(twoLettersLanguageCode.toLowerCase())) //$NON-NLS-1$
+            return Messages.LoggingGetDocument_Desc1;
+        return Messages.LoggingGetDocument_Desc2;
     }
 
     @Override
     public String getDocument() {
-        return "This service main role is to start, stop and confgure the logging connector in webapp. \n"
-                + "It is not meant to be called from a Routing Rule.";
+        return "This service main role is to start, stop and confgure the logging connector in webapp. \n" //$NON-NLS-1$
+                + "It is not meant to be called from a Routing Rule."; //$NON-NLS-1$
     }
 
 }

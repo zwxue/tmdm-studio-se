@@ -19,6 +19,7 @@ import org.talend.mdm.repository.core.command.CompoundCommand;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 /**
@@ -60,7 +61,7 @@ public class DeployCompoundCommand extends CompoundCommand {
         IInteractiveHandler handler = InteractiveService.findHandler(type);
         if (handler != null) {
             String typeLabel = handler.getLabel();
-            return typeLabel + " \"" + objectName + "\"" + " was updated successfully";
+            return Messages.bind(Messages._OkStatusMsg, typeLabel, objectName);
         }
         return null;
     }

@@ -262,7 +262,7 @@ public class DataClusterService {
                 }
                 try {
                     InputStreamMerger manager = bulkloadClient.load();
-                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));
+                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));//$NON-NLS-1$
                     manager.push(bin);
                     // bulkloadClient.load(sb.toString());
                     manager.close(); 

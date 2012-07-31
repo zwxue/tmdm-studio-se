@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.image.EImage;
@@ -207,7 +208,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
         openDLG.addSelectionListener(this);
         openDLG.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         openDLG.setVisible(isBtnShow);
-        openDLG.setToolTipText("Select one Entity");
+        openDLG.setToolTipText(Messages.ProcessViewXX_SelectOneEntity);
 
         errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
         errorMessageText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
@@ -218,10 +219,10 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
             Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
             radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
             radioGroup.setLayout(new GridLayout(1, false));
-            radioGroup.setText("Select one Type");
+            radioGroup.setText(Messages.ProcessViewXX_SelectOneType);
 
             transformeButton = new Button(radioGroup, SWT.RADIO);
-            transformeButton.setText("Create a Normal Process");
+            transformeButton.setText(Messages.ProcessViewXX_CreateNormalProcess);
             transformeButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             text.setText("");//$NON-NLS-1$
             transformeButton.addSelectionListener(new SelectionListener() {
@@ -241,7 +242,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
             });
             transformeButton.setSelection(true);
             smartViewButton = new Button(radioGroup, SWT.RADIO);
-            smartViewButton.setText("Create a Smartview Process");
+            smartViewButton.setText(Messages.ProcessViewXX_CreateSmartProcess);
             smartViewButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
             // smartViewButton.setSelection(true);
@@ -253,7 +254,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
 
                 public void widgetSelected(SelectionEvent e) {
                     text.setText(Smart_view);
-                    label.setText("Enter a name that follows: Smart_view_<EntityName>_<language ISO code>");
+                    label.setText(Messages.ProcessViewXX_LabelText);
                     openDLG.setVisible(true);
                     value = Smart_view;
                 }
@@ -261,7 +262,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
             });
 
             beforeSavingButton = new Button(radioGroup, SWT.RADIO);
-            beforeSavingButton.setText("Create a Before-Saving Process");
+            beforeSavingButton.setText(Messages.ProcessViewXX_CreateBeforeProcess);
             beforeSavingButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             beforeSavingButton.addSelectionListener(new SelectionListener() {
 
@@ -270,7 +271,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
 
                 public void widgetSelected(SelectionEvent e) {
                     text.setText(beforeSaving);
-                    label.setText("Enter a name that follows: beforeSaving_<EntityName>");
+                    label.setText(Messages.ProcessViewXX_LabelEnterName);
                     openDLG.setVisible(true);
                     value = beforeSaving;
                 }
@@ -278,7 +279,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
             });
 
             beforeDeletingButton = new Button(radioGroup, SWT.RADIO);
-            beforeDeletingButton.setText("Create a Before-Deleting Process");
+            beforeDeletingButton.setText(Messages.ProcessViewXX_CreateBeforeDelProcess);
             beforeDeletingButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             beforeDeletingButton.addSelectionListener(new SelectionListener() {
 
@@ -287,7 +288,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
 
                 public void widgetSelected(SelectionEvent e) {
                     text.setText(beforeDeleting);
-                    label.setText("Enter a name that follows: beforeDeleting_<EntityName>");
+                    label.setText(Messages.ProcessViewXX_LabelEnterNameDel);
                     openDLG.setVisible(true);
                     value = beforeDeleting;
                 }
@@ -295,7 +296,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
             });
 
             runnableProcessButton = new Button(radioGroup, SWT.RADIO);
-            runnableProcessButton.setText("Create a Runnable Process");
+            runnableProcessButton.setText(Messages.ProcessViewXX_CreateRunnableProcess);
             runnableProcessButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             runnableProcessButton.addSelectionListener(new SelectionListener() {
 
@@ -304,7 +305,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
 
                 public void widgetSelected(SelectionEvent e) {
                     text.setText(runnableProcess);
-                    label.setText("Enter a name that follows: Runnable_<EntityName>");
+                    label.setText(Messages.ProcessViewXX_LabelEnterNameRunnable);
                     openDLG.setVisible(true);
                     value = runnableProcess;
                 }
@@ -312,7 +313,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
             });
 
             standaloneProcessButton = new Button(radioGroup, SWT.RADIO);
-            standaloneProcessButton.setText("Create a Standalone Process");
+            standaloneProcessButton.setText(Messages.ProcessViewXX_CreateStandloneProcess);
             standaloneProcessButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             standaloneProcessButton.addSelectionListener(new SelectionListener() {
 
@@ -321,7 +322,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
 
                 public void widgetSelected(SelectionEvent e) {
                     text.setText(standaloneProcess);
-                    label.setText("Enter a name that follows: Runnable#name");
+                    label.setText(Messages.ProcessViewXX_LabelEnterNameFlowRunnable);
                     openDLG.setVisible(true);
                     value = standaloneProcess;
                 }
@@ -387,7 +388,7 @@ public class ProcessViewInputDialog extends Dialog implements SelectionListener 
 
 
      public void widgetSelected(SelectionEvent e) {
-        dlg = new XpathSelectDialog(composite.getShell(), treeParent, "Select one Entity", site, false, null);
+        dlg = new XpathSelectDialog(composite.getShell(), treeParent, Messages.ProcessViewXX_SelectOneEntity, site, false, null);
         dlg.setBlockOnOpen(true);
         dlg.open();
 

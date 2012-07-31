@@ -147,7 +147,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         String path = viewObj.getPath();
-        if (path != null && path.equalsIgnoreCase("system")) {
+        if (path != null && path.equalsIgnoreCase("system")) { //$NON-NLS-1$ 
             return false;
         }
         return true;

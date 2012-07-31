@@ -15,6 +15,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.repository.model.RepositoryNode;
 
@@ -28,7 +29,7 @@ public class ServerObjectRepositoryContentHandler implements IRepositoryContentH
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
         // add quick fix to avoid one problem of palette
-        if (item.eClass().getName().equals("CamelProcessItem")) {
+        if (item.eClass().getName().equals(Messages._CamelProcessItem)) {
             return null;
         }
 

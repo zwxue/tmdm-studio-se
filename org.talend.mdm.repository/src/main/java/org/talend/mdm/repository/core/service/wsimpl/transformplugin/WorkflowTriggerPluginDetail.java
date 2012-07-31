@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.transformplugin;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -46,9 +48,9 @@ public class WorkflowTriggerPluginDetail extends AbstractPluginDetail {
     public String getDescription() {
         String description = ""; //$NON-NLS-1$
         if (twoLettersLanguageCode.toLowerCase().equals("en")) { //$NON-NLS-1$
-            description = "Pass an item to a workflow engine"; //$NON-NLS-1$
+            description = Messages.WorkflowTriggerXX_PressItem;
         } else {
-            description = "Unsupported language! "; //$NON-NLS-1$
+            description = Messages.BatchProjectXX_UNSupportedLan;
         }
         return description;
     }

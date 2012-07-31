@@ -39,7 +39,7 @@ public class RepositoryJobInfoHolder extends RepositoryExternalInfoHolder<JobInf
         for (IRepositoryViewObject viewObj : viewObjs) {
             Property prop = viewObj.getProperty();
             // the suffix should be "war" or "zip", now use "" to replace
-            JobInfo jobInfo = new JobInfo(prop.getLabel(), prop.getVersion(), "");
+            JobInfo jobInfo = new JobInfo(prop.getLabel(), prop.getVersion(), ""); //$NON-NLS-1$
             results.add(jobInfo);
         }
 

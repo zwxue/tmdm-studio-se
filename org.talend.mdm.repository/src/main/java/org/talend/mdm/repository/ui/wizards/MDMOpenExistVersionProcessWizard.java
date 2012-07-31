@@ -131,25 +131,26 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         return this.viewObject;
     }
 
-    @Override
+//    @Override
     protected boolean refreshNewJob() {
-        IFolder folder = RepositoryResourceUtil.getFolder(getViewObj());
-        if (folder != null && folder.exists()) {
-            try {
-                for (IResource r : folder.members()) {
-                    if (r instanceof IFile) {
-                        if (r.getFileExtension().equalsIgnoreCase("bak")) {//$NON-NLS-1$
-                            IFile file = (IFile) r;
-                            if (file.exists()) {
-                                file.delete(true, null);
-                            }
-                        }
-                    }
-                }
-            } catch (CoreException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-        return super.refreshNewJob();
+//        IFolder folder = RepositoryResourceUtil.getFolder(getViewObj());
+//        if (folder != null && folder.exists()) {
+//            try {
+//                for (IResource r : folder.members()) {
+//                    if (r instanceof IFile) {
+//                        if (r.getFileExtension().equalsIgnoreCase("bak")) {//$NON-NLS-1$
+//                            IFile file = (IFile) r;
+//                            if (file.exists()) {
+//                                file.delete(true, null);
+//                            }
+//                        }
+//                    }
+//                }
+//            } catch (CoreException e) {
+//                log.error(e.getMessage(), e);
+//            }
+//        }
+//        return super.refreshNewJob();
+        return true;
     }
 }

@@ -103,7 +103,7 @@ public class NewProcessWizard extends Wizard {
         transformer = MdmserverobjectFactory.eINSTANCE.createWSTransformerV2E();
         transformer.setName(processName);
         if(processdesc==null|| processdesc.length()==0){
-            processdesc=processName + " template process";
+            processdesc=Messages.bind(Messages.NewProcessWizard_TemplateProcess, processName);
         }
         transformer.setDescription(processdesc); 
        

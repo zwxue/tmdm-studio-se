@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 
 /**
  * DOC hbhong  class global comment. Detailled comment
@@ -34,14 +36,14 @@ public class DumpToConsoleGetDocument extends AbstractGetDocument {
 
     @Override
     public String getDescription() {
-        if ("fr".matches(twoLettersLanguageCode.toLowerCase()))
-            return "This service dumps the content of the Item to the console and logs it as INFO";
-        return "This service dumps the content of the Item to the console and logs it as INFO";
+        if ("fr".matches(twoLettersLanguageCode.toLowerCase())) //$NON-NLS-1$
+            return Messages._DumpToConsoleDescription;
+        return Messages._DumpToConsoleDescription;
     }
 
     @Override
     public String getDocument() {
-        return "N/A";
+        return "N/A"; //$NON-NLS-1$
     }
 
 }

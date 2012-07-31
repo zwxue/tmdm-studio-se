@@ -115,7 +115,7 @@ public class ProcessStepFactory {
         outputLine.setPluginVariable(VAR_TEXT);
         outItems.add(outputLine);
         step.setPluginJNDI(XSLT_PLUGIN);
-        step.setDescription("Stylesheet");
+        step.setDescription("Stylesheet"); //$NON-NLS-1$
         step.setParameters(parameters);
         step.getInputMappings().addAll(inItems);
         step.getOutputMappings().addAll(outItems);

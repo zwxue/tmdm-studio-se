@@ -47,6 +47,7 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -73,7 +74,7 @@ public class ProcessXpathSelectDialog extends Dialog {
 
     protected TreeViewer domViewer;
 
-    private String title = "Select Xpath";
+    private String title = Messages.ProcessXpathXX_SelectXPath;
 
     protected TreeParent parent;
 
@@ -203,7 +204,7 @@ public class ProcessXpathSelectDialog extends Dialog {
         Label datamoelsLabel = new Label(composite, SWT.NONE);
         GridData dg = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
         datamoelsLabel.setLayoutData(dg);
-        datamoelsLabel.setText("Data Models:");
+        datamoelsLabel.setText(Messages.ProcessXpathXX_DataModels);
         dg = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         dg.widthHint = 400;
         dataModelCombo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
@@ -229,7 +230,7 @@ public class ProcessXpathSelectDialog extends Dialog {
             }
         });
         schemaLabel = new Label(composite, SWT.NONE);
-        schemaLabel.setText("Xpath:");
+        schemaLabel.setText(Messages.ProcessXpathXX_XPath);
         schemaLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         ((GridData) schemaLabel.getLayoutData()).widthHint = 10;
         xpathText = new Text(composite, SWT.BORDER);
@@ -238,7 +239,7 @@ public class ProcessXpathSelectDialog extends Dialog {
 
         // add the filter for the xpath,see bug 0016511: Entity filtering in select multiple xpath dialog:
         Label filterLabel = new Label(composite, SWT.NONE);
-        filterLabel.setText("Filter:");
+        filterLabel.setText(Messages.ProcessXpathXX_Filter);
         filterLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
         filterText = new Text(composite, SWT.BORDER);
         filterText.setEditable(true);
@@ -354,7 +355,7 @@ public class ProcessXpathSelectDialog extends Dialog {
 
     protected Control createButtonBar(Composite parent) {
         Control btnBar = super.createButtonBar(parent);
-        getButton(IDialogConstants.OK_ID).setText("Add");
+        getButton(IDialogConstants.OK_ID).setText(Messages.ProcessXpathXX_Add);
         return btnBar;
     }
 

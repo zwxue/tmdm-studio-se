@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.transformplugin;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -42,9 +44,9 @@ public class DumpAndGoPluginDetail extends AbstractPluginDetail {
 
         String description = ""; //$NON-NLS-1$
         if (twoLettersLanguageCode.toLowerCase().equals("en")) { //$NON-NLS-1$
-            description = "This is a plugin used for dump text and pass it. "; //$NON-NLS-1$
+            description = Messages.DumpAndGoPluginDetail_PlugDesc;
         } else {
-            description = "Unsupported language! "; //$NON-NLS-1$
+            description = Messages.BatchProjectXX_UNSupportedLan;
         }
         return description;
 

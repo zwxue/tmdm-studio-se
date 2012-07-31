@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.transformplugin;
 
+import org.talend.mdm.repository.i18n.Messages;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -43,9 +45,9 @@ public class BatchProjectPluginDetail extends AbstractPluginDetail {
     public String getDescription() {
         String description = ""; //$NON-NLS-1$
         if (twoLettersLanguageCode.toLowerCase().equals("en")) { //$NON-NLS-1$
-            description = "Batch projecting items to the Data Manager"; //$NON-NLS-1$
+            description = Messages.BatchProjectXX_BatchToDataManager;
         } else {
-            description = "Unsupported language! "; //$NON-NLS-1$
+            description = Messages.BatchProjectXX_UNSupportedLan;
         }
         return description;
     }
