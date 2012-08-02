@@ -52,7 +52,7 @@ public class RegisterWizardPage extends WizardPage {
     /**
      * 
      */
-    private static final String DESCRIPTION = Messages.getString("RegisterWizardPage.description", //$NON-NLS-1$
+    private static final String DESCRIPTION = Messages.bind(Messages.RegisterWizardPage_description,
             ((IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class)).getFullProductName());
 
     /** EMail field. */
@@ -83,9 +83,9 @@ public class RegisterWizardPage extends WizardPage {
      * @param author
      */
     public RegisterWizardPage() {
-        super("WizardPage"); //$NON-NLS-1$
+        super(Messages.RegisterWizardPage_WizardPage);
 
-        setTitle(Messages.getString("RegisterWizardPage.title")); //$NON-NLS-1$
+        setTitle(Messages.RegisterWizardPage_title);
         setDescription(DESCRIPTION);
     }
 
@@ -100,14 +100,14 @@ public class RegisterWizardPage extends WizardPage {
 
         // Email
         Label emailLabel = new Label(container, SWT.NONE);
-        emailLabel.setText(Messages.getString("RegisterWizardPage.email")); //$NON-NLS-1$
+        emailLabel.setText(Messages.RegisterWizardPage_email);
 
         emailText = new Text(container, SWT.BORDER);
         emailText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         // Country
         Label countryLabel = new Label(container, SWT.NONE);
-        countryLabel.setText(Messages.getString("RegisterWizardPage.country")); //$NON-NLS-1$
+        countryLabel.setText(Messages.RegisterWizardPage_country);
 
         countryCombo = new Combo(container, SWT.BORDER | SWT.READ_ONLY);
         countryCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -173,12 +173,12 @@ public class RegisterWizardPage extends WizardPage {
         // Email Name
         if (emailText.getText().length() == 0) {
             emailStatus = new Status(IStatus.ERROR, MDMWorbenchPlugin.ID, IStatus.OK,
-                    Messages.getString("RegisterWizardPage.emailEmpty"), null); //$NON-NLS-1$
+                    Messages.RegisterWizardPage_emailEmpty, null);
         } else {
             // Reg Exp validation
             if (!Pattern.matches(MAIL_PATTERN, emailText.getText())) {
                 emailStatus = new Status(IStatus.ERROR, MDMWorbenchPlugin.ID, IStatus.OK,
-                        Messages.getString("RegisterWizardPage.emailNotValid"), null); //$NON-NLS-1$
+                        Messages.RegisterWizardPage_emailNotValid, null); 
             }
         }
         updatePageStatus();
@@ -241,12 +241,12 @@ public class RegisterWizardPage extends WizardPage {
         legalInfos.setLayoutData(gd);
         IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
                 IBrandingService.class);
-        legalInfos.setText(Messages.getString("RegisterWizardPage.legalinfos", brandingService.getCorporationName())); //$NON-NLS-1$
+        legalInfos.setText(Messages.bind(Messages.RegisterWizardPage_legalinfos, brandingService.getCorporationName()));
     }
 
     protected void createHttpProxy(Composite composite, int columnSpan) {
         Group group = new Group(composite, SWT.NONE);
-        group.setText(Messages.getString("RegisterWizardPage.proxyGroup")); //$NON-NLS-1$
+        group.setText(Messages.RegisterWizardPage_proxyGroup);
         GridLayout layout = new GridLayout();
         layout.numColumns = 2;
         group.setLayout(layout);
@@ -255,19 +255,19 @@ public class RegisterWizardPage extends WizardPage {
         group.setLayoutData(gd);
 
         enableHttpProxy = new Button(group, SWT.CHECK);
-        enableHttpProxy.setText(Messages.getString("RegisterWizardPage.enableHttpProxy")); //$NON-NLS-1$
+        enableHttpProxy.setText(Messages.RegisterWizardPage_enableHttpProxy);
         gd = new GridData();
         gd.horizontalSpan = 2;
         enableHttpProxy.setLayoutData(gd);
 
         httpProxyHostLabel = new Label(group, SWT.NONE);
-        httpProxyHostLabel.setText(Messages.getString("RegisterWizardPage.httpProxyHost")); //$NON-NLS-1$
+        httpProxyHostLabel.setText(Messages.RegisterWizardPage_httpProxyHost);
 
         httpProxyHostText = new Text(group, SWT.SINGLE | SWT.BORDER);
         httpProxyHostText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         httpProxyPortLabel = new Label(group, SWT.NONE);
-        httpProxyPortLabel.setText(Messages.getString("RegisterWizardPage.httpProxyPort")); //$NON-NLS-1$
+        httpProxyPortLabel.setText(Messages.RegisterWizardPage_httpProxyPort);
 
         httpProxyPortText = new Text(group, SWT.SINGLE | SWT.BORDER);
         httpProxyPortText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -292,7 +292,7 @@ public class RegisterWizardPage extends WizardPage {
                 } catch (NumberFormatException nfe) {
                 }
                 setPageComplete(false);
-                setErrorMessage(Messages.getString("RegisterWizardPage.invalidPort")); //$NON-NLS-1$
+                setErrorMessage(Messages.RegisterWizardPage_invalidPort);
             }
         });
 

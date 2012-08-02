@@ -45,7 +45,7 @@ public class SimpleXPathComposite extends Composite {
 
     private IAllDataModelHolder allDataModelHolder;
 
-    public static final String DEFAULTTITLE = Messages.getString("EnterXpathForeignKey");//$NON-NLS-1$
+    public static final String DEFAULTTITLE = Messages.EnterXpathForeignKey;
     protected BasePropertySection section;
 
     private Button btnSep;
@@ -97,11 +97,11 @@ public class SimpleXPathComposite extends Composite {
         });
         btnSelectXPath = new Button(composite, SWT.NONE);
         btnSelectXPath.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-        btnSelectXPath.setToolTipText(Messages.getString("SchematronExpressBuilder_selectXPath"));
+        btnSelectXPath.setToolTipText(Messages.SchematronExpressBuilder_selectXPath);
         if (btnsp) {
             btnSep = new Button(composite, SWT.CHECK);
             btnSep.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
-            btnSep.setText(Messages.getString("SimpleXpathInputDialog_sepFkTabPanel"));//$NON-NLS-1$
+            btnSep.setText(Messages.SimpleXpathInputDialog_sepFkTabPanel);
             btnSep.addSelectionListener(new SelectionAdapter() {
 
                 public void widgetSelected(SelectionEvent e) {

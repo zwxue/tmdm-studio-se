@@ -45,7 +45,7 @@ public class RegisterWizardDialog extends WizardDialog {
         super.createButtonsForButtonBar(parent);
         Button button = getButton(IDialogConstants.FINISH_ID);
         if (button != null) {
-            button.setText(Messages.getString("RegisterWizardDialog.ok_button")); //$NON-NLS-1$);
+            button.setText(Messages.RegisterWizardDialog_ok_button);
         }
     }
 

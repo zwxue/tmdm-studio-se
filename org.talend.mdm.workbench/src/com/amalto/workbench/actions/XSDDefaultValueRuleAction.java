@@ -53,16 +53,16 @@ public class XSDDefaultValueRuleAction extends UndoAction {
     public XSDDefaultValueRuleAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ROUTINE.getPath()));
-        setText(Messages.getString("SetDefaultValueRule")); //$NON-NLS-1$
-        setToolTipText(Messages.getString("SetDefaultValueRule")); //$NON-NLS-1$
+        setText(Messages.SetDefaultValueRule);
+        setToolTipText(Messages.SetDefaultValueRule);
         this.dataModelName = dataModelName;
     }
 
     public XSDDefaultValueRuleAction(DataModelMainPage page, String dataModelName, boolean isDelete) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText(Messages.getString("DeleteDefaultValueRule")); //$NON-NLS-1$
-        setToolTipText(Messages.getString("DeleteDefaultValueRule")); //$NON-NLS-1$
+        setText(Messages.DeleteDefaultValueRule);
+        setToolTipText(Messages.DeleteDefaultValueRule);
         this.dataModelName = dataModelName;
         this.isDelete = isDelete;
     }
@@ -73,8 +73,8 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             // add by ymli. fix the bug:0010293
             if (page.isDirty()) {
                 // MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.getString("SaveResource"), "'" //$NON-NLS-1$ //$NON-NLS-2$
-                        + page.getXObject().getDisplayName() + "' " + Messages.getString("modifiedChanges")); //$NON-NLS-1$//$NON-NLS-2$
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource, "'" //$NON-NLS-1$
+                        + page.getXObject().getDisplayName() + "' " + Messages.modifiedChanges); //$NON-NLS-1$
                 if (save) {
                     IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
@@ -97,7 +97,7 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             if (xSDCom != null)
                 struc = new XSDAnnotationsStructure(xSDCom);
             if (struc == null || struc.getAnnotation() == null) {
-                throw new RuntimeException(Messages.getString("UnableEditType") + xSDCom.getClass().getName()); //$NON-NLS-1$
+                throw new RuntimeException(Messages.bind(Messages.UnableEditType, xSDCom.getClass().getName()));
             }
             // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
             if (!isDelete) {
@@ -123,17 +123,15 @@ public class XSDDefaultValueRuleAction extends UndoAction {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
 
-            MessageDialog.openError(page.getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
-                    Messages.getString("ErrorDefaultValueRule") //$NON-NLS-1$
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.ErrorDefaultValueRule + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
     }
 
     protected ValidationRuleExcpressDialog getExpressDialog() {
-        return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(), Messages
-                .getString("XSDDefaultValueRuleAction_buildDefaultValue"), struc.getDefaultValueRule(), conceptName, //$NON-NLS-1$
-                false, false);
+        return new ValidationRuleExcpressDialog(page.getSite().getShell(), getTreeParent(),
+                Messages.XSDDefaultValueRuleAction_buildDefaultValue, struc.getDefaultValueRule(), conceptName, false, false);
     }
 }

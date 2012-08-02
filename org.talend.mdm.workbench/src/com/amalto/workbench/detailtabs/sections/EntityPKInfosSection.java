@@ -59,13 +59,13 @@ public class EntityPKInfosSection extends XSDComponentSection {
 
     @Override
     protected String getSectionTitle() {
-        return Messages.getString("EntityPKInfosSection_pkInfoTitle"); //$NON-NLS-1$
+        return Messages.EntityPKInfosSection_pkInfoTitle;
     }
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
         compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, "XPaths", null, this); //$NON-NLS-1$
-        String tooltips = Messages.getString("EntityPKInfosSection_pkInfoTooltips");//$NON-NLS-1$
+        String tooltips = Messages.EntityPKInfosSection_pkInfoTooltips;
         compElements.getInfosTreeViewer().getTree().setToolTipText(tooltips);
         compElements.getInfosComboViewer().getCombo().setToolTipText(tooltips);
     }

@@ -61,8 +61,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
     public XSDNewComplexTypeDefinition(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText(Messages.getString("_CreateAComplexType")); //$NON-NLS-1$
-        setToolTipText(Messages.getString("_CreateAComplexTypeCanBeRefered")); //$NON-NLS-1$
+        setText(Messages._CreateAComplexType);
+        setToolTipText(Messages._CreateAComplexTypeCanBeRefered);
         setDescription(getToolTipText());
     }
 
@@ -153,8 +153,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
         if (term instanceof XSDModelGroup) {
             XSDModelGroup group = (XSDModelGroup) term;
             if (group.getCompositor() == XSDCompositor.ALL_LITERAL) {
-                if (MessageDialog.openConfirm(null, Messages.getString("_ChangeToSequenceType"), //$NON-NLS-1$
-                        Messages.getString("_ComplexTypeToSequence"))) { //$NON-NLS-1$
+                if (MessageDialog.openConfirm(null, Messages._ChangeToSequenceType,
+                        Messages._ComplexTypeToSequence)) {
                     group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
                     complexType.updateElement();
                     currentGroup.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
@@ -194,13 +194,13 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
                 XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDComplexTypeDefinition) {
-                        MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_ThisTypeHead", typeName)); //$NON-NLS-1$ //$NON-NLS-2$
+                        MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages._ThisTypeHead, typeName));
                         return false;
                     }
                 }
             }// for
         } else {
-            MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_PleaseEnterCTypeName")); //$NON-NLS-1$ //$NON-NLS-2$
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages._PleaseEnterCTypeName);
             return false;
         }
         return true;

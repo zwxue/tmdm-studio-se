@@ -50,8 +50,8 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
     public XSDSetAnnotationFKFilterAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.FILTER_PS.getPath()));
-        setText(Messages.getString("SetForeignKeyFilter")); //$NON-NLS-1$
-        setToolTipText(Messages.getString("SetForeignKeyFilter")); //$NON-NLS-1$
+        setText(Messages.SetForeignKeyFilter);
+        setToolTipText(Messages.SetForeignKeyFilter);
         this.dataModelName = dataModelName;
     }
 
@@ -59,8 +59,8 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
         try {
 
             if (page.isDirty()) {
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.getString("SaveResource"), "'" //$NON-NLS-1$ //$NON-NLS-2$
-                        + page.getXObject().getDisplayName() + "' " + Messages.getString("modifiedChanges")); //$NON-NLS-1$ //$NON-NLS-2$
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource, "'" //$NON-NLS-1$
+                        + page.getXObject().getDisplayName() + "' " + Messages.modifiedChanges); //$NON-NLS-1$ 
 
                 if (save) {
                     IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -90,7 +90,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
             if (xSDCom != null)
                 struc = new XSDAnnotationsStructure(xSDCom);
             if (struc == null || struc.getAnnotation() == null) {
-                throw new RuntimeException(Messages.getString("UnableEditAnnotationType") + xSDCom.getClass().getName()); //$NON-NLS-1$
+                throw new RuntimeException(Messages.bind(Messages.UnableEditAnnotationType, xSDCom.getClass().getName()));
             }
 
             fkd = getNewFKFilterDialog(page.getSite().getShell(), struc.getFKFilter(), page, conceptName);
@@ -112,15 +112,15 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
-                    Messages.getString("ErrorFKFilter") + e.getLocalizedMessage()); //$NON-NLS-1$
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.ErrorFKFilter, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
     }
 
     protected FKFilterDialog getNewFKFilterDialog(Shell shell, String filter, DataModelMainPage page, String conceptName) {
-        return new FKFilterDialog(shell, Messages.getString("SetForeignKeyFilter"), filter, page, conceptName); //$NON-NLS-1$
+        return new FKFilterDialog(shell, Messages.SetForeignKeyFilter, filter, page, conceptName);
     }
 
     private String getConceptName(XSDConcreteComponent element) {

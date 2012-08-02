@@ -140,7 +140,7 @@ public class ExportItemsWizard extends Wizard {
             exportFolder = tempFile.getAbsolutePath();
             zipfile = zip.getText().getText();
             if(zipfile!=null && new File(zipfile).exists()){
-                if(!MessageDialog.openConfirm(null,"Warning", Messages.getString("ExportItemsWizard.overridefile", zipfile))){//$NON-NLS-1$//$NON-NLS-2$
+                if(!MessageDialog.openConfirm(null,Messages.AddBrowseItemsWizard_Warning, Messages.bind(Messages.ExportItemsWizard_overridefile, zipfile))){
                     return false;
                 }
             }
@@ -148,7 +148,7 @@ public class ExportItemsWizard extends Wizard {
         if (folderBtn.getSelection()) {
             exportFolder = folder.getText().getText();
             if(exportFolder!=null && new File(exportFolder).list().length>0){
-                if(!MessageDialog.openConfirm(null,"Warning", Messages.getString("ExportItemsWizard.overridefolder", exportFolder))){//$NON-NLS-1$//$NON-NLS-2$
+                if(!MessageDialog.openConfirm(null,Messages.AddBrowseItemsWizard_Warning, Messages.bind(Messages.ExportItemsWizard_overridefolder, exportFolder))){
                     return false;
                 }
             }

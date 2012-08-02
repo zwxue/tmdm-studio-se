@@ -73,7 +73,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         super(parentShell);
         this.title = title;
         if(title == null || title.equals("")) //$NON-NLS-1$
-            this.title = Messages.getString("_ComplexTypeProp"); //$NON-NLS-1$
+            this.title = Messages._ComplexTypeProp;
             
         this.caller = caller;
         this.types = types;
@@ -145,7 +145,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         isSequence = conceptPanel.isSequence();
         
         if(superTypeName.equals(typeName) && (!superTypeName.equals(""))){//$NON-NLS-1$
-            MessageDialog.openError(null, Messages.getString("Error.title"), Messages.getString("typeCannotExtendsItsself")); //$NON-NLS-1$//$NON-NLS-2$
+            MessageDialog.openError(null, Messages._Error, Messages.typeCannotExtendsItsself);
             setReturnCode(CANCEL);
             return;
         }
@@ -163,7 +163,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
                 || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
-            conceptPanel.setMessage(Messages.getString("_NameWithEmptyCharacters")); //$NON-NLS-1$
+            conceptPanel.setMessage(Messages._NameWithEmptyCharacters);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         }
@@ -178,10 +178,10 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
             }
             if (typeToCompare.equals(type)) {
                 if (caller instanceof XSDNewComplexTypeDefinition) {
-                    conceptPanel.setMessage(Messages.getString("_SameTypeNameExists")); //$NON-NLS-1$
+                    conceptPanel.setMessage(Messages._SameTypeNameExists);
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                 } else if (caller instanceof XSDChangeToComplexTypeAction && specType instanceof XSDSimpleTypeDefinition) {
-                    conceptPanel.setMessage(Messages.getString("_SameTypeNameExists")); //$NON-NLS-1$
+                    conceptPanel.setMessage(Messages._SameTypeNameExists);
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                 }
                 break;

@@ -69,7 +69,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
                 RegisterWizard registerWizard = new RegisterWizard();
                 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
                 WizardDialog dialog = new RegisterWizardDialog(shell, registerWizard);
-                dialog.setTitle(Messages.getString("RegisterWizard.windowTitle")); //$NON-NLS-1$
+                dialog.setTitle(Messages.RegisterWizard_windowTitle);
                 if (dialog.open() == WizardDialog.OK) {
 
                     String projectLanguage = "java";//$NON-NLS-1$

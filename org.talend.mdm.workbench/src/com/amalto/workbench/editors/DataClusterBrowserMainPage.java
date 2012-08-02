@@ -599,16 +599,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             searchText.setFocus();
         } catch (ServerException e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
-                    Messages.getString("DataClusterBrowser.dataContainerError")); //$NON-NLS-1$
+            MessageDialog.openError(getSite().getShell(), Messages._Error,
+                    Messages.DataClusterBrowser_dataContainerError);
         } catch (RemoteException e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(getSite().getShell(), Messages.getString("Error.title"), //$NON-NLS-1$
-                    Messages.getString("DataClusterBrowser.connectionError")); //$NON-NLS-1$
+            MessageDialog.openError(getSite().getShell(), Messages._Error,
+                    Messages.DataClusterBrowser_connectionError);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), Messages.getString("Error.title"),//$NON-NLS-1$
-                    Messages.getString("DataClusterBrowser.error", e.getLocalizedMessage())); //$NON-NLS-1$
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.DataClusterBrowser_error, e.getLocalizedMessage()));
         }
     }
 

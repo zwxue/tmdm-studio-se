@@ -59,7 +59,7 @@ public class ListXPathComposite extends ListStringContentsComposite {
 	protected void createExtentUIArea(Composite parent) {
 
 		chkResolveAutoInWeb = new Button(this, SWT.CHECK);
-		chkResolveAutoInWeb.setText(Messages.getString("FKInfos.resolve")); //$NON-NLS-1$
+		chkResolveAutoInWeb.setText(Messages.FKInfos_resolve);
 		chkResolveAutoInWeb.setSelection(true);
 		chkResolveAutoInWeb.setLayoutData(new GridData());
 

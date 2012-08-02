@@ -97,7 +97,7 @@ public class SimpleXpathInputDialog extends Dialog {
         Button xpathButton = new Button(composite, SWT.PUSH | SWT.CENTER);
         xpathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-        xpathButton.setToolTipText(Messages.getString("SchematronExpressBuilder_selectXPath"));//$NON-NLS-1$
+        xpathButton.setToolTipText(Messages.SchematronExpressBuilder_selectXPath);
         xpathButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -120,7 +120,7 @@ public class SimpleXpathInputDialog extends Dialog {
 
         btnSep = new Button(composite, SWT.CHECK);
         btnSep.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
-        btnSep.setText(Messages.getString("SimpleXpathInputDialog_sepFkTabPanel"));//$NON-NLS-1$
+        btnSep.setText(Messages.SimpleXpathInputDialog_sepFkTabPanel);
         btnSep.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {

@@ -74,7 +74,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
     @Override
     protected void createTopPart(Composite parent) {
         Group basicPart = new Group(parent, SWT.NONE);
-        basicPart.setText(Messages.getString("_BasicInfo")); //$NON-NLS-1$
+        basicPart.setText(Messages._BasicInfo);
         basicPart.setLayoutData(new GridData(SWT.FILL, SWT.FILL,true,true));
         
         GridLayout layout = (GridLayout) basicPart.getLayout();
@@ -86,7 +86,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
 
         Label nameLabel = new Label(basicPart, SWT.NONE);
         nameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        nameLabel.setText(Messages.getString("_BusinessName")); //$NON-NLS-1$
+        nameLabel.setText(Messages._BusinessName);
 
         elementNameText = new Text(basicPart, SWT.BORDER);
         elementNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -95,7 +95,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
         
         Label minLabel = new Label(basicPart, SWT.NONE);
         minLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        minLabel.setText(Messages.getString("_MinOccur")); //$NON-NLS-1$
+        minLabel.setText(Messages._MinOccur);
 
         minOccursText = new Text(basicPart, SWT.NONE);
         minOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -104,7 +104,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
 
         Label maxLabel = new Label(basicPart, SWT.NONE);
         maxLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        maxLabel.setText(Messages.getString("_MaxOccur")); //$NON-NLS-1$
+        maxLabel.setText(Messages._MaxOccur);
 
         maxOccursText = new Text(basicPart, SWT.NONE);
         maxOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -124,7 +124,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
             });
 
             inheritCheckBox.setSelection(inherit);
-            inheritCheckBox.setText(Messages.getString("_InheritStr")); //$NON-NLS-1$
+            inheritCheckBox.setText(Messages._InheritStr);
         }
         // check pk can't edit Maximum/Minimum
         minOccursText.setEditable(!isPK);
@@ -150,15 +150,15 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
     private boolean valid() {
         elementName = elementNameText.getText().trim();
         if (((elementName == null) || ("".equals(elementName)))) {//$NON-NLS-1$
-            MessageDialog.openError(this.getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_BusinessNameCannotEmpty")); //$NON-NLS-1$
+            MessageDialog.openError(this.getShell(), Messages._Error,
+                    Messages._BusinessNameCannotEmpty);
             setReturnCode(-1);
             elementNameText.setFocus();
             return false;
         }
 
         if (elementName.replaceAll("\\s", "").length() != elementName.length()) {//$NON-NLS-1$//$NON-NLS-2$
-            MessageDialog.openError(this.getShell(), Messages.getString("_Error"), Messages.getString("_BusinessNameCannotContainEmpty")); //$NON-NLS-1$ //$NON-NLS-2$
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages._BusinessNameCannotContainEmpty);
             setReturnCode(-1);
             elementNameText.setFocus();
             return false;
@@ -172,13 +172,13 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
         try {
             minOccurs = Integer.parseInt(minOccursText.getText());
         } catch (Exception e1) {
-            MessageDialog.openError(this.getShell(), Messages.getString("_Error"), Messages.getString("_MinNoLessThanZero")); //$NON-NLS-1$ //$NON-NLS-2$
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages._MinNoLessThanZero);
             setReturnCode(-1);
             minOccursText.setFocus();
             return false;
         }
         if (minOccurs < 0) {
-            MessageDialog.openError(this.getShell(), Messages.getString("_Error"), Messages.getString("_MinNoLessThanZero")); //$NON-NLS-1$ //$NON-NLS-2$
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages._MinNoLessThanZero);
             setReturnCode(-1);
             minOccursText.setFocus();
             return false;
@@ -190,7 +190,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
             try {
                 maxOccurs = Integer.parseInt(maxOccursText.getText());
             } catch (Exception e2) {
-                MessageDialog.openError(this.getShell(), Messages.getString("_Error"), Messages.getString("_MaxOccBeNum"));  //$NON-NLS-1$ //$NON-NLS-2$
+                MessageDialog.openError(this.getShell(), Messages._Error, Messages._MaxOccBeNum);
                 setReturnCode(-1);
                 maxOccursText.setFocus();
                 return  false;
@@ -206,7 +206,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
                 if (thisDecl.getName().equals(elementName)) {
-                    MessageDialog.openError(getShell(), Messages.getString("_Error"), Messages.getString("_BusinessEle", elementName));  //$NON-NLS-1$ //$NON-NLS-2$
+                    MessageDialog.openError(getShell(), Messages._Error, Messages.bind(Messages._BusinessEle, elementName));
                     return  false;
                 }
             }
@@ -221,7 +221,7 @@ public class ComplexTypeInputDialogR extends ComplexTypeInputDialog {
                 XSDTypeDefinition td = iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDSimpleTypeDefinition) {
-                        MessageDialog.openError(getShell(), Messages.getString("_Error"), Messages.getString("_ThisType", typeName));  //$NON-NLS-1$ //$NON-NLS-2$
+                        MessageDialog.openError(getShell(), Messages._Error, Messages.bind(Messages._ThisType, typeName));
                         return false;
                     }
                 }

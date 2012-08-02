@@ -557,7 +557,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
             });
 
             checkBox.setSelection(isRetrieveFKinfos());
-            checkBox.setText(Messages.getString("FKInfos.resolve")); //$NON-NLS-1$
+            checkBox.setText(Messages.FKInfos_resolve);
         } else if (actionType != AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
                 && actionType != AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType
                 && actionType != AnnotationOrderedListsDialog.AnnotationSchematron_ActionType

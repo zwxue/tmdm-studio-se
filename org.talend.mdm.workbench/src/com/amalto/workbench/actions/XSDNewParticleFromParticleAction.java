@@ -70,15 +70,15 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
     public XSDNewParticleFromParticleAction(DataModelMainPage page) {
         super(page);
         this.simpleTypeName = "string";//$NON-NLS-1$
-        setText(Messages.getString("_AddStringElement")); //$NON-NLS-1$
-        setToolTipText(Messages.getString("_AddBusinessElementTip")); //$NON-NLS-1$
+        setText(Messages._AddStringElement);
+        setToolTipText(Messages._AddBusinessElementTip);
     }
     
     public XSDNewParticleFromParticleAction(DataModelMainPage page, String simpleType) {
         super(page);
         this.simpleTypeName = simpleType;
-        setText(Messages.getString("_AddTypeElement", simpleType)); //$NON-NLS-1$ //$NON-NLS-2$
-        setToolTipText(Messages.getString("_AddBusinessElementTip")); //$NON-NLS-1$
+        setText(Messages.bind(Messages._AddTypeElement, simpleType));
+        setToolTipText(Messages._AddBusinessElementTip);
     }
 
     public IStatus doAction() {
@@ -113,7 +113,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             }
             elementDeclarations.add("");//$NON-NLS-1$
 
-            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), Messages.getString("_AddANewBusinessElement"), null, null, //$NON-NLS-1$
+            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), Messages._AddANewBusinessElement, null, null,
                     elementDeclarations, 0, 1, true, false);
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();
@@ -189,8 +189,8 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_ErrorCreatBusinessElement", e.getLocalizedMessage())); //$NON-NLS-1$
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages._ErrorCreatBusinessElement, e.getLocalizedMessage()));
 
             return Status.CANCEL_STATUS;
         }
@@ -239,8 +239,8 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_ErrorPasteEntity", e.getLocalizedMessage())); //$NON-NLS-1$
+            MessageDialog.openError(this.page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages._ErrorPasteEntity, e.getLocalizedMessage()));
         }
         return infor;
     }
@@ -267,7 +267,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
                 if (thisDecl.getName().equals(elementName)) {
-                    MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), Messages.getString("_TheBusinessElement", elementName)); //$NON-NLS-1$ //$NON-NLS-2$
+                    MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages._TheBusinessElement, elementName));
                     return;
                 }
             }

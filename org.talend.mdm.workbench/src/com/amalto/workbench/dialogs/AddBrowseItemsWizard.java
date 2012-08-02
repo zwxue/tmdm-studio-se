@@ -113,7 +113,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     public AddBrowseItemsWizard(DataModelMainPage launchPage) {
         super();
-        setWindowTitle(Messages.getString("GenerateBrowseViews")); //$NON-NLS-1$
+        setWindowTitle(Messages.GenerateBrowseViews);
         page = launchPage;
     }
 
@@ -169,8 +169,8 @@ public class AddBrowseItemsWizard extends Wizard {
                     IEditorPart currentEditor = activePage.findEditor(xobjectEditorinput);
                     
                     if (currentEditor != null) {// editor is opened
-                        if (MessageDialog.openConfirm(this.getShell(), Messages.getString("AddBrowseItemsWizard_Warning"), //$NON-NLS-1$
-                                Messages.getString("AddBrowseItemsWizard_DuplicatedView"))) //$NON-NLS-1$
+                        if (MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizard_Warning,
+                                Messages.AddBrowseItemsWizard_DuplicatedView))
                         {
                             refreshEditorContent(obj);
                         } else {
@@ -296,9 +296,8 @@ public class AddBrowseItemsWizard extends Wizard {
                 newBrowseItemView(browse);
                 modifyRolesWithAttachedBrowseItem(browse, roles);
             } catch (RemoteException e) {
-                MessageDialog.openError(page.getSite().getShell(), Messages.getString("Error.title"), Messages //$NON-NLS-1$
-                        .getString("ErrorOccuredSaveView") //$NON-NLS-1$
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages
+                        .bind(Messages.ErrorOccuredSaveView, e.getLocalizedMessage()));
                 return false;
             }
         }
@@ -313,9 +312,9 @@ public class AddBrowseItemsWizard extends Wizard {
         private ComplexTableViewer complexTableViewer;
 
         public ConfigureRolePage() {
-            super(Messages.getString("ConfigureBrowseViews")); //$NON-NLS-1$
-            setTitle(Messages.getString("ConfigureBrowseViews")); //$NON-NLS-1$
-            setDescription(Messages.getString("ConfigureTheBrowseViews")); //$NON-NLS-1$
+            super(Messages.ConfigureBrowseViews);
+            setTitle(Messages.ConfigureBrowseViews);
+            setDescription(Messages.ConfigureTheBrowseViews); 
 
             // Page isn't complete until an e-mail address has been added
             setPageComplete(true);
@@ -392,15 +391,12 @@ public class AddBrowseItemsWizard extends Wizard {
                     String tValue = value.toString().trim();
                     if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()//$NON-NLS-1$
                             || tValue.replaceAll("\\s", "").length() != tValue.length()) {//$NON-NLS-1$//$NON-NLS-2$
-                        MessageDialog.openInformation(null, Messages.getString("WarnningText"), Messages //$NON-NLS-1$
-                                .getString("NotContainEmpty")); //$NON-NLS-1$
+                        MessageDialog.openInformation(null, Messages.WarnningText, Messages.NotContainEmpty);
                         return;
                     }
 
                     if (!value.toString().startsWith(BROWSE_ITEMS)) {
-                        MessageDialog.openInformation(null, Messages.getString("WarnningText"), Messages //$NON-NLS-1$
-                                .getString("NameStartWith") //$NON-NLS-1$
-                                + BROWSE_ITEMS);
+                        MessageDialog.openInformation(null, Messages.WarnningText, Messages.bind(Messages.NameStartWith, BROWSE_ITEMS));
                         return;
                     }
 
@@ -410,8 +406,7 @@ public class AddBrowseItemsWizard extends Wizard {
                             if (theElem == elem)
                                 continue;
                             if ((BROWSE_ITEMS + theElem.getName()).equals(tValue)) {
-                                MessageDialog.openInformation(null, Messages.getString("WarnningText"), Messages //$NON-NLS-1$
-                                        .getString("BrowseNameExists")); //$NON-NLS-1$
+                                MessageDialog.openInformation(null, Messages.WarnningText, Messages.BrowseNameExists);
                                 return;
                             }
                         }
@@ -457,7 +452,7 @@ public class AddBrowseItemsWizard extends Wizard {
             browseViewer.refresh();
             if (Util.IsEnterPrise()) {
                 Label infoLabel = new Label(composite, SWT.NONE);
-                infoLabel.setText(Messages.getString("RoleAccessDefinition")); //$NON-NLS-1$
+                infoLabel.setText(Messages.RoleAccessDefinition);
                 ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
                 ruleColumn.setColumnWidth(250);
                 // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
@@ -465,7 +460,7 @@ public class AddBrowseItemsWizard extends Wizard {
                 ruleColumn.setComboValues(roles.toArray(new String[] {}));
                 ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
                 acsColumn.setColumnWidth(250);
-                acsColumn.setComboValues(new String[] { Messages.getString("ReadOnly"), Messages.getString("ReadAndWrite") }); //$NON-NLS-1$//$NON-NLS-2$
+                acsColumn.setComboValues(new String[] { Messages.ReadOnly, Messages.ReadAndWrite});
                 complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns),
                         WidgetFactory.getWidgetFactory(), composite);
                 complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });

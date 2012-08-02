@@ -85,7 +85,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
     public XSDAddComplexTypeElementAction(DataModelMainPage page) {
         super(page);
-        setText(Messages.getString("_AddCType")); //$NON-NLS-1$
+        setText(Messages._AddCType);
     }
 
     public void updateElementFields() {
@@ -126,7 +126,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             } else if (selection.getFirstElement() instanceof XSDModelGroup) {
                 modelGroup = (XSDModelGroup) selection.getFirstElement();
             } else {
-                log.info(Messages.getString("_UnkownSection", selection.getFirstElement().getClass().getName(), selection.getFirstElement().toString())); //$NON-NLS-1$
+                log.info(Messages.bind(Messages._UnkownSection, selection.getFirstElement().getClass().getName(), selection.getFirstElement().toString())); //$NON-NLS-1$
                 return Status.CANCEL_STATUS;
             }
         }
@@ -156,8 +156,8 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_CreateCTypeError", e.getLocalizedMessage())); //$NON-NLS-1$
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages._CreateCTypeError, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 
@@ -169,7 +169,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 defaultTypeName);
         List<XSDComplexTypeDefinition> types = Util.getComplexTypes(schema);
 
-        dialogR = new ComplexTypeInputDialogR(page.getSite().getShell(), Messages.getString("_AddCType"), modelGroup, schema, types, //$NON-NLS-1$
+        dialogR = new ComplexTypeInputDialogR(page.getSite().getShell(), Messages._AddCType, modelGroup, schema, types, //$NON-NLS-1$
                 simpleTypeDefinition, false, false);
 
         dialogR.setBlockOnOpen(true);
@@ -269,8 +269,8 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.page.getSite().getShell(), Messages.getString("_Error"), //$NON-NLS-1$
-                    Messages.getString("_PasteError", e.getLocalizedMessage())); //$NON-NLS-1$
+            MessageDialog.openError(this.page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages._PasteError, e.getLocalizedMessage()));
         }
         return infor;
     }

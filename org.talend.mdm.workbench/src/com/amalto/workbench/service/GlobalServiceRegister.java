@@ -61,7 +61,7 @@ public class GlobalServiceRegister {
         if (service == null) {
             service = findService(klass);
             if (service == null) {
-                throw new RuntimeException(Messages.getString("GlobalServiceRegister.ServiceNotRegistered", klass.getName())); //$NON-NLS-1$ 
+                throw new RuntimeException(Messages.bind(Messages.GlobalServiceRegister_ServiceNotRegistered, klass.getName()));
             }
             services.put(klass, service);
         }

@@ -28,14 +28,13 @@ import org.eclipse.ui.intro.config.IIntroContentProviderSite;
 import org.eclipse.ui.intro.config.IIntroXHTMLContentProvider;
 import org.osgi.framework.Bundle;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.mdm.repository.i18n.MessagesE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.starting.MDMStartingConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.amalto.workbench.i18n.Messages;
 
 public class MDMStartingHelper {
     private static Logger log = Logger.getLogger(MDMStartingHelper.class);
@@ -114,7 +113,7 @@ public class MDMStartingHelper {
         Node[] nodes = getArray(internationals);
         for (int i = 0; i < nodes.length; i++) {
             Element internationalElement = (Element) nodes[i];
-            String nodeName = Messages.getString(internationalElement.getAttribute(MDMStartingConstants.ATT_ID));
+            String nodeName = MessagesE.getString(internationalElement.getAttribute(MDMStartingConstants.ATT_ID));
             internationalElement.getParentNode().replaceChild(dom.createTextNode(nodeName), internationalElement);
         }
     }

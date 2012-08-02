@@ -95,13 +95,12 @@ public class ValidationRuleWidget {
             }
         });
         button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-        button.setToolTipText(Messages.getString("BuildValidationRuleExpression")); //$NON-NLS-1$
+        button.setToolTipText(Messages.BuildValidationRuleExpression);
     }
 
     protected void createValidationRuleExcpressDialog(Shell shell) {
-        dlg = new ValidationRuleExcpressDialog(shell, treeParent, Messages.getString("BuildValidationRuleExpression"), text //$NON-NLS-1$
-                .getText(),
-        conceptName, false, true);
+        dlg = new ValidationRuleExcpressDialog(shell, treeParent, Messages.BuildValidationRuleExpression, text.getText(),
+                conceptName, false, true);
 
     }
     public Composite getComposite() {

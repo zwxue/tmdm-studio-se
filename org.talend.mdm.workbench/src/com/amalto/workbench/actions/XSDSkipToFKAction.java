@@ -48,7 +48,7 @@ public class XSDSkipToFKAction extends Action {
 
     public XSDSkipToFKAction(DataModelMainPage page) {
         this.page = page;
-        setText(Messages.getString("XSDSkipToFKAction.actionTitle")); //$NON-NLS-1$
+        setText(Messages.XSDSkipToFKAction_actionTitle);
         setImageDescriptor(ImageCache.getImage(EImage.STEP_INTO.getPath()));
     }
 
@@ -68,7 +68,7 @@ public class XSDSkipToFKAction extends Action {
                     MessageDialog
                             .openInformation(
                                     null,
-                                    Messages.getString("XSDSkipToFKAction.actionTitle"), Messages.getString("XSDSkipToFKAction.NotFoundFkInfo")); //$NON-NLS-1$ //$NON-NLS-2$
+                                    Messages.XSDSkipToFKAction_actionTitle, Messages.XSDSkipToFKAction_NotFoundFkInfo);
                     return;
                 }
                 String entityName = getEntityName(fkPath);

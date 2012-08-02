@@ -425,12 +425,12 @@ public class SchematronExpressBuilder {
     protected XpathSelectDialog getXPathSelectDialog() {
         if (treeParent != null)
             return new XpathSelectDialog(parent.getShell(), treeParent, Messages
-                    .getString("SchematronExpressBuilder_selectXPath"), //$NON-NLS-1$
+                    .SchematronExpressBuilder_selectXPath,
                 ServerView.show().getSite(), false, null,
                 isAbsoluteXPath);
         else
             return new XpathSelectDialog(parent.getShell(), treeParent, Messages
-                    .getString("SchematronExpressBuilder_selectXPath"), null, false, null, isAbsoluteXPath); //$NON-NLS-1$
+                    .SchematronExpressBuilder_selectXPath, null, false, null, isAbsoluteXPath);
 
     }
 }

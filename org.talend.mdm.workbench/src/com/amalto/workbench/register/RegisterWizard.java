@@ -61,7 +61,7 @@ public class RegisterWizard extends Wizard {
         addPage(mainPage);
         IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
                 IBrandingService.class);
-        setWindowTitle(Messages.getString("RegisterWizard.windowTitle", brandingService.getFullProductName())); //$NON-NLS-1$
+        setWindowTitle(Messages.bind(Messages.RegisterWizard_windowTitle, brandingService.getFullProductName()));
         setDefaultPageImageDescriptor(ImageCache.getImage(EImage.REGISTER_WIZ.getPath()));
     }
 

@@ -951,8 +951,8 @@ public class TransformerMainPage extends AMainPageV2 {
             }
             
             if (!has) {
-                MessageDialog.openWarning(getSite().getShell(), Messages.getString("TransformerMainPage_warning"),
-                        Messages.getString("TransformerMainPage_message", processName));
+                MessageDialog.openWarning(getSite().getShell(), Messages.TransformerMainPage_warning,
+                        Messages.bind(Messages.TransformerMainPage_message, processName));
             }
         }
 
