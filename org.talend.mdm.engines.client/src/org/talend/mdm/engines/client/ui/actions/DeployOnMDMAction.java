@@ -41,7 +41,6 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
@@ -61,7 +60,7 @@ import com.amalto.workbench.utils.MDMServerHelper;
 public final class DeployOnMDMAction extends AContextualAction {
     private static Logger log = Logger.getLogger(DeployOnMDMAction.class);
     
-    private static final String EXPORTJOBSCRIPTS = Messages.getString("DeployOnMDMAction_DeployToMDM"); //$NON-NLS-1$
+    private static final String EXPORTJOBSCRIPTS = Messages.DeployOnMDMAction_DeployToMDM;
     private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /*
