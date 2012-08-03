@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.model,
  org.talend.mdm.workbench
 Bundle-ActivationPolicy: lazy
-Eclipse-RegisterBuddy: org.mockito
+Eclipse-RegisterBuddy: org.talend.testutils
 Export-Package: org.talend.mdm.repository.model.mdmmetadata,
  org.talend.mdm.repository.model.mdmmetadata.impl,
  org.talend.mdm.repository.model.mdmmetadata.util,

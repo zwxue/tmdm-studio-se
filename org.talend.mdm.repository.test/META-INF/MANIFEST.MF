@@ -6,7 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Fragment-Host: org.talend.mdm.repository
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit4,
- org.mockito,
+ org.talend.testutils,
  org.hamcrest,
  org.eclipse.osgi.services
 Bundle-ClassPath: .
