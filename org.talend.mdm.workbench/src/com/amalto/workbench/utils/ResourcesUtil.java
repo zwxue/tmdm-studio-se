@@ -43,6 +43,7 @@ import org.dom4j.io.SAXReader;
 
 import sun.misc.BASE64Encoder;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 
 public class ResourcesUtil {
@@ -85,7 +86,7 @@ public class ResourcesUtil {
 
             int statusCode = httpClient.executeMethod(getMethod);
             if (statusCode != HttpStatus.SC_OK) {
-                System.err.println("Method failed: " + getMethod.getStatusLine());
+                System.err.println("Method failed: " + getMethod.getStatusLine()); //$NON-NLS-1$
             }
 
             byte[] responseBody = getMethod.getResponseBody();
@@ -127,7 +128,7 @@ public class ResourcesUtil {
 
         HttpGet httpget = new HttpGet(uri);
 
-        log.info("executing request" + httpget.getRequestLine());
+        log.info(Messages.ResourcesUtil_Loginfo + httpget.getRequestLine());
 
         // Create a response handler
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -235,7 +236,7 @@ public class ResourcesUtil {
                 new AuthScope(getEndpointHost(uri), Integer.valueOf(getEndpointPort(uri))),
                 new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
 
-        log.info("executing request" + httppost.getRequestLine());
+        log.info(Messages.ResourcesUtil_Loginfo + httppost.getRequestLine());
         HttpResponse response = httpclient.execute(httppost);
         HttpEntity entity = response.getEntity();
 

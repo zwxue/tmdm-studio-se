@@ -46,8 +46,8 @@ public class PasswordUtil {
         encodeStr = new String(enbytes);
         debytes = base64.decode(enbytes);
         decodeStr = new String(debytes);
-        System.out.println("plain password:" + str);
-        System.out.println("encrypted password:" + encodeStr);
-        System.out.println("decrypted password:" + decodeStr);
+        System.out.println("plain password:" + str); //$NON-NLS-1$
+        System.out.println("encrypted password:" + encodeStr); //$NON-NLS-1$
+        System.out.println("decrypted password:" + decodeStr); //$NON-NLS-1$
     }
 }

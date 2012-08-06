@@ -25,11 +25,12 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite;
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite.CommitBarListener;
 import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
+import com.amalto.workbench.i18n.Messages;
 
 public class CommitSection extends BasePropertySection {
 
 	private CommitBarComposite commitBar;
-	private String title="Commit";
+	private String title=Messages.CommitSection_Commit;
 	@Override
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage aTabbedPropertySheetPage) {

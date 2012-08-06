@@ -40,6 +40,7 @@ import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
@@ -86,22 +87,22 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
                 return Status.CANCEL_STATUS;
             } else {
                 boolean sameType = checkInSameClassType(delObjs.toArray(), delObjs.get(0).getClass());
-                String deleteLabel = "Are you sure you want to ";
+                String deleteLabel = Messages.DelLabel1;
                 String elemDesc = ((Action) clsAction.get(delObjs.get(0).getClass())).getText();
-                int backPos = elemDesc.indexOf(" ");
+                int backPos = elemDesc.indexOf(" "); //$NON-NLS-1$
 
                 if (delObjs.size() > 1) {
-                    deleteLabel += elemDesc.substring(0, backPos) + " these " + delObjs.size() + " "
-                            + (!sameType ? "Objects" : elemDesc.substring(backPos + 1));
+                    deleteLabel += elemDesc.substring(0, backPos) + Messages.DelLabel2 + delObjs.size() + Messages.DelLabel2A
+                            + (!sameType ? Messages.DelLabel2B : elemDesc.substring(backPos + 1));
                     if (deleteLabel.endsWith("y")) {//$NON-NLS-1$
-                        deleteLabel = deleteLabel.substring(0, deleteLabel.length() - 1) + "ies";
+                        deleteLabel = deleteLabel.substring(0, deleteLabel.length() - 1) + Messages.DelLabel3;
                     } else
-                        deleteLabel = deleteLabel + "s";
+                        deleteLabel = deleteLabel + Messages.XSDDeleteXX_DelLabel4;
                 } else
-                    deleteLabel += elemDesc.substring(0, backPos) + " the selected "
-                            + (!sameType ? "Objects" : elemDesc.substring(backPos + 1));
+                    deleteLabel += elemDesc.substring(0, backPos) + Messages.XSDDeleteXX_DelLabel5
+                            + (!sameType ? Messages.XSDDeleteXX_DelLabel5A : elemDesc.substring(backPos + 1));
 
-                if (!MessageDialog.openConfirm(page.getSite().getShell(), "Delete Model", deleteLabel)) {
+                if (!MessageDialog.openConfirm(page.getSite().getShell(), Messages.XSDDeleteXX_DialogTitle, deleteLabel)) {
                     return Status.CANCEL_STATUS;
                 }
             }
@@ -156,8 +157,8 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to remove Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDDeleteXX_ErrorMsg, e.getLocalizedMessage()));
 
             return (results.indexOf(Status.OK_STATUS) >= 0 ? Status.OK_STATUS : Status.CANCEL_STATUS);
         }
@@ -268,8 +269,8 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
             }
             setText(actionTxt);
         } else
-            setText("Delete Objects");
-        setToolTipText("Delete Entities");
+            setText(Messages.XSDDeleteXX_DeleteObjects);
+        setToolTipText(Messages.XSDDeleteXX_DeleteEntities);
     }
 
     private void clearDelData() {

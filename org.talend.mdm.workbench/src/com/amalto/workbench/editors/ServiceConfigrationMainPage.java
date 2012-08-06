@@ -42,6 +42,7 @@ import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.w3c.dom.Node;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -84,9 +85,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected static final String CHECKMSG_NOSELECTION = ""; //$NON-NLS-1$
 
-    protected static final String CHECKMSG_SUCCESSFULCONN = "Connection succeeded!";
+    protected static final String CHECKMSG_SUCCESSFULCONN = Messages.ServiceConfigrationMainPage_1;
 
-    protected static final String CHECKMSG_ERRORCONN = "Connection failed, please check your url, username and password";
+    protected static final String CHECKMSG_ERRORCONN = Messages.ServiceConfigrationMainPage_2;
 
     public ServiceConfigrationMainPage(FormEditor editor) {
         super(editor, ServiceConfigrationMainPage.class.getName(), ((XObjectEditorInput) editor.getEditorInput()).getName());
@@ -169,10 +170,10 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charSection) {
 
         // Routing Expressions
-        Composite serviceGroup = this.getNewSectionComposite("Services List");
+        Composite serviceGroup = this.getNewSectionComposite(Messages.ServiceConfigrationMainPage_3);
         serviceGroup.setLayout(new GridLayout(2, false));
         // Service Name
-        Label serviceNameLabel = toolkit.createLabel(serviceGroup, "Service", SWT.NULL);
+        Label serviceNameLabel = toolkit.createLabel(serviceGroup, Messages.ServiceConfigrationMainPage_4, SWT.NULL);
         serviceNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
 
         Composite subPanel = toolkit.createComposite(serviceGroup);
@@ -196,7 +197,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         // default parameters button
         defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);//$NON-NLS-1$
         defultParameterBtn.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
-        defultParameterBtn.setToolTipText("Help...");
+        defultParameterBtn.setToolTipText(Messages.ServiceConfigrationMainPage_5);
         defultParameterBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         defultParameterBtn.addSelectionListener(new SelectionListener() {
 
@@ -224,7 +225,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             private void showUpDialog(String desc, String doc) {
 
                 final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(), desc, doc, null,
-                        "Default Service Configuration");
+                        Messages.ServiceConfigrationMainPage_6);
                 dialog.addListener(new Listener() {
 
                     public void handleEvent(Event event) {
@@ -232,7 +233,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                     }
                 });
                 dialog.create();
-                dialog.getShell().setText(serviceNameCombo.getText() + " Service Configuration Details");
+                dialog.getShell().setText(serviceNameCombo.getText() + Messages.ServiceConfigrationMainPage_7);
                 dialog.setBlockOnOpen(true);
                 dialog.open();
             }
@@ -240,7 +241,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         });
 
         // Service Parameters
-        Label serviceConfigurationsLabel = toolkit.createLabel(serviceGroup, "Service Configuration", SWT.NULL);
+        Label serviceConfigurationsLabel = toolkit.createLabel(serviceGroup, Messages.ServiceConfigrationMainPage_8, SWT.NULL);
         serviceConfigurationsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 2, 1));
         serviceConfigurationsText = toolkit.createText(serviceGroup, "", SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.WRAP);//$NON-NLS-1$
 
@@ -257,7 +258,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 markDirtyWithoutCommit();
             }
         });
-        checkButton = toolkit.createButton(serviceGroup, "Check", SWT.NONE);
+        checkButton = toolkit.createButton(serviceGroup, Messages.ServiceConfigrationMainPage_9, SWT.NONE);
         checkButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
@@ -345,7 +346,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         String msg = checkValidXML();
 
         if (msg != null) {
-            MessageDialog.openError(getSite().getShell(), "Error", msg);
+            MessageDialog.openError(getSite().getShell(), Messages._Error, msg);
             return;
         }
 

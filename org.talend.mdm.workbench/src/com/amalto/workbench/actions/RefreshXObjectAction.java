@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Event;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.ObjectRetriever;
@@ -46,8 +47,8 @@ public class RefreshXObjectAction extends Action {
         this.view = view;
         this.selection = selection;
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
-        setText("Refresh");
-        setToolTipText("Refresh the " + IConstants.TALEND + " Server Object(s)");
+        setText(Messages.RefreshXObjectAction_Text);
+        setToolTipText(Messages.bind(Messages.RefreshXObjectAction_ActionTip, IConstants.TALEND));
     }
 
     public void run() {

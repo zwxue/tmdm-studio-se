@@ -30,28 +30,29 @@ import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
 import com.amalto.workbench.detailtabs.sections.model.entity.FieldWrapper;
 import com.amalto.workbench.detailtabs.sections.model.entity.KeyWrapper;
+import com.amalto.workbench.i18n.Messages;
 
 public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
-	private static final String ERR_ENTITY_NULLENTITYNAME = "Entity name can not be empty";
+	private static final String ERR_ENTITY_NULLENTITYNAME = Messages.EntityCommitHandler_EntityNameCannotbeEmpty;
 
-	private static final String ERR_ENTITY_CONTAINEMPTY = "Entity name can not contain the empty characters";
+	private static final String ERR_ENTITY_CONTAINEMPTY = Messages.EntityCommitHandler_EntityNameCannotContainEmpty;
 
-	private static final String ERR_ENTITY_DULPLICATEENTITYNAME = "Entity name has been existed";
+	private static final String ERR_ENTITY_DULPLICATEENTITYNAME = Messages.EntityCommitHandler_EntityNameExist;
 
-	private static final String ERR_KEY_NULLKEYNAME = "Key name can not be empty";
+	private static final String ERR_KEY_NULLKEYNAME = Messages.EntityCommitHandler_KeyNameCannotbeEmpty;
 
-	private static final String ERR_KEY_CONTAINEMPTY = "Key name can not contain the empty characters";
+	private static final String ERR_KEY_CONTAINEMPTY = Messages.EntityCommitHandler_KeyNameCannotContainEmpty;
 
-	private static final String ERR_KEY_DUPLICATEKEYNAME = "Key name has been existed";
+	private static final String ERR_KEY_DUPLICATEKEYNAME = Messages.EntityCommitHandler_KeyNameExist;
 
-	private static final String ERR_KEY_NOFIELDS = "The must be at least one field";
+	private static final String ERR_KEY_NOFIELDS = Messages.EntityCommitHandler_MustAtLeastOnField;
 
-	private static final String ERR_KEY_MULTIUNIQUE = "The must be one unique key at most";
+	private static final String ERR_KEY_MULTIUNIQUE = Messages.EntityCommitHandler_AtMostUniqueKey;
 
-	private static final String ERR_SELECTOR_WRONGFORMAT = "The Key's selector is in wrong format";
+	private static final String ERR_SELECTOR_WRONGFORMAT = Messages.EntityCommitHandler_KeySelectorInWrongFormat;
 
-	private static final String ERR_FIELD_WRONGFORMAT = "The Key's field is in wrong format";
+	private static final String ERR_FIELD_WRONGFORMAT = Messages.EntityCommitHandler_KeyFieldInWrongFormat;
 
 	public EntityCommitHandler(EntityWrapper entityWrapper) {
 		super(entityWrapper);

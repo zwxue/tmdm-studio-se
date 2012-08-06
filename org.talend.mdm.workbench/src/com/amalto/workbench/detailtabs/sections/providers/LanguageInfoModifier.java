@@ -21,13 +21,14 @@ import org.eclipse.swt.widgets.Item;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
+import com.amalto.workbench.i18n.Messages;
 
 
 public class LanguageInfoModifier implements ICellModifier {
 
-    public static final String COL_PROP_LANG = "language";
+    public static final String COL_PROP_LANG = Messages.LanguageInfoModifier_language;
 
-    public static final String COL_PROP_LABLE = "label";
+    public static final String COL_PROP_LABLE = Messages.LanguageInfoModifier_label;
 
     private List<LanguageInfo> allLanguageInfos = new ArrayList<LanguageInfo>();
 
@@ -89,8 +90,7 @@ public class LanguageInfoModifier implements ICellModifier {
     private void onModfiyColumnLanguage(LanguageInfo modifiedElement, Integer newSelectedIndex) {
 
         if (isNewLanguageExistedAlready(modifiedElement, allLanguages.get(newSelectedIndex))) {
-            MessageDialog.openInformation(null, "Warnning", "The Language " + allLanguages.get(newSelectedIndex)
-                    + "already exists");
+            MessageDialog.openInformation(null, Messages.LanguageInfoModifier_Warnning, Messages.bind(Messages.LanguageInfoModifier_InfoContent, allLanguages.get(newSelectedIndex)));
             return;
         }
 

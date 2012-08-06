@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
 
 /**
@@ -65,11 +66,11 @@ public class VersionTagWidget {
         Group tagGroup = new Group(composite, SWT.SHADOW_NONE);
         tagGroup.setLayout(new GridLayout(2, false));
         tagGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        tagGroup.setText("Tag " + resourcesName);
+        tagGroup.setText(Messages.bind(Messages.VersionTagWidget_GroupTextX, resourcesName));
 
         Label tagLabel = new Label(tagGroup, SWT.NONE);
         tagLabel.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1));
-        tagLabel.setText("Tag");
+        tagLabel.setText(Messages.VersionTagWidget_GroupText);
 
         tagText = new Text(tagGroup, SWT.BORDER);
         tagText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -80,7 +81,7 @@ public class VersionTagWidget {
 
         Label commentLabel = new Label(tagGroup, SWT.NONE);
         commentLabel.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1));
-        commentLabel.setText("Comment");
+        commentLabel.setText(Messages.VersionTagWidget_Comment);
 
         commentText = new Text(tagGroup, SWT.MULTI | SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
         commentText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -91,13 +92,13 @@ public class VersionTagWidget {
 
         tagButton = new Button(tagGroup, SWT.PUSH);
         tagButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-        tagButton.setText("Tag");
+        tagButton.setText(Messages.VersionTagWidget_GroupText);
         tagButton.addSelectionListener(tagSelectionListener);
 
         restoreGroup = new Group(composite, SWT.SHADOW_NONE);
         restoreGroup.setLayout(new GridLayout(1, true));
         restoreGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        restoreGroup.setText("Restore " + resourcesName);
+        restoreGroup.setText(Messages.bind(Messages.VersionTagWidget_RestoreX, resourcesName));
         restoreGroup.setEnabled(false);
 
         tagsViewer = new TableViewer(restoreGroup);
@@ -134,7 +135,7 @@ public class VersionTagWidget {
 
         restoreButton = new Button(restoreGroup, SWT.PUSH);
         restoreButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        restoreButton.setText("Restore");
+        restoreButton.setText(Messages.VersionTagWidget_Restore);
         restoreButton.addSelectionListener(restoreSelectionListener);
 
         refreshData(hisEntries);

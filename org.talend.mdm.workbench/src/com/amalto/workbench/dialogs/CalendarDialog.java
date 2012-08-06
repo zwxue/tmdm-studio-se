@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.vafada.swtcalendar.SWTCalendar;
 import org.vafada.swtcalendar.SWTCalendarListener;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class CalendarDialog {
 
     protected Shell shell;
@@ -36,7 +38,7 @@ public class CalendarDialog {
     public CalendarDialog(Shell parentShell) {
         display = parentShell.getDisplay();
         shell = new Shell(display, SWT.CLOSE);
-        shell.setText("Date Picker");
+        shell.setText(Messages.CalendarDialog_DatePicker);
         shell.setLayout(new RowLayout());
         swtcal = new SWTCalendar(shell);
     }

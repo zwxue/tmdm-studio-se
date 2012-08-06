@@ -61,7 +61,7 @@ public class TypesLabelProvider extends LabelProvider {
         if (obj instanceof XSDElementDeclaration) {
             String name = ((XSDElementDeclaration) obj).getName();
             if (((XSDElementDeclaration) obj).isAbstract())
-                name += "   (abstract)";
+                name += Messages.TypesLabelProvider_0;
             String tail = ((XSDElementDeclaration) obj).getTargetNamespace() == null ? "" : " : "//$NON-NLS-1$//$NON-NLS-2$
                     + ((XSDElementDeclaration) obj).getTargetNamespace();
             return name + tail;
@@ -176,41 +176,41 @@ public class TypesLabelProvider extends LabelProvider {
             try {
                 Element e = (Element) obj;
                 if (e.getLocalName().equals("documentation")) {//$NON-NLS-1$
-                    return "Documentation: " + e.getChildNodes().item(0).getNodeValue();
+                    return Messages.TypesLabelProvider_1 + e.getChildNodes().item(0).getNodeValue();
                 } else if (e.getLocalName().equals("appinfo")) {//$NON-NLS-1$
                     String source = e.getAttribute("source");//$NON-NLS-1$
                     if (source != null) {
                         if (source.startsWith("X_Label_")) {//$NON-NLS-1$
-                            return Util.iso2lang.get(source.substring(8).toLowerCase()) + " Label: "
+                            return Util.iso2lang.get(source.substring(8).toLowerCase()) + Messages.TypesLabelProvider_2
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
-                            return "Foreign Key:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_3 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey_NotSep")) {//$NON-NLS-1$
                             Boolean v = Boolean.valueOf(e.getChildNodes().item(0).getNodeValue());
-                            return Messages.SimpleXpathInputDialog_sepFkTabPanel +": " + v;
+                            return Messages.SimpleXpathInputDialog_sepFkTabPanel +Messages.TypesLabelProvider_4 + v;
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
-                            return "Foreign Key Info:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_5 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
-                            return "Foreign Key Filter:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_6 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
-                            return "Source System:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_7 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_TargetSystem")) {//$NON-NLS-1$
-                            return "Target System(s):  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_8 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.startsWith("X_Description_")) {//$NON-NLS-1$
-                            return Util.iso2lang.get(source.substring(14).toLowerCase()) + " Description: "
+                            return Util.iso2lang.get(source.substring(14).toLowerCase()) + Messages.TypesLabelProvider_9
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Write")) {//$NON-NLS-1$
-                            return "Writable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_10 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
-                            return "No Creatable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_11 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
-                            return "No Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_12 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
-                            return "No Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_13 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
-                            return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_14 + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
-                            return "Auto Expand : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.TypesLabelProvider_15 + e.getChildNodes().item(0).getNodeValue();
                         } else {
                             return source + ": " + Util.nodeToString((Element) obj);//$NON-NLS-1$
                         }
@@ -296,7 +296,7 @@ public class TypesLabelProvider extends LabelProvider {
             } else if (xsdTerm instanceof XSDWildcard) {
                 return ImageCache.getCreatedImage("icons/wildcard.gif");//$NON-NLS-1$
             } else {
-                log.info("ERROR XSD Term " + xsdTerm.getClass().getName());
+                log.info(Messages.TypesLabelProvider_16 + xsdTerm.getClass().getName());
                 return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }

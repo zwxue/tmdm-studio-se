@@ -19,6 +19,7 @@ import org.eclipse.ui.PlatformUI;
 import com.amalto.workbench.editors.AFormPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -26,9 +27,9 @@ public class RefreshCurrentEditorAction extends Action {
 
     public RefreshCurrentEditorAction() {
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
-        setText("Refresh");
-        setToolTipText("Refresh the current page");
-        setId("RefreshCurrentEditorAction");
+        setText(Messages.RefreshCurrentEditorAction_Text);
+        setToolTipText(Messages.RefreshCurrentEditorAction_ActionTip);
+        setId(Messages.RefreshCurrentEditorAction_ActionId);
     }
 
     public void run() {

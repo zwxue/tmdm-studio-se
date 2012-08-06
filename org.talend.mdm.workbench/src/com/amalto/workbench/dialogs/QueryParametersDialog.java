@@ -40,6 +40,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 
 public class QueryParametersDialog extends Dialog {
@@ -68,7 +69,7 @@ public class QueryParametersDialog extends Dialog {
 
         try {
             // Should not really be here but well,....
-            parent.getShell().setText("Query Parameters");
+            parent.getShell().setText(Messages.QueryParametersDialog_);
 
             Composite composite = (Composite) super.createDialogArea(parent);
             GridLayout layout = (GridLayout) composite.getLayout();
@@ -90,7 +91,7 @@ public class QueryParametersDialog extends Dialog {
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getShell(), "Error", "An error occured trying to create the Query Parameters dialog "
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.QueryParametersDialog_ErroMsg
                     + e.getLocalizedMessage());
             return null;
         }
@@ -98,8 +99,8 @@ public class QueryParametersDialog extends Dialog {
     }
 
     protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, BUTTON_OK, "OK", false);
-        createButton(parent, BUTTON_CANCEL, "Cancel", false);
+        createButton(parent, BUTTON_OK, Messages.QueryParametersDialog_Ok, false);
+        createButton(parent, BUTTON_CANCEL, Messages.Cancel, false);
     }
 
     @Override

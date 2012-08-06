@@ -14,6 +14,7 @@ package com.amalto.workbench.detailtabs.sections.model.simpletype.propsource;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.IConstants;
 
 public class SimpleTypeFacetPatternPropertySource extends SimpleTypeFacetListStrPropertySource {
@@ -26,12 +27,12 @@ public class SimpleTypeFacetPatternPropertySource extends SimpleTypeFacetListStr
 
     @Override
     protected String getCellEditorDialogInputAreaLabel() {
-        return "Pattern";
+        return Messages.SimpleTypeFacetPatternPropertySource_Pattern;
     }
 
     @Override
     protected String getCellEditorDialogTitle() {
-        return "SimpleType Pattern";
+        return Messages.SimpleTypeFacetPatternPropertySource_SimpleTypePattern;
     }
 
 }

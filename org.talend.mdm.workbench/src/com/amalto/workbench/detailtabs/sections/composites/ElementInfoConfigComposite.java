@@ -35,6 +35,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -154,11 +155,11 @@ public class ElementInfoConfigComposite extends Composite {
 		setLayout(gridLayout);
 		
 		autoExpandBtn=new Button(this,SWT.CHECK);
-		autoExpandBtn.setText("Auto Expand");
+		autoExpandBtn.setText(Messages.ElementInfoConfigComposite_AutoExpand);
 		autoExpandBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
 		final Label lblName = new Label(this, SWT.NONE);
-		lblName.setText("Name");
+		lblName.setText(Messages.ElementInfoConfigComposite_Name);
 
 		txtName = new Text(this, SWT.BORDER);
 		final GridData gd_txtName = new GridData(SWT.FILL, SWT.CENTER, true,

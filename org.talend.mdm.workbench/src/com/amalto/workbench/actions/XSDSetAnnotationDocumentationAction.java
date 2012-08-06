@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -36,8 +37,8 @@ public class XSDSetAnnotationDocumentationAction extends UndoAction {
     public XSDSetAnnotationDocumentationAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DOCUMENTATION.getPath()));
-        setText("Set the Documentation");
-        setToolTipText("Set the Documentation for this element");
+        setText(Messages.XSDSetXX_Text);
+        setToolTipText(Messages.XSDSetXX_ActionTip);
     }
 
     public IStatus doAction() {
@@ -46,12 +47,11 @@ public class XSDSetAnnotationDocumentationAction extends UndoAction {
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent) selection.getFirstElement());
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type "
-                        + selection.getFirstElement().getClass().getName());
+                throw new RuntimeException(Messages.bind(Messages.XSDSetXX_ExceptionInfo, selection.getFirstElement().getClass().getName()));
             }
 
-            InputDialog id = new InputDialog(page.getSite().getShell(), "Set the Documentation",
-                    "Enter a text for the documentation - Leave BLANK to delete the Documentation", struc.getDocumentation(),
+            InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDSetXX_DialogTitle,
+                    Messages.XSDSetXX_DialogTip, struc.getDocumentation(),
                     new IInputValidator() {
 
                         public String isValid(String newText) {
@@ -75,8 +75,8 @@ public class XSDSetAnnotationDocumentationAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set the Documentation: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDSetXX_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

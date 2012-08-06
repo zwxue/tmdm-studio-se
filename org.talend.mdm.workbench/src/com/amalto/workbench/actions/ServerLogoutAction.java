@@ -26,6 +26,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -50,11 +51,11 @@ public class ServerLogoutAction extends Action {
         this.view = view;
         this.remove = remove;
         if (remove) {
-            setText("Logout and Remove");
-            setToolTipText("Logout and Remove " + IConstants.TALEND + " Server");
+            setText(Messages.ServerLogoutAction_Text1);
+            setToolTipText(Messages.bind(Messages.ServerLogoutAction_ActionTip1, IConstants.TALEND));
         } else {
-            setText("Logout");
-            setToolTipText("Logout from the " + IConstants.TALEND + " Server");
+            setText(Messages.ServerLogoutAction_Text2);
+            setToolTipText(Messages.bind(Messages.ServerLogoutAction_ActionTip2, IConstants.TALEND));
         }
         setImageDescriptor(ImageCache.getImage(EImage.LOGOUT.getPath()));
         needConfirm=true;
@@ -73,8 +74,8 @@ public class ServerLogoutAction extends Action {
 
         if (remove
                 && needConfirm
-                && !MessageDialog.openConfirm(this.view.getSite().getShell(), "Delete server",
-                        "Are you sure you want to delete the server connection '" + serverRoot.getName() + "' ?"))
+                && !MessageDialog.openConfirm(this.view.getSite().getShell(), Messages.ServerLogoutAction_DialogTitle,
+                        Messages.bind(Messages.ServerLogoutAction_ConfirmInfo, serverRoot.getName())))
             return;
 
         final String universe = serverRoot.getUniverse();

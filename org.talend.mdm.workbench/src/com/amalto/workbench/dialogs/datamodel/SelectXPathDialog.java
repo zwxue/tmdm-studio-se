@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.widgets.composites.SelectXPathComposite;
 
@@ -56,7 +57,7 @@ public class SelectXPathDialog extends Dialog {
     @Override
     protected Control createDialogArea(Composite parent) {
 
-        getShell().setText("Set XPath");
+        getShell().setText(Messages.SelectXPathDialog_SetXPath);
 
         Composite container = (Composite) super.createDialogArea(parent);
 

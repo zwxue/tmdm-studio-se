@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -91,7 +92,7 @@ public class FileSelectWidget {
         button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
         gd = new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1);
         button.setLayoutData(gd);
-        button.setToolTipText("Browse...");
+        button.setToolTipText(Messages.FileSelectWidget_ToolTip);
 
         button.addSelectionListener(new SelectionListener() {
 

@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.i18n.Messages;
 
 public class ConditionWidget {
 
@@ -35,7 +36,7 @@ public class ConditionWidget {
         this.page = page;
         Group conditionComposite = new Group(parent, SWT.NONE);
         conditionComposite.setBackground(parent.getBackground());
-        conditionComposite.setText("Conditions:");
+        conditionComposite.setText(Messages.ConditionWidget_Conditions);
         conditionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         conditionComposite.setLayout(new GridLayout(3, false));
 

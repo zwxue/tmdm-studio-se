@@ -31,6 +31,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -43,8 +44,8 @@ public class XSDEditElementAction extends UndoAction {
     public XSDEditElementAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-        setText("Edit Element");
-        setToolTipText("Edit an Element");
+        setText(Messages.XSDEditElementAction_EditElement);
+        setToolTipText(Messages.XSDEditElementAction_EditAElement);
     }
 
     public IStatus doAction() {
@@ -56,7 +57,7 @@ public class XSDEditElementAction extends UndoAction {
             Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
             String oldName = decl.getName();
 
-            InputDialog id = new InputDialog(page.getSite().getShell(), "Edit Element", "Enter a new Name for the Element",
+            InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDEditElementAction_EditElement, Messages.XSDEditElementAction_EnterNameForElement,
                     oldName, new EditXSDEleDecNameValidator(schema)
             // new IInputValidator() {
             // public String isValid(String newText) {
@@ -100,8 +101,8 @@ public class XSDEditElementAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to edit an Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDEditElementAction_ErrorEditElement, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

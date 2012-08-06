@@ -147,6 +147,7 @@ import org.xml.sax.InputSource;
 
 import sun.misc.BASE64Encoder;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -358,7 +359,7 @@ public class Util {
             return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
                     xobject.getPassword());
         } catch (MalformedURLException e) {
-            throw new XtentisException("Invalid endpoint address: " + xobject.getEndpointAddress());
+            throw new XtentisException(Messages.Util_0 + xobject.getEndpointAddress());
         }
     }
 
@@ -366,7 +367,7 @@ public class Util {
         try {
             return getPort(new URL(default_endpoint_address), universe, username, password);
         } catch (MalformedURLException e) {
-            String err = "The default URL '" + default_endpoint_address + "' is invalid!";
+            String err = Messages.Util_1 + default_endpoint_address + Messages.Util_2;
             throw new XtentisException(err);
         }
     }
@@ -423,7 +424,7 @@ public class Util {
             return (XtentisPort) stub;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new XtentisException("Unable to access endpoint at: " + url + ": " + e.getLocalizedMessage());
+            throw new XtentisException(Messages.Util_3 + url + Messages.Util_4 + e.getLocalizedMessage());
         }
     }
 
@@ -434,7 +435,7 @@ public class Util {
             return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new XtentisException("Unable to retrieve all Data Model Names" + ": " + e.getLocalizedMessage());
+            throw new XtentisException(Messages.Util_5 + Messages.Util_6 + e.getLocalizedMessage());
         }
     }
 
@@ -445,7 +446,7 @@ public class Util {
             return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new XtentisException("Unable to retrieve all Data Container Names" + ": " + e.getLocalizedMessage());
+            throw new XtentisException(Messages.Util_7 + Messages.Util_8 + e.getLocalizedMessage());
         }
     }
 
@@ -458,7 +459,7 @@ public class Util {
             return port.getViewPKs(new WSGetViewPKs(regex)).getWsViewPK();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new XtentisException("Unable to retrieve all the Outbound Adaptors" + ": " + e.getLocalizedMessage());
+            throw new XtentisException(Messages.Util_9 + Messages.Util_10 + e.getLocalizedMessage());
         }
     }
 
@@ -600,7 +601,7 @@ public class Util {
             rootNS = namespaceHolder.getDocumentElement();
             rootNS.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:" + prefix, namespace);//$NON-NLS-1$//$NON-NLS-2$
         } catch (Exception e) {
-            String err = "Error creating a namespace holder document: " + e.getLocalizedMessage();
+            String err = Messages.Util_11 + e.getLocalizedMessage();
             throw new Exception(err);
         }
         return rootNS;
@@ -637,14 +638,14 @@ public class Util {
             if (schema != null) {
                 String errors = seh.getErrors();
                 if (!errors.equals("")) {//$NON-NLS-1$
-                    String err = "Document  did not parse against schema: \n" + errors + "\n";
+                    String err = Messages.Util_12 + errors + Messages.Util_13;
                     throw new Exception(err);
                 }
             }
             return d;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            String err = "Unable to parse the document" + ": " + e.getClass().getName() + ": " + e.getLocalizedMessage() + "\n "
+            String err = Messages.Util_14 + Messages.Util_15 + e.getClass().getName() + Messages.Util_16 + e.getLocalizedMessage() + Messages.Util_17
                     + xmlString;
             throw new Exception(err);
         }
@@ -681,7 +682,7 @@ public class Util {
                 results = new String[] { xo.toString() };
             }
         } catch (Exception e) {
-            String err = "Unable to get the text node(s) of " + xPath + ": " + e.getClass().getName() + ": "
+            String err = Messages.Util_18 + xPath + Messages.Util_19 + e.getClass().getName() + Messages.Util_20
                     + e.getLocalizedMessage();
             throw new XtentisException(err);
         }
@@ -734,7 +735,7 @@ public class Util {
 
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {
-                throw new XtentisException("Server sent error: " + mppost.getStatusCode() + ": " + mppost.getStatusText());
+                throw new XtentisException(Messages.Util_21 + mppost.getStatusCode() + Messages.Util_22 + mppost.getStatusText());
             }
             response = mppost.getResponseBodyAsString();
             mppost.releaseConnection();
@@ -742,7 +743,7 @@ public class Util {
         } catch (Exception e) {
             mppost.releaseConnection();
             log.error(e.getMessage(), e);
-            throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());
+            throw new XtentisException(e.getClass().getName() + Messages.Util_23 + e.getLocalizedMessage());
         }
     }
 
@@ -825,7 +826,7 @@ public class Util {
             client.getState().setAuthenticationPreemptive(true);
             client.getState().setCredentials(null, null, new UsernamePasswordCredentials(username, password));
             File file = new File(localFilename);
-            if (!"".equalsIgnoreCase(localFilename))
+            if (!Messages.Util_24.equalsIgnoreCase(localFilename))
                 mppost.addParameter("imageFile", file);//$NON-NLS-1$
             if (imageCatalog != null) {
                 mppost.addParameter("catalogName", imageCatalog);//$NON-NLS-1$
@@ -841,7 +842,7 @@ public class Util {
 
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {
-                throw new XtentisException("Server sent error: " + mppost.getStatusCode() + ": " + mppost.getStatusText());
+                throw new XtentisException(Messages.Util_25 + mppost.getStatusCode() + Messages.Util_26 + mppost.getStatusText());
             }
             response = mppost.getResponseBodyAsString();
             mppost.releaseConnection();
@@ -1491,7 +1492,7 @@ public class Util {
         } catch (XtentisException e) {
             throw (e);
         } catch (Exception e) {
-            throw new XtentisException("Unable to get core version " + e.getClass().getName() + " : " + e.getMessage());
+            throw new XtentisException(Messages.Util_27 + e.getClass().getName() + Messages.Util_28 + e.getMessage());
         }
     }
 
@@ -1541,7 +1542,7 @@ public class Util {
 
     private static TreeParent getTreeParent(TreeObject tObj, int type) {
         if (tObj == null)
-            throw new IllegalArgumentException("Parameter TreeObject is null!");
+            throw new IllegalArgumentException(Messages.Util_29);
         if (tObj instanceof TreeParent) {
             if (tObj.getType() == type)
                 return (TreeParent) tObj;
@@ -1704,7 +1705,7 @@ public class Util {
 
     public static IStatus changeElementTypeToSequence(XSDElementDeclaration decl, int maxOccurs) {
         if (maxOccurs < -1) {
-            MessageDialog.openError(null, "error", "max occurance value should be greater than -1");
+            MessageDialog.openError(null, Messages.Util_30, Messages.Util_31);
             return Status.CANCEL_STATUS;
         }
         if (Util.getParent(decl) instanceof XSDElementDeclaration) {
@@ -1758,8 +1759,8 @@ public class Util {
         XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
         if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
             // change the parent element to xsd:sequence
-            if (!MessageDialog.openConfirm(null, "Change to sequence type",
-                    "The complex type will be changed to sequence in response to the maxOccurs value change")) {
+            if (!MessageDialog.openConfirm(null, Messages.Util_32,
+                    Messages.Util_33)) {
                 return Status.CANCEL_STATUS;
             }
 
@@ -1809,13 +1810,13 @@ public class Util {
     private static String getComponentName(Object component) {
         if (component instanceof XSDElementDeclaration) {
             XSDElementDeclaration decl = (XSDElementDeclaration) component;
-            return "name=\"" + decl.getName() + "\"";
+            return Messages.Util_34 + decl.getName() + Messages.Util_35;
 
         } else if (component instanceof XSDParticle) {
             XSDParticle particle = (XSDParticle) component;
             XSDTerm term = (XSDTerm) particle.getTerm();
             if (term instanceof XSDElementDeclaration) {
-                return "name=\"" + ((XSDElementDeclaration) term).getName() + "\"";
+                return Messages.Util_36 + ((XSDElementDeclaration) term).getName() + Messages.Util_37;
             }
 
         } else if (component instanceof XSDComplexTypeDefinition) {
@@ -1824,17 +1825,17 @@ public class Util {
 
         } else if (component instanceof XSDSimpleTypeDefinition) {
 
-            return "name=\"" + ((XSDSimpleTypeDefinition) component).getName() + "\"";
+            return Messages.Util_38 + ((XSDSimpleTypeDefinition) component).getName() + Messages.Util_39;
 
         }
 
         else if (component instanceof XSDIdentityConstraintDefinition) {
             XSDIdentityConstraintDefinition identify = (XSDIdentityConstraintDefinition) component;
             XSDConcreteComponent c = identify.getContainer();
-            return "name=\"" + identify.getName() + "\"";
+            return Messages.Util_40 + identify.getName() + Messages.Util_41;
         } else if (component instanceof XSDXPathDefinition) {
             XSDXPathDefinition path = (XSDXPathDefinition) component;
-            return "xpath=\"" + path.getValue() + "\"";
+            return Messages.Util_42 + path.getValue() + Messages.Util_43;
         }
         return null;
     }
@@ -1990,7 +1991,7 @@ public class Util {
         if (exceptons.size() > 0) {
             throw exceptons.get(0);
         } else if (schemaMonitor.containsValue(new Integer(-1))) {
-            throw new Exception("The xsd schemas imported or included slump into endless reference circulation");
+            throw new Exception(Messages.Util_44);
         }
 
         addImport(xsdSchema, imports);
@@ -2900,14 +2901,14 @@ public class Util {
             if (!match.find()) {
                 return null;
             }
-            versionComp = "MDM studio & MDM server is not compatible. The MDM studio is " + studioVersion + " ";
+            versionComp = Messages.Util_45 + studioVersion + Messages.Util_46;
 
             int major = Integer.parseInt(match.group(1));
             int minor = Integer.parseInt(match.group(2));
             int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;//$NON-NLS-1$
             XtentisPort port = Util.getPort(new URL(url), universe, username, password);
             WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager, null));
-            versionComp += " while the MDM server is " + wsVersion.getMajor() + "." + wsVersion.getMinor() + "."
+            versionComp += Messages.Util_47 + wsVersion.getMajor() + Messages.Util_48 + wsVersion.getMinor() + Messages.Util_49
                     + wsVersion.getRevision();
             if (major != wsVersion.getMajor() || minor != wsVersion.getMinor())
                 return versionComp;
@@ -3249,7 +3250,7 @@ public class Util {
      * @throws Exception
      */
     public static void unZipFile(String zipfile, String unzipdir, int totalProgress, IProgressMonitor monitor) throws IOException {
-        monitor.setTaskName("Extracting archive...");
+        monitor.setTaskName(Messages.Util_50);
         File unzipF = new File(unzipdir);
         if (!unzipF.exists()) {
             unzipF.mkdirs();

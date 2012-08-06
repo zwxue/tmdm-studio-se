@@ -22,6 +22,7 @@ import java.util.Set;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfoCollection;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 abstract class LanguageInfoCommitHandler<T extends LanguageInfoCollection> extends AnnotationInfoCommitHandler<T> {
@@ -41,7 +42,7 @@ abstract class LanguageInfoCommitHandler<T extends LanguageInfoCollection> exten
 
     private void validateEachLanguageInfo(LanguageInfo validatedLanguageInfo) throws CommitValidationException {
         if ("".equals(validatedLanguageInfo.getLabel().trim())) {//$NON-NLS-1$
-            throw new CommitValidationException("The content of " + validatedLanguageInfo.getLanguage() + " can not be empty");
+            throw new CommitValidationException(Messages.bind(Messages.LanguageInfoCommitHandler_ExceptionInfo, validatedLanguageInfo.getLanguage()));
         }
 
     }

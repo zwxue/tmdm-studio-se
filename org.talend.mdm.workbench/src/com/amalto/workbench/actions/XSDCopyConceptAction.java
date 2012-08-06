@@ -23,6 +23,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.WorkbenchClipboard;
@@ -33,7 +34,7 @@ public class XSDCopyConceptAction extends Action {
 
     private DataModelMainPage page;
 
-    private String displayName = "Copy Entity";
+    private String displayName = Messages.XSDCopyConceptAction_DisplayName;
 
     public XSDCopyConceptAction(DataModelMainPage page, String title) {
         super();
@@ -69,8 +70,8 @@ public class XSDCopyConceptAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to copy Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDCopyConceptAction_ErrorMsg, e.getLocalizedMessage()));
 
         }
         // return true;

@@ -14,6 +14,7 @@ package com.amalto.workbench.availablemodel;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
@@ -27,13 +28,13 @@ import com.amalto.workbench.webservices.XtentisPort;
 public class JobAvailableModel extends AbstractAvailableModel {
 
     public void addTreeObjects(XtentisPort port, IProgressMonitor monitor, TreeParent serverRoot) {
-        monitor.subTask("Loading Jobs");
+        monitor.subTask(Messages.JobAvailableModel_LoadingJobs);
         // MDM Job
 
         TreeParent jobs = serverRoot.findServerFolder(TreeObject.JOB_REGISTRY);
         if (jobs == null)
             jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(), serverRoot, TreeObject.JOB_REGISTRY, null, null);
-        TreeParent deployedJob = new TreeParent("Deployed Jobs", serverRoot, TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
+        TreeParent deployedJob = new TreeParent(Messages.JobAvailableModel_DeployedJobs, serverRoot, TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
         try {
             WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
             if (jobPKs != null) {

@@ -64,6 +64,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.MenuEntryDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -100,7 +101,7 @@ public class MenuMainPage extends AMainPageV2 {
 
     public MenuMainPage(FormEditor editor) {
 
-        super(editor, MenuMainPage.class.getName(), "Menu " + ((XObjectEditorInput) editor.getEditorInput()).getName()
+        super(editor, MenuMainPage.class.getName(), Messages.MenuMainPage_Menu + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
         treeObject = (TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel();
         uripre = treeObject.getEndpointIpAddress();
@@ -111,7 +112,7 @@ public class MenuMainPage extends AMainPageV2 {
 
         try {
             // description
-            Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(mainComposite, Messages.MenuMainPage_Description, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -198,7 +199,7 @@ public class MenuMainPage extends AMainPageV2 {
                                 + wsMenuEntry.getDescriptions()[j].getLabel() + "] ";//$NON-NLS-1$
                     }
                     if (label.length() > 200)
-                        label = label.substring(0, 197) + "...";
+                        label = label.substring(0, 197) + "..."; //$NON-NLS-1$
                     return label;
                 }
 
@@ -254,14 +255,14 @@ public class MenuMainPage extends AMainPageV2 {
             this.refreshing = true;
 
             WSMenu wsMenu = (WSMenu) (getXObject().getWsObject());
-            descriptionText.setText(wsMenu.getDescription() == null ? "" : wsMenu.getDescription());
+            descriptionText.setText(wsMenu.getDescription() == null ? "" : wsMenu.getDescription()); //$NON-NLS-1$
             menuTree.setInput(wsMenu);
             this.refreshing = false;
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.MenuMainPage_ErrorRefreshingPage,
+                    Messages.bind(Messages.MenuMainPage_ErrorRefreshingPageXX, e.getLocalizedMessage()));
         }
     }
 
@@ -281,8 +282,8 @@ public class MenuMainPage extends AMainPageV2 {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error commiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.MenuMainPage_ErrorCommitingPage,
+                    Messages.bind(Messages.MenuMainPage_ErrorCommitingPageXX, e.getLocalizedMessage()));
         }
     }
 
@@ -347,14 +348,14 @@ public class MenuMainPage extends AMainPageV2 {
             if (dlg.getReturnCode() == Window.OK) {
                 String id = dlg.getIdText().getText();
                 if ("".equals(id)) {//$NON-NLS-1$
-                    MessageDialog.openError(viewer.getControl().getShell(), "Error", "The ID cannot be empty");
+                    MessageDialog.openError(viewer.getControl().getShell(), Messages._Error, Messages.MenuMainPage_IDCannotbeEmpty);
                     return;
                 }
                 LinkedHashMap<String, String> descriptions = ((LinkedHashMap<String, String>) dlg.getDescriptionsTableViewer()
                         .getInput());
                 if (descriptions.size() == 0) {
-                    MessageDialog.openError(viewer.getControl().getShell(), "Error",
-                            "The Menu Entry must have at least one description");
+                    MessageDialog.openError(viewer.getControl().getShell(), Messages._Error,
+                            Messages.MenuMainPage_ErrorMsg);
                     return;
                 }
                 treeEntry.getWsMenuEntry().setId(id);
@@ -400,8 +401,8 @@ public class MenuMainPage extends AMainPageV2 {
             this.viewer = view;
             treeEntry = (TreeEntry) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
             setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
-            setText("Edit");
-            setToolTipText("Edit ThisMenu Entry");
+            setText(Messages.MenuMainPage_Edit);
+            setToolTipText(Messages.MenuMainPage_EditThisMenuEntry);
         }
 
         public void run() {
@@ -409,7 +410,7 @@ public class MenuMainPage extends AMainPageV2 {
                 super.run();
                 // if attribute, edit parent else edit this one
                 dlg = new MenuEntryDialog(treeEntry.getWsMenuEntry(), new MenuEntryDialogSelectionListener(viewer, treeEntry),
-                        this.viewer.getControl().getShell(), "Edit the Menu Entry " + treeEntry.getWsMenuEntry().getId(), false,
+                        this.viewer.getControl().getShell(), Messages.MenuMainPage_EditTheMenuEntry + treeEntry.getWsMenuEntry().getId(), false,
                         uripre, isLocalInput(), treeObject);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
@@ -418,9 +419,8 @@ public class MenuMainPage extends AMainPageV2 {
                 log.error(e.getMessage(), e);
                 MessageDialog.openError(
                         viewer.getControl().getShell(),
-                        "Error",
-                        "An error occured trying to edit the Menu Entry: " + treeEntry.getWsMenuEntry().getId() + " : "
-                                + e.getLocalizedMessage());
+                        Messages._Error,
+                        Messages.bind(Messages.MenuMainPage_ErrorMsg1, treeEntry.getWsMenuEntry().getId(), e.getLocalizedMessage()));
             }
         }
 
@@ -451,22 +451,22 @@ public class MenuMainPage extends AMainPageV2 {
             case LOCATION_UNDER:
                 position = 0;
                 treeEntry = new TreeEntry(currentEntry, new WSMenuEntry("", null, "", "", "", null));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-                label = "Add a sub menu entry to " + currentEntry.getWsMenuEntry().getId();
+                label = Messages.MenuMainPage_LaelText + currentEntry.getWsMenuEntry().getId();
                 break;
             case LOCATION_BEFORE:
                 position = findSubMenuPosition(currentEntry);
                 treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), new WSMenuEntry("", null, "", "", "", null));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-                label = "Add a menu entry before this entry";
+                label = Messages.MenuMainPage_LaelText1;
                 break;
             case LOCATION_AFTER:
                 position = findSubMenuPosition(currentEntry);
-                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), new WSMenuEntry("", null, "", "", "", null));
-                label = "Add a menu entry after this entry";
+                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), new WSMenuEntry("", null, "", "", "", null)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                label = Messages.MenuMainPage_AddAMenuEntryAfter;
                 break;
             }
             setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
             setText(label);
-            setToolTipText("Add a menu entry");
+            setToolTipText(Messages.MenuMainPage_AddAMenuEntry);
         }
 
         public void run() {
@@ -474,7 +474,7 @@ public class MenuMainPage extends AMainPageV2 {
                 super.run();
                 // if attribute, edit parent else edit this one
                 dlg = new MenuEntryDialog(new WSMenuEntry(), new MenuEntryDialogSelectionListener(viewer, treeEntry), this.viewer
-                        .getControl().getShell(), "New Menu Entry ", uripre, isLocalInput(), treeObject);
+                        .getControl().getShell(), Messages.MenuMainPage_NewMenuEntry, uripre, isLocalInput(), treeObject);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
                 if (dlg.getReturnCode() == Window.OK) {
@@ -483,8 +483,8 @@ public class MenuMainPage extends AMainPageV2 {
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(viewer.getControl().getShell(), "Error", "An error occured trying to add a Menu Entry: "
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(viewer.getControl().getShell(), Messages._Error, Messages.bind(Messages.ErrorMsg1
+                        , e.getLocalizedMessage()));
             }
         }
 
@@ -528,14 +528,14 @@ public class MenuMainPage extends AMainPageV2 {
                 menu.setMenuEntries(list.toArray(new WSMenuEntry[list.size()]));
                 viewer.setExpandedState(menu, true);
                 viewer.refresh(menu, true);
-                log.info("There ");
+                log.info(Messages.MenuMainPage_There);
                 return;
             }
 
             // sub menu of a menu entry
             WSMenuEntry wsParent = entry.getParentTreeEntry().getWsMenuEntry();
             if ((wsParent.getSubMenus() == null) || (wsParent.getSubMenus().length == 0)) { // no submenus yet
-                log.info("Here ");
+                log.info(Messages.MenuMainPage_here);
                 wsParent.setSubMenus(new WSMenuEntry[] { entry.getWsMenuEntry() });
                 viewer.setExpandedState(entry.getParentTreeEntry(), true);
                 viewer.refresh(entry.getParentTreeEntry(), true);
@@ -567,8 +567,8 @@ public class MenuMainPage extends AMainPageV2 {
             this.viewer = view;
             treeEntry = (TreeEntry) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
             setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
-            setText("Delete Entry");
-            setToolTipText("Delete This Menu Entry");
+            setText(Messages.MenuMainPage_DelEntry);
+            setToolTipText(Messages.MenuMainPage_DelMenuEntry);
         }
 
         public void run() {
@@ -576,8 +576,8 @@ public class MenuMainPage extends AMainPageV2 {
                 if (treeEntry.getParentTreeEntry() == null) { // top level menu
                     WSMenu menu = ((WSMenu) viewer.getInput());
                     if (menu.getMenuEntries().length == 1) {
-                        MessageDialog.openWarning(MenuMainPage.this.getSite().getShell(), "Menu Entry Warning",
-                                "A Menu must contain at least one menu entry");
+                        MessageDialog.openWarning(MenuMainPage.this.getSite().getShell(), Messages.MenuMainPage_MenuEntryWarning,
+                                Messages.MenuMainPage_ErrorMsg2);
                         return;
                     }
                     ArrayList<WSMenuEntry> subMenus = new ArrayList(Arrays.asList(menu.getMenuEntries()));
@@ -603,9 +603,8 @@ public class MenuMainPage extends AMainPageV2 {
                 log.error(e.getMessage(), e);
                 MessageDialog.openError(
                         viewer.getControl().getShell(),
-                        "Error",
-                        "An error occured trying to delete the Menu Entry: " + treeEntry.getWsMenuEntry().getId() + " : "
-                                + e.getLocalizedMessage());
+                        Messages._Error,
+                        Messages.bind(Messages.MenuMainPage_ErrorMsg3, treeEntry.getWsMenuEntry().getId(), e.getLocalizedMessage()));
             }
         }
 

@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyInfosAnnoInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class ElementForeignKeyInfosCommitHandler extends ListContentsCommitHandler<ForeignKeyInfosAnnoInfo> {
@@ -27,7 +28,7 @@ public class ElementForeignKeyInfosCommitHandler extends ListContentsCommitHandl
 
     @Override
     protected String getMsgHeader() {
-        return "element foreign key infos";
+        return Messages.ElementForeignKeyInfosCommitHandler_MsgHeader;
     }
 
     @Override

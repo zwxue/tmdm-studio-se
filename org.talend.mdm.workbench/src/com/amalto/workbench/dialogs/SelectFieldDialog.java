@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class SelectFieldDialog extends Dialog {
 
     String title;
@@ -55,7 +57,7 @@ public class SelectFieldDialog extends Dialog {
 
         Label serverLabel = new Label(composite, SWT.NONE);
         serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        serverLabel.setText("Field Name");
+        serverLabel.setText(Messages.SelectFieldDialog_FieldName);
 
         fieldNameCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.BORDER);
         fieldNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -86,14 +88,14 @@ public class SelectFieldDialog extends Dialog {
     private boolean validateInput() {
 
         if ("".equals(fieldNameCombo.getText().trim())) {//$NON-NLS-1$
-            MessageDialog.openError(getShell(), "Error", "The field name cannot be empty");
+            MessageDialog.openError(getShell(), Messages._Error, Messages.SelectFieldDialog_FileNameCannotbeEmpty);
             return false;
         }
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(fieldNameCombo.getText()).matches()//$NON-NLS-1$
                 || fieldNameCombo.getText().trim().replaceAll("\\s", "").length() != fieldNameCombo.getText().trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
 
-            MessageDialog.openError(getShell(), "Error", "The field name cannot contain the empty characters");
+            MessageDialog.openError(getShell(), Messages._Error, Messages.SelectFieldDialog_FileNameCannotContainEmpty);
             return false;
         }
 

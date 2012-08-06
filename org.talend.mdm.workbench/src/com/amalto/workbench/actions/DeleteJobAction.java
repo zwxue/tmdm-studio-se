@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -31,8 +32,8 @@ public class DeleteJobAction extends AbstractAction {
     public DeleteJobAction() {
         super();
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete");
-        setToolTipText("Delete");
+        setText(Messages.Delete);
+        setToolTipText(Messages.Delete);
     }
 
     public void run() {

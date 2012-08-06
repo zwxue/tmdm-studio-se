@@ -19,6 +19,7 @@ import org.eclipse.xsd.XSDComplexTypeDefinition;
 import com.amalto.workbench.detailtabs.sections.composites.ComplexTypeConfigComposite;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.complextype.ComplexTypeWrapper;
+import com.amalto.workbench.i18n.Messages;
 
 public class ComplexTypeMainSection extends CommitBarListenerSection<XSDComplexTypeDefinition> {
 
@@ -47,7 +48,7 @@ public class ComplexTypeMainSection extends CommitBarListenerSection<XSDComplexT
 
     @Override
     protected String getSectionTitle() {
-        return "Main";
+        return Messages.ComplexTypeMainSection_Main;
     }
 
     @Override

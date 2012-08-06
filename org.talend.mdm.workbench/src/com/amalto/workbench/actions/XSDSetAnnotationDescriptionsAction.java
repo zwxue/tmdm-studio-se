@@ -35,6 +35,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -46,8 +47,8 @@ public class XSDSetAnnotationDescriptionsAction extends UndoAction {
     public XSDSetAnnotationDescriptionsAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DOCUMENTATION.getPath()));
-        setText("Set the Descriptions");
-        setToolTipText("Set the Descriptions of This Element");
+        setText(Messages.XSDSetAnnotationXX_SetDesc);
+        setToolTipText(Messages.XSDSetAnnotationXX_SetDescOfThisItem);
     }
 
     public IStatus doAction() {
@@ -65,12 +66,12 @@ public class XSDSetAnnotationDescriptionsAction extends UndoAction {
                 xSDCom = (XSDComponent) selection.getFirstElement();
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to set an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.bind(Messages.XSDSetAnnotationXX_ExceptionInfo2, xSDCom.getClass().getName()));
             }
 
             AnnotationLanguageLabelsDialog dlg = new AnnotationLanguageLabelsDialog(struc.getDescriptions(),
                     new AnnotationLabelDialogSelectionListener(page), page.getEditorSite().getShell(),
-                    "Set the Descriptions of This Element");
+                    Messages.XSDSetAnnotationXX_SetDescOfThisItem);
             dlg.setBlockOnOpen(true);
             dlg.open();
 
@@ -96,8 +97,8 @@ public class XSDSetAnnotationDescriptionsAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDSetAnnotationXX_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 
@@ -124,7 +125,7 @@ public class XSDSetAnnotationDescriptionsAction extends UndoAction {
         }
 
         public void widgetSelected(SelectionEvent e) {
-            AnnotationLanguageLabelsDialog dlg = (AnnotationLanguageLabelsDialog) ((Widget) e.getSource()).getData("dialog");
+            AnnotationLanguageLabelsDialog dlg = (AnnotationLanguageLabelsDialog) ((Widget) e.getSource()).getData("dialog"); //$NON-NLS-1$
             if (dlg.getReturnCode() == Window.OK) {
                 // No particular check on content
                 /*

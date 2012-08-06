@@ -102,6 +102,7 @@ import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.export.ImportItemsAction;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -608,7 +609,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
      * @return
      */
     public boolean refreshServerRoot(final ServerView view, final TreeParent serverRoot) {
-        UIJob job = new UIJob("Pending ...") {
+        UIJob job = new UIJob(Messages.ServerView_) {
 
             @Override
             public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -621,7 +622,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
                     return Status.OK_STATUS;
                 } catch (Exception e) {
-                    MessageDialog.openError(view.getSite().getShell(), "Error", e.getLocalizedMessage());
+                    MessageDialog.openError(view.getSite().getShell(), Messages._Error, e.getLocalizedMessage());
                     viewer.collapseToLevel(serverRoot, 1);
                     return Status.CANCEL_STATUS;
                 } finally {
@@ -868,7 +869,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                         action.setServerView(ServerView.this);
                         action.run();
                     } catch (Exception ex) {
-                        MessageDialog.openError(viewer.getControl().getShell(), "Error", "Unable to run action");
+                        MessageDialog.openError(viewer.getControl().getShell(), Messages._Error, Messages.ServerView_ErrorMsg);
                     }
                     return;
                 }// if action
@@ -1039,7 +1040,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     public void initServerTreeChildren(TreeParent serverRoot) {
         TreeObject obj = new TreeObject(PENDING_TREE_OBJECT, serverRoot, TreeObject._INVISIBLE, null, null);
-        obj.setDisplayName("Pending...");
+        obj.setDisplayName("Pending..."); //$NON-NLS-1$
         ArrayList list = new ArrayList();
         list.add(obj);
         serverRoot.setChildren(list);
@@ -1083,7 +1084,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             MDMServerDef serverDef = MDMServerDef.parse(url, username, password, universe, name);
             boolean saved = MDMServerHelper.saveServer(serverDef);
             if (!saved) {
-                MessageDialog.openError(null, "Error", "Unable to store server definition");
+                MessageDialog.openError(null, Messages._Error, Messages.ServerView_ErrorMsg1);
                 return false;
             }
             return true;
@@ -1091,7 +1092,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             return false;
         } catch (InvocationTargetException e) {
             log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.getSite().getShell(), "Error", CommonUtil.getErrMsgFromException(e.getCause()));
+            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages._Error, CommonUtil.getErrMsgFromException(e.getCause()));
             return false;
         }
     }
@@ -1147,7 +1148,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             MDMServerDef newServerDef = MDMServerDef.parse(url, username, password, universe, name);
             boolean updated = MDMServerHelper.updateServer(oldServerDef, newServerDef);
             if (!updated) {
-                MessageDialog.openError(null, "Error", "Unable to store server definition");
+                MessageDialog.openError(null, Messages._Error, Messages.ServerView_ErrorMsg1);
                 return;
             }
         } else {

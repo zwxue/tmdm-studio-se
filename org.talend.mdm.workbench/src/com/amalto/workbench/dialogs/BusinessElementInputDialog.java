@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 
 public class BusinessElementInputDialog extends Dialog {
@@ -119,7 +120,7 @@ public class BusinessElementInputDialog extends Dialog {
 
         Label nameLabel = new Label(composite, SWT.NONE);
         nameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        nameLabel.setText("Business Element Name");
+        nameLabel.setText(Messages.BusinessElementInputDialog_NameText);
 
         elementNameText = new Text(composite, SWT.BORDER);
         elementNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -129,7 +130,7 @@ public class BusinessElementInputDialog extends Dialog {
 
         Label refLabel = new Label(composite, SWT.NONE);
         refLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        refLabel.setText("Reference Name");
+        refLabel.setText(Messages.BusinessElementInputDialog_RefText);
 
         refCombo = new Combo(composite, SWT.DROP_DOWN | SWT.SIMPLE | SWT.READ_ONLY);
         refCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -165,7 +166,7 @@ public class BusinessElementInputDialog extends Dialog {
 
         Label minLabel = new Label(composite, SWT.NONE);
         minLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        minLabel.setText("Minimum Occurence");
+        minLabel.setText(Messages.BusinessElementInputDialog_MinText);
 
         minOccursText = new Text(composite, SWT.NONE);
         minOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -174,7 +175,7 @@ public class BusinessElementInputDialog extends Dialog {
 
         Label maxLabel = new Label(composite, SWT.NONE);
         maxLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        maxLabel.setText("Maximum Occurence");
+        maxLabel.setText(Messages.BusinessElementInputDialog_MaxText);
 
         maxOccursText = new Text(composite, SWT.NONE);
         maxOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -194,7 +195,7 @@ public class BusinessElementInputDialog extends Dialog {
             });
 
             checkBox.setSelection(inherit);
-            checkBox.setText(" Inherit the security annotations");
+            checkBox.setText(Messages.BusinessElementInputDialog_CheckboxText);
         }
         // check pk can't edit Maximum/Minimum
         minOccursText.setEditable(!isPK);
@@ -216,15 +217,15 @@ public class BusinessElementInputDialog extends Dialog {
         elementName = elementNameText.getText().trim();
         refName = refCombo.getText();
         if (((elementName == null) || ("".equals(elementName))) && ((refName == null) || "".equals(refName))) {//$NON-NLS-1$//$NON-NLS-2$
-            MessageDialog.openError(this.getShell(), "Error",
-                    "The Business Element Name cannot be empty if the reference is empty");
+            MessageDialog.openError(this.getShell(), Messages._Error,
+                    Messages.BusinessElementInputDialog_NameCannotbeEmptyIfXX);
             setReturnCode(-1);
             elementNameText.setFocus();
             return;
         }
 
         if (elementName.replaceAll("\\s", "").length() != elementName.length()) {//$NON-NLS-1$//$NON-NLS-2$
-            MessageDialog.openError(this.getShell(), "Error", "The Business Element Name cannot contain the empty characters");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.BusinessElementInputDialog_NameCannotContainEmpty);
             setReturnCode(-1);
             elementNameText.setFocus();
             return;
@@ -238,13 +239,13 @@ public class BusinessElementInputDialog extends Dialog {
         try {
             minOccurs = Integer.parseInt(minOccursText.getText());
         } catch (Exception e1) {
-            MessageDialog.openError(this.getShell(), "Error", "The Minimum Occurence must be greater or equal to Zero");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.BusinessElementInputDialog_ErrorMsg);
             setReturnCode(-1);
             minOccursText.setFocus();
             return;
         }
         if (minOccurs < 0) {
-            MessageDialog.openError(this.getShell(), "Error", "The Minimum Occurence must be greater or equal to Zero");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.BusinessElementInputDialog_ErrorMsg);
             setReturnCode(-1);
             minOccursText.setFocus();
             return;
@@ -256,7 +257,7 @@ public class BusinessElementInputDialog extends Dialog {
             try {
                 maxOccurs = Integer.parseInt(maxOccursText.getText());
             } catch (Exception e2) {
-                MessageDialog.openError(this.getShell(), "Error", "The Maximum Occurence must be a Number or Blank (unbounded).");
+                MessageDialog.openError(this.getShell(), Messages._Error, Messages.BusinessElementInputDialog_ErrorMsg1);
                 setReturnCode(-1);
                 maxOccursText.setFocus();
                 return;

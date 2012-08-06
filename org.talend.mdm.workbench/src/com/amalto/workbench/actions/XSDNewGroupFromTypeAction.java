@@ -33,6 +33,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.NewGroupDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 
 public class XSDNewGroupFromTypeAction extends UndoAction implements SelectionListener {
@@ -54,8 +55,8 @@ public class XSDNewGroupFromTypeAction extends UndoAction implements SelectionLi
     public XSDNewGroupFromTypeAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
-        setText("Add Group");
-        setToolTipText("Add a new Group at the top of the Business Elements");
+        setText(Messages.XSDNewGroupFromTypeAction_AddGroup);
+        setToolTipText(Messages.XSDNewGroupFromTypeAction_AddGroupAtTopXX);
     }
 
     public IStatus doAction() {
@@ -119,8 +120,8 @@ public class XSDNewGroupFromTypeAction extends UndoAction implements SelectionLi
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDNewGroupFromTypeAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

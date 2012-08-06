@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.MDMServerDef;
@@ -110,9 +111,9 @@ public class LoginDialog extends Dialog {
 
         Label nameLabel = new Label(composite, SWT.NONE);
         nameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        nameLabel.setText("Name");
+        nameLabel.setText(Messages.LoginDialog_Name);
         nameLabel.setForeground(nameLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
-        nameLabel.setToolTipText("Name is mandatory and must be unique!");
+        nameLabel.setToolTipText(Messages.LoginDialog_NameLabelTip);
         nameText = new Text(composite, SWT.BORDER);
         nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         ((GridData) nameText.getLayoutData()).widthHint = 400;
@@ -120,26 +121,26 @@ public class LoginDialog extends Dialog {
 
         Label urlLabel = new Label(composite, SWT.NONE);
         urlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        urlLabel.setText("Server");
+        urlLabel.setText(Messages.LoginDialog_Server);
         urlText = new Text(composite, SWT.BORDER);
         urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         authenticationGroup = new Group(composite, SWT.NONE);
         authenticationGroup.setVisible(true);
-        authenticationGroup.setText("Authentication");
+        authenticationGroup.setText(Messages.LoginDialog_Authentication);
         authenticationGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
         authenticationGroup.setLayout(new GridLayout(2, false));
 
         Label usernameLabel = new Label(authenticationGroup, SWT.NONE);
         usernameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-        usernameLabel.setText("Username");
+        usernameLabel.setText(Messages.LoginDialog_Username);
         userText = new Text(authenticationGroup, SWT.BORDER);
         userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         userText.setDoubleClickEnabled(false);
 
         Label passwordLabel = new Label(authenticationGroup, SWT.NONE);
         passwordLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-        passwordLabel.setText("Password");
+        passwordLabel.setText(Messages.LoginDialog_Password);
         passwordText = new Text(authenticationGroup, SWT.PASSWORD | SWT.BORDER);
         passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
@@ -148,7 +149,7 @@ public class LoginDialog extends Dialog {
             // universe
             Label universeLabel = new Label(composite, SWT.NONE);
             universeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            universeLabel.setText("Version");
+            universeLabel.setText(Messages.LoginDialog_Version);
             universeCombo = new Combo(composite, SWT.NONE);
             universeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
             ((GridData) universeCombo.getLayoutData()).widthHint = 300;
@@ -239,7 +240,7 @@ public class LoginDialog extends Dialog {
     protected void okPressed() {
         String name = getName();
         if (name.length() == 0) {
-            MessageDialog.openError(null, "Error", "Name can't be empty!");
+            MessageDialog.openError(null, Messages._Error, Messages.LoginDialog_NameCannotbeEmpty);
             nameText.setFocus();
             isOK = false;
             return;
@@ -249,25 +250,25 @@ public class LoginDialog extends Dialog {
         if (server != null) {
             if ((!isUpdateServerLocation())
                     ||( isUpdateServerLocation() && (!server.getName().equalsIgnoreCase(selectedServerDef.getName())))) {
-                MessageDialog.openError(null, "Error", "A server with same name already exists!");
+                MessageDialog.openError(null, Messages._Error, Messages.LoginDialog_ServerNameAlreadyExist);
                 isOK = false;
                 return;
             }
         }
         if (getServer().length() == 0) {
-            MessageDialog.openError(null, "Error", "Server can't be empty!");
+            MessageDialog.openError(null, Messages._Error, Messages.LoginDialog_ServerCannotbeEmpty);
             urlText.setFocus();
             isOK = false;
             return;
         }
         if (getUsernameText().length() == 0) {
-            MessageDialog.openError(null, "Error", "Username can't be empty!");
+            MessageDialog.openError(null, Messages._Error, Messages.LoginDialog_UserNameCannotbeEmpty);
             userText.setFocus();
             isOK = false;
             return;
         }
         if (getPasswordText().length() == 0) {
-            MessageDialog.openError(null, "Error", "Password can't be empty!");
+            MessageDialog.openError(null, Messages._Error, Messages.LoginDialog_PasswordCannotbeEmpty);
             passwordText.setFocus();
             isOK = false;
             return;

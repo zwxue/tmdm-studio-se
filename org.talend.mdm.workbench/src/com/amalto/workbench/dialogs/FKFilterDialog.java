@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
@@ -104,7 +105,7 @@ public class FKFilterDialog extends Dialog {
         // the text box of the custom filters
         Group customFiltersGroup = new Group(composite, SWT.NONE);
         customFiltersGroup.setVisible(true);
-        customFiltersGroup.setText("Custom filters");
+        customFiltersGroup.setText(Messages.FKFilterDialog_CustomFilters);
         customFiltersGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
         customFiltersGroup.setLayout(new GridLayout(1, false));
 
@@ -155,8 +156,8 @@ public class FKFilterDialog extends Dialog {
 
         TableItem[] items = viewer.getViewer().getTable().getItems();
         if (items.length > 0 && customFiltersText.getText() != null && customFiltersText.getText().trim().length() > 0) {
-            if (!MessageDialog.openConfirm(null, "Confirm",
-                    "Customized filter will override your already configured information, are you sure?"))
+            if (!MessageDialog.openConfirm(null, Messages.Confirm,
+                    Messages.FKFilterDialog_ConfirmContent))
                 return;
         }
 

@@ -169,7 +169,7 @@ public class AddBrowseItemsWizard extends Wizard {
                     IEditorPart currentEditor = activePage.findEditor(xobjectEditorinput);
                     
                     if (currentEditor != null) {// editor is opened
-                        if (MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizard_Warning,
+                        if (MessageDialog.openConfirm(this.getShell(), Messages.Warning,
                                 Messages.AddBrowseItemsWizard_DuplicatedView))
                         {
                             refreshEditorContent(obj);
@@ -391,12 +391,12 @@ public class AddBrowseItemsWizard extends Wizard {
                     String tValue = value.toString().trim();
                     if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()//$NON-NLS-1$
                             || tValue.replaceAll("\\s", "").length() != tValue.length()) {//$NON-NLS-1$//$NON-NLS-2$
-                        MessageDialog.openInformation(null, Messages.WarnningText, Messages.NotContainEmpty);
+                        MessageDialog.openInformation(null, Messages.Warning, Messages.NotContainEmpty);
                         return;
                     }
 
                     if (!value.toString().startsWith(BROWSE_ITEMS)) {
-                        MessageDialog.openInformation(null, Messages.WarnningText, Messages.bind(Messages.NameStartWith, BROWSE_ITEMS));
+                        MessageDialog.openInformation(null, Messages.Warning, Messages.bind(Messages.NameStartWith, BROWSE_ITEMS));
                         return;
                     }
 
@@ -406,7 +406,7 @@ public class AddBrowseItemsWizard extends Wizard {
                             if (theElem == elem)
                                 continue;
                             if ((BROWSE_ITEMS + theElem.getName()).equals(tValue)) {
-                                MessageDialog.openInformation(null, Messages.WarnningText, Messages.BrowseNameExists);
+                                MessageDialog.openInformation(null, Messages.Warning, Messages.BrowseNameExists);
                                 return;
                             }
                         }

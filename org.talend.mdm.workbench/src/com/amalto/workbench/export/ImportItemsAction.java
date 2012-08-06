@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPage;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -50,8 +51,8 @@ public class ImportItemsAction extends Action {
 
     private void setDetails() {
         setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
-        setText("Import");
-        setToolTipText("Import Items");
+        setText(Messages.ImportItemsAction_Import);
+        setToolTipText(Messages.ImportItemsAction_ImportItems);
     }
 
     public void run() {
@@ -68,7 +69,7 @@ public class ImportItemsAction extends Action {
         dialog.create();
         dialog.getShell().setSize(600, 550);
         dialog.getShell().layout(true);
-        dialog.getShell().setText("Import Objects");
+        dialog.getShell().setText(Messages.ImportItemsAction_ImportObjects);
         dialog.open();
 
     }

@@ -49,6 +49,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
@@ -79,7 +80,7 @@ public class ResourceSelectDialog extends Dialog {
 
     protected TreeViewer domViewer;
 
-    private String title = "Select Xpath";
+    private String title = Messages.ResourceSelectDialog_Title;
 
     protected TreeParent parent;
 
@@ -192,7 +193,7 @@ public class ResourceSelectDialog extends Dialog {
         datamoelsLabel = new Label(composite, SWT.NONE);
         GridData dg = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
         datamoelsLabel.setLayoutData(dg);
-        datamoelsLabel.setText("Data Models:");
+        datamoelsLabel.setText(Messages.ResourceSelectDialog_DataModels);
         dg = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
         dg.widthHint = 400;
         dataModelCombo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
@@ -218,7 +219,7 @@ public class ResourceSelectDialog extends Dialog {
             }
         });
         schemaLabel = new Label(composite, SWT.NONE);
-        schemaLabel.setText("Xpath: ");
+        schemaLabel.setText(Messages.ResourceSelectDialog_Xpath);
         schemaLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         ((GridData) schemaLabel.getLayoutData()).widthHint = 10;
 
@@ -233,7 +234,7 @@ public class ResourceSelectDialog extends Dialog {
         radioLayout.marginRight = 280;
 
         isXpath = new Button(radioComposite, SWT.RADIO);
-        isXpath.setText("Browse XPath");
+        isXpath.setText(Messages.ResourceSelectDialog_BrowseXPath);
         isXpath.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, true, 1, 1));
         isXpath.setSelection(true);
         ((GridData) isXpath.getLayoutData()).widthHint = 60;
@@ -242,7 +243,7 @@ public class ResourceSelectDialog extends Dialog {
             public void widgetSelected(SelectionEvent e) {
                 datamoelsLabel.setVisible(true);
                 dataModelCombo.setVisible(true);
-                schemaLabel.setText("Xpath: ");
+                schemaLabel.setText(Messages.ResourceSelectDialog_Xpath);
                 changeDomTree(tree);
                 domViewer.refresh(tree);
             }
@@ -251,7 +252,7 @@ public class ResourceSelectDialog extends Dialog {
             }
         });
         isResource = new Button(radioComposite, SWT.RADIO);
-        isResource.setText("Browse Resource");
+        isResource.setText(Messages.ResourceSelectDialog_BrowseResource);
         isResource.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, false, true, 1, 1));
         ((GridData) isResource.getLayoutData()).widthHint = 120;
         isResource.addSelectionListener(new SelectionListener() {
@@ -259,7 +260,7 @@ public class ResourceSelectDialog extends Dialog {
             public void widgetSelected(SelectionEvent e) {
                 datamoelsLabel.setVisible(false);
                 dataModelCombo.setVisible(false);
-                schemaLabel.setText("Resource: ");
+                schemaLabel.setText(Messages.ResourceSelectDialog_Resource);
                 // domViewer.setContentProvider(null);
                 domViewer.refresh(tree);
 
@@ -405,7 +406,7 @@ public class ResourceSelectDialog extends Dialog {
 
     protected Control createButtonBar(Composite parent) {
         Control btnBar = super.createButtonBar(parent);
-        getButton(IDialogConstants.OK_ID).setText("OK");
+        getButton(IDialogConstants.OK_ID).setText(Messages.ResourceSelectDialog_OK);
         return btnBar;
     }
 

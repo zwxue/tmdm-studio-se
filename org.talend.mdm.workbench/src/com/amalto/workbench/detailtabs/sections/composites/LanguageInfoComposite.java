@@ -43,6 +43,7 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.La
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoLabelProvider;
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoModifier;
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoSorter;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -88,7 +89,7 @@ public class LanguageInfoComposite extends Composite {
 
 		btnAdd = new Button(this, SWT.NONE);
 		btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-		btnAdd.setToolTipText("Add");
+		btnAdd.setToolTipText(Messages.Add);
 
 		tvInfos = new TreeViewer(this, SWT.BORDER | SWT.FULL_SELECTION);
 		Tree tree = tvInfos.getTree();
@@ -101,11 +102,11 @@ public class LanguageInfoComposite extends Composite {
 
 		final TreeColumn colLanguage = new TreeColumn(tree, SWT.NONE);
 		colLanguage.setWidth(120);
-		colLanguage.setText("Language");
+		colLanguage.setText(Messages.LanguageInfoComposite_);
 
 		final TreeColumn colLabel = new TreeColumn(tree, SWT.NONE);
 		colLabel.setWidth(242);
-		colLabel.setText("Label");
+		colLabel.setText(Messages.LanguageInfoComposite_Label);
 
 		btnRemove = new Button(this, SWT.NONE);
 		final GridData gd_btnRemove = new GridData(SWT.LEFT, SWT.TOP, false,
@@ -113,7 +114,7 @@ public class LanguageInfoComposite extends Composite {
 		btnRemove.setLayoutData(gd_btnRemove);
 		btnRemove.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ
 				.getPath()));
-		btnRemove.setToolTipText("Del");
+		btnRemove.setToolTipText(Messages.LanguageInfoComposite_Del);
 		//
 
 		tvInfos.setContentProvider(new ListContentProvider());
@@ -245,9 +246,9 @@ public class LanguageInfoComposite extends Composite {
 		if (correspondLangInfo.getLabel().equals(txtLabel.getText().trim()))
 			return;
 
-		if ("".equals(txtLabel.getText().trim())) {
-			MessageDialog.openWarning(getShell(), "Warning",
-					"the information can not be empty");
+		if ("".equals(txtLabel.getText().trim())) { //$NON-NLS-1$
+			MessageDialog.openWarning(getShell(), Messages.Warning,
+					Messages.LanguageInfoComposite_InfoCannotbeEmpty);
 			txtLabel.setText(correspondLangInfo.getLabel());
 		}
 
@@ -258,9 +259,9 @@ public class LanguageInfoComposite extends Composite {
 
 	private void onAddLanguageInfo() {
 
-		if ("".equals(txtLabel.getText().trim())) {
-			MessageDialog.openWarning(getShell(), "Warning",
-					"the information can not be empty");
+		if ("".equals(txtLabel.getText().trim())) { //$NON-NLS-1$
+			MessageDialog.openWarning(getShell(), Messages.Warning,
+					Messages.LanguageInfoComposite_InfoCannotbeEmpty);
 			return;
 		}
 

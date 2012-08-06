@@ -33,6 +33,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SelectFieldDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -46,8 +47,8 @@ public class XSDNewXPathAction extends UndoAction {
     public XSDNewXPathAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ADD_NEWXPATH.getPath()));
-        setText("New Field");
-        setToolTipText("Create a new Field");
+        setText(Messages.XSDNewXPathAction_Text);
+        setToolTipText(Messages.XSDNewXPathAction_ActionTip);
     }
 
     public IStatus doAction() {
@@ -64,7 +65,7 @@ public class XSDNewXPathAction extends UndoAction {
                 else
                     index = 0;
             } else {
-                MessageDialog.openError(this.page.getSite().getShell(), "Error", "huhhh: "
+                MessageDialog.openError(this.page.getSite().getShell(), Messages._Error, Messages.XSDNewXPathAction_Huhhh
                         + selection.getFirstElement().getClass().getName());
                 return Status.CANCEL_STATUS;
             }
@@ -82,7 +83,7 @@ public class XSDNewXPathAction extends UndoAction {
             // }
             // );
 
-            List<String> childNames = Util.getChildElementNames("", (XSDElementDeclaration) icd.getContainer());
+            List<String> childNames = Util.getChildElementNames("", (XSDElementDeclaration) icd.getContainer()); //$NON-NLS-1$
             // filter the non top level fields
             List<String> topChilds = new ArrayList<String>();
             for (String child : childNames) {
@@ -90,7 +91,7 @@ public class XSDNewXPathAction extends UndoAction {
                     topChilds.add(child);
                 }
             }
-            SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), "Select one field", topChilds, null);
+            SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), Messages.XSDNewXPathAction_SelectOnField, topChilds, null);
             id.create();
             id.setBlockOnOpen(true);
             int ret = id.open();
@@ -116,8 +117,8 @@ public class XSDNewXPathAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Field: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

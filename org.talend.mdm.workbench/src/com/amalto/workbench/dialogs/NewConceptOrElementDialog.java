@@ -37,6 +37,7 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.ConceptComposite;
 import com.amalto.workbench.widgets.ElementComposite;
@@ -91,7 +92,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
         layout.numColumns = 2;
         Label typeNameLabel = new Label(composite, SWT.NONE);
         typeNameLabel.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1));
-        typeNameLabel.setText("Name:");
+        typeNameLabel.setText(Messages.NewConceptOrElementDialog_Name);
 
         typeNameText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         typeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -100,14 +101,14 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 
         complexTypeBtn = new Button(composite, SWT.RADIO);
         complexTypeBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 2, 1));
-        complexTypeBtn.setText("Complex Type");
+        complexTypeBtn.setText(Messages.NewConceptOrElementDialog_ComplexType);
         complexTypeBtn.setSelection(true);
         complexTypeBtn.addSelectionListener(this);
 
         conceptPanel = new ConceptComposite(composite, true, Util.getComplexTypes(schema), false);
 
         simpleTypeBtn = new Button(composite, SWT.RADIO);
-        simpleTypeBtn.setText("Simple Type");
+        simpleTypeBtn.setText(Messages.NewConceptOrElementDialog_SimpleType);
         simpleTypeBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 2, 1));
         simpleTypeBtn.addSelectionListener(this);
 
@@ -146,22 +147,22 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 //        }
 
         if (typeNameText.getText().trim().equals("")) {//$NON-NLS-1$
-            infoLabel.setText("The Element Name cannot be empty or blank");
+            infoLabel.setText(Messages.NewConceptOrElementDialog_ElementNamecannotbeEmpty);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         } else if (typeNameText.getText().replaceAll("\\s", "").length() != typeNameText.getText().length()) {//$NON-NLS-1$//$NON-NLS-2$
-            infoLabel.setText("The name cannot contain the empty characters");
+            infoLabel.setText(Messages.NewConceptOrElementDialog_NameCannotContainEmpty);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         } else if (simpleTypeBtn.getSelection()
                 && (elemPanel.getText().trim().equals("") || elemPanel.getText().replaceAll("\\s", "").length() != elemPanel//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         .getText().length())) {
-            infoLabel.setText("The combo value cannot be empty or contain empty characters");
+            infoLabel.setText(Messages.NewConceptOrElementDialog_ComboValueCannotbeEmptyOrXX);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         } else if (complexTypeBtn.getSelection() && !conceptPanel.getText().trim().equals("")//$NON-NLS-1$
                 && conceptPanel.getText().replaceAll("\\s", "").length() != conceptPanel.getText().length()) {//$NON-NLS-1$//$NON-NLS-2$
-            infoLabel.setText("The combo value cannot be empty or contain empty characters");
+            infoLabel.setText(Messages.NewConceptOrElementDialog_ComboValueCannotbeEmptyOrXX);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         } else {
@@ -169,7 +170,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
             for (Iterator iter = list.iterator(); iter.hasNext();) {
                 XSDElementDeclaration decl = (XSDElementDeclaration) iter.next();
                 if (decl.getName().equals(typeNameText.getText())) {
-                    infoLabel.setText("This Element/Entity already exists");
+                    infoLabel.setText(Messages.NewConceptOrElementDialog_ElementEntityAlreadyExists);
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                     return;
                 }
@@ -203,7 +204,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
                 typeToCompare = typeToCompare.substring(0, delimiter);
             }
             if (typeToCompare.equals(specType.getName())) {
-                infoLabel.setText("The same Type name already exists");
+                infoLabel.setText(Messages.NewConceptOrElementDialog_SameTypeNameAlreadyExists);
                 getButton(IDialogConstants.OK_ID).setEnabled(false);
                 return;
             }

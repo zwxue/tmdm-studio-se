@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.amalto.workbench.dialogs.ValidationRuleExcpressDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeParent;
 
 
@@ -40,7 +41,7 @@ public class ValidationRuleExpressionCellEditor extends EditableDialogCellEditor
     protected Object openDialogBox(Control cellEditorWindow) {
         
         ValidationRuleExcpressDialog dialog = new ValidationRuleExcpressDialog(cellEditorWindow.getShell(),treeParent,
-                "Build Validation Rule Expression ", getValue() == null ? "" : getValue().toString(), conceptName, false, true);
+                Messages.ValidationRuleXX_DialogTitle, getValue() == null ? "" : getValue().toString(), conceptName, false, true); //$NON-NLS-1$
 
         if (dialog.open() != Window.OK)
             return null;

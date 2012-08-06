@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -43,8 +44,8 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
     protected Label statusLabel;
 
     public JobMainPage(FormEditor editor) {
-        super(editor, JobMainPage.class.getName(), "Job " + ((XObjectEditorInput) editor.getEditorInput()).getName()
-                + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
+        super(editor, JobMainPage.class.getName(), Messages.bind(Messages.JobMainPage_Job, ((XObjectEditorInput) editor.getEditorInput()).getName()
+                + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel())));
         jobName = ((XObjectEditorInput) editor.getEditorInput()).getName();
     }
 
@@ -70,12 +71,12 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
             Composite statusComposite = toolkit.createComposite(composite);
             statusComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             statusComposite.setLayout(new GridLayout(3, false));
-            Label descriptionLabel = toolkit.createLabel(statusComposite, "Service Status: ", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(statusComposite, Messages.JobMainPage_ServiceStatus, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             statusLabel = toolkit.createLabel(statusComposite, "                                           ", SWT.NULL);//$NON-NLS-1$
             statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // start/stop/suspend/resume
-            Button checkButton = toolkit.createButton(statusComposite, "Check", SWT.CENTER);
+            Button checkButton = toolkit.createButton(statusComposite, Messages.JobMainPage_Check, SWT.CENTER);
             checkButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             checkButton.addSelectionListener(new SelectionListener() {
 
@@ -104,7 +105,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
     public void checkServiceStatus() {
         try {//
             if (jobName.endsWith(".zip")) {//$NON-NLS-1$
-                statusLabel.setText("Ready");
+                statusLabel.setText(Messages.JobMainPage_Ready);
                 return;
             }
             String job = this.jobName.substring(0, this.jobName.lastIndexOf("_"));//$NON-NLS-1$
@@ -117,15 +118,15 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
             client.executeMethod(method);
             // System.out.println(method.getStatusLine().toString());
 
-            if (method.getStatusLine().toString().indexOf("OK") != -1)
-                statusLabel.setText("Ready");
+            if (method.getStatusLine().toString().indexOf(Messages.JobMainPage_OK) != -1)
+                statusLabel.setText(Messages.JobMainPage_Ready);
             else
-                statusLabel.setText("Fail");
+                statusLabel.setText(Messages.JobMainPage_Fail);
             method.releaseConnection();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error",
-                    "An error occured trying to check the job : " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.JobMainPage_ErrorMsg, e.getLocalizedMessage()));
         }
     }
 

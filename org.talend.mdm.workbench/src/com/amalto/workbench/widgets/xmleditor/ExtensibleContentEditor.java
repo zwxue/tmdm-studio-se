@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class ExtensibleContentEditor extends Composite {
@@ -304,8 +305,8 @@ public class ExtensibleContentEditor extends Composite {
                     oldPage.saveContentFromUI();
                 } catch (ExtensibleContentEditorPageSaveException e1) {
                     e.doit = false;
-                    MessageDialog.openError(getShell(), "error",
-                            "The contents in the current UI isn't valid to save to a xml document");
+                    MessageDialog.openError(getShell(), Messages._Error,
+                            Messages.ExtensibleContentEditor_ErrorMsg);
                     return;
                 }
             }

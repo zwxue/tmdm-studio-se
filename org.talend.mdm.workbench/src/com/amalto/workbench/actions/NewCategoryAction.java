@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -39,8 +40,8 @@ public class NewCategoryAction extends Action {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.COMPRESSED_FOLDER_OBJ.getPath()));
-        setText("New Category");
-        setToolTipText("Create a new Category for special XObjects");
+        setText(Messages.NewCategoryAction_Text);
+        setToolTipText(Messages.NewCategoryAction_ActionTip);
     }
 
     public void run() {
@@ -49,24 +50,24 @@ public class NewCategoryAction extends Action {
         TreeObject xobject = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
         xfolder = (TreeParent) xobject;
 
-        InputDialog id1 = new InputDialog(view.getSite().getShell(), "New Category", "Enter a name for the New Category", null,
+        InputDialog id1 = new InputDialog(view.getSite().getShell(), Messages.NewCategoryAction_Text, Messages.NewCategoryAction_DialogTip, null,
                 new IInputValidator() {
 
                     public String isValid(String newText) {
                         if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                            return "The Name cannot be empty";
+                            return Messages.NewCategoryAction_NameCannotbeEmpty;
                         Pattern p = Pattern.compile("([\\s*|\\W*]+)");//$NON-NLS-1$ 
                         Matcher m = p.matcher(newText);
                         if (m.find()) {
                             m.group(1);
-                            return "The name cannot contains invalid character!";
+                            return Messages.NewCategoryAction_NameCannotContainsInvalidChar;
                         }
 
                         TreeObject[] childList = xfolder.getChildren();
                         for (TreeObject theObj : childList) {
                             if (theObj.getType() == TreeObject.CATEGORY_FOLDER) {
                                 if (theObj.getDisplayName().equals(newText))
-                                    return "The name is being used !";
+                                    return Messages.NewCategoryAction_NameIsInUsing;
                             }
                         }
                         return null;

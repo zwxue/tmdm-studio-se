@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -205,8 +206,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         }
 
         if (result) {
-            MessageDialog.openWarning(null, "parsing error",
-                    "An exception occured in parsing the configuration document, all category information will lost");
+            MessageDialog.openWarning(null, Messages.LocalTreeObjectRepository_ErrorTitle,
+                    Messages.LocalTreeObjectRepository_ErrorMsg);
         }
 
         return result;
@@ -758,7 +759,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             String xpaths = getXPathForElem(elem);
             int modelPos = xpaths.indexOf(filterOutBlank(folder.getDisplayName()));
             if (modelPos == -1) {
-                System.err.println("elem.getName() is in wrong position !!!");
+                System.err.println("elem.getName() is in wrong position !!!"); //$NON-NLS-1$
                 return;
             }
             xpaths = xpaths.substring(modelPos + filterOutBlank(folder.getDisplayName()).length() + 1);

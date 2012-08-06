@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import com.amalto.workbench.dialogs.JobProcesssOptionsDialog;
 import com.amalto.workbench.dialogs.JobProcesssOptionsDialog.Execution;
 import com.amalto.workbench.dialogs.JobProcesssOptionsDialog.Parameter;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -42,8 +43,8 @@ public class GenerateJobDefaultTriggerAction extends Action {
 	public GenerateJobDefaultTriggerAction() {
 		super();
 		setImageDescriptor(ImageCache.getImage(EImage.JOB.getPath()));
-		setText("Generate Talend Job Caller Trigger");
-		setToolTipText("Generate Talend Job Caller Trigger");
+		setText(Messages.GenerateJobXX_Text2);
+		setToolTipText(Messages.GenerateJobXX_Text2);
 	}
 
 	public void run() {
@@ -58,7 +59,7 @@ public class GenerateJobDefaultTriggerAction extends Action {
 		}
 
 		String filename = xobject.getDisplayName();
-		Execution defaultExecutionType = filename.endsWith("zip") ? Execution.EMBEDDED : Execution.WEB_SERVICE;
+		Execution defaultExecutionType = filename.endsWith("zip") ? Execution.EMBEDDED : Execution.WEB_SERVICE; //$NON-NLS-1$
 		
 		JobProcesssOptionsDialog dialog = new JobProcesssOptionsDialog(server
 				.getSite().getShell(), defaultExecutionType);
@@ -81,22 +82,22 @@ public class GenerateJobDefaultTriggerAction extends Action {
 		Execution execution = dialog.getExecution();
 		Parameter executionParameter = dialog.getParameter();
 
-		String url = "";
+		String url = ""; //$NON-NLS-1$
 		switch (execution) {
 		case EMBEDDED:
 			String version = jobversion.substring(jobname.length() + 1);
-			url = "ltj://" + jobname + "/" + version;
+			url = "ltj://" + jobname + "/" + version; //$NON-NLS-1$ //$NON-NLS-2$
 			break;
 		case WEB_SERVICE:
-			String server = "http://" + xobject.getEndpointHost() + ":"
+			String server = "http://" + xobject.getEndpointHost() + ":" //$NON-NLS-1$ //$NON-NLS-2$
 					+ xobject.getEndpointPort();
-			url = server + "/" + jobversion + "/services/" + jobname;
+			url = server + "/" + jobversion + "/services/" + jobname; //$NON-NLS-1$ //$NON-NLS-2$
 			break;
 		}
 
 		try {
 			
-			String parameter = "";
+			String parameter = ""; //$NON-NLS-1$
 			switch(executionParameter) {
 			case CONTEXT_VARIABLE:
 				parameter = "<configuration>\n" + "<url>" + url + "</url><contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -104,7 +105,7 @@ public class GenerateJobDefaultTriggerAction extends Action {
 				+ "</configuration>\n";//$NON-NLS-1$
 				break;
 			case INTEGRATED:
-				parameter = "<configuration>\n" + "<url>" + url + "</url>" 
+				parameter = "<configuration>\n" + "<url>" + url + "</url>"  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ "</configuration>\n";//$NON-NLS-1$
 				break;
 			}

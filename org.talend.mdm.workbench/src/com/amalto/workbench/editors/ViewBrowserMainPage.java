@@ -57,6 +57,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -94,7 +95,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
     protected Button matchAllWords;
     
     public ViewBrowserMainPage(FormEditor editor) {
-        super(editor, ViewBrowserMainPage.class.getName(), "View Browser "
+        super(editor, ViewBrowserMainPage.class.getName(), Messages.ViewBrowserMainPage_ViewBrowser
                 + ((XObjectBrowserInput) editor.getEditorInput()).getName());
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
@@ -104,10 +105,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
         try {
 
-            Label vbeLabel = toolkit.createLabel(charComposite, "Viewable Elements", SWT.NULL);
+            Label vbeLabel = toolkit.createLabel(charComposite, Messages.ViewBrowserMainPage_ViewableElements, SWT.NULL);
             vbeLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
-            Label sbeLabel = toolkit.createLabel(charComposite, "Searchable Elements", SWT.NULL);
+            Label sbeLabel = toolkit.createLabel(charComposite, Messages.ViewBrowserMainPage_SearchableElements, SWT.NULL);
             sbeLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
             viewableBEsList = new List(charComposite, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
@@ -118,7 +119,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             searchableBEsList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             ((GridData) searchableBEsList.getLayoutData()).heightHint = 100;
 
-            Label wcLabel = toolkit.createLabel(charComposite, "Conditions", SWT.NULL);
+            Label wcLabel = toolkit.createLabel(charComposite, Messages.ViewBrowserMainPage_Conditions, SWT.NULL);
             wcLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
             wcListViewer = new ListViewer(charComposite, SWT.BORDER);
             wcListViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -203,13 +204,13 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 }
             });
 
-            Composite resultsGroup = this.getNewSectionComposite("Search and results");
+            Composite resultsGroup = this.getNewSectionComposite(Messages.ViewBrowserMainPage_SearchAndResults);
             resultsGroup.setLayout(new GridLayout(4, false));
 
             /***
              * Search Text
              */
-            Label descriptionLabel = toolkit.createLabel(resultsGroup, "Search", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 
             dataClusterCombo = new Combo(resultsGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
@@ -231,7 +232,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             }// keyListener
                     );
 
-            Button bSearch = toolkit.createButton(resultsGroup, "Search", SWT.CENTER);
+            Button bSearch = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.CENTER);
             bSearch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             bSearch.addListener(SWT.Selection, new Listener() {
 
@@ -240,10 +241,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 };
             });
 
-            matchAllWords = toolkit.createButton(resultsGroup, "Match whole sentence", SWT.CHECK);
+            matchAllWords = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_MatchWholeSentence, SWT.CHECK);
             matchAllWords.setSelection(true);
             
-            resultsLabel = toolkit.createLabel(resultsGroup, "Search", SWT.NULL);
+            resultsLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
             resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
             resultsLabel.setText("                                          ");//$NON-NLS-1$
             
@@ -261,9 +262,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     } catch (Exception e) {
                         MessageDialog.openError(
                                 ViewBrowserMainPage.this.getSite().getShell(),
-                                "Error",
-                                "Unable to display the element as a tree:\n" + e.getClass().getName() + ": "
-                                        + e.getLocalizedMessage());
+                                Messages._Error,
+                                Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg, e.getClass().getName(), e.getLocalizedMessage()));
                     }
                 }
             });
@@ -313,7 +313,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             WSDataClusterPK[] dataClusterPKs = getDataClusterPKs();
             if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)) {
                 MessageDialog
-                        .openError(this.getSite().getShell(), "Error", "Please create Data Containers before browsing views");
+                        .openError(this.getSite().getShell(), Messages._Error, Messages.ViewBrowserMainPage_ErrorMsg1);
                 return;
             }
             for (int i = 0; i < dataClusterPKs.length; i++) {
@@ -327,8 +327,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle2,
+                    Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg2, e.getLocalizedMessage()));
         }
     }
 
@@ -342,8 +342,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle3,
+                    Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg3, e.getLocalizedMessage()));
         }
     }
 
@@ -395,15 +395,15 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                             matchAllWords,
                             null, null)).getStrings();
 
-            resultsLabel.setText(results.length + " results");
+            resultsLabel.setText(Messages.bind(Messages.ViewBrowserMainPage_Results, results.length));
             return results;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
-                MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
-                        "More than 10000 results returned by the search. \nPlease narrow your search.");
+                MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle4,
+                        Messages.ViewBrowserMainPage_ErrorMsg4);
             else
-                MessageDialog.openError(this.getSite().getShell(), "Unable to perform the search", e.getLocalizedMessage());
+                MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle5, e.getLocalizedMessage());
             return null;
         } finally {
             try {
@@ -426,8 +426,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
-            setText("View Tree");
-            setToolTipText("View as a DOM Tree");
+            setText(Messages.ViewBrowserMainPage_ViewTree);
+            setToolTipText(Messages.ViewBrowserMainPage_ViewAsDOMTree);
         }
 
         public void run() {
@@ -454,8 +454,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg5, e.getLocalizedMessage()));
             }
         }
 

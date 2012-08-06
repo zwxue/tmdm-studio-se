@@ -38,6 +38,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.NewConceptOrElementDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -52,8 +53,8 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
         super(page);
         this.page = page;
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("New Entity");
-        setToolTipText("Create a new Entity");
+        setText(Messages.XSDNewConceptAction_NewEntity);
+        setToolTipText(Messages.XSDNewConceptAction_CreateNewEntity);
     }
 
     public IStatus doAction() {
@@ -63,7 +64,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
                 XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
                     customTypes
-                            .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
+                            .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : "")); //$NON-NLS-1$ //$NON-NLS-2$
             }
             List<String>builtInTypes = new ArrayList<String>();
             for (Iterator<XSDTypeDefinition> iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
@@ -72,7 +73,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
                     builtInTypes.add(type.getName());
             }
 
-            NewConceptOrElementDialog id = new NewConceptOrElementDialog(this, page.getSite().getShell(), schema, "New Entity",
+            NewConceptOrElementDialog id = new NewConceptOrElementDialog(this, page.getSite().getShell(), schema, Messages.XSDNewConceptAction_NewEntity,
                     customTypes, builtInTypes);
 
             id.setBlockOnOpen(true);
@@ -83,8 +84,8 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDNewConceptAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

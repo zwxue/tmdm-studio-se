@@ -141,7 +141,7 @@ public class SimpleXpathInputDialog extends Dialog {
     }
 
     protected XpathSelectDialog getNewXpathSelectDialog(DataModelMainPage parentPage, String dataModelName) {
-        return new XpathSelectDialog(parentPage.getSite().getShell(), parentPage.getXObject().getParent(), "Select Xpath",
+        return new XpathSelectDialog(parentPage.getSite().getShell(), parentPage.getXObject().getParent(), Messages.SimpleXpathInputDialog_SelectXpath,
                 parentPage.getSite(), false, dataModelName);
     }
     @Override

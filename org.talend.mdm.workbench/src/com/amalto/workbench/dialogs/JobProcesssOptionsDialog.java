@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class JobProcesssOptionsDialog extends Dialog {
 
 	private String title;
@@ -68,7 +70,7 @@ public class JobProcesssOptionsDialog extends Dialog {
 		grpRecord.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				true, 1, 1));
 		grpRecord
-				.setText("Select how the MDM record will be passed to the job");
+				.setText(Messages.JobProcesssOptionsDialog_GroupText);
 
 		btnIntegrated = new Button(grpRecord, SWT.RADIO);
 		btnIntegrated.setSize(78, 24);
@@ -78,12 +80,12 @@ public class JobProcesssOptionsDialog extends Dialog {
 				parameter = Parameter.INTEGRATED;
 			}
 		});
-		btnIntegrated.setText("Integrated");
+		btnIntegrated.setText(Messages.JobProcesssOptionsDialog_Integrated);
 
 		btnContext = new Button(grpRecord, SWT.RADIO);
 		btnContext.setSize(278, 24);
 		btnContext
-				.setText("Through a context variable (backward compatibility)");
+				.setText(Messages.JobProcesssOptionsDialog_BtnText);
 		btnContext.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -94,7 +96,7 @@ public class JobProcesssOptionsDialog extends Dialog {
 		grpExecution = new Group(composite, SWT.NONE);
 		grpExecution.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, true, 1, 1));
-		grpExecution.setText("Select the execution style of the job");
+		grpExecution.setText(Messages.JobProcesssOptionsDialog_GrpGroupText);
 		grpExecution.setLayout(new GridLayout(1, false));
 		btnEmbedded = new Button(grpExecution, SWT.RADIO);
 		btnEmbedded.setSize(191, 24);
@@ -106,7 +108,7 @@ public class JobProcesssOptionsDialog extends Dialog {
 				doUpdate();
 			}
 		});
-		btnEmbedded.setText("Embedded (always on, no latency)");
+		btnEmbedded.setText(Messages.JobProcesssOptionsDialog_EmbeddedBtnText);
 
 		btnWebService = new Button(grpExecution, SWT.RADIO);
 		btnWebService.setSize(217, 24);
@@ -117,7 +119,7 @@ public class JobProcesssOptionsDialog extends Dialog {
 				doUpdate();
 			}
 		});
-		btnWebService.setText("Web Service (allows remote invocation)");
+		btnWebService.setText(Messages.JobProcesssOptionsDialog_WebserviceBtnText);
 
 		// Initial value display
 		doUpdate();
@@ -160,7 +162,7 @@ public class JobProcesssOptionsDialog extends Dialog {
 		// create Generate and Cancel buttons by default
 		Button button = createButton(parent, IDialogConstants.OK_ID,
 				IDialogConstants.OK_LABEL, true);
-		button.setText("Generate");
+		button.setText(Messages.JobProcesssOptionsDialog_Generate);
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}

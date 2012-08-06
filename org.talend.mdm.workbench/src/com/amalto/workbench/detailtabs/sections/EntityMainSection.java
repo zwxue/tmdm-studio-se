@@ -26,6 +26,7 @@ import com.amalto.workbench.detailtabs.sections.composites.EntityKeyConfigCompos
 import com.amalto.workbench.detailtabs.sections.composites.NameConfigComposite;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
+import com.amalto.workbench.i18n.Messages;
 
 public class EntityMainSection extends
 		CommitBarListenerSection<XSDElementDeclaration> {
@@ -138,7 +139,7 @@ public class EntityMainSection extends
 		compNameConfig.setLayoutData(gdCompName);
 
 		Group gpKeyConfig = new Group(compTop, SWT.NONE);
-		gpKeyConfig.setText("Key Definition");
+		gpKeyConfig.setText(Messages.EntityMainSection_KeyDefinition);
 		gpKeyConfig.setBackground(compSectionClient.getDisplay()
 				.getSystemColor(SWT.COLOR_WHITE));
 		GridData gdGroupKeyConfig = new GridData(SWT.FILL, SWT.FILL, true, true);

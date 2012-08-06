@@ -28,6 +28,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
@@ -124,7 +125,7 @@ public class XpathWidget implements SelectionListener {
         layout.marginBottom = 0;
         xpathAntionHolder.setLayout(layout);
 
-        dlgTitle = "Select Xpath";
+        dlgTitle = Messages.XpathWidget_DialogTitle;
         accommodation = dialog;
         ModifyListener listenr = new ModifyListener() {
 
@@ -162,7 +163,7 @@ public class XpathWidget implements SelectionListener {
             annotationButton.addSelectionListener(this);
         }
         annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-        annotationButton.setToolTipText("Select Xpath");
+        annotationButton.setToolTipText(Messages.XpathWidget_DialogTitle);
 
     }
 

@@ -37,6 +37,7 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationshi
 import com.amalto.workbench.detailtabs.sections.providers.ForeignKeyFilterCellModifier;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.ColumnTextExtractor;
 import com.amalto.workbench.providers.CommonTableLabelProvider;
@@ -73,7 +74,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
     protected void createExtentArea() {
 
         Group gpCustomFilter = new Group(this, SWT.NORMAL);
-        gpCustomFilter.setText("Custom filters");
+        gpCustomFilter.setText(Messages.ForeignKeyFilterComposite_CustomFilters);
         gpCustomFilter.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         gpCustomFilter.setLayout(new GridLayout());
 
@@ -103,22 +104,22 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
         final TreeColumn colXPath = new TreeColumn(tree, SWT.NONE);
         colXPath.setWidth(200);
-        colXPath.setText("XPath");
+        colXPath.setText(Messages.ForeignKeyFilterComposite_XPath);
         colXPath.setImage(nillableColImage);
 
         final TreeColumn colOperator = new TreeColumn(tree, SWT.NONE);
         colOperator.setWidth(100);
-        colOperator.setText("Operator");
+        colOperator.setText(Messages.ForeignKeyFilterComposite_Operator);
         colOperator.setImage(nillableColImage);
 
         final TreeColumn colValue = new TreeColumn(tree, SWT.NONE);
         colValue.setWidth(200);
-        colValue.setText("Value");
+        colValue.setText(Messages.ForeignKeyFilterComposite_Value);
         colValue.setImage(nillableColImage);
 
         final TreeColumn colPredicate = new TreeColumn(tree, SWT.NONE);
         colPredicate.setWidth(100);
-        colPredicate.setText("Predicate");
+        colPredicate.setText(Messages.ForeignKeyFilterComposite_Predicate);
 
     }
 

@@ -17,6 +17,7 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.simpletype.SimpleTypeWrapper;
+import com.amalto.workbench.i18n.Messages;
 
 public class SimpleTypeBaseTypeCommitHandler extends CommitHandler<SimpleTypeWrapper> {
 
@@ -31,10 +32,10 @@ public class SimpleTypeBaseTypeCommitHandler extends CommitHandler<SimpleTypeWra
                 getCommitedObj().getSchema().getSchemaForSchemaNamespace(), getCommitedObj().getNewBaseTypeName());
 
         if (newBaseType == null)
-            throw new CommitValidationException("The new base type " + getCommitedObj().getNewBaseTypeName() + " doesn't exist");
+            throw new CommitValidationException(Messages.bind(Messages.SimpleTypeBaseTypeCommitHandler_ExceptionInfo1, getCommitedObj().getNewBaseTypeName()));
 
         if (newBaseType.equals(getCommitedObj()))
-            throw new CommitValidationException("The new base type can not equal to the simple type itself");
+            throw new CommitValidationException(Messages.SimpleTypeBaseTypeCommitHandler_ExceptionInfo2);
     }
 
     @Override

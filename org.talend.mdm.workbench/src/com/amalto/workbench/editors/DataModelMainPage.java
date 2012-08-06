@@ -701,7 +701,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
                         deleteConceptWrapAction.run();
                     } else {
-                        MessageDialog.openWarning(getSite().getShell(), Messages.WarnningText, Messages.SelectDeletableTry);
+                        MessageDialog.openWarning(getSite().getShell(), Messages.Warning, Messages.SelectDeletableTry);
                     }
                 }
             }
@@ -880,7 +880,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
                             deleteConceptWrapAction.run();
                         } else {
-                            MessageDialog.openWarning(getSite().getShell(), Messages.WarnningText, Messages.SelectDeletableTry);
+                            MessageDialog.openWarning(getSite().getShell(), Messages.Warning, Messages.SelectDeletableTry);
                         }
                     }
                 }
@@ -2707,7 +2707,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         }
                     }
                     if (!elem) {
-                        MessageDialog.openWarning(getSite().getShell(), Messages.WarnningText, Messages.NoElementNode);
+                        MessageDialog.openWarning(getSite().getShell(), Messages.Warning, Messages.NoElementNode);
                     }
                 } catch (Exception e) {
 

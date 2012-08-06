@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 
+import com.amalto.workbench.i18n.Messages;
 import com.thaiopensource.relaxng.edit.SchemaCollection;
 import com.thaiopensource.relaxng.input.InputFormat;
 import com.thaiopensource.relaxng.input.dtd.DtdInputFormat;
@@ -68,8 +69,8 @@ public class XSDDriver {
         List<String> outputParams = new Vector<String>();
 
         if (args.length < 2) {
-            error(localizer.message("too_few_arguments"));
-            eh.print(localizer.message("usage", Version.getVersion(XSDDriver.class)));
+            error(localizer.message(Messages.XSDDriver_TooFewArguments));
+            eh.print(localizer.message(Messages.XSDDriver_Usage, Version.getVersion(XSDDriver.class)));
             return 2;
         }
 
@@ -90,7 +91,7 @@ public class XSDDriver {
         else if (inputType.equalsIgnoreCase("xml"))//$NON-NLS-1$
             inFormat = new XmlInputFormat();
         else {
-            error(localizer.message("unrecognized_input_type", inputType));
+            error(localizer.message(Messages.XSDDriver_UnrecognizedInputType, inputType));
             return 2;
         }
         OutputFormat of;
@@ -109,7 +110,7 @@ public class XSDDriver {
         else if (outputType.equalsIgnoreCase("rnc"))//$NON-NLS-1$
             of = new RncOutputFormat();
         else {
-            error(localizer.message("unrecognized_output_type", outputType));
+            error(localizer.message(Messages.XSDDriver_UnrecognizedOutputType, outputType));
             return 2;
         }
         outputType = outputType.toLowerCase();
@@ -203,7 +204,7 @@ public class XSDDriver {
             log.error(e.getMessage(), e);
             return null;
         }
-        return "SUCCESS";
+        return Messages.XSDDriver_SUCCESS;
     }
 
     // Deletes all files and subdirectories under path

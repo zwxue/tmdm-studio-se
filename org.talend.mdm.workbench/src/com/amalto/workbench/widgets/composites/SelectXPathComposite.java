@@ -38,6 +38,7 @@ import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.providers.datamodel.SchemaNameFilter;
@@ -90,20 +91,20 @@ public class SelectXPathComposite extends Composite {
         setLayout(gridLayout);
 
         final Label lblDataModels = new Label(this, SWT.NONE);
-        lblDataModels.setText("Data Models:");
+        lblDataModels.setText(Messages.SelectXPathComposite_DataModels);
 
         comboDataModels = new Combo(this, SWT.READ_ONLY);
         comboDataModels.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
         final Label lblXPath = new Label(this, SWT.NONE);
-        lblXPath.setText("XPath:");
+        lblXPath.setText(Messages.SelectXPathComposite_XPath);
 
         txtXPath = new Text(this, SWT.READ_ONLY | SWT.BORDER);
         final GridData gd_txtXPath = new GridData(SWT.FILL, SWT.CENTER, true, false);
         txtXPath.setLayoutData(gd_txtXPath);
 
         final Label lblFilter = new Label(this, SWT.NONE);
-        lblFilter.setText("Filter:");
+        lblFilter.setText(Messages.SelectXPathComposite_Filters);
 
         txtFilter = new Text(this, SWT.BORDER);
         final GridData gd_txtFilter = new GridData(SWT.FILL, SWT.CENTER, true, false);
@@ -112,7 +113,7 @@ public class SelectXPathComposite extends Composite {
         tvXPath = new TreeViewer(this, SWT.BORDER);
         tvXPath.setContentProvider(new XPathContentProvider());
         tvXPath.setLabelProvider(new XSDTreeLabelProvider());
-        xpathTopElementNameFilter = new SchemaNameFilter(new SchemaElementNameFilterDes(true, "*"));
+        xpathTopElementNameFilter = new SchemaNameFilter(new SchemaElementNameFilterDes(true, "*")); //$NON-NLS-1$
         tvXPath.setFilters(new ViewerFilter[] { xpathTopElementNameFilter });
 
         Tree tree = tvXPath.getTree();

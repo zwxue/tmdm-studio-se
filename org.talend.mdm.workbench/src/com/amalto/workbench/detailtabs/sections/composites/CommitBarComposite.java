@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
+import com.amalto.workbench.i18n.Messages;
 
 public class CommitBarComposite extends Composite {
 
@@ -50,11 +51,11 @@ public class CommitBarComposite extends Composite {
 		gd_btnSubmit.heightHint = 18;
 		gd_btnSubmit.widthHint = 74;
 		btnSubmit.setLayoutData(gd_btnSubmit);
-		btnSubmit.setText("Apply");
+		btnSubmit.setText(Messages.CommitBarComposite_Apply);
 
 		btnReset = new Button(this, SWT.NONE);
 		btnReset.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
-		btnReset.setText("Reset");
+		btnReset.setText(Messages.CommitBarComposite_Reset);
 
 		initUIListeners();
 	}

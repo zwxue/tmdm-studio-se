@@ -39,6 +39,8 @@ import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class XSDAnnotationsStructure {
 
     private static Log log = LogFactory.getLog(XSDAnnotationsStructure.class);
@@ -424,7 +426,7 @@ public class XSDAnnotationsStructure {
         }
         //Starting from 5.0 onwards, always resolve FKInfos by default
         if(log.isDebugEnabled())
-            log.debug("No 'X_Retrieve_FKinfos' annotation found, considering resolving FKInfos");
+            log.debug(Messages.XSDAnnotationsStructure_DebugInfo);
         return true;
     }
 

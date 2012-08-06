@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.inputvalidator.NewXSDIndentityConstraintValidator;
 
 public class IdentityConstraintInputDialog extends Dialog {
@@ -111,14 +112,14 @@ public class IdentityConstraintInputDialog extends Dialog {
         // layout.verticalSpacing = 10;
         Label Label = new Label(composite, SWT.NONE);
         Label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        Label.setText("Key Name(*)");
+        Label.setText(Messages.IdentityConstraintInputDialog_KeyName);
         keyNameText = new Text(composite, SWT.BORDER);
         keyNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         keyNameText.setText(keyName);
 
         Label serverLabel = new Label(composite, SWT.NONE);
         serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        serverLabel.setText("Field Name");
+        serverLabel.setText(Messages.IdentityConstraintInputDialog_FieldName);
 
         fieldNameCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.BORDER);
         fieldNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -127,7 +128,7 @@ public class IdentityConstraintInputDialog extends Dialog {
             fieldNameCombo.select(0);
         Label typeLabel = new Label(composite, SWT.NONE);
         typeLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        typeLabel.setText("Type");
+        typeLabel.setText(Messages.IdentityConstraintInputDialog_Type);
 
         typeCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         typeCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -188,7 +189,7 @@ public class IdentityConstraintInputDialog extends Dialog {
         fieldName = fieldNameCombo.getText().trim();
         keyName = keyNameText.getText().trim();
         if ((keyName == null) || ("".equals(keyName))) {//$NON-NLS-1$
-            MessageDialog.openError(this.getShell(), "Error", "The Key name cannot be empty");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.IdentityConstraintInputDialog_KeyNameCannotbeEmpty);
             setReturnCode(-1);
             keyNameText.setFocus();
             // fieldNameCombo.setFocus();
@@ -196,14 +197,14 @@ public class IdentityConstraintInputDialog extends Dialog {
         }
 
         if (keyName.replaceAll("\\s", "").length() != keyName.length()) {//$NON-NLS-1$//$NON-NLS-2$
-            MessageDialog.openError(this.getShell(), "Error", "The Key name cannot contain the empty characters");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.IdentityConstraintInputDialog_KeyNameCannotContainEmpty);
             setReturnCode(-1);
             keyNameText.setFocus();
             return;
         }
 
         if (fieldName.replaceAll("\\s", "").length() != fieldName.length()) {//$NON-NLS-1$//$NON-NLS-2$
-            MessageDialog.openError(this.getShell(), "Error", "The field name cannot contain the empty characters");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.IdentityConstraintInputDialog_FieldNameCannotbeEmpty);
             setReturnCode(-1);
             fieldNameCombo.setFocus();
             return;
@@ -273,7 +274,7 @@ public class IdentityConstraintInputDialog extends Dialog {
     private boolean validInput() {
 
         if ("".equals(keyNameText.getText().trim())) {//$NON-NLS-1$
-            MessageDialog.openError(this.getShell(), "Error", "The Key Name cannot be empty");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.IdentityConstraintInputDialog_KeyNameCannotbeEmpty);
             keyNameText.setFocus();
             return false;
         }
@@ -282,7 +283,7 @@ public class IdentityConstraintInputDialog extends Dialog {
             String errMsg = inputValidator.isValid(keyNameText.getText().trim(), getTypeFromUI(), this.keyContainer);
 
             if (errMsg != null) {
-                MessageDialog.openError(this.getShell(), "Error", errMsg);
+                MessageDialog.openError(this.getShell(), Messages._Error, errMsg);
                 return false;
             }
         }

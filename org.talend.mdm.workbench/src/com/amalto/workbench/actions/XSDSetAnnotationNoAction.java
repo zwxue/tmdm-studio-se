@@ -34,6 +34,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
@@ -50,8 +51,8 @@ public class XSDSetAnnotationNoAction extends UndoAction {
     public XSDSetAnnotationNoAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.SECURITYANNOTATION.getPath()));
-        setText("Set the Roles with No Access");
-        setToolTipText("Set the Roles That Cannot See This Filed");
+        setText(Messages.XSDSetAnnotationNoAction_Text);
+        setToolTipText(Messages.XSDSetAnnotationNoAction_ActionTip);
         this.dataModelName = dataModelName;
     }
 
@@ -74,7 +75,7 @@ public class XSDSetAnnotationNoAction extends UndoAction {
             // IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             // XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.bind(Messages.XSDSetAnnotationNoAction_ExceptionInfo, xSDCom.getClass().getName()));
             }
 
             dlg = getNewAnnotaionOrderedListsDialog(struc.getHiddenAccesses().values());
@@ -96,8 +97,8 @@ public class XSDSetAnnotationNoAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set the No Access: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDSetAnnotationNoAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -109,7 +110,7 @@ public class XSDSetAnnotationNoAction extends UndoAction {
             public void widgetSelected(SelectionEvent e) {
                 dlg.close();
             }
-        }, page.getSite().getShell(), "Set The Roles That Cannot Access This Field", "Roles", page,
+        }, page.getSite().getShell(), Messages.XSDSetAnnotationNoAction_DialogTitle, "Roles", page, //$NON-NLS-1$
                 AnnotationOrderedListsDialog.AnnotationHidden_ActionType, dataModelName);
     }
 

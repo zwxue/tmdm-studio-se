@@ -14,6 +14,7 @@ package com.amalto.workbench.actions;
 
 import org.eclipse.jface.action.Action;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.IConstants;
@@ -38,7 +39,7 @@ public class DuplicateXObjectAction extends Action {
 
     private void setDetails() {
         setImageDescriptor(ImageCache.getImage(EImage.DUPLICATE.getPath()));
-        setText("Duplicate");
-        setToolTipText("Duplicate this instance of the " + IConstants.TALEND + " Object");
+        setText(Messages.DuplicateXObjectAction_Duplicate);
+        setToolTipText(Messages.bind(Messages.DuplicateXObjectAction_DuplicateTip, IConstants.TALEND));
     }
 }

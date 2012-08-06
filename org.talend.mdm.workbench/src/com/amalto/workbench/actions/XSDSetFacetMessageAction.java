@@ -32,6 +32,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -52,8 +53,8 @@ public class XSDSetFacetMessageAction extends UndoAction {
     public XSDSetFacetMessageAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DOCUMENTATION.getPath()));
-        setText("Set the facet message");
-        setToolTipText("Set multilingual facet error messages  for the content of this element");
+        setText(Messages.XSDSetFacetMessageAction_Text);
+        setToolTipText(Messages.XSDSetFacetMessageAction_ActionTip);
     }
 
     public IStatus doAction() {
@@ -72,8 +73,7 @@ public class XSDSetFacetMessageAction extends UndoAction {
             // IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             // XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type "
-                        + selection.getFirstElement().getClass().getName());
+                throw new RuntimeException(Messages.bind(Messages.XSDSetFacetMessageAction_ExceptionInfo, selection.getFirstElement().getClass().getName()));
             }
 
             dlg = new AnnotationLanguageLabelsDialog(struc.getFactMessage(), new SelectionListener() {
@@ -84,7 +84,7 @@ public class XSDSetFacetMessageAction extends UndoAction {
                 public void widgetSelected(SelectionEvent e) {
                     dlg.close();
                 }
-            }, page.getSite().getShell(), "Set multilingual facet error messages for the content of this element");
+            }, page.getSite().getShell(), Messages.XSDSetFacetMessageAction_DialogTip);
 
             dlg.setBlockOnOpen(true);
             int ret = dlg.open();
@@ -102,8 +102,8 @@ public class XSDSetFacetMessageAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set a multilingual facet error messages: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDSetFacetMessageAction_ErrorMsg + e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

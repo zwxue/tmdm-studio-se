@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 
+import com.amalto.workbench.i18n.Messages;
+
 /**
  * this class is meant to encapsulate all widgets rendering element it can output composite to populate element form
  * 
@@ -81,13 +83,13 @@ public class ElementComposite {
             cr.setLayout(new GridLayout(2, false));
             serverLabel = new Label(cr, SWT.NONE);
             serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-            serverLabel.setText("Type");
+            serverLabel.setText(Messages.ElementComposite_Type);
             typeCombo = new CCombo(cr, SWT.BORDER);
             typeCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         } else {
             serverLabel = new Label(parent, SWT.NONE);
             serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-            serverLabel.setText("Type");
+            serverLabel.setText(Messages.ElementComposite_Type);
 
             typeCombo = new CCombo(parent, SWT.BORDER);
             typeCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -113,7 +115,7 @@ public class ElementComposite {
                     }
                     typeCombo.indexOf("");//$NON-NLS-1$
                     typeCombo.setEditable(true);
-                    tipLabel.setText("Leave blank for anonymous");
+                    tipLabel.setText(Messages.ElementComposite_LeaveBlankForAnonymous);
                 }
             }
         });

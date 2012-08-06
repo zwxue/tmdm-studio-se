@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.webservices.WSDataCluster;
 
@@ -49,7 +50,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
     protected boolean comitting = false;
 
     public DataClusterMainPage(FormEditor editor) {
-        super(editor, DataClusterMainPage.class.getName(), "Data Container "
+        super(editor, DataClusterMainPage.class.getName(), Messages.DataClusterMainPage_DataContainer
                 + ((XObjectEditorInput) editor.getEditorInput()).getName());
     }
 
@@ -58,7 +59,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
         try {
 
             // description
-            Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(mainComposite, Messages.DataClusterMainPage_Description, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -214,8 +215,8 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterMainPage_ErrorRefreshingPage,
+                    Messages.DataClusterMainPage_ErrorRefreshingPageXX + e.getLocalizedMessage());
         }
     }
 
@@ -251,8 +252,8 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
             this.comitting = false;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterMainPage_ErrorCommitingPage,
+                    Messages.DataClusterMainPage_ErrorCommitingPageXX + e.getLocalizedMessage());
         }
     }
 

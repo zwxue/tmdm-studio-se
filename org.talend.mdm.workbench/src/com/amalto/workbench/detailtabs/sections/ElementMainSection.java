@@ -23,6 +23,7 @@ import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.composites.ElementInfoConfigComposite;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.element.ElementWrapper;
+import com.amalto.workbench.i18n.Messages;
 
 public class ElementMainSection extends CommitBarListenerSection<XSDParticle> {
 
@@ -65,7 +66,7 @@ public class ElementMainSection extends CommitBarListenerSection<XSDParticle> {
 
     @Override
     protected String getSectionTitle() {
-        return "Main";
+        return Messages.ElementMainSection_Main;
     }
 
     @Override

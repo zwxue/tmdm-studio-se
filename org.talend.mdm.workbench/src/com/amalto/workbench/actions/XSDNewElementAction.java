@@ -33,6 +33,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.NewConceptOrElementDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -46,8 +47,8 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
         super(page);
         // this.page = page;
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("New Element");
-        setToolTipText("Create a new Element");
+        setText(Messages.XSDNewElementAction_Text);
+        setToolTipText(Messages.XSDNewElementAction_ActionTip);
     }
 
     public IStatus doAction() {
@@ -57,7 +58,7 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
                 XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
                     customTypes
-                            .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));//$NON-NLS-1$
+                            .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));//$NON-NLS-1$ //$NON-NLS-2$
             }
             ArrayList builtInTypes = new ArrayList();
             for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
@@ -66,7 +67,7 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
                     builtInTypes.add(type.getName());
             }
 
-            NewConceptOrElementDialog id = new NewConceptOrElementDialog(this, page.getSite().getShell(), schema, "New Element",
+            NewConceptOrElementDialog id = new NewConceptOrElementDialog(this, page.getSite().getShell(), schema, Messages.XSDNewElementAction_Text,
                     customTypes, builtInTypes);
 
             id.setBlockOnOpen(true);
@@ -76,8 +77,8 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDNewElementAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

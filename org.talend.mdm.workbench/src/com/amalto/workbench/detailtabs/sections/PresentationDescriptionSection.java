@@ -16,6 +16,7 @@ import java.util.Map;
 
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfoCollection;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class PresentationDescriptionSection extends LanguageInfoSection {
@@ -27,7 +28,7 @@ public class PresentationDescriptionSection extends LanguageInfoSection {
 
     @Override
     protected String getSectionTitle() {
-        return "Descriptions";
+        return Messages.PresentationDescriptionSection_Descriptions;
     }
 
     @Override

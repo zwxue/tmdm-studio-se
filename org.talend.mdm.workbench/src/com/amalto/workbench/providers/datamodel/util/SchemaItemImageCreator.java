@@ -33,6 +33,7 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -114,7 +115,7 @@ public class SchemaItemImageCreator {
     }
 
     protected Image getImageForXSDParticle_WrongStatus(XSDParticle element) {
-        log.info("ERROR XSD Term " + element.getTerm().getClass().getName());
+        log.info(Messages.bind(Messages.SchemaItemImageCreator_Loginfo, element.getTerm().getClass().getName()));
         return ImageCache.getCreatedImage(EImage.ERROR.getPath());
     }
 
@@ -148,7 +149,7 @@ public class SchemaItemImageCreator {
     }
 
     protected Image getImageForXSDComplexTypeDef_WrangStatus(XSDComplexTypeDefinition element) {
-        log.info("ERROR XSD Type Content: " + element.getContent().getClass().getName());
+        log.info(Messages.bind(Messages.SchemaItemImageCreator_Loginfo1, element.getContent().getClass().getName()));
         return ImageCache.getCreatedImage(EImage.ERROR.getPath());
     }
 

@@ -110,7 +110,7 @@ public class TisTableViewer extends ComplexTableViewer {
         //
         addButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-        addButton.setToolTipText(Messages.AddText);
+        addButton.setToolTipText(Messages.Add);
         if (isXpath()) {
             addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_NEWXPATH.getPath()));
         } else {

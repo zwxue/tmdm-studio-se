@@ -43,6 +43,7 @@ import com.amalto.workbench.actions.SaveXObjectAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -174,7 +175,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
             }// switch
 
         } catch (PartInitException e) {
-            MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :" + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.bind(Messages.XObjectEditor_ErrorMsg, e.getLocalizedMessage()));
         }
     }
 
@@ -203,7 +204,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
                 return;
             }
             int numPages = formPages.size();
-            monitor.beginTask("Saving " + this.getEditorInput().getName(), numPages + 1);
+            monitor.beginTask(Messages.bind(Messages.XObjectEditor_Saving, this.getEditorInput().getName()), numPages + 1);
             for (int i = 0; i < numPages; i++) {
                 if ((formPages.get(i)) instanceof AFormPage) {
                     if (!((AFormPage) (formPages.get(i))).beforeDoSave())
@@ -499,7 +500,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
             public RefreshSectionAction() {
                 super("Refresh"); //$NON-NLS-1$
-                setToolTipText("Refresh");
+                setToolTipText(Messages.XObjectEditor_Refresh);
                 this.setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
             }
 

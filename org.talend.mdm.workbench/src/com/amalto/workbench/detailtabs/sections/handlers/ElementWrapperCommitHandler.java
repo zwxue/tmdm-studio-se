@@ -26,6 +26,7 @@ import org.w3c.dom.Element;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.element.ElementWrapper;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -138,28 +139,28 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
 		int newMinOcur = getCommitedObj().getNewMinOcur();
 		if (newMinOcur < 0)
 			throw new CommitValidationException(
-					"The Minimum Occurence must be greater or equal to Zero");
+					Messages.ElementWrapperCommitHandler_MinValidExceptionInfo);
 
 		int newMaxOcur = getCommitedObj().getNewMaxOcur();
 		if (newMaxOcur > -1
 				&& newMaxOcur < newMinOcur)
 			throw new CommitValidationException(
-					"The maximum Occurence should be greater or equal to the Minimum Occurence");
+					Messages.ElementWrapperCommitHandler_ManValidExceptionInfo);
 	}
 
     private void validateElementNameAndReference() throws CommitValidationException {
 
         if (((getCommitedObj().getNewName() == null) || ("".equals(getCommitedObj().getNewName())))//$NON-NLS-1$
                 && ((getCommitedObj().getNewReference() == null) || "".equals(getCommitedObj().getNewReference())))//$NON-NLS-1$
-            throw new CommitValidationException("The Business Element Name cannot be empty if the reference is empty");
+            throw new CommitValidationException(Messages.ElementWrapperCommitHandler_BusinessElementCannotbeEmpty);
 
         if (getCommitedObj().getNewName().replaceAll("\\s", "").length() != getCommitedObj().getNewName().length())//$NON-NLS-1$//$NON-NLS-2$
-            throw new CommitValidationException("The Business Element Name cannot contain the empty characters");
+            throw new CommitValidationException(Messages.ElementWrapperCommitHandler_BusinessElementCannotContainEmpty);
 
         if (getCommitedObj().hasNewReference()
                 && (Util.findReference(getCommitedObj().getNewReference(), getCommitedObj().getSchema()) == null))
-            throw new CommitValidationException("The Referenced Element " + getCommitedObj().getNewReference()
-                    + " cannot be found");
+            throw new CommitValidationException(Messages.ElementWrapperCommitHandler_ReferenceElementExceptionInfo + getCommitedObj().getNewReference()
+                    + Messages.ElementWrapperCommitHandler_ReferenceElementExceptionInfoA);
 
     }
 }

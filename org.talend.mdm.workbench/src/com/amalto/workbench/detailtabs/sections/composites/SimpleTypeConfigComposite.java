@@ -47,6 +47,7 @@ import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.providers.XSDNamedComponentLabelProvider;
 import com.amalto.workbench.detailtabs.sections.util.simpletype.SimpleTypeFacetPropSourceBuilder;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.ListContentProvider;
 import com.amalto.workbench.providers.ListStringLabelProvider;
 import com.amalto.workbench.providers.datamodel.SchemaElementSorter;
@@ -79,14 +80,14 @@ public class SimpleTypeConfigComposite extends Composite {
         setLayout(gridLayout);
 
         final Label lblName = new Label(this, SWT.NONE);
-        lblName.setText("Name");
+        lblName.setText(Messages.SimpleTypeConfigComposite_Name);
 
         txtName = new Text(this, SWT.BORDER);
         final GridData gd_txtName = new GridData(SWT.FILL, SWT.CENTER, true, false);
         txtName.setLayoutData(gd_txtName);
 
         final Group baseTypeGroup = new Group(this, SWT.NONE);
-        baseTypeGroup.setText("Base Type");
+        baseTypeGroup.setText(Messages.SimpleTypeConfigComposite_BaseType);
         final GridData gd_baseTypeGroup = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
         baseTypeGroup.setLayoutData(gd_baseTypeGroup);
         baseTypeGroup.setLayout(new GridLayout());
@@ -99,7 +100,7 @@ public class SimpleTypeConfigComposite extends Composite {
 
         radCustomTypes = new Button(composite, SWT.RADIO);
         radCustomTypes.setSelection(true);
-        radCustomTypes.setText("Custom Types");
+        radCustomTypes.setText(Messages.SimpleTypeConfigComposite_CustomTypes);
 
         comboCustomTypes = new ComboViewer(composite, SWT.READ_ONLY);
         final GridData gd_comboCustomTypes = new GridData(SWT.FILL, SWT.CENTER, true, false);
@@ -109,7 +110,7 @@ public class SimpleTypeConfigComposite extends Composite {
         comboCustomTypes.setSorter(new CustomTypeSorter());
 
         radBuildInTypes = new Button(composite, SWT.RADIO);
-        radBuildInTypes.setText("Buildin Types");
+        radBuildInTypes.setText(Messages.SimpleTypeConfigComposite_BuildinTypes);
 
         comboBuildInTypes = new ComboViewer(composite, SWT.READ_ONLY);
         Combo combo = comboBuildInTypes.getCombo();
@@ -118,7 +119,7 @@ public class SimpleTypeConfigComposite extends Composite {
         comboBuildInTypes.setLabelProvider(new XSDNamedComponentLabelProvider());
         comboBuildInTypes.setSorter(new SchemaElementSorter());
 
-        compProperty = new PropertyComposite(this, SWT.NONE, "", "", "Facet", "Value",section);//$NON-NLS-1$//$NON-NLS-2$
+        compProperty = new PropertyComposite(this, SWT.NONE, "", "", Messages.SimpleTypeConfigComposite_Facet, Messages.SimpleTypeConfigComposite_Value,section);//$NON-NLS-1$//$NON-NLS-2$
         GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
         data.horizontalSpan = 2;
         data.heightHint = 200;
@@ -152,7 +153,7 @@ public class SimpleTypeConfigComposite extends Composite {
 
     private void initUIContentForTxtName() {
     	removeNameTxtListener();
-        String name = xsdSimpleType.getName() == null ? "" : xsdSimpleType.getName();
+        String name = xsdSimpleType.getName() == null ? "" : xsdSimpleType.getName(); //$NON-NLS-1$
 		txtName.setText(name);
 		if (name != null) {
 			int length = name.length();

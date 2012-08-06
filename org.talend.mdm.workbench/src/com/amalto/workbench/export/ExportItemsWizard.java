@@ -140,7 +140,7 @@ public class ExportItemsWizard extends Wizard {
             exportFolder = tempFile.getAbsolutePath();
             zipfile = zip.getText().getText();
             if(zipfile!=null && new File(zipfile).exists()){
-                if(!MessageDialog.openConfirm(null,Messages.AddBrowseItemsWizard_Warning, Messages.bind(Messages.ExportItemsWizard_overridefile, zipfile))){
+                if(!MessageDialog.openConfirm(null,Messages.Warning, Messages.bind(Messages.ExportItemsWizard_overridefile, zipfile))){
                     return false;
                 }
             }
@@ -148,14 +148,14 @@ public class ExportItemsWizard extends Wizard {
         if (folderBtn.getSelection()) {
             exportFolder = folder.getText().getText();
             if(exportFolder!=null && new File(exportFolder).list().length>0){
-                if(!MessageDialog.openConfirm(null,Messages.AddBrowseItemsWizard_Warning, Messages.bind(Messages.ExportItemsWizard_overridefolder, exportFolder))){
+                if(!MessageDialog.openConfirm(null,Messages.Warning, Messages.bind(Messages.ExportItemsWizard_overridefolder, exportFolder))){
                     return false;
                 }
             }
         }
 
         final Object[] objs = getCheckedObjects();
-        Job job = new Job("Export ...") {
+        Job job = new Job(Messages.ExportItemsWizard_Export) {
 
             @Override
             public IStatus run(IProgressMonitor monitor) {
@@ -193,7 +193,7 @@ public class ExportItemsWizard extends Wizard {
         }
         if (objs == null || objs.length == 0)
             return;
-        monitor.beginTask("Export ...", IProgressMonitor.UNKNOWN);
+        monitor.beginTask(Messages.ExportItemsWizard_Export, IProgressMonitor.UNKNOWN);
         Exports eps = new Exports();
         List<TreeObject> exports = new ArrayList<TreeObject>();
         XtentisPort port;
@@ -210,7 +210,7 @@ public class ExportItemsWizard extends Wizard {
                 switch (obj.getType()) {
 
                 case TreeObject.DATA_CLUSTER:
-                    monitor.subTask(" Data Container...");
+                    monitor.subTask(Messages.ExportItemsWizard_2);
 
                     items = new ArrayList<String>();
                     // dataclusters
@@ -233,7 +233,7 @@ public class ExportItemsWizard extends Wizard {
                     monitor.worked(1);
                     // datacluster contents
 
-                    monitor.subTask(" Data Container " + pk.getPk() + " ...");
+                    monitor.subTask(Messages.bind(Messages.ExportItemsWizard_3, pk.getPk()));
 
                     exportCluster(exports, pk, port);
 
@@ -242,7 +242,7 @@ public class ExportItemsWizard extends Wizard {
                     break;
 
                 case TreeObject.DATA_MODEL:
-                    monitor.subTask(" Data Model...");
+                    monitor.subTask(Messages.ExportItemsWizard_5);
 
                     items = new ArrayList<String>();
                     // datamodels
@@ -260,7 +260,7 @@ public class ExportItemsWizard extends Wizard {
                     monitor.worked(1);
                     break;
                 case TreeObject.MENU:
-                    monitor.subTask(" Menu...");
+                    monitor.subTask(Messages.ExportItemsWizard_6);
                     // ExportItem exportItem=new ExportItem();
 
                     items = new ArrayList<String>();
@@ -281,7 +281,7 @@ public class ExportItemsWizard extends Wizard {
                     monitor.worked(1);
                     break;
                 case TreeObject.PICTURES_RESOURCE:
-                    monitor.subTask(" Picture...");
+                    monitor.subTask(Messages.ExportItemsWizard_7);
                     // ExportItem exportItem=new ExportItem();
 
                     items = new ArrayList<String>();
@@ -298,7 +298,7 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(get.getResponseBody(), sw);
                         encodedID = URLEncoder.encode(obj.getDisplayName(), "UTF-8");//$NON-NLS-1$
-                        writeInputStream(get.getResponseBodyAsStream(), TreeObject.PICTURES_ + "/" + encodedID);
+                        writeInputStream(get.getResponseBodyAsStream(), TreeObject.PICTURES_ + "/" + encodedID); //$NON-NLS-1$
                         items.add(TreeObject.PICTURES_ + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));
@@ -309,7 +309,7 @@ public class ExportItemsWizard extends Wizard {
                     break;
                 case TreeObject.ROLE:
                     if (Util.IsEnterPrise()) {
-                        monitor.subTask(" Role...");
+                        monitor.subTask(Messages.ExportItemsWizard_9);
                         // ExportItem exportItem=new ExportItem();
 
                         items = new ArrayList<String>();
@@ -332,7 +332,7 @@ public class ExportItemsWizard extends Wizard {
                     }
                     break;
                 case TreeObject.ROUTING_RULE:
-                    monitor.subTask(" Trigger...");
+                    monitor.subTask(Messages.ExportItemsWizard_10);
                     // ExportItem exportItem=new ExportItem();
 
                     items = new ArrayList<String>();
@@ -352,7 +352,7 @@ public class ExportItemsWizard extends Wizard {
                     monitor.worked(1);
                     break;
                 case TreeObject.STORED_PROCEDURE:
-                    monitor.subTask(" Stored Procedure...");
+                    monitor.subTask(Messages.ExportItemsWizard_11);
 
                     items = new ArrayList<String>();
                     // stored procedure
@@ -374,7 +374,7 @@ public class ExportItemsWizard extends Wizard {
                     break;
                 case TreeObject.SYNCHRONIZATIONPLAN:
                     if (Util.IsEnterPrise()) {
-                        monitor.subTask(" Synchronization Plan...");
+                        monitor.subTask(Messages.ExportItemsWizard_12);
 
                         items = new ArrayList<String>();
                         // Synchronizationplan
@@ -396,7 +396,7 @@ public class ExportItemsWizard extends Wizard {
                     }
                     break;
                 case TreeObject.TRANSFORMER:
-                    monitor.subTask(" Process...");
+                    monitor.subTask(Messages.ExportItemsWizard_13);
 
                     items = new ArrayList<String>();
                     // transformer
@@ -419,7 +419,7 @@ public class ExportItemsWizard extends Wizard {
                     break;
                 case TreeObject.UNIVERSE:
                     if (Util.IsEnterPrise()) {
-                        monitor.subTask(" Version...");
+                        monitor.subTask(Messages.ExportItemsWizard_14);
 
                         items = new ArrayList<String>();
                         // universe
@@ -440,7 +440,7 @@ public class ExportItemsWizard extends Wizard {
                     }
                     break;
                 case TreeObject.VIEW:
-                    monitor.subTask(" View...");
+                    monitor.subTask(Messages.ExportItemsWizard_15);
 
                     items = new ArrayList<String>();
                     // view
@@ -461,7 +461,7 @@ public class ExportItemsWizard extends Wizard {
                     break;
                 // add by ymli;fix the bug:0012771
                 case TreeObject.WORKFLOW_PROCESS:
-                    monitor.subTask("WORKFLOW_PROCESS...");
+                    monitor.subTask(Messages.ExportItemsWizard_16);
                     items = new ArrayList<String>();
                     String workflowURL = obj.getEndpointIpAddress() + TreeObject.BARFILE_URI + obj.getDisplayName();
                     try {
@@ -573,8 +573,8 @@ public class ExportItemsWizard extends Wizard {
     class SelectItemsPage extends WizardPage {
 
         protected SelectItemsPage() {
-            super("SelectItemsPage");
-            setTitle("Select items to export");
+            super(Messages.ExportItemsWizard_17);
+            setTitle(Messages.ExportItemsWizard_18);
             // setDescription("Please select items to export");
 
             // Page isn't complete until an e-mail address has been added
@@ -599,7 +599,7 @@ public class ExportItemsWizard extends Wizard {
             composite.setLayout(new GridLayout(3, false));
             folderBtn = new Button(composite, SWT.RADIO);
             folderBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
-            folderBtn.setText("Select root directory:");
+            folderBtn.setText(Messages.ExportItemsWizard_19);
             folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false, SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
@@ -617,7 +617,7 @@ public class ExportItemsWizard extends Wizard {
 
             zipBtn = new Button(composite, SWT.RADIO);
             zipBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
-            zipBtn.setText("Select archive file:");
+            zipBtn.setText(Messages.ExportItemsWizard_20);
             zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true, SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             zipBtn.addSelectionListener(new SelectionListener() {
@@ -649,7 +649,7 @@ public class ExportItemsWizard extends Wizard {
 
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = treeViewer.createItemList(composite);
-        treeViewer.setItemText("Select items to export:");
+        treeViewer.setItemText(Messages.ExportItemsWizard_21);
         return returnComposite;
     }
 

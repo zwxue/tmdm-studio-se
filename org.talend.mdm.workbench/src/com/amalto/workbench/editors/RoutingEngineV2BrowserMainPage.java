@@ -73,6 +73,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
 
 import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -133,8 +134,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     protected boolean[] ascending = { true, false, false, false };
 
     public RoutingEngineV2BrowserMainPage(FormEditor editor) {
-        super(editor, RoutingEngineV2BrowserMainPage.class.getName(), ((XObjectBrowserInput) editor.getEditorInput()).getName()
-                + " Manager");
+        super(editor, RoutingEngineV2BrowserMainPage.class.getName(), Messages.bind(Messages.RoutingEngineV2BrowserMainPage_Manager, ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
     }
@@ -160,14 +160,14 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusComposite.setLayout(new GridLayout(5, false));
 
             // status
-            Label descriptionLabel = toolkit.createLabel(statusComposite, "Event Manager Status: ", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(statusComposite, Messages.RoutingEngineV2BrowserMainPage_EventManagerStatus, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             statusLabel = toolkit.createLabel(statusComposite, "                                           ", SWT.NULL);//$NON-NLS-1$
             statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             // start/stop/suspend/resume
             Button startButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
             startButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
-            startButton.setToolTipText("Start");
+            startButton.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Start);
             startButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             startButton.addListener(SWT.Selection, new Listener() {
 
@@ -177,7 +177,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             });
             Button stopButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
             stopButton.setImage(ImageCache.getCreatedImage(EImage.STOP.getPath()));
-            stopButton.setToolTipText("Stop");
+            stopButton.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Stop);
             stopButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             stopButton.addListener(SWT.Selection, new Listener() {
 
@@ -187,7 +187,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             });
             suspendButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
             suspendButton.setImage(ImageCache.getCreatedImage(EImage.SUSPEND.getPath()));
-            suspendButton.setToolTipText("Suspend");
+            suspendButton.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Suspend);
             suspendButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             suspendButton.addListener(SWT.Selection, new Listener() {
 
@@ -214,22 +214,22 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             firstLineComposite.setLayout(new GridLayout(9, false));
 
             // Routing Orders Label
-            Label routingOrdersLabel = toolkit.createLabel(firstLineComposite, "Routing Orders ", SWT.NULL);
+            Label routingOrdersLabel = toolkit.createLabel(firstLineComposite, Messages.RoutingEngineV2BrowserMainPage_RoutingOrders, SWT.NULL);
             routingOrdersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 9, 1));
 
             // from
-            Label fromLabel = toolkit.createLabel(firstLineComposite, "From", SWT.NULL);
+            Label fromLabel = toolkit.createLabel(firstLineComposite, Messages.RoutingEngineV2BrowserMainPage_From, SWT.NULL);
             fromLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             CalendarSelectWidget fromCalendar = new CalendarSelectWidget(toolkit, firstLineComposite, true);
             fromText = fromCalendar.getText();
 
             // to
-            Label toLabel = toolkit.createLabel(firstLineComposite, "To", SWT.NULL);
+            Label toLabel = toolkit.createLabel(firstLineComposite, Messages.RoutingEngineV2BrowserMainPage_To, SWT.NULL);
             toLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             CalendarSelectWidget toCalendar = new CalendarSelectWidget(toolkit, firstLineComposite, false);
             toText = toCalendar.getText();
 
-            Label statusLabel = toolkit.createLabel(firstLineComposite, "Status", SWT.NULL);
+            Label statusLabel = toolkit.createLabel(firstLineComposite, Messages.RoutingEngineV2BrowserMainPage_Status, SWT.NULL);
             statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             statusCombo = new Combo(firstLineComposite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.MULTI);
             statusCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -251,9 +251,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusCombo.select(0);
 
             // to
-            Button bSearch = toolkit.createButton(firstLineComposite, "", SWT.CENTER);
+            Button bSearch = toolkit.createButton(firstLineComposite, "", SWT.CENTER); //$NON-NLS-1$
             bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
-            bSearch.setToolTipText("Search");
+            bSearch.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Search);
             bSearch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             bSearch.addListener(SWT.Selection, new Listener() {
 
@@ -269,7 +269,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             searchLineComposite.setLayout(new GridLayout(4, false));
 
             // document type
-            Label documentTypeLabel = toolkit.createLabel(searchLineComposite, "Document Type", SWT.NULL);
+            Label documentTypeLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_DocumentType, SWT.NULL);
             documentTypeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // DocumentType
             documentTypeText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
@@ -288,7 +288,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }// keyListener
                     );
             // ID
-            Label idLabel = toolkit.createLabel(searchLineComposite, "Item IDs", SWT.NULL);
+            Label idLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_ItemIDs, SWT.NULL);
             idLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // ID
             idText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
@@ -307,7 +307,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             );
 
             // service
-            Label serviceLabel = toolkit.createLabel(searchLineComposite, "Service", SWT.NULL);
+            Label serviceLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_Service, SWT.NULL);
             serviceLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // service
             serviceCombo = new Combo(searchLineComposite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.MULTI);
@@ -324,15 +324,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }// keyReleased
             }// keyListener
                     );
-            serviceCombo.add("");
+            serviceCombo.add(""); //$NON-NLS-1$
             // WSServicesListItem[] servicesList = Util.getPort(getXObject()).getServicesList(new
             // WSGetServicesList("en")).getItem();
-            WSServicesListItem[] servicesList = getPort().getServicesList(new WSGetServicesList("en")).getItem();
+            WSServicesListItem[] servicesList = getPort().getServicesList(new WSGetServicesList("en")).getItem(); //$NON-NLS-1$
 
             if ((servicesList != null) && (servicesList.length > 0)) {
                 String[] services = new String[servicesList.length];
                 for (int i = 0; i < servicesList.length; i++) {
-                    services[i] = servicesList[i].getJndiName().replaceFirst("amalto/local/service/", "");//$NON-NLS-1$
+                    services[i] = servicesList[i].getJndiName().replaceFirst("amalto/local/service/", "");//$NON-NLS-1$ //$NON-NLS-2$
                 }
                 Arrays.sort(services);
                 for (int i = 0; i < services.length; i++) {
@@ -342,7 +342,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             serviceCombo.select(0);
 
             // any Field
-            Label anyFieldLabel = toolkit.createLabel(searchLineComposite, "Any Field", SWT.NULL);
+            Label anyFieldLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_AnyField, SWT.NULL);
             anyFieldLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // anyField
             anyFieldText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
@@ -383,9 +383,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     } catch (Exception e) {
                         MessageDialog.openError(
                                 RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
-                                "Error",
-                                "Unable to display the element as a tree:\n" + e.getClass().getName() + ": "
-                                        + e.getLocalizedMessage());
+                                Messages._Error,
+                                Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg, e.getClass().getName(), e.getLocalizedMessage()));
                     }
                 }
             });
@@ -421,7 +420,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         // 1st column
         final TableColumn column0 = new TableColumn(table, SWT.LEFT, 0);
-        column0.setText("Document");
+        column0.setText(Messages.RoutingEngineV2BrowserMainPage_Document);
         column0.setWidth(150);
         column0.addSelectionListener(new SelectionListener() {
 
@@ -444,7 +443,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         // 2nd column
         final TableColumn column1 = new TableColumn(table, SWT.LEFT, 1);
-        column1.setText("Date");
+        column1.setText(Messages.RoutingEngineV2BrowserMainPage_Date);
         column1.setWidth(150);
         // Add listener to column so tasks are sorted by description when clicked
         column1.addSelectionListener(new SelectionListener() {
@@ -468,7 +467,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         // 3rd column
         final TableColumn column2 = new TableColumn(table, SWT.LEFT, 2);
-        column2.setText("Service");
+        column2.setText(Messages.RoutingEngineV2BrowserMainPage_Service);
         column2.setWidth(100);
         // Add listener to column so tasks are sorted by description when clicked
         column2.addSelectionListener(new SelectionListener() {
@@ -492,7 +491,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         // 4th column
         final TableColumn column3 = new TableColumn(table, SWT.LEFT, 3);
-        column3.setText("Message");
+        column3.setText(Messages.RoutingEngineV2BrowserMainPage_Message);
         column3.setWidth(300);
         // Add listener to column so tasks are sorted by description when clicked
         column3.addSelectionListener(new SelectionListener() {
@@ -538,8 +537,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
+                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX, e.getLocalizedMessage()));
         }
     }
 
@@ -548,8 +547,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             // Nothing to do
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_ErrorCommitingPage,
+                    Messages.RoutingEngineV2BrowserMainPage_ErrorCommitingPageXX + e.getLocalizedMessage());
         }
     }
 
@@ -644,11 +643,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
             Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");//$NON-NLS-1$
 
-            if (!"".equals(fromText.getText())) {
+            if (!"".equals(fromText.getText())) { //$NON-NLS-1$
                 String dateTimeText = fromText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
                     return new WSRoutingOrderV2[0];
                 }
                 try {
@@ -658,11 +657,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }
             }
 
-            if (!"".equals(toText.getText())) {
+            if (!"".equals(toText.getText())) { //$NON-NLS-1$
                 String dateTimeText = toText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
                     return new WSRoutingOrderV2[0];
                 }
                 try {
@@ -696,11 +695,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 timeLastRunCompletedMax = to;
                 status = WSRoutingOrderV2Status.FAILED;
             } else {
-                throw new XtentisException("The Routing Orders of status'" + statusText + "' do not exist!");
+                throw new XtentisException(Messages.RoutingEngineV2BrowserMainPage_ExceptionInfo + statusText + Messages.RoutingEngineV2BrowserMainPage_ExceptionInfoA);
             }
 
             String serviceJNDI = serviceCombo.getItem(serviceCombo.getSelectionIndex());
-            if ("".equals(serviceJNDI))
+            if ("".equals(serviceJNDI)) //$NON-NLS-1$
                 serviceJNDI = null;
 
             int start = pageToolBar.getStart();
@@ -718,13 +717,13 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                                     timeLastRunStartedMax,
                                     timeLastRunCompletedMin,
                                     timeLastRunCompletedMax,
-                                    "*".equals(documentTypeText.getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$
+                                    "*".equals(documentTypeText.getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$ //$NON-NLS-2$
                                     "*".equals(idText.getText()) || "".equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$//$NON-NLS-2$
                                     serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
             
             
             if (wsRoutingOrder.length == 1) {
-                MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
+                MessageDialog.openInformation(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_Info, Messages.RoutingEngineV2BrowserMainPage_SorryNoResult);
                 return new WSRoutingOrderV2[0];
             }
             
@@ -741,10 +740,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
-                MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
-                        "More than 10000 results returned by the search. \nPlease narrow your search.");
+                MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_TooManyResults,
+                        Messages.RoutingEngineV2BrowserMainPage_ErrorMsg1);
             else
-                MessageDialog.openError(this.getSite().getShell(), "Unable to perform the search", e.getLocalizedMessage());
+                MessageDialog.openError(this.getSite().getShell(), Messages.ErrorTitle1, e.getLocalizedMessage());
             return null;
         } finally {
             try {
@@ -780,8 +779,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
-            setText("Edit Item");
-            setToolTipText("View Routing Order details");
+            setText(Messages.RoutingEngineV2BrowserMainPage_EditItem);
+            setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ViewRoutingOrderDetails);
         }
 
         public void run() {
@@ -808,8 +807,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to view the Routing Order: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorToViewRoutingOrder, e.getLocalizedMessage()));
             }
         }
 
@@ -838,10 +837,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
-                setText("Delete the selected item");
+                setText(Messages.RoutingEngineV2BrowserMainPage_DelSelectedItem);
             else
-                setText("Delete these " + selection.size() + " selected Routing Orders");
-            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
+                setText(Messages.bind(Messages.RoutingEngineV2BrowserMainPage_DeleteThese, selection.size()));
+            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
         }
 
         public void run() {
@@ -855,8 +854,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 if (lineItems.size() == 0)
                     return;
 
-                if (!MessageDialog.openConfirm(this.shell, "Confirm Deletion", "Are you sure you want to delete the selected "
-                        + lineItems.size() + " items?"))
+                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmDeletion, Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg2
+                        , lineItems.size())))
                     return;
 
                 // Instantiate the Monitor with actual deletes
@@ -870,8 +869,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg3, e.getLocalizedMessage()));
             }
         }
 
@@ -897,18 +896,18 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
                 try {
-                    monitor.beginTask("Deleting items", lineItems.size());
+                    monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_DeletingItems, lineItems.size());
 
                     // XtentisPort port = Util.getPort(getXObject());
                     XtentisPort port = getPort();
 
                     int i = 0;
                     for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext();) {
-                        monitor.subTask("Processing item " + (i++));
+                        monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ProcessingItem + (i++));
                         if (monitor.isCanceled()) {
-                            MessageDialog.openWarning(this.parentShell, "User Canceled the delete",
-                                    "The deletes were canceled by the user on item " + i + "\n"
-                                            + "Some Items may have not been deleted");
+                            MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_UserCancelDel,
+                                    Messages.RoutingEngineV2BrowserMainPage_WarningMsg + i + Messages.RoutingEngineV2BrowserMainPage_WarningMsgA
+                                            + Messages.RoutingEngineV2BrowserMainPage_WarningMsgB);
                             return;
                         }
                         WSRoutingOrderV2 lineItem = iter.next();
@@ -920,8 +919,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     monitor.done();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, "Error Deleting",
-                            "An error occured trying to delete the items:\n\n " + e.getLocalizedMessage());
+                    MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorDel,
+                            Messages.RoutingEngineV2BrowserMainPage_WarningMsg1 + e.getLocalizedMessage());
                 }// try
 
             }// run
@@ -951,11 +950,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             setImageDescriptor(ImageCache.getImage("icons/execute.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
-                setText("Execute " + (synchronously ? "synchronously" : "asynchronously") + " the selected Routing Order ");
+                setText(Messages.RoutingEngineV2BrowserMainPage_Text + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_TextA);
             else
-                setText("Execute " + (synchronously ? "synchronously" : "asynchronously") + " the " + selection.size()
-                        + " selected Routing Order");
-            setToolTipText("Execute " + (synchronously ? "synchronously" : "asynchronously") + " the selected Routing Order"
+                setText(Messages.RoutingEngineV2BrowserMainPage_Text1 + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_Text1A + selection.size()
+                        + Messages.RoutingEngineV2BrowserMainPage_Text1B);
+            setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ActionTip + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ActionTipA
                     + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
@@ -970,9 +969,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 if (lineItems.size() == 0)
                     return;
 
-                if (!MessageDialog.openConfirm(this.shell, "Confirm Execution", "Are you sure you want to execute "
-                        + (synchronously ? "synchronously" : "asynchronously") + " the selected " + lineItems.size()
-                        + " Routing Orders?"))
+                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmTitle, Messages.RoutingEngineV2BrowserMainPage_ConfirmContent
+                        + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ConfirmContentA + lineItems.size()
+                        + Messages.RoutingEngineV2BrowserMainPage_B))
                     return;
 
                 // Instantiate the Monitor with actual deletes
@@ -986,8 +985,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to execute the Routing Order(s): " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg4, e.getLocalizedMessage()));
             }
         }
 
@@ -1013,7 +1012,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-                monitor.beginTask("Executing Routing Orders", lineItems.size());
+                monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrders, lineItems.size());
                 XtentisPort port = null;
 
                 try {
@@ -1021,20 +1020,20 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     port = getPort();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, "Error Executing",
-                            "An error occured trying to execute the Routing Order:\n\n " + e.getLocalizedMessage());
+                    MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
+                            Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg5, e.getLocalizedMessage()));
                 }// try
 
                 String results = "";//$NON-NLS-1$
                 for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext();) {
 
                     WSRoutingOrderV2 lineItem = iter.next();
-                    monitor.subTask("Executing Routing Order " + lineItem.getName());
+                    monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrder + lineItem.getName());
 
                     if (monitor.isCanceled()) {
-                        MessageDialog.openWarning(this.parentShell, "User Canceled the Execution",
-                                "The execution was canceled by the user on Routing Order " + lineItem.getName() + "\n"
-                                        + "Some Routing Orders may have not been executed");
+                        MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_WarningTitle,
+                                Messages.RoutingEngineV2BrowserMainPage_WraningMsg + lineItem.getName() + Messages.RoutingEngineV2BrowserMainPage_WraningMsgA
+                                        + Messages.RoutingEngineV2BrowserMainPage_WraningMsgB);
                         return;
                     }
 
@@ -1043,7 +1042,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                             WSString wsResult = port.executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
                                     new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
                             if (wsResult.getValue() != null)
-                                results += lineItem.getName() + ": " + wsResult.getValue();
+                                results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
                         } else {
                             port.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
                                     new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
@@ -1051,14 +1050,14 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                         monitor.worked(1);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
-                        MessageDialog.openError(shell, "Error Executing",
-                                "An error occured trying to execute the Routing Order:\n\n " + e.getLocalizedMessage());
+                        MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
+                                Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg6, e.getLocalizedMessage()));
                     }// try
 
                 }// for
 
                 monitor.done();
-                MessageDialog.openInformation(shell, "Execution Completed", lineItems.size() + " Routing Orders were executed"
+                MessageDialog.openInformation(shell, Messages.RoutingEngineV2BrowserMainPage_InfoTitle, lineItems.size() + Messages.RoutingEngineV2BrowserMainPage_InfoContent
                         + ("".equals(results) ? "" : "\n" + results));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
             }// run
@@ -1179,8 +1178,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error",
-                    "An error occured trying to start the router: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg7, e.getLocalizedMessage()));
         }
     }
 
@@ -1193,8 +1192,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error",
-                    "An error occured trying to susend the router: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg8, e.getLocalizedMessage()));
         }
     }
 
@@ -1207,8 +1206,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error",
-                    "An error occured trying to suspend the router: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg9, e.getLocalizedMessage()));
         }
     }
 
@@ -1221,8 +1220,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error",
-                    "An error occured trying to resume the router: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg10, e.getLocalizedMessage()));
         }
     }
 

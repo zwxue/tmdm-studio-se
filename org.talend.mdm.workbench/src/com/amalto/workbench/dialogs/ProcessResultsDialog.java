@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import com.amalto.workbench.editors.TransformerMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.webservices.WSExtractedContent;
 
 public class ProcessResultsDialog extends Dialog {
@@ -48,7 +49,7 @@ public class ProcessResultsDialog extends Dialog {
 
     private final static int BUTTON_CLOSE = 10;
 
-    private static final String DEFAULT_DISPLAY_TEXT = "Incoming document (_DEFAULT_)";
+    private static final String DEFAULT_DISPLAY_TEXT = Messages.ProcessResultsDialog_DefaultDisplayText;
 
     protected Combo variablesCombo;
 
@@ -81,7 +82,7 @@ public class ProcessResultsDialog extends Dialog {
 
             Label variableLabel = new Label(composite, SWT.NONE);
             variableLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
-            variableLabel.setText("Pipeline Variables");
+            variableLabel.setText(Messages.ProcessResultsDialog_PipelineVariables);
 
             variablesCombo = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
             variablesCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
@@ -118,15 +119,15 @@ public class ProcessResultsDialog extends Dialog {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getShell(), "Error",
-                    "An error occured trying to create the Views Search window: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getShell(), Messages._Error,
+                    Messages.bind(Messages.ProcessResultsDialog_ErrorMsg, e.getLocalizedMessage()));
             return null;
         }
 
     }
 
     protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, BUTTON_CLOSE, "Close", false);
+        createButton(parent, BUTTON_CLOSE, Messages.ProcessResultsDialog_Close, false);
     }
 
     protected void buttonPressed(int buttonId) {
@@ -160,7 +161,7 @@ public class ProcessResultsDialog extends Dialog {
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             ex.printStackTrace(new PrintWriter(sw));
-            return "ERROR - displaying the output with content type of " + contentType + "\n" + sw.toString();
+            return Messages.bind(Messages.ProcessResultsDialog_ErrorContent, contentType, sw.toString());
         }
     }
 
@@ -183,8 +184,8 @@ public class ProcessResultsDialog extends Dialog {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getShell(), Messages.ProcessResultsDialog_ErrorTitle,
+                    Messages.bind(Messages.ProcessResultsDialog_ErrorMsg1, e.getLocalizedMessage()));
         }
     }
 

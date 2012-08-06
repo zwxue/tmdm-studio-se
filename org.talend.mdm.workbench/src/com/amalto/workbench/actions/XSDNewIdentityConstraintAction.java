@@ -39,6 +39,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.IdentityConstraintInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
@@ -59,8 +60,8 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
     public XSDNewIdentityConstraintAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
-        setText("Add Key");
-        setToolTipText("Add a new Key");
+        setText(Messages.XSDNewIdentityConstraintAction_AddKey);
+        setToolTipText(Messages.XSDNewIdentityConstraintAction_AddANewKey);
     }
 
     public IStatus doAction() {
@@ -100,11 +101,11 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
                 // childNames.add(decl.getName());
 
             } else {
-                MessageDialog.openError(this.page.getSite().getShell(), "Error", "huhhh: "
-                        + selection.getFirstElement().getClass().getName());
+                MessageDialog.openError(this.page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDNewIdentityConstraintAction_ErrorMsg
+                        , selection.getFirstElement().getClass().getName()));
                 return Status.CANCEL_STATUS;
             }
-            childNames = Util.getChildElementNames("", decl);
+            childNames = Util.getChildElementNames("", decl); //$NON-NLS-1$
             // filter the non top level fields
             List<String> topChilds = new ArrayList<String>();
             for (String child : childNames) {
@@ -112,7 +113,7 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
                     topChilds.add(child);
                 }
             }
-            dialog = new IdentityConstraintInputDialog(decl, page.getSite().getShell(), "Add a new Key", topChilds,
+            dialog = new IdentityConstraintInputDialog(decl, page.getSite().getShell(), Messages.XSDNewIdentityConstraintAction_AddANewKey, topChilds,
                     decl.getName());
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();
@@ -131,11 +132,11 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
             icd.setIdentityConstraintCategory(type);
             XSDXPathDefinition selector = factory.createXSDXPathDefinition();
             selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-            selector.setValue(".");
+            selector.setValue("."); //$NON-NLS-1$
             icd.setSelector(selector);
             XSDXPathDefinition field = factory.createXSDXPathDefinition();
             field.setVariety(XSDXPathVariety.FIELD_LITERAL);
-            field.setValue(".");
+            field.setValue("."); //$NON-NLS-1$
             // if complex content set name of first field
             if (fieldName == null || fieldName.trim().length() == 0) {
                 if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
@@ -164,8 +165,8 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Key: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDNewIdentityConstraintAction_ErrorMsg2, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

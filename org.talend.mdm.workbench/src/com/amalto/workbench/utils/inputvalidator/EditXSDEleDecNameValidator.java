@@ -18,6 +18,8 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class EditXSDEleDecNameValidator implements IInputValidator {
 
     private XSDSchema schema;
@@ -29,15 +31,15 @@ public class EditXSDEleDecNameValidator implements IInputValidator {
     // @Override
     public String isValid(String newText) {
         if (newText == null || "".equals(newText.trim()))//$NON-NLS-1$
-            return "The Entity Name cannot be empty";
+            return Messages.EditXSDEleDecNameValidator_EntityNameCannotbeEmpty;
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                 || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
-            return "The name cannot contain the empty characters";
+            return Messages.EditXSDEleDecNameValidator_EntityNameCannotContainEmpty;
 
         for (XSDElementDeclaration eachElement : schema.getElementDeclarations()) {
             if (eachElement.getName().equals(newText.trim()))
-                return "This Entity already exists";
+                return Messages.EditXSDEleDecNameValidator_EntityAlreadyExist;
         }
 
         return null;

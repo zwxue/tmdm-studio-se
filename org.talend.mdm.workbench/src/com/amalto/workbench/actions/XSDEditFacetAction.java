@@ -49,6 +49,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import com.amalto.workbench.dialogs.FacetsListInputDialog;
 import com.amalto.workbench.dialogs.InputComboDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -70,8 +71,8 @@ public class XSDEditFacetAction extends UndoAction {
         super(page);
         this.facetName = facetName;
         setImageDescriptor(ImageCache.getImage(EImage.FACET.getPath()));
-        setText("Edit " + facetName);
-        setToolTipText("Edit the Facet " + facetName);
+        setText(Messages.bind(Messages.XSDEditFacetAction_Title, facetName));
+        setToolTipText(Messages.bind(Messages.XSDEditFacetAction_ActionTip, facetName));
     }
 
     public IStatus doAction() {
@@ -120,7 +121,7 @@ public class XSDEditFacetAction extends UndoAction {
             }
 
             else {
-                MessageDialog.openError(page.getSite().getShell(), "Error", "No editor available for the Facet: " + facetName);
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDEditFacetAction_ErrorMsg1, facetName));
                 return Status.CANCEL_STATUS;
             }
 
@@ -132,8 +133,8 @@ public class XSDEditFacetAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to edit a Facet: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDEditFacetAction_ErrorMsg2, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -159,7 +160,7 @@ public class XSDEditFacetAction extends UndoAction {
                 newValues = ((FacetsListInputDialog) dialog).getItems();
                 dialog.close();
             }
-        }, page.getSite().getShell(), "Edit Pattern Values", stringValues);
+        }, page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle1, stringValues);
 
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
@@ -192,7 +193,7 @@ public class XSDEditFacetAction extends UndoAction {
                 newValues = ((FacetsListInputDialog) dialog).getItems();
                 dialog.close();
             }
-        }, page.getSite().getShell(), "Edit Enumerations Values", stringValues);
+        }, page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle2, stringValues);
 
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
@@ -214,7 +215,7 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "Length Facet", "Enter a new value for the facet; 0 to remove it",
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle3, Messages.XSDEditFacetAction_DialogTitle3Tip,
                 stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
@@ -222,10 +223,10 @@ public class XSDEditFacetAction extends UndoAction {
                         try {
                             val = Integer.parseInt(newText);
                         } catch (Exception e) {
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         }
                         if (val < 0)
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         return null;
                     }
                 });
@@ -251,7 +252,7 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "MinLength Facet", "Enter a new value for the facet; 0 to remove it",
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle4, Messages.XSDEditFacetAction_DialogTitle4Tip,
                 stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
@@ -259,10 +260,10 @@ public class XSDEditFacetAction extends UndoAction {
                         try {
                             val = Integer.parseInt(newText);
                         } catch (Exception e) {
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         }
                         if (val < 0)
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         return null;
                     }
                 });
@@ -288,7 +289,7 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "MaxLength Facet", "Enter a new value for the facet; 0 to remove it",
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle5, Messages.XSDEditFacetAction_DialogTitle4Tip,
                 stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
@@ -296,10 +297,10 @@ public class XSDEditFacetAction extends UndoAction {
                         try {
                             val = Integer.parseInt(newText);
                         } catch (Exception e) {
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         }
                         if (val < 0)
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         return null;
                     }
                 });
@@ -324,18 +325,18 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle6,
+                Messages.XSDEditFacetAction_DialogTitle6Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         int val;
                         try {
                             val = Integer.parseInt(newText);
                         } catch (Exception e) {
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         }
                         if (val < 0)
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         return null;
                     }
                 });
@@ -359,18 +360,18 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle7,
+                Messages.XSDEditFacetAction_DialogTitle7Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         int val;
                         try {
                             val = Integer.parseInt(newText);
                         } catch (Exception e) {
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         }
                         if (val < 0)
-                            return "The value must be a non negative integer";
+                            return Messages.XSDEditFacetAction_ValueMustBeXX;
                         return null;
                     }
                 });
@@ -394,8 +395,8 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "MaxInclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle8,
+                Messages.XSDEditFacetAction_DialogTitle8Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         // double val;
@@ -431,8 +432,8 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "MaxExclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle9,
+                Messages.XSDEditFacetAction_DialogTitle9Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         // double val;
@@ -469,8 +470,8 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "MinInclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle10,
+                Messages.XSDEditFacetAction_DialogTitle10Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         // double val;
@@ -497,18 +498,18 @@ public class XSDEditFacetAction extends UndoAction {
         if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMinInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinInclusiveFacet();
             // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue())); //$NON-NLS-1$
             std.getFacetContents().add(f);
         }
     }
 
     private void editMinExclusive() {
         XSDMinExclusiveFacet currentValue = std.getMinExclusiveFacet();
-        String stringValue = "0";
+        String stringValue = "0"; //$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "MinExclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
+        dialog = new InputDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle11,
+                Messages.XSDEditFacetAction_DialogTitle11Tip, stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         // double val;
@@ -535,7 +536,7 @@ public class XSDEditFacetAction extends UndoAction {
         if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMinExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinExclusiveFacet();
             // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue())); //$NON-NLS-1$
             std.getFacetContents().add(f);
         }
     }
@@ -546,7 +547,7 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "preserve";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputComboDialog(page.getSite().getShell(), "WhiteSpace Facet", "Select a new value for the facet", values,
+        dialog = new InputComboDialog(page.getSite().getShell(), Messages.XSDEditFacetAction_DialogTitle12, Messages.XSDEditFacetAction_DialogTitle12Tip, values,
                 stringValue,null);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
@@ -596,10 +597,10 @@ public class XSDEditFacetAction extends UndoAction {
             int tempVal = Integer.parseInt(text);
 
             if (tempVal < 0)
-                return "The value must be a non negative int";
+                return Messages.XSDEditFacetAction_ValueMustBeXI;
 
         } catch (Exception e) {
-            return "The value must be a non negative int";
+            return Messages.XSDEditFacetAction_ValueMustBeXI;
         }
 
         return null;
@@ -612,10 +613,10 @@ public class XSDEditFacetAction extends UndoAction {
             Float tempVal = Float.parseFloat(text);
 
             if (tempVal < 0)
-                return "The value must be a non negative float";
+                return Messages.XSDEditFacetAction_ValueMustBeXF;
 
         } catch (Exception e) {
-            return "The value must be a non negative float";
+            return Messages.XSDEditFacetAction_ValueMustBeXF;
         }
 
         return null;
@@ -627,10 +628,10 @@ public class XSDEditFacetAction extends UndoAction {
             Double tempVal = Double.parseDouble(text);
 
             if (tempVal < 0)
-                return "The value must be a non negative double";
+                return Messages.XSDEditFacetAction_ValueMustBeXD;
 
         } catch (Exception e) {
-            return "The value must be a non negative double";
+            return Messages.XSDEditFacetAction_ValueMustBeXD;
         }
 
         return null;

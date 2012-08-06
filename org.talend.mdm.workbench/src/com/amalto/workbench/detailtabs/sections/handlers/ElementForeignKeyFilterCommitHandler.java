@@ -15,6 +15,7 @@ package com.amalto.workbench.detailtabs.sections.handlers;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class ElementForeignKeyFilterCommitHandler extends ListContentsCommitHandler<ForeignKeyFilterAnnoInfo> {
@@ -25,7 +26,7 @@ public class ElementForeignKeyFilterCommitHandler extends ListContentsCommitHand
 
     @Override
     protected String getMsgHeader() {
-        return "element foreign key filter";
+        return Messages.ElementForeignKeyFilterCommitHandler_MsgHeader;
     }
 
     @Override

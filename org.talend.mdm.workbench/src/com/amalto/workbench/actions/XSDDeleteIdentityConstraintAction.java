@@ -23,6 +23,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -35,8 +36,8 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
     public XSDDeleteIdentityConstraintAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete Key");
-        setToolTipText("Delete a Key");
+        setText(Messages.XSDDeleteXX_Text);
+        setToolTipText(Messages.XSDDeleteXX_ActionTip);
     }
 
     public void run(Object toDel) {
@@ -81,8 +82,8 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to remove Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDDeleteXX_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

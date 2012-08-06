@@ -28,6 +28,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -69,12 +70,11 @@ public class XObjectRevisionBrowser extends FormEditor {
             if (Util.hasUniverse(xobject))
                 addPage(new BrowseRevisionMainPage(this));
             else
-                MessageDialog.openError(this.getSite().getShell(), "Error", "Unsupported " + IConstants.TALEND + " Object Type: "
-                        + xobject.getType());
+                MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.bind(Messages.XObjectRevisionBrowser_ErrorMsg, IConstants.TALEND, xobject.getType()));
 
             // switch
         } catch (PartInitException e) {
-            MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :" + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.bind(Messages.XObjectRevisionBrowser_ErrorMsg1, e.getLocalizedMessage()));
         }
     }
 
@@ -95,7 +95,7 @@ public class XObjectRevisionBrowser extends FormEditor {
         try {
             this.saveInProgress = true;
             int numPages = formPages.size();
-            monitor.beginTask("Saving " + this.getEditorInput().getName(), numPages + 1);
+            monitor.beginTask(Messages.bind(Messages.XObjectRevisionBrowser_Saving, this.getEditorInput().getName()), numPages + 1);
             for (int i = 0; i < numPages; i++) {
                 if ((formPages.get(i)) instanceof AFormPage) {
                     if (!((AFormPage) (formPages.get(i))).beforeDoSave())

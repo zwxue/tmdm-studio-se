@@ -14,6 +14,7 @@ package com.amalto.workbench.detailtabs.sections.model.simpletype.propsource;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.IConstants;
 
 public class SimpleTypeFacetEnumPropertySource extends SimpleTypeFacetListStrPropertySource {
@@ -26,11 +27,11 @@ public class SimpleTypeFacetEnumPropertySource extends SimpleTypeFacetListStrPro
 
     @Override
     protected String getCellEditorDialogInputAreaLabel() {
-        return "Enumeration";
+        return Messages.SimpleTypeFacetEnumPropertySource_Enumeration;
     }
 
     @Override
     protected String getCellEditorDialogTitle() {
-        return "SimpleType Enumeration";
+        return Messages.SimpleTypeFacetEnumPropertySource_SimpleTypeEnumeration;
     }
 }

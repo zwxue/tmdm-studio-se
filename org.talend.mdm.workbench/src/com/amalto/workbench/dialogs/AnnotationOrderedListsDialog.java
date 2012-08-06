@@ -232,7 +232,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
             Button xpathButton = new Button(composite, SWT.PUSH | SWT.CENTER);
             xpathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             xpathButton.setText("...");//$NON-NLS-1$
-            xpathButton.setToolTipText("Select xpath");
+            xpathButton.setToolTipText(Messages.AnnotationOrderedListsDialog_SelectXpath);
             xpathButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(SelectionEvent e) {
@@ -260,7 +260,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         addLabelButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         // addLabelButton.setText("Set");
         addLabelButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-        addLabelButton.setToolTipText("Add");
+        addLabelButton.setToolTipText(Messages.AnnotationOrderedListsDialog_Add);
         addLabelButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -272,7 +272,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                     if (it.next().equals(getControlText(textControl)))
                         exist = true;
                 }
-                if (!exist && getControlText(textControl) != null && getControlText(textControl) != "")
+                if (!exist && getControlText(textControl) != null && getControlText(textControl) != "") //$NON-NLS-1$
                     xPaths.add(getControlText(textControl));
                 viewer.refresh();
             };
@@ -386,7 +386,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                         xPaths.add(value.toString());
                         viewer.update(line, null);
                     } else if (targetPos >= 0 && !value.toString().equals(orgValue)) {
-                        MessageDialog.openInformation(null, "Warnning", "The Value already exists");
+                        MessageDialog.openInformation(null, Messages.Warning, Messages.AnnotationOrderedListsDialog_ValueAlreadyExists);
                     }
                     return;
                 } else {
@@ -394,7 +394,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                     value = attrs[Integer.parseInt(value.toString())];
                     int pos = xPaths.indexOf(value.toString());
                     if (pos >= 0 && !(orgValue.equals(value))) {
-                        MessageDialog.openInformation(null, "Warnning", "The Value already exists");
+                        MessageDialog.openInformation(null, Messages.Warning, Messages.AnnotationOrderedListsDialog_);
                         return;
                     } else if (pos < 0) {
                         line.setLabel(value.toString());
@@ -463,7 +463,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         Button upButton = new Button(rightButtonsComposite, SWT.PUSH | SWT.CENTER);
         upButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
-        upButton.setToolTipText("Move up the selected item");
+        upButton.setToolTipText(Messages.AnnotationOrderedListsDialog_MoveUpTheItem);
         upButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -493,7 +493,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         Button downButton = new Button(rightButtonsComposite, SWT.PUSH | SWT.CENTER);
         downButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-        downButton.setToolTipText("Move down the selected item");
+        downButton.setToolTipText(Messages.AnnotationOrderedListsDialog_MoveDownTheItem);
         downButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -523,7 +523,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         Button delButton = new Button(rightButtonsComposite, SWT.PUSH | SWT.CENTER);
         delButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         delButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-        delButton.setToolTipText("Delete the selected item");
+        delButton.setToolTipText(Messages.AnnotationOrderedListsDialog_DelTheItem);
 
         delButton.addSelectionListener(new SelectionListener() {
 
@@ -575,7 +575,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 };
             });
             checkBox.setSelection(recursive);
-            checkBox.setText("set role recursively");
+            checkBox.setText(Messages.AnnotationOrderedListsDialog_SetRoleRecursively);
             // Label label = new Label(composite, SWT.LEFT);
             // label.setText("set role recursively");
             // label.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true,
@@ -593,7 +593,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
     }
 
     protected XpathSelectDialog getNewXpathSelectDialog(DataModelMainPage parentPage, String dataModelName) {
-        return new XpathSelectDialog(parentPage.getSite().getShell(), xObject.getParent(), "Select Xpath ...",
+        return new XpathSelectDialog(parentPage.getSite().getShell(), xObject.getParent(), Messages.AnnotationOrderedListsDialog_SelectXPathXX,
                 parentPage.getSite(), false, dataModelName);
     }
     @Override

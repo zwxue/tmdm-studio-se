@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.FontUtils;
 
 public class PluginDetailsDialog extends Dialog {
@@ -66,7 +67,7 @@ public class PluginDetailsDialog extends Dialog {
 
         try {
             // Should not really be here but well,....
-            parent.getShell().setText("Plugin Details");
+            parent.getShell().setText(Messages.PluginDetailsDialog_PluginDetails);
 
             Composite composite = new Composite(parent, SWT.NULL);
             GridLayout layout = new GridLayout();
@@ -85,8 +86,8 @@ public class PluginDetailsDialog extends Dialog {
             ((GridData) tabFolder.getLayoutData()).widthHint = 600;
 
             TabItem descriptionTI = new TabItem(tabFolder, SWT.NULL);
-            descriptionTI.setText("Description");
-            descriptionTI.setToolTipText("Display the plugin description and documentation");
+            descriptionTI.setText(Messages.PluginDetailsDialog_Description);
+            descriptionTI.setToolTipText(Messages.PluginDetailsDialog_DescriptionTip);
 
             Composite descriptionC = new Composite(tabFolder, SWT.NULL);
             descriptionC.setLayout(new GridLayout(1, true));
@@ -132,15 +133,15 @@ public class PluginDetailsDialog extends Dialog {
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getShell(), "Error",
-                    "An error occured trying to create the DOM Viewer " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getShell(), Messages._Error,
+                    Messages.bind(Messages.PluginDetailsDialog_ErrorMsg, e.getLocalizedMessage()));
             return null;
         }
 
     }
 
     protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, 0, "Close", true);
+        createButton(parent, 0, Messages.PluginDetailsDialog_Close, true);
     }
 
     protected void buttonPressed(int buttonId) {

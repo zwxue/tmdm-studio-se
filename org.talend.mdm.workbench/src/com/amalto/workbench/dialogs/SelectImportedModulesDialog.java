@@ -278,7 +278,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 InputDialog id = new InputDialog(shell.getShell(), Messages.AddXsdFromOther,
-                        Messages.EnterTextUrl, "", new IInputValidator() { 
+                        Messages.EnterTextUrl, "", new IInputValidator() {  //$NON-NLS-1$
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))//$NON-NLS-1$
@@ -302,7 +302,7 @@ public class SelectImportedModulesDialog extends Dialog {
         delLabelButton = new Button(compositeBtn, SWT.PUSH);
         delLabelButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
         delLabelButton.setText(Messages.DeleteXsdModule);
-        delLabelButton.setToolTipText(Messages.DeleteText);
+        delLabelButton.setToolTipText(Messages.Delete);
         delLabelButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {

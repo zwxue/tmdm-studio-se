@@ -39,6 +39,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.talend.mdm.commmon.util.core.ITransformerConstants;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class VariableDefinitionDialog extends Dialog {
 
     protected TableViewer descriptionsViewer;
@@ -49,7 +51,7 @@ public class VariableDefinitionDialog extends Dialog {
 
     private ArrayList<String> inputList = new ArrayList<String>();
 
-    private static String title = "Variable Assignment";
+    private static String title = Messages.VariableDefinitionDialog_VariableAssign;
 
     private static String SMART_VIEW_TRANSFORMER = "Smart_view";//$NON-NLS-1$
 
@@ -119,7 +121,7 @@ public class VariableDefinitionDialog extends Dialog {
         ((GridData) descriptionsViewer.getControl().getLayoutData()).heightHint = 100;
         // Set up the underlying table
         Table table = descriptionsViewer.getTable();
-        final String columnTitle = "Available Variables";
+        final String columnTitle = Messages.VariableDefinitionDialog_AvailableVariables;
         new TableColumn(table, SWT.CENTER).setText(columnTitle);
         table.getColumn(0).setWidth(350);
 

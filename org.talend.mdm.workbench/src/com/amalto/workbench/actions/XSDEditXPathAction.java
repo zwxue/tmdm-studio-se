@@ -31,6 +31,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SelectFieldDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -43,8 +44,8 @@ public class XSDEditXPathAction extends UndoAction {
     public XSDEditXPathAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-        setText("Edit Selector/Field");
-        setToolTipText("Edit a Selector/Field");
+        setText(Messages.XSDEditXPathAction_Text);
+        setToolTipText(Messages.XSDEditXPathAction_Tip);
     }
 
     public IStatus doAction() {
@@ -68,7 +69,7 @@ public class XSDEditXPathAction extends UndoAction {
             // List<String> childNames = Util.getChildElementNames("", (XSDElementDeclaration) icd.getContainer());
             List<String> childNames = new ArrayList<String>();
             childNames.add("."); //$NON-NLS-1$
-            SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), "Select one field", childNames,
+            SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), Messages.XSDEditXPathAction_DialogTitle, childNames,
                     xpath.getValue());
             id.create();
             id.setBlockOnOpen(true);
@@ -97,8 +98,8 @@ public class XSDEditXPathAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to edit a Field/Selector: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDEditXPathAction_ErrorMsg, e.getLocalizedMessage()));
 
             return Status.CANCEL_STATUS;
         }

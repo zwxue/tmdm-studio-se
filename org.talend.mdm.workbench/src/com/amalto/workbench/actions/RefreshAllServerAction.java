@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
@@ -34,8 +35,8 @@ public class RefreshAllServerAction extends Action {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
-        setText("Refresh");
-        setToolTipText("Refresh All the Server");
+        setText(Messages.RefreshAllServerAction_Text);
+        setToolTipText(Messages.RefreshAllServerAction_ActionTip);
     }
 
     @Override

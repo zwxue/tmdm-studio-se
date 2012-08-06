@@ -20,6 +20,8 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class EditXSDIdentityConstraintNameValidator implements IInputValidator {
 
     private XSDIdentityConstraintDefinition key;
@@ -40,20 +42,20 @@ public class EditXSDIdentityConstraintNameValidator implements IInputValidator {
     public String isValid(String newText) {
 
         if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-            return "The unique key name cannot be empty";
+            return Messages.EditXSDIdXXValidator_UniqueKeyNameCannotbeEmpty;
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                 || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
-            return "The unique key name cannot contain the empty characters";
+            return Messages.EditXSDIdXXValidator_UniqueKeyNameCannotContainEmpty;
 
         if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(key.getIdentityConstraintCategory())
                 && !newText.trim().equals(((XSDElementDeclaration) key.getContainer()).getName())) {
-            return "The unique key name must be equal to the name of it's parent entity";
+            return Messages.EditXSDIdXXValidator_UniqueKeyNameMustbeEqualXX;
         }
 
         for (XSDIdentityConstraintDefinition eachId : getSchema().getIdentityConstraintDefinitions()) {
             if (eachId.getName().equals(newText.trim()))
-                return "This Key already exists";
+                return Messages.EditXSDIdXXValidator_KeyAlreadyExist;
         }
 
         return null;

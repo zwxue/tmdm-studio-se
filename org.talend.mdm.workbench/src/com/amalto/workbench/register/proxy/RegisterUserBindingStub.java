@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.register.proxy;
 
+import com.amalto.workbench.i18n.Messages;
+
 /**
  * DOC mhirt class global comment. Detailled comment <br/>
  * 
@@ -302,7 +304,7 @@ public class RegisterUserBindingStub extends org.apache.axis.client.Stub impleme
             }
             return _call;
         } catch (java.lang.Throwable _t) {
-            throw new org.apache.axis.AxisFault("Failure trying to get the Call object", _t);
+            throw new org.apache.axis.AxisFault(Messages.RegisterUserBindingStub_ExceptionINfo, _t);
         }
     }
 

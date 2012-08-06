@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -128,7 +129,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         Button addLabelButton = new Button(composite, SWT.PUSH);
         addLabelButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         addLabelButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-        addLabelButton.setToolTipText("Add");
+        addLabelButton.setToolTipText(Messages.AnnotationLanguageLabelsDialog_Add);
         addLabelButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -141,8 +142,8 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
             };
         });
 
-        final String LANGUAGE = "Language";
-        final String LABEL = "Label";
+        final String LANGUAGE = Messages.AnnotationLanguageLabelsDialog_Language;
+        final String LABEL = Messages.AnnotationLanguageLabelsDialog_Label;
 
         descriptionsViewer = new TableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
         descriptionsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -165,7 +166,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         Button delLabelButton = new Button(composite, SWT.PUSH);
         delLabelButton.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 1, 1));
         delLabelButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-        delLabelButton.setToolTipText("Del");
+        delLabelButton.setToolTipText(Messages.AnnotationLanguageLabelsDialog_Del);
         delLabelButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -259,7 +260,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
                     if (orgIndx != Integer.parseInt(value.toString())) {
                         String newLang = attrs[Integer.parseInt(value.toString())];
                         if (descriptionsMap.containsKey(Util.lang2iso.get(newLang))) {
-                            MessageDialog.openInformation(null, "Warnning", "The Language already exists");
+                            MessageDialog.openInformation(null, Messages.Warnning, Messages.AnnotationLanguageLabelsDialog_InforContent);
                             return;
                         }
                         descriptionsMap.remove(Util.lang2iso.get(line.getLanguage()));

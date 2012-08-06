@@ -27,6 +27,7 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.inputvalidator.EditXSDIdentityConstraintNameValidator;
@@ -40,8 +41,8 @@ public class XSDEditIdentityConstraintAction extends UndoAction {
     public XSDEditIdentityConstraintAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-        setText("Edit Key");
-        setToolTipText("Edit a Key");
+        setText(Messages.XSDEditIdentityXX_EditKey);
+        setToolTipText(Messages.XSDEditIdentityXX_EditAKey);
     }
 
     public IStatus doAction() {
@@ -51,7 +52,7 @@ public class XSDEditIdentityConstraintAction extends UndoAction {
             constraint = (XSDIdentityConstraintDefinition) ((IStructuredSelection) selection).getFirstElement();
             String oldName = constraint.getName();
 
-            InputDialog id = new InputDialog(page.getSite().getShell(), "Edit Key", "Enter a new Name for the Key", oldName,
+            InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDEditIdentityXX_EditKey, Messages.XSDEditIdentityXX_EnterANameForKey, oldName,
                     new EditXSDIdentityConstraintNameValidator(constraint)
             // new IInputValidator() {
             // public String isValid(String newText) {
@@ -76,8 +77,8 @@ public class XSDEditIdentityConstraintAction extends UndoAction {
             if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(constraint.getIdentityConstraintCategory())
                     && !((XSDElementDeclaration) constraint.getContainer()).getName().equals(id.getValue())) {
 
-                MessageDialog.openWarning(page.getSite().getShell(), "Warning",
-                        "The name of the unique key should be same to the name of it's parent entity");
+                MessageDialog.openWarning(page.getSite().getShell(), Messages.Warning,
+                        Messages.XSDEditIdentityXX_WarningMsg);
                 return Status.CANCEL_STATUS;
             }
 
@@ -89,8 +90,8 @@ public class XSDEditIdentityConstraintAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to edit an Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDEditIdentityXX_ErrorEditEntity, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

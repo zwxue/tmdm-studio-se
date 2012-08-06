@@ -32,6 +32,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.dialogs.MDMXSDSchemaEntryDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -126,8 +127,8 @@ public class PasteXObjectAction extends Action {
 
     private void setDetails() {
         setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
-        setText("Paste");
-        setToolTipText("Paste this instance of the " + IConstants.TALEND + " Object");
+        setText(Messages._Paste);
+        setToolTipText(Messages.bind(Messages.PasteXObjectAction_ActionTip, IConstants.TALEND ));
     }
 
     public void setXtentisPort(TreeObject remoteTreeObject) {
@@ -149,8 +150,8 @@ public class PasteXObjectAction extends Action {
         try {
             super.run();
             if (this.view == null) {
-                MessageDialog.openError(view.getSite().getShell(), "Paste Error",
-                        "This function must be called from the Object View");
+                MessageDialog.openError(view.getSite().getShell(), Messages.PasteXObjectAction_DialogTitle1,
+                        Messages.PasteXObjectAction_ErrorMsg1);
                 return;
             }
 
@@ -174,10 +175,8 @@ public class PasteXObjectAction extends Action {
                                         .getWsKey())).is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Data Model with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -185,7 +184,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -223,10 +222,8 @@ public class PasteXObjectAction extends Action {
                                 .is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A View with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent2, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -234,7 +231,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -276,10 +273,8 @@ public class PasteXObjectAction extends Action {
                                         : (WSDataClusterPK) xobject.getWsKey())).is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Data Container with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent3, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -287,7 +282,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -327,10 +322,8 @@ public class PasteXObjectAction extends Action {
                                         : (WSStoredProcedurePK) xobject.getWsKey())).is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Stored Procedure with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent4, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -338,7 +331,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -378,10 +371,8 @@ public class PasteXObjectAction extends Action {
                                 .is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Role with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent5, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -389,7 +380,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -428,10 +419,8 @@ public class PasteXObjectAction extends Action {
                                         : (WSRoutingRulePK) xobject.getWsKey())).is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Trigger with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent6, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -439,7 +428,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -481,10 +470,8 @@ public class PasteXObjectAction extends Action {
                                         : (WSTransformerV2PK) xobject.getWsKey())).is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Process with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent7, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -492,7 +479,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -530,10 +517,8 @@ public class PasteXObjectAction extends Action {
                                 .is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Menu with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent8, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -541,7 +526,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -579,10 +564,8 @@ public class PasteXObjectAction extends Action {
                                         .getWsKey())).is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A Version with the name \""
-                                            + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                    Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
+                                    Messages.bind(Messages.PasteXObjectAction_MsgContent9, (latestValue != null ? newKey.getPk() : key.getPk())),
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -590,7 +573,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -631,10 +614,10 @@ public class PasteXObjectAction extends Action {
                                         : (WSSynchronizationPlanPK) xobject.getWsKey())).is_true()) {
                             InputDialog id = new InputDialog(
                                     view.getSite().getShell(),
-                                    "Pasting instance " + key.getPk(),
-                                    "A SynchronizationPlan with the name \""
+                                    Messages.PasteXObjectAction_DialogTitle2 + key.getPk(),
+                                    Messages.PasteXObjectAction_MsgContent10
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
-                                            + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
+                                            + Messages.PasteXObjectAction_MsgContent10t,
                                     "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
@@ -642,7 +625,7 @@ public class PasteXObjectAction extends Action {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                                return "The name cannot be empty";
+                                                return Messages.PasteXObjectAction_NameCannotBeEmpty;
                                             return null;
                                         };
                                     });
@@ -693,8 +676,8 @@ public class PasteXObjectAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error",
-                    "An error occured trying to copy: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                    Messages.PasteXObjectAction_ErrorMsg + e.getLocalizedMessage());
         } finally {
             keyTrackMap.clear();
             // refresh view
@@ -738,7 +721,7 @@ public class PasteXObjectAction extends Action {
                 }
 
                 MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(this.view.getSite().getShell(),
-                        "Select Concepts to be copied");
+                        Messages.PasteXObjectAction_DialogTitle3);
                 dlg.create();
                 dlg.retrieveDataModels(conceptList, true);
                 dlg.setOKButton(true);

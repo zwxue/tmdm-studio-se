@@ -350,9 +350,9 @@ public class SchemaItemLabelCreator {
                     } else if (source.equals("X_Retrieve_FKinfos")) {//$NON-NLS-1$
                         return "Foreign Key resolution:  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
                     } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
-                        return "Foreign Key integrity:  " + element.getChildNodes().item(0).getNodeValue();
+                        return "Foreign Key integrity:  " + element.getChildNodes().item(0).getNodeValue(); //$NON-NLS-1$
                     } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
-                        return "Foreign Key integrity override:  " + element.getChildNodes().item(0).getNodeValue();
+                        return "Foreign Key integrity override:  " + element.getChildNodes().item(0).getNodeValue(); //$NON-NLS-1$
                     }
                     if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
                         return "Foreign Key Filter:  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$

@@ -36,6 +36,7 @@ import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 
 public class TextViewDialog extends Dialog {
@@ -60,7 +61,7 @@ public class TextViewDialog extends Dialog {
 
         try {
             // Should not really be here but well,....
-            parent.getShell().setText("Text View");
+            parent.getShell().setText(Messages.TextViewDialog_TextView);
 
             Composite composite = (Composite) super.createDialogArea(parent);
             GridLayout layout = (GridLayout) composite.getLayout();
@@ -77,15 +78,15 @@ public class TextViewDialog extends Dialog {
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getShell(), "Error",
-                    "An error occured trying to create the Views Search window: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getShell(), Messages._Error,
+                    Messages.TextViewDialog_ErrorMsg + e.getLocalizedMessage());
             return null;
         }
 
     }
 
     protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, BUTTON_CLOSE, "Close", false);
+        createButton(parent, BUTTON_CLOSE, Messages.Close, false);
     }
 
     protected void buttonPressed(int buttonId) {

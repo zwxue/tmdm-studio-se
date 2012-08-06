@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.extra.LookupFieldsAnnoInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class LookupFieldsCommitHandler extends ListContentsCommitHandler<LookupFieldsAnnoInfo> {
@@ -28,7 +29,7 @@ public class LookupFieldsCommitHandler extends ListContentsCommitHandler<LookupF
 
     @Override
     protected String getMsgHeader() {
-        return "lookup fields";
+        return Messages.LookupFieldsCommitHandler_MsgHeader;
     }
 
     @Override

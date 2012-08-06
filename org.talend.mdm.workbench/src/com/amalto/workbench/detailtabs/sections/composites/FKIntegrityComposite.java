@@ -20,12 +20,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.amalto.workbench.detailtabs.sections.ElementFKSection;
+import com.amalto.workbench.i18n.Messages;
 
 public class FKIntegrityComposite extends Composite {
 
-	private static final String X_FK_INTEGRITY_OVERRIDE = "X_FKIntegrity_Override";
+	private static final String X_FK_INTEGRITY_OVERRIDE = "X_FKIntegrity_Override"; //$NON-NLS-1$
 
-	private static final String X_FK_INTEGRITY = "X_FKIntegrity";
+	private static final String X_FK_INTEGRITY = "X_FKIntegrity"; //$NON-NLS-1$
 
 	private final Button btnAllowFkIntegrity;
 
@@ -55,7 +56,7 @@ public class FKIntegrityComposite extends Composite {
 		setLayout(gridLayout);
 
 		btnEnforceFkIntegrity = new Button(this, SWT.FLAT | SWT.CHECK);
-		btnEnforceFkIntegrity.setText("Enforce FK integrity");
+		btnEnforceFkIntegrity.setText(Messages.FKIntegrityComposite_EnforceFKIntegrity);
 		btnEnforceFkIntegrity.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -73,7 +74,7 @@ public class FKIntegrityComposite extends Composite {
 		btnEnforceFkIntegrity.setSelection(true);
 
 		btnAllowFkIntegrity = new Button(this, SWT.CHECK);
-		btnAllowFkIntegrity.setText("Allow FK integrity override");
+		btnAllowFkIntegrity.setText(Messages.FKIntegrityComposite_AllowFKIntergrityOverride);
 		btnAllowFkIntegrity.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -112,7 +113,7 @@ public class FKIntegrityComposite extends Composite {
 
 		EList<Element> appInfo = annotation.getApplicationInformation();
 		for (Element currentElement : appInfo) {
-			String source = currentElement.getAttribute("source");
+			String source = currentElement.getAttribute("source"); //$NON-NLS-1$
 			if (X_FK_INTEGRITY.endsWith(source)) {
 				fkIntegrityElement = currentElement;
 			} else if (X_FK_INTEGRITY_OVERRIDE.endsWith(source)) {
@@ -150,7 +151,7 @@ public class FKIntegrityComposite extends Composite {
 		Element fkIntegrityOverrideElement = null;
 		EList<Element> appInfo = annotation.getApplicationInformation();
 		for (Element currentElement : appInfo) {
-			String source = currentElement.getAttribute("source");
+			String source = currentElement.getAttribute("source"); //$NON-NLS-1$
 			if (X_FK_INTEGRITY.endsWith(source)) {
 				fkIntegrityElement = currentElement;
 			} else if (X_FK_INTEGRITY_OVERRIDE.endsWith(source)) {
@@ -173,9 +174,9 @@ public class FKIntegrityComposite extends Composite {
 			Document ownerDocument = xsdDeclarationDomElement
 					.getOwnerDocument();
 			property = ownerDocument.createElementNS(
-					xsdDeclarationDomElement.getNamespaceURI(), "appinfo");
-			property.setPrefix("xsd");
-			property.setAttribute("source", type);
+					xsdDeclarationDomElement.getNamespaceURI(), "appinfo"); //$NON-NLS-1$
+			property.setPrefix("xsd"); //$NON-NLS-1$
+			property.setAttribute("source", type); //$NON-NLS-1$
 			property.setTextContent(Boolean.toString(value));
 
 			xsdComponent.getAnnotation().getApplicationInformation()
@@ -215,13 +216,11 @@ public class FKIntegrityComposite extends Composite {
 	public void setXSDComponent(XSDComponent xsdComponent) {
 		if (xsdComponent == null) {
 			throw new IllegalArgumentException(
-					"Argument xsdComponent can not be null");
+					Messages.FKIntegrityComposite_ArgCannotbeNull);
 		}
 		if (!(xsdComponent instanceof XSDParticle)) {
-			throw new IllegalArgumentException(
-					"Argument xsdComponent has not expected type (expected: "
-							+ XSDElementDeclaration.class.getName()
-							+ " but got " + xsdComponent.getClass().getName());
+            throw new IllegalArgumentException(Messages.bind(Messages.FKIntegrityComposite_ExceptionInfo,
+                    XSDElementDeclaration.class.getName(), xsdComponent.getClass().getName()));
 		}
 
 		// Take into account only component change

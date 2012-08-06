@@ -42,6 +42,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.providers.XSDNamedComponentLabelProvider;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.ListContentProvider;
 import com.amalto.workbench.providers.datamodel.SchemaElementSorter;
 import com.amalto.workbench.utils.Util;
@@ -76,14 +77,14 @@ public class ComplexTypeConfigComposite extends Composite {
         setLayout(gridLayout);
 
         final Label lblName = new Label(this, SWT.NONE);
-        lblName.setText("Name");
+        lblName.setText(Messages.ComplexTypeConfigComposite_Name);
 
         txtName = new Text(this, SWT.BORDER);
         final GridData gd_txtName = new GridData(SWT.FILL, SWT.CENTER, true, false);
         txtName.setLayoutData(gd_txtName);
 
         final Label extensionLabel = new Label(this, SWT.NONE);
-        extensionLabel.setText("Extends");
+        extensionLabel.setText(Messages.ComplexTypeConfigComposite_Extends);
 
         comboExtends = new ComboViewer(this, SWT.READ_ONLY);
         comboExtends.setContentProvider(new ListContentProvider());
@@ -93,7 +94,7 @@ public class ComplexTypeConfigComposite extends Composite {
         combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
         final Group gpGroup = new Group(this, SWT.NONE);
-        gpGroup.setText("Sub-Elements Group");
+        gpGroup.setText(Messages.ComplexTypeConfigComposite_SubElementsGroup);
         final GridData gd_gpGroup = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
         gpGroup.setLayoutData(gd_gpGroup);
         gpGroup.setLayout(new GridLayout());
@@ -137,7 +138,7 @@ public class ComplexTypeConfigComposite extends Composite {
 
     private void fillUIContentsInTxtName() {
         removeNameTxtListener();
-        String name = complexType.getName() == null ? "" : complexType.getName();
+        String name = complexType.getName() == null ? "" : complexType.getName(); //$NON-NLS-1$
         txtName.setText(name);
         if (name != null) {
             int length = name.length();

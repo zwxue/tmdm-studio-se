@@ -33,6 +33,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -46,8 +47,8 @@ public class XSDAnnotationLookupFieldsAction extends UndoAction {
     public XSDAnnotationLookupFieldsAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.BROWSE.getPath()));
-        setText("Set Lookup Fields");
-        setToolTipText("Set Lookup Fields");
+        setText(Messages.XSDAnnotationLookupFieldsAction_SetLookupFields);
+        setToolTipText(Messages.XSDAnnotationLookupFieldsAction_SetLookupFields);
     }
 
     public IStatus doAction() {
@@ -69,7 +70,7 @@ public class XSDAnnotationLookupFieldsAction extends UndoAction {
             // XSDAnnotationsStructure struc = new XSDAnnotationsStructure(
             // (XSDComponent) selection.getFirstElement());
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.bind(Messages.XSDAnnotationLookupFieldsAction_ExceptionInfo, xSDCom.getClass().getName()));
             }
 
             dlg = new AnnotationOrderedListsDialog(new ArrayList(struc.getLookupFields().values()), new SelectionListener() {
@@ -80,7 +81,7 @@ public class XSDAnnotationLookupFieldsAction extends UndoAction {
                 public void widgetSelected(SelectionEvent e) {
                     dlg.close();
                 }
-            }, page.getSite().getShell(), "Set Lookup Fields", "Lookup Fields", page,
+            }, page.getSite().getShell(), Messages.XSDAnnotationLookupFieldsAction_SetLookupFields, Messages.XSDAnnotationLookupFieldsAction_LookupFields, page,
                     AnnotationOrderedListsDialog.AnnotationLookupField_ActionType, null);
 
             dlg.setBlockOnOpen(true);
@@ -100,8 +101,8 @@ public class XSDAnnotationLookupFieldsAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set the Lookup Fields: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDAnnotationLookupFieldsAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

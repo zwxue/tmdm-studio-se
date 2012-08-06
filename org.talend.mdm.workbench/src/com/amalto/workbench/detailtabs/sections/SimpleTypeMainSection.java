@@ -19,6 +19,7 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import com.amalto.workbench.detailtabs.sections.composites.SimpleTypeConfigComposite;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.simpletype.SimpleTypeWrapper;
+import com.amalto.workbench.i18n.Messages;
 
 public class SimpleTypeMainSection extends CommitBarListenerSection<XSDSimpleTypeDefinition> {
 
@@ -50,7 +51,7 @@ public class SimpleTypeMainSection extends CommitBarListenerSection<XSDSimpleTyp
 
     @Override
     protected String getSectionTitle() {
-        return "Main";
+        return Messages.SimpleTypeMainSection_Main;
     }
 
     @Override

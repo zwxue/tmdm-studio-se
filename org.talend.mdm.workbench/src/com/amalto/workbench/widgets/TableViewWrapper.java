@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.TransformerMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 
 public class TableViewWrapper {
@@ -53,8 +54,8 @@ public class TableViewWrapper {
         public DeleteItemAction(ObserverMetaData obsv) {
             super();
             setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
-            setText("Delete the selected item(s)");
-            setToolTipText("Delete the selected item(s)");
+            setText(Messages.TableViewWrapper_DelSelectItems);
+            setToolTipText(Messages.TableViewWrapper_DelSelectItems);
 
             observer = obsv;
         }
@@ -76,8 +77,8 @@ public class TableViewWrapper {
         public RenameItemAction(ObserverMetaData obsv) {
             super();
             setImageDescriptor(ImageCache.getImage("icons/rename.png"));//$NON-NLS-1$
-            setText("Rename");
-            setToolTipText("Rename");
+            setText(Messages.TableViewWrapper_Rename);
+            setToolTipText(Messages.TableViewWrapper_Rename);
 
             observer = obsv;
         }

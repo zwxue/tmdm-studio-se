@@ -35,6 +35,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -51,8 +52,8 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
     public XSDChangeBaseTypeAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.CHANGE_TO_SIMPLE.getPath()));
-        setText("Change Base Type");
-        setToolTipText("Change the Base Type of the Element Simple Type");
+        setText(Messages.XSDChangeBaseTypeAction_Text);
+        setToolTipText(Messages.XSDChangeBaseTypeAction_ActionTip);
         setDescription(getToolTipText());
     }
 
@@ -87,7 +88,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
             if(builtInTypes.contains(typedef.getName())){
             	return Status.CANCEL_STATUS;
             }
-            dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, "Change Base Type", customTypes,
+            dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeBaseTypeAction_DialogTitle, customTypes,
                     builtInTypes);
 
             dialog.setBlockOnOpen(true);
@@ -143,8 +144,8 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to change the Base Type Definition: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDChangeBaseTypeAction_ErrorMsg1, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -178,7 +179,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
                     }
             }
             if (!found) {
-                MessageDialog.openError(page.getSite().getShell(), "Error", "The built-in type " + typeName + " does not exist");
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDChangeBaseTypeAction_ErrorMsg2, typeName));
                 return;
             }
         }

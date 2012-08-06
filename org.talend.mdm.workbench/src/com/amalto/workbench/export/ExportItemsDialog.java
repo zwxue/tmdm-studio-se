@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
@@ -77,7 +78,7 @@ public class ExportItemsDialog extends Dialog {
 
     @Override
     protected Control createDialogArea(Composite parent) {
-        parent.getShell().setText("Data Container Export");
+        parent.getShell().setText(Messages.ExportItemsDialog_DialogTitle);
         Composite composite = (Composite) super.createDialogArea(parent);
         composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
         GridLayout layout = (GridLayout) composite.getLayout();
@@ -161,12 +162,12 @@ public class ExportItemsDialog extends Dialog {
     protected void okPressed() {
         // /db/CONF -d c:/CONF.zip";
         if (comboDataCluster.getCombo().getText().trim().length() == 0) {
-            MessageDialog.openError(null, "Error", "Data Container should not be null!");
+            MessageDialog.openError(null, Messages._Error, Messages.ExportItemsDialog_ErrorMsg);
             comboDataCluster.getCombo().setFocus();
             return;
         }
         if (fw.getText().getText().trim().length() == 0) {
-            MessageDialog.openError(null, "Error", "Target should not be null!");
+            MessageDialog.openError(null, Messages._Error, Messages.ExportItemsDialog_ErrorMsg1);
             fw.getText().setFocus();
             return;
         }
@@ -180,12 +181,12 @@ public class ExportItemsDialog extends Dialog {
         dataCluster = comboDataCluster.getCombo().getText();
         dataCluster = xpathMap.get(dataCluster);
         filename = fw.getText().getText().trim();
-        Job job = new Job("Export Data Containers : " + dataCluster + " ...") {//$NON-NLS-2$
+        Job job = new Job(Messages.bind(Messages.ExportItemsDialog_JobName, dataCluster + " ...")) {//$NON-NLS-1$
 
             @Override
             public IStatus run(IProgressMonitor monitor) {
                 try {
-                    monitor.beginTask("Export Data Containers : " + dataCluster + " ...", IProgressMonitor.UNKNOWN);
+                    monitor.beginTask(Messages.bind(Messages.ExportItemsDialog_TaskName, dataCluster), IProgressMonitor.UNKNOWN);
                     // Util.exportDataCluster(xObject, dataCluster, filename,server, monitor);
                     monitor.done();
                     return Status.OK_STATUS;

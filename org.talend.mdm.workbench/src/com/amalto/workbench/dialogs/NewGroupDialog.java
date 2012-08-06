@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class NewGroupDialog extends Dialog {
 
     protected Button sequenceButton = null;
@@ -55,7 +57,7 @@ public class NewGroupDialog extends Dialog {
 
     protected Control createDialogArea(Composite parent) {
         // Should not really be here but well,....
-        parent.getShell().setText("Add Group");
+        parent.getShell().setText(Messages.NewGroupDialog_DialogTitle);
 
         final Composite composite = (Composite) super.createDialogArea(parent);
 
@@ -64,24 +66,24 @@ public class NewGroupDialog extends Dialog {
         // layout.verticalSpacing = 10;
 
         Group radioGroup = new Group(composite, SWT.SHADOW_NONE);
-        radioGroup.setText("Sub-Elements Group");
+        radioGroup.setText(Messages.NewGroupDialog_SubElementGroup);
         radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
         radioGroup.setLayout(new GridLayout(1, false));
         allButton = new Button(radioGroup, SWT.RADIO);
-        allButton.setText("All");
+        allButton.setText(Messages.NewGroupDialog_All);
         allButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         allButton.setSelection(true);
 
         sequenceButton = new Button(radioGroup, SWT.RADIO);
-        sequenceButton.setText("Sequence");
+        sequenceButton.setText(Messages.NewGroupDialog_Sequence);
         sequenceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         choiceButton = new Button(radioGroup, SWT.RADIO);
-        choiceButton.setText("Choice");
+        choiceButton.setText(Messages.NewGroupDialog_Choice);
         choiceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         Label minOccursLabel = new Label(composite, SWT.NONE);
         minOccursLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        minOccursLabel.setText("Minimum Occurence");
+        minOccursLabel.setText(Messages.NewGroupDialog_MinOccurence);
 
         minOccursText = new Text(composite, SWT.NONE);
         minOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -90,7 +92,7 @@ public class NewGroupDialog extends Dialog {
 
         Label maxOccursLabel = new Label(composite, SWT.NONE);
         maxOccursLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        maxOccursLabel.setText("Maximum Occurence");
+        maxOccursLabel.setText(Messages.NewGroupDialog_MaxOccurence);
 
         maxOccursText = new Text(composite, SWT.NONE);
         maxOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -117,13 +119,13 @@ public class NewGroupDialog extends Dialog {
         try {
             minOccurs = Integer.parseInt(minOccursText.getText());
         } catch (Exception e1) {
-            MessageDialog.openError(this.getShell(), "Error", "The Minimum Occurence must be greater or equal to Zero");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.NewGroupDialog_ErrorMsg);
             setReturnCode(-1);
             minOccursText.setFocus();
             return;
         }
         if (minOccurs < 0) {
-            MessageDialog.openError(this.getShell(), "Error", "The Minimum Occurence must be greater or equal to Zero");
+            MessageDialog.openError(this.getShell(), Messages._Error, Messages.NewGroupDialog_ErrorMsg);
             setReturnCode(-1);
             minOccursText.setFocus();
             return;
@@ -135,7 +137,7 @@ public class NewGroupDialog extends Dialog {
             try {
                 maxOccurs = Integer.parseInt(maxOccursText.getText());
             } catch (Exception e2) {
-                MessageDialog.openError(this.getShell(), "Error", "The Maximum Occurence must be a Number or Blank (unbounded).");
+                MessageDialog.openError(this.getShell(), Messages._Error, Messages.NewGroupDialog_ErrorMsg1);
                 setReturnCode(-1);
                 maxOccursText.setFocus();
                 return;

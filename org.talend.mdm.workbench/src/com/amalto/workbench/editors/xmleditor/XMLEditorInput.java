@@ -17,6 +17,8 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class XMLEditorInput implements IEditorInput {
 
     Document document;
@@ -45,7 +47,7 @@ public class XMLEditorInput implements IEditorInput {
 
     public String getName() {
         
-        return "document";
+        return Messages.XMLEditorInput_Document;
     }
 
     public IPersistableElement getPersistable() {
@@ -55,7 +57,7 @@ public class XMLEditorInput implements IEditorInput {
 
     public String getToolTipText() {
         
-        return "tooltip";
+        return Messages.XMLEditorInput_Tooltip;
     }
 
     public Object getAdapter(Class adapter) {

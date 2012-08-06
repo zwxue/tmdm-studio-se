@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.editors.XObjectBrowser;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -40,8 +41,8 @@ public class BrowseViewAction extends Action {
         this.server = serverView;
 
         setImageDescriptor(ImageCache.getImage(EImage.BROWSE.getPath()));
-        setText("Test");
-        setToolTipText("Browse Content");
+        setText(Messages.BrowseViewAction_Test);
+        setToolTipText(Messages.BrowseViewAction_BrowseContent);
     }
 
     public void setObject(TreeObject obj) {
@@ -64,7 +65,7 @@ public class BrowseViewAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(server.getSite().getShell(), "Error", "An error occured trying to open the view browser: "
+            MessageDialog.openError(server.getSite().getShell(), Messages._Error, Messages.BrowseViewAction_ErrorMsg
                     + e.getLocalizedMessage());
         }
     }

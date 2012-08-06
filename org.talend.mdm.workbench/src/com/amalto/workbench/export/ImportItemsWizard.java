@@ -74,6 +74,7 @@ import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
@@ -192,7 +193,7 @@ public class ImportItemsWizard extends Wizard {
     }
 
     protected void refreshViewJob() {
-        new UIJob("Refreshing server") {
+        new UIJob(Messages.ImportItemsWizard_0) {
 
             @Override
             public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -224,7 +225,7 @@ public class ImportItemsWizard extends Wizard {
         }
 
         final Object[] objs = getCheckedObjects();
-        UIJob job = new UIJob("Import Objects ...") {
+        UIJob job = new UIJob(Messages.ImportItemsWizard_1) {
 
             @Override
             public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -263,8 +264,8 @@ public class ImportItemsWizard extends Wizard {
     private void closeOpenEditors() {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         int length = page.getEditors().length;
-        String version = "";
-        String tabEndpointAddress = "";
+        String version = Messages.ImportItemsWizard_2;
+        String tabEndpointAddress = Messages.ImportItemsWizard_3;
         String unserName = null;
         int j = 0;
         for (int i = 0; i < length; i++) {
@@ -298,8 +299,8 @@ public class ImportItemsWizard extends Wizard {
     }
 
     private boolean isSaveModifiedEditor(String editorName) {
-        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), "Save Resource", null, "'" + editorName
-                + "' has been modified. Save changes?", MessageDialog.QUESTION, new String[] { IDialogConstants.YES_LABEL,
+        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.ImportItemsWizard_4, null, Messages.ImportItemsWizard_5 + editorName
+                + Messages.ImportItemsWizard_6, MessageDialog.QUESTION, new String[] { IDialogConstants.YES_LABEL,
                 IDialogConstants.NO_LABEL }, 0);
         dialog.open();
         if (dialog.getReturnCode() == 0)
@@ -365,7 +366,7 @@ public class ImportItemsWizard extends Wizard {
         int total = 500, zipCount = 200, readCount = 100;
         int step = 1, interval = 1;
         //
-        monitor.beginTask("ImportItem", total);
+        monitor.beginTask(Messages.ImportItemsWizard_7, total);
 
         if (importFromArchieve) {
             checkUpExchangeImport(true);
@@ -376,7 +377,7 @@ public class ImportItemsWizard extends Wizard {
             }
         }
         monitor.worked(zipCount);
-        monitor.setTaskName("Reading items...");
+        monitor.setTaskName(Messages.ImportItemsWizard_8);
         InputStreamReader reader = null;
         try {
             reader = new InputStreamReader(new FileInputStream(importFolder + "/exportitems.xml"), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
@@ -463,7 +464,7 @@ public class ImportItemsWizard extends Wizard {
                 interval = Math.round(exports.getItems().length / (total - zipCount - readCount) + 0.5f);
             }
             // System.out.println("count:" + exports.getItems().length + "\tinterval:" + interval + "\tstep:" + step);
-            monitor.setTaskName("Importing item...");
+            monitor.setTaskName(Messages.ImportItemsWizard_9);
             //
             int tmp = 1;
             for (TreeObject obj : exports.getItems()) {
@@ -508,8 +509,8 @@ public class ImportItemsWizard extends Wizard {
                 default:
                     if (obj.getItems() != null && obj.getItems().length > 0) {
                         for (int i = 0; i < obj.getItems().length; i++) {
-                            if (obj.getItems()[i].split("/")[1] != null)
-                                dataClusterContent.put(obj.getItems()[i].split("/")[1], obj.getItems());
+                            if (obj.getItems()[i].split(Messages.ImportItemsWizard_10)[1] != null)
+                                dataClusterContent.put(obj.getItems()[i].split(Messages.ImportItemsWizard_11)[1], obj.getItems());
                         }
                     }
                 }
@@ -560,9 +561,9 @@ public class ImportItemsWizard extends Wizard {
 
     private int isOveride(String name, String obTypeName) {
 
-        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), "Confirm Overwrite", null,
-                "There is already a " + obTypeName + " named " + name
-                        + ". Do you really want to overwrite it with the new one when the export runs?", MessageDialog.QUESTION,
+        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.ImportItemsWizard_12, null,
+                Messages.ImportItemsWizard_13 + obTypeName + Messages.ImportItemsWizard_14 + name
+                        + Messages.ImportItemsWizard_15, MessageDialog.QUESTION,
                 new String[] { IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL,
                         IDialogConstants.CANCEL_LABEL }, 0);
         dialog.open();
@@ -587,7 +588,7 @@ public class ImportItemsWizard extends Wizard {
         }
         if (objs == null || objs.length == 0)
             return;
-        monitor.beginTask("Import ...", IProgressMonitor.UNKNOWN);
+        monitor.beginTask(Messages.ImportItemsWizard_16, IProgressMonitor.UNKNOWN);
         Reader reader = null;
         // sort the objs for first import data_model.
         Arrays.sort(objs, new Comparator<Object>() {
@@ -622,7 +623,7 @@ public class ImportItemsWizard extends Wizard {
 
             case TreeObject.DATA_CLUSTER:
                 // datacluster
-                monitor.subTask(" Data Container...");
+                monitor.subTask(Messages.ImportItemsWizard_17);
                 subItems = item.getItems();
 
                 for (String subItem : subItems) {
@@ -659,13 +660,13 @@ public class ImportItemsWizard extends Wizard {
                     try {
                         importClusterContents(item, port, picturePathMap);
                     } catch (Exception e) {
-                        MessageDialog.openWarning(null, "Warning", e.getLocalizedMessage());
+                        MessageDialog.openWarning(null, Messages.Warning, e.getLocalizedMessage());
                     }
                 }
                 monitor.worked(1);
                 break;
             case TreeObject.DATA_MODEL:
-                monitor.subTask(" Data Model...");
+                monitor.subTask(Messages.ImportItemsWizard_19);
                 subItems = item.getItems();
 
                 for (String subItem : subItems) {
@@ -703,7 +704,7 @@ public class ImportItemsWizard extends Wizard {
                 monitor.worked(1);
                 break;
             case TreeObject.MENU:
-                monitor.subTask(" Menu...");
+                monitor.subTask(Messages.ImportItemsWizard_20);
                 subItems = item.getItems();
 
                 for (String subItem : subItems) {
@@ -742,7 +743,7 @@ public class ImportItemsWizard extends Wizard {
                 break;
             case TreeObject.ROLE:
                 if (Util.IsEnterPrise()) {
-                    monitor.subTask(" Role...");
+                    monitor.subTask(Messages.ImportItemsWizard_21);
                     subItems = item.getItems();
 
                     for (String subItem : subItems) {
@@ -781,7 +782,7 @@ public class ImportItemsWizard extends Wizard {
                 }
                 break;
             case TreeObject.ROUTING_RULE:
-                monitor.subTask(" Trigger...");
+                monitor.subTask(Messages.ImportItemsWizard_22);
                 subItems = item.getItems();
 
                 for (String subItem : subItems) {
@@ -826,7 +827,7 @@ public class ImportItemsWizard extends Wizard {
                 monitor.worked(1);
                 break;
             case TreeObject.STORED_PROCEDURE:
-                monitor.subTask(" Stored Procedure...");
+                monitor.subTask(Messages.ImportItemsWizard_23);
                 subItems = item.getItems();
 
                 for (String subItem : subItems) {
@@ -869,7 +870,7 @@ public class ImportItemsWizard extends Wizard {
                 break;
             case TreeObject.SYNCHRONIZATIONPLAN:
                 if (Util.IsEnterPrise()) {
-                    monitor.subTask(" Synchronization Plan...");
+                    monitor.subTask(Messages.ImportItemsWizard_24);
                     subItems = item.getItems();
 
                     for (String subItem : subItems) {
@@ -911,7 +912,7 @@ public class ImportItemsWizard extends Wizard {
 
             // add by ymli. fix the bug:0012882: Allow workflow bars to be imported
             case TreeObject.WORKFLOW_PROCESS:
-                monitor.subTask("Workflow...");
+                monitor.subTask(Messages.ImportItemsWizard_25);
                 // available models
                 java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
                 for (IAvailableModel model : availablemodels) {
@@ -922,7 +923,7 @@ public class ImportItemsWizard extends Wizard {
                 monitor.worked(1);
                 break;
             case TreeObject.TRANSFORMER:
-                monitor.subTask(" Process...");
+                monitor.subTask(Messages.ImportItemsWizard_26);
                 subItems = item.getItems();
 
                 for (String subItem : subItems) {
@@ -989,7 +990,7 @@ public class ImportItemsWizard extends Wizard {
                 break;
             case TreeObject.UNIVERSE:
                 if (Util.IsEnterPrise()) {
-                    monitor.subTask(" Version...");
+                    monitor.subTask(Messages.ImportItemsWizard_27);
                     subItems = item.getItems();
 
                     for (String subItem : subItems) {
@@ -1028,7 +1029,7 @@ public class ImportItemsWizard extends Wizard {
                 }
                 break;
             case TreeObject.VIEW:
-                monitor.subTask(" View...");
+                monitor.subTask(Messages.ImportItemsWizard_28);
                 subItems = item.getItems();
 
                 for (String subItem : subItems) {
@@ -1169,14 +1170,14 @@ public class ImportItemsWizard extends Wizard {
                 }
                 try {
                     InputStreamMerger manager = bulkloadClient.load();
-                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));
+                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes(Messages.ImportItemsWizard_29));
                     manager.push(bin);
                     // bulkloadClient.load(sb.toString());
                     manager.close();
                 } catch (Exception e) {
                     // MessageDialog.openWarning(null, "Warning", "Importing  Entity: "+ concept+
                     // " in Data Container: "+cluster + " Error --> "+e.getLocalizedMessage());
-                    throw new Exception("Importing  Entity: " + concept + " in Data Container: " + cluster + " occurs error --> "
+                    throw new Exception(Messages.ImportItemsWizard_30 + concept + Messages.ImportItemsWizard_31 + cluster + Messages.ImportItemsWizard_32
                             + e.getLocalizedMessage());
                 }
             }
@@ -1212,8 +1213,8 @@ public class ImportItemsWizard extends Wizard {
     class SelectItemsPage extends WizardPage {
 
         protected SelectItemsPage() {
-            super("SelectFileOrFolderPage");
-            setTitle("Select folder or file to import");
+            super(Messages.ImportItemsWizard_33);
+            setTitle(Messages.ImportItemsWizard_34);
 
             // Page isn't complete until an e-mail address has been added
             setPageComplete(false);
@@ -1239,7 +1240,7 @@ public class ImportItemsWizard extends Wizard {
 
             folderBtn = new Button(composite, SWT.RADIO);
             folderBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            folderBtn.setText("Select root directory:");
+            folderBtn.setText(Messages.ImportItemsWizard_35);
             folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             // folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
             // false, 1, 1));
@@ -1261,7 +1262,7 @@ public class ImportItemsWizard extends Wizard {
 
             zipBtn = new Button(composite, SWT.RADIO);
             zipBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            zipBtn.setText("Select archive file:");
+            zipBtn.setText(Messages.ImportItemsWizard_36);
             zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             // zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
             // false, 1, 1));
@@ -1271,7 +1272,7 @@ public class ImportItemsWizard extends Wizard {
 
             final Button exchangeBtn = new Button(composite, SWT.PUSH);
             exchangeBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, false, 1, 1));
-            exchangeBtn.setText("Import from Talend Exchange");
+            exchangeBtn.setText(Messages.ImportItemsWizard_37);
             exchangeBtn.setEnabled(false);
             exchangeBtn.addSelectionListener(new SelectionListener() {
 
@@ -1329,7 +1330,7 @@ public class ImportItemsWizard extends Wizard {
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = treeViewer.createItemList(composite);
         treeViewer.getViewer().setInput(null);
-        treeViewer.setItemText("Select items to import:");
+        treeViewer.setItemText(Messages.ImportItemsWizard_38);
         return returnComposite;
     }
 

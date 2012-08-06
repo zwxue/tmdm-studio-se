@@ -26,6 +26,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import com.amalto.workbench.actions.RefreshCurrentEditorAction;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 
@@ -72,7 +73,7 @@ public abstract class AFormPage extends FormPage {
         if (editor instanceof IServerObjectEditorState) {
             if (((IServerObjectEditorState) editor).isReadOnly()) {
                 form.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
-                form.setText(form.getText() + " (Read Only)");
+                form.setText(form.getText() + Messages.AFormPage_ReadOnly);
                 if (parent != null) {
                     for (Control control : parent.getChildren()) {
                         control.setEnabled(false);

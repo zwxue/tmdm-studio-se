@@ -73,6 +73,7 @@ import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.QueryParametersDialog;
 import com.amalto.workbench.dialogs.TextViewDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
@@ -110,10 +111,10 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
     private Button refreshCacheBtn;
 
-    private final static String[] KEYWORDS = new String[] {"nested", "exception", "is:"};
+    private final static String[] KEYWORDS = new String[] {Messages.StoredProcedureMainPage_0, Messages.StoredProcedureMainPage_1, Messages.StoredProcedureMainPage_2};
     
     public StoredProcedureMainPage(FormEditor editor) {
-        super(editor, StoredProcedureMainPage.class.getName(), "Stored Procedure "
+        super(editor, StoredProcedureMainPage.class.getName(), Messages.StoredProcedureMainPage_3
                 + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
     }
@@ -125,7 +126,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
 
             // description
-            Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(charComposite, Messages.StoredProcedureMainPage_4, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
 
             descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);//$NON-NLS-1$
@@ -134,7 +135,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             descriptionText.addModifyListener(this);
             // Procedure
             Group storedProcedureGroup = new Group(charComposite, SWT.SHADOW_NONE);
-            storedProcedureGroup.setText("Procedure");
+            storedProcedureGroup.setText(Messages.StoredProcedureMainPage_5);
             storedProcedureGroup.setLayout(new GridLayout(1, true));
             storedProcedureGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 
@@ -143,7 +144,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             procedureViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             procedureViewer.addTextListener(this);
             WidgetUtils.initRedoUndo(procedureViewer);
-            refreshCacheBtn = toolkit.createButton(charComposite, "Refresh the cache after execution(recommended for updates)",
+            refreshCacheBtn = toolkit.createButton(charComposite, Messages.StoredProcedureMainPage_6,
                     SWT.CHECK);
             refreshCacheBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
             refreshCacheBtn.addSelectionListener(new SelectionListener() {
@@ -163,11 +164,11 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
              ************************************************************/
 
             createCompDropTarget();
-            Composite resultsGroup = this.getNewSectionComposite("Execute Procedure");
+            Composite resultsGroup = this.getNewSectionComposite(Messages.StoredProcedureMainPage_7);
             resultsGroup.setLayout(new GridLayout(4, false));
 
             // data cluster
-            Hyperlink dataClusterLink = toolkit.createHyperlink(resultsGroup, "Data Container", SWT.NULL);
+            Hyperlink dataClusterLink = toolkit.createHyperlink(resultsGroup, Messages.StoredProcedureMainPage_8, SWT.NULL);
             dataClusterLink.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             dataClusterLink.addHyperlinkListener(new IHyperlinkListener() {
 
@@ -191,7 +192,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             dataClusterCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.NONE, false, false, 1, 1));
 
             Button executeButton = new Button(resultsGroup, SWT.PUSH);
-            executeButton.setText("Execute Procedure");
+            executeButton.setText(Messages.StoredProcedureMainPage_9);
             executeButton.addMouseListener(new MouseListener() {
 
                 public void mouseUp(MouseEvent e) {
@@ -266,15 +267,15 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             dataClusterPKs = Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(),
                     getXObject().getUsername(), getXObject().getPassword());
         } catch (Exception ex) {
-            MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), "Error",
-                    "Unable to get the list of Data Containers:\n" + ex.getClass().getName() + ": " + ex.getLocalizedMessage());
+            MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), Messages._Error,
+                    Messages.StoredProcedureMainPage_11 + ex.getClass().getName() + Messages.StoredProcedureMainPage_12 + ex.getLocalizedMessage());
             this.refreshing = false;
             return;
         }
         if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)
                 || ((dataClusterPKs.length == 1) && ("CACHE".equals(dataClusterPKs[0].getPk())))) {//$NON-NLS-1$
-            MessageDialog.openError(this.getSite().getShell(), "Error",
-                    "Please create Data Containers before editing an Inbound Adaptor");
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                    Messages.StoredProcedureMainPage_14);
             return;
         }
         dataClusterCombo.add("[ALL]");//$NON-NLS-1$
@@ -379,7 +380,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                                 wsStoredProcedure.getName()), null, dcpk, currentParameters.toArray(new String[currentParameters
                                 .size()])));
                         String[] results = array.getStrings();
-                        resultsLabel.setText("Procedure returned " + results.length + " Records.");
+                        resultsLabel.setText(Messages.StoredProcedureMainPage_15 + results.length + Messages.StoredProcedureMainPage_16);
                         resultsViewer.setInput(results);
                     }
                 } catch (Exception ex) {
@@ -390,14 +391,14 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 						builder.append(currentMessage + '\n');
 					}
                 	
-					MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), "Error", builder.toString());
+					MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), Messages._Error, builder.toString());
                 }
             }
         });
     }
     
     private static Set<String> getMessages(String msg) {
-        StringTokenizer tokenizer = new StringTokenizer(msg, " ");
+        StringTokenizer tokenizer = new StringTokenizer(msg, Messages.StoredProcedureMainPage_18);
         StringBuilder currentMessage = new StringBuilder();
         Set<String> messages = new HashSet<String>();
        
@@ -438,8 +439,8 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
-            setText("Details");
-            setToolTipText("View in Details");
+            setText(Messages.StoredProcedureMainPage_19);
+            setToolTipText(Messages.StoredProcedureMainPage_20);
         }
 
         public void run() {
@@ -471,8 +472,8 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.StoredProcedureMainPage_22 + e.getLocalizedMessage());
             }
         }
 

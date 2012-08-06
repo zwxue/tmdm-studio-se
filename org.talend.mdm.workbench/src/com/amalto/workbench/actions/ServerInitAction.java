@@ -27,6 +27,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -51,26 +52,26 @@ public class ServerInitAction extends Action {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage("icons/zap.gif"));//$NON-NLS-1$
-        setText("Initialize");
-        setToolTipText("Initializes an " + IConstants.TALEND + " MDM Server");
+        setText(Messages.ServerInitAction_Init);
+        setToolTipText(Messages.ServerInitAction_ActionTip + IConstants.TALEND + Messages.ServerInitAction_ActionTipA);
 
     }
 
     public void run() {
         try {
             super.run();
-            boolean confirm = MessageDialog.openConfirm(view.getSite().getShell(), "Initialize the MDM server",
-                    "Are you sure you want to initialize the MDM server?");
+            boolean confirm = MessageDialog.openConfirm(view.getSite().getShell(), Messages.ServerInitAction_InitMDMServer,
+                    Messages.ServerInitAction_ConfirmContent);
             if (!confirm)
                 return;
-            boolean zap = MessageDialog.openQuestion(view.getSite().getShell(), "Initalize MDM server",
-                    "Do you want top zap all existing data");
+            boolean zap = MessageDialog.openQuestion(view.getSite().getShell(), Messages.ServerInitAction_QuestionTitle,
+                    Messages.ServerInitAction_QuestionContent);
             if (zap)
-                zap = MessageDialog.openConfirm(view.getSite().getShell(), "Initialize the MDM server",
-                        "Are you sure you want to zap all the data?");
+                zap = MessageDialog.openConfirm(view.getSite().getShell(), Messages.ServerInitAction_InitMDMServer,
+                        Messages.ServerInitAction_ConfirmContent1);
 
             FileDialog fd = new FileDialog(view.getSite().getShell(), SWT.OPEN);
-            fd.setText("Select the XML Schema definition for XML Schema (xmlSchema.xsd)");
+            fd.setText(Messages.ServerInitAction_FileDialogTitle);
             String filename = fd.open();
             if (filename == null)
                 return;
@@ -89,11 +90,11 @@ public class ServerInitAction extends Action {
 
             port.initMDM(new WSInitData(zap, xml));
             xobject.getServerRoot().fireEvent(IXObjectModelListener.NEED_REFRESH, null, xobject.getServerRoot());
-            MessageDialog.openInformation(view.getSite().getShell(), "Initialize the MDM server", "Initialization completed");
+            MessageDialog.openInformation(view.getSite().getShell(), Messages.ServerInitAction_InitMDMServer, Messages.ServerInitAction_ConfirmContent2);
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to initilaize the MDM server: "
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error, Messages.ServerInitAction_ErrorMsg
                     + e.getLocalizedMessage());
         }
     }

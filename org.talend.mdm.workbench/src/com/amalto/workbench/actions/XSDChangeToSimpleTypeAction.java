@@ -40,6 +40,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -64,8 +65,8 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
     public XSDChangeToSimpleTypeAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.SIMPLETYPE.getPath()));
-        setText("Change to a Simple Type");
-        setToolTipText("Make Element a Simple Element or change the current Simple Type");
+        setText(Messages.XSDChangeToXX_Text);
+        setToolTipText(Messages.XSDChangeToXX_ActionTip);
         setDescription(getToolTipText());
     }
 
@@ -113,7 +114,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
             initBuiltInTypesWithSelectedTypes(builtInTypes); 
             
             if (showDlg) {
-                dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, "Make Simple Type", customTypes,
+                dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeToXX_DialogTitle, customTypes,
                         builtInTypes);
 
                 dialog.setBlockOnOpen(true);
@@ -209,8 +210,8 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to change to Simple Type: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDChangeToXX_ErrorMsg1, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -304,7 +305,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                 }
         }
         if (!found) {
-            MessageDialog.openError(page.getSite().getShell(), "Error", "The built-in type " + typeName + " does not exist");
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDChangeToXX_ErrorMsg2, typeName ));
             return false;
         }
 

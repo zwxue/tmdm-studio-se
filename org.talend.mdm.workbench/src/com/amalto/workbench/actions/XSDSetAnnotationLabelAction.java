@@ -35,6 +35,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -46,8 +47,8 @@ public class XSDSetAnnotationLabelAction extends UndoAction {
     public XSDSetAnnotationLabelAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.LABEL.getPath()));
-        setText("Set the Labels");
-        setToolTipText("Set the Element Labels");
+        setText(Messages.XSDSetAnnotationLabelAction_Text);
+        setToolTipText(Messages.XSDSetAnnotationLabelAction_ActionTip);
     }
 
     public IStatus doAction() {
@@ -67,11 +68,11 @@ public class XSDSetAnnotationLabelAction extends UndoAction {
                 xSDCom = (XSDComponent) selection.getFirstElement();
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to set an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.bind(Messages.XSDSetAnnotationLabelAction_ExceptioInfo, xSDCom.getClass().getName()));
             }
 
             AnnotationLanguageLabelsDialog dlg = new AnnotationLanguageLabelsDialog(struc.getLabels(),
-                    new AnnotationLabelDialogSelectionListener(page), page.getEditorSite().getShell(), "Set the Labels");
+                    new AnnotationLabelDialogSelectionListener(page), page.getEditorSite().getShell(), Messages.XSDSetAnnotationLabelAction_DialogTitle);
             dlg.setBlockOnOpen(true);
             dlg.open();
 
@@ -97,8 +98,8 @@ public class XSDSetAnnotationLabelAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDSetAnnotationLabelAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

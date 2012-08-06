@@ -32,6 +32,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -47,8 +48,8 @@ public class XSDSetAnnotationTargetSystemsAction extends UndoAction {
     public XSDSetAnnotationTargetSystemsAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.TARGETSYSTEM.getPath()));
-        setText("Set the Target Systems");
-        setToolTipText("Set the the Target Systems for the content of this element");
+        setText(Messages.XSDSetAnnotationTargetSystemsAction_Text);
+        setToolTipText(Messages.XSDSetAnnotationTargetSystemsAction_ActionTip);
         this.dataModelName = dataModelName;
     }
 
@@ -68,7 +69,7 @@ public class XSDSetAnnotationTargetSystemsAction extends UndoAction {
             // IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             // XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+                throw new RuntimeException(Messages.bind(Messages.XSDSetAnnotationTargetSystemsAction_ExceptionInfo, xSDCom.getClass().getName()));
             }
 
             dlg = new AnnotationOrderedListsDialog(new ArrayList(struc.getTargetSystems().values()), new SelectionListener() {
@@ -79,7 +80,7 @@ public class XSDSetAnnotationTargetSystemsAction extends UndoAction {
                 public void widgetSelected(SelectionEvent e) {
                     dlg.close();
                 }
-            }, page.getSite().getShell(), "Set the Target Systems for the content of this element", "Target System Name", page,
+            }, page.getSite().getShell(), Messages.XSDSetAnnotationTargetSystemsAction_DialogTitle, Messages.XSDSetAnnotationTargetSystemsAction_DialogTip, page,
                     AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType, dataModelName);
 
             dlg.setBlockOnOpen(true);
@@ -98,8 +99,8 @@ public class XSDSetAnnotationTargetSystemsAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set a Forign Key: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDSetAnnotationTargetSystemsAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

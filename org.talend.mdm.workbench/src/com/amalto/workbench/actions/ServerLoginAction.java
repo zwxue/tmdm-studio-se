@@ -22,6 +22,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.dialogs.LoginDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
@@ -39,15 +40,15 @@ public class ServerLoginAction extends Action implements SelectionListener {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage("icons/startserveraction.gif"));//$NON-NLS-1$
-        setText("Login");
-        setToolTipText("Add MDM Server Location");
+        setText(Messages.ServerLoginAction_Text);
+        setToolTipText(Messages.ServerLoginAction_ActionTip);
     }
 
     @Override
     public void run() {
         try {
             super.run();
-            dialog = new LoginDialog(this, view.getSite().getShell(), IConstants.TALEND + " Login");
+            dialog = new LoginDialog(this, view.getSite().getShell(), Messages.bind(Messages.ServerLoginAction_LoginTitle, IConstants.TALEND));
             dialog.setBlockOnOpen(true);
             dialog.open();
         } catch (Exception e) {
@@ -77,7 +78,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
 
         String cmp = Util.checkOnVersionCompatibility(url, username, password, universe);
         if (cmp != null) {
-            MessageDialog.openError(null, "Error", "The version of mdm studio is not compatible with that of server : \n" + cmp);
+            MessageDialog.openError(null, Messages._Error, Messages.bind(Messages.ServerLoginAction_ErrorMsg, cmp));
             return;
         }
 

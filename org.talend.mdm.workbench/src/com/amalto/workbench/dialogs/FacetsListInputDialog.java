@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -76,7 +77,7 @@ public class FacetsListInputDialog extends Dialog {
 
         Label serverLabel = new Label(composite, SWT.NONE);
         serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        serverLabel.setText("New Item");
+        serverLabel.setText(Messages.FacetsListInputDialog_NewItem);
 
         newItemText = new Text(composite, SWT.NONE);
         newItemText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -86,7 +87,7 @@ public class FacetsListInputDialog extends Dialog {
         Button addButton = new Button(composite, SWT.PUSH);
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-        addButton.setToolTipText("Add");
+        addButton.setToolTipText(Messages.Add);
         parent.getShell().setDefaultButton(addButton);
         addButton.addSelectionListener(new SelectionAdapter() {
 
@@ -102,7 +103,7 @@ public class FacetsListInputDialog extends Dialog {
         Button deleteButton = new Button(composite, SWT.PUSH);
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-        deleteButton.setToolTipText("Delete");
+        deleteButton.setToolTipText(Messages.Delete);
         deleteButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent event) {

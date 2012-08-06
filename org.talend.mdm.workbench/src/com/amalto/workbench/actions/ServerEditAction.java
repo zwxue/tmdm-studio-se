@@ -30,6 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import com.amalto.workbench.dialogs.LoginDialog;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -57,8 +58,8 @@ public class ServerEditAction extends Action  implements SelectionListener{
 
     public ServerEditAction(ServerView view ) {
         this.view = view;
-        setText("Edit");
-        setToolTipText("Edit MDM Server Location");
+        setText(Messages.ServerEditAction_Edit);
+        setToolTipText(Messages.ServerEditAction_EditServerLocation);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT.getPath()));
     }
 
@@ -74,7 +75,7 @@ public class ServerEditAction extends Action  implements SelectionListener{
 
         serverDef = MDMServerDef.parse(endpointAddress, username, password, universe, name);
         try {
-            dialog = new LoginDialog(this, view.getSite().getShell(), IConstants.TALEND + " Login",serverDef);
+            dialog = new LoginDialog(this, view.getSite().getShell(), Messages.bind(Messages.ServerEditAction_Login,IConstants.TALEND),serverDef);
             dialog.setBlockOnOpen(true);
             dialog.open();
         } catch (Exception e) {
@@ -101,7 +102,7 @@ public class ServerEditAction extends Action  implements SelectionListener{
 
         String cmp = Util.checkOnVersionCompatibility(url, username, password, universe);
         if (cmp != null) {
-            MessageDialog.openError(null, "Error", "The version of mdm studio is not compatible with that of server : \n" + cmp);
+            MessageDialog.openError(null, Messages._Error, Messages.bind(Messages.ServerEditAction_ErrorMsg, cmp));
             return;
         }
 

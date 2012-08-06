@@ -89,7 +89,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
         try {// temporarily store the file data for restore
             IFile file = getXSDFile(xobject);
-            fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8");
+            fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8"); //$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -139,7 +139,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 mainPage.save(xsd);
             }
 
-            fileContents = xsd.getBytes("utf-8");
+            fileContents = xsd.getBytes("utf-8"); //$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {

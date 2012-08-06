@@ -32,6 +32,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -48,8 +49,8 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
     public XSDNewSimpleTypeDefinition(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("Create a Simple Type");
-        setToolTipText("Create a new simple Type");
+        setText(Messages.XSDNewSimpleTypeDefinition_CreateSimpleType);
+        setToolTipText(Messages.XSDNewSimpleTypeDefinition_CreateSimpleTypeX);
         setDescription(getToolTipText());
     }
 
@@ -70,7 +71,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
                 builtInTypes.add(type.getName());
         }
 
-        dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, "New Simple Type", customTypes, builtInTypes);
+        dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDNewSimpleTypeDefinition_NewSimpleType, customTypes, builtInTypes);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
         if (ret == Dialog.CANCEL) {
@@ -84,7 +85,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
             // check if simple type definition already exists
             XSDSimpleTypeDefinition std = schema.resolveSimpleTypeDefinition(typeName);
             if (!schema.getTypeDefinitions().contains(std)) {
-                std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+                std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string")); //$NON-NLS-1$
                 schema.getContents().add(std);
             }
             typedef.setBaseTypeDefinition(std);
@@ -118,7 +119,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
                     }
             }
             if (!found) {
-                MessageDialog.openError(page.getSite().getShell(), "Error", "The built-in type " + typeName + " does not exist");
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDNewSimpleTypeDefinition_ErrorMsg, typeName));
                 return;
             }
         }
@@ -130,20 +131,20 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
     }
 
     private boolean validateType() {
-        if (!"".equals(typeName)) {
+        if (!"".equals(typeName)) { //$NON-NLS-1$
             EList list = schema.getTypeDefinitions();
             for (Iterator iter = list.iterator(); iter.hasNext();) {
                 XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDSimpleTypeDefinition) {
-                        MessageDialog.openError(page.getSite().getShell(), "Error", "This type \"" + typeName
-                                + "\" already exists as a Simple Type");
+                        MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                                Messages.bind(Messages.XSDNewSimpleTypeDefinition_ErrorMsg1, typeName));
                         return false;
                     }
                 }
             }// for
         } else {
-            MessageDialog.openError(page.getSite().getShell(), "Error", "Please enter the Simple Type name");
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.XSDNewSimpleTypeDefinition_ErrorMsg2);
             return false;
         }
 

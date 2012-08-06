@@ -63,7 +63,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
         if (obj instanceof XSDElementDeclaration) {
             String name = ((XSDElementDeclaration) obj).getName();
             if (((XSDElementDeclaration) obj).isAbstract())
-                name += "   (abstract)";
+                name += Messages.XSDTreeLabelProvider_0;
             String tail = ((XSDElementDeclaration) obj).getTargetNamespace() != null ? " : "//$NON-NLS-1$
                     + ((XSDElementDeclaration) obj).getTargetNamespace() : "";//$NON-NLS-1$
             return name + tail;
@@ -178,48 +178,45 @@ public class XSDTreeLabelProvider extends LabelProvider {
                     String source = e.getAttribute("source");//$NON-NLS-1$
                     if (source != null) {
                         if (source.startsWith("X_Label_")) {//$NON-NLS-1$
-                            return Util.iso2lang.get(source.substring(8).toLowerCase()) + " Label: "
-                                    + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_1, Util.iso2lang.get(source.substring(8).toLowerCase()), e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
-                            return "Foreign Key:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_2, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_ForeignKey_NotSep")) {//$NON-NLS-1$
                             Boolean v = Boolean.valueOf(e.getChildNodes().item(0).getNodeValue());
-                            return Messages.SimpleXpathInputDialog_sepFkTabPanel + ": " + v;
+                            return Messages.bind(Messages.XSDTreeLabelProvider_3, Messages.SimpleXpathInputDialog_sepFkTabPanel, v);
                         } else if (source.equals("X_Visible_Rule")) {//$NON-NLS-1$
-                            return "Visible Rule:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_4, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Default_Value_Rule")) {//$NON-NLS-1$
-                            return "Default Value Rule:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_5, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
-                            return "Foreign Key Info:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_6, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_PrimaryKeyInfo")) {//$NON-NLS-1$
-                            return "Primary Key Info:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_7, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
-                            return "Source System:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_8, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_TargetSystem")) {//$NON-NLS-1$
-                            return "Target System(s):  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_9, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.startsWith("X_Description_")) {//$NON-NLS-1$
-                            return Util.iso2lang.get(source.substring(14).toLowerCase()) + " Description: "
-                                    + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_10, Util.iso2lang.get(source.substring(14).toLowerCase()), e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Write")) {//$NON-NLS-1$
-                            return "Writable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_11, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
-                            return "No Creatable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_12, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
-                            return "No Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_13, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
-                            return "No Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_14, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Lookup_Field")) {//$NON-NLS-1$
-                            return "Look Field : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_15, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Workflow")) {//$NON-NLS-1$
-                            return "Workflow access : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_16, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
-                            return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_17, e.getChildNodes().item(0).getNodeValue());
                             // add by ymli; bugId 0009157
                         } else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
-                            return "Auto Expand : " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_18, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.startsWith("X_Facet")) {//$NON-NLS-1$
-                            return source.substring(2, 7) + "_Msg_" + source.substring(8) + ": "
-                                    + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_19, source.substring(2, 7), source.substring(8), e.getChildNodes().item(0).getNodeValue());
                             // made schematron show:Schematron: schematron
                         } else if (source.startsWith("X_Display_Format_")) {//$NON-NLS-1$
                             return source + ": " + e.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
@@ -230,14 +227,14 @@ public class XSDTreeLabelProvider extends LabelProvider {
                                 Element el = Util.parse(e.getChildNodes().item(0).getNodeValue()).getDocumentElement();
                                 if (el.getAttributes().getNamedItem("name") != null)pattern = el.getAttributes().getNamedItem("name").getTextContent();//$NON-NLS-1$//$NON-NLS-2$
                             }
-                            return "Validation Rule: " + (pattern == null ? "" : pattern);// e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_21, (pattern == null ? Messages.XSDTreeLabelProvider_22 : pattern));// e.getChildNodes().item(0).getNodeValue();
                             // end
                         } else if (source.equals("X_Retrieve_FKinfos")) {//$NON-NLS-1$
-                            return "Foreign Key resolution:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_23, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
-                            return "Foreign Key integrity:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_24, e.getChildNodes().item(0).getNodeValue());
                         } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
-                            return "Foreign Key integrity override:  " + e.getChildNodes().item(0).getNodeValue();
+                            return Messages.bind(Messages.XSDTreeLabelProvider_25, e.getChildNodes().item(0).getNodeValue());
                         }
 
                         if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
@@ -245,7 +242,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                             if(nodeValue.startsWith("$CFFP:")) {//$NON-NLS-1$
                                 nodeValue = StringEscapeUtils.unescapeXml(nodeValue).substring(6);
                             }
-                            return "Foreign Key Filter:  " + nodeValue;
+                            return Messages.bind(Messages.XSDTreeLabelProvider_26, nodeValue);
                         } else {
                             return source + ": " + Util.nodeToString((Element) obj);//$NON-NLS-1$
                         }
@@ -330,7 +327,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
             } else if (xsdTerm instanceof XSDWildcard) {
                 return ImageCache.getCreatedImage("icons/wildcard.gif");//$NON-NLS-1$
             } else {
-                log.info("ERROR XSD Term " + xsdTerm.getClass().getName());
+                log.info(Messages.bind(Messages.XSDTreeLabelProvider_27, xsdTerm.getClass().getName()));
                 return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }
@@ -356,7 +353,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                 }
             } else {
                 // simple Type!!!
-                log.info("ERROR XSD Type Content: " + ctc.getClass().getName());
+                log.info(Messages.bind(Messages.XSDTreeLabelProvider_28, ctc.getClass().getName()));
                 return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }

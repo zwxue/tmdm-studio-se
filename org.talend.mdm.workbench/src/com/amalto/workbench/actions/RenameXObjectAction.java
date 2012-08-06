@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import com.amalto.workbench.editors.xsdeditor.XSDEditorInput;
 import com.amalto.workbench.editors.xsdeditor.XSDEditorUtil;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -44,8 +45,8 @@ public class RenameXObjectAction extends Action {
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.RENAME.getPath()));
 
-        setText("Rename");
-        setToolTipText("Rename the selected object");
+        setText(Messages.RenameXObjectAction_Rename);
+        setToolTipText(Messages.RenameXObjectAction_RenameTheObject);
     }
 
     @Override

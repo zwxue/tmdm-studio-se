@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.xsd.XSDElementDeclaration;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -39,8 +40,8 @@ public class XSDDeleteElementAction extends UndoAction {
         super(page);
         // this.page = page;
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete Element");
-        setToolTipText("Delete an Element");
+        setText(Messages.XSDDeleteElementAction_Text);
+        setToolTipText(Messages.XSDDeleteElementAction_ActionTip);
     }
 
     /**
@@ -86,8 +87,8 @@ public class XSDDeleteElementAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to remove the Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDDeleteElementAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

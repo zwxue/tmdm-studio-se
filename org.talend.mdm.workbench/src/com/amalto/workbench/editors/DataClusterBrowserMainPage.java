@@ -171,8 +171,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     private PageingToolBar pageToolBar;
 
     public DataClusterBrowserMainPage(FormEditor editor) {
-        super(editor, DataClusterBrowserMainPage.class.getName(), "Data Container Browser "
-                + ((XObjectBrowserInput) editor.getEditorInput()).getName());
+        super(editor, DataClusterBrowserMainPage.class.getName(), Messages.bind(Messages.DataClusterBrowserMainPage_0, ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
     }
@@ -198,7 +197,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             compFirstLine.setLayout(new GridLayout(9, false));
 
             // from
-            Label fromLabel = toolkit.createLabel(compFirstLine, "From", SWT.NULL);
+            Label fromLabel = toolkit.createLabel(compFirstLine, Messages.DataClusterBrowserMainPage_1, SWT.NULL);
             fromLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
             CalendarSelectWidget fromCalendar = new CalendarSelectWidget(toolkit, compFirstLine, true);
@@ -220,14 +219,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }// keyListener
             );
             // to
-            Label toLabel = toolkit.createLabel(compFirstLine, "To", SWT.NULL);
+            Label toLabel = toolkit.createLabel(compFirstLine, Messages.DataClusterBrowserMainPage_2, SWT.NULL);
             toLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
             CalendarSelectWidget toCalendar = new CalendarSelectWidget(toolkit, compFirstLine, false);
             toText = toCalendar.getText();
             toText.addKeyListener(keylistener);
 
-            Label conceptLabel = toolkit.createLabel(compFirstLine, "Entity", SWT.NULL);
+            Label conceptLabel = toolkit.createLabel(compFirstLine, Messages.DataClusterBrowserMainPage_3, SWT.NULL);
             conceptLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             conceptCombo = new Combo(compFirstLine, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.MULTI);
             conceptCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -237,7 +236,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             // search
             Button bSearch = toolkit.createButton(compFirstLine, "", SWT.CENTER); //$NON-NLS-1$
             bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
-            bSearch.setToolTipText("Search");
+            bSearch.setToolTipText(Messages.DataClusterBrowserMainPage_4);
             bSearch.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             bSearch.addListener(SWT.Selection, new Listener() {
 
@@ -254,7 +253,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             compSecondLine.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
             compSecondLine.setLayout(new GridLayout(9, false));
 
-            Label keyLabel = toolkit.createLabel(compSecondLine, "Keys", SWT.NULL);
+            Label keyLabel = toolkit.createLabel(compSecondLine, Messages.DataClusterBrowserMainPage_5, SWT.NULL);
             keyLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             keyText = toolkit.createText(compSecondLine, "", SWT.BORDER);//$NON-NLS-1$
             keyText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
@@ -263,20 +262,20 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             /***
              * Search Text
              */
-            Label descriptionLabel = toolkit.createLabel(compSecondLine, "Keywords", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(compSecondLine, Messages.DataClusterBrowserMainPage_6, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             searchText = toolkit.createText(compSecondLine, "", SWT.BORDER);//$NON-NLS-1$
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
             // searchText.addModifyListener(this);
             searchText.addKeyListener(keylistener);
 
-            checkFTSearchButton = toolkit.createButton(compSecondLine, "Use Full Text Search", SWT.CHECK);
+            checkFTSearchButton = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_7, SWT.CHECK);
             checkFTSearchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
             Label fill = toolkit.createLabel(compSecondLine, "", SWT.NULL);//$NON-NLS-1$
             fill.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 8, 1));
 
-            showTaskIdCB = toolkit.createButton(compSecondLine, "Show Task ID", SWT.CHECK);
+            showTaskIdCB = toolkit.createButton(compSecondLine, Messages.DataClusterBrowserMainPage_8, SWT.CHECK);
             showTaskIdCB.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
             // pagetoolbar
@@ -302,9 +301,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     } catch (Exception e) {
                         MessageDialog.openError(
                                 DataClusterBrowserMainPage.this.getSite().getShell(),
-                                "Error",
-                                "Unable to display the element as a tree:\n" + e.getClass().getName() + ": "
-                                        + e.getLocalizedMessage());
+                                Messages._Error,
+                                Messages.bind(Messages.DataClusterBrowserMainPage_10, e.getClass().getName(), e.getLocalizedMessage()));
                     }
                 }
             });
@@ -329,7 +327,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         if (showTaskIdCB.getSelection()) {
             if (DataClusterBrowserMainPage.this.resultsViewer.getTable().getColumnCount() != 4) {
                 final TableColumn column3 = new TableColumn(DataClusterBrowserMainPage.this.resultsViewer.getTable(), SWT.LEFT, 3);
-                column3.setText("TaskId");
+                column3.setText(Messages.DataClusterBrowserMainPage_12);
                 column3.setWidth(150);
             }
         } else {
@@ -381,7 +379,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         final TableColumn column = new TableColumn(table, SWT.LEFT, 0);
         // table.setSortColumn(column);
         // table.setSortDirection(SWT.UP);
-        column.setText("Date");
+        column.setText(Messages.DataClusterBrowserMainPage_13);
         column.setWidth(150);
         // column.setImage(getDefaultImage());//============
         column.addSelectionListener(new SelectionListener() {
@@ -407,7 +405,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         // 2nd column
         final TableColumn column1 = new TableColumn(table, SWT.LEFT, 1);
         // table.setSortColumn(column1);
-        column1.setText("Entity");
+        column1.setText(Messages.DataClusterBrowserMainPage_14);
         column1.setWidth(150);
         // Add listener to column so tasks are sorted by description when clicked
         column1.addSelectionListener(new SelectionListener() {
@@ -434,7 +432,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         // 3rd column
         final TableColumn column2 = new TableColumn(table, SWT.LEFT, 2);
         // table.setSortColumn(column2);
-        column2.setText("Keys");
+        column2.setText(Messages.DataClusterBrowserMainPage_15);
         column2.setWidth(150);
         // Add listener to column so tasks are sorted by description when clicked
         column2.addSelectionListener(new SelectionListener() {
@@ -556,7 +554,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     if (object != null) {
                         // TMDM-2606: Don't expect data model to contain revision name (CE edition doesn't support
                         // revisions).
-                        if (object.getDisplayName().contains("[") && object.getDisplayName().contains("]")) {
+                        if (object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_16) && object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_17)) {
                             revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
                                     object.getDisplayName().indexOf("]"));//$NON-NLS-1$
                         }
@@ -618,8 +616,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_18,
+                    Messages.bind(Messages.DataClusterBrowserMainPage_19, e.getLocalizedMessage()));
         }
     }
 
@@ -704,7 +702,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 String dateTimeText = fromText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
                     return new LineItem[0];
                 }
 
@@ -719,7 +717,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 String dateTimeText = toText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
                     return new LineItem[0];
                 }
 
@@ -756,7 +754,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             limit), useFTSearch)).getResults();
 
             if (showResultInfo && (results.length == 1)) {
-                MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
+                MessageDialog.openInformation(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_24, Messages.DataClusterBrowserMainPage_25);
                 return new LineItem[0];
             }
             if (results.length == 1)
@@ -778,10 +776,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
-                MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
-                        "More than 10000 results returned by the search. \nPlease narrow your search.");
+                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_26,
+                        Messages.DataClusterBrowserMainPage_27);
             else
-                MessageDialog.openError(this.getSite().getShell(), "Unable to perform the search", e.getLocalizedMessage());
+                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_28, e.getLocalizedMessage());
             return null;
         } finally {
             try {
@@ -811,8 +809,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
-            setText("Edit Record");
-            setToolTipText("View as a DOM Tree or edit the XML source");
+            setText(Messages.DataClusterBrowserMainPage_29);
+            setToolTipText(Messages.DataClusterBrowserMainPage_30);
         }
 
         public void run() {
@@ -855,8 +853,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                     if (MessageDialog
                                             .openConfirm(
                                                     null,
-                                                    "Confirm",
-                                                    "This object was also modified by somebody else. If you save now, you will overwrite his or her changes. Are you sure you want to do that?")) {
+                                                    Messages.DataClusterBrowserMainPage_31,
+                                                    Messages.DataClusterBrowserMainPage_32)) {
                                         if (d.isTriggerProcess()) {
                                             Util.getPort(getXObject()).putItemWithReport(itemWithReport);
                                         } else {
@@ -873,8 +871,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             } catch (Exception e) {
                                 MessageDialog
                                         .openError(shell,
-                                                "Error saving the Record",
-                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage()));
+                                                Messages.DataClusterBrowserMainPage_33,
+                                                Messages.bind(Messages.DataClusterBrowserMainPage_34, Util.formatErrorMessage(e.getLocalizedMessage())));
                                 return;
                             }
                         }// if
@@ -887,8 +885,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_36, e.getLocalizedMessage()));
             }
         }
 
@@ -910,8 +908,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/default.gif"));//$NON-NLS-1$
-            setText("Edit TaskId");
-            setToolTipText("Edit taskId of the record");
+            setText(Messages.DataClusterBrowserMainPage_37);
+            setToolTipText(Messages.DataClusterBrowserMainPage_38);
         }
 
         public void run() {
@@ -921,8 +919,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 LineItem li = (LineItem) selection.getFirstElement();
 
-                InputDialog input = new InputDialog(DataClusterBrowserMainPage.this.getSite().getShell(), "Edit TaskId",
-                        "Please input the new taskid.", li.getTaskId(), null);
+                InputDialog input = new InputDialog(DataClusterBrowserMainPage.this.getSite().getShell(), Messages.DataClusterBrowserMainPage_39,
+                        Messages.DataClusterBrowserMainPage_40, li.getTaskId(), null);
                 input.setBlockOnOpen(true);
 
                 if (input.open() == Window.OK) {
@@ -941,8 +939,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     viewer.refresh();
                 }
             } catch (Exception e) {
-                MessageDialog.openError(shell, "Error saving the Record",
-                        "An error occured trying save the Record:\n\n " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
                 return;
             }
         }
@@ -963,8 +961,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage(EImage.SYNCH.getPath()));
-            setText("Compare With Each Other");
-            setToolTipText("Compare With Each Other");
+            setText(Messages.DataClusterBrowserMainPage_43);
+            setToolTipText(Messages.DataClusterBrowserMainPage_44);
         }
 
         @Override
@@ -976,7 +974,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 int selectSize = selection.size();
                 if (selectSize != 2) {
-                    MessageDialog.openWarning(null, "Warning", "Please select two Records to compare! ");
+                    MessageDialog.openWarning(null, Messages.Warning, Messages.DataClusterBrowserMainPage_46);
                     return;
                 }
 
@@ -1009,8 +1007,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to compare items with each other: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_48, e.getLocalizedMessage()));
             }
         }
     }
@@ -1029,8 +1027,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage(EImage.SYNCH.getPath()));
-            setText("Compare With Latest Revision");
-            setToolTipText("Compare With Latest Revision");
+            setText(Messages.DataClusterBrowserMainPage_49);
+            setToolTipText(Messages.DataClusterBrowserMainPage_50);
         }
 
         @Override
@@ -1041,10 +1039,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 int selectSize = selection.size();
                 if (selectSize == 0) {
-                    MessageDialog.openWarning(null, "Warning", "Please select an item at least! ");
+                    MessageDialog.openWarning(null, Messages.Warning, Messages.DataClusterBrowserMainPage_52);
                     return;
                 } else if (selectSize > 1) {
-                    MessageDialog.openWarning(null, "Warning", "This operation can not be supported for muti-Record(s)! ");
+                    MessageDialog.openWarning(null, Messages.Warning, Messages.DataClusterBrowserMainPage_54);
                     return;
                 }
                 LineItem li = (LineItem) selection.getFirstElement();
@@ -1060,7 +1058,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             new WSVersioningGetItemContent(ICoreConstants.DEFAULT_SVN, new WSItemPK(wsItem.getWsDataClusterPK(),
                                     wsItem.getConceptName(), wsItem.getIds()), "-1"));//$NON-NLS-1$
                 } catch (Exception e) {
-                    MessageDialog.openWarning(null, "Warning", e.getLocalizedMessage());
+                    MessageDialog.openWarning(null, Messages.Warning, e.getLocalizedMessage());
                     return;
                 }
 
@@ -1069,14 +1067,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     CompareHeadInfo compareHeadInfo = new CompareHeadInfo(getXObject());
                     compareHeadInfo.setItem(true);
                     compareHeadInfo.setDataModelName(wsItem.getDataModelName());
-                    CompareManager.getInstance().compareTwoStream(xml, itemcontent, true, compareHeadInfo, "Local Content",
-                            "Lastest Revision", true, false);
+                    CompareManager.getInstance().compareTwoStream(xml, itemcontent, true, compareHeadInfo, Messages.DataClusterBrowserMainPage_56,
+                            Messages.DataClusterBrowserMainPage_57, true, false);
                 }
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to compare Record with svn: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_59, e.getLocalizedMessage()));
             }
         }
     }
@@ -1102,11 +1100,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
-                setText("Logically delete the selected Record");
+                setText(Messages.DataClusterBrowserMainPage_60);
             else
-                setText("Logically delete these " + selection.size() + " Records");
+                setText(Messages.bind(Messages.DataClusterBrowserMainPage_61, selection.size()));
 
-            setToolTipText("Logically delete the Selected Record" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
+            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_62, (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : Messages.DataClusterBrowserMainPage_63)));
         }
 
         @Override
@@ -1122,12 +1120,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (lineItems.size() == 0)
                     return;
 
-                InputDialog id = new InputDialog(this.shell, "Confirm Deletion", "Are you sure you want to send the selected "
-                        + lineItems.size() + " Records to trash?\nSet Part-Path:", "/", new IInputValidator() {
+                InputDialog id = new InputDialog(this.shell, Messages.DataClusterBrowserMainPage_64, Messages.bind(Messages.DataClusterBrowserMainPage_65
+                        , lineItems.size()), Messages.DataClusterBrowserMainPage_67, new IInputValidator() {
 
                     public String isValid(String newText) {
                         if ((newText == null) || !newText.matches("^\\/.*$"))//$NON-NLS-1$
-                            return "Illegal Part-Path";
+                            return Messages.DataClusterBrowserMainPage_68;
                         return null;
                     };
                 });
@@ -1149,8 +1147,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to delete the Records: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_70, e.getLocalizedMessage()));
             }
         }
 
@@ -1180,7 +1178,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
                 try {
-                    monitor.beginTask("Deleting Records", lineItems.size());
+                    monitor.beginTask(Messages.DataClusterBrowserMainPage_71, lineItems.size());
 
                     XtentisPort port = Util.getPort(xObject);
 
@@ -1189,11 +1187,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         LineItem lineItem = iter.next();
                         String itemID = ((WSDataClusterPK) xObject.getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
                                 + Util.joinStrings(lineItem.getIds(), ".");//$NON-NLS-1$
-                        monitor.subTask("Processing Record " + (i++) + ": " + itemID);
+                        monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_72, (i++), itemID));
                         if (monitor.isCanceled()) {
-                            MessageDialog.openWarning(this.parentShell, "User canceled the logically delete",
-                                    "The logical-deletes was canceled by the user on Record " + i + "\n"
-                                            + "Some Records may have not been logically deleted");
+                            MessageDialog.openWarning(this.parentShell, Messages.DataClusterBrowserMainPage_74,
+                                    Messages.bind(Messages.DataClusterBrowserMainPage_75, i ));
                             return;
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
@@ -1209,8 +1206,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                     monitor.done();
                 } catch (Exception e) {
-                    MessageDialog.openError(shell, "Error logically Deleting",
-                            "An error occured trying to logically delete the Records:\n\n" + e.getLocalizedMessage());
+                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_78,
+                            Messages.bind(Messages.DataClusterBrowserMainPage_79, e.getLocalizedMessage()));
                 }// try
 
             }// run
@@ -1231,11 +1228,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
-                setText("Physically delete the selected Record");
+                setText(Messages.DataClusterBrowserMainPage_80);
             else
-                setText("Physically delete these " + selection.size() + " Records");
+                setText(Messages.bind(Messages.DataClusterBrowserMainPage_81, selection.size()));
 
-            setToolTipText("Physically delete the selected Record" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
+            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_82, (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : Messages.DataClusterBrowserMainPage_83)));
         }
 
         @Override
@@ -1251,8 +1248,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (lineItems.size() == 0)
                     return;
 
-                if (!MessageDialog.openConfirm(this.shell, "Confirm Deletion", "Are you sure you want to delete the selected "
-                        + lineItems.size() + " Records?"))
+                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_64, Messages.bind(Messages.DataClusterBrowserMainPage_85
+                        , lineItems.size())))
                     return;
 
                 // Instantiate the Monitor with actual deletes
@@ -1266,8 +1263,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to delete the Records: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_88, e.getLocalizedMessage()));
             }
         }
 
@@ -1294,7 +1291,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
                 try {
-                    monitor.beginTask("Deleting Records", lineItems.size());
+                    monitor.beginTask(Messages.DataClusterBrowserMainPage_89, lineItems.size());
 
                     XtentisPort port = Util.getPort(getXObject());
 
@@ -1303,11 +1300,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         LineItem lineItem = iter.next();
                         String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
                                 + Util.joinStrings(lineItem.getIds(), ".");//$NON-NLS-1$
-                        monitor.subTask("Processing Record " + (i++) + ": " + itemID);
+                        monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_90, (i++), itemID));
                         if (monitor.isCanceled()) {
-                            MessageDialog.openWarning(this.parentShell, "User Canceled the delete",
-                                    "The deletes werz canceled by the user on Record " + i + "\n"
-                                            + "Some Records may have not been deleted");
+                            MessageDialog.openWarning(this.parentShell, Messages.DataClusterBrowserMainPage_92,
+                                    Messages.bind(Messages.DataClusterBrowserMainPage_93, i));
                             return;
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem.getConcept(),
@@ -1320,8 +1316,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     monitor.done();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, "Error Deleting",
-                            "An error occured trying to delete the Records:\n\n " + e.getLocalizedMessage());
+                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_96,
+                            Messages.bind(Messages.DataClusterBrowserMainPage_97, e.getLocalizedMessage()));
                 }// try
 
             }// run
@@ -1346,8 +1342,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/add_obj.gif")); //$NON-NLS-1$
-            setText("New Record");
-            setToolTipText("Add a new Record");
+            setText(Messages.DataClusterBrowserMainPage_98);
+            setToolTipText(Messages.DataClusterBrowserMainPage_99);
         }
 
         @Override
@@ -1387,10 +1383,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 }
                                 doSearch();
                             } catch (Exception e) {
-                                MessageDialog
-                                        .openError(shell,
-                                                "Error saving the Record", 
-                                                "An error occured trying save the Record:\n\n " + Util.formatErrorMessage(e.getLocalizedMessage()));
+                                MessageDialog.openError(
+                                        shell,
+                                        Messages.DataClusterBrowserMainPage_100,
+                                        Messages.bind(Messages.DataClusterBrowserMainPage_101,
+                                                Util.formatErrorMessage(e.getLocalizedMessage())));
                                 return;
                             }
                         }// if
@@ -1403,8 +1400,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_103, e.getLocalizedMessage()));
             }
         }
 
@@ -1434,10 +1431,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             setImageDescriptor(ImageCache.getImage("icons/execute.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
-                setText("Route the selected Record");
+                setText(Messages.DataClusterBrowserMainPage_104);
             else
-                setText("Route these " + selection.size() + " Records");
-            setToolTipText("Route the Selected Record" + (selection.size() > 1 ? "s" : ""));
+                setText(Messages.bind(Messages.DataClusterBrowserMainPage_105, selection.size()));
+            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_107, (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : "")));//$NON-NLS-1$
         }
 
         @Override
@@ -1453,8 +1450,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 if (lineItems.size() == 0)
                     return;
 
-                if (!MessageDialog.openConfirm(this.shell, "Confirm Deletion", "Are you sure you want to route the selected "
-                        + (lineItems.size() > 1 ? lineItems.size() + " " : "") + "Record(s) using the Event Manager?"))
+                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_110, Messages.bind(Messages.DataClusterBrowserMainPage_111
+                        , (lineItems.size() > 1 ? lineItems.size() + " " : ""))))//$NON-NLS-1$//$NON-NLS-2$
                     return;
 
                 // Instantiate the Monitor with actual deletes
@@ -1466,7 +1463,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error", "An error occured trying route the Records: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error, Messages.bind(Messages.DataClusterBrowserMainPage_116, e.getLocalizedMessage()));
             }
         }
 
@@ -1492,26 +1489,25 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
 
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-                monitor.beginTask("Deleting Records", lineItems.size());
+                monitor.beginTask(Messages.DataClusterBrowserMainPage_117, lineItems.size());
                 XtentisPort port = null;
                 try {
                     port = Util.getPort(getXObject());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, "Error Routing",
-                            "An error occured trying to route the Records:\n\n " + e.getLocalizedMessage());
+                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_118,
+                            Messages.bind(Messages.DataClusterBrowserMainPage_119, e.getLocalizedMessage()));
                 }// try
 
                 int i = 0;
                 for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext();) {
                     LineItem lineItem = iter.next();
                     String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "." //$NON-NLS-1$  //$NON-NLS-2$
-                            + Util.joinStrings(lineItem.getIds(), ".");
-                    monitor.subTask("Processing Record " + (i++) + " - " + itemID);
+                            + Util.joinStrings(lineItem.getIds(), Messages.DataClusterBrowserMainPage_120);
+                    monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_121, (i++), itemID));
                     if (monitor.isCanceled()) {
-                        MessageDialog.openWarning(this.parentShell, "User Canceled the Routing",
-                                "The submissions were canceled by the user on Record " + i + "\n"
-                                        + "Some Records may have not been routed");
+                        MessageDialog.openWarning(this.parentShell, Messages.DataClusterBrowserMainPage_123,
+                                Messages.bind(Messages.DataClusterBrowserMainPage_124, i));
                         return;
                     }
                     try {
@@ -1519,8 +1515,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 .getConcept(), lineItem.getIds())));
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
-                        MessageDialog.openError(shell, "Error Routing", "An error occured trying to route the item '" + itemID
-                                + "':\n\n " + e.getLocalizedMessage());
+                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127, Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
                     }// try
                     monitor.worked(1);
                 }// for
@@ -1608,7 +1603,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 res = li1.getConcept().compareToIgnoreCase(li2.getConcept());
                 break;
             case 2:
-                res = Util.joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), ".")); //$NON-NLS-1$
+                res = Util.joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;

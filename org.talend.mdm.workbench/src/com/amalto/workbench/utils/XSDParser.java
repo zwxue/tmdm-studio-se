@@ -161,74 +161,74 @@ public class XSDParser {
     /**
      * The list of anchors in <a href="http://www.w3.org/TR/xmlschema-1/">Part 1</a>.
      */
-    protected List part1Anchors = Arrays.asList(new String[] { "all", "annotation", "any", "anyAttribute", "appinfo",
-            "attribute", "attributeGroup", "choice", "complexContent", "complexContent::extension",
-            "complexContent::restriction", "complexType", "documentation", "element", "field", "group", "import", "include",
-            "key", "keyref", "list", "notation", "redefine", "restriction", "schema", "selector", "sequence", "simpleContent",
+    protected List part1Anchors = Arrays.asList(new String[] { "all", "annotation", "any", "anyAttribute", "appinfo", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            "attribute", "attributeGroup", "choice", "complexContent", "complexContent::extension", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            "complexContent::restriction", "complexType", "documentation", "element", "field", "group", "import", "include", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+            "key", "keyref", "list", "notation", "redefine", "restriction", "schema", "selector", "sequence", "simpleContent", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
             // "simpleContent::attributeGroup",
-            "simpleContent::extension", "simpleContent::restriction", "simpleType", "union", "unique", });
+            "simpleContent::extension", "simpleContent::restriction", "simpleType", "union", "unique", }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
     /**
      * The list of components in <a href="http://www.w3.org/TR/xmlschema-1/">Part 1</a>.
      */
-    List part1Components = Arrays.asList(new String[] { "all", "Model_Group_details Particle_details", "annotation",
-            "Annotation_details", "any", "Wildcard_details", "anyAttribute", "Wildcard_details", "appinfo", "Annotation_details",
-            "attribute", "Attribute_Declaration_details AU_details", "attributeGroup", "Attribute_Group_Definition_details",
-            "choice", "Model_Group_details Particle_details", "complexContent", "Complex_Type_Definition_details",
-            "complexContent::extension", "Complex_Type_Definition_details", "complexContent::restriction",
-            "Complex_Type_Definition_details", "complexType", "Complex_Type_Definition_details", "documentation",
-            "Annotation_details", "element", "Element_Declaration_details Particle_details", "field",
-            "Identity-constraint_Definition_details", "group", "Model_Group_Definition_details Particle_details", "import", "",
-            "include", "", "key", "Identity-constraint_Definition_details", "keyref", "Identity-constraint_Definition_details",
-            "list", "Simple_Type_Definition_details", "notation", "Notation_Declaration_details", "redefine", "", "restriction",
-            "Simple_Type_Definition_details", "schema", "Schema_details", "selector", "Identity-constraint_Definition_details",
-            "sequence", "Model_Group_details Particle_details", "simpleContent",
-            "Complex_Type_Definition_details",
+    List part1Components = Arrays.asList(new String[] { "all", "Model_Group_details Particle_details", "annotation", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "Annotation_details", "any", "Wildcard_details", "anyAttribute", "Wildcard_details", "appinfo", "Annotation_details", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+            "attribute", "Attribute_Declaration_details AU_details", "attributeGroup", "Attribute_Group_Definition_details", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            "choice", "Model_Group_details Particle_details", "complexContent", "Complex_Type_Definition_details", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            "complexContent::extension", "Complex_Type_Definition_details", "complexContent::restriction", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "Complex_Type_Definition_details", "complexType", "Complex_Type_Definition_details", "documentation", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            "Annotation_details", "element", "Element_Declaration_details Particle_details", "field", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            "Identity-constraint_Definition_details", "group", "Model_Group_Definition_details Particle_details", "import", "", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            "include", "", "key", "Identity-constraint_Definition_details", "keyref", "Identity-constraint_Definition_details", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+            "list", "Simple_Type_Definition_details", "notation", "Notation_Declaration_details", "redefine", "", "restriction", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+            "Simple_Type_Definition_details", "schema", "Schema_details", "selector", "Identity-constraint_Definition_details", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            "sequence", "Model_Group_details Particle_details", "simpleContent", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "Complex_Type_Definition_details", //$NON-NLS-1$
             // "simpleContent::attributeGroup", "",
-            "simpleContent::extension", "Complex_Type_Definition_details", "simpleContent::restriction",
-            "Complex_Type_Definition_details", "simpleType", "Simple_Type_Definition_details", "union",
-            "Simple_Type_Definition_details", "unique", "Identity-constraint_Definition_details", });
+            "simpleContent::extension", "Complex_Type_Definition_details", "simpleContent::restriction", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "Complex_Type_Definition_details", "simpleType", "Simple_Type_Definition_details", "union", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            "Simple_Type_Definition_details", "unique", "Identity-constraint_Definition_details", }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     /**
      * The list of anchors in <a href="http://www.w3.org/TR/xmlschema-2/">Part 2</a>.
      */
-    protected List part2Anchors = Arrays.asList(new String[] { "enumeration", "fractionDigits", "length", "list", "maxExclusive",
-            "maxInclusive", "maxLength", "minExclusive", "minInclusive", "minLength", "pattern", "restriction", "simpleType",
-            "totalDigits", "union", "whiteSpace", });
+    protected List part2Anchors = Arrays.asList(new String[] { "enumeration", "fractionDigits", "length", "list", "maxExclusive", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            "maxInclusive", "maxLength", "minExclusive", "minInclusive", "minLength", "pattern", "restriction", "simpleType", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+            "totalDigits", "union", "whiteSpace", }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     /**
      * The list of components in <a href="http://www.w3.org/TR/xmlschema-2/">Part 2</a>.
      */
-    protected List part2Components = Arrays.asList(new String[] { "enumeration", "dc-enumeration", "fractionDigits",
-            "dc-fractionDigits", "length", "dc-length", "list", "dc-defn", "maxExclusive", "dc-maxExclusive", "maxInclusive",
-            "dc-maxInclusive", "maxLength", "dc-maxLength", "minExclusive", "dc-minExclusive", "minInclusive", "dc-minInclusive",
-            "minLength", "dc-minLength", "pattern", "dc-pattern", "restriction", "dc-defn", "simpleType", "dc-defn",
-            "totalDigits", "dc-totalDigits", "union", "dc-defn", "whiteSpace", "dc-whiteSpace", });
+    protected List part2Components = Arrays.asList(new String[] { "enumeration", "dc-enumeration", "fractionDigits", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "dc-fractionDigits", "length", "dc-length", "list", "dc-defn", "maxExclusive", "dc-maxExclusive", "maxInclusive", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+            "dc-maxInclusive", "maxLength", "dc-maxLength", "minExclusive", "dc-minExclusive", "minInclusive", "dc-minInclusive", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+            "minLength", "dc-minLength", "pattern", "dc-pattern", "restriction", "dc-defn", "simpleType", "dc-defn", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+            "totalDigits", "dc-totalDigits", "union", "dc-defn", "whiteSpace", "dc-whiteSpace", }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
     /**
      * The URL for errata.
      */
-    protected String errata = "http://www.w3.org/2001/05/xmlschema-rec-comments";
+    protected String errata = "http://www.w3.org/2001/05/xmlschema-rec-comments"; //$NON-NLS-1$
 
     /**
      * A markup style indicating the feature is required to be supported.
      */
-    public static final String REQUIRES = "requires";
+    public static final String REQUIRES = "requires"; //$NON-NLS-1$
 
     /**
      * A markup style indicating the feature not required to be supported.
      */
-    public static final String ALLOWS = "allows";
+    public static final String ALLOWS = "allows"; //$NON-NLS-1$
 
     /**
      * A markup style indicating the feature will eventually be required to be supported.
      */
-    public static final String FUTURE = "future";
+    public static final String FUTURE = "future"; //$NON-NLS-1$
 
     /**
      * A markup style indicating the feature will never be required to be supported.
      */
-    public static final String NEVER = "never";
+    public static final String NEVER = "never"; //$NON-NLS-1$
 
     /**
      * Creates an instance.
@@ -250,16 +250,16 @@ public class XSDParser {
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(source);
             for (Node child = document.getDocumentElement().getFirstChild(); child != null; child = child.getNextSibling()) {
-                if ("elementAnnotation".equals(child.getLocalName())) {
+                if ("elementAnnotation".equals(child.getLocalName())) { //$NON-NLS-1$
                     handleMarkup(elementDeclarationMarkupMap, (Element) child);
-                } else if ("attributeAnnotation".equals(child.getLocalName())) {
+                } else if ("attributeAnnotation".equals(child.getLocalName())) { //$NON-NLS-1$
                     handleMarkup(attributeDeclarationMarkupMap, (Element) child);
-                } else if ("content".equals(child.getLocalName())) {
+                } else if ("content".equals(child.getLocalName())) { //$NON-NLS-1$
                     handleMarkup(contentDocumentationMap, (Element) child);
-                } else if ("typeMap".equals(child.getLocalName())) {
+                } else if ("typeMap".equals(child.getLocalName())) { //$NON-NLS-1$
                     Element markupElement = (Element) child;
-                    String schemaType = markupElement.getAttribute("schemaType");
-                    String javaClass = markupElement.getAttribute("javaClass");
+                    String schemaType = markupElement.getAttribute("schemaType"); //$NON-NLS-1$
+                    String javaClass = markupElement.getAttribute("javaClass"); //$NON-NLS-1$
                     schemaTypeToJavaClassMap.put(schemaType, javaClass);
                 }
             }
@@ -275,19 +275,19 @@ public class XSDParser {
      * @param markupElement the element specifying the markup.
      */
     public void handleMarkup(Map markupMap, Element markupElement) {
-        String keyList = markupElement.getAttribute("key");
+        String keyList = markupElement.getAttribute("key"); //$NON-NLS-1$
         for (StringTokenizer stringTokenizer = new StringTokenizer(keyList); stringTokenizer.hasMoreTokens();) {
             String key = stringTokenizer.nextToken();
-            String markup = markupElement.getAttribute("markup");
+            String markup = markupElement.getAttribute("markup"); //$NON-NLS-1$
             if (markup.length() > 0) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 try {
                     TransformerFactory transformerFactory = TransformerFactory.newInstance();
                     Transformer transformer = transformerFactory.newTransformer();
 
-                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                    transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+                    transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
+                    transformer.setOutputProperty(OutputKeys.METHOD, "xml"); //$NON-NLS-1$
+                    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
 
                     for (Node grandChild = markupElement.getFirstChild(); grandChild != null; grandChild = grandChild
                             .getNextSibling()) {
@@ -296,8 +296,8 @@ public class XSDParser {
                         }
                     }
                     String serialization = out.toString();
-                    serialization = serialization.substring(serialization.indexOf("<div>"));
-                    markupMap.put(key, markup + "@" + serialization);
+                    serialization = serialization.substring(serialization.indexOf("<div>")); //$NON-NLS-1$
+                    markupMap.put(key, markup + "@" + serialization); //$NON-NLS-1$
                 } catch (Exception exception) {
                     exception.printStackTrace(System.err);
                 }
@@ -315,7 +315,7 @@ public class XSDParser {
     public String getContentDocumentation(String key) {
         String result = (String) contentDocumentationMap.get(key);
         if (result != null) {
-            result = result.substring(result.indexOf("@") + 1);
+            result = result.substring(result.indexOf("@") + 1); //$NON-NLS-1$
             if (result.length() == 0) {
                 result = null;
             }
@@ -333,7 +333,7 @@ public class XSDParser {
     public String getElementDeclarationMarkup(String key) {
         String result = (String) elementDeclarationMarkupMap.get(key);
         if (result != null) {
-            result = result.substring(0, result.indexOf("@"));
+            result = result.substring(0, result.indexOf("@")); //$NON-NLS-1$
             if (result.length() == 0) {
                 result = null;
             }
@@ -351,7 +351,7 @@ public class XSDParser {
     public String getElementDeclarationDocumentation(String key) {
         String result = (String) elementDeclarationMarkupMap.get(key);
         if (result != null) {
-            result = result.substring(result.indexOf("@") + 1);
+            result = result.substring(result.indexOf("@") + 1); //$NON-NLS-1$
             if (result.length() == 0) {
                 result = null;
             }
@@ -369,7 +369,7 @@ public class XSDParser {
     public String getAttributeDeclarationMarkup(String key) {
         String result = (String) attributeDeclarationMarkupMap.get(key);
         if (result != null) {
-            result = result.substring(0, result.indexOf("@"));
+            result = result.substring(0, result.indexOf("@")); //$NON-NLS-1$
             if (result.length() == 0) {
                 result = null;
             }
@@ -387,7 +387,7 @@ public class XSDParser {
     public String getAttributeDeclarationDocumentation(String key) {
         String result = (String) attributeDeclarationMarkupMap.get(key);
         if (result != null) {
-            result = result.substring(result.indexOf("@") + 1);
+            result = result.substring(result.indexOf("@") + 1); //$NON-NLS-1$
             if (result.length() == 0) {
                 result = null;
             }
@@ -405,15 +405,15 @@ public class XSDParser {
         String result = xsdElementDeclaration.getName();
         XSDElementDeclaration parentElementDeclaration = (XSDElementDeclaration) specialAnchorMap.get(xsdElementDeclaration);
         if (parentElementDeclaration != null) {
-            result = "<a target='Part1' href='" + XSDConstants.PART1 + "#element-" + parentElementDeclaration.getName() + "::"
+            result = "<a target='Part1' href='" + XSDConstants.PART1 + "#element-" + parentElementDeclaration.getName() + "::" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                     + result;
         } else if (part2Anchors.contains(result)) {
-            result = "<a target='Part2' href='" + XSDConstants.PART2 + "#element-" + result;
+            result = "<a target='Part2' href='" + XSDConstants.PART2 + "#element-" + result; //$NON-NLS-1$ //$NON-NLS-2$
         } else {
-            result = "<a target='Part1' href='" + XSDConstants.PART1 + "#element-" + result;
+            result = "<a target='Part1' href='" + XSDConstants.PART1 + "#element-" + result; //$NON-NLS-1$ //$NON-NLS-2$
         }
 
-        return result + "'>";
+        return result + "'>"; //$NON-NLS-1$
     }
 
     /**
@@ -426,7 +426,7 @@ public class XSDParser {
         String name = xsdElementDeclaration.getName();
         XSDElementDeclaration parentElementDeclaration = (XSDElementDeclaration) specialAnchorMap.get(xsdElementDeclaration);
         if (parentElementDeclaration != null) {
-            name = parentElementDeclaration.getName() + "::" + name;
+            name = parentElementDeclaration.getName() + "::" + name; //$NON-NLS-1$
         }
 
         int part = 0;
@@ -448,15 +448,15 @@ public class XSDParser {
             int count = 0;
             for (StringTokenizer stringTokenizer = new StringTokenizer(anchors); stringTokenizer.hasMoreTokens();) {
                 String anchor = stringTokenizer.nextToken();
-                result.append("&nbsp;&nbsp;<a target='Part");
+                result.append("&nbsp;&nbsp;<a target='Part"); //$NON-NLS-1$
                 result.append(part);
-                result.append("' href='");
+                result.append("' href='"); //$NON-NLS-1$
                 result.append(part == 1 ? XSDConstants.PART1 : XSDConstants.PART2);
-                result.append("#");
+                result.append("#"); //$NON-NLS-1$
                 result.append(anchor);
-                result.append("'><font size=-2>");
+                result.append("'><font size=-2>"); //$NON-NLS-1$
                 result.append(++count);
-                result.append("</font></a>");
+                result.append("</font></a>"); //$NON-NLS-1$
             }
             return result.length() > 0 ? result.toString() : null;
         } else {
@@ -473,27 +473,27 @@ public class XSDParser {
     public String getSimpleTypeDefinitionLink(XSDSimpleTypeDefinition xsdSimpleTypeDefinition) {
         String reference = xsdSimpleTypeDefinition.getName();
         StringBuffer result = new StringBuffer();
-        if ("anyType".equals(reference)) {
-            result.append("<a target='Part1' href='");
+        if ("anyType".equals(reference)) { //$NON-NLS-1$
+            result.append("<a target='Part1' href='"); //$NON-NLS-1$
             result.append(XSDConstants.PART1);
         } else {
-            result.append("<a target='Part2' href='");
+            result.append("<a target='Part2' href='"); //$NON-NLS-1$
             result.append(XSDConstants.PART2);
         }
-        result.append("#");
-        if ("anyType".equals(reference)) {
-            reference = "ur-type-itself";
-        } else if ("anySimpleType".equals(reference)) {
-            reference = "anySimpleType-component";
-        } else if ("anyListType".equals(reference)) {
-            reference = "element-list";
-        } else if ("anyUnionType".equals(reference)) {
-            reference = "element-union";
+        result.append("#"); //$NON-NLS-1$
+        if ("anyType".equals(reference)) { //$NON-NLS-1$
+            reference = "ur-type-itself"; //$NON-NLS-1$
+        } else if ("anySimpleType".equals(reference)) { //$NON-NLS-1$
+            reference = "anySimpleType-component"; //$NON-NLS-1$
+        } else if ("anyListType".equals(reference)) { //$NON-NLS-1$
+            reference = "element-list"; //$NON-NLS-1$
+        } else if ("anyUnionType".equals(reference)) { //$NON-NLS-1$
+            reference = "element-union"; //$NON-NLS-1$
         }
         result.append(reference);
-        result.append("'>");
+        result.append("'>"); //$NON-NLS-1$
         result.append(xsdSimpleTypeDefinition.getName());
-        result.append("</a>");
+        result.append("</a>"); //$NON-NLS-1$
         return result.toString();
     }
 
@@ -507,11 +507,11 @@ public class XSDParser {
         String result = xsdElementDeclaration.getName();
         XSDElementDeclaration parentElementDeclaration = (XSDElementDeclaration) specialAnchorMap.get(xsdElementDeclaration);
         if (parentElementDeclaration != null) {
-            result = "element-" + parentElementDeclaration.getName() + "::" + result;
+            result = "element-" + parentElementDeclaration.getName() + "::" + result; //$NON-NLS-1$ //$NON-NLS-2$
         } else if (part2Anchors.contains(result)) {
-            result = "element-2-" + result;
+            result = "element-2-" + result; //$NON-NLS-1$
         } else {
-            result = "element-" + result;
+            result = "element-" + result; //$NON-NLS-1$
         }
 
         return result;
@@ -541,31 +541,31 @@ public class XSDParser {
      * Print the start of the document.
      */
     public void printHeader() {
-        System.out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
-        System.out.println("<html>");
+        System.out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">"); //$NON-NLS-1$
+        System.out.println("<html>"); //$NON-NLS-1$
 
-        System.out.println("<style type='text/css'>");
-        System.out.println("  code { font-family: monospace; font-size: 100%}");
-        System.out.println("  div.reprdef { border: 4px double gray; margin: 0em 1em; padding: 0em }");
-        System.out.println("  span.reprdef { color: #A52A2A }");
+        System.out.println("<style type='text/css'>"); //$NON-NLS-1$
+        System.out.println("  code { font-family: monospace; font-size: 100%}"); //$NON-NLS-1$
+        System.out.println("  div.reprdef { border: 4px double gray; margin: 0em 1em; padding: 0em }"); //$NON-NLS-1$
+        System.out.println("  span.reprdef { color: #A52A2A }"); //$NON-NLS-1$
 
-        System.out.println("  div.reprHeader { margin: 4px; font-weight: bold }");
+        System.out.println("  div.reprHeader { margin: 4px; font-weight: bold }"); //$NON-NLS-1$
         System.out
-                .println("  div.reprBody { border-top-width: 4px; border-top-style: double; border-top-color: #d3d3d3; padding: 4px ; margin: 0em}");
+                .println("  div.reprBody { border-top-width: 4px; border-top-style: double; border-top-color: #d3d3d3; padding: 4px ; margin: 0em}"); //$NON-NLS-1$
 
-        System.out.println("  div.never, span.never { color : #7F7F7F }");
+        System.out.println("  div.never, span.never { color : #7F7F7F }"); //$NON-NLS-1$
         // System.out.println(" div.future, span.future { color : #AF7F7F }");
-        System.out.println("  div.allows, span.allows { color : #7FAF7F }");
-        System.out.println("  div.future, span.future { color : #7F7FAF }");
+        System.out.println("  div.allows, span.allows { color : #7FAF7F }"); //$NON-NLS-1$
+        System.out.println("  div.future, span.future { color : #7F7FAF }"); //$NON-NLS-1$
 
-        System.out.println("</style>");
+        System.out.println("</style>"); //$NON-NLS-1$
     }
 
     /**
      * Print the end of the document.
      */
     public void printFooter() {
-        System.out.println("</html>");
+        System.out.println("</html>"); //$NON-NLS-1$
     }
 
     /**
@@ -595,7 +595,7 @@ public class XSDParser {
          * XSDSchema xsdSchema = xsdResource.getSchema();
          */
 
-        String elementContentHeaderDocumentation = getContentDocumentation("element-header");
+        String elementContentHeaderDocumentation = getContentDocumentation("element-header"); //$NON-NLS-1$
         if (elementContentHeaderDocumentation != null) {
             System.out.println(elementContentHeaderDocumentation);
         }
@@ -604,7 +604,7 @@ public class XSDParser {
 
         for (Iterator iter = all.iterator(); iter.hasNext();) {
             XSDElementDeclaration concept = (XSDElementDeclaration) iter.next();
-            System.out.println("CONCEPT: " + concept.getName() + "-- " + concept.getContainer().getClass().getName());
+            System.out.println("CONCEPT: " + concept.getName() + "-- " + concept.getContainer().getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
             // name of the concept in English
             XSDAnnotation annotation = concept.getAnnotation();
@@ -612,10 +612,10 @@ public class XSDParser {
                 EList list = annotation.getApplicationInformation();
                 for (Iterator iterator = list.iterator(); iterator.hasNext();) {
                     Element appinfo = (Element) iterator.next();
-                    String language = appinfo.getAttribute("source");
-                    if ("EN".equals(language.toUpperCase())) {
+                    String language = appinfo.getAttribute("source"); //$NON-NLS-1$
+                    if ("EN".equals(language.toUpperCase())) { //$NON-NLS-1$
                         if (appinfo.getFirstChild() != null)
-                            System.out.println("     " + appinfo.getFirstChild().getNodeValue());
+                            System.out.println("     " + appinfo.getFirstChild().getNodeValue()); //$NON-NLS-1$
                     }
                 }
             }
@@ -625,7 +625,7 @@ public class XSDParser {
             if (typedef instanceof XSDComplexTypeDefinition) {
                 XSDComplexTypeContent xsdContent = ((XSDComplexTypeDefinition) typedef).getContent();
                 XSDParticle xsdParticle = (XSDParticle) xsdContent;
-                String ident = "    ";
+                String ident = "    "; //$NON-NLS-1$
                 processParticle(xsdParticle, ident);
             }
 
@@ -643,43 +643,43 @@ public class XSDParser {
             System.out.print(elementDeclarationName);
             if (minOccurs == 0) {
                 if (maxOccurs == 1) {
-                    System.out.print("?");
+                    System.out.print("?"); //$NON-NLS-1$
                 } else {
-                    System.out.print("*");
+                    System.out.print("*"); //$NON-NLS-1$
                 }
             } else if (maxOccurs == -1) {
-                System.out.print("+");
+                System.out.print("+"); //$NON-NLS-1$
             }
-            System.out.println("  -- root Container: "
+            System.out.println("  -- root Container: " //$NON-NLS-1$
                     + ((XSDParticle) xsdElementDeclaration.getContainer()).getTerm().getClass().getName());
 
         } else if (xsdTerm instanceof XSDModelGroup) {
             XSDModelGroup xsdModelGroup = (XSDModelGroup) xsdTerm;
             List particles = xsdModelGroup.getParticles();
 
-            String separator = XSDCompositor.CHOICE_LITERAL == xsdModelGroup.getCompositor() ? "|"
-                    : XSDCompositor.SEQUENCE_LITERAL == xsdModelGroup.getCompositor() ? "&" : "a";
+            String separator = XSDCompositor.CHOICE_LITERAL == xsdModelGroup.getCompositor() ? "|" //$NON-NLS-1$
+                    : XSDCompositor.SEQUENCE_LITERAL == xsdModelGroup.getCompositor() ? "&" : "a"; //$NON-NLS-1$ //$NON-NLS-2$
 
             for (Iterator it = particles.iterator(); it.hasNext();) {
                 XSDParticle childParticle = (XSDParticle) it.next();
-                System.out.print(ident + "[" + separator + "]");
-                processParticle(childParticle, ident + "    ");
+                System.out.print(ident + "[" + separator + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+                processParticle(childParticle, ident + "    "); //$NON-NLS-1$
             }
 
             if (minOccurs == 0) {
                 if (maxOccurs == 1) {
-                    System.out.print("?");
+                    System.out.print("?"); //$NON-NLS-1$
                 } else {
-                    System.out.print("*");
+                    System.out.print("*"); //$NON-NLS-1$
                 }
             } else if (maxOccurs == -1) {
-                System.out.print("+");
+                System.out.print("+"); //$NON-NLS-1$
             }
 
             System.out.println();
 
         } else if (xsdTerm instanceof XSDWildcard) {
-            System.out.print("<em>{any}</em>");
+            System.out.print("<em>{any}</em>"); //$NON-NLS-1$
         }
     }
 
@@ -762,10 +762,10 @@ public class XSDParser {
              * 
              * XSDParser parser = new XSDParser(); parser.loadAndPrint(xsd);
              */
-            FileWriter fw = new FileWriter("/tmp/xcb35sr.xsd");
+            FileWriter fw = new FileWriter("/tmp/xcb35sr.xsd"); //$NON-NLS-1$
 
-            Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xsd", new XSDResourceFactoryImpl());
-            String xsdFile = "/home/bgrieder/workspace/XCBL35/XCBL35.xsd";
+            Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xsd", new XSDResourceFactoryImpl()); //$NON-NLS-1$
+            String xsdFile = "/home/bgrieder/workspace/XCBL35/XCBL35.xsd"; //$NON-NLS-1$
             ResourceSet resourceSet = new ResourceSetImpl();
             XSDResourceImpl xsdResource = (XSDResourceImpl) resourceSet.getResource(URI.createFileURI(xsdFile), true);
 
@@ -774,9 +774,9 @@ public class XSDParser {
              */
             XSDSchema xsdSchema = xsdResource.getSchema();
 
-            String header = "<xsd:schema " + "elementFormDefault=\"qualified\" "
-                    + "targetNamespace=\"rrn:org.xcbl:schemas/xcbl/v3_5/xcbl35.xsd\" "
-                    + "xmlns=\"rrn:org.xcbl:schemas/xcbl/v3_5/xcbl35.xsd\" " + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">";
+            String header = "<xsd:schema " + "elementFormDefault=\"qualified\" " //$NON-NLS-1$ //$NON-NLS-2$
+                    + "targetNamespace=\"rrn:org.xcbl:schemas/xcbl/v3_5/xcbl35.xsd\" " //$NON-NLS-1$
+                    + "xmlns=\"rrn:org.xcbl:schemas/xcbl/v3_5/xcbl35.xsd\" " + "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">"; //$NON-NLS-1$ //$NON-NLS-2$
 
             fw.write(header);
 
@@ -785,7 +785,7 @@ public class XSDParser {
                 XSDElementDeclaration elementDeclaration = (XSDElementDeclaration) it.next();
                 // if ("Order".equals(elementDeclaration.getName())) {
                 fw.write(Util.nodeToString(elementDeclaration.getElement()).replaceAll(
-                        "xmlns:xsd=\"http:\\/\\/www\\.w3\\.org\\/2001\\/XMLSchema\"", ""));
+                        "xmlns:xsd=\"http:\\/\\/www\\.w3\\.org\\/2001\\/XMLSchema\"", "")); //$NON-NLS-1$ //$NON-NLS-2$
                 // }
             }
             it = xsdSchema.getTypeDefinitions().iterator();
@@ -793,7 +793,7 @@ public class XSDParser {
                 XSDTypeDefinition typedef = (XSDTypeDefinition) it.next();
                 fw.write(Util.nodeToString(typedef.getElement()));
             }
-            String footer = "</xsd:schema>";
+            String footer = "</xsd:schema>"; //$NON-NLS-1$
             fw.write(footer);
             fw.close();
         } catch (Exception e) {

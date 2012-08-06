@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.views.ServerView;
@@ -360,15 +361,15 @@ public class TreeObjectUtil {
 
     private static String getNewName(Shell shell, String displayName, final XtentisPort destPort, final int type) {
         InputDialog id;
-        id = new InputDialog(shell, "Rename", "Please enter a new name", displayName, new IInputValidator() {
+        id = new InputDialog(shell, Messages.TreeObjectUtil_Rename, Messages.TreeObjectUtil_PleaseEnterNewName, displayName, new IInputValidator() {
 
             public String isValid(String newText) {
                 if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                    return "The name cannot be empty";
+                    return Messages.TreeObjectUtil_NameCannotbeEmpty;
 
                 if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                         || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
-                    return "The name cannot contain the empty characters";
+                    return Messages.TreeObjectUtil_NameCannotContainEmpty;
 
                 newText = newText.trim();
                 try {
@@ -384,7 +385,7 @@ public class TreeObjectUtil {
                             || (type == TreeObject.TRANSFORMER && destPort.existsTransformerV2(
                                     new WSExistsTransformerV2(new WSTransformerV2PK(newText))).is_true())
                             || (type == TreeObject.MENU && destPort.existsMenu(new WSExistsMenu(new WSMenuPK(newText))).is_true()))
-                        return "The name already exists";
+                        return Messages.TreeObjectUtil_NameAlreadyExist;
                     if (Util.IsEnterPrise()
                             && ((type == TreeObject.ROLE && destPort.existsRole(new WSExistsRole(new WSRolePK(newText)))
                                     .is_true())
@@ -392,7 +393,7 @@ public class TreeObjectUtil {
                                             new WSExistsUniverse(new WSUniversePK(newText))).is_true()) || (type == TreeObject.SYNCHRONIZATIONPLAN && destPort
                                     .existsSynchronizationPlan(
                                             new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(newText))).is_true())))
-                        return "The name already exists";
+                        return Messages.TreeObjectUtil_NameAlreadyExist;
                 } catch (RemoteException e) {
                     log.error(e.getMessage(), e);
                 }

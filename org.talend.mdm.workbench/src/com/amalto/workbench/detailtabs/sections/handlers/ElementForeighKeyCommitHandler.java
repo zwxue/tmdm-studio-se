@@ -15,6 +15,7 @@ package com.amalto.workbench.detailtabs.sections.handlers;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyAnnoInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -26,7 +27,7 @@ public class ElementForeighKeyCommitHandler extends ListContentsCommitHandler<Fo
 
     @Override
     protected String getMsgHeader() {
-        return "element foreign key";
+        return Messages.ElementForeighKeyCommitHandler_MsgHeader;
     }
 
     @Override

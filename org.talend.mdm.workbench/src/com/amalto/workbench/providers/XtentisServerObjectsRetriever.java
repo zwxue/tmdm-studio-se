@@ -23,6 +23,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
@@ -116,22 +117,22 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
     public synchronized void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
         try {
             if (password == null || password.length() == 0) {
-                throw new Exception("Password has not been specified!");
+                throw new Exception(Messages.XtentisServerObjectsRetriever_0);
             }
-            monitor.beginTask("Loading " + IConstants.TALEND + " Server Objects", "admin".equals(username) ? 12 : 9);
+            monitor.beginTask(Messages.bind(Messages.XtentisServerObjectsRetriever_1, IConstants.TALEND), Messages.XtentisServerObjectsRetriever_3.equals(username) ? 12 : 9);
             // server
             serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                     : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
             // init load category
-            monitor.subTask("load category...");
+            monitor.subTask(Messages.XtentisServerObjectsRetriever_4);
             LocalTreeObjectRepository.getInstance().startUp(view, endpointaddress, username, password);
             LocalTreeObjectRepository.getInstance().switchOnListening();
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);
             monitor.worked(1);
             // Access to server and get port
             XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
-            port.ping(new WSPing("Studio"));// viewer user can't use studio
+            port.ping(new WSPing(Messages.XtentisServerObjectsRetriever_5));// viewer user can't use studio
 
             monitor.worked(1);
 
@@ -146,9 +147,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
 
             if (monitor.isCanceled())
-                throw new InterruptedException("User Cancel");
+                throw new InterruptedException(Messages.XtentisServerObjectsRetriever_6);
 
-            monitor.subTask("Accessing server....");
+            monitor.subTask(Messages.XtentisServerObjectsRetriever_7);
             UserInfo user = new UserInfo();
             user.setUsername(username);
             user.setPassword(password);
@@ -170,7 +171,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 log.error(e.getMessage(), e);
             }
             if (xdmPKs != null) {
-                monitor.subTask("Loading Data Models");
+                monitor.subTask(Messages.XtentisServerObjectsRetriever_8);
                 for (int i = 0; i < xdmPKs.length; i++) {
                     String name = xdmPKs[i].getPk();
                     if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
@@ -184,7 +185,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             monitor.worked(1);
             if (monitor.isCanceled())
-                throw new InterruptedException("User Cancel");
+                throw new InterruptedException(Messages.XtentisServerObjectsRetriever_9);
 
             // DataClusters
             TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(), serverRoot,
@@ -196,7 +197,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 log.error(e.getMessage(), e);
             }
             if (xdcPKs != null) {
-                monitor.subTask("Loading Data Containers");
+                monitor.subTask(Messages.XtentisServerObjectsRetriever_10);
                 for (int i = 0; i < xdcPKs.length; i++) {
                     String name = xdcPKs[i].getPk();
                     if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE//$NON-NLS-1$
@@ -214,7 +215,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             monitor.worked(1);
             if (monitor.isCanceled())
-                throw new InterruptedException("User Cancel");
+                throw new InterruptedException(Messages.XtentisServerObjectsRetriever_11);
             // event management
             TreeParent eventManagement = new TreeParent(EXtentisObjects.EventManagement.getDisplayName(), serverRoot,
                     TreeObject.EVENT_MANAGEMENT, null, null);
@@ -236,7 +237,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     null);
             eventManagement.addChild(transformers);
             if (transformerPKs != null) {
-                monitor.subTask("Loading Transfomers");
+                monitor.subTask(Messages.XtentisServerObjectsRetriever_12);
                 for (int i = 0; i < transformerPKs.length; i++) {
                     String id = transformerPKs[i].getPk();
                     WSTransformerV2 wsobject = null;
@@ -259,7 +260,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(), serverRoot, TreeObject.ROUTING_RULE, null, null);
             eventManagement.addChild(rules);
             if (routingRulePKs != null) {
-                monitor.subTask("Loading Triggers");
+                monitor.subTask(Messages.XtentisServerObjectsRetriever_13);
                 for (int i = 0; i < routingRulePKs.length; i++) {
                     String id = routingRulePKs[i].getPk();
                     WSRoutingRule wsobject = null;
@@ -284,7 +285,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             }
             if (viewPKs != null) {
-                monitor.subTask("Loading Views");
+                monitor.subTask(Messages.XtentisServerObjectsRetriever_14);
                 for (int i = 0; i < viewPKs.length; i++) {
                     String name = viewPKs[i].getPk();
                     WSView wsobject = null;
@@ -296,7 +297,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             monitor.worked(1);
             if (monitor.isCanceled())
-                throw new InterruptedException("User Cancel");
+                throw new InterruptedException(Messages.XtentisServerObjectsRetriever_15);
 
             // Stored Procedures
             TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(), serverRoot,
@@ -309,7 +310,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 log.error(e.getMessage(), e);
             }
             if (spk != null) {
-                monitor.subTask("Loading Stored Procedures");
+                monitor.subTask(Messages.XtentisServerObjectsRetriever_16);
                 for (int i = 0; i < spk.length; i++) {
                     String name = spk[i].getPk();
                     WSStoredProcedure wsobject = null;
@@ -322,7 +323,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             }
             monitor.worked(1);
             if (monitor.isCanceled())
-                throw new InterruptedException("User Cancel");
+                throw new InterruptedException(Messages.XtentisServerObjectsRetriever_17);
 
             // Service Configuration
             TreeObject serviceConfiguration = new TreeObject(EXtentisObjects.ServiceConfiguration.getDisplayName(), serverRoot,
@@ -330,7 +331,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // serviceConfiguration.setXObject(false);
             monitor.worked(1);
             if (monitor.isCanceled())
-                throw new InterruptedException("User Cancel");
+                throw new InterruptedException(Messages.XtentisServerObjectsRetriever_18);
 
             // Menus
             WSMenuPK[] menuPKs = null;
@@ -346,7 +347,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             if (hasMenus) {
                 menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(), serverRoot, TreeObject.MENU, null, null);
                 if (menuPKs != null) {
-                    monitor.subTask("Loading Menus");
+                    monitor.subTask(Messages.XtentisServerObjectsRetriever_19);
                     for (int i = 0; i < menuPKs.length; i++) {
                         String id = menuPKs[i].getPk();
                         WSMenu wsobject = null;
@@ -363,7 +364,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 monitor.worked(1);
 
                 if (monitor.isCanceled())
-                    throw new InterruptedException("User Cancel");
+                    throw new InterruptedException(Messages.XtentisServerObjectsRetriever_20);
             }
             // move Job from EE to CE.
 
@@ -395,7 +396,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             monitor.done();
         } catch (Exception e) {
             if (monitor.isCanceled())
-                throw new InterruptedException("User Cancel");
+                throw new InterruptedException(Messages.XtentisServerObjectsRetriever_21);
 
             log.error(e.getMessage(), e);
             throw new InvocationTargetException(new XtentisException(e.getLocalizedMessage()));

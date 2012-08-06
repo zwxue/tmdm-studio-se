@@ -60,6 +60,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
@@ -99,9 +100,9 @@ public class ComplexTableViewer {
 
     protected boolean editable = true;
 
-    protected static String ERROR_ITEMALREADYEXISTS_CONTENT = "This line already Exists!";
+    protected static String ERROR_ITEMALREADYEXISTS_CONTENT = Messages.ComplexTableViewer_AlreadyExists;
 
-    protected static String ERROR_ITEMALREADYEXISTS_TITLE = "Warning";
+    protected static String ERROR_ITEMALREADYEXISTS_TITLE = Messages.Warning;
 
     // mainPage can be null
     protected AMainPageV2 mainPage;
@@ -341,7 +342,7 @@ public class ComplexTableViewer {
         addButton = toolkit.createButton(mainComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
         addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-        addButton.setToolTipText("Add");
+        addButton.setToolTipText(Messages.ComplexTableViewer_Add);
         addButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -375,8 +376,8 @@ public class ComplexTableViewer {
                                 ((Text) column.getControl()).setText(text);
                             }
                         } else {
-                            MessageDialog.openError(ComplexTableViewer.this.getViewer().getControl().getShell(), "Input Error",
-                                    "The Column '" + column.getName() + "' cannot be empty");
+                            MessageDialog.openError(ComplexTableViewer.this.getViewer().getControl().getShell(), Messages.ComplexTableViewer_InputError,
+                                    Messages.ComplexTableViewer_ErrorMsg + column.getName() + Messages.ComplexTableViewer_ErrorMsgA);
                             return;
                         }
                     }
@@ -420,7 +421,7 @@ public class ComplexTableViewer {
         viewer = new TableViewer(table);
 
         // table.setLayoutData(new GridData(GridData.FILL_BOTH));
-        table.setToolTipText("Column with * is required, column with U is unique!");
+        table.setToolTipText(Messages.ComplexTableViewer_TableTip);
         for (ComplexTableViewerColumn column : columns) {
             TableColumn tableColumn = new TableColumn(table, SWT.CENTER);
             tableColumn.setText(column.getName());
@@ -462,7 +463,7 @@ public class ComplexTableViewer {
         upButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         upButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
-        upButton.setToolTipText("Move down the selected item");
+        upButton.setToolTipText(Messages.ComplexTableViewer_UpBtnTip);
         upButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -493,7 +494,7 @@ public class ComplexTableViewer {
         downButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         downButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-        downButton.setToolTipText("Move down the selected item");
+        downButton.setToolTipText(Messages.ComplexTableViewer_DownBtnTip);
         downButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -523,7 +524,7 @@ public class ComplexTableViewer {
         });
         deleteButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-        deleteButton.setToolTipText("Delete the selected item");
+        deleteButton.setToolTipText(Messages.ComplexTableViewer_DelBtnLabel);
         deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
         deleteButton.addSelectionListener(new SelectionListener() {
 

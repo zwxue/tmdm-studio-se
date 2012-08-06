@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
@@ -89,7 +90,7 @@ public class RoleAssignmentDialog extends Dialog {
         Label instanceNameLabel = new Label(composite, SWT.NONE);
         instanceNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        instanceNameLabel.setText("Enter a name for the New Instance");
+        instanceNameLabel.setText(Messages.RoleAssignmentDialog_EnterNameForNewInstance);
 
         instanceNameText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         instanceNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -107,7 +108,7 @@ public class RoleAssignmentDialog extends Dialog {
 
         if(Util.IsEnterPrise()){
 	        Label infoLabel = new Label(composite, SWT.NONE);
-	        infoLabel.setText("Role Access definition");
+	        infoLabel.setText(Messages.RoleAssignmentDialog_RoleAccessDefinition);
 	        ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
 	        ruleColumn.setColumnWidth(250);
 	        // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
@@ -115,7 +116,7 @@ public class RoleAssignmentDialog extends Dialog {
 	        ruleColumn.setComboValues(roles.toArray(new String[] {}));
 	        ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
 	        acsColumn.setColumnWidth(250);
-	        acsColumn.setComboValues(new String[] { "Read Only", "Read & Write" });
+	        acsColumn.setComboValues(new String[] { Messages.RoleAssignmentDialog_ReadOnly, Messages.RoleAssignmentDialog_ReadWrite });
 	        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
 	        complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns), toolkit, composite);
 	        complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
@@ -162,7 +163,7 @@ public class RoleAssignmentDialog extends Dialog {
                         WSRoleSpecificationInstance[] specInstance = spec.getInstance();
                         WSRoleSpecificationInstance newInstance = new WSRoleSpecificationInstance();
                         newInstance.setInstanceName(ObjectName);
-                        newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);
+                        newInstance.setWritable(keyValues.get(1).value.equals(Messages.RoleAssignmentDialog_ReadOnly) ? false : true);
                         WSRoleSpecificationInstance[] newSpecInstance = new WSRoleSpecificationInstance[specInstance.length + 1];
                         System.arraycopy(specInstance, 0, newSpecInstance, 0, specInstance.length);
                         newSpecInstance[specInstance.length] = newInstance;

@@ -32,6 +32,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -47,8 +48,8 @@ public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
     public XSDSetAnnotaionDisplayFormatAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.THIN_MIN_VIEW.getPath()));
-        setText("Set the display format");
-        setToolTipText("Set the display format for the content of this element");
+        setText(Messages.XSDSetAnnoXX_Text);
+        setToolTipText(Messages.XSDSetAnnoXX_ActionTip2);
     }
 
     public IStatus doAction() {
@@ -67,7 +68,7 @@ public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
             // IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             // XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
             if (struc.getAnnotation() == null) {
-                throw new RuntimeException("Unable to edit an annotation for object of type "
+                throw new RuntimeException(Messages.XSDSetAnnoXX_ExceptionInfo
                         + selection.getFirstElement().getClass().getName());
             }
 
@@ -79,7 +80,7 @@ public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
                 public void widgetSelected(SelectionEvent e) {
                     dlg.close();
                 }
-            }, page.getSite().getShell(), "Set the display format for the content of this element");
+            }, page.getSite().getShell(), Messages.XSDSetAnnoXX_DialogTitle2);
 
             dlg.setBlockOnOpen(true);
             int ret = dlg.open();
@@ -97,8 +98,8 @@ public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to set a fomat: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDSetAnnoXX_ErrorMsg2, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 

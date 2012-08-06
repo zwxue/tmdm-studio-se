@@ -36,6 +36,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.actions.EditXObjectAction;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
@@ -64,7 +65,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
     protected List<WSUniverse> universes;
 
     public BrowseRevisionMainPage(FormEditor editor) {
-        super(editor, BrowseRevisionMainPage.class.getName(), "Revision Browser "
+        super(editor, BrowseRevisionMainPage.class.getName(), Messages.BrowseRevisionMainPage_RevisionBrowser
                 + ((XObjectBrowserInput) editor.getEditorInput()).getName().replaceAll("\\[.*\\]", "").trim());//$NON-NLS-1$//$NON-NLS-2$
 
     }
@@ -78,7 +79,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
         revisionIDComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         revisionIDComposite.setLayout(new GridLayout(1, true));
 
-        Label revisionLabel = toolkit.createLabel(revisionIDComposite, "RevisionID");
+        Label revisionLabel = toolkit.createLabel(revisionIDComposite, Messages.BrowseRevisionMainPage_RevisionID);
         revisionLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, true, 1, 1));
         revisionIDList = new org.eclipse.swt.widgets.List(revisionIDComposite, SWT.V_SCROLL | SWT.BORDER | SWT.LINE_SOLID);
         revisionIDList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1));
@@ -89,7 +90,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
         universeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         universeComposite.setLayout(new GridLayout(1, true));
 
-        Label universeLabel = toolkit.createLabel(universeComposite, "Version");
+        Label universeLabel = toolkit.createLabel(universeComposite, Messages.BrowseRevisionMainPage_Version);
         universeLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, true, 1, 1));
         universeList = new org.eclipse.swt.widgets.List(universeComposite, SWT.V_SCROLL | SWT.BORDER | SWT.LINE_SOLID);
         universeList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -252,8 +253,8 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
             refreshing = false;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.BrowseRevisionMainPage_ErrorRefreshingPage,
+                    Messages.bind(Messages.BrowseRevisionMainPage_ErrorRefreshingPageX, e.getLocalizedMessage()));
         }
 
     }

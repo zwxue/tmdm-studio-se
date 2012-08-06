@@ -44,6 +44,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.w3c.dom.Element;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -62,7 +63,7 @@ public class XSDPasteConceptAction extends UndoAction {
 
     HashMap<String, XSDTypeDefinition> typeList = new HashMap<String, XSDTypeDefinition>();
 
-    String displayName = "Paste Entity";
+    String displayName = Messages.XSDPasteConceptAction_DisplayName;
 
     public XSDPasteConceptAction(DataModelMainPage page, String title) {
         super(page);
@@ -71,7 +72,7 @@ public class XSDPasteConceptAction extends UndoAction {
         displayName = title;
         setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
         setText(displayName);
-        setToolTipText("Paste one or more Entities");
+        setToolTipText(Messages.XSDPasteConceptAction_ActionTip);
     }
 
     public IStatus doAction() {
@@ -102,17 +103,17 @@ public class XSDPasteConceptAction extends UndoAction {
                        
 
                         new_copy_concept = (XSDElementDeclaration) copy_concept.cloneConcreteComponent(true, false);
-                        InputDialog id = new InputDialog(page.getSite().getShell(), "Copy Element",
-                                "Enter a new Name for the Element", "Copy_of_" + copy_concept.getName(), new IInputValidator() {//$NON-NLS-2$
+                        InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDPasteConceptAction_CopyElement,
+                                Messages.XSDPasteConceptAction_DialogTip, Messages.bind(Messages.XSDPasteConceptAction_CopyOf, copy_concept.getName()), new IInputValidator() {//$NON-NLS-2$
 
                                     public String isValid(String newText) {
-                                        if ((newText == null) || "".equals(newText))
-                                            return "The Entity Name cannot be empty";
+                                        if ((newText == null) || "".equals(newText)) //$NON-NLS-1$
+                                            return Messages.XSDPasteConceptAction_NameCannNotbeEmpty;
                                         EList list = schema.getElementDeclarations();
                                         for (Iterator iter = list.iterator(); iter.hasNext();) {
                                             XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
                                             if (d.getName().equals(newText))
-                                                return "This Entity already exists";
+                                                return Messages.XSDPasteConceptAction_EntityAlreadyExists;
                                         }
                                         return null;
                                     };
@@ -200,8 +201,8 @@ public class XSDPasteConceptAction extends UndoAction {
                 return Status.CANCEL_STATUS;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to Paste Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDPasteConceptAction_ErrorMsg1, e.getLocalizedMessage()));
 
         }
         return Status.OK_STATUS;
@@ -307,8 +308,8 @@ public class XSDPasteConceptAction extends UndoAction {
                                     if (((XSDElementDeclaration) totm).getType() != null) {
                                         addAnnotion(struc, fromannotation);
                                     } else {
-                                        MessageDialog.openInformation(page.getSite().getShell(), "Warning", "The Entity: "
-                                                + fromElem.getName() + " is pointed to by a foreign key.");
+                                        MessageDialog.openInformation(page.getSite().getShell(), Messages.Warning,
+                                                Messages.bind(Messages.XSDPasteConceptAction_Information, fromElem.getName()));
                                         return;
                                     }
 
@@ -363,7 +364,7 @@ public class XSDPasteConceptAction extends UndoAction {
                     Element oldElem = oldAnn.getApplicationInformation().get(i);
                     // System.out.println(oldElem.getAttributes().getNamedItem(
                     // "source").getNodeValue());
-                    String type = oldElem.getAttributes().getNamedItem("source").getNodeValue();
+                    String type = oldElem.getAttributes().getNamedItem(Messages.XSDPasteConceptAction_Source).getNodeValue();
                     /*
                      * Element newElem = (Element) oldElem.cloneNode(true);
                      * listAppInfo.add(oldAnn.getApplicationInformation().get(i));
@@ -393,8 +394,8 @@ public class XSDPasteConceptAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.page.getSite().getShell(), "Error",
-                    "An error occured trying to paste Entities: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDPasteConceptAction_ErrorMsg2, e.getLocalizedMessage()));
         }
         return infor;
     }
@@ -420,9 +421,8 @@ public class XSDPasteConceptAction extends UndoAction {
                 for (XSDParticle particle : particles) {
                     // if the is particle with the same name, donot copy it.
                     if (isExist(toGroup, particle)) {
-                        boolean ifOverwrite = MessageDialog.openConfirm(this.page.getSite().getShell(), "confirm",
-                                "The Element '" + ((XSDElementDeclaration) particle.getTerm()).getName()
-                                        + "' already exsists,do you want to overwrite it?");
+                        boolean ifOverwrite = MessageDialog.openConfirm(this.page.getSite().getShell(), Messages.XSDPasteConceptAction_Confirm,
+                                Messages.bind(Messages.XSDPasteConceptAction_ErrorMsg3, ((XSDElementDeclaration) particle.getTerm()).getName()));
                         if (ifOverwrite) {
                             reomveElement(toGroup, particle);
                         } else

@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.utils.Util;
@@ -173,14 +174,14 @@ public class UndoAction extends Action {
      * @return
      */
     protected IStatus undo() {
-        log.info(getText() + " undo....");
+        log.info(getText() + Messages.UndoAction_undo);
         String doc = undoActionTrack.get(getActionUndoPos() - 1);
         refresh(doc);
         return Status.OK_STATUS;
     }
 
     protected IStatus redo() {
-        log.info(getText() + " redo....");
+        log.info(getText() + Messages.UndoAction_redo);
         String doc = redoActionTrack.get(getActionUndoPos());
         refresh(doc);
         return Status.OK_STATUS;

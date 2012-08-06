@@ -52,7 +52,7 @@ public class ListXPathComposite extends ListStringContentsComposite {
 
 	@Override
 	protected String getInfoColTitle() {
-		return "XPath";
+		return "XPath"; //$NON-NLS-1$
 	}
 
 	@Override

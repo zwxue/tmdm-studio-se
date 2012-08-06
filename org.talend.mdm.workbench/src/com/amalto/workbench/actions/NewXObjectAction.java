@@ -36,6 +36,7 @@ import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.editors.xsdeditor.XSDEditorUtil;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -105,8 +106,8 @@ public class NewXObjectAction extends Action {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("New");
-        setToolTipText("Create a new instance of an " + IConstants.TALEND + " Object");
+        setText(Messages.New);
+        setToolTipText(Messages.bind(Messages.NewXObjectAction_ActionTip, IConstants.TALEND));
     }
 
     @Override
@@ -122,56 +123,56 @@ public class NewXObjectAction extends Action {
             Object key = null;
             switch (xfolder.getType()) {
             case TreeObject.SOURCE:
-                title = "New Source";
+                title = Messages.NewXObjectAction_Title1;
                 break;
             case TreeObject.DESTINATION:
-                title = "New Destination";
+                title = Messages.NewXObjectAction_Title2;
                 break;
             case TreeObject.DATA_MODEL:
-                title = "New Data Model";
+                title = Messages.NewXObjectAction_NewDataModel;
                 break;
             case TreeObject.RESOURCES:
-                title = "New Resource";
+                title = Messages.NewXObjectAction_NewResource;
                 break;
             case TreeObject.CUSTOM_TYPE:
-                title = "New Custom Type";
+                title = Messages.NewXObjectAction_NewCustom;
                 break;
             case TreeObject.INBOUND_ADAPTOR:
-                title = "New Inbound Adaptor";
+                title = Messages.NewXObjectAction_NewInboundAdapter;
                 break;
             case TreeObject.INBOUND_PLUGIN:
-                title = "New Inbound Plugin";
+                title = Messages.NewXObjectAction_NewInboundPlugin;
                 break;
             case TreeObject.OUTBOUND_ADAPTOR:
-                title = "New Outbound Adaptor";
+                title = Messages.NewXObjectAction_NewOutboundAdapter;
                 break;
             case TreeObject.OUTBOUND_PLUGIN:
-                title = "New OutBound plugin";
+                title = Messages.NewXObjectAction_NewOutboundPlugin;
                 break;
             case TreeObject.DATA_CLUSTER:
-                title = "New Data Container";
+                title = Messages.NewXObjectAction_NewDataContainer;
                 break;
             case TreeObject.STORED_PROCEDURE:
-                title = "New Stored Procedure";
+                title = Messages.NewXObjectAction_NewStoredProc;
                 break;
             // case TreeObject.ROLE:
             case TreeObject.ROUTING_RULE:
-                title = "New Trigger";
+                title = Messages.NewXObjectAction_NewTrigger;
                 break;
             case TreeObject.MENU:
-                title = "New Menu";
+                title = Messages.NewXObjectAction_NewMenu;
                 break;
             case TreeObject.UNIVERSE:
-                title = "New Version";
+                title = Messages.NewXObjectAction_NewVersion;
                 break;
             case TreeObject.SYNCHRONIZATIONPLAN:
-                title = "New Synchronization Plan";
+                title = Messages.NewXObjectAction_NewSynPlan;
                 break;
             case TreeObject.TRANSFORMER:
-                title = "New Process";
+                title = Messages.NewXObjectAction_NewProcess;
                 break;
             case TreeObject.VIEW:
-                title = "New View";
+                title = Messages.NewXObjectAction_NewView;
                 break;
             default:
                 return;
@@ -186,16 +187,16 @@ public class NewXObjectAction extends Action {
                         xfolder,
                         view.getSite().getShell(),
                         title,// "New "+IConstants.TALEND+" Object Instance",
-                        "Enter a Name for the New Instance                                                                                  ",
+                        Messages.NewXObjectAction_DialogTip,
                         "Smart_view_", new IInputValidator() {//$NON-NLS-1$
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                    return "The Name cannot be empty";
+                                    return Messages.NewXObjectAction_NameCannotBeEmpty;
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)) {
                                 if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
-                                    return "The name cannot contains invalid character!";
+                                    return Messages.NewXObjectAction_NameCannotContainInvalid;
                                 }
                                 return null;
                             };
@@ -214,15 +215,15 @@ public class NewXObjectAction extends Action {
                 ViewInputDialog tid = new ViewInputDialog(view.getSite(),
                         xfolder, view.getSite()
                                 .getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
-                        "Enter a Name for the New Instance", "Browse_items_", new IInputValidator() {//$NON-NLS-2$
+                        Messages.NewXObjectAction_EnterNameForInstance, "Browse_items_", new IInputValidator() {//$NON-NLS-1$
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                    return "The Name cannot be empty";
+                                    return Messages.NewXObjectAction_NameCannotBeEmpty;
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+#*", newText)) {
                                 if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
-                                    return "The name cannot contain invalid character!";
+                                    return Messages.NewXObjectAction_NameCannotContainInvalid;
                                 }
                                 return null;
                             };
@@ -237,7 +238,7 @@ public class NewXObjectAction extends Action {
                 break;
             case TreeObject.DATA_CLUSTER:
                 StringBuffer clsBuf = new StringBuffer();
-                RoleAssignmentDialog dialog = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title, "Data Cluster",
+                RoleAssignmentDialog dialog = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title, Messages.NewXObjectAction_DataCluster,
                         clsBuf);
                 dialog.setBlockOnOpen(true);
                 if (dialog.open() == Window.OK) {
@@ -247,7 +248,7 @@ public class NewXObjectAction extends Action {
                 break;
             case TreeObject.DATA_MODEL:
                 StringBuffer mlBuf = new StringBuffer();
-                RoleAssignmentDialog dlg = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title, "Data Model",
+                RoleAssignmentDialog dlg = new RoleAssignmentDialog(view.getSite().getShell(), xfolder, title, Messages.NewXObjectAction_DataModel,
                         mlBuf);
                 dlg.setBlockOnOpen(true);
                 if (dlg.open() == Window.OK) {
@@ -271,15 +272,15 @@ public class NewXObjectAction extends Action {
             case TreeObject.UNIVERSE:
             case TreeObject.SYNCHRONIZATIONPLAN:
                 InputDialog id1 = new InputDialog(view.getSite().getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
-                        "Enter a Name for the New Instance", null, new IInputValidator() {
+                        Messages.NewXObjectAction_EnterNameForInstance, null, new IInputValidator() {
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                    return "The Name cannot be empty";
+                                    return Messages.NewXObjectAction_NameCannotBeEmpty;
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\.|\\w+)+\\w+", newText)) {
                                 if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
-                                    return "The name cannot contain invalid character!";
+                                    return Messages.NewXObjectAction_NameCannotContainInvalid;
                                 }
                                 return null;
                             };
@@ -305,16 +306,16 @@ public class NewXObjectAction extends Action {
             case TreeObject.DATA_MODEL: {
                 // check if already exists
                 if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Data Model "
-                            + (String) key + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg, (String) key));
                     return;
                 }
                 WSDataModelPK[] dataModelPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs(); //$NON-NLS-1$
                 for (WSDataModelPK dataModel : dataModelPKs) {
                     String pk = dataModel.getPk();
                     if (pk.equalsIgnoreCase((String) key)) {
-                        MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Data Model "
-                                + " already exists");
+                        MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                                Messages.bind(Messages.NewXObjectAction_ErrorMsg, ""));
                         return;
                     }
                 }
@@ -334,8 +335,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.VIEW: {
                 // check if already exists
                 if (port.existsView(new WSExistsView(new WSViewPK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "View " + (String) key
-                            + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg2, (String) key));
                     return;
                 }
                 // add
@@ -349,8 +350,8 @@ public class NewXObjectAction extends Action {
                     }
                 }
                 if (firstDataModel == null) {
-                    MessageDialog.openError(view.getSite().getShell(), "Error",
-                            "Please create a Data Model before editing a View");
+                    MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                            Messages.NewXObjectAction_ErrorMsg3);
                     return;
                 }
                 WSDataClusterPK[] dataClusterPKs = Util.getAllDataClusterPKs(new URL(xobject.getEndpointAddress()),
@@ -363,8 +364,8 @@ public class NewXObjectAction extends Action {
                     }
                 }
                 if (firstItemCluster == null) {
-                    MessageDialog.openError(view.getSite().getShell(), "Error",
-                            "Please create a Data Container for Records before editing a View");
+                    MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                            Messages.NewXObjectAction_ErrorMsg4);
                     return;
                 }
                 WSView wsview = new WSView((String) key, "", new String[] {}, new WSWhereCondition[0], new String[] {}, null,//$NON-NLS-1$
@@ -378,8 +379,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.DATA_CLUSTER: {
                 // check if already exists
                 if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Data Container "
-                            + (String) key + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg5, (String) key));
                     return;
                 }
                 // add
@@ -393,8 +394,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.STORED_PROCEDURE: {
                 // check if already exists
                 if (port.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Stored Procedure "
-                            + (String) key + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg6, (String) key));
                     return;
                 }
                 // add
@@ -407,8 +408,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.ROLE: {
                 // check if already exists
                 if (port.existsRole(new WSExistsRole(new WSRolePK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Role " + (String) key
-                            + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg7, (String) key));
                     return;
                 }
                 // add
@@ -422,8 +423,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.ROUTING_RULE: {
                 // check if already exists
                 if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Trigger " + (String) key
-                            + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg8, (String) key));
                     return;
                 }
                 // add
@@ -437,8 +438,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.TRANSFORMER: {
                 // check if already exists
                 if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Process " + (String) key
-                            + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg9, (String) key));
                     return;
                 }
                 // add
@@ -481,8 +482,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.MENU: {
                 // check if already exists
                 if (port.existsMenu(new WSExistsMenu(new WSMenuPK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Menu " + (String) key
-                            + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg10, (String) key));
                     return;
                 }
                 // add
@@ -496,8 +497,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.UNIVERSE: {
                 // check if already exists
                 if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Version " + (String) key
-                            + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance, Messages.bind(Messages.NewXObjectAction_ErrorMsg11, (String) key
+                            ));
                     return;
                 }
                 // add
@@ -517,8 +518,8 @@ public class NewXObjectAction extends Action {
                 // check if already exists
                 if (port.existsSynchronizationPlan(new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK((String) key)))
                         .is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "SynchronizationPlan "
-                            + (String) key + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg12, (String) key));
                     return;
                 }
                 // add
@@ -540,8 +541,8 @@ public class NewXObjectAction extends Action {
             case TreeObject.CUSTOM_TYPE: {
                 // check if already exists
                 if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String) key))).is_true()) {
-                    MessageDialog.openError(this.view.getSite().getShell(), "Error Creating Instance", "Version " + (String) key
-                            + " already exists");
+                    MessageDialog.openError(this.view.getSite().getShell(), Messages.NewXObjectAction_ErrorCreatingInstance,
+                            Messages.bind(Messages.NewXObjectAction_ErrorMsg13, (String) key));
                     return;
                 }
                 // add
@@ -560,7 +561,7 @@ public class NewXObjectAction extends Action {
                         .getWorkbenchWindow()
                         .getActivePage()
                         .openEditor(new XObjectEditorInput(newInstance, newInstance.getDisplayName()),
-                                "com.amalto.workbench.editors.XObjectEditor");
+                                "com.amalto.workbench.editors.XObjectEditor"); //$NON-NLS-1$
 
                 /*
                  * make the new page dirty
@@ -572,8 +573,8 @@ public class NewXObjectAction extends Action {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to create a new "
-                    + IConstants.TALEND + " Object Instance: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.NewXObjectAction_ErrorMsg14, IConstants.TALEND, e.getLocalizedMessage()));
         }
     }
 

@@ -59,6 +59,7 @@ import com.amalto.workbench.detailtabs.sections.providers.FieldWrapperLabelProvi
 import com.amalto.workbench.detailtabs.sections.providers.KeyWrapperLabelProvider;
 import com.amalto.workbench.dialogs.IdentityConstraintInputDialog;
 import com.amalto.workbench.dialogs.SelectFieldDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -160,11 +161,11 @@ public class EntityKeyConfigComposite extends Composite {
         compKeyBtns.setLayout(gridLayout);
 
         btnAddKey = new Button(compKeyBtns, SWT.NONE);
-        btnAddKey.setToolTipText("Add key...");
+        btnAddKey.setToolTipText(Messages.EntityKeyConfigComposite_0);
         btnAddKey.setImage(addKeyIcon);
 
         btnDeleteKey = new Button(compKeyBtns, SWT.NONE);
-        btnDeleteKey.setToolTipText("Delete keys");
+        btnDeleteKey.setToolTipText(Messages.EntityKeyConfigComposite_1);
         btnDeleteKey.setImage(deleteKeyIcon);
 
         final Composite compKeyInfo = new Composite(sashForm, SWT.NONE);
@@ -182,7 +183,7 @@ public class EntityKeyConfigComposite extends Composite {
         composite.setLayout(gridLayout_3);
 
         final Label lblKeyName = new Label(composite, SWT.NONE);
-        lblKeyName.setText("Key Name");
+        lblKeyName.setText(Messages.EntityKeyConfigComposite_2);
         lblKeyName.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         lblKeyNameErrIndicator = new Label(composite, SWT.NONE);
@@ -195,7 +196,7 @@ public class EntityKeyConfigComposite extends Composite {
         txtKeyName.setLayoutData(gd_txtKeyName);
 
         final Label lblSelector = new Label(compKeyInfo, SWT.NONE);
-        lblSelector.setText("Selector");
+        lblSelector.setText(Messages.EntityKeyConfigComposite_Selector);
         lblSelector.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         comboSelector = new Combo(compKeyInfo, SWT.BORDER);
@@ -203,7 +204,7 @@ public class EntityKeyConfigComposite extends Composite {
         comboSelector.setLayoutData(gd_comboSelector);
 
         final Label lblFields = new Label(compKeyInfo, SWT.NONE);
-        lblFields.setText("Fields");
+        lblFields.setText(Messages.EntityKeyConfigComposite_Fields);
         lblFields.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         tvFields = new TreeViewer(compKeyInfo, SWT.BORDER | SWT.FULL_SELECTION);
@@ -221,15 +222,15 @@ public class EntityKeyConfigComposite extends Composite {
         compFieldBtns.setLayout(gridLayout_1);
 
         btnAddField = new Button(compFieldBtns, SWT.NONE);
-        btnAddField.setToolTipText("Add field...");
+        btnAddField.setToolTipText(Messages.EntityKeyConfigComposite_AddField);
         btnAddField.setImage(addFieldIcon);
 
         btnEditField = new Button(compFieldBtns, SWT.NONE);
-        btnEditField.setToolTipText("Edit Field...");
+        btnEditField.setToolTipText(Messages.EntityKeyConfigComposite_EditFields);
         btnEditField.setImage(editFieldIcon);
 
         btnDeleteField = new Button(compFieldBtns, SWT.NONE);
-        btnDeleteField.setToolTipText("Delete Fields");
+        btnDeleteField.setToolTipText(Messages.EntityKeyConfigComposite_DelField);
         btnDeleteField.setImage(deleteFieldIcon);
 
         tvKeys.setContentProvider(new ListContentProvider());
@@ -508,7 +509,7 @@ public class EntityKeyConfigComposite extends Composite {
                     return;
 
                 if (getAllFields().length == selectedFields.length) {
-                    MessageDialog.openWarning(getShell(), "Warning", "There must be at least 1 field");
+                    MessageDialog.openWarning(getShell(), Messages.Warning, Messages.EntityKeyConfigComposite_WarningMsg);
                     return;
                 }
 
@@ -535,7 +536,7 @@ public class EntityKeyConfigComposite extends Composite {
                     return;
 
                 try {
-                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity());
+                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity()); //$NON-NLS-1$
                     // filter the non top level fields
                     List<String> topChilds = new ArrayList<String>();
                     for (String child : childNames) {
@@ -573,7 +574,7 @@ public class EntityKeyConfigComposite extends Composite {
                     KeyWrapper[] selectedKeys = getSelectedKeys();
                     if (selectedKeys.length == 0)
                         return;
-                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity());
+                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity()); //$NON-NLS-1$
                     // filter the non top level fields
                     List<String> topChilds = new ArrayList<String>();
                     for (String child : childNames) {
@@ -581,7 +582,7 @@ public class EntityKeyConfigComposite extends Composite {
                             topChilds.add(child);
                         }
                     }
-                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field",
+                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), Messages.EntityKeyConfigComposite_SelectOneField,
  topChilds, null);//$NON-NLS-1$
 
                     if (selectFieldDlg.open() != Window.OK)
@@ -615,7 +616,7 @@ public class EntityKeyConfigComposite extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 try {
-                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity());
+                    List<String> childNames = Util.getChildElementNames("", entityWrapper.getSourceEntity()); //$NON-NLS-1$
                     // filter the non top level fields
                     List<String> topChilds = new ArrayList<String>();
                     for (String child : childNames) {
@@ -624,7 +625,7 @@ public class EntityKeyConfigComposite extends Composite {
                         }
                     }
                     IdentityConstraintInputDialog dialog = new IdentityConstraintInputDialog(entityWrapper.getSourceEntity(),
-                            getShell(), "Add a new Key", topChilds,
+                            getShell(), Messages.EntityKeyConfigComposite_AddANewKey, topChilds,
                             entityWrapper.getSourceEntityName());
 
                     dialog.setInputValidator(new NewKeyWrapperValidator(entityWrapper));
@@ -677,7 +678,7 @@ public class EntityKeyConfigComposite extends Composite {
     private String isKeyNameValid(String keyName, KeyWrapper keyBeforeModified) {
 
         if (entityWrapper == null)
-            return "The eneity can not be null";
+            return Messages.EntityKeyConfigComposite_EntityCannotbeNull;
 
         return new EditKeyWrapperNameValidator(entityWrapper, keyBeforeModified).isValid(keyName);
     }
@@ -711,11 +712,11 @@ public class EntityKeyConfigComposite extends Composite {
         public String isValid(String newText) {
 
             if (newText == null || "".equals(newText.trim()))//$NON-NLS-1$
-                return "The key name cannot be empty";
+                return Messages.EntityKeyConfigComposite_KeyNamecannotbeEmpty;
 
             if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(targetKeyWrapper.getType())
                     && !entityWrapper.getName().equals(targetKeyWrapper.getName())) {
-                return "The unique key name must be equal to the name of it's parent entity";
+                return Messages.EntityKeyConfigComposite_ValidInfo1;
             }
 
             for (XSDIdentityConstraintDefinition eachKey : getSchema().getIdentityConstraintDefinitions()) {
@@ -725,7 +726,7 @@ public class EntityKeyConfigComposite extends Composite {
                 }
 
                 if (eachKey.getName().equals(newText)) {
-                    return "The key " + newText + " already exist";
+                    return Messages.bind(Messages.EntityKeyConfigComposite_ValidInfo2, newText);
                 }
             }
 
@@ -735,7 +736,7 @@ public class EntityKeyConfigComposite extends Composite {
                     continue;
 
                 if (eachKeyWrapper.getName().equals(newText)) {
-                    return "The key " + newText + " already exist";
+                    return Messages.bind(Messages.EntityKeyConfigComposite_ValidInfo3, newText);
                 }
             }
 
@@ -762,7 +763,7 @@ public class EntityKeyConfigComposite extends Composite {
         public String isValid(String keyName, XSDIdentityConstraintCategory type, XSDElementDeclaration element) {
 
             if (keyName == null || "".equals(keyName.trim()))//$NON-NLS-1$
-                return "The Key Name cannot be empty";
+                return Messages.EntityKeyConfigComposite_ValidInfo4;
 
             for (XSDIdentityConstraintDefinition eachKey : getSchema().getIdentityConstraintDefinitions()) {
 
@@ -771,7 +772,7 @@ public class EntityKeyConfigComposite extends Composite {
                 }
 
                 if (eachKey.getName().equals(keyName)) {
-                    return "The Key " + keyName + " already exist";
+                    return Messages.bind(Messages.EntityKeyConfigComposite_ValidInfo5, keyName);
                 }
 
             }
@@ -780,11 +781,11 @@ public class EntityKeyConfigComposite extends Composite {
 
                 if (type.equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)
                         && eachKeyWrapper.getType().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-                    return "The Business Element already has an unique key";
+                    return Messages.EntityKeyConfigComposite_ValidInfo6;
                 }
 
                 if (eachKeyWrapper.getName().equals(keyName)) {
-                    return "The Key " + keyName + " already exist";
+                    return Messages.bind(Messages.EntityKeyConfigComposite_ValidInfo7, keyName);
                 }
             }
 

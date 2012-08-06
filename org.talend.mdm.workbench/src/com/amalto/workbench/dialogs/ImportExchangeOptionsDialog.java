@@ -54,6 +54,7 @@ import org.json.JSONObject;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -85,7 +86,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
     private static String COLUMN_URL_NAME = "download_url";//$NON-NLS-1$
 
-    private static String REVISION_LIST_URL = "http://talendforge.org/exchange/mdm/api/get_version_list.php";
+    private static String REVISION_LIST_URL = "http://talendforge.org/exchange/mdm/api/get_version_list.php"; //$NON-NLS-1$
 
     public ImportExchangeOptionsDialog(Shell parentShell, FormToolkit toolkit, boolean importOption,
             StringBuffer zipFileRepository) {
@@ -96,7 +97,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
     }
 
     protected Control createDialogArea(Composite parent) {
-        parent.getShell().setText("Import from Talend Exchange options");
+        parent.getShell().setText(Messages.ImportExchangeOptionsDialog_DialogTitle);
 
         Composite composite = (Composite) super.createDialogArea(parent);
 
@@ -105,19 +106,19 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
         exportsBtn = new Button(composite, SWT.RADIO);
         exportsBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        exportsBtn.setText("exports");
+        exportsBtn.setText(Messages.ImportExchangeOptionsDialog_Exports);
         exportsBtn.setEnabled(export ? true : false);
         exportsBtn.setSelection(false);
 
         dataModelBtn = new Button(composite, SWT.RADIO);
         dataModelBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-        dataModelBtn.setText("data-models");
+        dataModelBtn.setText(Messages.ImportExchangeOptionsDialog_Datamodels);
         dataModelBtn.setEnabled(!export ? true : false);
         dataModelBtn.setSelection(false);
 
         Label label = new Label(composite, SWT.BORDER);
         label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-        label.setText("Revision:");
+        label.setText(Messages.ImportExchangeOptionsDialog_RevisionXX);
 
         revisionCombo = new CCombo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.FLAT);
         GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
@@ -161,11 +162,11 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         exchangeDwnTable.setLinesVisible(true);
 
         final TableColumn column1 = new TableColumn(exchangeDwnTable, SWT.NONE);
-        column1.setText("Name");
+        column1.setText(Messages.ImportExchangeOptionsDialog_Name);
         final TableColumn column2 = new TableColumn(exchangeDwnTable, SWT.NONE);
-        column2.setText("Revision");
+        column2.setText(Messages.ImportExchangeOptionsDialog_Revision);
         final TableColumn column3 = new TableColumn(exchangeDwnTable, SWT.NONE);
-        column3.setText("Url");
+        column3.setText(Messages.ImportExchangeOptionsDialog_Url);
         column1.setWidth(100);
         column2.setWidth(100);
         column3.setWidth(400);
@@ -367,7 +368,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             }
         } catch (Exception e1) {
 
-            final MessageDialog dialog = new MessageDialog(this.getParentShell().getShell(), "parsing error", null,
+            final MessageDialog dialog = new MessageDialog(this.getParentShell().getShell(), Messages.ImportExchangeOptionsDialog_ParsingError, null,
                     e1.getMessage(), MessageDialog.ERROR, new String[] { IDialogConstants.OK_LABEL }, 0);
             dialog.open();
         }

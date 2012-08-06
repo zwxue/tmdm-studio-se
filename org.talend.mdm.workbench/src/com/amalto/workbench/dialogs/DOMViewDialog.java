@@ -54,6 +54,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
@@ -132,9 +133,9 @@ public class DOMViewDialog extends Dialog {
         try {
             // Should not really be here but well,....
             if (editable) {
-                parent.getShell().setText("XML Editor/Viewer");
+                parent.getShell().setText(Messages.DOMViewDialog_EditorViewer);
             } else {
-                parent.getShell().setText("XML Viewer");
+                parent.getShell().setText(Messages.DOMViewDialog_Viewer);
             }
 
             Composite composite = new Composite(parent, SWT.NULL);
@@ -174,8 +175,8 @@ public class DOMViewDialog extends Dialog {
 
                                 log.error(ex.getMessage(), ex);
                                 tabFolder.setSelection(1);
-                                MessageDialog.openError(DOMViewDialog.this.getShell(), "The XML is not valid",
-                                        "The XML is not valid:\n\n" + ex.getLocalizedMessage());
+                                MessageDialog.openError(DOMViewDialog.this.getShell(), Messages.DOMViewDialog_XMLInvalid,
+                                        Messages.bind(Messages.DOMViewDialog_XMLInvalidInfo, ex.getLocalizedMessage()));
                                 return;
                             }
                             domViewer.setInput(node);
@@ -186,17 +187,17 @@ public class DOMViewDialog extends Dialog {
                             sourceViewer.setDocument(new org.eclipse.jface.text.Document(Util.nodeToString(node)));
                             node = null; // this should be better implemented in a change listener on the text
                         } catch (Exception ex) {
-                            MessageDialog.openError(DOMViewDialog.this.getShell(), "An error occured",
-                                    "Unable to get the document as string:\n\n" + ex.getLocalizedMessage());
-                            sourceViewer.setDocument(new org.eclipse.jface.text.Document(""));
+                            MessageDialog.openError(DOMViewDialog.this.getShell(), Messages.DOMViewDialog_ErrorTitle,
+                                    Messages.bind(Messages.DOMViewDialog_ErrorMsg, ex.getLocalizedMessage()));
+                            sourceViewer.setDocument(new org.eclipse.jface.text.Document("")); //$NON-NLS-1$
                         }
                     }
                 }// widget Selected
             });
 
             TabItem tiDOM = new TabItem(tabFolder, SWT.NULL);
-            tiDOM.setText("Tree");
-            tiDOM.setToolTipText("Display the Record as a DOM Tree");
+            tiDOM.setText(Messages.DOMViewDialog_Tree);
+            tiDOM.setToolTipText(Messages.DOMViewDialog_DisplayAsDomTree);
 
             domViewer = new TreeViewer(tabFolder, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
             domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -212,8 +213,8 @@ public class DOMViewDialog extends Dialog {
             tiDOM.setControl(domViewer.getControl());
 
             TabItem tiSource = new TabItem(tabFolder, SWT.NULL);
-            tiSource.setText("Source");
-            tiSource.setToolTipText("Display the XML source of the Record");
+            tiSource.setText(Messages.DOMViewDialog_TiSourceText);
+            tiSource.setToolTipText(Messages.DOMViewDialog_TiSourceTip);
 
             org.eclipse.jface.text.Document doc = new org.eclipse.jface.text.Document(Util.nodeToString(node));
             sourceViewer = new SourceViewer(tabFolder, new VerticalRuler(5), SWT.H_SCROLL | SWT.V_SCROLL);
@@ -234,7 +235,7 @@ public class DOMViewDialog extends Dialog {
             // this.getShell().setSize(600, 600);
             // this.getShell().layout();
             triggerBtn = new Button(composite, SWT.CHECK);
-            triggerBtn.setText("Fire a change event (update report) and triggers");
+            triggerBtn.setText(Messages.DOMViewDialog_TriggerBtnText);
             triggerBtn.addSelectionListener(new SelectionAdapter() {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
@@ -242,13 +243,13 @@ public class DOMViewDialog extends Dialog {
                 }
             });
             beforeBtn = new Button(composite, SWT.CHECK);
-            beforeBtn.setText("Enable verification by before processes");
+            beforeBtn.setText(Messages.DOMViewDialog_BeforeBtnText);
             beforeBtn.setEnabled(triggerBtn.getSelection());
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getShell(), "Error",
-                    "An error occured trying to create the DOM Viewer " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getShell(), Messages._Error,
+                    Messages.bind(Messages.DOMViewDialog_ErrorMsg1, e.getLocalizedMessage()));
             return null;
         }
 
@@ -279,10 +280,10 @@ public class DOMViewDialog extends Dialog {
     protected void createButtonsForButtonBar(Composite parent) {
 
         if (!editable) {
-            createButton(parent, BUTTON_CLOSE, "Close", true);
+            createButton(parent, BUTTON_CLOSE, Messages.Close, true);
         } else {
             mcLable = new Label(parent, SWT.RIGHT);
-            mcLable.setText("Data Model");
+            mcLable.setText(Messages.DOMViewDialog_DataModel);
             dataModelCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
             String[] dms = dataModelNames.toArray(new String[dataModelNames.size()]);
             Arrays.sort(dms);
@@ -298,8 +299,8 @@ public class DOMViewDialog extends Dialog {
                 }
             }
 
-            createButton(parent, BUTTON_SAVE, "Save", false);
-            createButton(parent, BUTTON_CANCEL, "Cancel", true);
+            createButton(parent, BUTTON_SAVE, Messages.Save, false);
+            createButton(parent, BUTTON_CANCEL, Messages.Cancel, true);
         }
     }
 
@@ -309,8 +310,8 @@ public class DOMViewDialog extends Dialog {
         if (buttonId == BUTTON_SAVE) {
             // check that Data Model is not nul
             if (dataModelCombo.getSelectionIndex() == -1) {
-                MessageDialog.openError(DOMViewDialog.this.getShell(), "No Data Model is selected",
-                        "A Data Model must be selected\n\n");
+                MessageDialog.openError(DOMViewDialog.this.getShell(), Messages.DOMViewDialog_ErrorTitle2,
+                        Messages.DOMViewDialog_ErrorMsg2);
                 return;
             }
             // if save and on DOM viewer get the XML String
@@ -319,8 +320,8 @@ public class DOMViewDialog extends Dialog {
                     sourceViewer.setDocument(new org.eclipse.jface.text.Document(Util.nodeToString(node)));
                 } catch (Exception ex) {
                     tabFolder.setSelection(1);
-                    MessageDialog.openError(DOMViewDialog.this.getShell(), "Error Serializing the XML",
-                            "The DOM tree could not be serialized to an XML string:\n\n" + ex.getLocalizedMessage());
+                    MessageDialog.openError(DOMViewDialog.this.getShell(), Messages.DOMViewDialog_ErrorTitle3,
+                            Messages.bind(Messages.DOMViewDialog_ErrorMsg3, ex.getLocalizedMessage()));
                     return;
                 }
             }

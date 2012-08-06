@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -102,7 +103,7 @@ public class ProjectDecisionDialog extends Dialog {
 
             Label dataClustersLabel = new Label(composite, SWT.NULL);
             dataClustersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            dataClustersLabel.setText("Data Containers");
+            dataClustersLabel.setText(Messages.ProjectDecisionDialog_DataContainers);
 
             dataClustersCombo = new Combo(composite, SWT.DROP_DOWN);
             dataClustersCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -121,7 +122,7 @@ public class ProjectDecisionDialog extends Dialog {
 
             Label dataModelsLabel = new Label(composite, SWT.NULL);
             dataModelsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            dataModelsLabel.setText("Data Models");
+            dataModelsLabel.setText(Messages.ProjectDecisionDialog_DataModels);
 
             dataModelsCombo = new Combo(composite, SWT.DROP_DOWN);
             dataModelsCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -138,15 +139,15 @@ public class ProjectDecisionDialog extends Dialog {
             // Overwrite
             Label overwriteLabel = new Label(composite, SWT.NULL);
             overwriteLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            overwriteLabel.setText("Overwrite");
+            overwriteLabel.setText(Messages.ProjectDecisionDialog_Overwrite);
 
             overwriteButton = new Button(composite, SWT.CHECK);
             overwriteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             overwriteButton.setSelection(doOverwrite);
 
         } catch (Exception e) {
-            MessageDialog.openError(ProjectDecisionDialog.this.getShell(), "Error Creating Dialog",
-                    "Could not create the dialog: " + e.getMessage());
+            MessageDialog.openError(ProjectDecisionDialog.this.getShell(), Messages.ProjectDecisionDialog_ErrorTitle,
+                    Messages.bind(Messages.ProjectDecisionDialog_ErrorMsg, e.getMessage()));
         }
 
         return composite;

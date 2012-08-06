@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -48,16 +49,16 @@ public class CopyXObjectAction extends Action {
 
     private void setDetails() {
         setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
-        setText("Copy");
-        setToolTipText("Copy this instance of the " + IConstants.TALEND + " Object");
+        setText(Messages.CopyXObjectAction__Copy);
+        setToolTipText(Messages.bind(Messages.CopyXObjectAction_AtionTip, IConstants.TALEND));
     }
 
     public void run() {
         try {
             super.run();
             if (this.view == null) {
-                MessageDialog.openError(view.getSite().getShell(), "Copy Error",
-                        "This function must be called from the Object View");
+                MessageDialog.openError(view.getSite().getShell(), Messages.CopyXObjectAction_CopyError,
+                        Messages.CopyXObjectAction_ErrorMsg1);
                 return;
             }
 
@@ -112,8 +113,8 @@ public class CopyXObjectAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error",
-                    "An error occured trying to copy: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.CopyXObjectAction_ErrorMsg2, e.getLocalizedMessage()));
         }
     }
 

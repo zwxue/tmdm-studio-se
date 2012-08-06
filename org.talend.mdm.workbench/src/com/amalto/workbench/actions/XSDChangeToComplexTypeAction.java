@@ -49,6 +49,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.dialogs.ComplexTypeInputDialogR;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -84,10 +85,10 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
         this.isXSDModelGroup = isXSDModelGroup;
         setImageDescriptor(ImageCache.getImage(EImage.COMPLEX_ALL.getPath()));
         if (isXSDModelGroup)
-            setText("Change Sub-Element Group");
+            setText(Messages.XSDChangeToCXX_Text1);
         else
-            setText("Change to a Complex Type");
-        setToolTipText("Make an Element a Complex Element or change the type of current Complex Element");
+            setText(Messages.XSDChangeToCXX_Text2);
+        setToolTipText(Messages.XSDChangeToCXX_ActionTip);
         setDescription(getToolTipText());
     }
 
@@ -390,8 +391,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to change to Complex Type: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDChangeToCXX_ErrorMsg1, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 
@@ -442,8 +443,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDSimpleTypeDefinition) {
-                        MessageDialog.openError(page.getSite().getShell(), "Error", "This type \"" + typeName
-                                + "\" already exists as a Simple Type");
+                        MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDChangeToCXX_ErrorMsg2, typeName));
                         return false;
                     }
                 }

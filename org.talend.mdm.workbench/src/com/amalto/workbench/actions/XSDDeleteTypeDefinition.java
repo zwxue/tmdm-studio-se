@@ -29,6 +29,7 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ISchemaContentProvider;
@@ -45,8 +46,8 @@ public class XSDDeleteTypeDefinition extends UndoAction {
     public XSDDeleteTypeDefinition(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete type definition");
-        setToolTipText("Remove a type definition from the XSD Schema context");
+        setText(Messages.XSDDeleteTypeDefinition_DelTypeDefine);
+        setToolTipText(Messages.XSDDeleteTypeDefinition_RemoveTypeDefineFromSchema);
         setDescription(getToolTipText());
     }
 
@@ -54,10 +55,10 @@ public class XSDDeleteTypeDefinition extends UndoAction {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
         if (isMulti)
-            setText("Delete type definitions");
+            setText(Messages.XSDDeleteTypeDefinition_DelTypeDefines);
         else
-            setText("Delete type definition");
-        setToolTipText("Remove a type definition from the XSD Schema context");
+            setText(Messages.XSDDeleteTypeDefinition_DelTypeDefine);
+        setToolTipText(Messages.XSDDeleteTypeDefinition_RemoveTypeDefineFromSchema);
         setDescription(getToolTipText());
     }
 
@@ -92,10 +93,8 @@ public class XSDDeleteTypeDefinition extends UndoAction {
                     simpleType = xsdSimpType;
                 boolean find = Util.findElementsUsingType(objList, simpleType);
                 if (find) {
-                    boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), "Confirm Delete",
-                            "The simple-type definition: \"" + simpleType.getName()
-                                    + "\" is referred to by at least one element. Are you sure you want to proceed?\n"
-                                    + "\nIf you click OK, this will leave one element or more with an invalid simple-type.");
+                    boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), Messages.XSDDeleteTypeDefinition_ConfirmDel,
+                            Messages.bind(Messages.XSDDeleteTypeDefinition_ConfirmInfo, simpleType.getName()));
                     if (!confirmed) {
                         xsdSimpType = null;
                         return Status.CANCEL_STATUS;
@@ -113,10 +112,8 @@ public class XSDDeleteTypeDefinition extends UndoAction {
 
                 boolean find = Util.findElementsUsingType(objList, complxType);
                 if (find) {
-                    boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), "Confirm Delete",
-                            "The complex-type definition: \"" + complxType.getName()
-                                    + "\" is referred to by at least one element. Are you sure you want to proceed?\n"
-                                    + "\nIf you click OK, this will leave one element or more with an invalid complex-type.");
+                    boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), Messages.XSDDeleteTypeDefinition_ConfirmDel,
+                            Messages.bind(Messages.XSDDeleteTypeDefinition_ConfirmInfo1, complxType.getName()));
                     if (!confirmed) {
                         xsdCmpexType = null;
                         return Status.CANCEL_STATUS;

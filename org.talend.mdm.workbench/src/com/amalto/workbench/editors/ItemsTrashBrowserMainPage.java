@@ -58,6 +58,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -88,7 +89,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
     protected boolean[] ascending = { true, false, false, false, false };
 
     public ItemsTrashBrowserMainPage(FormEditor editor) {
-        super(editor, ItemsTrashBrowserMainPage.class.getName(), "Data Container Browser "
+        super(editor, ItemsTrashBrowserMainPage.class.getName(), Messages.ItemsTrashBrowserMainPage_0
                 + ((XObjectBrowserInput) editor.getEditorInput()).getName());
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
@@ -116,7 +117,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             /***
              * Search Text
              */
-            Label descriptionLabel = toolkit.createLabel(composite, "Keywords", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(composite, Messages.ItemsTrashBrowserMainPage_1, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             searchText = toolkit.createText(composite, "*", SWT.BORDER);//$NON-NLS-1$
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
@@ -137,7 +138,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             // search
             Button bSearch = toolkit.createButton(composite, "", SWT.CENTER);//$NON-NLS-1$
             bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
-            bSearch.setToolTipText("Search");
+            bSearch.setToolTipText(Messages.ItemsTrashBrowserMainPage_2);
             bSearch.setLayoutData(new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1));
             bSearch.addListener(SWT.Selection, new Listener() {
 
@@ -166,8 +167,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                     } catch (Exception e) {
                         MessageDialog.openError(
                                 ItemsTrashBrowserMainPage.this.getSite().getShell(),
-                                "Error",
-                                "Unable to display the element as a tree:\n" + e.getClass().getName() + ": "
+                                Messages._Error,
+                                Messages.ItemsTrashBrowserMainPage_4 + e.getClass().getName() + Messages.ItemsTrashBrowserMainPage_5
                                         + e.getLocalizedMessage());
                     }
                 }
@@ -206,7 +207,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
         // 1st column
         final TableColumn column = new TableColumn(table, SWT.LEFT, 0);
-        column.setText("Data Container");
+        column.setText(Messages.ItemsTrashBrowserMainPage_6);
         column.setWidth(150);
         column.addSelectionListener(new SelectionListener() {
 
@@ -230,7 +231,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
         // 2nd column
         final TableColumn column1 = new TableColumn(table, SWT.LEFT, 1);
-        column1.setText("Entity");
+        column1.setText(Messages.ItemsTrashBrowserMainPage_7);
         column1.setWidth(150);
         // Add listener to column so tasks are sorted by description when clicked
         column1.addSelectionListener(new SelectionListener() {
@@ -255,7 +256,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
         // 3rd column
         final TableColumn column2 = new TableColumn(table, SWT.LEFT, 2);
-        column2.setText("Keys");
+        column2.setText(Messages.ItemsTrashBrowserMainPage_8);
         column2.setWidth(150);
         // Add listener to column so tasks are sorted by description when clicked
         column2.addSelectionListener(new SelectionListener() {
@@ -280,7 +281,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
         // 4th column
         final TableColumn column3 = new TableColumn(table, SWT.LEFT, 3);
-        column3.setText("Revision ID");
+        column3.setText(Messages.ItemsTrashBrowserMainPage_9);
         column3.setWidth(150);
         // Add listener to column so tasks are sorted by description when clicked
         column3.addSelectionListener(new SelectionListener() {
@@ -304,7 +305,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
         // 5th column
         final TableColumn column4 = new TableColumn(table, SWT.LEFT, 4);
-        column4.setText("Part Path");
+        column4.setText(Messages.ItemsTrashBrowserMainPage_10);
         column4.setWidth(150);
         // Add listener to column so tasks are sorted by description when clicked
         column4.addSelectionListener(new SelectionListener() {
@@ -349,8 +350,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_11,
+                    Messages.ItemsTrashBrowserMainPage_12 + e.getLocalizedMessage());
         }
     }
 
@@ -359,8 +360,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_13,
+                    Messages.ItemsTrashBrowserMainPage_14 + e.getLocalizedMessage());
         }
     }
 
@@ -428,7 +429,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             if ((results == null) || (results.length == 0)) {
                 if (showResultInfo) {
-                    MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
+                    MessageDialog.openInformation(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_15, Messages.ItemsTrashBrowserMainPage_16);
                     return new LineItem[0];
                 }
             } else {
@@ -450,10 +451,10 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
-                MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
-                        "More than 10000 results returned by the search. \nPlease narrow your search.");
+                MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_17,
+                        Messages.ItemsTrashBrowserMainPage_18);
             else
-                MessageDialog.openError(this.getSite().getShell(), "Unable to perform the search", e.getLocalizedMessage());
+                MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_19, e.getLocalizedMessage());
             return null;
         } finally {
             try {
@@ -480,8 +481,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
-            setText("Display Dropped Record");
-            setToolTipText("View a DOM Tree of the XML source");
+            setText(Messages.ItemsTrashBrowserMainPage_20);
+            setToolTipText(Messages.ItemsTrashBrowserMainPage_21);
         }
 
         public void run() {
@@ -513,7 +514,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                         .getInsertionUserName();
                 String droppedTime = wsDroppedItem.getInsertionTime() == null ? "undefine" : sdf.format(wsDroppedItem//$NON-NLS-1$
                         .getInsertionTime());
-                String desc = "This Record was dropped by " + userName + " on " + droppedTime;
+                String desc = Messages.ItemsTrashBrowserMainPage_22 + userName + Messages.ItemsTrashBrowserMainPage_23 + droppedTime;
 
                 final DOMViewDialog d = new DOMViewDialog(ItemsTrashBrowserMainPage.this.getSite().getShell(),
                         Util.parse(projection), false, null, DOMViewDialog.TREE_VIEWER, null, desc);
@@ -533,8 +534,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.ItemsTrashBrowserMainPage_25 + e.getLocalizedMessage());
             }
         }
 
@@ -559,8 +560,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             this.shell = shell;
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
-            setText("Restore the dropped Record");
-            setToolTipText("Restore the dropped Record");
+            setText(Messages.ItemsTrashBrowserMainPage_26);
+            setToolTipText(Messages.ItemsTrashBrowserMainPage_26);
         }
 
         public void run() {
@@ -584,8 +585,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to restore the selected dropped Record:\n\n" + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.ItemsTrashBrowserMainPage_29 + e.getLocalizedMessage());
             }
         }
 
@@ -611,8 +612,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-            setText("Remove the dropped Record");
-            setToolTipText("Remove the dropped Record");
+            setText(Messages.ItemsTrashBrowserMainPage_30);
+            setToolTipText(Messages.ItemsTrashBrowserMainPage_30);
         }
 
         public void run() {
@@ -625,8 +626,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 if (li == null)
                     return;
 
-                if (!MessageDialog.openConfirm(this.shell, "Confirm Deletion",
-                        "Are you sure you want to remove the selected one ?"))
+                if (!MessageDialog.openConfirm(this.shell, Messages.ItemsTrashBrowserMainPage_32,
+                        Messages.ItemsTrashBrowserMainPage_33))
                     return;
 
                 WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()),
@@ -638,8 +639,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, "Error",
-                        "An error occured trying to delete the Records: " + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.ItemsTrashBrowserMainPage_35 + e.getLocalizedMessage());
             }
         }
 

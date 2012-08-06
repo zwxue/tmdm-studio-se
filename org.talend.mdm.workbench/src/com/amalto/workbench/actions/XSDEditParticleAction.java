@@ -40,6 +40,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
@@ -62,13 +63,13 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 
     private int maxOccurs;
 
-    private String initEleName = "";
+    private String initEleName = ""; //$NON-NLS-1$
 
     public XSDEditParticleAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-        setText("Edit Element");
-        setToolTipText("Edit the Business Element Name and Cardinality.");
+        setText(Messages.XSDEditParticleAction_EditElement);
+        setToolTipText(Messages.XSDEditParticleAction_EditBusinessElement);
     }
 
     public IStatus doAction() {
@@ -94,9 +95,9 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
                 XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
                 if (d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))
                     continue;
-                elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
+                elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : "")); //$NON-NLS-1$ //$NON-NLS-2$
             }
-            elementDeclarations.add("");
+            elementDeclarations.add(""); //$NON-NLS-1$
 
             XSDIdentityConstraintDefinition identify = null;
 
@@ -109,7 +110,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
                 isPK = true;
             }
             initEleName = decl.getName();
-            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), "Edit Business Element", decl.getName(),
+            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), Messages.XSDEditParticleAction_InputDialogTitle, decl.getName(),
                     ref == null ? null : ref.getQName(), elementDeclarations, selParticle.getMinOccurs(),
                     selParticle.getMaxOccurs(), false, isPK);
             dialog.setBlockOnOpen(true);
@@ -122,16 +123,15 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             }
             // find reference
             XSDElementDeclaration newRef = null;
-            if (!"".equals(refName.trim())) {
+            if (!"".equals(refName.trim())) { //$NON-NLS-1$
                 newRef = Util.findReference(refName, schema);
                 if (newRef == null) {
-                    MessageDialog.openError(this.page.getSite().getShell(), "Error", "The Referenced Element " + refName
-                            + " cannot be found");
+                    MessageDialog.openError(this.page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDEditParticleAction_ErrorMsg, refName));
                     return Status.CANCEL_STATUS;
                 }
             }// ref
 
-            decl.setName("".equals(this.elementName) ? null : this.elementName);
+            decl.setName("".equals(this.elementName) ? null : this.elementName); //$NON-NLS-1$
             if (keyPath != null) {
                 XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
                 XSDXPathDefinition field = factory.createXSDXPathDefinition();
@@ -159,7 +159,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
                 newD.updateElement();
                 XSDSimpleTypeDefinition stringType = ((SchemaTreeContentProvider) page.getTreeViewer().getContentProvider())
                         .getXsdSchema().getSchemaForSchema()
-                        .resolveSimpleTypeDefinition(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001, "string");
+                        .resolveSimpleTypeDefinition(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001, "string"); //$NON-NLS-1$
 
                 newD.setTypeDefinition(stringType);
                 if (selParticle.getContainer() instanceof XSDModelGroup) {
@@ -193,8 +193,8 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to Edit a Business Elementt: "
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDEditParticleAction_ErrorMsg1
+                    , e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
 
@@ -227,8 +227,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
                 if (thisDecl.getName().equals(elementName) && initEleName != null && !initEleName.equalsIgnoreCase(elementName)) {
-                    MessageDialog.openError(page.getSite().getShell(), "Error", "The Business Element " + elementName
-                            + " already exists.");
+                    MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDEditParticleAction_ErrorMsg2, elementName));
                     return;
                 }
             }

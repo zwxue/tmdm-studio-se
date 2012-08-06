@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -41,8 +42,8 @@ public class XSDEditComplexTypeAction extends UndoAction {
     public XSDEditComplexTypeAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-        setText("Edit a Complex Type");
-        setToolTipText("Edit a Complex Type which can be referred to by Elements or Entities");
+        setText(Messages.EditAComplexType);
+        setToolTipText(Messages.EditAComplexTypeTip);
         setDescription(getToolTipText());
     }
 
@@ -53,16 +54,16 @@ public class XSDEditComplexTypeAction extends UndoAction {
             XSDComplexTypeDefinition decl = (XSDComplexTypeDefinition) ((IStructuredSelection) selection).getFirstElement();
 
             String oldName = decl.getName();
-            InputDialog id = new InputDialog(page.getSite().getShell(), "Edit Complex Type", "Enter a new Name for the Entity",
+            InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDEditComplexTypeAction_EditComplexType, Messages.XSDEditComplexTypeAction_EnterNameForEntity,
                     oldName, new IInputValidator() {
 
                         public String isValid(String newText) {
-                            if ((newText == null) || "".equals(newText))
-                                return "The Complex Type Name cannot be empty";
+                            if ((newText == null) || "".equals(newText)) //$NON-NLS-1$
+                                return Messages.XSDEditComplexTypeAction_ComplexTypeCannotBeEmpty;
 
                             if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                                     || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
-                                return "The name cannot contain the empty characters";
+                                return Messages.XSDEditComplexTypeAction_NameCannotContainEmpty;
 
                             EList list = schema.getTypeDefinitions();
                             for (Iterator iter = list.iterator(); iter.hasNext();) {
@@ -70,7 +71,7 @@ public class XSDEditComplexTypeAction extends UndoAction {
                                 if (d instanceof XSDComplexTypeDefinition) {
                                     XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) d;
                                     if (type.getName().equals(newText.trim()))
-                                        return "This Complex Type already exists";
+                                        return Messages.XSDEditComplexTypeAction_ComplexAlreadyExists;
                                 }
                             }
                             return null;
@@ -90,8 +91,8 @@ public class XSDEditComplexTypeAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to edit an Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.XSDEditComplexTypeAction_ErrorEditEntity + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
 

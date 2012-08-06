@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -52,8 +53,8 @@ public class ImportTISJobAction extends Action {
         super();
 
         setImageDescriptor(ImageCache.getImage(EImage.WORKFLOW_PROCESS.getPath()));
-        setText("Import a TIS Job Archive");
-        setToolTipText("Import a TIS Job Archive");
+        setText(Messages.ImportTISJobAction_Text);
+        setToolTipText(Messages.ImportTISJobAction_Text);
     }
 
     public void run() {
@@ -81,16 +82,16 @@ public class ImportTISJobAction extends Action {
                 WSMDMJobArray array = port.getMDMJob(new WSMDMNULL());
                 exist = checkExist(array, info);
                 if (exist) {
-                    recover = MessageDialog.openConfirm(this.server.getSite().getShell(), "Confirm",
-                            "This job is already deployed on the server." + System.getProperty("line.separator")
-                                    + "Are you sure you want to redeploy it with this new archive?");
+                    recover = MessageDialog.openConfirm(this.server.getSite().getShell(), Messages.ImportTISJobAction_Confirm,
+                            Messages.ImportTISJobAction_ConfirmInfo + System.getProperty("line.separator") //$NON-NLS-1$
+                                    + Messages.ImportTISJobAction_ConfirmInfoA);
                     if (!recover)
                         return;
                     else
-                        MessageDialog.openInformation(this.server.getSite().getShell(), "Information", "This Job is redeployed!");
+                        MessageDialog.openInformation(this.server.getSite().getShell(), Messages.ImportTISJobAction_Information, Messages.ImportTISJobAction_InformationMsg);
                 }
 
-                String fileName = info.getJobname() + "_" + info.getJobversion() + info.getSuffix();
+                String fileName = info.getJobname() + "_" + info.getJobversion() + info.getSuffix(); //$NON-NLS-1$
                 String endpointaddress = xobject.getEndpointAddress();
                 String uploadURL = new URL(endpointaddress).getProtocol() + "://" + new URL(endpointaddress).getHost() + ":"//$NON-NLS-1$ //$NON-NLS-2$
                         + new URL(endpointaddress).getPort() + "/datamanager/uploadFile?deployjob=" + fileName;//$NON-NLS-1$ 

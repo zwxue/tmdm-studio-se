@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -160,20 +161,20 @@ public class PageingToolBar {
         // firstpage
         GridData gd = new GridData();
         firstPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
-        firstPageBtn.setToolTipText("First Page");
+        firstPageBtn.setToolTipText(Messages.PageingToolBar_FirstPage);
         firstPageBtn.setImage(ImageCache.getCreatedImage("icons/page-first.gif"));//$NON-NLS-1$
         firstPageBtn.setLayoutData(gd);
         // previous page
         gd = new GridData();
         prevPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
-        prevPageBtn.setToolTipText("Previous Page");
+        prevPageBtn.setToolTipText(Messages.PageingToolBar_PrePage);
         prevPageBtn.setImage(ImageCache.getCreatedImage("icons/page-prev.gif"));//$NON-NLS-1$
         prevPageBtn.setLayoutData(gd);
         // page
         // Button btn=toolkit.createButton(comp, "", SWT.SEPARATOR);
         // gd=new GridData();
         // btn.setLayoutData(gd);
-        Label label = toolkit.createLabel(comp, "Page", SWT.NULL);
+        Label label = toolkit.createLabel(comp, Messages.PageingToolBar_Page, SWT.NULL);
         gd = new GridData();
         label.setLayoutData(gd);
         pageText = toolkit.createText(comp, "" + page);//$NON-NLS-1$
@@ -182,7 +183,7 @@ public class PageingToolBar {
         pageText.setLayoutData(gd);
         pageText.addKeyListener(keylistener);
 
-        totalPage = toolkit.createLabel(comp, "of " + totalpage, SWT.NULL);
+        totalPage = toolkit.createLabel(comp, Messages.bind(Messages.PageingToolBar_LabelText, totalpage), SWT.NULL);
         gd = new GridData();
         totalPage.setLayoutData(gd);
 
@@ -193,22 +194,22 @@ public class PageingToolBar {
         // nextpage
         gd = new GridData();
         nextPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
-        nextPageBtn.setToolTipText("Next Page");
+        nextPageBtn.setToolTipText(Messages.PageingToolBar_NextPage);
         nextPageBtn.setImage(ImageCache.getCreatedImage("icons/page-next.gif"));//$NON-NLS-1$
         nextPageBtn.setLayoutData(gd);
         // last page
         gd = new GridData();
         lastPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
-        lastPageBtn.setToolTipText("Last Page");
+        lastPageBtn.setToolTipText(Messages.PageingToolBar_LastPage);
         lastPageBtn.setImage(ImageCache.getCreatedImage("icons/page-last.gif"));//$NON-NLS-1$
         lastPageBtn.setLayoutData(gd);
         // refresh
         // Button btn2=toolkit.createButton(comp, "", SWT.SEPARATOR);
         // gd=new GridData();
         // btn2.setLayoutData(gd);
-        refreshBtn = toolkit.createButton(comp, "", SWT.PUSH);
+        refreshBtn = toolkit.createButton(comp, "", SWT.PUSH); //$NON-NLS-1$
         gd = new GridData();
-        refreshBtn.setToolTipText("Refresh");
+        refreshBtn.setToolTipText(Messages.PageingToolBar_Refresh);
         refreshBtn.setLayoutData(gd);
         refreshBtn.setImage(ImageCache.getCreatedImage(EImage.REFRESH.getPath()));
 
@@ -217,7 +218,7 @@ public class PageingToolBar {
         // btn3.setLayoutData(gd);
 
         // page size
-        Label label3 = toolkit.createLabel(comp, "Number of lines per page:", SWT.NULL);
+        Label label3 = toolkit.createLabel(comp, Messages.PageingToolBar_LineNumberOfPage, SWT.NULL);
         gd = new GridData();
         label3.setLayoutData(gd);
 
@@ -298,10 +299,10 @@ public class PageingToolBar {
 
     public void refreshUI() {
         long count = page * pagesize > totalsize ? totalsize : page * pagesize;
-        displayItems.setText("Display items of " + ((page - 1) * pagesize + 1) + "-" + count + " of " + totalsize);
+        displayItems.setText(Messages.bind(Messages.PageingToolBar_DisplayText, ((page - 1) * pagesize + 1)+"", ""+count, ""+totalsize));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         pageSizeText.setText("" + pagesize);//$NON-NLS-1$
         pageText.setText("" + page);//$NON-NLS-1$
-        totalPage.setText("of " + totalpage);
+        totalPage.setText(Messages.bind(Messages.PageingToolBar_LabelText, totalpage));
         if (page <= 1) {
             firstPageBtn.setImage(ImageCache.getCreatedImage("icons/page-first-disabled.gif"));//$NON-NLS-1$
             prevPageBtn.setImage(ImageCache.getCreatedImage("icons/page-prev-disabled.gif"));//$NON-NLS-1$

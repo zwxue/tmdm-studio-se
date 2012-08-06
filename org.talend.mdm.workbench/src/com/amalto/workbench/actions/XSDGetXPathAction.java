@@ -29,6 +29,7 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTerm;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -40,8 +41,8 @@ public class XSDGetXPathAction extends UndoAction {
     public XSDGetXPathAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
-        setText("Copy XPath");
-        setToolTipText("Copy the XPath");
+        setText(Messages.XSDGetXPathAction_CopyXPath);
+        setToolTipText(Messages.XSDGetXPathAction_CopyTheXPath);
     }
 
     public IStatus doAction() {
@@ -56,13 +57,13 @@ public class XSDGetXPathAction extends UndoAction {
 
             Clipboard clipboard = Util.getClipboard();
 
-            String path = "";
+            String path = ""; //$NON-NLS-1$
             TreeItem item = page.getTreeViewer().getTree().getSelection()[0];
             do {
                 XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
                 if (component instanceof XSDParticle) {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
-                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
+                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path; //$NON-NLS-1$
                 } else if (component instanceof XSDElementDeclaration) {
                     path = ((XSDElementDeclaration) component).getName() + path;
                 }
@@ -74,8 +75,8 @@ public class XSDGetXPathAction extends UndoAction {
             clipboard.setContents(new Object[] { path }, new Transfer[] { TextTransfer.getInstance() });
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to remove Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDGetXPathAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

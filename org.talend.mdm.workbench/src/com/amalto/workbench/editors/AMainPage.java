@@ -33,6 +33,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -68,7 +69,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
 
             // Layout the components
             Section firstSection = firstSectionPart.getSection();
-            firstSection.setText("Characteristics");
+            firstSection.setText(Messages.AMainPage_Characteristics);
             firstSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
 
             firstSection.addExpansionListener(new ExpansionAdapter() {
@@ -77,7 +78,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
                     form.reflow(true);
                 }
             });
-            firstSection.setDescription("The main characteristics");
+            firstSection.setDescription(Messages.AMainPage_MainCharacteristics);
             firstSection.setLayout(new GridLayout(1, false));
 
             // toolkit.createCompositeSeparator(firstSection);

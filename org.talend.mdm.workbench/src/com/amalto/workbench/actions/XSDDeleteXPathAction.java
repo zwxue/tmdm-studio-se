@@ -25,6 +25,7 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -37,8 +38,8 @@ public class XSDDeleteXPathAction extends UndoAction {
     public XSDDeleteXPathAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete Field");
-        setToolTipText("Delete a Field");
+        setText(Messages.XSDDeleteXPathAction_DelField);
+        setToolTipText(Messages.XSDDeleteXPathAction_DelAField);
     }
 
     public void run(Object toDel) {
@@ -65,12 +66,12 @@ public class XSDDeleteXPathAction extends UndoAction {
                 return Status.CANCEL_STATUS;
 
             if (xpath.getVariety().equals(XSDXPathVariety.SELECTOR_LITERAL)) {
-                MessageDialog.openError(page.getSite().getShell(), "Error", "The Selector cannot be deleted");
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.XSDDeleteXPathAction_SelectorCannotDel);
                 return Status.CANCEL_STATUS;
             }
 
             if (icd.getFields().size() == 1) {
-                MessageDialog.openError(page.getSite().getShell(), "Error", "The Key must contain at least one field");
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.XSDDeleteXPathAction_KeyMustContainOne);
                 return Status.CANCEL_STATUS;
             }
 
@@ -82,8 +83,8 @@ public class XSDDeleteXPathAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to remove a Field: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDDeleteXPathAction_ErrorRemoveAField, e.getLocalizedMessage()));
 
             return Status.CANCEL_STATUS;
         }

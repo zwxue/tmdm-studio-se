@@ -21,6 +21,7 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.extra.LookupFieldsAnnoInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.XSDComponentChildElementsHolder;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.widgets.composites.SelectElementsOfEntityComposite;
@@ -58,12 +59,12 @@ public class LookupFieldsSection extends XSDComponentSection {
 
     @Override
     protected String getSectionTitle() {
-        return "Lookup Fields";
+        return Messages.LookupFieldsSection_LookupFields;
     }
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, "Lookup Fields", null,this);
+        compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, Messages.LookupFieldsSection_LookupFields, null,this);
     }
 
 }

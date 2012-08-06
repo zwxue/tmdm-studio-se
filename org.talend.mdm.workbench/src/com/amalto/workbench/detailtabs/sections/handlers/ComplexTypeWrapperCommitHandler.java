@@ -17,6 +17,7 @@ import org.eclipse.xsd.XSDCompositor;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.complextype.ComplexTypeWrapper;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 
 public class ComplexTypeWrapperCommitHandler extends CompositeCommitHandler<ComplexTypeWrapper> {
@@ -44,10 +45,10 @@ class ComplexTypeNameCommitHandler extends CommitHandler<ComplexTypeWrapper> {
     protected void validateCommit() throws CommitValidationException {
 
         if (getCommitedObj().getNewTypeName() == null || "".equals(getCommitedObj().getNewTypeName().trim()))//$NON-NLS-1$
-            throw new CommitValidationException("The name of the complex type can not be empty");
+            throw new CommitValidationException(Messages.ComplexTypeXXHandler_CannotbeEmpty);
 
         if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())//$NON-NLS-1$//$NON-NLS-2$
-            throw new CommitValidationException("The name of the complex type can not contain the empty characters");
+            throw new CommitValidationException(Messages.ComplexTypeXXHandler_CannotContainEmpty);
 
     }
 
@@ -69,26 +70,26 @@ class ComplexTypeExtendsCommitHandler extends CommitHandler<ComplexTypeWrapper> 
 
         if (getCommitedObj().getNewExtends() != null
                 && getCommitedObj().getNewExtends().equals(getCommitedObj().getCurComplexType()))
-            throw new CommitValidationException("The base type of a complex type can not be itself");
+            throw new CommitValidationException(Messages.ComplexTypeXXHandler_CBaseTypeCannotbeItself);
 
         if (Util.getParentTypes(getCommitedObj().getNewExtends()).contains(getCommitedObj().getCurComplexType()))
-            throw new CommitValidationException("The base type " + getCommitedObj().getNewExtends().getName()
-                    + " shouldn't be the child of " + getCommitedObj().getCurComplexType().getName());
+            throw new CommitValidationException(Messages.bind(Messages.ComplexTypeXXHandler_ValidExceptionInfo, getCommitedObj()
+                    .getNewExtends().getName(), getCommitedObj().getCurComplexType().getName()));
 
         if (!getCommitedObj().isDefaultExtends()) {
             XSDCompositor newBaseGroupType = Util.getComplexTypeGroupType(getCommitedObj().getNewExtends());
             XSDCompositor newGroupType = getCommitedObj().getNewGroupType();
 
             if (newBaseGroupType != null && newBaseGroupType.equals(XSDCompositor.ALL_LITERAL))
-                throw new CommitValidationException("The group type of the new base "
-                        + getCommitedObj().getNewExtends().getName() + " shouldn't be 'All'");
+                throw new CommitValidationException(Messages.bind(Messages.ComplexTypeXXHandler_ValidExceptionInfo1,
+                        getCommitedObj().getNewExtends().getName()));
 
             if (newGroupType != null && newGroupType.equals(XSDCompositor.ALL_LITERAL))
-                throw new CommitValidationException("The new group type shouldn't be 'All'");
+                throw new CommitValidationException(Messages.ComplexTypeXXHandler_ValidExceptionInfo2);
 
             if (newBaseGroupType != null && !newBaseGroupType.equals(newGroupType))
-                throw new CommitValidationException("The group type of the new base "
-                        + getCommitedObj().getNewExtends().getName() + " should be same to the new group type ");
+                throw new CommitValidationException(Messages.bind(Messages.ComplexTypeXXHandler_ValidExceptionInfo3,
+                        getCommitedObj().getNewExtends().getName()));
         }
     }
 
@@ -109,7 +110,7 @@ class ComplexTypeGroupTypeCommitHandler extends CommitHandler<ComplexTypeWrapper
     protected void validateCommit() throws CommitValidationException {
 
         if (getCommitedObj().getNewGroupType() == null)
-            throw new CommitValidationException("The group type of the complex type can not be null");
+            throw new CommitValidationException(Messages.ComplexTypeXXHandler_ValidExceptionInfo4);
 
     }
 

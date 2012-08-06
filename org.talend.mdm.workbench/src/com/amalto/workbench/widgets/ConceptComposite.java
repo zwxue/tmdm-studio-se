@@ -31,6 +31,8 @@ import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.impl.XSDModelGroupImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
 
+import com.amalto.workbench.i18n.Messages;
+
 /**
  * this class is meant to encapsulate all widgets rendering concept it can output a composite to populate concept form
  * 
@@ -70,8 +72,8 @@ public class ConceptComposite {
         typeNameLabel = new Label(parent, SWT.NONE);
         typeNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 
-        typeNameLabel.setText(newComplex == false ? "Please enter the name of the complex type. Leave blank for anonymous"
-                : "Please enter the name of the complex type");
+        typeNameLabel.setText(newComplex == false ? Messages.ConceptComposite_TypeName1
+                : Messages.ConceptComposite_TypeName2);
 
         typeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER);
         typeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
@@ -147,7 +149,7 @@ public class ConceptComposite {
         messageLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         Label label = new Label(parent, 0);
         label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-        label.setText("This complex-type extends another complex-type:");
+        label.setText(Messages.ConceptComposite_Label);
 
         superTypeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY);
         superTypeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
@@ -189,7 +191,7 @@ public class ConceptComposite {
         });
         btnAbstract = new Button(parent, SWT.CHECK);
         btnAbstract.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
-        btnAbstract.setText("Abstract");
+        btnAbstract.setText(Messages.ConceptComposite_Abstract);
         container = parent;
         if (encloseTextField) {
             typeNameLabel.setParent(radioGroup);

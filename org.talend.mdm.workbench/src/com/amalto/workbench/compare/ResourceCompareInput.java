@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -509,7 +510,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(null, "Error", "An error occured trying to commit: " + e.getLocalizedMessage());
+            MessageDialog.openError(null, Messages._Error, Messages.bind(Messages.ResourceCompareInput_ErrorMsg, e.getLocalizedMessage()));
         }
 
     }

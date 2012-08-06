@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -106,31 +107,31 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
 
         btnAdd = new Button(compBtns, SWT.NONE);
         btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-        btnAdd.setToolTipText("Add");
+        btnAdd.setToolTipText(Messages._Add);
 
         btnRemove = new Button(compBtns, SWT.NONE);
         btnRemove.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-        btnRemove.setToolTipText("Remove");
+        btnRemove.setToolTipText(Messages._Remove);
 
         btnRemoveAll = new Button(compBtns, SWT.NONE);
         btnRemoveAll.setImage(ImageCache.getCreatedImage(EImage.PROGRESS_REMALL.getPath()));
-        btnRemoveAll.setToolTipText("Remove all");
+        btnRemoveAll.setToolTipText(Messages.ComplexAnnotaionXX_RemoveAll);
 
         btnMoveUp = new Button(compBtns, SWT.NONE);
         btnMoveUp.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
-        btnMoveUp.setToolTipText("Move up");
+        btnMoveUp.setToolTipText(Messages.ComplexAnnotaionXX_MoveUp);
 
         btnMoveDown = new Button(compBtns, SWT.NONE);
         btnMoveDown.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-        btnMoveDown.setToolTipText("Move down");
+        btnMoveDown.setToolTipText(Messages.ComplexAnnotaionXX_MoveDown);
 
         btnCopy = new Button(compBtns, SWT.NONE);
         btnCopy.setImage(ImageCache.getCreatedImage(EImage.COPY.getPath()));
-        btnCopy.setToolTipText("Copy");
+        btnCopy.setToolTipText(Messages._Copy);
 
         btnPaste = new Button(compBtns, SWT.NONE);
         btnPaste.setImage(ImageCache.getCreatedImage(EImage.PASTE.getPath()));
-        btnPaste.setToolTipText("Paste");
+        btnPaste.setToolTipText(Messages._Paste);
 
     }
 

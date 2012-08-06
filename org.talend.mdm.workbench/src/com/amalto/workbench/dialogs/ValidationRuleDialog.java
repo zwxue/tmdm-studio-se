@@ -38,6 +38,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
@@ -98,7 +99,7 @@ public class ValidationRuleDialog extends Dialog {
         Composite composite = (Composite) super.createDialogArea(parent);
         composite.setLayout(new GridLayout(2, false));
         Label label = new Label(composite, SWT.NONE);
-        label.setText("Name:");
+        label.setText(Messages.ValidationRuleDialog_);
         label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
         text = new Text(composite, SWT.BORDER);
         text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
@@ -150,12 +151,12 @@ public class ValidationRuleDialog extends Dialog {
         
         
         if(checkNameIsDuplicated(struc,name)){
-            MessageDialog.openWarning(page.getSite().getShell(),"Warning","You can not input a duplicated name"); 
+            MessageDialog.openWarning(page.getSite().getShell(),Messages.Warning,Messages.ValidationRuleDialog_InputDuplicateName); 
             return false;
         }
         
         if(name == null || name.trim().equals("")){ //$NON-NLS-1$
-            MessageDialog.openWarning(page.getSite().getShell(),"Warning","You can not input a blank name"); 
+            MessageDialog.openWarning(page.getSite().getShell(),Messages.Warning,Messages.ValidationRuleDialog_InputBlankName); 
             return false;
         }
         return true;

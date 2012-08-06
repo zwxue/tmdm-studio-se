@@ -33,6 +33,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
@@ -120,7 +121,7 @@ public class XSDEditorUtil {
         final IWorkspace workspace = ResourcesPlugin.getWorkspace();        
         final IProjectDescription desc = workspace.newProjectDescription(projectname);
         desc.setNatureIds(new String[] { "org.talend.mdm.schema.nature" });//$NON-NLS-1$
-        desc.setComment("Talend MDM DataModel Project");
+        desc.setComment(Messages.XSDEditorUtil_Comment);
         try {
             prj.create(desc, null);
             prj.open(IResource.BACKGROUND_REFRESH, null);
@@ -164,8 +165,8 @@ public class XSDEditorUtil {
         //can't add DataModelMainPage the 3rd page, see 0019663
         CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
         folder.getItem(2).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));//$NON-NLS-1$
-        folder.getItem(0).setText("Schema Design");
-        folder.getItem(1).setText("Schema Source");
+        folder.getItem(0).setText(Messages.XSDEditorUtil_SchemaDesign);
+        folder.getItem(1).setText(Messages.XSDEditorUtil_SchemaSource);
         if (markdirty)
             dMainPage.markDirty();
 

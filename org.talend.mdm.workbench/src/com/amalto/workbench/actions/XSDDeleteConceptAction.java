@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.xsd.XSDElementDeclaration;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ISchemaContentProvider;
@@ -45,8 +46,8 @@ public class XSDDeleteConceptAction extends UndoAction {
         super(page);
         // this.page = page;
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete Entity");
-        setToolTipText("Delete an Entity");
+        setText(Messages.XSDDeleteConceptAction_Text);
+        setToolTipText(Messages.XSDDeleteConceptAction_ActionTip);
     }
 
     public void run(Object toDel) {
@@ -69,10 +70,8 @@ public class XSDDeleteConceptAction extends UndoAction {
             }
 
             if (checkContainFK(decl.getName())) {
-                boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), "Confirm Delete",
-                        "The \"" + decl.getName()
-                                + "\" Entity is referred to by at least one foreign key. Are you sure you want to proceed?\n"
-                                + "\nIf you click OK, this will leave one reference or more to a non-existing Entity.");
+                boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), Messages.XSDDeleteConceptAction_ConfirmDel,
+                        Messages.bind(Messages.XSDDeleteConceptAction_ConfirmInfo, decl.getName()));
                 if (!confirmed) {
                     return Status.CANCEL_STATUS;
                 }
@@ -92,8 +91,8 @@ public class XSDDeleteConceptAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to remove Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDDeleteConceptAction_ErrorMsg, e.getLocalizedMessage()));
 
             return Status.CANCEL_STATUS;
         }

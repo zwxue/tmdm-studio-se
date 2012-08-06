@@ -20,6 +20,7 @@ import com.amalto.workbench.detailtabs.sections.composites.ForeignKeyFilterCompo
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.util.BasePropertySectionDataModelExtractor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class ElementFKFilterSection extends XSDComponentSection {
@@ -60,6 +61,6 @@ public class ElementFKFilterSection extends XSDComponentSection {
 
     @Override
     protected String getSectionTitle() {
-        return "Foreign Key Filter";
+        return Messages.ElementFKFilterSection_ForeignKeyFilter;
     }
 }

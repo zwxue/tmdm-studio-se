@@ -34,6 +34,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -104,14 +105,14 @@ public class DescAnnotationComposite implements SelectionListener {
             annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
             annotationButton.addSelectionListener(this);
             annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-            annotationButton.setToolTipText("Set the Descriptions");
+            annotationButton.setToolTipText(Messages.DescAnnotationComposite_AnnoBtnDesc);
 
         } else {
             annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);//$NON-NLS-1$
             annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
             annotationButton.addSelectionListener(this);
             annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-            annotationButton.setToolTipText("Set the Descriptions");
+            annotationButton.setToolTipText(Messages.DescAnnotationComposite_AnnoBtnDesc);
 
             descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER);//$NON-NLS-1$
             textGD = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -129,7 +130,7 @@ public class DescAnnotationComposite implements SelectionListener {
         }
         // Util.createCompDropTarget(descriptionText);
         accommodation = dialog;
-        dlgTitle = "Set the Descriptions";
+        dlgTitle = Messages.DescAnnotationComposite_AnnoBtnDesc;
     }
 
     public void setAnnotationDialogTitle(String title) {

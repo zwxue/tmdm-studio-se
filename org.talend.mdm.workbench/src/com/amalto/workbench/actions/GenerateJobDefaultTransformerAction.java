@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import com.amalto.workbench.dialogs.JobProcesssOptionsDialog;
 import com.amalto.workbench.dialogs.JobProcesssOptionsDialog.Execution;
 import com.amalto.workbench.dialogs.JobProcesssOptionsDialog.Parameter;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -46,8 +47,8 @@ public class GenerateJobDefaultTransformerAction extends Action {
 	public GenerateJobDefaultTransformerAction() {
 		super();
 		setImageDescriptor(ImageCache.getImage(EImage.JOB.getPath()));
-		setText("Generate Talend Job Caller Process");
-		setToolTipText("Generate Talend Job Caller Process");
+		setText(Messages.GenerateJobXX_Text1);
+		setToolTipText(Messages.GenerateJobXX_Text1);
 	}
 
 	public void run() {
@@ -62,7 +63,7 @@ public class GenerateJobDefaultTransformerAction extends Action {
 		}
 
 		String filename = xobject.getDisplayName();
-		Execution defaultExecutionType = filename.endsWith("zip") ? Execution.EMBEDDED : Execution.WEB_SERVICE;
+		Execution defaultExecutionType = filename.endsWith("zip") ? Execution.EMBEDDED : Execution.WEB_SERVICE; //$NON-NLS-1$
 		
 		JobProcesssOptionsDialog dialog = new JobProcesssOptionsDialog(server
 				.getSite().getShell(), defaultExecutionType);
@@ -86,15 +87,15 @@ public class GenerateJobDefaultTransformerAction extends Action {
 		Execution execution = dialog.getExecution();
 		Parameter executionParameter = dialog.getParameter();
 		
-		String url = "";
+		String url = ""; //$NON-NLS-1$
 		switch (execution) {
 		case EMBEDDED:
 			String version = jobversion.substring(jobname.length() + 1);
-			url = "ltj://" + jobname + "/" + version;
+			url = "ltj://" + jobname + "/" + version; //$NON-NLS-1$ //$NON-NLS-2$
 			break;
 		case WEB_SERVICE:
-			String server = "http://" + xobject.getEndpointHost()+ ":" + xobject.getEndpointPort();
-			url = server + "/" + jobversion + "/services/" + jobname;
+			String server = "http://" + xobject.getEndpointHost()+ ":" + xobject.getEndpointPort(); //$NON-NLS-1$ //$NON-NLS-2$
+			url = server + "/" + jobversion + "/services/" + jobname; //$NON-NLS-1$ //$NON-NLS-2$
 			break;
 		}
 		
@@ -168,7 +169,7 @@ public class GenerateJobDefaultTransformerAction extends Action {
 						"Invoke the job", parameter, input, output, false); //$NON-NLS-1$  //$NON-NLS-2$
 				break;
 			default:
-				log.warn("Unsupported execution type: " + executionParameter);
+				log.warn(Messages.bind(Messages.GenerateJobXX_UnsupportedType, executionParameter));
 				steps =  new WSTransformerProcessStep[0];
 			}
 		} catch (Exception e) {

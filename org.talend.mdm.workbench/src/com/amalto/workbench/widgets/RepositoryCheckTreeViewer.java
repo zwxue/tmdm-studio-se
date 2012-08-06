@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.PartInitException;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.CheckboxRepositoryTreeViewer;
@@ -203,7 +204,7 @@ public class RepositoryCheckTreeViewer {
         GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(400, 300).applyTo(itemComposite);
 
         itemLabel = new Label(itemComposite, SWT.NONE);
-        itemLabel.setText("Select Items to Tag");
+        itemLabel.setText(Messages.RepositoryCheckTreeViewer_ItemLabel);
         GridDataFactory.swtDefaults().span(2, 1).applyTo(itemLabel);
 
         createTreeViewer(itemComposite);
@@ -379,7 +380,7 @@ public class RepositoryCheckTreeViewer {
         Button hide = new Button(buttonComposite, SWT.PUSH);
         hide.setVisible(false);
         Button selectAll = new Button(buttonComposite, SWT.PUSH);
-        selectAll.setText("Select All");
+        selectAll.setText(Messages.RepositoryCheckTreeViewer_SelectAll);
         selectAll.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -389,7 +390,7 @@ public class RepositoryCheckTreeViewer {
         });
 
         Button deselectAll = new Button(buttonComposite, SWT.PUSH);
-        deselectAll.setText("Deselect all");
+        deselectAll.setText(Messages.RepositoryCheckTreeViewer_DeselectAll);
         deselectAll.addSelectionListener(new SelectionAdapter() {
 
             @Override

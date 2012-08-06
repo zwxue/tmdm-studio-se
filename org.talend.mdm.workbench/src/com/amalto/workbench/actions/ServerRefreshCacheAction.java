@@ -18,6 +18,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
@@ -49,8 +50,8 @@ public class ServerRefreshCacheAction extends Action {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
-        setText("Refresh Cache");
-        setToolTipText("Refresh the item & object caches");
+        setText(Messages.ServerRefreshCacheAction_Text);
+        setToolTipText(Messages.ServerRefreshCacheAction_ActionTip);
     }
 
     public void run() {
@@ -58,7 +59,7 @@ public class ServerRefreshCacheAction extends Action {
             doRun();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the Cache" + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error, Messages.bind(Messages.ServerRefreshCacheAction_ErrorMsg, e.getLocalizedMessage()));
         }
     }
 
@@ -72,10 +73,10 @@ public class ServerRefreshCacheAction extends Action {
             if (serverRoot == null)
                 return;
             WSString ret=Util.getPort(serverRoot).refreshCache(new WSRefreshCache("ALL"));//$NON-NLS-1$
-            MessageDialog.openInformation(null, "Refresh the cache", ret.getValue());
+            MessageDialog.openInformation(null, Messages.ServerRefreshCacheAction_InformationTitle, ret.getValue());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new Exception("Error while refreshing the Cache" + e.getLocalizedMessage());
+            throw new Exception(Messages.bind(Messages.ServerRefreshCacheAction_ExceptionInfo, e.getLocalizedMessage()));
         }
     }
 }

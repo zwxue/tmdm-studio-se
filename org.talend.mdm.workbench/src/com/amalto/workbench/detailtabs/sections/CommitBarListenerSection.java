@@ -25,6 +25,7 @@ import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite.Co
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
+import com.amalto.workbench.i18n.Messages;
 
 public abstract class CommitBarListenerSection<T> extends BasePropertySection implements CommitBarListener {
 
@@ -43,9 +44,9 @@ public abstract class CommitBarListenerSection<T> extends BasePropertySection im
                 refreshDataModelMainPageAfterModification();
             }
         } catch (CommitException e) {
-            handleCommitException(e, "Commit Error");
+            handleCommitException(e, Messages.CommitBarListenerSection_CommitError);
         } catch (CommitValidationException e) {
-            handleCommitException(e, "Commit Validation Error");
+            handleCommitException(e, Messages.CommitBarListenerSection_CommitValidationError);
         }
     }
 

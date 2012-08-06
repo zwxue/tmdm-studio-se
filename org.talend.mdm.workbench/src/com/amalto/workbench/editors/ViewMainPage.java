@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -116,7 +117,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     // private TisTableViewer conditionViewer;
 
     public ViewMainPage(FormEditor editor) {
-        super(editor, ViewMainPage.class.getName(), "View " + ((XObjectEditorInput) editor.getEditorInput()).getName()
+        super(editor, ViewMainPage.class.getName(), Messages.ViewMainPage_View + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
         // this.treeParent = this.getXObject().getParent();
         Object model = ((XObjectEditorInput) editor.getEditorInput()).getModel();
@@ -126,7 +127,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     protected void initProcessCombo() throws RemoteException, XtentisException {
         java.util.List<String> pList = new ArrayList<String>();
-        WSTransformerPKArray array = Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs(""));
+        WSTransformerPKArray array = Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs("")); //$NON-NLS-1$
         if (array != null && array.getWsTransformerPK() != null) {
             for (WSTransformerPK pk : array.getWsTransformerPK()) {
                 pList.add(pk.getPk());
@@ -138,7 +139,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
-            desAntionComposite = new DescAnnotationComposite("Description", " ...", toolkit, charComposite, (AMainPageV2) this,
+            desAntionComposite = new DescAnnotationComposite(Messages.ViewMainPage_Description, " ...", toolkit, charComposite, (AMainPageV2) this, //$NON-NLS-1$
                     false);
             Composite comp = toolkit.createComposite(charComposite);
             GridLayout layout = new GridLayout(2, false);
@@ -148,7 +149,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             layout.marginHeight = 0;
             layout.marginBottom = 0;
             comp.setLayout(layout);
-            btnRunProcess = toolkit.createButton(comp, "Run the view result through a Process", SWT.CHECK);
+            btnRunProcess = toolkit.createButton(comp, Messages.ViewMainPage_RunResultThroughProcess, SWT.CHECK);
             btnRunProcess.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
             cboProcessList = new Combo(comp, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
             cboProcessList.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
@@ -182,13 +183,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
              * /viewable Business Elements
              ****/
             TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
-            Composite viewablehGroup = this.getNewSectionComposite("Viewable Business Elements");
+            Composite viewablehGroup = this.getNewSectionComposite(Messages.ViewMainPage_ViewableBusinessElements);
             viewablehGroup.setLayout(new GridLayout(2, false));
             viewableElementColumns[0].setColumnWidth(220);
             viewableViewer = getNewTisTableViewer(viewablehGroup, toolkit, Arrays.asList(viewableElementColumns));
             viewableViewer.setTreeParent(treeParent);
             viewableViewer.setXpath(true);
-            if (viewName.startsWith("Browse_items_")) {
+            if (viewName.startsWith(Messages.ViewMainPage_BrowseItems)) {
                 concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             }
             viewableViewer.setConceptName(concept);
@@ -198,7 +199,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             viewableViewer.setHeight(110);
             // wrap.Wrap(this, viewableViewer);
 
-            Composite searchGroup = this.getNewSectionComposite("Searchable Business Elements");
+            Composite searchGroup = this.getNewSectionComposite(Messages.ViewMainPage_SearchableBusinessElements);
             searchGroup.setLayout(new GridLayout(2, false));
             searchableElementColumns[0].setColumnWidth(220);
             searchableViewer = getNewTisTableViewer(searchGroup, toolkit, Arrays.asList(searchableElementColumns));
@@ -217,7 +218,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             // else
             setCompositeView(true);
             initCoditionsColumns();
-            Composite wcGroup = this.getNewSectionComposite("Where Conditions");
+            Composite wcGroup = this.getNewSectionComposite(Messages.ViewMainPage_WhereConditions);
             wcGroup.setLayout(new GridLayout(2, false));
             conditionsColumns[0].setColumnWidth(250);
             conditionsColumns[1].setColumnWidth(150);
@@ -300,8 +301,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.ViewMainPage_ErrorRefreshPage,
+                    Messages.bind(Messages.ViewMainPage_ErrorRefreshPageXX, e.getLocalizedMessage()));
         }
     }
 
@@ -368,8 +369,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
-                    "Error comitting the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.ViewMainPage_ErrorCommitPage,
+                    Messages.bind(Messages.ViewMainPage_ErrorCommitPageXX, e.getLocalizedMessage()));
         }
     }
 
@@ -444,14 +445,14 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                     // show verify report
                     if (toAddViewableList.size() > 0) {
 
-                        String msg = "[Missing Unique Key]: \n\n";
+                        String msg = Messages.ViewMainPage_Msg;
                         for (Iterator iterator = toAddViewableList.iterator(); iterator.hasNext();) {
                             String toAddItem = (String) iterator.next();
-                            msg += (toAddItem + "\n");
+                            msg += (toAddItem + "\n"); //$NON-NLS-1$
                         }
-                        msg += "\nSystem will add these key-paths for you automatically.\n";
+                        msg += Messages.ViewMainPage_Addtions;
 
-                        MessageDialog.openInformation(this.getSite().getShell(), "Verify Report", msg);
+                        MessageDialog.openInformation(this.getSite().getShell(), Messages.ViewMainPage_VerifyReport, msg);
                     }
 
                     // auto fix
@@ -580,7 +581,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
             try {
-                monitor.beginTask("Adding key-path", toAddViewableList.size());
+                monitor.beginTask(Messages.ViewMainPage_Addingkeypath, toAddViewableList.size());
 
                 for (Iterator<String> iter = toAddViewableList.iterator(); iter.hasNext();) {
                     String[] keyPath = new String[] { iter.next() };
@@ -594,8 +595,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                 monitor.done();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(parentShell, "Error Auto Fix",
-                        "An error occured trying to fix issues automatically:\n\n " + e.getLocalizedMessage());
+                MessageDialog.openError(parentShell, Messages.ViewMainPage_ErrorAutoFix,
+                        Messages.bind(Messages.ViewMainPage_ErrorMsg, e.getLocalizedMessage()));
             }// try
         }
 
@@ -613,18 +614,18 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     @Override
     public boolean beforeDoSave() {
         if (desAntionComposite.getText().trim().equals("")) {//$NON-NLS-1$en
-            MessageDialog.openError(this.getSite().getShell(), "Error saving", "Description cannot be empty");
+            MessageDialog.openError(this.getSite().getShell(), Messages.ViewMainPage_ErrorSaving, Messages.ViewMainPage_DescriptionCannotbeEmpty);
             return false;
         }
         java.util.List<Line> input = (java.util.List<Line>) viewableViewer.getViewer().getInput();
         if (input != null && input.size() == 0) {
-            MessageDialog.openError(this.getSite().getShell(), "Error", "Viewable Business Elements can't be empty!");
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.ViewMainPage_ErrorMsg1);
             return false;
         }
 
         input = (java.util.List<Line>) searchableViewer.getViewer().getInput();
         if (input != null && input.size() == 0) {
-            MessageDialog.openError(this.getSite().getShell(), "Error", "Searchable Business Elements can't be empty!");
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.ViewMainPage_ErrorMsg2);
             return false;
         }
         return true;

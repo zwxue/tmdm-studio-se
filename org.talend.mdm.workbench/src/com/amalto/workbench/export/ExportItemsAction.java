@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPage;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -51,8 +52,8 @@ public class ExportItemsAction extends Action {
 
     private void setDetails() {
         setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
-        setText("Export");
-        setToolTipText("Export Items");
+        setText(Messages.ExportItemsAction_Text);
+        setToolTipText(Messages.ExportItemsAction_ActionTip);
     }
 
     public void run() {
@@ -67,7 +68,7 @@ public class ExportItemsAction extends Action {
             ExportItemsWizard wizard = new ExportItemsWizard((IStructuredSelection) selection);
             WizardDialog dialog = new WizardDialog(view.getSite().getShell(), wizard);
             dialog.create();
-            dialog.getShell().setText("Export items");
+            dialog.getShell().setText(Messages.ExportItemsAction_ActionTip);
             dialog.open();
             // DataClusterExportDialog dialog=new DataClusterExportDialog(view.getSite().getShell(),xobject);
             // dialog.create();
@@ -75,8 +76,8 @@ public class ExportItemsAction extends Action {
             // dialog.open();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error",
-                    "An error occured trying to Export Data Container: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.ExportItemsAction_ErrorMsg, e.getLocalizedMessage()));
         }
     }
 }

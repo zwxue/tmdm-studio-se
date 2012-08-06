@@ -44,7 +44,7 @@ public final class PerspectiveReviewUtil {
 
     private static String WORKFLOW_PERSPECTIVE_ID = "org.bonitasoft.studio.application.perspective"; //$NON-NLS-1$
 
-    private static String isfirst = "";
+    private static String isfirst = ""; //$NON-NLS-1$
 
     static List<String> diViewList = new ArrayList<String>();
 
@@ -84,10 +84,10 @@ public final class PerspectiveReviewUtil {
     // DQ View
     static String dqRepositoryViewId = "org.talend.dataprofiler.core.ui.views.DQRespositoryView";//$NON-NLS-1$
 
-    static String dqRepositoryDetailViewId = "org.talend.dataprofiler.core.ui.views.RespositoryDetailView";
+    static String dqRepositoryDetailViewId = "org.talend.dataprofiler.core.ui.views.RespositoryDetailView"; //$NON-NLS-1$
 
     // MDM View
-    static String mdmServerViewId = "org.talend.mdm.workbench.views.ServerView";
+    static String mdmServerViewId = "org.talend.mdm.workbench.views.ServerView"; //$NON-NLS-1$
 
     public static void setPerspectiveReviewUtil() {
         // DI
@@ -196,12 +196,12 @@ public final class PerspectiveReviewUtil {
             @Override
             public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
                 String pId = perspective.getId();
-                if (null == isfirst || "".equals(isfirst)) {
+                if (null == isfirst || "".equals(isfirst)) { //$NON-NLS-1$
                     isfirst = perspective.getId();
                     refreshAll();
-                } else if (pId.equals(isfirst) && !"".equals(isfirst)) {
+                } else if (pId.equals(isfirst) && !"".equals(isfirst)) { //$NON-NLS-1$
                     return;
-                } else if (!pId.equals(isfirst) && !"".equals(isfirst)) {
+                } else if (!pId.equals(isfirst) && !"".equals(isfirst)) { //$NON-NLS-1$
                     isfirst = perspective.getId();
                     refreshAll();
                 }
@@ -223,7 +223,7 @@ public final class PerspectiveReviewUtil {
             IWorkbenchPage page = workBenchWindow.getActivePage();
             if (page != null) {
                 String perId = page.getPerspective().getId();
-                if ((!"".equals(perId) && null != perId)) {
+                if ((!"".equals(perId) && null != perId)) { //$NON-NLS-1$
                     // eg : use DI, then switch to DQ : All view from DI must be hidden when switch
                     if (perId.equalsIgnoreCase(PERSPECTIVE_DI_ID)) {
                         for (String strId : dqViewList) {

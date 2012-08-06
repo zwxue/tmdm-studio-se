@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.TransformerMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.EContentType;
@@ -76,7 +77,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         comp.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         comp.setLayout(new GridLayout(1, false));
-        comp.setText("Setup " + transformer.getName() + " input variables");
+        comp.setText(Messages.bind(Messages.SetupTransformerInputVariablesDialog_CompText, transformer.getName()));
 
         // Get the input variable names
         Set<String> inputVariables = new HashSet<String>();
@@ -87,7 +88,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
             }
         }
 
-        ComplexTableViewerColumn[] columns = new ComplexTableViewerColumn[] { new ComplexTableViewerColumn("Input Variables", // name
+        ComplexTableViewerColumn[] columns = new ComplexTableViewerColumn[] { new ComplexTableViewerColumn(Messages.SetupTransformerInputVariablesDialog_InputVariables, // name
                 true, // is Nillable ?
                 "_DEFAULT_", // Nill value//$NON-NLS-1$
                 "_DEFAULT_", // Nill display//$NON-NLS-1$
@@ -95,7 +96,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
                 ComplexTableViewerColumn.COMBO_STYLE, // is Combo ?
                 inputVariables.toArray(new String[inputVariables.size()]), // Combo Values
                 0 // Text Lines
-                ), new ComplexTableViewerColumn("Content Type", // name
+                ), new ComplexTableViewerColumn(Messages.SetupTransformerInputVariablesDialog_ContentType, // name
                         false, // is Nillable ?
                         "", // Nill value//$NON-NLS-1$
                         "", // Nill display//$NON-NLS-1$
@@ -103,7 +104,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
                         ComplexTableViewerColumn.COMBO_STYLE, // is Combo ?
                         EContentType.allTypes().toArray(new String[EContentType.allTypes().size()]), // Combo Values
                         0 // Text Lines
-                ), new ComplexTableViewerColumn("Value", // name
+                ), new ComplexTableViewerColumn(Messages.SetupTransformerInputVariablesDialog_Value, // name
                         true, // is Nillable ?
                         "", // Nill value//$NON-NLS-1$
                         "", // Nill display//$NON-NLS-1$

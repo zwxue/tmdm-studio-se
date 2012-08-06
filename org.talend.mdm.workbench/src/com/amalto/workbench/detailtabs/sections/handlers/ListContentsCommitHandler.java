@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.ListContentsAnnotationInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public abstract class ListContentsCommitHandler<T extends ListContentsAnnotationInfo> extends AnnotationInfoCommitHandler<T> {
@@ -31,7 +32,7 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
 
         for (String eachSubmittedSimpleAnnoInfoValue : getCommitedObj().getInfos()) {
             if (eachSubmittedSimpleAnnoInfoValue == null || "".equals(eachSubmittedSimpleAnnoInfoValue.trim())) {//$NON-NLS-1$
-                throw new CommitValidationException("The " + getMsgHeader() + " can not contains empty content");
+                throw new CommitValidationException(Messages.bind(Messages.ListContentsCommitHandler_ExceptionInfo, getMsgHeader()));
             }
         }
 

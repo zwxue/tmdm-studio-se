@@ -113,7 +113,7 @@ public class EntityWrapper implements ISubmittable, INameEditable {
         if (sourceEntity != null)
             return sourceEntity.getName();
 
-        return "";
+        return ""; //$NON-NLS-1$
     }
 
     public CommitHandler<EntityWrapper> createCommitHandler() {

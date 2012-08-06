@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPage;
 
 import com.amalto.workbench.editors.xsdeditor.XSDEditorUtil;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -87,8 +88,8 @@ public class EditXObjectAction extends Action {
 
     private void setDetails() {
         setImageDescriptor(ImageCache.getImage("icons/edit.gif"));//$NON-NLS-1$
-        setText("Edit");
-        setToolTipText("Edit/View this instance of the " + IConstants.TALEND + " Object");
+        setText(Messages.EditXObjectAction_Edit);
+        setToolTipText(Messages.bind(Messages.EditXObjectAction_ActionTip, IConstants.TALEND));
     }
 
     public void run() {
@@ -172,8 +173,7 @@ public class EditXObjectAction extends Action {
             case TreeObject.PICTURES_RESOURCE:
                 break;
             default:
-                MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown " + IConstants.TALEND + " Object Type: "
-                        + xobject.getType());
+                MessageDialog.openError(view.getSite().getShell(), Messages._Error, Messages.bind(Messages.EditXObjectAction_ErrorMsg1, IConstants.TALEND, xobject.getType()));
                 return;
             }// switch
 
@@ -185,8 +185,8 @@ public class EditXObjectAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error",
-                    "An error occured trying to open the editor: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.EditXObjectAction_ErrorMsg2, e.getLocalizedMessage()));
         }
     }
 

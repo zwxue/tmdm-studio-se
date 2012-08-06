@@ -37,6 +37,7 @@ import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -84,7 +85,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
             }
             addPageForXObject(xobject);
         } catch (PartInitException e) {
-            MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :" + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.bind(Messages.XObjectBrowser_ErrorMsg, e.getLocalizedMessage()));
         }
     }
 
@@ -281,7 +282,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
 
         public RefreshSectionAction() {
             super("Refresh"); //$NON-NLS-1$
-            setToolTipText("Refresh");
+            setToolTipText(Messages.XObjectBrowser_Refresh);
             this.setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
         }
 

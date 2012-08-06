@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
@@ -54,8 +55,8 @@ public class ServerRefreshAction extends Action {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
-        setText("Refresh");
-        setToolTipText("Refresh the " + IConstants.TALEND + " Server Object(s)");
+        setText(Messages.ServerRefreshAction_Text);
+        setToolTipText(Messages.bind(Messages.ServerRefreshAction_ActionTip, IConstants.TALEND));
     }
 
     @Override
@@ -64,8 +65,8 @@ public class ServerRefreshAction extends Action {
             doRun();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the " + IConstants.TALEND
-                    + " Server Objects: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.ServerRefreshAction_ErrorMsg, IConstants.TALEND, e.getLocalizedMessage()));
         }
     }
 
@@ -94,7 +95,7 @@ public class ServerRefreshAction extends Action {
                 msg = CommonUtil.getErrMsgFromException(e.getCause());
             else
                 msg = e.getLocalizedMessage();
-            throw new Exception("Error while refreshing the " + IConstants.TALEND + " Server Objects: " + msg);
+            throw new Exception(Messages.bind(Messages.ServerRefreshAction_ExceptionInfo, IConstants.TALEND, msg));
         }
     }
 

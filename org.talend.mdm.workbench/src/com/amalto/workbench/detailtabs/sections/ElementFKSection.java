@@ -21,6 +21,7 @@ import com.amalto.workbench.detailtabs.sections.composites.FKIntegrityComposite;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.util.FixDMNameBasePropertySectionDataModelExtractor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.widgets.composites.SimpleXPathComposite;
 
@@ -73,6 +74,6 @@ public class ElementFKSection extends XSDComponentSection {
 
     @Override
     protected String getSectionTitle() {
-        return "Foreign Key";
+        return Messages.ElementFKSection_ForeignKey;
     }
 }

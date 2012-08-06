@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -148,7 +149,7 @@ public class MenuEntryDialog extends Dialog {
         Label idLabel = new Label(composite, SWT.NONE);
         idLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        idLabel.setText("ID");
+        idLabel.setText(Messages.MenuEntryDialog_Id);
         if (this.isChanged) {
             idText = new Text(composite, SWT.NONE);
         } else {
@@ -161,7 +162,7 @@ public class MenuEntryDialog extends Dialog {
 
         Label contextLabel = new Label(composite, SWT.NONE);
         contextLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        contextLabel.setText("Context");
+        contextLabel.setText(Messages.MenuEntryDialog_Context);
 
         contextText = new Text(composite, SWT.NONE);
         contextText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -169,14 +170,14 @@ public class MenuEntryDialog extends Dialog {
 
         Label applicationNameLabel = new Label(composite, SWT.NONE);
         applicationNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        applicationNameLabel.setText("Application");
+        applicationNameLabel.setText(Messages.MenuEntryDialog_Application);
 
         applicationNameText = new Text(composite, SWT.NONE);
         applicationNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         Label iconPathLabel = new Label(composite, SWT.NONE);
         iconPathLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        iconPathLabel.setText("Icon Path");
-        iconPathText = new FileSelectWidget(composite, "", new String[] { "*.png", "*.gif", "*.jpg" }, "", true);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-1$//$NON-NLS-4$
+        iconPathLabel.setText(Messages.MenuEntryDialog_IconPath);
+        iconPathText = new FileSelectWidget(composite, "", new String[] { "*.png", "*.gif", "*.jpg" }, "", true);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$
 
         // Labels
         descriptionsComposite = new Composite(composite, SWT.BORDER);
@@ -185,7 +186,7 @@ public class MenuEntryDialog extends Dialog {
 
         Label descriptionsLabel = new Label(descriptionsComposite, SWT.NULL);
         descriptionsLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-        descriptionsLabel.setText("Menu Entry Labels");
+        descriptionsLabel.setText(Messages.MenuEntryDialog_MenuEntryLabels);
 
         languagesCombo = new Combo(descriptionsComposite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
         languagesCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.NONE, false, false, 1, 1));
@@ -220,7 +221,7 @@ public class MenuEntryDialog extends Dialog {
         Button addLabelButton = new Button(descriptionsComposite, SWT.PUSH);
         addLabelButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         addLabelButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-        addLabelButton.setToolTipText("Add");
+        addLabelButton.setToolTipText(Messages.MenuEntryDialog_Add);
         addLabelButton.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -233,8 +234,8 @@ public class MenuEntryDialog extends Dialog {
             };
         });
 
-        final String LANGUAGE = "Language";
-        final String LABEL = "Label";
+        final String LANGUAGE = Messages.MenuEntryDialog_Language;
+        final String LABEL = Messages.MenuEntryDialog_Label;
 
         descriptionsViewer = new TableViewer(descriptionsComposite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER
                 | SWT.FULL_SELECTION);

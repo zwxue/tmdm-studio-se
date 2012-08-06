@@ -24,6 +24,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -63,7 +64,7 @@ public class ObjectRetriever implements IRunnableWithProgress {
     }
 
     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-        monitor.beginTask("Loading " + IConstants.TALEND + " Server Objects", "admin".equals(username) ? 12 : 9);//$NON-NLS-3$
+        monitor.beginTask(Messages.bind(Messages.ObjectRetriever_TaskName, IConstants.TALEND), "admin".equals(username) ? 12 : 9);//$NON-NLS-1$
         // Access to server and get port
 
         try {

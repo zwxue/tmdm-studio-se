@@ -34,6 +34,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.NewGroupDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -56,8 +57,8 @@ public class XSDNewGroupFromParticleAction extends UndoAction implements Selecti
     public XSDNewGroupFromParticleAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-        setText("Add Group (after)");
-        setToolTipText("Add a new Group after this one. Add from the Type to add at First Position.");
+        setText(Messages.XSDNewGroupFromParticleAction_Text);
+        setToolTipText(Messages.XSDNewGroupFromParticleAction_ActionTip);
     }
 
     public IStatus doAction() {
@@ -126,8 +127,8 @@ public class XSDNewGroupFromParticleAction extends UndoAction implements Selecti
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDNewGroupFromParticleAction_ErrorMsg, e.getLocalizedMessage()));
 
             return Status.CANCEL_STATUS;
         }

@@ -17,6 +17,8 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.i18n.Messages;
+
 public class NewXSDIndentityConstraintValidator {
 
     private XSDSchema schema;
@@ -32,7 +34,7 @@ public class NewXSDIndentityConstraintValidator {
     public String isValid(String keyName, XSDIdentityConstraintCategory type, XSDElementDeclaration element) {
 
         if (keyName == null || "".equals(keyName.trim()))//$NON-NLS-1$
-            return "The Key Name cannot be empty";
+            return Messages.NewXSDIndentityConstraintValidator_KeyNameCannotbeEmpty;
 
         for (XSDIdentityConstraintDefinition eachKey : schema.getIdentityConstraintDefinitions()) {
 
@@ -42,11 +44,11 @@ public class NewXSDIndentityConstraintValidator {
                     // there are more than 1 unique key under 1 element
                     // (icd.getContainer().equals(decl.getContainer()))) {
                     && (eachKey.getContainer().equals(element))) {
-                return "The Business Element already has an unique key";
+                return Messages.NewXSDIndentityConstraintValidator_BElemntAlreadyHasUniqueKey;
             }
 
             if (eachKey.getName().equals(keyName)) {
-                return "The Key " + keyName + " already exist";
+                return Messages.bind(Messages.NewXSDIndentityConstraintValidator_KeyInfo, keyName);
             }
 
         }

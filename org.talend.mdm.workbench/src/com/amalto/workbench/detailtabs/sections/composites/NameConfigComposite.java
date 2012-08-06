@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.INameEditable;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -56,7 +57,7 @@ public class NameConfigComposite extends Composite {
         setLayout(gridLayout);
 
         final Label lblName = new Label(this, SWT.NONE);
-        lblName.setText("Name");
+        lblName.setText(Messages.NameConfigComposite_Name);
         lblName.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
         lblNameErrIndicator = new Label(this, SWT.NONE);

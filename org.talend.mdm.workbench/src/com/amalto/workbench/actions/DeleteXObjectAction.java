@@ -32,6 +32,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -53,8 +54,8 @@ public class DeleteXObjectAction extends Action {
         super();
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete");
-        setToolTipText("Delete this instance of the " + IConstants.TALEND + " Object");
+        setText(Messages.Delete);
+        setToolTipText(Messages.bind(Messages.DeleteXObjectAction_ActionTip, IConstants.TALEND));
     }
 
     public void run() {
@@ -73,9 +74,9 @@ public class DeleteXObjectAction extends Action {
                 List<IEditorPart> opendViewer = new ArrayList<IEditorPart>();
 
                 if (size > 1)
-                    s = "Instances";
+                    s = Messages.DeleteXObjectAction_Instances;
                 else
-                    s = "Instance";
+                    s = Messages.DeleteXObjectAction_Instance;
 
                 for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext();) {
                     TreeObject xobject = iter.next();
@@ -90,9 +91,9 @@ public class DeleteXObjectAction extends Action {
                     }
 
                     if ((!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER)
-                            || (xobject.getType() == TreeObject.CATEGORY_FOLDER && xobject.getDisplayName().equals("System")))
+                            || (xobject.getType() == TreeObject.CATEGORY_FOLDER && xobject.getDisplayName().equals("System"))) //$NON-NLS-1$
                         continue;
-                    else if (xobject.getType() == TreeObject.CATEGORY_FOLDER && !xobject.getDisplayName().equals("System")) {
+                    else if (xobject.getType() == TreeObject.CATEGORY_FOLDER && !xobject.getDisplayName().equals("System")) { //$NON-NLS-1$
                         TreeParent parent = (TreeParent) xobject;
                         LocalTreeObjectRepository.getInstance().receiveAllOffsprings(parent, toDelList);
                         toDelList.add(xobject);
@@ -108,14 +109,15 @@ public class DeleteXObjectAction extends Action {
                 }
 
                 if (toDelList.size() > 0) {
-                    if (!MessageDialog.openConfirm(this.view.getSite().getShell(), "Delete " + IConstants.TALEND
-                            + " Object Instance", "Are you sure you want to delete the " + toDelList.size() + " " + s + "?"))
+                    if (!MessageDialog.openConfirm(this.view.getSite().getShell(),
+                            Messages.bind(Messages.DeleteXObjectAction_ConfirmTitle, IConstants.TALEND),
+                            Messages.bind(Messages.DeleteXObjectAction_ConfirmContent, toDelList.size(), s)))
                         return;
 
                 }// if the isnotdefault is true,open this dialog
             }// end of if(selection...)
 
-            UIJob job = new UIJob("delete Objects ...") {
+            UIJob job = new UIJob(Messages.DeleteXObjectAction_JobName) {
 
                 @Override
                 public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -136,8 +138,8 @@ public class DeleteXObjectAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to delete the "
-                    + IConstants.TALEND + " object: " + e.getLocalizedMessage());
+            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.DeleteXObjectAction_ErrorMsg, IConstants.TALEND, e.getLocalizedMessage()));
         } finally {
             // refresh view
             // view.forceAllSiteToRefresh();

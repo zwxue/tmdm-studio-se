@@ -191,14 +191,14 @@ public class SchematronExpressBuilder {
         com.setLayout(getLayout(3));
         // expression
         Group expressG = new Group(com, SWT.NONE);
-        expressG.setText("Expression");
+        expressG.setText(Messages.SchematronExpressBuilder_Expression);
         expressG.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 2));
         expressG.setLayout(getLayout(1));
         // top button group
         Composite topCom = new Composite(expressG, 0);
         Button clearBtn = new Button(topCom, SWT.PUSH);
         topCom.setLayout(getLayout(4));
-        clearBtn.setText("Clear");
+        clearBtn.setText(Messages.SchematronExpressBuilder_Clear);
         clearBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
         clearBtn.addSelectionListener(new SelectionAdapter() {
 
@@ -337,7 +337,7 @@ public class SchematronExpressBuilder {
 
         // categories
         Group categoryG = new Group(com, SWT.NONE);
-        categoryG.setText("Categories");
+        categoryG.setText(Messages.SchematronExpressBuilder_Categories);
         GridData gd1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         gd1.heightHint = 200;
         gd1.widthHint = 140;
@@ -376,7 +376,7 @@ public class SchematronExpressBuilder {
         });
         // funcations
         Group functionG = new Group(com, SWT.NONE);
-        functionG.setText("Functions");
+        functionG.setText(Messages.SchematronExpressBuilder_Functions);
         functionG.setLayout(getLayout(1));
         GridData gd3 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         gd3.widthHint = 220;
@@ -402,7 +402,7 @@ public class SchematronExpressBuilder {
         });
         // help
         Group helpG = new Group(com, SWT.NONE);
-        helpG.setText("Help");
+        helpG.setText(Messages.SchematronExpressBuilder_Help);
         helpG.setLayout(getLayout(1));
         helpG.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         helpTxt = new StyledText(helpG, SWT.BORDER | SWT.WRAP);

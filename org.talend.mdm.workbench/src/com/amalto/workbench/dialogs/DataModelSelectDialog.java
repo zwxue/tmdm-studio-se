@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
@@ -50,7 +51,7 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
     protected Label schemaLabel = null;
 
-    private String title = "There are too many records in this data-container to determine the \navailable entities automatically. \nPlease pick a data-model to select the entities from.";
+    private String title = Messages.DataModelSelectDialog_Title;
 
     private String xpath;
 
@@ -65,7 +66,7 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
     protected TreeViewer domViewer;
 
     protected Control createDialogArea(Composite parent) {
-        parent.getShell().setText("Select a Data Model");
+        parent.getShell().setText(Messages.DataModelSelectDialog_SelectDataModel);
         Composite composite = (Composite) super.createDialogArea(parent);
         GridLayout layout = (GridLayout) composite.getLayout();
         layout.makeColumnsEqualWidth = false;
@@ -133,7 +134,7 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
     protected Control createButtonBar(Composite parent) {
         Control btnBar = super.createButtonBar(parent);
-        getButton(IDialogConstants.OK_ID).setText("OK");
+        getButton(IDialogConstants.OK_ID).setText(Messages.DataModelSelectDialog_Ok);
         return btnBar;
     }
 

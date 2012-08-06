@@ -18,6 +18,7 @@ import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyInfosAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.PrimaryKeyInfosAnnoInfo;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class EnityPrimaryKeyInfosCommitHandler extends
@@ -30,7 +31,7 @@ public class EnityPrimaryKeyInfosCommitHandler extends
 
 	@Override
 	protected String getMsgHeader() {
-		return "entity primary key infos";
+		return Messages.EnityPrimaryKeyInfosCommitHandler_MsgHeader;
 	}
 
 	@Override

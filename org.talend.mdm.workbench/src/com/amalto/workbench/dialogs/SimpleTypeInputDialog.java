@@ -33,6 +33,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDNewSimpleTypeDefinition;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.widgets.ElementComposite;
 
 public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
@@ -124,7 +125,7 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
                 || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
-            infoLabel.setText("The name cannot contain empty characters");
+            infoLabel.setText(Messages.SimpleTypeInputDialog_infoLabelText);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         }
@@ -139,11 +140,11 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
             }
             if (typeToCompare.equals(type)) {
                 if (caller instanceof XSDNewSimpleTypeDefinition) {
-                    infoLabel.setText("The same Type name already exists");
+                    infoLabel.setText(Messages.SimpleTypeInputDialog_SameName);
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                 } else if ((caller instanceof XSDChangeToSimpleTypeAction || caller instanceof XSDChangeBaseTypeAction)
                         && simpType instanceof XSDComplexTypeDefinition) {
-                    infoLabel.setText("The same Type name already exists");
+                    infoLabel.setText(Messages.SimpleTypeInputDialog_SameName);
                     getButton(IDialogConstants.OK_ID).setEnabled(false);
                 }
                 return;

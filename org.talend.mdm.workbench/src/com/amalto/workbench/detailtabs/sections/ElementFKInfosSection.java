@@ -22,6 +22,7 @@ import org.eclipse.xsd.XSDComponent;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyInfosAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.util.FixDMNameBasePropertySectionDataModelExtractor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.widgets.composites.ListXPathComposite;
 
@@ -72,6 +73,6 @@ public class ElementFKInfosSection extends XSDComponentSection {
 
     @Override
     protected String getSectionTitle() {
-        return "Foreign Key Infos";
+        return Messages.ElementFKInfosSection_ForeignKeyInfos;
     }
 }

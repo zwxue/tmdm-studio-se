@@ -33,6 +33,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -44,8 +45,8 @@ public class XSDEditConceptAction extends UndoAction {
     public XSDEditConceptAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-        setText("Edit Entity");
-        setToolTipText("Edit an Entity");
+        setText(Messages.Text);
+        setToolTipText(Messages.XSDEditConceptAction_ActionTip);
     }
 
     public IStatus doAction() {
@@ -57,22 +58,22 @@ public class XSDEditConceptAction extends UndoAction {
             Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
             String oldName = decl.getName();
 
-            InputDialog id = new InputDialog(page.getSite().getShell(), "Edit Entity", "Enter a new Name for the Entity",
+            InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDEditConceptAction_Text, Messages.XSDEditConceptAction_DialogTip,
                     oldName, new IInputValidator() {
 
                         public String isValid(String newText) {
                             if ((newText == null) || "".equals(newText))//$NON-NLS-1$
-                                return "The Entity Name cannot be empty";
+                                return Messages.XSDEditConceptAction_NameCannotBeEmpty;
 
                             if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                                     || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
-                                return "The name cannot contain the empty characters";
+                                return Messages.XSDEditConceptAction_NameCannotContainEmpty;
 
                             EList list = schema.getElementDeclarations();
                             for (Iterator iter = list.iterator(); iter.hasNext();) {
                                 XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
                                 if (d.getName().equals(newText.trim()))
-                                    return "This Entity already exists";
+                                    return Messages.XSDEditConceptAction_EntityAlreadyExist;
                             }
                             return null;
                         };
@@ -109,8 +110,8 @@ public class XSDEditConceptAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to edit an Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDEditConceptAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

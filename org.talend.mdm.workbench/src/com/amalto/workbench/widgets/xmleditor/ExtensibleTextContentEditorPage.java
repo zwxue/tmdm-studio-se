@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.amalto.workbench.dialogs.ResourceSelectDialog;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.utils.WidgetUtils;
@@ -134,7 +135,7 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
                     return;
 
                 try {
-                    ResourceSelectDialog dialog = new ResourceSelectDialog(getShell(), null, "Select a resource node", ServerView
+                    ResourceSelectDialog dialog = new ResourceSelectDialog(getShell(), null, Messages.ExtensibleTextXX_DialogTitle, ServerView
                             .show().getSite());
                     dialog.setBlockOnOpen(true);
                     dialog.open();

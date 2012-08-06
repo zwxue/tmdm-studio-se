@@ -22,6 +22,7 @@ import org.eclipse.xsd.XSDFacet;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.simpletype.SimpleTypeWrapper;
+import com.amalto.workbench.i18n.Messages;
 
 public abstract class SimpleTypeFacetCommitHandlerHelper {
 
@@ -62,7 +63,7 @@ class SimpleTypeFacetCommitHandlerHelper_StringFacet extends SimpleTypeFacetComm
     protected void validateCommit(String facetName) throws CommitValidationException {
 
         if (!(commitHandler.getCommitedObj().getFacetValue(facetName) instanceof String))
-            throw new CommitValidationException("The value type of the facet " + facetName + " should be a string");
+            throw new CommitValidationException(Messages.SimpleTypeFacetCommitHandlerHelper_ValueTypeOfFacet + facetName + Messages.SimpleTypeFacetCommitHandlerHelper_ShouldbeString);
 
     }
 
@@ -115,7 +116,7 @@ class SimpleTypeFacetCommitHandlerHelper_DoubleFacet extends SimpleTypeFacetComm
 
         if (!(commitHandler.getCommitedObj().getFacetValue(facetName) instanceof Double)
                 || ((Double) commitHandler.getCommitedObj().getFacetValue(facetName)) < 0)
-            throw new CommitValidationException("The value type of the facet " + facetName + " should be a positive double or 0");
+            throw new CommitValidationException(Messages.SimpleTypeFacetCommitHandlerHelper_ValueTypeOfFacet + facetName + Messages.SimpleTypeFacetCommitHandlerHelper_ShouldbeDoubleOr0);
 
     }
 
@@ -166,7 +167,7 @@ class SimpleTypeFacetCommitHandlerHelper_IntFacet extends SimpleTypeFacetCommitH
     protected void validateCommit(String facetName) throws CommitValidationException {
         if (!(commitHandler.getCommitedObj().getFacetValue(facetName) instanceof Integer)
                 || ((Integer) commitHandler.getCommitedObj().getFacetValue(facetName)) < 0)
-            throw new CommitValidationException("The value type of the facet " + facetName + " should be a positive integer or 0");
+            throw new CommitValidationException(Messages.SimpleTypeFacetCommitHandlerHelper_ValueTypeOfFacet + facetName + Messages.SimpleTypeFacetCommitHandlerHelper_ShouldbePosition);
     }
 
     @Override
@@ -216,7 +217,7 @@ class SimpleTypeFacetCommitHandlerHelper_StringArrayFacet extends SimpleTypeFace
     protected void validateCommit(String facetName) throws CommitValidationException {
 
         if (!(commitHandler.getCommitedObj().getFacetValue(facetName) instanceof String[]))
-            throw new CommitValidationException("The value type of the facet " + facetName + " should be a string array");
+            throw new CommitValidationException(Messages.SimpleTypeFacetCommitHandlerHelper_ValueTypeOfFacet + facetName + Messages.SimpleTypeFacetCommitHandlerHelper_ShouldbeStringArray);
 
     }
 

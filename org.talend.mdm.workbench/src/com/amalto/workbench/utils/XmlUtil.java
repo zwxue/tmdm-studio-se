@@ -44,6 +44,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import com.amalto.workbench.actions.XSDGetXPathAction;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.callback.AttributeProcess;
 import com.amalto.workbench.utils.callback.DocumentCreate;
 import com.amalto.workbench.utils.callback.ElementProcess;
@@ -200,7 +201,7 @@ public final class XmlUtil {
 
         documentCreate.create(document);
 
-        logger.info("New Document has bean created");
+        logger.info(Messages.XmlUtil_Loginfo);
 
         return document;
     }
@@ -226,7 +227,7 @@ public final class XmlUtil {
 
         writer.write(document);
 
-        logger.info("New xml file has bean exported on " + filePath);
+        logger.info(Messages.bind(Messages.XmlUtil_Loginfo1, filePath));
 
         // logger.write( document );
 
@@ -246,7 +247,7 @@ public final class XmlUtil {
 
         XMLWriter xmlwriter = new XMLWriter(writer, format);
 
-        String result = "";
+        String result = ""; //$NON-NLS-1$
 
         try {
 
@@ -362,7 +363,7 @@ public final class XmlUtil {
         // return the transformed document
         Document transformedDoc = result.getDocument();
 
-        logger.info("The xml file style transformed successfully ");
+        logger.info(Messages.XmlUtil_Loginfo2);
 
         return transformedDoc;
     }

@@ -16,9 +16,6 @@ import java.util.ResourceBundle;
 
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 
-import com.amalto.workbench.MDMWorbenchPlugin;
-import com.amalto.workbench.i18n.MessagesCore;
-
 /**
  * Default implementation of MessageCore from org.talend.commons plug-in.<br/>
  * 
@@ -32,7 +29,7 @@ import com.amalto.workbench.i18n.MessagesCore;
  */
 public class MessagesE extends MessagesCoreE {
 
-    private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages_en"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
 
     private static final String PLUGIN_ID = RepositoryPlugin.PLUGIN_ID;
 
@@ -43,7 +40,7 @@ public class MessagesE extends MessagesCoreE {
      * 
      * @param key - the key for the desired string
      * @return the string for the given key in the class resource bundle
-     * @see MessagesCore#getString(String, ResourceBundle)
+     * @see MessagesCoreE#getString(String, ResourceBundle)
      */
     public static String getString(String key) {
         return getString(key, PLUGIN_ID, resourceBundle);
@@ -55,7 +52,7 @@ public class MessagesE extends MessagesCoreE {
      * @param key - the key for the desired string
      * @param args - arg to include in the string
      * @return the string for the given key in the given resource bundle
-     * @see MessagesCore#getString(String, ResourceBundle, Object[])
+     * @see MessagesCoreE#getString(String, ResourceBundle, Object[])
      */
     public static String getString(String key, Object... args) {
         return getString(key, PLUGIN_ID, resourceBundle, args);

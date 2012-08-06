@@ -24,6 +24,7 @@ import org.talend.mdm.commmon.util.core.CommonUtil;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.RoleAssignmentDialog;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -121,8 +122,8 @@ public class SaveXObjectAction extends Action {
             case TreeObject.SERVICE_CONFIGURATION:
                 break;
             default:
-                MessageDialog.openError(this.editor.getSite().getShell(), "Error", "Unknown " + IConstants.TALEND
-                        + " Object Type: " + xobject.getType());
+                MessageDialog.openError(this.editor.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.SaveXObjectAction_ErrorMsg, IConstants.TALEND, xobject.getType()));
                 return;
             }// switch
 
@@ -147,7 +148,7 @@ public class SaveXObjectAction extends Action {
         } catch (Exception e) {
 
             log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.editor.getSite().getShell(), "Error Occured on Saving",
+            ErrorExceptionDialog.openError(this.editor.getSite().getShell(), Messages.ErrorTitle2,
                     CommonUtil.getErrMsgFromException(e));
             state = 1;
         }

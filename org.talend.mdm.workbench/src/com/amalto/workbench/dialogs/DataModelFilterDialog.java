@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.SchemaElementNameFilterDes;
@@ -62,10 +63,9 @@ public class DataModelFilterDialog extends Dialog {
 
     private Text txtNameFilterComment;
 
-    private static final String LABEL_NAMEFILTER = "Name filter patterns (matching names will be shown):";
+    private static final String LABEL_NAMEFILTER = Messages.DataModelFilterDialog_LabelNameFilter;
 
-    private static final String LABEL_NAMEFILTERCOMMENT = "The patterns are separated by comma, where:\r\n"
-            + " * = any string\r\n" + " ? = any character\r\n" + " + = more than one characters\r\n" + " ,, = ,";
+    private static final String LABEL_NAMEFILTERCOMMENT = Messages.DataModelFilterDialog_LabelNameFilterComment;
 
     public DataModelFilterDialog(Shell parentShell, TreeObject xObject, DataModelFilter dataModelFilter,
             SchemaElementNameFilterDes nameFilterDes) {
@@ -77,7 +77,7 @@ public class DataModelFilterDialog extends Dialog {
 
     @Override
     protected Control createDialogArea(Composite parent) {
-        parent.getShell().setText("Data Model Filter");
+        parent.getShell().setText(Messages.DataModelFilterDialog_DialogTitle);
         Composite composite = (Composite) super.createDialogArea(parent);
         composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
         GridLayout layout = (GridLayout) composite.getLayout();
@@ -93,7 +93,7 @@ public class DataModelFilterDialog extends Dialog {
     private void createNameFilterArea(Composite compParent) {
 
         Group nameFilterGroup = new Group(compParent, SWT.NORMAL);
-        nameFilterGroup.setText("Name Filter Setting");
+        nameFilterGroup.setText(Messages.DataModelFilterDialog_NameFilterSetting);
         nameFilterGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         nameFilterGroup.setLayout(new GridLayout());
         nameFilterGroup.setBackground(compParent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -122,12 +122,12 @@ public class DataModelFilterDialog extends Dialog {
     }
     private void createSecurityFilterArea(Composite compParent) {
         Group secutityFilterGroup = new Group(compParent, SWT.NORMAL);
-        secutityFilterGroup.setText("Security Filter Setting");
+        secutityFilterGroup.setText(Messages.DataModelFilterDialog_SecurityFilterSetting);
         secutityFilterGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
         secutityFilterGroup.setLayout(new GridLayout());
         secutityFilterGroup.setBackground(compParent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        comboRole = new LabelCombo(toolkit, secutityFilterGroup, "Role", SWT.BORDER, 2);
+        comboRole = new LabelCombo(toolkit, secutityFilterGroup, Messages.DataModelFilterDialog_Role, SWT.BORDER, 2);
         comboRole.getCombo().setEditable(false);
         // List<String> roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
         List<String> roles = getRoles();// Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
@@ -138,19 +138,19 @@ public class DataModelFilterDialog extends Dialog {
             comboRole.getCombo().setText(dataModelFilter.getRole());
         }
 
-        btnAll = toolkit.createButton(secutityFilterGroup, "All", SWT.RADIO);
+        btnAll = toolkit.createButton(secutityFilterGroup, Messages.DataModelFilterDialog_All, SWT.RADIO);
         btnAll.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         btnAll.setSelection(dataModelFilter.isAll());
 
-        btnReadOnly = toolkit.createButton(secutityFilterGroup, "Read only", SWT.RADIO);
+        btnReadOnly = toolkit.createButton(secutityFilterGroup, Messages.DataModelFilterDialog_ReadOnly, SWT.RADIO);
         btnReadOnly.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         btnReadOnly.setSelection(dataModelFilter.isReadOnly());
 
-        btnWrite = toolkit.createButton(secutityFilterGroup, "Write access", SWT.RADIO);
+        btnWrite = toolkit.createButton(secutityFilterGroup, Messages.DataModelFilterDialog_WriteAccess, SWT.RADIO);
         btnWrite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         btnWrite.setSelection(dataModelFilter.isWriteAccess());
 
-        btnHidden = toolkit.createButton(secutityFilterGroup, "No access", SWT.RADIO);
+        btnHidden = toolkit.createButton(secutityFilterGroup, Messages.DataModelFilterDialog_NoAccess, SWT.RADIO);
         btnHidden.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         btnHidden.setSelection(dataModelFilter.isHiddenAccess());
     }

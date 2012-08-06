@@ -30,6 +30,7 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDXPathDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -44,8 +45,8 @@ public class XSDDeleteParticleAction extends UndoAction {
     public XSDDeleteParticleAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-        setText("Delete Element");
-        setToolTipText("Delete a Business Element");
+        setText(Messages.XSDDeleteParticleAction_DelElement);
+        setToolTipText(Messages.XSDDeleteParticleAction_DelBusinessElement);
     }
 
     public void run(Object toDel) {
@@ -91,7 +92,7 @@ public class XSDDeleteParticleAction extends UndoAction {
                 }
             }
             if (!(particle.getContainer() instanceof XSDModelGroup))
-                throw new XtentisException("Unknown container " + particle.getContainer().getClass().getName());
+                throw new XtentisException(Messages.bind(Messages.XSDDeleteParticleAction_ExceptionInfo, particle.getContainer().getClass().getName()));
 
             XSDModelGroup group = (XSDModelGroup) particle.getContainer();
             group.getContents().remove(particle);
@@ -115,8 +116,8 @@ public class XSDDeleteParticleAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), "Error",
-                    "An error occured trying to remove Entity: " + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDDeleteParticleAction_ErrorMsg, e.getLocalizedMessage()));
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

@@ -202,12 +202,12 @@ public class TransformerMainPage extends AMainPageV2 {
 
     java.util.List<Line> cacheList; // remember the setup transformerinputvariablesdialog's input list
 
-    private static final String TOOLTIP_AUTOINDENT_ENABLE = "Auto-indent enabled";
+    private static final String TOOLTIP_AUTOINDENT_ENABLE = Messages.TransformerMainPage_AutoIndentEnabled;
 
-    private static final String TOOLTIP_AUTOINDENT_DISABLE = "Auto-indent disabled";
+    private static final String TOOLTIP_AUTOINDENT_DISABLE = Messages.TransformerMainPage_AutoIndentDisabled;
 
     public TransformerMainPage(FormEditor editor) {
-        super(editor, TransformerMainPage.class.getName(), "Process " + ((XObjectEditorInput) editor.getEditorInput()).getName()
+        super(editor, TransformerMainPage.class.getName(), Messages.TransformerMainPage_Process + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
 
         initExternalInfoHolder();
@@ -295,7 +295,7 @@ public class TransformerMainPage extends AMainPageV2 {
                             }
 
                             if (monitor.isCanceled()) {
-                                throw new InterruptedException("User Cancel");
+                                throw new InterruptedException(Messages.TransformerMainPage_UserCancel);
                             }
 
                             job = port.getBackgroundJob(new WSGetBackgroundJob(jobPK.getPk()));
@@ -309,11 +309,11 @@ public class TransformerMainPage extends AMainPageV2 {
 
                                 public void run() {
                                     MessageDialog.openError(TransformerMainPage.this.getEditor().getSite().getShell(),
-                                            "ERROR processing '" + transformer.getName() + "'", job.getMessage());
+                                            Messages.bind(Messages.TransformerMainPage_ErrorMsg, transformer.getName()), job.getMessage());
 
                                 }
                             });
-                            throw new XtentisException("The job was stopped. " + job.getMessage());
+                            throw new XtentisException(Messages.bind(Messages.TransformerMainPage_JobWasStoped, job.getMessage()));
                         }
 
                         monitor.worked(1);
@@ -341,8 +341,8 @@ public class TransformerMainPage extends AMainPageV2 {
                                      * parent.editor.getEditorSite().getShell()
                                      */
                                     // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
-                                    ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), "Results at "
-                                            + sdf.format(new Date(System.currentTimeMillis())), pipeline);
+                                    ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), Messages.bind(Messages.TransformerMainPage_DailogTitle
+                                            , sdf.format(new Date(System.currentTimeMillis()))), pipeline);
                                     dialog.setBlockOnOpen(false);
                                     dialog.open();
                                 } catch (Exception e) {
@@ -394,7 +394,7 @@ public class TransformerMainPage extends AMainPageV2 {
              * //((WSTransformerV2)getXObject().getWsObject()) transformer.setDescription(descriptionText.getText());
              * TransformerMainPage.this.comitting= false; //markDirtyWithoutCommit(); markDirtyWithoutCommit(); } });
              */
-            desAntionComposite = new DescAnnotationComposite("Description", " ...", toolkit, descriptionComposite,//$NON-NLS-1$
+            desAntionComposite = new DescAnnotationComposite(Messages.TransformerMainPage_Description, " ...", toolkit, descriptionComposite, //$NON-NLS-1$
                     (AMainPageV2) this, false);
             desAntionComposite.getTextWidget().addModifyListener(new ModifyListener() {
 
@@ -412,7 +412,7 @@ public class TransformerMainPage extends AMainPageV2 {
             Button processButton = toolkit.createButton(descriptionComposite, "", SWT.PUSH);//$NON-NLS-1$
             processButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             processButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
-            processButton.setToolTipText("Execute...");
+            processButton.setToolTipText(Messages.TransformerMainPage_Execute);
             processButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -424,15 +424,15 @@ public class TransformerMainPage extends AMainPageV2 {
                         WSTransformerProcessStep[] steps = // ((WSTransformerV2)getXObject().getWsObject())
                         transformer.getProcessSteps();
                         if ((steps == null) || (steps.length == 0)) {
-                            MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), "Unable to process a file",
-                                    "The Process must have at least one step!");
+                            MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ErrorTitle1,
+                                    Messages.TransformerMainPage_ErrorMsg1);
                             return;
                         }
                         // perform save
                         if (TransformerMainPage.this.getEditor().isDirty()) {
                             if (MessageDialog
-                                    .openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer",
-                                            "The Transformer was changed and will be executed using the saved version.\nSave the Process before executing it?"))
+                                    .openConfirm(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ConfirmTitle,
+                                            Messages.TransformerMainPage_ConfirmContent))
                                 TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
                         }
                         // Open form Dialog
@@ -440,7 +440,7 @@ public class TransformerMainPage extends AMainPageV2 {
                             transformerDialog = new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite()
                                     .getShell(), toolkit, getXObject(), TransformerMainPage.this);
                             transformerDialog.create();
-                            transformerDialog.getShell().setText("Setup Process's input variables");
+                            transformerDialog.getShell().setText(Messages.TransformerMainPage_DialogTitle);
                         }
                         openTransformerDialog();
                     } catch (Exception ex) {
@@ -455,14 +455,14 @@ public class TransformerMainPage extends AMainPageV2 {
             windowTarget.addDropListener(new DCDropTargetListener());
 
             // Sequence
-            Composite sequenceGroup = this.getNewSectionComposite("Steps Sequence");
+            Composite sequenceGroup = this.getNewSectionComposite(Messages.TransformerMainPage_StepsSequence);
             sequenceGroup.setLayout(new GridLayout(1, false));
 
             Composite sequenceComposite = toolkit.createComposite(sequenceGroup, SWT.NONE);
             sequenceComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             sequenceComposite.setLayout(new GridLayout(6, false));
 
-            Label l3 = toolkit.createLabel(sequenceComposite, "Step Description", SWT.NULL);
+            Label l3 = toolkit.createLabel(sequenceComposite, Messages.TransformerMainPage_StepDesc, SWT.NULL);
             l3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
 
             stepText = toolkit.createText(sequenceComposite, "", SWT.BORDER | SWT.SINGLE);//$NON-NLS-1$
@@ -484,7 +484,7 @@ public class TransformerMainPage extends AMainPageV2 {
             });
             Button addStepButton = toolkit.createButton(sequenceComposite, "", SWT.PUSH);//$NON-NLS-1$
             addStepButton.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 1));
-            addStepButton.setToolTipText("Add");
+            addStepButton.setToolTipText(Messages.TransformerMainPage_Add);
             addStepButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
             addStepButton.addSelectionListener(new SelectionListener() {
 
@@ -535,10 +535,10 @@ public class TransformerMainPage extends AMainPageV2 {
             stepUpDownComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             stepUpDownComposite.setLayout(new GridLayout(1, false));
 
-            Button stepUpButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+            Button stepUpButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER); //$NON-NLS-1$
             stepUpButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             stepUpButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
-            stepUpButton.setToolTipText("Move up the selected item");
+            stepUpButton.setToolTipText(Messages.TransformerMainPage_MoveUpTheItem);
             stepUpButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -570,7 +570,7 @@ public class TransformerMainPage extends AMainPageV2 {
             Button stepDownButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             stepDownButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             stepDownButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-            stepDownButton.setToolTipText("Move down the selected item");
+            stepDownButton.setToolTipText(Messages.TransformerMainPage_MoveDownTheItem);
             stepDownButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -601,7 +601,7 @@ public class TransformerMainPage extends AMainPageV2 {
             Button deleteStepButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             deleteStepButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             deleteStepButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-            deleteStepButton.setToolTipText("Delete the selected item");
+            deleteStepButton.setToolTipText(Messages.TransformerMainPage_DelTheItem);
             deleteStepButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -617,11 +617,11 @@ public class TransformerMainPage extends AMainPageV2 {
 
             // Plugin Specifications
             // Sequence
-            section = this.getNewSection("Step Specification");
+            section = this.getNewSection(Messages.TransformerMainPage_StepSpecification);
             section.setVisible(false);
 
             sequenceGroup.setLayout(new GridLayout(4, false));
-            disabledButton = toolkit.createButton((Composite) section.getClient(), "Disabled", SWT.CHECK);
+            disabledButton = toolkit.createButton((Composite) section.getClient(), Messages.TransformerMainPage_Disabled, SWT.CHECK);
             disabledButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 4, 1));
 
             specsComposite = toolkit.createComposite((Composite) section.getClient(), SWT.NULL);
@@ -648,7 +648,7 @@ public class TransformerMainPage extends AMainPageV2 {
             stepWidget.create();
 
             btnAutoIndent = new Button(specsComposite, SWT.CHECK);
-            btnAutoIndent.setText("Auto-indent");
+            btnAutoIndent.setText(Messages.TransformerMainPage_AutoIndent);
             btnAutoIndent.setImage(ImageCache.getCreatedImage(EImage.INTENT.getPath()));
             btnAutoIndent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
             // refreshAutoIndentTooltip();
@@ -662,7 +662,7 @@ public class TransformerMainPage extends AMainPageV2 {
             });
 
             Group parametersGroup = new Group(specsComposite, SWT.SHADOW_NONE);
-            parametersGroup.setText("Parameters");
+            parametersGroup.setText(Messages.TransformerMainPage_Parameters);
             parametersGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
             ((GridData) parametersGroup.getLayoutData()).minimumHeight = 300;
             parametersGroup.setLayout(new GridLayout(1, true));
@@ -692,7 +692,7 @@ public class TransformerMainPage extends AMainPageV2 {
     private void setParameterEditorPageGroup(String pagegroup) {
 
         parameterEditor.setPageGroup(pagegroup);
-        parameterEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
+        parameterEditor.addPage(new ExtensibleContentEditorPageDescription(Messages.TransformerMainPage_Source, Integer.MAX_VALUE,
                 new ExtensibleTextContentEditorPageCreator(), false));
 
     }
@@ -809,12 +809,12 @@ public class TransformerMainPage extends AMainPageV2 {
         if (arg != null && (arg == stepsList || arg == stepWidget.inputViewer || arg == stepWidget.outputViewer)) {
             int index = stepsList.getSelectionIndices()[0];
             String stepName = stepsList.getItem(index);
-            InputDialog id = new InputDialog(this.getSite().getShell(), "Rename", "Please enter a new name", stepName,
+            InputDialog id = new InputDialog(this.getSite().getShell(), Messages.TransformerMainPage_Rename, Messages.TransformerMainPage_InputDialogTitle, stepName,
                     new IInputValidator() {
 
                         public String isValid(String newText) {
                             if ((newText == null) || newText.length() == 0)
-                                return "The name cannot be empty";
+                                return Messages.TransformerMainPage_NameCannotbeEmpty;
                             return null;
                         }
                     });
@@ -877,7 +877,7 @@ public class TransformerMainPage extends AMainPageV2 {
             WSTransformerV2 wsTransformer = (WSTransformerV2) (getXObject().getWsObject());
 
             desAntionComposite.getTextWidget().setText(
-                    wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription());
+                    wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription()); //$NON-NLS-1$
 
             stepsList.removeAll();
             WSTransformerProcessStep[] specs = wsTransformer.getProcessSteps();
@@ -898,8 +898,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
-                    "Error refreshing the page: " + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), Messages.TransformerMainPage_ErroRefreshPage,
+                    Messages.bind(Messages.TransformerMainPage_ErroRefreshPageXX, e.getLocalizedMessage()));
         }
     }
 
@@ -951,7 +951,7 @@ public class TransformerMainPage extends AMainPageV2 {
             }
             
             if (!has) {
-                MessageDialog.openWarning(getSite().getShell(), Messages.TransformerMainPage_warning,
+                MessageDialog.openWarning(getSite().getShell(), Messages.Warning,
                         Messages.bind(Messages.TransformerMainPage_message, processName));
             }
         }
@@ -1033,7 +1033,7 @@ public class TransformerMainPage extends AMainPageV2 {
         private TableViewer createViewer(final java.util.List<String> columns, Composite parent, final boolean isInput) {
             Table table = new Table(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
             final TableViewer viewer = new TableViewer(table);
-            table.setToolTipText("Press 'DEL' key to delete the selected item.");
+            table.setToolTipText(Messages.TransformerMainPage_TableTip);
             table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
             ((GridData) viewer.getControl().getLayoutData()).heightHint = 60;
 
@@ -1140,7 +1140,7 @@ public class TransformerMainPage extends AMainPageV2 {
         private boolean isExist(java.util.List<WSTransformerVariablesMapping> list, String parameterName) {
             for (WSTransformerVariablesMapping map : list) {
                 if (map.getPluginVariable().equals(parameterName)) {
-                    MessageDialog.openInformation(null, "Warning", parameterName + " already Exists!");
+                    MessageDialog.openInformation(null, "", Messages.bind(Messages.TransformerMainPage_InfoContent, parameterName)); //$NON-NLS-1$
                     return true;
                 }
             }
@@ -1152,15 +1152,15 @@ public class TransformerMainPage extends AMainPageV2 {
             inputComposite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 1, 1));
             inputComposite.setLayout(new GridLayout(3, false));
 
-            LabelCombo inputV = new LabelCombo(toolkit, inputComposite, "Input Variables", SWT.BORDER, 1);
+            LabelCombo inputV = new LabelCombo(toolkit, inputComposite, Messages.TransformerMainPage_InputVariables, SWT.BORDER, 1);
             inputVariables = inputV.getCombo();
             inputVariables.addKeyListener(variableListener);
             inputVariables.getTabList()[0].addMouseTrackListener(mouseListener);
 
             inputLinkButton = toolkit.createButton(inputComposite, "", SWT.PUSH | SWT.CENTER); //$NON-NLS-1$
             inputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
-            inputLinkButton.setToolTipText("Link");
-            inputLinkButton.setToolTipText("Add a link for Input Variables and Process Plugin's Input Parameters");
+            inputLinkButton.setToolTipText(Messages.TransformerMainPage_LinkTip);
+            inputLinkButton.setToolTipText(Messages.TransformerMainPage_AddLinkTip);
             inputLinkButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             inputLinkButton.addSelectionListener(new SelectionAdapter() {
 
@@ -1190,13 +1190,13 @@ public class TransformerMainPage extends AMainPageV2 {
                     markDirtyWithoutCommit();
                 }
             });
-            LabelCombo inputP = new LabelCombo(toolkit, inputComposite, "Input Parameters", SWT.BORDER | SWT.READ_ONLY, 1);
+            LabelCombo inputP = new LabelCombo(toolkit, inputComposite, Messages.TransformerMainPage_InputParameters, SWT.BORDER | SWT.READ_ONLY, 1);
             inputParams = inputP.getCombo();
 
             // create table
             java.util.List<String> columns = new ArrayList<String>();
-            columns.add("Input Variables");
-            columns.add("Input Parameters");
+            columns.add(Messages.TransformerMainPage_InputVariables);
+            columns.add(Messages.TransformerMainPage_InputParameters);
             inputViewer = createViewer(columns, inputComposite, true);
             wrap.Wrap(TransformerMainPage.this, inputViewer);
         }
@@ -1206,13 +1206,13 @@ public class TransformerMainPage extends AMainPageV2 {
             outputComposite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 1, 1));
             outputComposite.setLayout(new GridLayout(3, false));
 
-            LabelCombo outputP = new LabelCombo(toolkit, outputComposite, "Output Parameters", SWT.BORDER | SWT.READ_ONLY, 1);
+            LabelCombo outputP = new LabelCombo(toolkit, outputComposite, Messages.TransformerMainPage_OutputParameters, SWT.BORDER | SWT.READ_ONLY, 1);
             outputParams = outputP.getCombo();
 
             outputLinkButton = toolkit.createButton(outputComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             outputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
-            outputLinkButton.setToolTipText("Link");
-            outputLinkButton.setToolTipText("Add a link for output Variables and output Parameters");
+            outputLinkButton.setToolTipText(Messages.TransformerMainPage_LinkTip);
+            outputLinkButton.setToolTipText(Messages.TransformerMainPage_AddLinkTip1);
             outputLinkButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             outputLinkButton.addSelectionListener(new SelectionAdapter() {
 
@@ -1242,7 +1242,7 @@ public class TransformerMainPage extends AMainPageV2 {
                     markDirtyWithoutCommit();
                 }
             });
-            LabelCombo outputV = new LabelCombo(toolkit, outputComposite, "Output Variables", SWT.BORDER, 1);
+            LabelCombo outputV = new LabelCombo(toolkit, outputComposite, Messages.TransformerMainPage_OutputVariables, SWT.BORDER, 1);
             outputVariables = outputV.getCombo();
             outputVariables.addKeyListener(variableListener);
             outputVariables.addMouseTrackListener(mouseListener);
@@ -1250,8 +1250,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
             // create table
             java.util.List<String> columns = new ArrayList<String>();
-            columns.add("Output Parameters");
-            columns.add("Output Variables");
+            columns.add(Messages.TransformerMainPage_OutputParameters);
+            columns.add(Messages.TransformerMainPage_OutputVariables);
             outputViewer = createViewer(columns, outputComposite, false);
             wrap.Wrap(TransformerMainPage.this, outputViewer);
         }
@@ -1265,7 +1265,7 @@ public class TransformerMainPage extends AMainPageV2 {
             pluginDescription.setEditable(false);
             pluginDescription.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 4, 2));
             ((GridData) pluginDescription.getLayoutData()).heightHint = 35;
-            Label jndiLabel = toolkit.createLabel(specsComposite, "Plugin name", SWT.NULL);
+            Label jndiLabel = toolkit.createLabel(specsComposite, Messages.TransformerMainPage_PluginName, SWT.NULL);
             jndiLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             pluginsCombo = new CCombo(specsComposite, SWT.BORDER | SWT.READ_ONLY);
             pluginsCombo.addSelectionListener(new SelectionAdapter() {
@@ -1294,7 +1294,7 @@ public class TransformerMainPage extends AMainPageV2 {
             initPlugin();
             Button detailsButton = toolkit.createButton(specsComposite, "", SWT.PUSH | SWT.CENTER); //$NON-NLS-1$
             detailsButton.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
-            detailsButton.setToolTipText("Help...");
+            detailsButton.setToolTipText(Messages.TransformerMainPage_Help);
             detailsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             detailsButton.addSelectionListener(new SelectionListener() {
 
@@ -1312,7 +1312,7 @@ public class TransformerMainPage extends AMainPageV2 {
                         WSTransformerPluginV2Details details = getWsTransformerPluginV2Details(jndi);
                         final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(),
                                 details.getDescription(), details.getDocumentation(), details.getParametersSchema(),
-                                "Documentation");
+                                Messages.TransformerMainPage_Documentation);
                         dialog.addListener(new Listener() {
 
                             public void handleEvent(Event event) {
@@ -1328,8 +1328,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
                         jndi = pluginsCombo.getText();
 
-                        MessageDialog.openError(getSite().getShell(), "Check " + jndi, "The plugin \"" + jndi
-                                + "\" did NOT respond correctly");
+                        MessageDialog.openError(getSite().getShell(), Messages.TransformerMainPage_ErrorDialogTitle + jndi,
+                                Messages.bind(Messages.TransformerMainPage_ErrorMsg2, jndi));
                         return;
                     }
                 }
@@ -1383,7 +1383,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
                 @Override
                 public void mouseEnter(MouseEvent e) {
-                    ((Control) e.getSource()).setToolTipText("please click 'ALT + /' to pop up Variable Dialog");
+                    ((Control) e.getSource()).setToolTipText(Messages.TransformerMainPage_ToolTip);
                 }
             };
 
@@ -1403,9 +1403,9 @@ public class TransformerMainPage extends AMainPageV2 {
             ExternalInfoHolder<?> workflowInfoHolder = ExternalInfoHolder.getAllWorkflowInfoHolder(Util.getPort(getXObject()));
             ExternalInfoHolder<?> allDataModelHolderProxy = ExternalInfoHolder.getAllDataModelInfoHolderProxy(getXObject());
 
-            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder,
+            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder, //$NON-NLS-1$
                     allVarCandidatesHolder });
-            initExternalInfoHolderForEachType("workflowtrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder,
+            initExternalInfoHolderForEachType("workflowtrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder, //$NON-NLS-1$
                     allDataModelHolderProxy });
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
