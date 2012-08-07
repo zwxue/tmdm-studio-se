@@ -52,8 +52,7 @@ public class XSDNewBrowseItemViewAction extends Action {
 
     public void run() {
         if (page.isDirty()) {
-            boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource, "'" //$NON-NLS-1$
-                    + page.getXObject().getDisplayName() + "' " + Messages.modifiedChanges); //$NON-NLS-1$
+            boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource, Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName())); //$NON-NLS-1$
             if (save) {
                 pageSave();
             } else
