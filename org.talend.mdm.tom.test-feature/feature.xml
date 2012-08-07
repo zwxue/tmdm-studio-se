@@ -18,7 +18,6 @@
 
    <requires>
       <import plugin="org.junit4"/>
-      <import plugin="org.talend.mdm.test.library"/>
       <import plugin="org.talend.mdm.repository"/>
       <import plugin="org.eclipse.xsd"/>
       <import plugin="org.talend.mdm.workbench"/>
