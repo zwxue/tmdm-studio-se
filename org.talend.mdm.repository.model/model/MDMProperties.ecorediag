@@ -99,6 +99,10 @@
         <element xmi:type="ecore:EAttribute" href="MDMProperties.ecore#//ContainerItem/repObjType"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_32VwYZ4PEeCFRPvlzUtZAA"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_gnTTAeTqEeG-vehZd2eWoA" type="2001">
+        <element xmi:type="ecore:EAttribute" href="MDMProperties.ecore#//ContainerItem/data"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_gnTTAuTqEeG-vehZd2eWoA"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_hOtKgZ1yEeCayaFOjH-gSQ"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_hOtKgp1yEeCayaFOjH-gSQ"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_hOtKg51yEeCayaFOjH-gSQ"/>

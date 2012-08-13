@@ -22,6 +22,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="ContainerItem" eSuperTypes="#//MDMItem ../../org.talend.model/model/properties.ecore#//FolderItem">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repObjType" eType="#//ERepositoryObjectType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="data" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"
+        transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="ERepositoryObjectType" instanceClassName="org.talend.core.model.repository.ERepositoryObjectType"/>
   <eClassifiers xsi:type="ecore:EClass" name="WSDataModelItem" eSuperTypes="#//MDMServerObjectItem">

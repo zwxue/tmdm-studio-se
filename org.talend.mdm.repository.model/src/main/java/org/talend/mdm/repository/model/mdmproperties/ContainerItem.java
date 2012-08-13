@@ -19,6 +19,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getLabel <em>Label</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getRepObjType <em>Rep Obj Type</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getData <em>Data</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,5 +79,31 @@ public interface ContainerItem extends MDMItem, FolderItem {
      * @generated
      */
     void setRepObjType(ERepositoryObjectType value);
+
+    /**
+     * Returns the value of the '<em><b>Data</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Data</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Data</em>' attribute.
+     * @see #setData(Object)
+     * @see org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage#getContainerItem_Data()
+     * @model transient="true"
+     * @generated
+     */
+    Object getData();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getData <em>Data</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Data</em>' attribute.
+     * @see #getData()
+     * @generated
+     */
+    void setData(Object value);
 
 } // ContainerItem

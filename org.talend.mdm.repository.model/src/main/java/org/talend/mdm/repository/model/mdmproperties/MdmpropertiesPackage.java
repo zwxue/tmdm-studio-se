@@ -503,13 +503,22 @@ public interface MdmpropertiesPackage extends EPackage {
     int CONTAINER_ITEM__REP_OBJ_TYPE = MDM_ITEM_FEATURE_COUNT + 3;
 
     /**
+     * The feature id for the '<em><b>Data</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONTAINER_ITEM__DATA = MDM_ITEM_FEATURE_COUNT + 4;
+
+    /**
      * The number of structural features of the '<em>Container Item</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CONTAINER_ITEM_FEATURE_COUNT = MDM_ITEM_FEATURE_COUNT + 4;
+    int CONTAINER_ITEM_FEATURE_COUNT = MDM_ITEM_FEATURE_COUNT + 5;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSDataModelItemImpl <em>WS Data Model Item</em>}' class.
@@ -1824,6 +1833,17 @@ public interface MdmpropertiesPackage extends EPackage {
     EAttribute getContainerItem_RepObjType();
 
     /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmproperties.ContainerItem#getData <em>Data</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Data</em>'.
+     * @see org.talend.mdm.repository.model.mdmproperties.ContainerItem#getData()
+     * @see #getContainerItem()
+     * @generated
+     */
+    EAttribute getContainerItem_Data();
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmproperties.WSDataModelItem <em>WS Data Model Item</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2291,6 +2311,14 @@ public interface MdmpropertiesPackage extends EPackage {
          * @generated
          */
         EAttribute CONTAINER_ITEM__REP_OBJ_TYPE = eINSTANCE.getContainerItem_RepObjType();
+
+        /**
+         * The meta object literal for the '<em><b>Data</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CONTAINER_ITEM__DATA = eINSTANCE.getContainerItem_Data();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmproperties.impl.WSDataModelItemImpl <em>WS Data Model Item</em>}' class.

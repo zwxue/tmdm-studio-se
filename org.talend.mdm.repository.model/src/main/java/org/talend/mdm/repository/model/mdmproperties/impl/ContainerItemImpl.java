@@ -32,6 +32,7 @@ import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
  *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.ContainerItemImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.ContainerItemImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.ContainerItemImpl#getRepObjType <em>Rep Obj Type</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmproperties.impl.ContainerItemImpl#getData <em>Data</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,6 +108,26 @@ public class ContainerItemImpl extends MDMItemImpl implements ContainerItem {
      * @ordered
      */
     protected ERepositoryObjectType repObjType = REP_OBJ_TYPE_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getData() <em>Data</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getData()
+     * @generated
+     * @ordered
+     */
+    protected static final Object DATA_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getData() <em>Data</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getData()
+     * @generated
+     * @ordered
+     */
+    protected Object data = DATA_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -186,6 +207,27 @@ public class ContainerItemImpl extends MDMItemImpl implements ContainerItem {
      * <!-- end-user-doc -->
      * @generated
      */
+    public Object getData() {
+        return data;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setData(Object newData) {
+        Object oldData = data;
+        data = newData;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmpropertiesPackage.CONTAINER_ITEM__DATA, oldData, data));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public FolderType getType() {
         return type;
     }
@@ -218,6 +260,8 @@ public class ContainerItemImpl extends MDMItemImpl implements ContainerItem {
                 return getLabel();
             case MdmpropertiesPackage.CONTAINER_ITEM__REP_OBJ_TYPE:
                 return getRepObjType();
+            case MdmpropertiesPackage.CONTAINER_ITEM__DATA:
+                return getData();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -244,6 +288,9 @@ public class ContainerItemImpl extends MDMItemImpl implements ContainerItem {
             case MdmpropertiesPackage.CONTAINER_ITEM__REP_OBJ_TYPE:
                 setRepObjType((ERepositoryObjectType)newValue);
                 return;
+            case MdmpropertiesPackage.CONTAINER_ITEM__DATA:
+                setData(newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -268,6 +315,9 @@ public class ContainerItemImpl extends MDMItemImpl implements ContainerItem {
             case MdmpropertiesPackage.CONTAINER_ITEM__REP_OBJ_TYPE:
                 setRepObjType(REP_OBJ_TYPE_EDEFAULT);
                 return;
+            case MdmpropertiesPackage.CONTAINER_ITEM__DATA:
+                setData(DATA_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -288,6 +338,8 @@ public class ContainerItemImpl extends MDMItemImpl implements ContainerItem {
                 return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
             case MdmpropertiesPackage.CONTAINER_ITEM__REP_OBJ_TYPE:
                 return REP_OBJ_TYPE_EDEFAULT == null ? repObjType != null : !REP_OBJ_TYPE_EDEFAULT.equals(repObjType);
+            case MdmpropertiesPackage.CONTAINER_ITEM__DATA:
+                return DATA_EDEFAULT == null ? data != null : !DATA_EDEFAULT.equals(data);
         }
         return super.eIsSet(featureID);
     }
@@ -342,6 +394,8 @@ public class ContainerItemImpl extends MDMItemImpl implements ContainerItem {
         result.append(label);
         result.append(", repObjType: ");
         result.append(repObjType);
+        result.append(", data: ");
+        result.append(data);
         result.append(')');
         return result.toString();
     }
