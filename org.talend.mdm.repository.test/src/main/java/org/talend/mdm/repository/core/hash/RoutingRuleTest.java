@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.hash.test;
+package org.talend.mdm.repository.core.hash;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,7 +18,6 @@ import org.junit.Test;
 import org.talend.mdm.commmon.util.hash.IHashValueCalculator;
 import org.talend.mdm.repository.core.hash.routingrule.EObjRoutingRuleHVCalculator;
 import org.talend.mdm.repository.core.hash.routingrule.WSRoutingRuleHVCalculator;
-import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSRoutingRuleExpressionE;
@@ -31,7 +30,7 @@ import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class TestRoutingRule {
+public class RoutingRuleTest {
 
     private WSRoutingRule initWSObject() {
         WSRoutingRule rule = new WSRoutingRule();

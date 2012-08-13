@@ -45,13 +45,16 @@ public class JobResourceListener implements IResourceChangeListener {
 
     static Logger log = Logger.getLogger(JobResourceListener.class);
 
-    private boolean workInUI;
 
     public JobResourceListener() {
+
+    }
+
+    private boolean isWorkInUI() {
         try {
-            workInUI = PlatformUI.getWorkbench() != null;
+            return PlatformUI.getWorkbench() != null;
         } catch (Exception e) {
-            workInUI = false;
+            return false;
         }
     }
     IResourceDeltaVisitor visitor = new IResourceDeltaVisitor() {
@@ -117,7 +120,7 @@ public class JobResourceListener implements IResourceChangeListener {
     }
 
     public void resourceChanged(IResourceChangeEvent event) {
-        if (!workInUI || !ProxyRepositoryFactory.getInstance().isFullLogonFinished())
+        if (!isWorkInUI() || !ProxyRepositoryFactory.getInstance().isFullLogonFinished())
             return;
         IResourceDelta delta = event.getDelta();
         try {
