@@ -22,8 +22,6 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.jface.text.source.VerticalRuler;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -57,6 +55,9 @@ import org.w3c.dom.NodeList;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.widgets.xmlviewer.XMLConfiguration;
+import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewer;
+import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewerHelper;
 
 public class DOMViewDialog extends Dialog {
 
@@ -76,7 +77,7 @@ public class DOMViewDialog extends Dialog {
 
     protected TreeViewer domViewer;
 
-    protected SourceViewer sourceViewer;
+    protected XMLSourceViewer sourceViewer;
 
     protected Combo dataModelCombo;
 
@@ -100,7 +101,7 @@ public class DOMViewDialog extends Dialog {
 
     private Collection<Listener> listeners = new ArrayList<Listener>();
 
-	private Button triggerBtn;
+    private Button triggerBtn;
 
     private Button beforeBtn;
 
@@ -169,7 +170,7 @@ public class DOMViewDialog extends Dialog {
 
                                 if (sourceViewer == null || sourceViewer.getDocument() == null)
                                     return;
-                                node = Util.parse(sourceViewer.getDocument().get());
+                                node = Util.parse(sourceViewer.getText());
 
                             } catch (Exception ex) {
 
@@ -184,12 +185,12 @@ public class DOMViewDialog extends Dialog {
                         }
                     } else if (tabFolder.getSelectionIndex() == 1) {
                         try {
-                            sourceViewer.setDocument(new org.eclipse.jface.text.Document(Util.nodeToString(node)));
+                            sourceViewer.setText(Util.nodeToString(node));
                             node = null; // this should be better implemented in a change listener on the text
                         } catch (Exception ex) {
                             MessageDialog.openError(DOMViewDialog.this.getShell(), Messages.DOMViewDialog_ErrorTitle,
                                     Messages.bind(Messages.DOMViewDialog_ErrorMsg, ex.getLocalizedMessage()));
-                            sourceViewer.setDocument(new org.eclipse.jface.text.Document("")); //$NON-NLS-1$
+                            sourceViewer.setText(""); //$NON-NLS-1$
                         }
                     }
                 }// widget Selected
@@ -216,10 +217,14 @@ public class DOMViewDialog extends Dialog {
             tiSource.setText(Messages.DOMViewDialog_TiSourceText);
             tiSource.setToolTipText(Messages.DOMViewDialog_TiSourceTip);
 
-            org.eclipse.jface.text.Document doc = new org.eclipse.jface.text.Document(Util.nodeToString(node));
-            sourceViewer = new SourceViewer(tabFolder, new VerticalRuler(5), SWT.H_SCROLL | SWT.V_SCROLL);
+            XMLSourceViewerHelper sourceViewerHelper = XMLSourceViewerHelper.getInstance();
+            sourceViewer = new XMLSourceViewer(tabFolder, sourceViewerHelper.createVerticalRuler(),
+                    sourceViewerHelper.createOverviewRuler(), true, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+            XMLConfiguration sourceViewerConfiguration = new XMLConfiguration();
+            sourceViewer.configure(sourceViewerConfiguration);
+            sourceViewer.initilize();
             sourceViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-            sourceViewer.setDocument(doc);
+            sourceViewer.setText(Util.nodeToString(node));
             sourceViewer.setEditable(this.editable);
             /*
              * sourceViewer.addTextListener( new ITextListener() { public void
@@ -237,6 +242,7 @@ public class DOMViewDialog extends Dialog {
             triggerBtn = new Button(composite, SWT.CHECK);
             triggerBtn.setText(Messages.DOMViewDialog_TriggerBtnText);
             triggerBtn.addSelectionListener(new SelectionAdapter() {
+
                 @Override
                 public void widgetSelected(SelectionEvent e) {
                     beforeBtn.setEnabled(triggerBtn.getSelection());
@@ -254,13 +260,15 @@ public class DOMViewDialog extends Dialog {
         }
 
     }
-    public boolean isTriggerProcess(){
-    	return triggerBtn.getSelection();
+
+    public boolean isTriggerProcess() {
+        return triggerBtn.getSelection();
     }
 
     public boolean isBeforeVerification() {
         return beforeBtn.getSelection();
     }
+
     public int getButtonPressed() {
         return buttonPressed;
     }
@@ -274,7 +282,7 @@ public class DOMViewDialog extends Dialog {
     }
 
     public String getXML() {
-        return sourceViewer.getDocument().get();
+        return sourceViewer.getText();
     }
 
     protected void createButtonsForButtonBar(Composite parent) {
@@ -317,7 +325,7 @@ public class DOMViewDialog extends Dialog {
             // if save and on DOM viewer get the XML String
             if (tabFolder.getSelectionIndex() == 0) {
                 try {
-                    sourceViewer.setDocument(new org.eclipse.jface.text.Document(Util.nodeToString(node)));
+                    sourceViewer.setText(Util.nodeToString(node));
                 } catch (Exception ex) {
                     tabFolder.setSelection(1);
                     MessageDialog.openError(DOMViewDialog.this.getShell(), Messages.DOMViewDialog_ErrorTitle3,
