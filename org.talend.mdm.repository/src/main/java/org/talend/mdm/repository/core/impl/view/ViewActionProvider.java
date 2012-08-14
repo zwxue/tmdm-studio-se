@@ -31,6 +31,7 @@ import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.view.BrowseViewAction;
 import org.talend.mdm.repository.ui.actions.view.NewViewAction;
+import org.talend.mdm.repository.ui.actions.view.RenameViewAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -42,12 +43,14 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
     AbstractRepositoryAction addAction;
 
     AbstractRepositoryAction browseViewAction;
+    AbstractRepositoryAction renameViewAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
         addAction = initRepositoryAction(new NewViewAction(), commonViewer);
         browseViewAction = initRepositoryAction(new BrowseViewAction(), commonViewer);
+        renameViewAction = initRepositoryAction(new RenameViewAction(), commonViewer);
         //
     }
 
@@ -59,7 +62,7 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
 
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-            addAction(actions, renameAction, viewObj);
+            addAction(actions, renameViewAction, viewObj);
             actions.add(browseViewAction);
             // deploy
             actions.add(deployToAction);

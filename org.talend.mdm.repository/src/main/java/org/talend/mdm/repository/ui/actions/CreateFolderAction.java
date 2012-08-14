@@ -21,6 +21,10 @@ import org.eclipse.jface.window.Window;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
+import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
+import org.talend.mdm.repository.core.IRepositoryNodeContentProvider;
+import org.talend.mdm.repository.core.impl.view.ViewContentProvider;
+import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
@@ -86,6 +90,27 @@ public class CreateFolderAction extends AbstractRepositoryAction {
                 containerViewObject.getChildren().add(folderViewObject);
                 commonViewer.refresh(containerViewObject);
                 commonViewer.expandToLevel(containerViewObject, 1);
+                
+                //
+                refreshAnotherViewFolder(containerViewObject);
+            }
+        }
+    }
+
+    private void refreshAnotherViewFolder(final FolderRepositoryObject containerViewObject) {
+        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(containerViewObject);
+        IRepositoryNodeContentProvider contentProvider = configuration.getContentProvider();
+        if(contentProvider instanceof ViewContentProvider) {
+            for(IRepositoryViewObject object:((ViewContentProvider) contentProvider).getFolderMap().keySet()) {
+                
+                ContainerItem cItem1 = (ContainerItem) containerViewObject.getProperty().getItem();
+                ContainerItem cItem2 = (ContainerItem) object.getProperty().getItem();
+                Object data1 = cItem1.getData();
+                Object data2 = cItem2.getData();
+                if (data1 != null && data2 != null && !data1.equals(data2)) {
+
+                    commonViewer.refresh(object);
+                }
             }
         }
     }

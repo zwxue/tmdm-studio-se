@@ -65,58 +65,55 @@ public class NewViewAction extends AbstractSimpleAddAction {
         return Messages.NewViewAction_newView;
     }
 
-    protected WSViewE newView(String key) {
-
-        WSBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
-        wsBool.set_true(false);
-
-        WSViewE view = MdmserverobjectFactory.eINSTANCE.createWSViewE();
-        view.setName(key);
-        view.setDescription(""); //$NON-NLS-1$
-        view.setTransformerPK(null);
-        view.setIsTransformerActive(wsBool);
-
-        return view;
-    }
-
     protected void doRun() {
-        parentItem = null;
-        selectObj = getSelectedObject().get(0);
-        if (selectObj instanceof IRepositoryViewObject) {
-            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
-            if (pItem instanceof ContainerItem) {
-                parentItem = (ContainerItem) pItem;
-            }
-        }
+        getParentItem();
+
+        int type = getType();
+
         IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
-        ViewInputDialog2 vid = new ViewInputDialog2(site, getShell(), getDialogTitle(),
-
-        Messages.Common_inputName, "Browse_items_", new IInputValidator() {//$NON-NLS-1$
-
-                    public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0)
-                            return Messages.Common_nameCanNotBeEmpty;
-                        if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
-                            return Messages.Common_nameInvalid;
-                        }
-                        if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
-                            return Messages.Common_nameIsUsed;
-                        }
-                        return null;
-                    };
-                }, false);
+        ViewInputDialog2 vid = new ViewInputDialog2(site, getShell(), getDialogTitle(), Messages.Common_inputName,
+                getInputValidator(), false, type);
         vid.setBtnShow(true);
         vid.create();
-        vid.getShell().setSize(new Point(500, 180));
+        vid.getShell().setSize(new Point(500, 280));
         vid.setBlockOnOpen(true);
         if (vid.open() == Window.CANCEL)
             return;
-        String key = vid.getValue();
+        String key = vid.getEntityName();
+        String filterName = vid.getFilterName();
 
-        Item item = createServerObject(key);
+        Item item = null;
+        if (filterName == null)
+            item = createServerObject(key);
+        else {
+            String filterPart = ""; //$NON-NLS-1$
+            if (!filterName.isEmpty())
+                filterPart = "#" + filterName; //$NON-NLS-1$
+
+            item = createServerObject(Messages.ViewPrefix + key + filterPart);
+        }
         commonViewer.refresh(selectObj);
         commonViewer.expandToLevel(selectObj, 1);
+
         openEditor(item);
+    }
+
+    private int getType() {
+        int type = 0;
+
+        IRepositoryViewObject repositoryViewObject = (IRepositoryViewObject) selectObj;
+
+        ContainerItem containerItem = (ContainerItem) repositoryViewObject.getProperty().getItem();
+        String value = (String) containerItem.getData();
+        if (RepositoryResourceUtil.TYPE_VIEW.equalsIgnoreCase(value)) {
+            type = 0;
+        } else if (RepositoryResourceUtil.TYPE_WEBFILTER.equalsIgnoreCase(value)) {
+            type = 1;
+        } else if (RepositoryResourceUtil.TYPE_SEARCHFILTER.equalsIgnoreCase(value)) {
+            type = 2;
+        }
+
+        return type;
     }
 
     protected Item createServerObject(String key) {
@@ -138,9 +135,40 @@ public class NewViewAction extends AbstractSimpleAddAction {
         return item;
     }
 
+    protected WSViewE newView(String key) {
+
+        WSBooleanE wsBool = MdmserverobjectFactory.eINSTANCE.createWSBooleanE();
+        wsBool.set_true(false);
+
+        WSViewE view = MdmserverobjectFactory.eINSTANCE.createWSViewE();
+        view.setName(key);
+        view.setDescription(""); //$NON-NLS-1$
+        view.setTransformerPK(null);
+        view.setIsTransformerActive(wsBool);
+
+        return view;
+    }
+
     public void setXSDElementDeclaration(XSDElementDeclaration decl) {
         this.decl = decl;
 
+    }
+
+    private IInputValidator getInputValidator() {
+        return new IInputValidator() {//$NON-NLS-1$
+
+            public String isValid(String newText) {
+                if (newText == null || newText.trim().length() == 0)
+                    return Messages.Common_nameCanNotBeEmpty;
+                if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                    return Messages.Common_nameInvalid;
+                }
+                if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
+                    return Messages.Common_nameIsUsed;
+                }
+                return null;
+            };
+        };
     }
 
     public void createNewView(String viewName) {

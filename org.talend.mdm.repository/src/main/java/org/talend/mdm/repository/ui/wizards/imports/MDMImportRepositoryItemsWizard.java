@@ -56,7 +56,9 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.dialogs.importexchange.ImportExchangeOptionsDialogR;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
@@ -132,6 +134,53 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }
         return true;
     }
+    
+    
+    private void filterImportedItems(List<ItemRecord> toImportItemRecords) {
+        List sels = sel.toList();
+        List<String> type = new ArrayList<String>();
+        for(Object obj:sels) {
+            if(obj instanceof IRepositoryViewObject) {
+                IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+                ContainerItem cItem = (ContainerItem) viewObject.getProperty().getItem();
+                if(cItem.getData() != null) {
+                    if(RepositoryResourceUtil.TYPE_VIEW.equalsIgnoreCase((String)cItem.getData()))
+                        return;
+                    else if(RepositoryResourceUtil.TYPE_SEARCHFILTER.equalsIgnoreCase((String)cItem.getData()))
+                        type.add(RepositoryResourceUtil.TYPE_SEARCHFILTER);
+                    else if(RepositoryResourceUtil.TYPE_WEBFILTER.equalsIgnoreCase((String)cItem.getData()))
+                        type.add(RepositoryResourceUtil.TYPE_WEBFILTER);
+                }
+            }
+        }
+        
+        if(type.size() == 1){
+            if(type.get(0) == RepositoryResourceUtil.TYPE_SEARCHFILTER) {
+                
+                for(Iterator<ItemRecord> it = toImportItemRecords.iterator();it.hasNext();) {
+                    Item item = it.next().getProperty().getItem();
+                    if(item instanceof WSViewItem) {
+                        WSViewItem viewItem = (WSViewItem) item;
+                        String name = viewItem.getProperty().getLabel();
+                        if(name.startsWith(Messages.ViewPrefix))
+                            it.remove();
+                    }
+                    
+                }
+            } else if(type.get(0) == RepositoryResourceUtil.TYPE_WEBFILTER) {
+                for(Iterator<ItemRecord> it = toImportItemRecords.iterator();it.hasNext();) {
+                    Item item = it.next().getProperty().getItem();
+                    if(item instanceof WSViewItem) {
+                        WSViewItem viewItem = (WSViewItem) item;
+                        String name = viewItem.getProperty().getLabel();
+                        if(!name.startsWith(Messages.ViewPrefix))
+                            it.remove();
+                    }
+                    
+                }
+            }
+        }
+    }
 
     @Override
     public void doImport(final Object[] selectedObjs, final IProgressMonitor monitor) {
@@ -142,6 +191,8 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
             @Override
             protected void run() throws LoginException, PersistenceException {
+                filterImportedItems(toImportItemRecords);
+                
                 repositoryUtil.importItemRecords(manager, toImportItemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
 
                 for (ItemRecord itemRec : toImportItemRecords) {

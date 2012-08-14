@@ -126,7 +126,11 @@ public class RepositoryResourceUtil {
     static XmiResourceManager resourceManager = new XmiResourceManager();
 
     private static final String DIVIDE = "/"; //$NON-NLS-1$
-
+    
+    public static final String TYPE_WEBFILTER = "webfilter";//$NON-NLS-1$
+    public static final String TYPE_SEARCHFILTER = "searchfilter";//$NON-NLS-1$
+    public static final String TYPE_VIEW = "view";//$NON-NLS-1$
+    
     public static boolean createItem(Item item, String propLabel) {
         return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
     }

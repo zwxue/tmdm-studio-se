@@ -22,11 +22,15 @@ public class Messages extends NLS {
 
     public static final String KEY_NOT_FOUND_SUFFIX = "!!!"; //$NON-NLS-1$
 
+    public static String Warning;
+
     public static String _CamelProcessItem;
 
     public static String _CustomeLayout;
 
     public static String _DumpToConsoleDescription;
+
+    public static String _Error;
 
     public static String _ErrorStatusMsg1;
 
@@ -39,6 +43,12 @@ public class Messages extends NLS {
     public static String _Resource;
 
     public static String _SubTaskTitle;
+    
+    public static String ViewContentProvider_SearchFilter;
+
+    public static String ViewContentProvider_WebFilter;
+
+    public static String ViewPrefix;
 
     public static String AbstractDataClusterAction_ConnectFailed;
 
@@ -211,6 +221,24 @@ public class Messages extends NLS {
     public static String RemovePhysicallyFromRepositoryAction_title;
 
     public static String RenameObjectAction_rename;
+
+    public static String RenameViewDialog_DefaultFilter;
+
+    public static String RenameViewDialog_Entity;
+
+    public static String RenameViewDialog_InternalName;
+
+    public static String RenameViewDialog_InternalNameX;
+
+    public static String RenameViewDialog_Rename;
+
+    public static String RenameViewDialog_ViewPrefix;
+
+    public static String RenameViewDialog2_InternalName;
+
+    public static String RenameViewDialog2_InternalNameX;
+
+    public static String RenameViewDialog2_Name;
 
     public static String RepositoryDropAssistant_pasteObject;
 
@@ -403,6 +431,22 @@ public class Messages extends NLS {
     public static String Version;
 
     public static String VersionInteractiveHandler_label;
+
+    public static String ViewInputDialog_Default;
+
+    public static String ViewInputDialog_Entity;
+
+    public static String ViewInputDialog_InternalName;
+
+    public static String ViewInputDialog_InternalNameX;
+
+    public static String ViewInputDialog_lblFilterName_text;
+
+    public static String ViewInputDialog_Name;
+
+    public static String ViewInputDialog_NameCannotbeEmpty;
+
+    public static String ViewInputDialog_SelectOneEntity;
 
     public static String ViewInputDialog2_SelectOneEntity;
 
@@ -658,6 +702,15 @@ public class Messages extends NLS {
     public static String GenerateJobXX_ProcessCallJob;
 
     public static String GroovyPluginDetail_PluginCallScript;
+
+    public static String ViewInputDialog_webFilterRadioBtnText;
+
+    public static String ViewInputDialog_searchFilterRadioBtnText;
+
+    public static String ViewInputDialog_lblNewLabel_text1;
+
+    public static String ViewInputDialog_lblNewLabel_text2;
+    
 
     // //////////////////////////////////////////////////////////////////////////
     //

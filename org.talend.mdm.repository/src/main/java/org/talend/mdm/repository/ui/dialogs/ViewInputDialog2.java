@@ -20,8 +20,6 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 
-import com.amalto.workbench.dialogs.ViewInputDialog;
-
 /**
  * DOC hbhong class global comment. this class is compatible with ViewInputDialog, but works for Repository view
  */
@@ -40,8 +38,8 @@ public class ViewInputDialog2 extends ViewInputDialog {
      * @param isTransfor
      */
     public ViewInputDialog2(IWorkbenchPartSite site, Shell parentShell, String dialogTitle, String dialogMessage,
-            String initialValue, IInputValidator validator, boolean isTransfor) {
-        super(site, null, parentShell, dialogTitle, dialogMessage, initialValue, validator, isTransfor);
+            IInputValidator validator, boolean isTransfor, int type) {
+        super(site, null, parentShell, dialogTitle, dialogMessage, validator, isTransfor, type);
     }
 
     public void widgetSelected(SelectionEvent e) {
@@ -50,7 +48,7 @@ public class ViewInputDialog2 extends ViewInputDialog {
         dlg.open();
 
         if (dlg.getReturnCode() == IDialogConstants.OK_ID) {
-            text.setText(value + dlg.getEntityName());
+            entityText.setText(value + dlg.getEntityName());
             dlg.close();
         }
     }
