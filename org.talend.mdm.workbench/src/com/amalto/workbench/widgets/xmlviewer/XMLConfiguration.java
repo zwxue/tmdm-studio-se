@@ -28,7 +28,8 @@ import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import com.amalto.workbench.widgets.xmlviewer.contentassist.XMLContentAssistProcessor;
+import com.amalto.workbench.widgets.xmlviewer.contentassist.DataModelContentAssisProcessor;
+import com.amalto.workbench.widgets.xmlviewer.contentassist.IKeyWordProvider;
 import com.amalto.workbench.widgets.xmlviewer.format.XMLFormattingStrategy;
 import com.amalto.workbench.widgets.xmlviewer.hover.TextHover;
 import com.amalto.workbench.widgets.xmlviewer.partition.IXMLPartitions;
@@ -47,11 +48,14 @@ public class XMLConfiguration extends SourceViewerConfiguration implements IXMLP
 
     private ContentAssistant contentAssist;
 
+    private final IKeyWordProvider keyWordProvider;
+
 
     /**
      * DOC hbhong XMLEditorConfiguration constructor comment.
      */
-    public XMLConfiguration() {
+    public XMLConfiguration(IKeyWordProvider keyWordProvider) {
+        this.keyWordProvider = keyWordProvider;
     }
 
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
@@ -131,7 +135,7 @@ public class XMLConfiguration extends SourceViewerConfiguration implements IXMLP
     }
 
     private void addContentAssistProcessors(ContentAssistant assist) {
-        XMLContentAssistProcessor processor = new XMLContentAssistProcessor();
+        DataModelContentAssisProcessor processor = new DataModelContentAssisProcessor(keyWordProvider);
 
         assist.setContentAssistProcessor(processor, IXMLPartitions.XML_TAG);
         assist.setContentAssistProcessor(processor, IXMLPartitions.XML_EMPTYTAG);

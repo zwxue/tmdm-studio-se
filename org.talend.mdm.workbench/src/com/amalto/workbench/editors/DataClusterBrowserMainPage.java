@@ -834,7 +834,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     }
                 }
 
-                final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), Util.parse(xml),
+                final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), port,
+                        Util.parse(xml),
                         true, dataModels, DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
                 d.addListener(new Listener() {
 
@@ -1362,8 +1363,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             dataModels.add(dmPKs[i].getPk());
                     }
                 }
-
-                final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), Util.parse(xml),
+                final XtentisPort port = Util.getPort(getXObject());
+                final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), port,
+                        Util.parse(xml),
                         true, dataModels, DOMViewDialog.SOURCE_VIEWER, null);
                 d.addListener(new Listener() {
 
@@ -1371,7 +1373,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (event.button == DOMViewDialog.BUTTON_SAVE) {
                             // attempt to save
                             try {
-                                final XtentisPort port = Util.getPort(getXObject());
+
                                 WSPutItem putItem = new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
                                         "".equals(d //$NON-NLS-1$
                                                 .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false);

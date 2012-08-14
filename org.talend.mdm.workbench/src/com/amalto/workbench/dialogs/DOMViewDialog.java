@@ -12,13 +12,19 @@
 // ============================================================================
 package com.amalto.workbench.dialogs;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -46,6 +52,13 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -55,11 +68,16 @@ import org.w3c.dom.NodeList;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSDataModel;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.xmlviewer.XMLConfiguration;
 import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewer;
 import com.amalto.workbench.widgets.xmlviewer.XMLSourceViewerHelper;
+import com.amalto.workbench.widgets.xmlviewer.contentassist.IKeyWordProvider;
 
-public class DOMViewDialog extends Dialog {
+public class DOMViewDialog extends Dialog implements IKeyWordProvider {
 
     private static Log log = LogFactory.getLog(DOMViewDialog.class);
 
@@ -105,19 +123,22 @@ public class DOMViewDialog extends Dialog {
 
     private Button beforeBtn;
 
+    private final XtentisPort port;
+
     public DOMViewDialog(Shell parentShell, Node node) {
-        this(parentShell, node, false, null, TREE_VIEWER, null);
+        this(parentShell, null, node, false, null, TREE_VIEWER, null);
     }
 
     public DOMViewDialog(Shell parentShell, Node node, boolean editable, Collection<String> dataModelNames, int firstTab,
             String selectedDataModel, String desc) {
-        this(parentShell, node, editable, dataModelNames, firstTab, selectedDataModel);
+        this(parentShell, null, node, editable, dataModelNames, firstTab, selectedDataModel);
         this.desc = desc;
     }
 
-    public DOMViewDialog(Shell parentShell, Node node, boolean editable, Collection<String> dataModelNames, int firstTab,
-            String selectedDataModel) {
+    public DOMViewDialog(Shell parentShell, XtentisPort port, Node node, boolean editable, Collection<String> dataModelNames,
+            int firstTab, String selectedDataModel) {
         super(parentShell);
+        this.port = port;
         this.node = node;
         this.editable = editable;
         this.dataModelNames = new ArrayList<String>();
@@ -220,7 +241,7 @@ public class DOMViewDialog extends Dialog {
             XMLSourceViewerHelper sourceViewerHelper = XMLSourceViewerHelper.getInstance();
             sourceViewer = new XMLSourceViewer(tabFolder, sourceViewerHelper.createVerticalRuler(),
                     sourceViewerHelper.createOverviewRuler(), true, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-            XMLConfiguration sourceViewerConfiguration = new XMLConfiguration();
+            XMLConfiguration sourceViewerConfiguration = new XMLConfiguration(this);
             sourceViewer.configure(sourceViewerConfiguration);
             sourceViewer.initilize();
             sourceViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -285,6 +306,68 @@ public class DOMViewDialog extends Dialog {
         return sourceViewer.getText();
     }
 
+    private Map<String, String[]> keyWordMap = new HashMap<String, String[]>();
+
+    private void updateKeyMap(String dataModelName) {
+        if (dataModelName == null || port == null)
+            return;
+        if (keyWordMap.get(dataModelName) == null) {
+            WSGetDataModel wsGetModel = new WSGetDataModel(new WSDataModelPK(dataModelName));
+            try {
+                WSDataModel dataModel = port.getDataModel(wsGetModel);
+                String xsdSchemaStr = dataModel.getXsdSchema();
+                if (xsdSchemaStr != null) {
+                    XSDSchema schema = Util.getXSDSchema(xsdSchemaStr);
+                    Set<String> allKeyWords = getAllKeyWords(schema);
+                    if (!allKeyWords.isEmpty()) {
+                        String[] keys = allKeyWords.toArray(new String[0]);
+                        Arrays.sort(keys);
+                        keyWordMap.put(dataModelName, keys);
+                    }
+                }
+            } catch (RemoteException ex) {
+                log.error(ex.getMessage(), ex);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        }
+    }
+
+    public String[] getCurrentKeyWords() {
+        String dataModelName = dataModelCombo.getText();
+        if (dataModelName != null) {
+            return keyWordMap.get(dataModelName);
+        }
+        return null;
+    }
+
+    private Set<String> getAllKeyWords(XSDSchema schema) {
+        Set<String> keys = new HashSet<String>();
+        for (XSDElementDeclaration elementDecl : schema.getElementDeclarations()) {
+            collectKeyWords(elementDecl, keys);
+        }
+        return keys;
+    }
+
+    private void collectKeyWords(XSDElementDeclaration elementDeclaration, Set<String> keys) {
+        String elementName = elementDeclaration.getName();
+        keys.add(elementName);
+        XSDTypeDefinition typeDefinition = elementDeclaration.getType();
+        if (typeDefinition instanceof XSDComplexTypeDefinition) {
+            XSDParticle particle = (XSDParticle) ((XSDComplexTypeDefinition) typeDefinition).getContent();
+            XSDTerm term = particle.getTerm();
+            if (term instanceof XSDModelGroup) {
+                EList<XSDParticle> particles = ((XSDModelGroup) term).getContents();
+                for (XSDParticle p : particles) {
+                    XSDTerm childTerm = p.getTerm();
+                    if (childTerm instanceof XSDElementDeclaration) {
+                        collectKeyWords((XSDElementDeclaration) childTerm, keys);
+                    }
+                }
+            }
+        }
+    }
+
     protected void createButtonsForButtonBar(Composite parent) {
 
         if (!editable) {
@@ -297,11 +380,20 @@ public class DOMViewDialog extends Dialog {
             Arrays.sort(dms);
             dataModelCombo.setItems(dms);
             dataModelCombo.select(-1);
+            dataModelCombo.addSelectionListener(new SelectionAdapter() {
+
+                public void widgetSelected(SelectionEvent e) {
+                    String dataModelName = dataModelCombo.getText();
+                    updateKeyMap(dataModelName);
+                }
+            });
+
             if (selectedDataModel != null) {
                 for (int i = 0; i < dms.length; i++) {
                     String dm = dms[i];
                     if (dm.equals(selectedDataModel)) {
                         dataModelCombo.select(i);
+                        updateKeyMap(dm);
                         break;
                     }
                 }

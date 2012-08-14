@@ -116,12 +116,10 @@ public class XMLValidator {
                 }
 
                 public void fatalError(SAXParseException exception) throws SAXException {
-                    System.out.println(">>>fatal error " + exception.getMessage()); //$NON-NLS-1$
                     updateAnnotation(exception);
                 }
 
                 public void error(SAXParseException exception) throws SAXException {
-                    System.out.println(">>>error" + exception.getMessage()); //$NON-NLS-1$
                     updateAnnotation(exception);
                 }
             };
@@ -145,7 +143,6 @@ public class XMLValidator {
                 //
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 builder.setErrorHandler(errorHandler);
-                System.out.println(xml);
                 builder.parse(new InputSource(new StringReader(xml)));
             } catch (Exception e) {
                 // do nothing because already has errHandler to handle it
