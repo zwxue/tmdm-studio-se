@@ -54,6 +54,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -144,36 +145,36 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
                 ContainerItem cItem = (ContainerItem) viewObject.getProperty().getItem();
                 if(cItem.getData() != null) {
-                    if(RepositoryResourceUtil.TYPE_VIEW.equalsIgnoreCase((String)cItem.getData()))
+                    if(IViewNodeConstDef.TYPE_VIEW.equalsIgnoreCase((String)cItem.getData()))
                         return;
-                    else if(RepositoryResourceUtil.TYPE_SEARCHFILTER.equalsIgnoreCase((String)cItem.getData()))
-                        type.add(RepositoryResourceUtil.TYPE_SEARCHFILTER);
-                    else if(RepositoryResourceUtil.TYPE_WEBFILTER.equalsIgnoreCase((String)cItem.getData()))
-                        type.add(RepositoryResourceUtil.TYPE_WEBFILTER);
+                    else if(IViewNodeConstDef.TYPE_SEARCHFILTER.equalsIgnoreCase((String)cItem.getData()))
+                        type.add(IViewNodeConstDef.TYPE_SEARCHFILTER);
+                    else if(IViewNodeConstDef.TYPE_WEBFILTER.equalsIgnoreCase((String)cItem.getData()))
+                        type.add(IViewNodeConstDef.TYPE_WEBFILTER);
                 }
             }
         }
         
         if(type.size() == 1){
-            if(type.get(0) == RepositoryResourceUtil.TYPE_SEARCHFILTER) {
+            if(type.get(0) == IViewNodeConstDef.TYPE_SEARCHFILTER) {
                 
                 for(Iterator<ItemRecord> it = toImportItemRecords.iterator();it.hasNext();) {
                     Item item = it.next().getProperty().getItem();
                     if(item instanceof WSViewItem) {
                         WSViewItem viewItem = (WSViewItem) item;
                         String name = viewItem.getProperty().getLabel();
-                        if(name.startsWith(Messages.ViewPrefix))
+                        if(name.startsWith(IViewNodeConstDef.ViewPrefix))
                             it.remove();
                     }
                     
                 }
-            } else if(type.get(0) == RepositoryResourceUtil.TYPE_WEBFILTER) {
+            } else if(type.get(0) == IViewNodeConstDef.TYPE_WEBFILTER) {
                 for(Iterator<ItemRecord> it = toImportItemRecords.iterator();it.hasNext();) {
                     Item item = it.next().getProperty().getItem();
                     if(item instanceof WSViewItem) {
                         WSViewItem viewItem = (WSViewItem) item;
                         String name = viewItem.getProperty().getLabel();
-                        if(!name.startsWith(Messages.ViewPrefix))
+                        if(!name.startsWith(IViewNodeConstDef.ViewPrefix))
                             it.remove();
                     }
                     

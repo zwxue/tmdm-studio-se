@@ -91,26 +91,6 @@ public class CreateFolderAction extends AbstractRepositoryAction {
                 commonViewer.refresh(containerViewObject);
                 commonViewer.expandToLevel(containerViewObject, 1);
                 
-                //
-                refreshAnotherViewFolder(containerViewObject);
-            }
-        }
-    }
-
-    private void refreshAnotherViewFolder(final FolderRepositoryObject containerViewObject) {
-        IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(containerViewObject);
-        IRepositoryNodeContentProvider contentProvider = configuration.getContentProvider();
-        if(contentProvider instanceof ViewContentProvider) {
-            for(IRepositoryViewObject object:((ViewContentProvider) contentProvider).getFolderMap().keySet()) {
-                
-                ContainerItem cItem1 = (ContainerItem) containerViewObject.getProperty().getItem();
-                ContainerItem cItem2 = (ContainerItem) object.getProperty().getItem();
-                Object data1 = cItem1.getData();
-                Object data2 = cItem2.getData();
-                if (data1 != null && data2 != null && !data1.equals(data2)) {
-
-                    commonViewer.refresh(object);
-                }
             }
         }
     }

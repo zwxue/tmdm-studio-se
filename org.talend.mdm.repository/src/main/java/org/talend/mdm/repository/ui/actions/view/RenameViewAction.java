@@ -26,6 +26,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -46,7 +47,7 @@ public class RenameViewAction extends AbstractRepositoryAction {
     private ERepositoryObjectType type;
     private IWorkbenchPartSite site;
     
-    private String viewPrefix = Messages.ViewPrefix;
+    private String viewPrefix = IViewNodeConstDef.ViewPrefix;
     
     public RenameViewAction() {
         super(Messages.RenameObjectAction_rename);

@@ -33,6 +33,7 @@ import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -90,7 +91,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
             if (!filterName.isEmpty())
                 filterPart = "#" + filterName; //$NON-NLS-1$
 
-            item = createServerObject(Messages.ViewPrefix + key + filterPart);
+            item = createServerObject(IViewNodeConstDef.ViewPrefix + key + filterPart);
         }
         commonViewer.refresh(selectObj);
         commonViewer.expandToLevel(selectObj, 1);
@@ -105,11 +106,11 @@ public class NewViewAction extends AbstractSimpleAddAction {
 
         ContainerItem containerItem = (ContainerItem) repositoryViewObject.getProperty().getItem();
         String value = (String) containerItem.getData();
-        if (RepositoryResourceUtil.TYPE_VIEW.equalsIgnoreCase(value)) {
+        if (IViewNodeConstDef.TYPE_VIEW.equalsIgnoreCase(value)) {
             type = 0;
-        } else if (RepositoryResourceUtil.TYPE_WEBFILTER.equalsIgnoreCase(value)) {
+        } else if (IViewNodeConstDef.TYPE_WEBFILTER.equalsIgnoreCase(value)) {
             type = 1;
-        } else if (RepositoryResourceUtil.TYPE_SEARCHFILTER.equalsIgnoreCase(value)) {
+        } else if (IViewNodeConstDef.TYPE_SEARCHFILTER.equalsIgnoreCase(value)) {
             type = 2;
         }
 

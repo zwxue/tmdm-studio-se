@@ -48,8 +48,6 @@ public class Messages extends NLS {
 
     public static String ViewContentProvider_WebFilter;
 
-    public static String ViewPrefix;
-
     public static String AbstractDataClusterAction_ConnectFailed;
 
     public static String AbstractDataClusterAction_zipContentFile;
@@ -231,8 +229,6 @@ public class Messages extends NLS {
     public static String RenameViewDialog_InternalNameX;
 
     public static String RenameViewDialog_Rename;
-
-    public static String RenameViewDialog_ViewPrefix;
 
     public static String RenameViewDialog2_InternalName;
 

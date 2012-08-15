@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
@@ -286,7 +287,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     
     private String getInternalName() {
         StringBuffer internalBuffer = new StringBuffer();
-        internalBuffer.append(Messages.ViewPrefix);
+        internalBuffer.append(IViewNodeConstDef.ViewPrefix);
         internalBuffer.append(entityText.getText());
         
         if(!filterText1.getText().isEmpty()) {

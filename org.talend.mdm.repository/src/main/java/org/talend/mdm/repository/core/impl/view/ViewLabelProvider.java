@@ -25,7 +25,6 @@ import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
-import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -77,7 +76,7 @@ public class ViewLabelProvider extends AbstractLabelProvider {
     }
     
     private String filterName(String name) {
-        String prefix = Messages.ViewPrefix;
+        String prefix = IViewNodeConstDef.ViewPrefix;
         if(name != null && !name.isEmpty() && name.startsWith(prefix)) {
             name = name.substring(prefix.length());
             if(name.indexOf("#") != -1)//$NON-NLS-1$

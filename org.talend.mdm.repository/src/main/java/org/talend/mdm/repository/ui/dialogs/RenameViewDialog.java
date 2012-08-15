@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
@@ -118,7 +119,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             public void modifyText(ModifyEvent e) {
                 if(okBtn != null)
                     okBtn.setEnabled(true);
-                internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, Messages.RenameViewDialog_ViewPrefix
+                internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
                         + entityText.getText() + "#" + filterText.getText())); //$NON-NLS-3$
             }
         });
@@ -128,7 +129,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             public void modifyText(ModifyEvent e) {
                 if(okBtn != null)
                     okBtn.setEnabled(true);
-                internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, Messages.RenameViewDialog_ViewPrefix
+                internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
                         + entityText.getText() + "#" + filterText.getText())); //$NON-NLS-3$
             }
         });
@@ -143,7 +144,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
                 filterText.setText(""); //$NON-NLS-1$
             else
                 filterText.setText(split[1]);
-            internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, Messages.RenameViewDialog_ViewPrefix
+            internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
                     + entityText.getText() + "#" + filterText.getText())); //$NON-NLS-3$
         }
     }

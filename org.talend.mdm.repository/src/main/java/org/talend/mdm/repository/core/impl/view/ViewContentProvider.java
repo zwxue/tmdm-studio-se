@@ -75,8 +75,8 @@ public class ViewContentProvider extends AbstractContentProvider {
                         .getConfiguration(IServerObjectRepositoryType.TYPE_VIEW);
                 
                 //
-                addCategoryViewObject(result, webfilterConf, Messages.ViewContentProvider_WebFilter, RepositoryResourceUtil.TYPE_WEBFILTER);
-                addCategoryViewObject(result, searchfilterConf, Messages.ViewContentProvider_SearchFilter, RepositoryResourceUtil.TYPE_SEARCHFILTER);
+                addCategoryViewObject(result, webfilterConf, Messages.ViewContentProvider_WebFilter, IViewNodeConstDef.TYPE_WEBFILTER);
+                addCategoryViewObject(result, searchfilterConf, Messages.ViewContentProvider_SearchFilter, IViewNodeConstDef.TYPE_SEARCHFILTER);
                 addToMap(result.get(0), result.get(1));
                 
                 return result;
@@ -106,12 +106,12 @@ public class ViewContentProvider extends AbstractContentProvider {
             for(IRepositoryViewObject viewObj:viewObjects) {
                 if(viewObj.getProperty().getItem() instanceof ContainerItem) {
                     ContainerItem cItem = (ContainerItem) viewObj.getProperty().getItem();
-                    cItem.setData(RepositoryResourceUtil.TYPE_WEBFILTER);
+                    cItem.setData(IViewNodeConstDef.TYPE_WEBFILTER);
                     resultList.add(viewObj);
                 } else {
                     WSViewItem viewItem = (WSViewItem) viewObj.getProperty().getItem();
                     String name = viewItem.getWsView().getName();
-                    if(name.startsWith(Messages.ViewPrefix))
+                    if(name.startsWith(IViewNodeConstDef.ViewPrefix))
                         resultList.add(viewObj);
                 }
             }
@@ -119,14 +119,14 @@ public class ViewContentProvider extends AbstractContentProvider {
             for(IRepositoryViewObject viewObj:viewObjects) {
                 if(viewObj.getProperty().getItem() instanceof ContainerItem) {
                     ContainerItem cItem = (ContainerItem) viewObj.getProperty().getItem();
-                    IRepositoryViewObject clonedCategoryObject = cloneContainerItem(cItem, RepositoryResourceUtil.TYPE_SEARCHFILTER);
+                    IRepositoryViewObject clonedCategoryObject = cloneContainerItem(cItem, IViewNodeConstDef.TYPE_SEARCHFILTER);
                     resultList.add(clonedCategoryObject);
                     
 //                    addToMap(viewObj, clonedCategoryObject);
                 } else {
                     WSViewItem viewItem = (WSViewItem) viewObj.getProperty().getItem();
                     String name = viewItem.getWsView().getName();
-                    if(!name.startsWith(Messages.ViewPrefix))
+                    if(!name.startsWith(IViewNodeConstDef.ViewPrefix))
                         resultList.add(viewObj);
                 }
             }
@@ -153,14 +153,14 @@ public class ViewContentProvider extends AbstractContentProvider {
     }
     
     private boolean isViewRootNode(ContainerItem containerItem) {
-        if(containerItem.getLabel().equalsIgnoreCase(RepositoryResourceUtil.TYPE_VIEW))
+        if(containerItem.getData() == null && containerItem.getState().getPath().isEmpty())
             return true;
         return false;
     }
     
     private boolean isWebFilterNode(ContainerItem containerItem) {
         Object value = containerItem.getData();
-        if(RepositoryResourceUtil.TYPE_WEBFILTER.equalsIgnoreCase((String)value))
+        if(IViewNodeConstDef.TYPE_WEBFILTER.equalsIgnoreCase((String)value))
             return true;
         
         return false;
