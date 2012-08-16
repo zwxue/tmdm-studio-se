@@ -71,7 +71,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     public static AbstractRepositoryAction createFolderAction;
 
-    static AbstractRepositoryAction removeFromRepositoryAction;
+    protected static AbstractRepositoryAction removeFromRepositoryAction;
 
     static AbstractRepositoryAction duplicateAction;
 

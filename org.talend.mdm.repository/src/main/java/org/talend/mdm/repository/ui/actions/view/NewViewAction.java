@@ -23,6 +23,7 @@ package org.talend.mdm.repository.ui.actions.view;
 
 import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Point;
@@ -100,17 +101,19 @@ public class NewViewAction extends AbstractSimpleAddAction {
     }
 
     private int getType() {
+        
+        
         int type = 0;
 
         IRepositoryViewObject repositoryViewObject = (IRepositoryViewObject) selectObj;
 
         ContainerItem containerItem = (ContainerItem) repositoryViewObject.getProperty().getItem();
-        String value = (String) containerItem.getData();
-        if (IViewNodeConstDef.TYPE_VIEW.equalsIgnoreCase(value)) {
+        String path = containerItem.getState().getPath();
+        if (path.isEmpty()) {
             type = 0;
-        } else if (IViewNodeConstDef.TYPE_WEBFILTER.equalsIgnoreCase(value)) {
+        } else if (path.startsWith(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER)) {
             type = 1;
-        } else if (IViewNodeConstDef.TYPE_SEARCHFILTER.equalsIgnoreCase(value)) {
+        } else if (path.startsWith(IPath.SEPARATOR+IViewNodeConstDef.PATH_SEARCHFILTER)) {
             type = 2;
         }
 
@@ -128,7 +131,15 @@ public class NewViewAction extends AbstractSimpleAddAction {
         item.setWsView(view);
 
         if (parentItem != null) {
-            item.getState().setPath(parentItem.getState().getPath());
+            String path = parentItem.getState().getPath();
+            if(path.isEmpty()) {
+                if(key.startsWith(IViewNodeConstDef.ViewPrefix))
+                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;                
+                else {
+                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;                
+                }
+            }
+            item.getState().setPath(path);
         } else {
             item.getState().setPath(""); //$NON-NLS-1$
         }

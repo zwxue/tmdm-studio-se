@@ -24,6 +24,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -54,11 +55,13 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.dialogs.importexchange.ImportExchangeOptionsDialogR;
@@ -138,46 +141,34 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     
     
     private void filterImportedItems(List<ItemRecord> toImportItemRecords) {
-        List sels = sel.toList();
-        List<String> type = new ArrayList<String>();
-        for(Object obj:sels) {
-            if(obj instanceof IRepositoryViewObject) {
-                IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
-                ContainerItem cItem = (ContainerItem) viewObject.getProperty().getItem();
-                if(cItem.getData() != null) {
-                    if(IViewNodeConstDef.TYPE_VIEW.equalsIgnoreCase((String)cItem.getData()))
-                        return;
-                    else if(IViewNodeConstDef.TYPE_SEARCHFILTER.equalsIgnoreCase((String)cItem.getData()))
-                        type.add(IViewNodeConstDef.TYPE_SEARCHFILTER);
-                    else if(IViewNodeConstDef.TYPE_WEBFILTER.equalsIgnoreCase((String)cItem.getData()))
-                        type.add(IViewNodeConstDef.TYPE_WEBFILTER);
+        String transformerStandalonePrefix = ITransformerV2NodeConsDef.Prefix_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
+        
+        for (Iterator<ItemRecord> it = toImportItemRecords.iterator(); it.hasNext();) {
+            Item item = it.next().getProperty().getItem();
+            if (item instanceof WSViewItem) {
+                if (item.getProperty().getLabel().startsWith(IViewNodeConstDef.ViewPrefix))
+                    item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + item.getState().getPath());
+                else {
+                    item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + item.getState().getPath());
                 }
             }
-        }
-        
-        if(type.size() == 1){
-            if(type.get(0) == IViewNodeConstDef.TYPE_SEARCHFILTER) {
-                
-                for(Iterator<ItemRecord> it = toImportItemRecords.iterator();it.hasNext();) {
-                    Item item = it.next().getProperty().getItem();
-                    if(item instanceof WSViewItem) {
-                        WSViewItem viewItem = (WSViewItem) item;
-                        String name = viewItem.getProperty().getLabel();
-                        if(name.startsWith(IViewNodeConstDef.ViewPrefix))
-                            it.remove();
-                    }
-                    
+            
+            if(item instanceof WSTransformerV2Item) {
+                if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE))
+                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + item.getState().getPath());
+                else if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)) {
+                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + item.getState().getPath());
                 }
-            } else if(type.get(0) == IViewNodeConstDef.TYPE_WEBFILTER) {
-                for(Iterator<ItemRecord> it = toImportItemRecords.iterator();it.hasNext();) {
-                    Item item = it.next().getProperty().getItem();
-                    if(item instanceof WSViewItem) {
-                        WSViewItem viewItem = (WSViewItem) item;
-                        String name = viewItem.getProperty().getLabel();
-                        if(!name.startsWith(IViewNodeConstDef.ViewPrefix))
-                            it.remove();
-                    }
-                    
+                else if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)) {
+                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION + item.getState().getPath());
+                }
+                else if (item.getProperty().getLabel().startsWith(transformerStandalonePrefix)) {
+                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + item.getState().getPath());
+                }
+                else if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)) {
+                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW + item.getState().getPath());
+                } else {
+                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER + item.getState().getPath());
                 }
             }
         }

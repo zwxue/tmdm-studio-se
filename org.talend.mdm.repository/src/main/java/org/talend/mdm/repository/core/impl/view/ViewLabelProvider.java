@@ -63,6 +63,16 @@ public class ViewLabelProvider extends AbstractLabelProvider {
     }
     
     @Override
+    protected String getConainerItemText(Item item) {
+        if(item.getState().getPath().equals("/"+IViewNodeConstDef.PATH_SEARCHFILTER))//$NON-NLS-1$
+            return "Search Filter";
+        else if(item.getState().getPath().equals("/"+IViewNodeConstDef.PATH_WEBFILTER))//$NON-NLS-1$
+            return "Web Filter";
+        
+        return super.getConainerItemText(item);
+    }
+    
+    @Override
     protected String getServerObjectItemText(Item item) {
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject != null) {

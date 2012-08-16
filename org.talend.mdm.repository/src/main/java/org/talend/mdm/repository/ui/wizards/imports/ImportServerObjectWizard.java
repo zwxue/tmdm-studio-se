@@ -40,6 +40,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -78,6 +79,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
@@ -513,9 +515,36 @@ public class ImportServerObjectWizard extends Wizard {
                 return treeObj.getPath().substring(8);
 
         }
+        
+        if(treeObj.getType() == TreeObject.VIEW) {
+            return getViewTypeObjectPath(treeObj);
+        }
 
         return treeObj.getPath();
 
+    }
+
+    private String getViewTypeObjectPath(TreeObject treeObj) {
+        if (treeObj.getName().startsWith(IViewNodeConstDef.ViewPrefix)) {
+            if (!treeObj.getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
+                String path = treeObj.getPath();
+                if (path.length() > 8)
+                    path = IPath.SEPARATOR + path.substring(8);
+                else if (!path.isEmpty()) {
+                    path = IPath.SEPARATOR + path;
+                }
+                return IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + path;
+            }
+        } else {
+            if (!treeObj.getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER)) {
+                String path = treeObj.getPath();
+                if (path.length() > 8)
+                    path = path.substring(8);
+                return IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + IPath.SEPARATOR + path;
+            }
+        }
+        
+        return treeObj.getPath();
     }
 
     /**

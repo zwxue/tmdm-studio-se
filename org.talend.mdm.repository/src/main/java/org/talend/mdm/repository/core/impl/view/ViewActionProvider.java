@@ -23,11 +23,14 @@ package org.talend.mdm.repository.core.impl.view;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderType;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.view.BrowseViewAction;
 import org.talend.mdm.repository.ui.actions.view.NewViewAction;
@@ -57,6 +60,19 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
+        
+        Item item = viewObj.getProperty().getItem();
+        String path = item.getState().getPath();
+        if(path.isEmpty())
+            actions.remove(createFolderAction);
+        
+        if ((item instanceof ContainerItem)
+                && (path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER) || path.equals(IPath.SEPARATOR
+                        + IViewNodeConstDef.PATH_WEBFILTER))) {
+            actions.remove(removeFromRepositoryAction);
+        }
+        
+
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
             actions.add(addAction);
 
