@@ -27,6 +27,9 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractContentProvider;
+import org.talend.mdm.repository.core.migrate.IMigrateObjectPathRule;
+import org.talend.mdm.repository.core.migrate.MigrateObjectPathProcess;
+import org.talend.mdm.repository.core.migrate.impl.ViewMigrateObjectPathRule;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
@@ -38,8 +41,30 @@ import com.amalto.workbench.webservices.WSView;
  */
 public class ViewContentProvider extends AbstractContentProvider {
 
+    IMigrateObjectPathRule rule = new ViewMigrateObjectPathRule();
+
+    MigrateObjectPathProcess process = new MigrateObjectPathProcess(rule);
+
+    boolean migrated = false;
     @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
+        // if(parentItem instanceof ContainerItem) {
+        // try {
+        // Thread.sleep(30000);
+        // } catch (InterruptedException e) {
+        // e.printStackTrace();
+        // }
+        // String path = parentItem.getState().getPath();
+        // if (path != null && path.length() == 0 && !migrated) {
+        // if (rule.getRootFolderItem() == null) {
+        // rule.setRootFolderItem(parentItem);
+        // }
+        // System.out.println(">>>>>>>>>>>>>\n>>>>>>>>>>>>>>>>>>>>>>>>");
+        // migrated = true;
+        // process.run();
+        //
+        // }
+        // }
         List<IRepositoryViewObject> resultList = RepositoryResourceUtil.findViewObjectsByType(
                 IServerObjectRepositoryType.TYPE_VIEW, parentItem, TreeObject.VIEW);
 
