@@ -14,7 +14,6 @@ package org.talend.mdm.repository.core.migrate.impl;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.migrate.AbstractMigrateObjectPathRule;
@@ -45,11 +44,8 @@ public class ViewMigrateObjectPathRule extends AbstractMigrateObjectPathRule {
 
 
 
-    /* (non-Javadoc)
-     * @see org.talend.mdm.repository.core.migrate.IMigrateObjectPathRule#routeObject(org.talend.core.model.repository.IRepositoryViewObject)
-     */
-    public String routeObject(IRepositoryViewObject viewObj) {
-        Item item = viewObj.getProperty().getItem();
+
+    public String routeObject(Item item) {
         if (item instanceof MDMServerObjectItem) {
             String name = ((MDMServerObjectItem) item).getMDMServerObject().getName().toLowerCase();
             if (name != null) {

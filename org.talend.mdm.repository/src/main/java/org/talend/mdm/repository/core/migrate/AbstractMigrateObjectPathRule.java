@@ -14,15 +14,18 @@ package org.talend.mdm.repository.core.migrate;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.core.model.properties.Item;
-import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.models.FolderRepositoryObject;
-import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.core.model.properties.Property;
+import org.talend.core.repository.utils.XmiResourceManager;
 
 /**
  * DOC HHB class global comment. Detailled comment
@@ -31,52 +34,74 @@ public abstract class AbstractMigrateObjectPathRule implements IMigrateObjectPat
 
     Map<String, String[]> folderRouteCache = new HashMap<String, String[]>();
 
-    private Item item;
+    private XmiResourceManager xmiResourceManager;
 
-    public String[] routeFolderObject(IRepositoryViewObject folderViewObj) {
-        if (folderViewObj instanceof FolderRepositoryObject) {
-            FolderRepositoryObject folderObj = (FolderRepositoryObject) folderViewObj;
-            String path = folderObj.getPath();
+    public AbstractMigrateObjectPathRule() {
+        xmiResourceManager = new XmiResourceManager();
+    }
+
+    public String[] routeFolderObject(IResource resource) {
+        if (resource instanceof IFolder) {
+
+            String path = resource.getFullPath().toString();
             String[] newFolders = folderRouteCache.get(path);
             if (newFolders != null)
                 return newFolders;
-            Item item = folderViewObj.getProperty().getItem();
-            List<IRepositoryViewObject> viewObjects = RepositoryResourceUtil.findViewObjects(getRepositoryObjectType(), item,
-                    true, true);
-            if (viewObjects != null) {
-                if (viewObjects.size() == 0) {
-                    newFolders = new String[0];
-                    folderRouteCache.put(path, newFolders);
-                    return newFolders;
-                }
-                //
-                Set<String> paths = new HashSet<String>();
-                for (IRepositoryViewObject childViewObj : viewObjects) {
-                    if (childViewObj instanceof FolderRepositoryObject) {
-                        String[] folderResult = routeFolderObject(childViewObj);
+            //
+            Set<String> paths = new HashSet<String>();
+            try {
+                for (IResource childRes : ((IFolder) resource).members()) {
+                    if (childRes instanceof IFolder) {
+                        String[] folderResult = routeFolderObject(childRes);
                         if (folderResult != null) {
                             for (String folderName : folderResult) {
                                 paths.add(folderName);
                             }
                         }
                     } else {
-                        String objPath = routeObject(childViewObj);
+                        String objPath = routeObject(childRes);
                         if (objPath != null) {
                             paths.add(objPath);
                         }
                     }
                 }
-                return paths.toArray(new String[0]);
-
+            } catch (CoreException e) {
+                ExceptionHandler.process(e);
             }
+            return paths.toArray(new String[0]);
         }
         return null;
     }
 
-    public boolean isToMigrateFolder(IRepositoryViewObject folderViewObj) {
-        if (folderViewObj instanceof FolderRepositoryObject) {
-            String path = ((FolderRepositoryObject) folderViewObj).getPath();
-            if (isNewFolder(path))
+    private String routeObject(IResource resource) {
+        IFile propFile = (IFile) resource;
+        if (isPropertyFile(propFile)) {
+            Property property = null;
+
+            property = xmiResourceManager.loadProperty(propFile);
+            Item item = property.getItem();
+            return routeObject(item);
+        }
+        return null;
+    }
+
+    public boolean isPropertyFile(IResource resource) {
+        if (resource instanceof IFile) {
+            return xmiResourceManager.isPropertyFile((IFile) resource);
+        }
+        return false;
+    }
+
+    public Property loadProperty(IResource resource) {
+        return xmiResourceManager.loadProperty(resource);
+    }
+
+    public boolean isToMigrateFolder(IResource parentRes, IResource resource) {
+        if (resource instanceof IFolder) {
+            int segmentCount = parentRes.getFullPath().segmentCount();
+            IPath path = resource.getFullPath().removeFirstSegments(segmentCount);
+
+            if (isNewFolder(path.toOSString()))
                 return true;
         }
         return false;
@@ -93,15 +118,6 @@ public abstract class AbstractMigrateObjectPathRule implements IMigrateObjectPat
             }
         }
         return false;
-    }
-
-    public Item getRootFolderItem() {
-            return item;
-    }
-
-    public void setRootFolderItem(Item item) {
-        this.item = item;
-
     }
 
 }

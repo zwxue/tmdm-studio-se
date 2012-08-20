@@ -617,6 +617,28 @@
          </action>
       </actionSet>
    </extension>
+   <extension
+         point="org.talend.core.migrationTask">
+      <projecttask
+            beforeLogon="true"
+            breaks="5.1.1"
+            class="org.talend.mdm.repository.core.migrate.UpdateViewObjectPathMT"
+            description="Update MDM View Objects"
+            id="org.talend.mdm.repository.core.migrate.UpdateViewObjectPathMT"
+            name="Update MDM View Objects"
+            version="5.1.2">
+      </projecttask>
+            <projecttask
+            beforeLogon="true"
+            breaks="5.1.1"
+            class="org.talend.mdm.repository.core.migrate.UpdateProcessObjectPathMT"
+            description="Update MDM Process Objects"
+            id="org.talend.mdm.repository.core.migrate.UpdateProcessObjectPathMT"
+            name="Update MDM Process Objects"
+            version="5.1.2">
+      </projecttask>
+      
+   </extension>
       
    
 </plugin>

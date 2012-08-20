@@ -12,24 +12,27 @@
 // ============================================================================
 package org.talend.mdm.repository.core.migrate;
 
+import org.eclipse.core.resources.IResource;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.model.repository.IRepositoryViewObject;
-
 
 /**
- * DOC HHB  class global comment. Detailled comment
+ * DOC HHB class global comment. Detailled comment
  */
 public interface IMigrateObjectPathRule {
+
     public ERepositoryObjectType getRepositoryObjectType();
+
     public String[] getAllNewFolderNames();
 
-    public Item getRootFolderItem();
+    public String routeObject(Item item);
 
-    public void setRootFolderItem(Item item);
-    public String routeObject(IRepositoryViewObject viewObj);
+    public boolean isPropertyFile(IResource resource);
 
-    public String[] routeFolderObject(IRepositoryViewObject folderViewObj);
+    public Property loadProperty(IResource resource);
 
-    public boolean isToMigrateFolder(IRepositoryViewObject folderViewObj);
+    public String[] routeFolderObject(IResource resource);
+
+    public boolean isToMigrateFolder(IResource parentRes, IResource resource);
 }

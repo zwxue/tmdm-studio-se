@@ -669,14 +669,6 @@ public class Messages extends NLS {
     
     public static String MdmPropertiesWizard_imageCatalog;
 
-    public static String MigrateObjectPathProcess_checkFolder;
-
-    public static String MigrateObjectPathProcess_checkObj;
-
-    public static String MigrateObjectPathProcess_clean;
-
-    public static String MigrateObjectPathProcess_update;
-
     public static String Server_cannot_connected;
 
     public static String SmtpGetDocument_Desc0;
