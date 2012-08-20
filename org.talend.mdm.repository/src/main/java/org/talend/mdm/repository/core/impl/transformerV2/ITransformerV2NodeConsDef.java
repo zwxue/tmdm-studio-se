@@ -32,14 +32,16 @@ public interface ITransformerV2NodeConsDef {
     public static final String TYPE_SMARTVIEW = "smartView";//$NON-NLS-1$
     public static final String TYPE_OTHER = "other";//$NON-NLS-1$
     
-    public static final String Prefix_BEFOREDEL = "beforeDeleting_";//$NON-NLS-1$
-    public static final String Prefix_BEFORESAVE = "beforeSaving_";//$NON-NLS-1$
-    public static final String Prefix_RUNNABLE = "Runnable_";//$NON-NLS-1$
-    public static final String Prefix_STANDLONE = "Runnable#";//$NON-NLS-1$
-    public static final String Prefix_SMARTVIEW = "Smart_view_";//$NON-NLS-1$
+    public static final String Prefix_BEFOREDEL = "beforedeleting_";//$NON-NLS-1$
+    public static final String Prefix_BEFORESAVE = "beforesaving_";//$NON-NLS-1$
+    public static final String Prefix_RUNNABLE = "runnable_";//$NON-NLS-1$
+    public static final String Prefix_STANDLONE = "runnable#";//$NON-NLS-1$
+    public static final String Prefix_SMARTVIEW = "smart_view_";//$NON-NLS-1$
     
+    
+    public static final String PATH_PROCESS = "Process";//$NON-NLS-1$
     public static final String PATH_BEFORESAVE = "beforesaving";//$NON-NLS-1$
-    public static final String PATH_BEFOREDEL = "beforedeleing";//$NON-NLS-1$
+    public static final String PATH_BEFOREDEL = "beforedeleting";//$NON-NLS-1$
     public static final String PATH_ENTITYACTION = "entityaction";//$NON-NLS-1$
     public static final String PATH_WELCOMEACTION = "welcomeaction";//$NON-NLS-1$
     public static final String PATH_SMARTVIEW = "smartview";//$NON-NLS-1$

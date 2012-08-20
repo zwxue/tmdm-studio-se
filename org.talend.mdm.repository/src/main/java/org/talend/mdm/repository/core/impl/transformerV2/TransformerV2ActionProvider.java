@@ -21,13 +21,16 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.transformerV2;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.FolderType;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.process.NewProcessAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -54,6 +57,10 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
 
+        if (!canDelete(viewObj)) {
+            actions.remove(removeFromRepositoryAction);
+        }
+
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
             actions.add(addAction);
 
@@ -67,6 +74,22 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
         }
         actions.add(deployAllAction);
         return actions;
+    }
+
+    private boolean canDelete(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
+        if(!(item instanceof ContainerItem))
+            return true;
+        
+        String path = item.getState().getPath();
+        List<String> paths = Arrays.asList(ITransformerV2NodeConsDef.PATH_BEFOREDEL, ITransformerV2NodeConsDef.PATH_BEFORESAVE,
+                ITransformerV2NodeConsDef.PATH_ENTITYACTION, ITransformerV2NodeConsDef.PATH_WELCOMEACTION,
+                ITransformerV2NodeConsDef.PATH_SMARTVIEW, ITransformerV2NodeConsDef.PATH_OTHER);
+        if(path.startsWith("/")) //$NON-NLS-1$
+            path = path.substring(1);
+        boolean canDel = !paths.contains(path);
+        
+        return canDel;
     }
 
 }

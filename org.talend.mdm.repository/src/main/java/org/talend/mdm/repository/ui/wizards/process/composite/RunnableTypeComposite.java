@@ -50,14 +50,14 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
      * DOC hbhong BeforeProcessTypeComposite constructor comment.
      * 
      * @param parent
+     * @param defaultProcessType 
      */
-    public RunnableTypeComposite(Composite parent, SelectionListener selectionListener) {
+    public RunnableTypeComposite(Composite parent, int defaultProcessType, SelectionListener selectionListener) {
         super(parent, selectionListener);
         setLayout(new GridLayout(2, false));
 
         runnableBun = new Button(this, SWT.RADIO);
         runnableBun.addSelectionListener(selectionListener);
-        runnableBun.setSelection(true);
         runnableBun.setText(Messages.RunnableTypeComposite_createRunnableProcess);
 
         descContainer = new Composite(this, SWT.NONE);
@@ -97,8 +97,25 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
         standaloneBun.setText(Messages.RunnableTypeComposite_createStandaloneProcess);
         standaloneBun.addSelectionListener(selectionListener);
 
+        updateBtnState(defaultProcessType);
     }
 
+    public void updateBtnState(int defaultProcessType) {
+        if(defaultProcessType == NewProcessWizard.RUNNABLE_RUNNABLE) {
+            runnableBun.setSelection(true);
+            standaloneBun.setSelection(false);
+            standaloneBun.setEnabled(false);
+        }
+        else if(defaultProcessType == NewProcessWizard.RUNNABLE_STANDALONE) {
+            standaloneBun.setSelection(true);
+            runnableBun.setSelection(false);
+            runnableBun.setEnabled(false);
+        } else {
+            runnableBun.setSelection(true);
+            standaloneBun.setSelection(false);
+        }
+    }
+    
     public int getCurrentProcessType() {
         if (runnableBun.getSelection())
             return NewProcessWizard.RUNNABLE_RUNNABLE;

@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -81,6 +82,7 @@ public class InputProcessNamePage extends WizardPage {
     protected SelectionListener selectionListener = new SelectionAdapter() {
 
         public void widgetSelected(SelectionEvent e) {
+            setEntityLabelEnable();
             updateProcessNameLabel();
             getWizard().getContainer().updateButtons();
         }
@@ -108,6 +110,19 @@ public class InputProcessNamePage extends WizardPage {
 
     private Composite container;
 
+    final Shell another = new Shell();
+
+    private Label optionNameLabel;
+
+    private Text optionNameText;
+
+    private Label padLabel;
+
+    private Group grpEnterProcessName;
+
+    private Label internalNameLabel;
+
+    private Label pad2Label;
     /**
      * Create contents of the wizard.
      * 
@@ -121,11 +136,10 @@ public class InputProcessNamePage extends WizardPage {
         typeComposite = new Composite(container, SWT.NONE);
         typeComposite.setLayout(new GridLayout(1, false));
         typeComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        curProcessTypeComposite = (AbstractProcessTypeComposite) getProcessTypeComposite(NewProcessWizard.BEFORE_TYPE);
+        curProcessTypeComposite = (AbstractProcessTypeComposite) getProcessTypeComposite(NewProcessWizard.BEFORE_TYPE, NewProcessWizard.ANY_TYPE);
         ((Composite) curProcessTypeComposite).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-        // name
-        Group grpEnterProcessName = new Group(container, SWT.NONE);
+        grpEnterProcessName = new Group(container, SWT.NONE);
         grpEnterProcessName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         grpEnterProcessName.setText(Messages.InputProcessNamePage_enterName);
         grpEnterProcessName.setLayout(new GridLayout(3, false));
@@ -160,27 +174,96 @@ public class InputProcessNamePage extends WizardPage {
             }
         });
         selectEntityBun.setText(Messages.InputProcessNamePage_select);
+        
+        //option part
+        optionNameLabel = new Label(another, SWT.NONE);
+        optionNameLabel.setText(Messages.InputProcessNamePage_OptionalName);
+        
+        optionNameText = new Text(another, SWT.BORDER);
+        optionNameText.addModifyListener(new ModifyListener() {
 
-        Label lblNewLabel = new Label(grpEnterProcessName, SWT.NONE);
-        lblNewLabel.setText(Messages.InputProcessNamePage_processName);
+            public void modifyText(ModifyEvent e) {
+                updateProcessNameLabel();
+                getWizard().getContainer().updateButtons();
+            }
+        });
+        optionNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+        padLabel = new Label(another, SWT.NONE); 
+        
+        optionNameLabel.setParent(grpEnterProcessName);
+        optionNameText.setParent(grpEnterProcessName);
+        padLabel.setParent(grpEnterProcessName);
+        
+        
+        //bottom part
+        internalNameLabel = new Label(grpEnterProcessName, SWT.NONE);
+        internalNameLabel.setText(Messages.InputProcessNamePage_processName);
 
         processNameLabel = new Label(grpEnterProcessName, SWT.NONE);
         processNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-        new Label(grpEnterProcessName, SWT.NONE);
+        pad2Label = new Label(grpEnterProcessName, SWT.NONE);
+        
+        updateOptionPart();
+    }
+    
+    private void updateOptionPart() {
+        if(curProcessTypeComposite != null){
+            int type = curProcessTypeComposite.getCurrentProcessType();
+            if(type == NewProcessWizard.RUNNABLE_RUNNABLE || type == NewProcessWizard.RUNNABLE_STANDALONE || type == NewProcessWizard.SMARTVIEW_TYPE){
+                setOptionPartVisible(true);
+                optionNameText.setText(""); //$NON-NLS-1$
+            }
+            else {
+                setOptionPartVisible(false);
+            }
+            
+        }
     }
 
-    private IProcessTypeComposite getProcessTypeComposite(int processType) {
+    private boolean optionPartVisible = false;
+    private void setOptionPartVisible(boolean visible) {
+        optionPartVisible = visible;
+        if(visible) {
+            internalNameLabel.setParent(another);
+            processNameLabel.setParent(another);
+            pad2Label.setParent(another);
+            
+            optionNameLabel.setParent(grpEnterProcessName);
+            optionNameText.setParent(grpEnterProcessName);
+            padLabel.setParent(grpEnterProcessName);
+            
+            internalNameLabel.setParent(grpEnterProcessName);
+            processNameLabel.setParent(grpEnterProcessName);
+            pad2Label.setParent(grpEnterProcessName);
+            
+            grpEnterProcessName.layout();
+            container.layout();
+        } else {
+            optionNameLabel.setParent(another);
+            optionNameText.setParent(another);
+            padLabel.setParent(another);
+            grpEnterProcessName.layout();
+            container.layout();
+        }
+    }
+
+    private IProcessTypeComposite getProcessTypeComposite(int processType, int defaultProcessType) {
         if (typeComposite == null)
             return null;
         switch (processType) {
         case NewProcessWizard.BEFORE_TYPE:
             if (beforeProcessComposite == null) {
-                beforeProcessComposite = new BeforeProcessTypeComposite(typeComposite, selectionListener);
+                beforeProcessComposite = new BeforeProcessTypeComposite(typeComposite,defaultProcessType, selectionListener);
+            } else {
+                ((BeforeProcessTypeComposite)beforeProcessComposite).updateBtnState(defaultProcessType);
             }
+            
             return beforeProcessComposite;
         case NewProcessWizard.RUNNABLE_TYPE:
             if (runnableProcessComposite == null) {
-                runnableProcessComposite = new RunnableTypeComposite(typeComposite, selectionListener);
+                runnableProcessComposite = new RunnableTypeComposite(typeComposite,defaultProcessType, selectionListener);
+            } else {
+                ((RunnableTypeComposite)runnableProcessComposite).updateBtnState(defaultProcessType);
             }
             return runnableProcessComposite;
 
@@ -199,8 +282,9 @@ public class InputProcessNamePage extends WizardPage {
         return null;
     }
 
-    public void updateProcessTypeComposite(int type) {
-        IProcessTypeComposite newComposite = getProcessTypeComposite(type);
+    public void updateProcessTypeComposite(int type, int defaultProcessType) {
+        IProcessTypeComposite newComposite = getProcessTypeComposite(type, defaultProcessType);
+        
         if (newComposite != null && newComposite != curProcessTypeComposite) {
             if (curProcessTypeComposite instanceof Composite) {
                 GridData gridData = (GridData) ((Composite) curProcessTypeComposite).getLayoutData();
@@ -221,19 +305,41 @@ public class InputProcessNamePage extends WizardPage {
             typeComposite.layout();
             container.layout();
         }
+        
+        updateOptionPart();
+        if(optionPartVisible) {
+            setEntityLabelEnable();
+        }
         updateProcessNameLabel();
-
     }
 
+    private void setEntityLabelEnable() {
+        boolean enabled = true;
+        int type = curProcessTypeComposite.getCurrentProcessType();
+        if(type == NewProcessWizard.RUNNABLE_RUNNABLE) {
+            enabled = true;
+        } else if(type == NewProcessWizard.RUNNABLE_STANDALONE) {
+            enabled = false;
+            nameText.setText("");//$NON-NLS-1$
+        }
+        inputLabel.setEnabled(enabled);
+        nameText.setEnabled(enabled);
+        selectEntityBun.setEnabled(enabled);
+    }
+    
     private boolean validateProcessName() {
         if (processNameLabel == null)
             return false;
         String name = processNameLabel.getText().trim();
         String errorMsg = null;
         boolean result = false;
-        if (nameText.getText().trim().length() == 0) {
+        boolean nameEnabled = nameText.isEnabled();
+        if (nameEnabled && nameText.getText().trim().length() == 0) {
             errorMsg = Messages.Common_nameCanNotBeEmpty;
-        } else if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", name)) {//$NON-NLS-1$
+        } else if (!nameEnabled && optionPartVisible && optionNameText.getText().trim().length() == 0) {
+            errorMsg = Messages.Common_nameCanNotBeEmpty;
+        }
+        else if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", name)) {//$NON-NLS-1$
             errorMsg = Messages.Common_nameInvalid;
         } else if (RepositoryResourceUtil.isExistByName(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, name)) {
             errorMsg = Messages.Common_nameIsUsed;
@@ -243,6 +349,7 @@ public class InputProcessNamePage extends WizardPage {
             result = false;
         } else {
             setErrorMessage(null);
+            
             processName = name;
             processType = curProcessTypeComposite.getCurrentProcessType();
             processDesc = curProcessTypeComposite.getDesc();
@@ -255,7 +362,23 @@ public class InputProcessNamePage extends WizardPage {
         if (curProcessTypeComposite == null || selectEntityBun == null)
             return;
         String prefix = curProcessTypeComposite.getProcessPrefix();
-        prefix += nameText.getText();
+        int type = curProcessTypeComposite.getCurrentProcessType();
+        if(type == NewProcessWizard.RUNNABLE_STANDALONE) {
+            prefix += optionNameText.getText();
+        } else if (type == NewProcessWizard.RUNNABLE_RUNNABLE) {
+            prefix += nameText.getText();
+            if(!optionNameText.getText().isEmpty())
+                prefix += "#" + optionNameText.getText(); //$NON-NLS-1$
+        } else if (type == NewProcessWizard.SMARTVIEW_TYPE) {
+            prefix += nameText.getText();
+            if(!optionNameText.getText().isEmpty())
+                prefix += "#" + optionNameText.getText(); //$NON-NLS-1$
+        }
+        else {
+            prefix += nameText.getText();
+        }
+        
+        
         processNameLabel.setText(prefix);
         // update button
         selectEntityBun.setVisible(curProcessTypeComposite.needShowSelectEntityBun());

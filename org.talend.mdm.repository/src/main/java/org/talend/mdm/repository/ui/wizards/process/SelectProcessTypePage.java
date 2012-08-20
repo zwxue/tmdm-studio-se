@@ -32,20 +32,30 @@ public class SelectProcessTypePage extends WizardPage {
 
     public static final String PAGE_ID = "org.talend.mdm.repository.ui.wizards.process.SelectProcessTypePage"; //$NON-NLS-1$
 
+
+    private Button btnTypeBefore;
+
+    private Button btnTypeRunnable;
+
+    private Button btnSmartView;
+
+    private Button btnTypeOther;
+    
     private Text descriptionTxt;
 
     private int currentSelectedType = NewProcessWizard.BEFORE_TYPE;
+
+    private int type;
 
 
     /**
      * Create the wizard.
      * 
-     * @param site
-     * 
-     * @param rType
+     * @param type
      */
-    public SelectProcessTypePage() {
+    public SelectProcessTypePage(int type) {
         super(PAGE_ID);
+        this.type = type;
         setTitle(Messages.NewProcessWizard_title);
         setDescription(Messages.SelectProcessTypePage_description);
     }
@@ -66,7 +76,7 @@ public class SelectProcessTypePage extends WizardPage {
         typeGroup.setLayout(new GridLayout(1, false));
         typeGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
-        Button btnTypeBefore = new Button(typeGroup, SWT.RADIO);
+        btnTypeBefore = new Button(typeGroup, SWT.RADIO);
         btnTypeBefore.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -75,9 +85,9 @@ public class SelectProcessTypePage extends WizardPage {
                 updateAll();
             }
         });
-        btnTypeBefore.setSelection(true);
+//        btnTypeBefore.setSelection(true);
         btnTypeBefore.setText(Messages.SelectProcessTypePage_createBeforeProcess);
-        Button btnTypeRunnable = new Button(typeGroup, SWT.RADIO);
+        btnTypeRunnable = new Button(typeGroup, SWT.RADIO);
         btnTypeRunnable.setText(Messages.SelectProcessTypePage_createRunnableProcess);
         btnTypeRunnable.addSelectionListener(new SelectionAdapter() {
 
@@ -87,7 +97,7 @@ public class SelectProcessTypePage extends WizardPage {
                 updateAll();
             }
         });
-        Button btnSmartView = new Button(typeGroup, SWT.RADIO);
+        btnSmartView = new Button(typeGroup, SWT.RADIO);
         btnSmartView.setText(Messages.SelectProcessTypePage_createSmartViewProcess);
         btnSmartView.addSelectionListener(new SelectionAdapter() {
 
@@ -98,7 +108,7 @@ public class SelectProcessTypePage extends WizardPage {
             }
         });
 
-        Button btnTypeOther = new Button(typeGroup, SWT.RADIO);
+        btnTypeOther = new Button(typeGroup, SWT.RADIO);
         btnTypeOther.setText(Messages.SelectProcessTypePage_createOtherProcess);
         btnTypeOther.addSelectionListener(new SelectionAdapter() {
 
@@ -119,8 +129,55 @@ public class SelectProcessTypePage extends WizardPage {
 
         descriptionTxt = new Text(descriptionGroup, SWT.READ_ONLY | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
 
+        //
+        updateBtnState();
+        
         // init
         updateAll();
+    }
+
+    private void updateBtnState() {
+        switch (type) {
+        case 1:
+            defaultProcessType = NewProcessWizard.BEFORE_SAVING;
+            setBtnEnabled(btnTypeBefore);
+            break;
+        case 2:
+            defaultProcessType = NewProcessWizard.BEFORE_DELETING;
+            setBtnEnabled(btnTypeBefore);
+            break;
+        case 3:
+            defaultProcessType = NewProcessWizard.RUNNABLE_RUNNABLE;
+            setBtnEnabled(btnTypeRunnable);
+            currentSelectedType = NewProcessWizard.RUNNABLE_TYPE;
+            break;
+        case 4:
+            defaultProcessType = NewProcessWizard.RUNNABLE_STANDALONE;
+            setBtnEnabled(btnTypeRunnable);
+            currentSelectedType = NewProcessWizard.RUNNABLE_TYPE;
+            break;
+        case 5:
+            defaultProcessType = NewProcessWizard.SMARTVIEW_TYPE;
+            setBtnEnabled(btnSmartView);
+            currentSelectedType = NewProcessWizard.SMARTVIEW_TYPE;
+            break;
+        case 6:
+            defaultProcessType = NewProcessWizard.OTHER_TYPE;
+            setBtnEnabled(btnTypeOther);
+            currentSelectedType = NewProcessWizard.OTHER_TYPE;
+            break;
+        default:
+            break;
+        }
+    }
+
+    private void setBtnEnabled(Button btn) {
+        btnTypeBefore.setEnabled(false);
+        btnTypeRunnable.setEnabled(false);
+        btnSmartView.setEnabled(false);
+        btnTypeOther.setEnabled(false);
+        
+        btn.setEnabled(true);
     }
 
     private String inputName = null;
@@ -134,9 +191,10 @@ public class SelectProcessTypePage extends WizardPage {
         updateProcessNamePage();
     }
 
+    private int defaultProcessType = 0;
     private void updateProcessNamePage() {
         InputProcessNamePage page = (InputProcessNamePage) getWizard().getPage(InputProcessNamePage.PAGE_ID);
-        page.updateProcessTypeComposite(currentSelectedType);
+        page.updateProcessTypeComposite(currentSelectedType, defaultProcessType);
     }
 
     private void updateProcessTypeDescription() {

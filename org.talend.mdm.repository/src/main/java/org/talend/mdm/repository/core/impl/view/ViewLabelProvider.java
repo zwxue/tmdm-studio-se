@@ -21,10 +21,12 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.view;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.graphics.Image;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -64,10 +66,10 @@ public class ViewLabelProvider extends AbstractLabelProvider {
     
     @Override
     protected String getConainerItemText(Item item) {
-        if(item.getState().getPath().equals("/"+IViewNodeConstDef.PATH_SEARCHFILTER))//$NON-NLS-1$
-            return "Search Filter";
-        else if(item.getState().getPath().equals("/"+IViewNodeConstDef.PATH_WEBFILTER))//$NON-NLS-1$
-            return "Web Filter";
+        if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_SEARCHFILTER))
+            return Messages.ViewLabelProvider_WebfilterNodeName;
+        else if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER))
+            return Messages.ViewLabelProvider_SearchfilterNodeName;
         
         return super.getConainerItemText(item);
     }
@@ -87,7 +89,7 @@ public class ViewLabelProvider extends AbstractLabelProvider {
     
     private String filterName(String name) {
         String prefix = IViewNodeConstDef.ViewPrefix;
-        if(name != null && !name.isEmpty() && name.startsWith(prefix)) {
+        if(name != null && !name.isEmpty() && name.toLowerCase().startsWith(prefix)) {
             name = name.substring(prefix.length());
             if(name.indexOf("#") != -1)//$NON-NLS-1$
                 name = name.replace("#", "(") + ")";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$

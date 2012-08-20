@@ -35,18 +35,35 @@ public class BeforeProcessTypeComposite extends AbstractProcessTypeComposite {
      * 
      * @param parent
      */
-    public BeforeProcessTypeComposite(Composite parent, SelectionListener selectionListener) {
+    public BeforeProcessTypeComposite(Composite parent, int defaultProcessType, SelectionListener selectionListener) {
         super(parent, selectionListener);
         setLayout(new GridLayout(1, false));
 
         beforeSaveBun = new Button(this, SWT.RADIO);
         beforeSaveBun.addSelectionListener(selectionListener);
-        beforeSaveBun.setSelection(true);
         beforeSaveBun.setText(Messages.BeforeProcessTypeComposite_createBeforeSavingProcess);
 
         beforeDeleteBun = new Button(this, SWT.RADIO);
         beforeDeleteBun.setText(Messages.BeforeProcessTypeComposite_createBeforeDeletingProcess);
         beforeDeleteBun.addSelectionListener(selectionListener);
+        
+        updateBtnState(defaultProcessType);
+    }
+
+    public void updateBtnState(int defaultProcessType) {
+        if(defaultProcessType == NewProcessWizard.BEFORE_SAVING) {
+            beforeSaveBun.setSelection(true);
+            beforeDeleteBun.setSelection(false);
+            beforeDeleteBun.setEnabled(false);
+        }
+        else if(defaultProcessType == NewProcessWizard.BEFORE_DELETING) {
+            beforeDeleteBun.setSelection(true);
+            beforeSaveBun.setSelection(false);
+            beforeSaveBun.setEnabled(false);
+        } else {
+            beforeDeleteBun.setSelection(false);
+            beforeSaveBun.setSelection(true);
+        }
     }
 
     public int getCurrentProcessType() {

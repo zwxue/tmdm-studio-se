@@ -462,6 +462,20 @@ public class Messages extends NLS {
 
     public static String TransformerInteractiveHandler_label;
 
+    public static String TransformerV2XX_BeforeDeleting;
+
+    public static String TransformerV2XX_BeforeSaving;
+
+    public static String TransformerV2XX_EntityAction;
+
+    public static String TransformerV2XX_Other;
+
+    public static String TransformerV2XX_ProcessCategoryName;
+
+    public static String TransformerV2XX_SmartView;
+
+    public static String TransformerV2XX_WelcomeAction;
+
     public static String AutoDeploy_saving_text;
 
     public static String BatchDeployJobCommand_createSuccessfully;
@@ -552,6 +566,8 @@ public class Messages extends NLS {
     public static String InputProcessNamePage_enterName;
 
     public static String InputProcessNamePage_inputName;
+
+    public static String InputProcessNamePage_OptionalName;
 
     public static String InputProcessNamePage_processName;
 
@@ -715,6 +731,11 @@ public class Messages extends NLS {
 
     public static String ViewInputDialog_lblNewLabel_text2;
     
+
+    public static String ViewLabelProvider_SearchfilterNodeName;
+
+    public static String ViewLabelProvider_WebfilterNodeName;
+
 
     // //////////////////////////////////////////////////////////////////////////
     //

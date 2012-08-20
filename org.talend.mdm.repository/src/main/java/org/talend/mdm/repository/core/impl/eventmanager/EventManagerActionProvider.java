@@ -45,6 +45,7 @@ public class EventManagerActionProvider extends RepositoryNodeActionProviderAdap
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
+        actions.remove(createFolderAction);
         actions.add(deployAllAction);
         return actions;
     }

@@ -142,33 +142,47 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     
     private void filterImportedItems(List<ItemRecord> toImportItemRecords) {
         String transformerStandalonePrefix = ITransformerV2NodeConsDef.Prefix_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
-        
+        String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.Prefix_STANDLONE;
         for (Iterator<ItemRecord> it = toImportItemRecords.iterator(); it.hasNext();) {
             Item item = it.next().getProperty().getItem();
             if (item instanceof WSViewItem) {
-                if (item.getProperty().getLabel().startsWith(IViewNodeConstDef.ViewPrefix))
-                    item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + item.getState().getPath());
+                if (item.getProperty().getLabel().toLowerCase().startsWith(IViewNodeConstDef.ViewPrefix)) {
+                    if(!item.getState().getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER))
+                        item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + item.getState().getPath());
+                }
                 else {
-                    item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + item.getState().getPath());
+                    if(!item.getState().getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER))
+                        item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + item.getState().getPath());
                 }
             }
             
             if(item instanceof WSTransformerV2Item) {
-                if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE))
-                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + item.getState().getPath());
-                else if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)) {
-                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + item.getState().getPath());
-                }
-                else if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)) {
-                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION + item.getState().getPath());
-                }
-                else if (item.getProperty().getLabel().startsWith(transformerStandalonePrefix)) {
-                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + item.getState().getPath());
-                }
-                else if (item.getProperty().getLabel().startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)) {
-                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW + item.getState().getPath());
+                String lowerCaseItemLabel = item.getProperty().getLabel().toLowerCase();
+                
+                if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE)) {
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE))
+                        item.getState().setPath(
+                                IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + item.getState().getPath());
+                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)) {
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL))
+                        item.getState().setPath(
+                                IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + item.getState().getPath());
+                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)) {
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION))
+                        item.getState().setPath(
+                                IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION + item.getState().getPath());
+                } else if (lowerCaseItemLabel.startsWith(transformerStandalonePrefix) || 
+                        lowerCaseItemLabel.startsWith(transformerStandalonePrefix2)) {
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION))
+                        item.getState().setPath(
+                                IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + item.getState().getPath());
+                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)) {
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
+                        item.getState().setPath(
+                                IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW + item.getState().getPath());
                 } else {
-                    item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER + item.getState().getPath());
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER))
+                        item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER + item.getState().getPath());
                 }
             }
         }

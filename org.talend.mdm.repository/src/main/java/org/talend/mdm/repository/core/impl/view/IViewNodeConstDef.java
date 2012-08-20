@@ -29,6 +29,6 @@ public interface IViewNodeConstDef {
     
     public static final String ViewPrefix = "browse_items_";//$NON-NLS-1$
     
-    public static final String PATH_WEBFILTER = "web";
-    public static final String PATH_SEARCHFILTER = "search";
+    public static final String PATH_WEBFILTER = "web";//$NON-NLS-1$
+    public static final String PATH_SEARCHFILTER = "search";//$NON-NLS-1$
 }

@@ -24,6 +24,7 @@ package org.talend.mdm.repository.ui.actions.process;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -31,6 +32,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -65,6 +67,9 @@ public class NewProcessAction extends AbstractSimpleAddAction {
     protected void doRun() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);
+        
+        int type = getType();
+        
         if (selectObj instanceof IRepositoryViewObject) {
             Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
             if (pItem instanceof ContainerItem) {
@@ -73,7 +78,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         }
         IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
         // wizard
-        NewProcessWizard newProcessWizard = new NewProcessWizard(site);
+        NewProcessWizard newProcessWizard = new NewProcessWizard(site, type);
         WizardDialog wizardDialog = new WizardDialog(getShell(), newProcessWizard);
         wizardDialog.setPageSize(500, 240);
         if (wizardDialog.open() == IDialogConstants.OK_ID) {
@@ -85,6 +90,32 @@ public class NewProcessAction extends AbstractSimpleAddAction {
             openEditor(item);
         }
        
+    }
+    
+    private int getType() {
+        int type = 0;
+
+        IRepositoryViewObject repositoryViewObject = (IRepositoryViewObject) selectObj;
+
+        ContainerItem containerItem = (ContainerItem) repositoryViewObject.getProperty().getItem();
+        String path = containerItem.getState().getPath();
+        if (path.isEmpty()) {
+            type = 0;
+        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
+            type = 1;
+        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
+            type = 2;
+        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
+            type = 3;
+        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
+            type = 4;
+        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
+            type = 5;
+        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_OTHER)) {
+            type = 6;
+        }
+
+        return type;
     }
 
     private WSTransformerV2E newProcess(String key) {
@@ -158,9 +189,35 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         item.setWsTransformerV2(process);
 
         if (parentItem != null) {
-            item.getState().setPath(parentItem.getState().getPath());
+            String path = rebuildItemPath(process.getName());
+            
+            item.getState().setPath(path);
             RepositoryResourceUtil.createItem(item, process.getName());
         }
         return item;
+    }
+
+    private String rebuildItemPath(String processName) {
+        String path = parentItem.getState().getPath();
+        if(path.isEmpty()) {
+            if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE))
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;                
+            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)){
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;                
+            }
+            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)){
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;                
+            }
+            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_STANDLONE)){
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;                
+            }
+            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)){
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;                
+            }
+            else {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;                
+            }
+        }
+        return path;
     }
 }

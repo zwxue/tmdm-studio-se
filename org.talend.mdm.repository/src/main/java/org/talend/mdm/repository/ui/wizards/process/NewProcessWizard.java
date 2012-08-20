@@ -32,6 +32,9 @@ import com.amalto.workbench.utils.Util;
  */
 public class NewProcessWizard extends Wizard {
 
+    //
+    public static final int ANY_TYPE = 0;
+    
     // BEFORE
     public static final int BEFORE_TYPE = 1;
 
@@ -65,18 +68,22 @@ public class NewProcessWizard extends Wizard {
     private WSTransformerV2E transformer;
 
     List<IMDMJobTemplate> jobTemplates;
+    
+    private int type;//use it to decide which type of process can be create,if 0,all type is permitted
+    
     public WSTransformerV2E getNewProcess() {
         return this.transformer;
     }
 
-    public NewProcessWizard(IWorkbenchPartSite site) {
+    public NewProcessWizard(IWorkbenchPartSite site, int type) {
         this.site = site;
+        this.type = type;
         setWindowTitle(Messages.NewProcessWizard_title);
     }
 
     @Override
     public void addPages() {
-        selectProcessTypePage = new SelectProcessTypePage();
+        selectProcessTypePage = new SelectProcessTypePage(type);
         inputProcessNamePage = new InputProcessNamePage(site);
         configRedirectURLPage = new ConfigRedirectURLPage();
         configReturnMessagePage = new ConfigReturnMessagePage();
