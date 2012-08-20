@@ -61,7 +61,7 @@ public class ProcessMigrateObjectPathRule extends AbstractMigrateObjectPathRule 
                     return ITransformerV2NodeConsDef.PATH_SMARTVIEW;
                 }
                 else {
-                    return ITransformerV2NodeConsDef.PATH_BEFOREDEL;
+                    return ITransformerV2NodeConsDef.PATH_OTHER;
                 }
             }
         }
