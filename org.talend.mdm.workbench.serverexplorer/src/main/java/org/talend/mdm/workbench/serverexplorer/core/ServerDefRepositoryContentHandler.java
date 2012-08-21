@@ -12,24 +12,19 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.core;
 
-import java.util.Collection;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.AbstractRepositoryContentHandler;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.core.model.repository.IRepositoryContentHandler;
-import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
-import org.talend.repository.model.RepositoryNode;
 
-public class ServerDefRepositoryContentHandler implements IRepositoryContentHandler {
+public class ServerDefRepositoryContentHandler extends AbstractRepositoryContentHandler {
 
     private XmiResourceManager xmiResourceManager = new XmiResourceManager();
 
@@ -65,9 +60,11 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
         return null;
     }
 
+    @Override
     public IImage getIcon(ERepositoryObjectType type) {
-        if (type == ServerDefService.REPOSITORY_TYPE_SERVER_DEF)
+        if (type == ServerDefService.REPOSITORY_TYPE_SERVER_DEF) {
             return ServerDefImage.BEAN_ICON;
+        }
         return null;
     }
 
@@ -78,33 +75,8 @@ public class ServerDefRepositoryContentHandler implements IRepositoryContentHand
         return null;
     }
 
-    public boolean isProcess(Item item) {
-        return false;
-    }
-
     public boolean isRepObjType(ERepositoryObjectType type) {
         return type == ServerDefService.REPOSITORY_TYPE_SERVER_DEF;
     }
 
-    public ERepositoryObjectType getProcessType() {
-        return null;
-    }
-
-    public ERepositoryObjectType getCodeType() {
-        return null;
-    }
-
-    public void addNode(ERepositoryObjectType type, RepositoryNode recBinNode, IRepositoryViewObject repositoryObject,
-            RepositoryNode node) {
-        // TODO Auto-generated method stub
-    }
-
-    public void addContents(Collection<EObject> collection, Resource resource) {
-        // TODO Auto-generated method stub
-    }
-
-    public IImage getIcon(Item item) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }
