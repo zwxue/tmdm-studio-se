@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mdmserverobject:WSRoutingRuleE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_ifub4KsQEeG4CbSrdZtHRA" name="GoogleMap" description="Complete with Google Map" synchronous="true" concept="Update" serviceJNDI="amalto/local/service/callJob" parameters="&lt;configuration>&#xA;  &lt;url>ltj://GoogleMap/0.1&lt;/url>&#xA;  &lt;contextParam>&#xA;    &lt;name>xmlInput&lt;/name>&#xA;    &lt;value>{exchange_data}&lt;/value>&#xA;  &lt;/contextParam>&#xA;&lt;/configuration>" condition="Store And DM And (CR Or (UP And DoNotLoop And Address))">
-  <lastServerDef xmi:id="_ifub4asQEeG4CbSrdZtHRA" name="My Server" label="" passwd="dGFsZW5k" url="http://localhost:8180/talend/TalendPort" user="admin"/>
   <wsRoutingRuleExpressions xmi:id="_ifub4qsQEeG4CbSrdZtHRA" name="Store" xpath="Update/Concept" value="Store">
     <wsOperator xmi:id="_ifub46sQEeG4CbSrdZtHRA" value="EQUALS"/>
   </wsRoutingRuleExpressions>
