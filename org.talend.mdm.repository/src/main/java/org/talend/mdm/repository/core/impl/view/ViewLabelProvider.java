@@ -98,5 +98,14 @@ public class ViewLabelProvider extends AbstractLabelProvider {
         return name;
     }
 
+    @Override
+    protected boolean isSystemServerObjectItem(Object element) {
+        Item item = getItem(element);
+        String path = item.getState().getPath();
+        if(path.equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER) || path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER))
+            return true;
+        
+        return false;
+    }
 
 }

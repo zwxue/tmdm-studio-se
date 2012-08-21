@@ -565,6 +565,8 @@ public class Messages extends NLS {
 
     public static String InputProcessNamePage_enterName;
 
+    public static String InputProcessNamePage_entityName;
+    
     public static String InputProcessNamePage_inputName;
 
     public static String InputProcessNamePage_OptionalName;

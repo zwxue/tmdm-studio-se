@@ -144,8 +144,9 @@ public class InputProcessNamePage extends WizardPage {
         grpEnterProcessName.setText(Messages.InputProcessNamePage_enterName);
         grpEnterProcessName.setLayout(new GridLayout(3, false));
 
-        inputLabel = new Label(grpEnterProcessName, SWT.NONE);
-        inputLabel.setText(Messages.InputProcessNamePage_inputName);
+        inputLabel = new Label(grpEnterProcessName, SWT.NONE|SWT.WRAP);
+        inputLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+        inputLabel.setText(Messages.InputProcessNamePage_entityName);
 
         nameText = new Text(grpEnterProcessName, SWT.BORDER);
         nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -217,6 +218,12 @@ public class InputProcessNamePage extends WizardPage {
                 setOptionPartVisible(false);
             }
             
+            
+            if(type == NewProcessWizard.OTHER_TYPE) {
+                inputLabel.setText(Messages.InputProcessNamePage_inputName);
+            } else {
+                inputLabel.setText(Messages.InputProcessNamePage_entityName);
+            }
         }
     }
 

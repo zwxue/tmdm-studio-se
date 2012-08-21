@@ -4,14 +4,13 @@ import java.text.Collator;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ViewerSorter;
-import org.talend.core.model.properties.FolderItem;
-import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.ui.navigator.sorter.SortOrderFactory;
 
 public class MDMRepositoryViewerSorter extends ViewerSorter {
 
@@ -41,8 +40,7 @@ public class MDMRepositoryViewerSorter extends ViewerSorter {
                         return 1;
                     }
                     if (item instanceof ContainerItem) {
-                        int typeValue = ((FolderItem) item).getType().getValue();
-                        return (typeValue == FolderType.STABLE_SYSTEM_FOLDER) ? -2 : -1;
+                        return SortOrderFactory.getOrder((ContainerItem)item);
                     }
                 }
             } catch (Exception e) {

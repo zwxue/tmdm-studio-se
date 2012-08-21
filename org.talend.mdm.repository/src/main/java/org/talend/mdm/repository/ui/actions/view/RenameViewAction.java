@@ -82,8 +82,9 @@ public class RenameViewAction extends AbstractRepositoryAction {
                     int returnCode = dialog.open();
                     if (returnCode == IDialogConstants.OK_ID) {
                         String newName = dialog.getValue();
-//                        if(type == IServerObjectRepositoryType.TYPE_WEBFILTER) 
-                        newName = viewPrefix + newName;
+                        
+                        if(oldName.toLowerCase().startsWith(viewPrefix))
+                            newName = oldName.substring(0, viewPrefix.length()) + newName;
                         
                         if (newName != null && factory.isEditableAndLockIfPossible(item)) {
                             serverObject.setName(newName);
@@ -116,7 +117,7 @@ public class RenameViewAction extends AbstractRepositoryAction {
     
     private RenameViewDialog getRenameDialog(String oldName) {
         RenameViewDialog dialog = null;
-        if(oldName.startsWith(viewPrefix)) {
+        if(oldName.toLowerCase().startsWith(viewPrefix)) {
             dialog = new RenameViewDialog(getShell(), Messages.RenameObjectAction_rename, Messages.Common_rename, oldName.substring(viewPrefix.length()), getInputValidator() , site);
         } else {
             dialog = new RenameViewDialog2(getShell(), Messages.RenameObjectAction_rename, Messages.Common_rename, oldName,getInputValidator(), site);
