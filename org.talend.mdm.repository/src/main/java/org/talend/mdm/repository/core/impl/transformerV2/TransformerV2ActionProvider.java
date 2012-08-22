@@ -60,6 +60,9 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
         if (!canDelete(viewObj)) {
             actions.remove(removeFromRepositoryAction);
         }
+        if(isProcessNode(viewObj)) {
+            actions.remove(createFolderAction);
+        }
 
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
             actions.add(addAction);
@@ -74,6 +77,12 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
         }
         actions.add(deployAllAction);
         return actions;
+    }
+
+    private boolean isProcessNode(IRepositoryViewObject viewObj) {
+        String path = viewObj.getProperty().getItem().getState().getPath();
+        
+        return path.isEmpty();
     }
 
     private boolean canDelete(IRepositoryViewObject viewObj) {

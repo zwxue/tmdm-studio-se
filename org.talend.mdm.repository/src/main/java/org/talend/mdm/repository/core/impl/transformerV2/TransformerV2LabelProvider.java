@@ -27,6 +27,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -124,15 +125,17 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
     @Override
     protected boolean isSystemServerObjectItem(Object element) {
         Item item = getItem(element);
-        String path = item.getState().getPath();
-        if (path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE)
-                || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)
-                || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)
-                || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)
-                || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)
-                || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER))
-            
-            return true;
+        if(item instanceof ContainerItem) {
+            String path = item.getState().getPath();
+            if (path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE)
+                    || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)
+                    || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)
+                    || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)
+                    || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)
+                    || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER))
+                
+                return true;
+        }
 
         return false;
     }

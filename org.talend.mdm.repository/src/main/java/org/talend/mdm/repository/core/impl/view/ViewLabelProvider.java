@@ -27,6 +27,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -101,9 +102,12 @@ public class ViewLabelProvider extends AbstractLabelProvider {
     @Override
     protected boolean isSystemServerObjectItem(Object element) {
         Item item = getItem(element);
-        String path = item.getState().getPath();
-        if(path.equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER) || path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER))
-            return true;
+        if(item instanceof ContainerItem) {
+            String path = item.getState().getPath();
+            if (path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)
+                    || path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER))
+                return true;
+        }
         
         return false;
     }
