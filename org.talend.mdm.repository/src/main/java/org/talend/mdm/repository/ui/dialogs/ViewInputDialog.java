@@ -99,7 +99,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     public ViewInputDialog(IWorkbenchPartSite site, TreeParent treeParent, Shell parentShell, String dialogTitle,
             String dialogMessage, IInputValidator validator, boolean isTransfor, int type) {
         super(parentShell);
-        setShellStyle(getShellStyle() | SWT.WRAP);
+        setShellStyle(getShellStyle() | SWT.WRAP | SWT.RESIZE);
         this.site = site;
         this.title = dialogTitle;
         this.treeParent = treeParent;
@@ -172,14 +172,14 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         searchFilterRadioBtn.setText(Messages.ViewInputDialog_searchFilterRadioBtnText);
         
         lblNewLabel = new Label(composite, SWT.WRAP);
-        GridData gd_lblNewLabel = new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1);
+        GridData gd_lblNewLabel = new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1);
         gd_lblNewLabel.widthHint = 423;
         lblNewLabel.setLayoutData(gd_lblNewLabel);
         
         final Composite botComposite = new Composite(composite, SWT.NONE);
         final StackLayout stackLayout = new StackLayout();
         botComposite.setLayout(stackLayout);
-        botComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        botComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3,1));
         
         bottom1 = getBottom1(botComposite);
         bottom2 = getBottom2(botComposite);
@@ -240,8 +240,8 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         label2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         label2.setText(Messages.ViewInputDialog_Entity);
         entityText = new Text(panel1, getInputTextStyle() | SWT.WRAP);
-        GridData layoutData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-        layoutData.widthHint = 350;
+        GridData layoutData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+//        layoutData.widthHint = 350;
         entityText.setLayoutData(layoutData);
 
 
@@ -307,7 +307,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         label2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         label2.setText(Messages.ViewInputDialog_Name);
         filterText2 = new Text(panel2, getInputTextStyle() | SWT.WRAP);
-        GridData gd_text = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+        GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
         gd_text.widthHint = 420;
         filterText2.setLayoutData(gd_text);
         new Label(panel2, SWT.NONE);
