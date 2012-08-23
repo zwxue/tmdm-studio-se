@@ -148,7 +148,11 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         try {
             XSDParticle particle = createParticle();
             XSDElementDeclaration declaration = (XSDElementDeclaration) particle.getContent();
-            transformToComplexType(declaration);
+            boolean flag = transformToComplexType(declaration);
+            if(!flag) {
+                modelGroup.getContents().remove(particle);
+                return Status.CANCEL_STATUS;
+            }
             
             page.refresh();
             page.getTreeViewer().setSelection(new StructuredSelection(particle), true);
@@ -275,7 +279,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         return infor;
     }
 
-    private void transformToComplexType(XSDElementDeclaration decl) {
+    private boolean transformToComplexType(XSDElementDeclaration decl) {
         List<XSDComplexTypeDefinition> types = Util.getComplexTypes(schema);
 
         XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
@@ -324,7 +328,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 alreadyExists = false;
         }
 
-        if (parent != null && complexType != null && complexType.getSchema() != null) {
+        if (complexType != null && complexType.getSchema() != null) {
 
             XSDParticleImpl partCnt = (XSDParticleImpl) complexType.getContentType();
             XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
@@ -349,6 +353,11 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             }
 
             if (superType != null) {
+                
+                boolean status = updateCompositorType(superType, mdlGrp);
+                if(!status)
+                    return false;
+                
                 complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                 complexType.setBaseTypeDefinition(superType);
             }
@@ -478,6 +487,28 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
         decl.updateElement();
         schema.update();
+        
+        return true;
     }
 
+    private boolean updateCompositorType(XSDTypeDefinition superType, XSDModelGroup currentGroup) {
+        XSDParticle superTypeParticle = superType.getComplexType();
+        XSDTerm term = superTypeParticle.getTerm();
+        if (term instanceof XSDModelGroup) {
+            XSDModelGroup group = (XSDModelGroup) term;
+            if (group.getCompositor() == XSDCompositor.ALL_LITERAL || currentGroup.getCompositor() == XSDCompositor.ALL_LITERAL) {
+                if(MessageDialog.openConfirm(null, Messages._ChangeToSequenceType,
+                        Messages._ComplexTypeToSequence)) {
+                    group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                    superTypeParticle.updateElement();
+                    currentGroup.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                    currentGroup.updateElement();
+                    return true;
+                }
+                return false;
+
+            }
+        }
+        return true;
+    }
 }

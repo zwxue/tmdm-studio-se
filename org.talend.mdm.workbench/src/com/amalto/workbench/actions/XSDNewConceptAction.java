@@ -131,7 +131,6 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             // schema.getElementDeclarations().add(decl);
             decl.updateElement();
 
-            page.refresh();
             // page.markDirty();
             getOperationHistory();
             UndoAction changeAction = null;
@@ -143,7 +142,12 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             }
             dlg.close();
 
-            changeAction.execute();
+            IStatus status = changeAction.execute();
+            if (status == Status.CANCEL_STATUS) {
+                schema.getContents().remove(decl);
+            }
+            
+            page.refresh();
         }
     }
 }

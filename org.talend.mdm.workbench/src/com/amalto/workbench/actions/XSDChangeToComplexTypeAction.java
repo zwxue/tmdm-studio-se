@@ -39,6 +39,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
+import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
@@ -47,7 +48,6 @@ import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
-import com.amalto.workbench.dialogs.ComplexTypeInputDialogR;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
@@ -256,6 +256,10 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
  
                 
                 if (superType != null) {
+                    boolean status = updateCompositorType(superType, mdlGrp);
+                    if(!status)
+                        return Status.CANCEL_STATUS;
+                    
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                     complexType.setBaseTypeDefinition(superType);
                 }
@@ -397,6 +401,27 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
         }
 
         return Status.OK_STATUS;
+    }
+    
+    private boolean updateCompositorType(XSDTypeDefinition superType, XSDModelGroup currentGroup) {
+        XSDParticle superTypeParticle = superType.getComplexType();
+        XSDTerm term = superTypeParticle.getTerm();
+        if (term instanceof XSDModelGroup) {
+            XSDModelGroup group = (XSDModelGroup) term;
+            if (group.getCompositor() == XSDCompositor.ALL_LITERAL || currentGroup.getCompositor() == XSDCompositor.ALL_LITERAL) {
+                if(MessageDialog.openConfirm(null, Messages._ChangeToSequenceType,
+                        Messages._ComplexTypeToSequence)) {
+                    group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                    superTypeParticle.updateElement();
+                    currentGroup.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                    currentGroup.updateElement();
+                    return true;
+                }
+                return false;
+
+            }
+        }
+        return true;
     }
 
     private void checkConcept() {
