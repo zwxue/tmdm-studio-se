@@ -47,7 +47,7 @@ public class DefaultUpdateObjectPathMigrationTask extends AbstractProjectMigrati
                     ERepositoryObjectType.getFolderName(migrateObjectPathHandler.getRule().getRepositoryObjectType()), true);
             if (folder != null)
                 migrateObjectPathHandler.migrate(folder);
-            return ExecutionResult.SUCCESS_WITH_ALERT;
+            return ExecutionResult.SUCCESS_NO_ALERT;
         } catch (PersistenceException e) {
             ExceptionHandler.process(e);
             return ExecutionResult.FAILURE;

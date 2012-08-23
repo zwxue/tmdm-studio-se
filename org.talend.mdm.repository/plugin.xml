@@ -639,6 +639,13 @@
       </projecttask>
       
    </extension>
+   <extension
+         point="org.talend.core.repository.login.task">
+      <loginTask
+            class="org.talend.mdm.repository.core.migrate.AssertFolderLogonTask"
+            priority="normal">
+      </loginTask>
+   </extension>
       
    
 </plugin>

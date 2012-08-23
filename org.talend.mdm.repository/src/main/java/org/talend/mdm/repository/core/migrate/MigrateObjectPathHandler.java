@@ -60,7 +60,7 @@ public class MigrateObjectPathHandler {
     private void removeFolder(List<IResource> toMoveResources) {
         for (ListIterator<IResource> il = toMoveResources.listIterator(toMoveResources.size()); il.hasPrevious();) {
             IResource resource = il.previous();
-            if (resource instanceof IFolder) {
+            if (resource instanceof IFolder && !isSVNFolder(resource)) {
                 IFolder folder = (IFolder) resource;
                 try {
                     if (folder != null && folder.exists()) {
@@ -161,7 +161,7 @@ public class MigrateObjectPathHandler {
             try {
                 for (IResource resource : ((IFolder) parentRes).members()) {
                     if (resource instanceof IFolder) {
-                        if (!rule.isToMigrateFolder(parentRes, resource)) {
+                        if (!rule.isToMigrateFolder(parentRes, resource) && !isSVNFolder(resource)) {
                             handleResourceObject(resource, toMoveResourceObjects);
                         }
                     } else {
@@ -175,7 +175,14 @@ public class MigrateObjectPathHandler {
 
     }
 
-    private void assertFolder(IFolder parentFolder) {
+    private boolean isSVNFolder(IResource resource) {
+        if (resource instanceof IFolder) {
+            return resource.getName().equalsIgnoreCase(".svn"); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    public void assertFolder(IFolder parentFolder) {
         for (String name : rule.getAllNewFolderNames()) {
             IFolder folder = parentFolder.getFolder(name);
             if (!folder.exists()) {
