@@ -14,6 +14,10 @@ package routines;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -273,6 +277,92 @@ public class MDM {
         return "<report><message type=\"" + type + "\">" + msg + "</message></report>"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     }
     
+    /**
+     * Add or update an ISO variant to the multi-lingual text value
+     * 
+     * 
+     * {talendTypes} String
+     * 
+     * {Category} MDM
+     * 
+     * {param} string(iso) iso: iso
+     * 
+     * {param} string(value) value: value
+     * 
+     * {param} string(rawValue) rawValue: rawValue
+     * 
+     * {example} setLanguageVariant("EN","abc","[EN:ab][FR:ab_fr]") # return [EN:abc][FR:ab_fr]
+     */
+    public static String setLanguageVariant(String iso, String value, String rawValue) {
+
+        if (iso == null || value == null)
+            throw new IllegalArgumentException();
+        
+        iso=iso.toUpperCase();
+
+        Map<String, String> isoValues = new LinkedHashMap<String, String>();
+
+        if (rawValue == null || rawValue.trim().length() == 0) {
+            isoValues.put(iso, value);
+        } else {
+
+            Pattern p = Pattern.compile("\\[(\\w+)\\:([^\\[\\]\\:]*?)\\]{1,}");//$NON-NLS-1$
+            Matcher m = p.matcher(rawValue);
+            while (m.find()) {
+                isoValues.put(m.group(1).toUpperCase(), m.group(2));
+            }
+
+            if (isoValues.size() == 0)
+                throw new IllegalArgumentException();
+
+            isoValues.put(iso, value);
+        }
+
+        StringBuilder result = new StringBuilder();
+        if (isoValues.size() > 0) {
+            for (Iterator<String> iterator = isoValues.keySet().iterator(); iterator.hasNext();) {
+                String isoKey = (String) iterator.next();
+                String isoValue = isoValues.get(isoKey);
+                result.append("[").append(isoKey).append(":").append(isoValue).append("]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            }
+        }
+
+        return result.toString();
+
+    }
+
+    /**
+     * Give an ISO value from a multi-lingual text value
+     * 
+     * 
+     * {talendTypes} String
+     * 
+     * {Category} MDM
+     * 
+     * {param} string(iso) iso: iso
+     * 
+     * {param} string(rawValue) rawValue: rawValue
+     * 
+     * {example} getLanguageVariant("FR","[EN:ab][FR:ab_fr]") # return ab_fr
+     */
+    public static String getLanguageVariant(String iso, String rawValue) {
+
+        if (iso == null || rawValue == null)
+            throw new IllegalArgumentException();
+
+        iso = iso.toUpperCase();
+
+        Map<String, String> isoValues = new HashMap<String, String>();
+        Pattern p = Pattern.compile("\\[(\\w+)\\:([^\\[\\]\\:]*?)\\]{1,}");//$NON-NLS-1$
+        Matcher m = p.matcher(rawValue);
+        while (m.find()) {
+            isoValues.put(m.group(1).toUpperCase(), m.group(2));
+        }
+
+        return isoValues.get(iso);
+
+    }
+
     //Utility methods
     /**
      * Get a nodelist from an xPath
