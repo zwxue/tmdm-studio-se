@@ -31,12 +31,14 @@ import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
+import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -179,6 +181,13 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                         std = schema.resolveSimpleTypeDefinition(typeName);
                         std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(),
                                 "string"));//$NON-NLS-1$
+
+                        if(typeName.equals(EUUIDCustomType.MULTI_LINGUAL.getName())){
+                            XSDPatternFacet f = XSDSchemaBuildingTools.getXSDFactory().createXSDPatternFacet();
+                            f.setLexicalValue("(\\[\\w+\\:[^\\[\\]]*\\]){0,}");//$NON-NLS-1$
+                            std.getFacetContents().add(f);
+                        }
+                        
                         schema.getContents().add(std);
                     }
 
