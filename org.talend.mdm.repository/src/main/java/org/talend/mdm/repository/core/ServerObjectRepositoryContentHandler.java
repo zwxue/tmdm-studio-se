@@ -1,20 +1,25 @@
 package org.talend.mdm.repository.core;
 
+import java.util.Collection;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.IImage;
 import org.talend.core.model.properties.Item;
-import org.talend.core.model.repository.AbstractRepositoryContentHandler;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryContentHandler;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.repository.model.RepositoryNode;
 
-public class ServerObjectRepositoryContentHandler extends AbstractRepositoryContentHandler implements IServerObjectRepositoryType {
+public class ServerObjectRepositoryContentHandler implements IRepositoryContentHandler, IServerObjectRepositoryType {
 
     private XmiResourceManager xmiResourceManager = ProxyRepositoryFactory.getInstance().getRepositoryFactoryFromProvider()
             .getResourceManager();
@@ -54,56 +59,39 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         return null;
     }
 
-    @Override
     public IImage getIcon(ERepositoryObjectType type) {
-        if (type == TYPE_MENU) {
+        if (type == TYPE_MENU)
             return ServerObjectImage.MENU_ICON;
-        }
-        if (type == TYPE_ROLE) {
+        if (type == TYPE_ROLE)
             return ServerObjectImage.ROLE_ICON;
-        }
-        if (type == TYPE_DATACLUSTER) {
+        if (type == TYPE_DATACLUSTER)
             return ServerObjectImage.DATACLUSTER_ICON;
-        }
-        if (type == TYPE_DATAMODEL) {
+        if (type == TYPE_DATAMODEL)
             return ServerObjectImage.DATAMODEL_ICON;
-        }
-        if (type == TYPE_EVENTMANAGER) {
+        if (type == TYPE_EVENTMANAGER)
             return ServerObjectImage.EVENTMANAGER_ICON;
-        }
-        if (type == TYPE_JOBMODEL) {
+        if (type == TYPE_JOBMODEL)
             return ServerObjectImage.JOBMODEL_ICON;
-        }
-        if (type == TYPE_RESOURCE) {
+        if (type == TYPE_RESOURCE)
             return ServerObjectImage.RESOURCE_ICON;
-        }
-        if (type == TYPE_ROUTINGRULE) {
+        if (type == TYPE_ROUTINGRULE)
             return ServerObjectImage.ROUTINGRULE_ICON;
-        }
-        if (type == TYPE_SERVICECONFIGURATION) {
+        if (type == TYPE_SERVICECONFIGURATION)
             return ServerObjectImage.SERVICECONFIGURATION_ICON;
-        }
-        if (type == TYPE_STOREPROCEDURE) {
+        if (type == TYPE_STOREPROCEDURE)
             return ServerObjectImage.STOREPROCEDURE_ICON;
-        }
-        if (type == TYPE_SYNCHRONIZATIONPLAN) {
+        if (type == TYPE_SYNCHRONIZATIONPLAN)
             return ServerObjectImage.SYNCHRONIZATIONPLAN_ICON;
-        }
-        if (type == TYPE_TRANSFORMERV2) {
+        if (type == TYPE_TRANSFORMERV2)
             return ServerObjectImage.TRANSFORMERV2_ICON;
-        }
-        if (type == TYPE_UNIVERSE) {
+        if (type == TYPE_UNIVERSE)
             return ServerObjectImage.UNIVERSE_ICON;
-        }
-        if (type == TYPE_VIEW) {
+        if (type == TYPE_VIEW)
             return ServerObjectImage.VIEW_ICON;
-        }
-        if (type == TYPE_WORKFLOW) {
+        if (type == TYPE_WORKFLOW)
             return ServerObjectImage.WORKFLOW_ICON;
-        }
-        if (type == TYPE_CUSTOM_FORM) {
+        if (type == TYPE_CUSTOM_FORM)
             return ServerObjectImage.CUSTOMFORM_ICON;
-        }
 
         return null;
     }
@@ -116,7 +104,6 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         return null;
     }
 
-    @Override
     public boolean isProcess(Item item) {
         return false;
     }
@@ -125,6 +112,29 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(type);
         return configuration != null;
 
+    }
+
+    public ERepositoryObjectType getProcessType() {
+        return null;
+    }
+
+    public ERepositoryObjectType getCodeType() {
+        return null;
+    }
+
+    public void addNode(ERepositoryObjectType type, RepositoryNode recBinNode, IRepositoryViewObject repositoryObject,
+            RepositoryNode node) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addContents(Collection<EObject> collection, Resource resource) {
+        // TODO Auto-generated method stub
+    }
+
+    public IImage getIcon(Item item) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

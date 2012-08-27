@@ -199,6 +199,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
 
     private String rebuildItemPath(String processName) {
         String path = parentItem.getState().getPath();
+        processName = processName.toLowerCase();
         if(path.isEmpty()) {
             if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE))
                 path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;                

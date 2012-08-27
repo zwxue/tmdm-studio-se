@@ -19,6 +19,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -119,6 +121,8 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
             if(parentType == 1) {
                 value = entityText.getText();
                 filterName = filterText1.getText();
+                if(filterName.equals(Messages.ViewInputDialog_Default))
+                    filterName = "";//$NON-NLS-1$
                 if(value.isEmpty()) {
                     MessageDialog.openError(getShell(), Messages.Warning, Messages.ViewInputDialog_NameCannotbeEmpty);
                     return;
@@ -261,17 +265,38 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         layoutData2.widthHint = 330;
         filterText1.setLayoutData(layoutData2);
         filterText1.setText(Messages.ViewInputDialog_Default);
+        filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
         new Label(panel1, SWT.NONE);
        
         final Label internalLabel = new Label(panel1, SWT.NONE | SWT.WRAP);
         internalLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
-        internalLabel.setText(Messages.ViewInputDialog_InternalName);
+        internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
         
         filterText1.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 getOkButton().setEnabled(true);
                 internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
+                filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+            }
+        });
+        
+        filterText1.addFocusListener(new FocusAdapter() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(filterText1.getText().equals(Messages.ViewInputDialog_Default)) {
+                    filterText1.setText("");
+                    filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+                }
+            }
+            
+            @Override
+            public void focusLost(FocusEvent e) {
+                if(filterText1.getText().isEmpty()) {
+                    filterText1.setText(Messages.ViewInputDialog_Default);
+                    filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+                }
             }
         });
 
@@ -290,7 +315,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         internalBuffer.append(IViewNodeConstDef.ViewPrefix);
         internalBuffer.append(entityText.getText());
         
-        if(!filterText1.getText().isEmpty()) {
+        if(!filterText1.getText().isEmpty() && !filterText1.getText().equalsIgnoreCase(Messages.ViewInputDialog_Default)) {
             internalBuffer.append("#");//$NON-NLS-1$
             internalBuffer.append(filterText1.getText());
         }

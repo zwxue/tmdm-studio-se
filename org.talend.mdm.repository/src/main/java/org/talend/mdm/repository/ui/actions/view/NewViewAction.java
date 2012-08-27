@@ -141,7 +141,11 @@ public class NewViewAction extends AbstractSimpleAddAction {
             }
             item.getState().setPath(path);
         } else {
-            item.getState().setPath(""); //$NON-NLS-1$
+            if(key.toLowerCase().startsWith(IViewNodeConstDef.ViewPrefix))
+                item.getState().setPath(IViewNodeConstDef.PATH_WEBFILTER);
+            else {
+                item.getState().setPath(IViewNodeConstDef.PATH_SEARCHFILTER);
+            }
         }
         RepositoryResourceUtil.createItem(item, key);
         return item;

@@ -119,8 +119,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             public void modifyText(ModifyEvent e) {
                 if(okBtn != null)
                     okBtn.setEnabled(true);
-                internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
-                        + entityText.getText() + "#" + filterText.getText())); //$NON-NLS-1$
+                internalLabel.setText(getInternalName());
             }
         });
 
@@ -129,8 +128,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             public void modifyText(ModifyEvent e) {
                 if(okBtn != null)
                     okBtn.setEnabled(true);
-                internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
-                        + entityText.getText() + "#" + filterText.getText())); //$NON-NLS-1$
+                internalLabel.setText(getInternalName());
             }
         });
        
@@ -144,12 +142,21 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
                 filterText.setText(""); //$NON-NLS-1$
             else
                 filterText.setText(split[1]);
-            internalLabel.setText(Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
-                    + entityText.getText() + "#" + filterText.getText())); //$NON-NLS-1$
+            
+            internalLabel.setText(getInternalName()); 
         }
     }
 
-    
+    private String getInternalName() {
+        String filterPart = "";//$NON-NLS-1$
+        if(!filterText.getText().isEmpty())
+            filterPart = "#" + filterText.getText();//$NON-NLS-1$
+        
+        String internalName = Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
+                + entityText.getText() + filterPart);
+        
+        return internalName;
+    }
     /**
      * Create contents of the button bar.
      * @param parent
