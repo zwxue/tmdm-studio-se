@@ -222,7 +222,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                     alreadyExists = false;
             }
 
-            if (parent != null && complexType != null && complexType.getSchema() != null) {
+            if (complexType != null && complexType.getSchema() != null && !anonymous) {
 
                 XSDParticleImpl partCnt = (XSDParticleImpl) complexType.getContentType();
                 XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();

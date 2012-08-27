@@ -411,6 +411,10 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 }
                 complexType.setName(typeName);
                 if (superType != null) {
+                    boolean status = updateCompositorType(superType, group);
+                    if(!status)
+                        return false;
+                    
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                     complexType.setBaseTypeDefinition(superType);
                 }
