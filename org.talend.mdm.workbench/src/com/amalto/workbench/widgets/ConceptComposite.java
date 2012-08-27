@@ -17,6 +17,8 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -108,6 +110,14 @@ public class ConceptComposite {
                 }
             };
         });
+		typeNameText.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				String text = typeNameText.getText();
+				if (text.isEmpty())
+					setAll();
+			}
+		});
 
         final Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
         radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");//$NON-NLS-1$//$NON-NLS-2$

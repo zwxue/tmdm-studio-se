@@ -110,8 +110,10 @@ public class TypesLabelProvider extends LabelProvider {
 
         if (obj instanceof XSDModelGroup) {
             // return the name of the complex type definition
-            XSDParticle particle = (XSDParticle) (((XSDModelGroup) obj).getContainer());
-            String name = ((XSDComplexTypeDefinition) particle.getContainer()).getName();
+        	XSDParticle particle = (XSDParticle) (((XSDModelGroup) obj).getContainer());
+            XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) particle.getContainer();
+            
+            String name = complexTypeDefinition.getName();
             if (name == null)
                 name = "";//$NON-NLS-1$
             // return the occurence
@@ -122,8 +124,15 @@ public class TypesLabelProvider extends LabelProvider {
                 name += (particle.getMaxOccurs() == -1) ? "many" : "" + particle.getMaxOccurs();//$NON-NLS-1$//$NON-NLS-2$
                 name += "]";//$NON-NLS-1$
             }
-            return name;
 
+
+            XSDTypeDefinition extendType = complexTypeDefinition.getBaseTypeDefinition();
+            String extendTypeName = ""; //$NON-NLS-1$
+            if (extendType != null && extendType != complexTypeDefinition && !"anyType".equals(extendType.getName())) { //$NON-NLS-1$
+                extendTypeName = ":" + extendType.getName(); //$NON-NLS-1$
+            }
+            
+            return name + extendTypeName;
         }
 
         /*
