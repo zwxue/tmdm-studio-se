@@ -295,6 +295,30 @@ public class MDM {
      */
     public static String setLanguageVariant(String iso, String value, String rawValue) {
 
+        return setLanguageVariant(iso, value, rawValue, "EN");//$NON-NLS-1$
+
+    }
+
+    /**
+     * Add or update an ISO variant to the multi-lingual text value with defaultIso
+     * (For the legacy value which do not follow the multi-lingual field syntax, it will be adapted to defaultIso)
+     * 
+     * {talendTypes} String
+     * 
+     * {Category} MDM
+     * 
+     * {param} string(iso) iso: iso
+     * 
+     * {param} string(value) value: value
+     * 
+     * {param} string(rawValue) rawValue: rawValue
+     * 
+     * {param} string(defaultIso) defaultIso: defaultIso
+     * 
+     * {example} setLanguageVariant("FR","ab_fr","ab","EN") # return [EN:ab][FR:ab_fr]
+     */
+    public static String setLanguageVariant(String iso, String value, String rawValue, String defaultIso) {
+
         if (iso == null || value == null)
             throw new IllegalArgumentException();
         
@@ -312,8 +336,14 @@ public class MDM {
                 isoValues.put(m.group(1).toUpperCase(), m.group(2));
             }
 
-            if (isoValues.size() == 0)
-                throw new IllegalArgumentException();
+            // illegal/legacy raw value
+            if (isoValues.size() == 0) {
+                // throw new IllegalArgumentException();
+                if (defaultIso != null && defaultIso.trim().length() > 0)
+                    isoValues.put(defaultIso.toUpperCase(), rawValue);
+                else
+                    isoValues.put("EN", rawValue); //$NON-NLS-1$
+            }
 
             isoValues.put(iso, value);
         }
