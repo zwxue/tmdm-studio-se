@@ -14,9 +14,12 @@ package routines;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -295,13 +298,13 @@ public class MDM {
      */
     public static String setLanguageVariant(String iso, String value, String rawValue) {
 
-        return setLanguageVariant(iso, value, rawValue, "EN");//$NON-NLS-1$
+        return setLanguageVariant(iso, value, rawValue, "EN", true);//$NON-NLS-1$
 
     }
 
     /**
-     * Add or update an ISO variant to the multi-lingual text value with defaultIso
-     * (For the legacy value which do not follow the multi-lingual field syntax, it will be adapted to defaultIso)
+     * Add or update an ISO variant to the multi-lingual text value with defaultIso and sort option (For the legacy
+     * value which do not follow the multi-lingual field syntax, it will be adapted to defaultIso)
      * 
      * {talendTypes} String
      * 
@@ -315,9 +318,11 @@ public class MDM {
      * 
      * {param} string(defaultIso) defaultIso: defaultIso
      * 
-     * {example} setLanguageVariant("FR","ab_fr","ab","EN") # return [EN:ab][FR:ab_fr]
+     * {param} string(sort) sort: sort
+     * 
+     * {example} setLanguageVariant("FR","ab_fr","ab","EN", true) # return [EN:ab][FR:ab_fr]
      */
-    public static String setLanguageVariant(String iso, String value, String rawValue, String defaultIso) {
+    public static String setLanguageVariant(String iso, String value, String rawValue, String defaultIso, boolean sort) {
 
         if (iso == null || value == null)
             throw new IllegalArgumentException();
@@ -350,7 +355,13 @@ public class MDM {
 
         StringBuilder result = new StringBuilder();
         if (isoValues.size() > 0) {
-            for (Iterator<String> iterator = isoValues.keySet().iterator(); iterator.hasNext();) {
+
+            List<String> isoList = new ArrayList<String>(isoValues.keySet());
+            // sort
+            if (sort)
+                Collections.sort(isoList);
+
+            for (Iterator<String> iterator = isoList.iterator(); iterator.hasNext();) {
                 String isoKey = (String) iterator.next();
                 String isoValue = isoValues.get(isoKey);
                 result.append("[").append(isoKey).append(":").append(isoValue).append("]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
