@@ -149,11 +149,15 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
 
     private String getInternalName() {
         String filterPart = "";//$NON-NLS-1$
-        if(!filterText.getText().isEmpty())
-            filterPart = "#" + filterText.getText();//$NON-NLS-1$
+        
+        String filterStr = filterText.getText().trim();
+        if(!filterStr.isEmpty())
+            filterPart = "#" + filterStr;//$NON-NLS-1$
+        
+        String entityName = entityText.getText().trim();
         
         String internalName = Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
-                + entityText.getText() + filterPart);
+                + entityName + filterPart);
         
         return internalName;
     }
@@ -177,10 +181,11 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
     }
 
     protected void saveDatas() {
-        value = entityText.getText();
-        if(!filterText.getText().isEmpty())
+        value = entityText.getText().trim();
+        String filterStr = filterText.getText().trim();
+        if(!filterStr.isEmpty())
         {
-            value += "#" + filterText.getText(); //$NON-NLS-1$
+            value += "#" + filterStr; //$NON-NLS-1$
         }
     }
     
@@ -188,9 +193,9 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
     protected boolean validInput() {
         if(validator != null)
         {
-            String validMsg = validator.isValid(entityText.getText());
+            String validMsg = validator.isValid(entityText.getText().trim());
             if(validMsg == null)
-                validMsg = validator.isValid(filterText.getText());
+                validMsg = validator.isValid(filterText.getText().trim());
             
             if(validMsg != null) {
                 MessageDialog.openError(getShell(), Messages._Error, validMsg);

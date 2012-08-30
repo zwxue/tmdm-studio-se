@@ -119,8 +119,8 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
             if(parentType == 1) {
-                value = entityText.getText();
-                filterName = filterText1.getText();
+                value = entityText.getText().trim();
+                filterName = filterText1.getText().trim();
                 if(filterName.equals(Messages.ViewInputDialog_Default))
                     filterName = "";//$NON-NLS-1$
                 if(value.isEmpty()) {
@@ -129,7 +129,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
                 }
             }
             if(parentType == 2) {
-                value = filterText2.getText();
+                value = filterText2.getText().trim();
                 if(value.isEmpty()) {
                     MessageDialog.openError(getShell(), Messages.Warning, Messages.ViewInputDialog_NameCannotbeEmpty);
                     return;
@@ -285,15 +285,15 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
             @Override
             public void focusGained(FocusEvent e) {
-                if(filterText1.getText().equals(Messages.ViewInputDialog_Default)) {
-                    filterText1.setText("");
+                if(filterText1.getText().trim().equals(Messages.ViewInputDialog_Default)) {
+                    filterText1.setText("");//$NON-NLS-1$
                     filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
                 }
             }
             
             @Override
             public void focusLost(FocusEvent e) {
-                if(filterText1.getText().isEmpty()) {
+                if(filterText1.getText().trim().isEmpty()) {
                     filterText1.setText(Messages.ViewInputDialog_Default);
                     filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
                 }
@@ -313,11 +313,12 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     private String getInternalName() {
         StringBuffer internalBuffer = new StringBuffer();
         internalBuffer.append(IViewNodeConstDef.ViewPrefix);
-        internalBuffer.append(entityText.getText());
+        internalBuffer.append(entityText.getText().trim());
         
-        if(!filterText1.getText().isEmpty() && !filterText1.getText().equalsIgnoreCase(Messages.ViewInputDialog_Default)) {
+        String filterStr = filterText1.getText().trim();
+        if(!filterStr.isEmpty() && !filterStr.equalsIgnoreCase(Messages.ViewInputDialog_Default)) {
             internalBuffer.append("#");//$NON-NLS-1$
-            internalBuffer.append(filterText1.getText());
+            internalBuffer.append(filterStr);
         }
         
         return internalBuffer.toString();
@@ -346,7 +347,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
             
             public void modifyText(ModifyEvent e) {
                 getOkButton().setEnabled(true);
-                internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, filterText2.getText()));
+                internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, filterText2.getText().trim()));
             }
         });
         
