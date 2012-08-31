@@ -108,6 +108,8 @@ public final class DeployOnMDMAction extends AContextualAction {
     }
 
     protected void doRun() {
+    	IRepositoryViewObject viewObj = getSelectedViewObject();
+    	
         DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
         publishWizard.setWindowTitle(EXPORTJOBSCRIPTS); //$NON-NLS-1$
         publishWizard.init(getWorkbench(), (IStructuredSelection) this.getSelection());
@@ -121,7 +123,6 @@ public final class DeployOnMDMAction extends AContextualAction {
             SpagoBiServer spagoBiServer = publishWizard.getMdmServer();
             MDMServerDef mdmServer = getMdmServer(spagoBiServer);
             
-            IRepositoryViewObject viewObj = getSelectedViewObject();
             Item item = viewObj.getProperty().getItem();            
             Property property = item.getProperty();
             
