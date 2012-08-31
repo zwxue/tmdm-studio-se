@@ -83,11 +83,12 @@ public final class DeployOnMDMAction extends AContextualAction {
         }
         List<RepositoryNode> nodes = (List<RepositoryNode>) selection.toList();
         for (RepositoryNode node : nodes) {
-            if (node.getType() != ENodeType.REPOSITORY_ELEMENT
-                    || node.getProperties(EProperties.CONTENT_TYPE) != ERepositoryObjectType.PROCESS) {
-                canWork = false;
-                break;
+            if (node.getType() == ENodeType.REPOSITORY_ELEMENT
+                    && node.getProperties(EProperties.CONTENT_TYPE) == ERepositoryObjectType.PROCESS) {
+                continue;
             }
+            canWork = false;
+            break;
         }
         setEnabled(canWork);
     }
@@ -107,6 +108,8 @@ public final class DeployOnMDMAction extends AContextualAction {
     }
 
     protected void doRun() {
+        IRepositoryViewObject viewObj = getSelectedViewObject();
+        
         DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
         publishWizard.setWindowTitle(EXPORTJOBSCRIPTS); //$NON-NLS-1$
         publishWizard.init(getWorkbench(), (IStructuredSelection) this.getSelection());
@@ -120,7 +123,6 @@ public final class DeployOnMDMAction extends AContextualAction {
             SpagoBiServer spagoBiServer = publishWizard.getMdmServer();
             MDMServerDef mdmServer = getMdmServer(spagoBiServer);
             
-            IRepositoryViewObject viewObj = getSelectedViewObject();
             Item item = viewObj.getProperty().getItem();            
             Property property = item.getProperty();
             
