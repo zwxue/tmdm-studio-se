@@ -26,6 +26,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
@@ -40,6 +41,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -113,6 +115,14 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
             initBuiltInTypesWithSelectedTypes(builtInTypes); 
             
             if (showDlg) {
+                if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                    boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.getString("Warning"),//$NON-NLS-1$
+                            Messages.getString("XSDChangeToCXX_ChangeToAnotherTypeWarning"));//$NON-NLS-1$
+
+                    if (!confirm)
+                        return Status.CANCEL_STATUS;
+                }
+                
                 dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, "Make Simple Type", customTypes,
                         builtInTypes);
 
