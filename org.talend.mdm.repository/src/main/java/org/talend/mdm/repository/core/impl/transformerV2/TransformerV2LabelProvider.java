@@ -69,13 +69,20 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
     @Override
     protected String getServerObjectItemText(Item item) {
-        String sepA = "#";//$NON-NLS-1$
-        String sepB = "(";//$NON-NLS-1$
-        String sepC = ")";//$NON-NLS-1$
 
         String itemText = super.getServerObjectItemText(item);
 
+        itemText = transformItemText(itemText);
+
+        return itemText;
+    }
+
+    protected String transformItemText(String itemText) {
         String prefix = null;
+        
+        String sepA = "#";//$NON-NLS-1$
+        String sepB = "(";//$NON-NLS-1$
+        String sepC = ")";//$NON-NLS-1$
         if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE)) {
             prefix = ITransformerV2NodeConsDef.Prefix_BEFORESAVE;
             itemText = itemText.substring(prefix.length());
@@ -104,7 +111,7 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
             prefix = "";//$NON-NLS-1$
             itemText = itemText.substring(prefix.length());
         }
-
+        
         return itemText;
     }
 

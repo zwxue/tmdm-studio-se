@@ -59,7 +59,7 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                 IRepositoryViewObject[] viewObjs = getSortedViewObjects(categoryViewObjects);
 
                 treeViewer = new ContainerCheckedTreeViewer(parent);
-                treeViewer.setLabelProvider(new MDMRepositoryLabelProvider());
+                treeViewer.setLabelProvider(new MDMExporterLabelProvider());
                 treeViewer.setContentProvider(new MDMRepositoryContentProvider());
                 treeViewer.setInput(viewObjs);
                 return treeViewer;

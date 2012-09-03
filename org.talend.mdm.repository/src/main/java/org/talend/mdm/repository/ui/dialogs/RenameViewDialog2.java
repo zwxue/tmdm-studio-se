@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.dialogs;
 
 import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -59,29 +58,46 @@ public class RenameViewDialog2 extends RenameViewDialog {
         internalLabel.setText(Messages.RenameViewDialog2_InternalName);
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
         
-        entityText.addModifyListener(new ModifyListener() {
-            
-            public void modifyText(ModifyEvent e) {
-                if(okBtn != null)
-                    okBtn.setEnabled(true);
-                internalLabel.setText(Messages.bind(Messages.RenameViewDialog2_InternalNameX, entityText.getText()));
-            }
-        });
-        
         if(value != null) {
             entityText.setText(value);
             internalLabel.setText(Messages.bind(Messages.RenameViewDialog2_InternalNameX, value));
         }
+        
+        entityText.addModifyListener(new ModifyListener() {
+            
+            public void modifyText(ModifyEvent e) {
+                updateOkButtonState();
+                
+                internalLabel.setText(Messages.bind(Messages.RenameViewDialog2_InternalNameX, entityText.getText()));
+            }
+        });
     }
-
+    
+    private void updateOkButtonState() {
+        if(okBtn != null) {
+            if(validInput())
+                okBtn.setEnabled(true);
+            else {
+                okBtn.setEnabled(false);
+            }
+        }
+    }
+    
     protected boolean validInput() {
+        String entityName = entityText.getText().trim();
+        
+        if(entityName.equals(value))
+            return false;
+        
         if(validator != null)
         {
-            String validMsg = validator.isValid(entityText.getText());
+            String validMsg = validator.isValid(entityName);
             if(validMsg != null) {
-                MessageDialog.openError(getShell(), Messages._Error, validMsg);
+                errorMessageText.setText(validMsg);
                 return false;
             }
+            
+            errorMessageText.setText(""); //$NON-NLS-1$
         }
         
         return true;

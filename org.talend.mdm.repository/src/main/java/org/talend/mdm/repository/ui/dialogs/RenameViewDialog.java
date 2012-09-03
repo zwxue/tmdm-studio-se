@@ -15,7 +15,6 @@ package org.talend.mdm.repository.ui.dialogs;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -42,12 +41,17 @@ import com.amalto.workbench.image.ImageCache;
 
 
 public class RenameViewDialog extends Dialog implements SelectionListener {
+    private final String seprator3 = "#";//$NON-NLS-1$
+    private final String blankText = "";//$NON-NLS-1$
+    
     private Text entityText;
     private Text filterText;
     protected String value;
     protected IInputValidator validator;
     private IWorkbenchPartSite site;
     protected Button okBtn;
+
+    protected Text errorMessageText;
 
     /**
      * Create the dialog.
@@ -75,6 +79,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite) super.createDialogArea(parent);
         createMainPart(container);
+        createBottom(container);
 
         return container;
     }
@@ -115,10 +120,22 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
         internalLabel.setText(Messages.RenameViewDialog_InternalName);
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
         
+        
+        if(value != null) {
+            String[] split = value.split(seprator3);
+            entityText.setText(split[0]);
+            if(split.length == 1)
+                filterText.setText(blankText);
+            else
+                filterText.setText(split[1]);
+            
+            internalLabel.setText(getInternalName()); 
+        }
+        
         filterText.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
-                if(okBtn != null)
-                    okBtn.setEnabled(true);
+                updateOkButtonState();
+                
                 internalLabel.setText(getInternalName());
             }
         });
@@ -126,33 +143,26 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
         entityText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                if(okBtn != null)
-                    okBtn.setEnabled(true);
+                updateOkButtonState();
+                
                 internalLabel.setText(getInternalName());
             }
         });
        
-        
-       
-        
-        if(value != null) {
-            String[] split = value.split("#"); //$NON-NLS-1$
-            entityText.setText(split[0]);
-            if(split.length == 1)
-                filterText.setText(""); //$NON-NLS-1$
-            else
-                filterText.setText(split[1]);
-            
-            internalLabel.setText(getInternalName()); 
-        }
     }
 
+    private void createBottom(Composite container) {
+        errorMessageText = new Text(container, 72);
+        errorMessageText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        errorMessageText.setBackground(Display.getCurrent().getSystemColor(22));
+    }
+    
     private String getInternalName() {
-        String filterPart = "";//$NON-NLS-1$
+        String filterPart = blankText;
         
         String filterStr = filterText.getText().trim();
         if(!filterStr.isEmpty())
-            filterPart = "#" + filterStr;//$NON-NLS-1$
+            filterPart = seprator3 + filterStr;
         
         String entityName = entityText.getText().trim();
         
@@ -168,14 +178,12 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
         okBtn = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+        okBtn.setEnabled(false);
         createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
     }
 
     @Override
     protected void okPressed() {
-        if(!validInput()) 
-            return;
-        
         saveDatas();
         super.okPressed();
     }
@@ -185,24 +193,46 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
         String filterStr = filterText.getText().trim();
         if(!filterStr.isEmpty())
         {
-            value += "#" + filterStr; //$NON-NLS-1$
+            value += seprator3 + filterStr;
+        }
+    }
+
+    private void updateOkButtonState() {
+        if(okBtn != null) {
+            if(validInput())
+                okBtn.setEnabled(true);
+            else {
+                okBtn.setEnabled(false);
+            }
         }
     }
     
-    
     protected boolean validInput() {
-        if(validator != null)
-        {
-            String validMsg = validator.isValid(entityText.getText().trim());
-            if(validMsg == null)
-                validMsg = validator.isValid(filterText.getText().trim());
-            
-            if(validMsg != null) {
-                MessageDialog.openError(getShell(), Messages._Error, validMsg);
+        String entityName = entityText.getText().trim();
+        String filter = filterText.getText().trim();
+        
+        if(value.equals(entityName + seprator3 + filter))
+            return false;
+        
+        if (validator != null) {
+            String prefix = IViewNodeConstDef.ViewPrefix;
+            if (entityName.isEmpty())
+                prefix = blankText;
+
+            String suffix = seprator3 + filter;
+            if (filter.isEmpty())
+                suffix = blankText;
+
+            String validMsg = validator.isValid(prefix + entityName + suffix);
+
+            if (validMsg != null) {
+                errorMessageText.setText(validMsg);
                 return false;
             }
+
+            errorMessageText.setText(blankText);
         }
-        
+
         return true;
     }
     /**
@@ -210,7 +240,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
      */
     @Override
     protected Point getInitialSize() {
-        return new Point(478, 170);
+        return new Point(478, 190);
     }
 
     public String getValue() {

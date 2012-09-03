@@ -81,7 +81,7 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return element.toString();
     }
 
-    private IRepositoryNodeLabelProvider getLabelProvider(Object element) {
+    protected IRepositoryNodeLabelProvider getLabelProvider(Object element) {
         if (element instanceof IRepositoryViewObject) {
             Item item = ((IRepositoryViewObject) element).getProperty().getItem();
             IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);

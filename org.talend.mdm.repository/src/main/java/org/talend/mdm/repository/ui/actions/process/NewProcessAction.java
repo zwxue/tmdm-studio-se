@@ -80,7 +80,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         // wizard
         NewProcessWizard newProcessWizard = new NewProcessWizard(site, type);
         WizardDialog wizardDialog = new WizardDialog(getShell(), newProcessWizard);
-        wizardDialog.setPageSize(500, 240);
+        wizardDialog.setPageSize(500, 260);
         if (wizardDialog.open() == IDialogConstants.OK_ID) {
             WSTransformerV2E newProcess = newProcessWizard.getNewProcess();
             Item item = createServerObject(newProcess);
