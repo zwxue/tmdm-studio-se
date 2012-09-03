@@ -45,7 +45,9 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
 
 public class ViewInputDialog extends Dialog implements SelectionListener {
-
+    private final String seprator3 = "#";//$NON-NLS-1$
+    private final String blankText = "";//$NON-NLS-1$
+    
     /**
      * The title of the dialog.
      */
@@ -98,6 +100,10 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
     private Text filterText2;
 
+
+    private Text errorMessageText1;
+    private Text errorMessageText2;
+
     public ViewInputDialog(IWorkbenchPartSite site, TreeParent treeParent, Shell parentShell, String dialogTitle,
             String dialogMessage, IInputValidator validator, boolean isTransfor, int type) {
         super(parentShell);
@@ -108,7 +114,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         this.parentType = type;
         this.validator = validator;
         
-        value = "";//$NON-NLS-1$
+        value = blankText;
     }
 
     public void setBtnShow(boolean isBtnShow) {
@@ -122,7 +128,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
                 value = entityText.getText().trim();
                 filterName = filterText1.getText().trim();
                 if(filterName.equals(Messages.ViewInputDialog_Default))
-                    filterName = "";//$NON-NLS-1$
+                    filterName = blankText;
                 if(value.isEmpty()) {
                     MessageDialog.openError(getShell(), Messages.Warning, Messages.ViewInputDialog_NameCannotbeEmpty);
                     return;
@@ -187,6 +193,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         
         bottom1 = getBottom1(botComposite);
         bottom2 = getBottom2(botComposite);
+        
         if(parentType == 0) {
             webFilterRadioBtn.setSelection(true);
             searchFilterRadioBtn.setSelection(false);
@@ -273,9 +280,15 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
         
+        errorMessageText1 = new Text(panel1, 72);
+        errorMessageText1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        errorMessageText1.setBackground(Display.getCurrent().getSystemColor(22));
+        errorMessageText1.setText(Messages.Common_nameCanNotBeEmpty);
+        
         filterText1.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
-                getOkButton().setEnabled(true);
+                updateoOkButtonForWebType();
+                
                 internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
                 filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
             }
@@ -286,7 +299,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
             @Override
             public void focusGained(FocusEvent e) {
                 if(filterText1.getText().trim().equals(Messages.ViewInputDialog_Default)) {
-                    filterText1.setText("");//$NON-NLS-1$
+                    filterText1.setText(blankText);
                     filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
                 }
             }
@@ -303,13 +316,42 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         entityText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                getOkButton().setEnabled(true);
+                updateoOkButtonForWebType();
+                
                 internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
             }
+
         });
         return panel1;
     }
     
+    private void updateoOkButtonForWebType() {
+        if(validator != null) {
+            String entityName = entityText.getText().trim();
+            String prefix1 = IViewNodeConstDef.ViewPrefix;
+            if(entityName.isEmpty()) {
+                prefix1 = blankText;
+            }
+            
+            String filter1 = filterText1.getText().trim();
+            String suffix1 = seprator3 + filter1;
+            if(filter1.isEmpty() || filter1.equals(Messages.ViewInputDialog_Default)) {
+                suffix1 = blankText;
+            }
+            
+            String validMsg = validator.isValid(prefix1 + entityName + suffix1);
+            
+            if(validMsg == null) {
+                errorMessageText1.setText(blankText);
+                okButton.setEnabled(true);
+            }
+            else {
+                errorMessageText1.setText(validMsg);
+                okButton.setEnabled(false);
+            }
+        }
+    }
+
     private String getInternalName() {
         StringBuffer internalBuffer = new StringBuffer();
         internalBuffer.append(IViewNodeConstDef.ViewPrefix);
@@ -317,7 +359,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         
         String filterStr = filterText1.getText().trim();
         if(!filterStr.isEmpty() && !filterStr.equalsIgnoreCase(Messages.ViewInputDialog_Default)) {
-            internalBuffer.append("#");//$NON-NLS-1$
+            internalBuffer.append(seprator3);
             internalBuffer.append(filterStr);
         }
         
@@ -343,10 +385,26 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         internalLabel.setText(Messages.ViewInputDialog_InternalName);
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
         
+        errorMessageText2 = new Text(panel2, 72);
+        errorMessageText2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        errorMessageText2.setBackground(Display.getCurrent().getSystemColor(22));
+        errorMessageText2.setText(Messages.Common_nameCanNotBeEmpty);
+        
         filterText2.addModifyListener(new ModifyListener() {
             
             public void modifyText(ModifyEvent e) {
-                getOkButton().setEnabled(true);
+                if(validator != null) {
+                    String validMsg = validator.isValid(filterText2.getText().trim());
+                    if(validMsg == null) {
+                        errorMessageText2.setText(blankText);
+                        okButton.setEnabled(true);
+                    }
+                    else {
+                        errorMessageText2.setText(validMsg);
+                        okButton.setEnabled(false);
+                    }
+                }
+                
                 internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, filterText2.getText().trim()));
             }
         });
