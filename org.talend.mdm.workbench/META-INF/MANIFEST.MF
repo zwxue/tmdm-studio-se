@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.ui,
  org.talend.core.runtime,
  org.talend.mdm.commmon
 Eclipse-AutoStart: true
-Eclipse-RegisterBuddy: org.mockito
+Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-ClassPath: com.amalto.workbench.jar,
  META-INF/lib/activation.jar,
  META-INF/lib/commons-beanutils.jar,
