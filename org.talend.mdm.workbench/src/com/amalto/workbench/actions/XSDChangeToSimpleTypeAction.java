@@ -26,6 +26,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
@@ -116,6 +117,12 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
             initBuiltInTypesWithSelectedTypes(builtInTypes); 
             
             if (showDlg) {
+                if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                    boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning, Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
+                    if(!confirm)
+                        return Status.CANCEL_STATUS;
+                }
+                
                 dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeToXX_DialogTitle, customTypes,
                         builtInTypes);
 

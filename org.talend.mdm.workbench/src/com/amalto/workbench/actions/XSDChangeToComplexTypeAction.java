@@ -148,6 +148,12 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             // XSDTypeDefinition current = decl.getTypeDefinition();
             List<XSDComplexTypeDefinition> types = Util.getComplexTypes(decl.getSchema());
             if (showDlg) {
+                if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                    boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning, Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
+                    if(!confirm)
+                        return Status.CANCEL_STATUS;
+                }
+                
                 if (tPath != null)
                     for (int i = 0; i < tPath.getSegmentCount(); i++) {
                         if (tPath.getSegment(i) instanceof XSDElementDeclaration) {

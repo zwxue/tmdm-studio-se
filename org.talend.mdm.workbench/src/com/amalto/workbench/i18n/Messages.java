@@ -179,6 +179,8 @@ public class Messages extends NLS {
 
     public static String XSDChangeToCXX_ActionTip;
 
+    public static String XSDChangeToCXX_ChangeToAnotherTypeWarning;
+
     public static String XSDChangeToCXX_ErrorMsg1;
 
     public static String XSDChangeToCXX_ErrorMsg2;
