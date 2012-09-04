@@ -133,7 +133,14 @@ public class RenameViewAction extends AbstractRepositoryAction {
                 public String isValid(String newText) {
                     if (newText == null || newText.trim().length() == 0)
                         return Messages.Common_nameCanNotBeEmpty;
-                    if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                    
+                    String regex = "\\w*(#|-|\\.|\\w*)+\\w+";//$NON-NLS-1$
+                    Pattern pattern = Pattern.compile(regex);
+                    Pattern p2 = Pattern.compile(".*\\w+");//$NON-NLS-1$
+                    if(!p2.matcher(newText).matches())
+                        return Messages.Common_nameInvalid;
+                        
+                    if (!pattern.matcher(newText).matches()) {
                         return Messages.Common_nameInvalid;
                     }
                     //

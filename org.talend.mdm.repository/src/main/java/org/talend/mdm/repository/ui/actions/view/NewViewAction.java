@@ -171,12 +171,12 @@ public class NewViewAction extends AbstractSimpleAddAction {
     }
 
     private IInputValidator getInputValidator() {
-        return new IInputValidator() {//$NON-NLS-1$
+        return new IInputValidator() {
 
             public String isValid(String newText) {
                 if (newText == null || newText.trim().length() == 0)
                     return Messages.Common_nameCanNotBeEmpty;
-                if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                if (!matchRegex(newText)) {
                     return Messages.Common_nameInvalid;
                 }
                 if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
@@ -186,7 +186,17 @@ public class NewViewAction extends AbstractSimpleAddAction {
             };
         };
     }
-
+    private boolean matchRegex(String newText) {
+        String regex = "\\w*(#|\\.|\\w*)+\\w+";//$NON-NLS-1$
+        String tailRegex = ".*\\w+";//$NON-NLS-1$
+        
+        Pattern p1 = Pattern.compile(regex);
+        Pattern p2 =Pattern.compile(tailRegex);
+        if(!p2.matcher(newText).matches())
+            return false;
+        
+        return p1.matcher(newText).matches();
+    }
     public void createNewView(String viewName) {
         RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_VIEW, viewName, null, null);
         createServerObject(viewName);

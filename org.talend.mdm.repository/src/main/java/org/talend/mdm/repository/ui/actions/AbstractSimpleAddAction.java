@@ -75,7 +75,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
             public String isValid(String newText) {
                 if (newText == null || newText.trim().length() == 0)
                     return Messages.Common_nameCanNotBeEmpty;
-                if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                if (!matchRegex(newText)) {//$NON-NLS-1$
                     return Messages.Common_nameInvalid;
                 }
                 if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
@@ -90,6 +90,18 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
         
         String key = dlg.getValue();
         return key;
+    }
+    
+    private boolean matchRegex(String newText) {
+        String regex = "\\w*(#|-|\\.|\\w*)+\\w+";//$NON-NLS-1$
+        String tailRegex = ".*\\w+";//$NON-NLS-1$
+        
+        Pattern p1 = Pattern.compile(regex);
+        Pattern p2 =Pattern.compile(tailRegex);
+        if(!p2.matcher(newText).matches())
+            return false;
+        
+        return p1.matcher(newText).matches();
     }
 
     protected void getParentItem() {
