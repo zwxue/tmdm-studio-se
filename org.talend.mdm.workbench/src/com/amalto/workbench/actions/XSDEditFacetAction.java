@@ -127,9 +127,10 @@ public class XSDEditFacetAction extends UndoAction {
 
             std.updateElement();
 
-            //page.refresh();
+            
             page.getTreeViewer().refresh(true);
             page.markDirty();
+            page.refresh();
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
