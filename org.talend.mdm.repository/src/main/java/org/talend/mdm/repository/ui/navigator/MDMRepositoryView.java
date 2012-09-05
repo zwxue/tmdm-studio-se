@@ -76,7 +76,6 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.ISvnHistory;
-import org.talend.mdm.repository.ui.editors.WorkflowEditorInput;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -295,9 +294,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         }
 
         public void partActivated(IWorkbenchPartReference partRef) {
-            if (partRef.getId().equals(WorkflowEditorInput.EDITOR_ID)) {//$NON-NLS-1$
+            if (partRef.getId().equals("org.bonitasoft.studio.model.process.diagram.part.ProcessDiagramEditorID")) {//$NON-NLS-1$
                 IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-                        .findPerspectiveWithId("org.bonitasoft.studio.perspective.process"); //$NON-NLS-1$
+                        .findPerspectiveWithId("org.bonitasoft.studio.application.perspective"); //$NON-NLS-1$
                 if (perspective != null) {
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
                 }
