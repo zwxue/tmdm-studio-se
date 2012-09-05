@@ -591,6 +591,10 @@
             class="org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction"
             serviceId="IEventMgrService">
       </Service>
+      <Service
+            class="org.talend.mdm.repository.core.service.RemoveAddCommandService"
+            serviceId="IRemoveAddCommandService">
+      </Service>
    </extension>
       
    
