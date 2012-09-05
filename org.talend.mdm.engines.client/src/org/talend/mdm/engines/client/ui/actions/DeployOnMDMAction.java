@@ -29,6 +29,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.image.EImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.core.CorePlugin;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.language.ECodeLanguage;
@@ -50,6 +51,7 @@ import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.ui.actions.AContextualAction;
 
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.service.bridge.IRemoveAddCommandService;
 import com.amalto.workbench.utils.MDMServerHelper;
 
 /**
@@ -135,6 +137,8 @@ public final class DeployOnMDMAction extends AContextualAction {
                 factory.save(item);
                 refreshMdmRepositoryViewTree();
                 
+                IRemoveAddCommandService service = (IRemoveAddCommandService) GlobalServiceRegister.getDefault().getService(IRemoveAddCommandService.class);
+                service.removeAddCommandOf(ERepositoryObjectType.PROCESS, item);
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
             }
