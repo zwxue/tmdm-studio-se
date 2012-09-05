@@ -88,7 +88,23 @@ public class JobResourceListener implements IResourceChangeListener {
                     }
                 }
             }
-
+            
+            if ((delta.getKind() & IResourceDelta.ADDED) != 0) {
+                IResource resource = delta.getResource();
+                if (resource.getType() == IResource.FILE) {
+                    if ("properties".equals(resource.getFileExtension()) || "item".equals(resource.getFileExtension())) {//$NON-NLS-1$//$NON-NLS-2$
+                        String name = resource.getName();
+                        int lastIndex = name.lastIndexOf("_");//$NON-NLS-1$
+                        String jobName = name.substring(0, lastIndex);
+                        IRepositoryViewObject job = RepositoryResourceUtil.findViewObjectByName(ERepositoryObjectType.PROCESS,
+                                jobName);
+                        if (job != null) {
+                            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, job.getId(), jobName);
+                        }
+                    }
+                }
+            }
+            
             return true;
         }
     };
