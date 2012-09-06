@@ -50,6 +50,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
+import org.talend.mdm.repository.ui.wizards.exports.viewers.MDMExporterLabelProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -223,7 +224,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
         treeViewer = new ContainerCheckedTreeViewer(this, SWT.BORDER);
         ILabelDecorator labelDecorator = RepositoryPlugin.getDefault().getWorkbench().getDecoratorManager().getLabelDecorator();
-        DecoratingLabelProvider labelProvider = new DecoratingLabelProvider(new MDMRepositoryLabelProvider(), labelDecorator);
+        DecoratingLabelProvider labelProvider = new DecoratingLabelProvider(new MDMExporterLabelProvider(), labelDecorator);
         treeViewer.setLabelProvider(labelProvider);
         treeViewer.setContentProvider(new ContentProvider());
 
