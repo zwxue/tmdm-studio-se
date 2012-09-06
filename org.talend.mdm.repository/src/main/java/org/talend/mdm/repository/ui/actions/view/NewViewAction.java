@@ -43,6 +43,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.dialogs.ViewInputDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 
 /**
  * DOC class global comment. Detailled comment <br/>
@@ -96,7 +97,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
                     public String isValid(String newText) {
                         if (newText == null || newText.trim().length() == 0)
                             return Messages.Common_nameCanNotBeEmpty;
-                        if (!matchRegex(newText)) {
+                        if (!ValidateUtil.matchViewProcessRegex(newText)) {
                             return Messages.Common_nameInvalid;
                         }
                         if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
@@ -104,18 +105,6 @@ public class NewViewAction extends AbstractSimpleAddAction {
                         }
                         return null;
                     };
-                    
-                    private boolean matchRegex(String newText) {
-                        String regex = "\\w*(#|\\.|\\w*)+\\w+";//$NON-NLS-1$
-                        String tailRegex = ".*\\w+";//$NON-NLS-1$
-                        
-                        Pattern p1 = Pattern.compile(regex);
-                        Pattern p2 =Pattern.compile(tailRegex);
-                        if(!p2.matcher(newText).matches())
-                            return false;
-                        
-                        return p1.matcher(newText).matches();
-                    }
                 }, false);
         vid.setBtnShow(true);
         vid.create();
