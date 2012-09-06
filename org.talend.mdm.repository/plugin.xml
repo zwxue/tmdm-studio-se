@@ -649,8 +649,8 @@
    <extension
          point="org.talend.core.runtime.service">
       <Service
-            class="org.talend.mdm.repository.core.service.RemoveAddCommandService"
-            serviceId="IRemoveAddCommandService">
+            class="org.talend.mdm.repository.core.service.RemoveCommandService"
+            serviceId="IRemoveCommandService">
       </Service>
    </extension>
       
