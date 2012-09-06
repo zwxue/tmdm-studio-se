@@ -12,15 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.job;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.designer.core.ui.action.CreateProcess;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
-import org.talend.mdm.repository.core.command.CommandManager;
-import org.talend.mdm.repository.core.command.ICommand;
-import org.talend.mdm.repository.models.FolderRepositoryObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -42,25 +35,8 @@ public class CreateProcessAction extends AbstractBridgeRepositoryAction {
     }
 
     protected void doRun() {
-        List<IRepositoryViewObject> childrenBeforeAdd = getCurrentChildren();
-        
         //
         super.doRun();
         refreshCurrentContainer();
-        
-        //
-        List<IRepositoryViewObject> childrenAfterAdd = getCurrentChildren();
-        childrenAfterAdd.removeAll(childrenBeforeAdd);
-        
-        IRepositoryViewObject addedViewObject = childrenAfterAdd.get(0);
-        CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, addedViewObject.getId(), addedViewObject.getLabel());
     }
-
-    private List<IRepositoryViewObject> getCurrentChildren() {
-        FolderRepositoryObject viewObj = (FolderRepositoryObject) getSelectedObject().get(0);
-        List<IRepositoryViewObject> children = new ArrayList<IRepositoryViewObject>(viewObj.getChildren());
-        
-        return children;
-    }
-
 }
