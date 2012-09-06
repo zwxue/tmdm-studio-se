@@ -592,8 +592,8 @@
             serviceId="IEventMgrService">
       </Service>
       <Service
-            class="org.talend.mdm.repository.core.service.RemoveAddCommandService"
-            serviceId="IRemoveAddCommandService">
+            class="org.talend.mdm.repository.core.service.RemoveCommandService"
+            serviceId="IRemoveCommandService">
       </Service>
    </extension>
       
