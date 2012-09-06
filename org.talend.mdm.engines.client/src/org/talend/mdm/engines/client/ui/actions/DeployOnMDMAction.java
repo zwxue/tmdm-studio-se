@@ -50,7 +50,7 @@ import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.ui.actions.AContextualAction;
 
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.service.bridge.IRemoveAddCommandService;
+import com.amalto.workbench.service.bridge.IRemoveCommandService;
 import com.amalto.workbench.utils.MDMServerHelper;
 
 /**
@@ -125,7 +125,7 @@ public final class DeployOnMDMAction extends AContextualAction {
             SpagoBiServer spagoBiServer = publishWizard.getMdmServer();
             MDMServerDef mdmServer = getMdmServer(spagoBiServer);
             
-            Item item = viewObj.getProperty().getItem();            
+            Item item = viewObj.getProperty().getItem();
             Property property = item.getProperty();
             
             if (property != null) {
@@ -137,8 +137,8 @@ public final class DeployOnMDMAction extends AContextualAction {
                 factory.save(item);
                 refreshMdmRepositoryViewTree();
                 
-                IRemoveAddCommandService service = (IRemoveAddCommandService) GlobalServiceRegister.getDefault().getService(IRemoveAddCommandService.class);
-                service.removeAddCommandOf(ERepositoryObjectType.PROCESS, item);
+                IRemoveCommandService service = (IRemoveCommandService) GlobalServiceRegister.getDefault().getService(IRemoveCommandService.class);
+                service.removeDeployPhaseCommandOf(ERepositoryObjectType.PROCESS, item);
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
             }
