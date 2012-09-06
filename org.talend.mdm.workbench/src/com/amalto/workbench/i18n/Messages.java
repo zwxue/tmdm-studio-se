@@ -2461,8 +2461,6 @@ public class Messages extends NLS {
 
     public static String TransformerMainPage_LinkTip;
 
-    public static String TransformerMainPage_message;
-
     public static String TransformerMainPage_MoveDownTheItem;
 
     public static String TransformerMainPage_MoveUpTheItem;
@@ -2470,6 +2468,8 @@ public class Messages extends NLS {
     public static String TransformerMainPage_NameCannotbeEmpty;
 
     public static String TransformerMainPage_OutputParameters;
+
+    public static String TransformerMainPage_OutputReportMissing;
 
     public static String TransformerMainPage_OutputVariables;
 

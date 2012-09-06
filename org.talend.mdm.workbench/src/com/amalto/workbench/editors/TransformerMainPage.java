@@ -952,7 +952,7 @@ public class TransformerMainPage extends AMainPageV2 {
             
             if (!has) {
                 MessageDialog.openWarning(getSite().getShell(), Messages.Warning,
-                        Messages.bind(Messages.TransformerMainPage_message, processName));
+                        Messages.bind(Messages.TransformerMainPage_OutputReportMissing, processName));
             }
         }
 
