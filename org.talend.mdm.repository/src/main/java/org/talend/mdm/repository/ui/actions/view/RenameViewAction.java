@@ -84,7 +84,7 @@ public class RenameViewAction extends AbstractRepositoryAction {
                         String newName = dialog.getValue();
                         
                         if(oldName.toLowerCase().startsWith(viewPrefix))
-                            newName = oldName.substring(0, viewPrefix.length()) + newName;
+                            newName = IViewNodeConstDef.ViewPrefix_Upper + newName;
                         
                         if (newName != null && factory.isEditableAndLockIfPossible(item)) {
                             serverObject.setName(newName);

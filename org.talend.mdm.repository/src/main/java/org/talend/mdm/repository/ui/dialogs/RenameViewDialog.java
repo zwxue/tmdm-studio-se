@@ -166,7 +166,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
         
         String entityName = entityText.getText().trim();
         
-        String internalName = Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix
+        String internalName = Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix_Upper
                 + entityName + filterPart);
         
         return internalName;
@@ -215,7 +215,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             return false;
         
         if (validator != null) {
-            String prefix = IViewNodeConstDef.ViewPrefix;
+            String prefix = IViewNodeConstDef.ViewPrefix_Upper;
             if (entityName.isEmpty())
                 prefix = blankText;
 

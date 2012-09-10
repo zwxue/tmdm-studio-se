@@ -328,7 +328,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     private void updateoOkButtonForWebType() {
         if(validator != null) {
             String entityName = entityText.getText().trim();
-            String prefix1 = IViewNodeConstDef.ViewPrefix;
+            String prefix1 = IViewNodeConstDef.ViewPrefix_Upper;
             if(entityName.isEmpty()) {
                 prefix1 = blankText;
             }
@@ -354,7 +354,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
     private String getInternalName() {
         StringBuffer internalBuffer = new StringBuffer();
-        internalBuffer.append(IViewNodeConstDef.ViewPrefix);
+        internalBuffer.append(IViewNodeConstDef.ViewPrefix_Upper);
         internalBuffer.append(entityText.getText().trim());
         
         String filterStr = filterText1.getText().trim();
