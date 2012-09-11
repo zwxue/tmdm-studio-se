@@ -75,7 +75,6 @@ import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
-import org.talend.mdm.repository.ui.editors.ISvnHistory;
 import org.talend.mdm.repository.ui.editors.WorkflowEditorInput;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -88,6 +87,8 @@ import com.amalto.workbench.views.MDMPerspective;
  * 
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
+
+    public static final String CONTRIBUTER_ID = "org.talend.mdm.repository.propertycontributer";
 
     private static final String VIEW_CONTEXT_ID = "org.talend.mdm.repository.context"; //$NON-NLS-1$
 
@@ -455,6 +456,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     }
 
     public String getContributorId() {
-        return ISvnHistory.CONTRUIBUTIONID_SVNHISTORY;
+        return CONTRIBUTER_ID;
     }
 }
