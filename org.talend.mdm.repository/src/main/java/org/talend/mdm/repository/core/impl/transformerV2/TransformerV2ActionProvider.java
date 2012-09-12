@@ -33,6 +33,7 @@ import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.process.NewProcessAction;
+import org.talend.mdm.repository.ui.actions.process.RenameProcessAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -42,15 +43,19 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAdapter {
 
     AbstractRepositoryAction addAction;
+    
+    AbstractRepositoryAction renameProcessAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
 
         addAction = new NewProcessAction();
+        renameProcessAction = new RenameProcessAction(); 
 
         //
         addAction.initCommonViewer(commonViewer);
+        renameProcessAction.initCommonViewer(commonViewer);
     }
 
     @Override
@@ -69,7 +74,7 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
 
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
-            addAction(actions, renameAction, viewObj);
+            addAction(actions, renameProcessAction, viewObj);
             // deploy
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);

@@ -45,19 +45,19 @@ public class ProcessMigrateObjectPathRule extends AbstractMigrateObjectPathRule 
         if (item instanceof MDMServerObjectItem) {
             String lowerCaseName = ((MDMServerObjectItem) item).getMDMServerObject().getName().toLowerCase();
             if (lowerCaseName != null) {
-                if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE)) {
+                if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
                     return ITransformerV2NodeConsDef.PATH_BEFORESAVE;
                 } 
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)){
+                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)){
                     return ITransformerV2NodeConsDef.PATH_BEFOREDEL;
                 }
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)){
+                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)){
                     return ITransformerV2NodeConsDef.PATH_ENTITYACTION;
                 }
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_STANDLONE)){
+                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)){
                     return ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
                 }
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)){
+                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)){
                     return ITransformerV2NodeConsDef.PATH_SMARTVIEW;
                 }
                 else {

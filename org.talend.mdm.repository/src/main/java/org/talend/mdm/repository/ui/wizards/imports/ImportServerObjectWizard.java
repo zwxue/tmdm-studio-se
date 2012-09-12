@@ -523,25 +523,25 @@ public class ImportServerObjectWizard extends Wizard {
     }
     
     private String getProcessTypeObjectPath(TreeObject treeObj) {
-        String transformerStandalonePrefix = ITransformerV2NodeConsDef.Prefix_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
-        String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.Prefix_STANDLONE;
+        String transformerStandalonePrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
+        String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
         
         String path = treeObj.getPath();
         String lowerCaseName = treeObj.getName().toLowerCase();
         
-        if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE)) {
+        if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
             } else if (!path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)
                     && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + path.substring(8);
-        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)) {
+        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
             } else if (!path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)
                     && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL))
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + path.substring(8);
-        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)) {
+        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
             } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION))
@@ -552,7 +552,7 @@ public class ImportServerObjectWizard extends Wizard {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
             } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION))
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + path.substring(8);
-        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)) {
+        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
             } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
@@ -568,7 +568,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private String getViewTypeObjectPath(TreeObject treeObj) {
-        if (treeObj.getName().toLowerCase().startsWith(IViewNodeConstDef.ViewPrefix)) {
+        if (treeObj.getName().toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
             if (!treeObj.getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
                 String path = treeObj.getPath();
                 if (path.length() > 8)

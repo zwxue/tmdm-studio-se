@@ -49,7 +49,7 @@ public class ViewMigrateObjectPathRule extends AbstractMigrateObjectPathRule {
         if (item instanceof MDMServerObjectItem) {
             String name = ((MDMServerObjectItem) item).getMDMServerObject().getName().toLowerCase();
             if (name != null) {
-                if (name.startsWith(IViewNodeConstDef.ViewPrefix)) {
+                if (name.startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
                     return IViewNodeConstDef.PATH_WEBFILTER;
                 } else {
                     return IViewNodeConstDef.PATH_SEARCHFILTER;

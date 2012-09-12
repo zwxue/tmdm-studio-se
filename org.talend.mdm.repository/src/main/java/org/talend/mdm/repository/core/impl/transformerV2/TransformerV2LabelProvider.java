@@ -83,26 +83,26 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
         String sepA = "#";//$NON-NLS-1$
         String sepB = "(";//$NON-NLS-1$
         String sepC = ")";//$NON-NLS-1$
-        if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE)) {
-            prefix = ITransformerV2NodeConsDef.Prefix_BEFORESAVE;
+        if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
+            prefix = ITransformerV2NodeConsDef.PREFIX_BEFORESAVE;
             itemText = itemText.substring(prefix.length());
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)) {
-            prefix = ITransformerV2NodeConsDef.Prefix_BEFOREDEL;
+        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
+            prefix = ITransformerV2NodeConsDef.PREFIX_BEFOREDEL;
             itemText = itemText.substring(prefix.length());
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)) {
-            prefix = ITransformerV2NodeConsDef.Prefix_RUNNABLE;
-            itemText = itemText.substring(prefix.length());
-            if (itemText.indexOf(sepA) != -1) {
-                itemText = itemText.replace(sepA, sepB) + sepC;
-            }
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.Prefix_STANDLONE)) {
-            prefix = ITransformerV2NodeConsDef.Prefix_STANDLONE;
+        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
+            prefix = ITransformerV2NodeConsDef.PREFIX_RUNNABLE;
             itemText = itemText.substring(prefix.length());
             if (itemText.indexOf(sepA) != -1) {
                 itemText = itemText.replace(sepA, sepB) + sepC;
             }
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)) {
-            prefix = ITransformerV2NodeConsDef.Prefix_SMARTVIEW;
+        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)) {
+            prefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
+            itemText = itemText.substring(prefix.length());
+            if (itemText.indexOf(sepA) != -1) {
+                itemText = itemText.replace(sepA, sepB) + sepC;
+            }
+        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
+            prefix = ITransformerV2NodeConsDef.PREFIX_SMARTVIEW;
             itemText = itemText.substring(prefix.length());
             if (itemText.indexOf(sepA) != -1) {
                 itemText = itemText.replace(sepA, sepB) + sepC;

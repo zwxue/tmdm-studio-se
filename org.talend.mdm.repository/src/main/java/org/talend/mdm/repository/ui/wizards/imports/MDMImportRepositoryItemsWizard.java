@@ -141,12 +141,12 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     
     
     private void filterImportedItems(List<ItemRecord> toImportItemRecords) {
-        String transformerStandalonePrefix = ITransformerV2NodeConsDef.Prefix_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
-        String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.Prefix_STANDLONE;
+        String transformerStandalonePrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
+        String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
         for (Iterator<ItemRecord> it = toImportItemRecords.iterator(); it.hasNext();) {
             Item item = it.next().getProperty().getItem();
             if (item instanceof WSViewItem) {
-                if (item.getProperty().getLabel().toLowerCase().startsWith(IViewNodeConstDef.ViewPrefix)) {
+                if (item.getProperty().getLabel().toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
                     if(!item.getState().getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER))
                         item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + item.getState().getPath());
                 }
@@ -159,15 +159,15 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             if(item instanceof WSTransformerV2Item) {
                 String lowerCaseItemLabel = item.getProperty().getLabel().toLowerCase();
                 
-                if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE)) {
+                if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
                     if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE))
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + item.getState().getPath());
-                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)) {
+                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
                     if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL))
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + item.getState().getPath());
-                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)) {
+                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
                     if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION))
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION + item.getState().getPath());
@@ -176,7 +176,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                     if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION))
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + item.getState().getPath());
-                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)) {
+                } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
                     if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW + item.getState().getPath());

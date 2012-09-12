@@ -89,7 +89,7 @@ public class ViewLabelProvider extends AbstractLabelProvider {
     }
     
     private String filterName(String name) {
-        String prefix = IViewNodeConstDef.ViewPrefix;
+        String prefix = IViewNodeConstDef.PREFIX_VIEW;
         if(name != null && !name.isEmpty() && name.toLowerCase().startsWith(prefix)) {
             name = name.substring(prefix.length());
             if(name.indexOf("#") != -1)//$NON-NLS-1$

@@ -201,18 +201,18 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         String path = parentItem.getState().getPath();
         processName = processName.toLowerCase();
         if(path.isEmpty()) {
-            if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFORESAVE))
+            if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE))
                 path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;                
-            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_BEFOREDEL)){
+            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)){
                 path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;                
             }
-            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_RUNNABLE)){
+            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)){
                 path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;                
             }
-            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_STANDLONE)){
+            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)){
                 path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;                
             }
-            else if(processName.startsWith(ITransformerV2NodeConsDef.Prefix_SMARTVIEW)){
+            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)){
                 path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;                
             }
             else {

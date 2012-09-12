@@ -166,7 +166,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
         
         String entityName = entityText.getText().trim();
         
-        String internalName = Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.ViewPrefix_Upper
+        String internalName = Messages.bind(Messages.RenameViewDialog_InternalNameX, IViewNodeConstDef.PREFIX_VIEW_UPPER
                 + entityName + filterPart);
         
         return internalName;
@@ -199,11 +199,8 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
 
     private void updateOkButtonState() {
         if(okBtn != null) {
-            if(validInput())
-                okBtn.setEnabled(true);
-            else {
-                okBtn.setEnabled(false);
-            }
+            boolean isValid = validInput();
+            okBtn.setEnabled(isValid);
         }
     }
     
@@ -215,14 +212,17 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
             return false;
         
         if (validator != null) {
-            String prefix = IViewNodeConstDef.ViewPrefix_Upper;
-            if (entityName.isEmpty())
-                prefix = blankText;
+            String prefix = IViewNodeConstDef.PREFIX_VIEW_UPPER;
+            if (entityName.isEmpty()) {
+                errorMessageText.setText(Messages.Common_nameCanNotBeEmpty);
+                return false;
+            }
 
             String suffix = seprator3 + filter;
             if (filter.isEmpty())
                 suffix = blankText;
 
+            
             String validMsg = validator.isValid(prefix + entityName + suffix);
 
             if (validMsg != null) {
@@ -240,7 +240,7 @@ public class RenameViewDialog extends Dialog implements SelectionListener {
      */
     @Override
     protected Point getInitialSize() {
-        return new Point(478, 190);
+        return new Point(478, 230);
     }
 
     public String getValue() {

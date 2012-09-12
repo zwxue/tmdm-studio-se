@@ -47,7 +47,7 @@ public class RenameViewAction extends AbstractRepositoryAction {
     private ERepositoryObjectType type;
     private IWorkbenchPartSite site;
     
-    private String viewPrefix = IViewNodeConstDef.ViewPrefix;
+    private String viewPrefix = IViewNodeConstDef.PREFIX_VIEW;
     
     public RenameViewAction() {
         super(Messages.RenameObjectAction_rename);
@@ -84,7 +84,7 @@ public class RenameViewAction extends AbstractRepositoryAction {
                         String newName = dialog.getValue();
                         
                         if(oldName.toLowerCase().startsWith(viewPrefix))
-                            newName = IViewNodeConstDef.ViewPrefix_Upper + newName;
+                            newName = IViewNodeConstDef.PREFIX_VIEW_UPPER + newName;
                         
                         if (newName != null && factory.isEditableAndLockIfPossible(item)) {
                             serverObject.setName(newName);

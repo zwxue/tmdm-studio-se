@@ -32,11 +32,18 @@ public interface ITransformerV2NodeConsDef {
     public static final String TYPE_SMARTVIEW = "smartView";//$NON-NLS-1$
     public static final String TYPE_OTHER = "other";//$NON-NLS-1$
     
-    public static final String Prefix_BEFOREDEL = "beforedeleting_";//$NON-NLS-1$
-    public static final String Prefix_BEFORESAVE = "beforesaving_";//$NON-NLS-1$
-    public static final String Prefix_RUNNABLE = "runnable_";//$NON-NLS-1$
-    public static final String Prefix_STANDLONE = "runnable#";//$NON-NLS-1$
-    public static final String Prefix_SMARTVIEW = "smart_view_";//$NON-NLS-1$
+    public static final String PREFIX_BEFOREDEL = "beforedeleting_";//$NON-NLS-1$
+    public static final String PREFIX_BEFOREDEL_UPPER = "beforeDeleting_";//$NON-NLS-1$
+    public static final String PREFIX_BEFORESAVE = "beforesaving_";//$NON-NLS-1$
+    public static final String PREFIX_BEFORESAVE_UPPER = "beforeSaving_";//$NON-NLS-1$
+    
+    public static final String PREFIX_RUNNABLE = "runnable_";//$NON-NLS-1$
+    public static final String PREFIX_RUNNABLE_UPPER = "Runnable_";//$NON-NLS-1$
+    public static final String PREFIX_STANDLONE = "runnable#";//$NON-NLS-1$
+    public static final String PREFIX_STANDLONE_UPPER = "Runnable#";//$NON-NLS-1$
+    
+    public static final String PREFIX_SMARTVIEW = "smart_view_";//$NON-NLS-1$
+    public static final String PREFIX_SMARTVIEW_UPPER = "Smart_view_";//$NON-NLS-1$
     
     
     public static final String PATH_PROCESS = "Process";//$NON-NLS-1$

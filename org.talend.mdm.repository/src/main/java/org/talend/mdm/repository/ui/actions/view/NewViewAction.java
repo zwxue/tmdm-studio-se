@@ -92,7 +92,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
             if (!filterName.isEmpty())
                 filterPart = "#" + filterName; //$NON-NLS-1$
 
-            item = createServerObject(IViewNodeConstDef.ViewPrefix_Upper + key + filterPart);
+            item = createServerObject(IViewNodeConstDef.PREFIX_VIEW_UPPER + key + filterPart);
         }
         commonViewer.refresh(selectObj);
         commonViewer.expandToLevel(selectObj, 1);
@@ -133,7 +133,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
         if (parentItem != null) {
             String path = parentItem.getState().getPath();
             if(path.isEmpty()) {
-                if(key.toLowerCase().startsWith(IViewNodeConstDef.ViewPrefix))
+                if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW))
                     path = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;                
                 else {
                     path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;                
@@ -141,7 +141,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
             }
             item.getState().setPath(path);
         } else {
-            if(key.toLowerCase().startsWith(IViewNodeConstDef.ViewPrefix))
+            if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW))
                 item.getState().setPath(IViewNodeConstDef.PATH_WEBFILTER);
             else {
                 item.getState().setPath(IViewNodeConstDef.PATH_SEARCHFILTER);
