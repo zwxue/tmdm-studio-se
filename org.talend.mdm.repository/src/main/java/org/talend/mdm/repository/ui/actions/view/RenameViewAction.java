@@ -34,6 +34,7 @@ import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.dialogs.RenameViewDialog;
 import org.talend.mdm.repository.ui.dialogs.RenameViewDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.image.EImage;
@@ -134,13 +135,7 @@ public class RenameViewAction extends AbstractRepositoryAction {
                     if (newText == null || newText.trim().length() == 0)
                         return Messages.Common_nameCanNotBeEmpty;
                     
-                    String regex = "\\w*(#|-|\\.|\\w*)+\\w+";//$NON-NLS-1$
-                    Pattern pattern = Pattern.compile(regex);
-                    Pattern p2 = Pattern.compile(".*\\w+");//$NON-NLS-1$
-                    if(!p2.matcher(newText).matches())
-                        return Messages.Common_nameInvalid;
-                        
-                    if (!pattern.matcher(newText).matches()) {
+                    if (!ValidateUtil.matchViewProcessRegex(newText)) {
                         return Messages.Common_nameInvalid;
                     }
                     //

@@ -41,6 +41,7 @@ import org.talend.mdm.repository.ui.wizards.process.composite.OtherTypeComposite
 import org.talend.mdm.repository.ui.wizards.process.composite.RunnableTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.SmartviewProcessTypeComposite;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -346,7 +347,7 @@ public class InputProcessNamePage extends WizardPage {
         } else if (!nameEnabled && optionPartVisible && optionNameText.getText().trim().length() == 0) {
             errorMsg = Messages.Common_nameCanNotBeEmpty;
         }
-        else if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", name)) {//$NON-NLS-1$
+        else if (!ValidateUtil.matchViewProcessRegex(name)) {
             errorMsg = Messages.Common_nameInvalid;
         } else if (RepositoryResourceUtil.isExistByName(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, name)) {
             errorMsg = Messages.Common_nameIsUsed;

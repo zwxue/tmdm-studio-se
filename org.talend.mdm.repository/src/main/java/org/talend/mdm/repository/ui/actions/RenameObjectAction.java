@@ -36,6 +36,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.image.EImage;
@@ -120,22 +121,12 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                         if (newText == null || newText.trim().length() == 0)
                             return Messages.Common_nameCanNotBeEmpty;
                         
-                        Pattern p1 = Pattern.compile("\\w*(#|\\.|\\w*)+(#|\\w+)");//$NON-NLS-1$
-                        Pattern p2 = Pattern.compile(".*(#|\\w+)");//$NON-NLS-1$
-                        Pattern p3 = Pattern.compile("\\w*(#|-|\\.|\\w*)+\\w+");//$NON-NLS-1$
-                        
                         if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
                                 || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
-                            Matcher m = p1.matcher(newText);
-                            Matcher m2 = p2.matcher(newText);
-                            if(!m2.matches())//judge the suffix of newText is legal
+                            if (!ValidateUtil.matchViewProcessRegex(newText)) {
                                 return Messages.Common_nameInvalid;
-                            else {
-                                if (!m.matches()) {
-                                    return Messages.Common_nameInvalid;
-                                }
                             }
-                        } else if (!p3.matcher(newText).matches()) {
+                        } else if (!ValidateUtil.matchCommonRegex(newText)) {
                             return Messages.Common_nameInvalid;
                         }
                         //

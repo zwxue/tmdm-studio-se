@@ -27,6 +27,7 @@ import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -75,7 +76,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
             public String isValid(String newText) {
                 if (newText == null || newText.trim().length() == 0)
                     return Messages.Common_nameCanNotBeEmpty;
-                if (!matchRegex(newText)) {//$NON-NLS-1$
+                if (!ValidateUtil.matchCommonRegex(newText)) {//$NON-NLS-1$
                     return Messages.Common_nameInvalid;
                 }
                 if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
@@ -92,18 +93,6 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
         return key;
     }
     
-    private boolean matchRegex(String newText) {
-        String regex = "\\w*(#|-|\\.|\\w*)+\\w+";//$NON-NLS-1$
-        String tailRegex = ".*\\w+";//$NON-NLS-1$
-        
-        Pattern p1 = Pattern.compile(regex);
-        Pattern p2 =Pattern.compile(tailRegex);
-        if(!p2.matcher(newText).matches())
-            return false;
-        
-        return p1.matcher(newText).matches();
-    }
-
     protected void getParentItem() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);

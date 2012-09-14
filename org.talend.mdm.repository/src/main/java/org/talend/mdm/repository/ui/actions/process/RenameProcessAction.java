@@ -32,6 +32,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.image.EImage;
@@ -153,7 +154,7 @@ public class RenameProcessAction extends AbstractRepositoryAction {
                     if (newText == null || newText.trim().length() == 0)
                         return Messages.Common_nameCanNotBeEmpty;
 
-                    if (!matchViewProcessRegex(newText)) {
+                    if (!ValidateUtil.matchViewProcessRegex(newText)) {
                         return Messages.Common_nameInvalid;
                     }
                     //

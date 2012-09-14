@@ -17,26 +17,42 @@ import java.util.regex.Pattern;
 
 public class ValidateUtil {
     public static boolean matchCommonRegex(String newText) {
-        String regex = "\\w*[#|-|\\.|\\w*]+\\w+";//$NON-NLS-1$        
-        
-        return matches(regex, newText);
+        String regex = "\\w*(#|-|\\.|\\w*)+\\w+";//$NON-NLS-1$        
+        String tailRegex = ".*\\w+";//$NON-NLS-1$
+
+        return matches(regex, tailRegex, newText);
     }
     
     public static boolean matchCustomFormRegex(String newText) {
-        String regex = "\\w*[#|\\.|\\w*]+\\w+";//$NON-NLS-1$
-        
-        return matches(regex, newText);
+        String regex = "\\w*(#|\\.|\\w*)+\\w+";//$NON-NLS-1$
+        String tailRegex = ".*\\w+";//$NON-NLS-1$
+
+        return matches(regex, tailRegex, newText);
     }
     
     public static boolean matchViewProcessRegex(String newText) {
-        String regex = "\\w*[#|\\.|\\w*]+(#|\\w+)";//$NON-NLS-1$
-        
-        return matches(regex, newText);
+        String regex = "\\w*(#|\\.|\\w*)+(#|\\w+)";//$NON-NLS-1$        
+        String tailRegex = ".*(#|\\w+)";//$NON-NLS-1$
+
+        return matches(regex, tailRegex, newText);
     }
-    
-    private static boolean matches(String regex, String newText) {
-        Pattern p1 = Pattern.compile(regex);
         
-        return p1.matcher(newText).matches();
+    public static boolean matchRoleRegex(String newText) {
+        String regex = "\\w*(#|\\w*)+\\w+";//$NON-NLS-1$
+        String tailRegex = ".*\\w+";//$NON-NLS-1$
+
+        return matches(regex, tailRegex, newText);
+    }
+
+    private static boolean matches(String regex, String tailRegex, String newText) {
+        Pattern tailPattern = Pattern.compile(tailRegex);
+        boolean match = tailPattern.matcher(newText).matches();
+        
+        if (match) {
+            Pattern pattern = Pattern.compile(regex);
+            return pattern.matcher(newText).matches();
+        }
+
+        return false;
     }
 }
