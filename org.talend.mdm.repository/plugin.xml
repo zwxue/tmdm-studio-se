@@ -528,7 +528,7 @@
       <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
       <propertyContributor
-            contributorId="org.talend.mdm.repository.repositoryviewobjct.version.propertycontributer">
+            contributorId="org.talend.mdm.repository.propertycontributer">
          <propertyCategory
                category="RepositoryViewObject"></propertyCategory>
       </propertyContributor>
@@ -536,24 +536,24 @@
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
       <propertyTabs
-            contributorId="org.talend.mdm.repository.repositoryviewobjct.version.propertycontributer">
+            contributorId="org.talend.mdm.repository.propertycontributer">         
+         <propertyTab
+               category="RepositoryViewObject"
+               id="tab.main"
+               label="Main">
+         </propertyTab>
      
          <propertyTab
                category="RepositoryViewObject"
                id="tab.version"
                label="Version">
-         </propertyTab>         
-         <propertyTab
-               category="RepositoryViewObject"
-               id="tab.main"
-               label="Main">
          </propertyTab>
       </propertyTabs>
    </extension>
    <extension
          point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <propertySections
-            contributorId="org.talend.mdm.repository.repositoryviewobjct.version.propertycontributer">
+            contributorId="org.talend.mdm.repository.propertycontributer">
          <propertySection
                class="org.talend.mdm.repository.ui.contributor.ViewObjectPropertyMainSection"
                id="section.main"
