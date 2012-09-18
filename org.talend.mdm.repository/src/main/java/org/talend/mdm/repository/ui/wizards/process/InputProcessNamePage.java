@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.process;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
@@ -34,12 +32,12 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
-import org.talend.mdm.repository.ui.wizards.process.composite.AbstractProcessTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.BeforeProcessTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.OtherTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.RunnableTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.SmartviewProcessTypeComposite;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -58,7 +56,7 @@ public class InputProcessNamePage extends WizardPage {
         return this.processName;
     }
 
-    public String getProcessDesc() {        
+    public String getProcessDesc() {
         return this.processDesc;
     }
 
@@ -80,6 +78,7 @@ public class InputProcessNamePage extends WizardPage {
 
     protected SelectionListener selectionListener = new SelectionAdapter() {
 
+        @Override
         public void widgetSelected(SelectionEvent e) {
             updateProcessNameLabel();
             getWizard().getContainer().updateButtons();
@@ -121,7 +120,7 @@ public class InputProcessNamePage extends WizardPage {
         typeComposite = new Composite(container, SWT.NONE);
         typeComposite.setLayout(new GridLayout(1, false));
         typeComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        curProcessTypeComposite = (AbstractProcessTypeComposite) getProcessTypeComposite(NewProcessWizard.BEFORE_TYPE);
+        curProcessTypeComposite = getProcessTypeComposite(NewProcessWizard.BEFORE_TYPE);
         ((Composite) curProcessTypeComposite).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         // name
@@ -170,8 +169,9 @@ public class InputProcessNamePage extends WizardPage {
     }
 
     private IProcessTypeComposite getProcessTypeComposite(int processType) {
-        if (typeComposite == null)
+        if (typeComposite == null) {
             return null;
+        }
         switch (processType) {
         case NewProcessWizard.BEFORE_TYPE:
             if (beforeProcessComposite == null) {
@@ -226,14 +226,15 @@ public class InputProcessNamePage extends WizardPage {
     }
 
     private boolean validateProcessName() {
-        if (processNameLabel == null)
+        if (processNameLabel == null) {
             return false;
+        }
         String name = processNameLabel.getText().trim();
         String errorMsg = null;
         boolean result = false;
         if (nameText.getText().trim().length() == 0) {
             errorMsg = Messages.Common_nameCanNotBeEmpty;
-        } else if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", name)) {//$NON-NLS-1$
+        } else if (!ValidateUtil.matchViewProcessRegex(name)) {
             errorMsg = Messages.Common_nameInvalid;
         } else if (RepositoryResourceUtil.isExistByName(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, name)) {
             errorMsg = Messages.Common_nameIsUsed;
@@ -252,8 +253,9 @@ public class InputProcessNamePage extends WizardPage {
     }
 
     private void updateProcessNameLabel() {
-        if (curProcessTypeComposite == null || selectEntityBun == null)
+        if (curProcessTypeComposite == null || selectEntityBun == null) {
             return;
+        }
         String prefix = curProcessTypeComposite.getProcessPrefix();
         prefix += nameText.getText();
         processNameLabel.setText(prefix);
