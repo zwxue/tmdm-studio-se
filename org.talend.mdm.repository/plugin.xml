@@ -50,7 +50,13 @@
             class="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
             id="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
             category="org.talend.designer.core.ui.preferences.RepositoryPreferencePage"
-            name="MDM"/> 
+            name="MDM"/>
+      <page
+            category="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
+            class="org.talend.mdm.repository.ui.preferences.SwitchPerspectivePreferencePage"
+            id="org.talend.mdm.repository.ui.preferences.SwitchPerspectivePreferencePage"
+            name="Editor">
+      </page> 
    </extension>
    
    <extension 

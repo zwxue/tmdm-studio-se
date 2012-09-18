@@ -705,6 +705,12 @@ public class Messages extends NLS {
 
     public static String SVNGetDocument_SVNGetDocumentB;
     
+    public static String SwitchPerspectiveDialog_message;
+
+    public static String SwitchPerspectiveDialog_notAskAgain;
+
+    public static String SwitchPerspectiveDialog_title;
+
     public static String NewProcessWizard_TemplateProcess;
     
     public static String GenerateJobXX_GenTJobTrigger;

@@ -53,7 +53,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
-import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
@@ -74,8 +73,10 @@ import org.talend.mdm.repository.ui.actions.ExportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportObjectAction;
 import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
+import org.talend.mdm.repository.ui.dialogs.SwitchPerspectiveDialog;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.WorkflowEditorInput;
+import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -88,13 +89,25 @@ import com.amalto.workbench.views.MDMPerspective;
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
-    public static final String CONTRIBUTER_ID = "org.talend.mdm.repository.propertycontributer";
+    /**
+     * 
+     */
+    private static final String JOB_EDITOR_ID = "org.talend.designer.core.ui.MultiPageTalendEditor"; //$NON-NLS-1$
+
+    /**
+     * 
+     */
+    private static final String BONITA_PERSPECTIVE_ID = "org.bonitasoft.studio.perspective.process"; //$NON-NLS-1$
+
+    public static final String CONTRIBUTER_ID = "org.talend.mdm.repository.propertycontributer"; //$NON-NLS-1$
 
     private static final String VIEW_CONTEXT_ID = "org.talend.mdm.repository.context"; //$NON-NLS-1$
 
     private static final Log log = LogFactory.getLog(MDMRepositoryView.class);
 
     public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-1$
+
+    private static final String DI_PERSPECTIVE_ID = "org.talend.rcp.perspective";//$NON-NLS-1$
 
     @Override
     public void createPartControl(Composite aParent) {
@@ -156,7 +169,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     public DeployAllAction getDeployAllAction() {
         return deployAll;
     }
-    
+
     /**
      * DOC hbhong Comment method "initInput".
      */
@@ -296,31 +309,29 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         }
 
         public void partActivated(IWorkbenchPartReference partRef) {
-            if (partRef.getId().equals(WorkflowEditorInput.EDITOR_ID)) {//$NON-NLS-1$
-                IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-                        .findPerspectiveWithId("org.bonitasoft.studio.perspective.process"); //$NON-NLS-1$
-                if (perspective != null) {
-                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
-                }
+            SwitchPerspectiveDialog dialog = null;
+            if (partRef.getId().equals(WorkflowEditorInput.EDITOR_ID)) {
+                dialog = new SwitchPerspectiveDialog(getSite().getShell(), "BPM", BONITA_PERSPECTIVE_ID, //$NON-NLS-1$
+                        PreferenceConstants.P_AUTO_SWITCH_TO_BONITA, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA);
+
             }
             // if editor is talend job editor, switch to org.talend.rcp.perspective
-            if (partRef.getId().equals("org.talend.designer.core.ui.MultiPageTalendEditor")) {//$NON-NLS-1$
-
-                String perspectiveId = "org.talend.rcp.perspective";//$NON-NLS-1$
-
-                if (deactivePerspective != null && deactivePerspective.getId().equals(perspectiveId))
+            if (partRef.getId().equals(JOB_EDITOR_ID)) {
+                if (deactivePerspective != null && deactivePerspective.getId().equals(DI_PERSPECTIVE_ID))
                     return;
+                dialog = new SwitchPerspectiveDialog(getSite().getShell(), "Integration", DI_PERSPECTIVE_ID, //$NON-NLS-1$
+                        PreferenceConstants.P_AUTO_SWITCH_TO_DI, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI);
 
-                IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-                        .findPerspectiveWithId(perspectiveId);
-                if (perspective != null) {
-                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
-                }
             }
-
+            if (dialog != null) {
+                dialog.run();
+            }
             deactivePerspective = null;
         }
+
     };
+
+
 
     private IPerspectiveDescriptor deactivePerspective;// record current deactivated perspective for temp use
 
@@ -336,22 +347,24 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             }
 
         });
-        
+
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
+
             @Override
             public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-                if(first) {
+                if (first) {
                     first = false;
-                    if(MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
+                    if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
                         ShowWelcomeEditor.showWelcomeEditor();
                     }
                 }
-                
-                if(MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) 
+
+                if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId()))
                     getCommonViewer().refresh();
             }
         });
     }
+
     private static boolean first = true;
 
     IPartListener editorListener = new IPartListener() {
