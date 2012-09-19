@@ -14,7 +14,6 @@ package org.talend.mdm.repository.core.dnd;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -56,6 +55,8 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
+import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.IMDMRepositoryEnterpriseServiceExt;
 import org.talend.mdm.repository.i18n.Messages;
@@ -65,6 +66,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
@@ -74,6 +76,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     private static Logger log = Logger.getLogger(RepositoryDropAssistant.class);
 
+    @Override
     public IStatus validateDrop(Object target, int operation, TransferData transferType) {
         if (operation == DND.DROP_COPY || operation == DND.DROP_MOVE) {
             if (!(target instanceof IRepositoryViewObject)) {
@@ -112,14 +115,86 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         // can't move to self folder
         if (operation == DND.DROP_MOVE) {
             IRepositoryViewObject dragParent = getParentRepositoryViewObject(dragViewObj);
-            if (dragParent.equals(dropViewObj))
+            if (dragParent.equals(dropViewObj)) {
                 return false;
+            }
         }
         // can't move/copy to different node folder
         ERepositoryObjectType dropType = dropViewObj.getRepositoryObjectType();
 
-        if (dragType != null && !dragType.equals(dropType))
+        if (dragType != null && !dragType.equals(dropType)) {
             return false;
+        }
+
+        if (dragType == IServerObjectRepositoryType.TYPE_VIEW) {
+            boolean viewValid = validateForView(dragViewObj, dropViewObj);
+
+            return viewValid;
+        }
+
+        if (dragType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
+            boolean processValid = validateForProcess(dragViewObj, dropViewObj);
+
+            return processValid;
+        }
+
+        return true;
+    }
+
+    private boolean validateForView(IRepositoryViewObject dragViewObj, IRepositoryViewObject dropViewObj) {
+        String dropPath = dropViewObj.getProperty().getItem().getState().getPath().toLowerCase();
+        String dragPath = dragViewObj.getProperty().getItem().getState().getPath().toLowerCase();
+
+        if (dropPath.isEmpty()) {
+            return false;
+        }
+
+        String webTypePrefix = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;
+        if (dragPath.startsWith(webTypePrefix) && !dropPath.startsWith(webTypePrefix)) {
+            return false;
+        }
+
+        if (!dragPath.startsWith(webTypePrefix) && dropPath.startsWith(webTypePrefix)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateForProcess(IRepositoryViewObject dragViewObj, IRepositoryViewObject dropViewObj) {
+        String dropPath = dropViewObj.getProperty().getItem().getState().getPath().toLowerCase();
+        String dragPath = dragViewObj.getProperty().getItem().getState().getPath().toLowerCase();
+
+        if (dropPath.isEmpty()) {
+            return false;
+        }
+
+        String beforeSavingPrefix = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
+        String beforeDelPrefix = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
+        String entityActionPrefix = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
+        String welcomeActionPrefix = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
+        String smartviewPrefix = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
+        String otherPrefix = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;
+
+        if (dragPath.startsWith(beforeSavingPrefix) && !dropPath.startsWith(beforeSavingPrefix)) {
+            return false;
+        }
+        if (dragPath.startsWith(beforeDelPrefix) && !dropPath.startsWith(beforeDelPrefix)) {
+            return false;
+        }
+        if (dragPath.startsWith(entityActionPrefix) && !dropPath.startsWith(entityActionPrefix)) {
+            return false;
+        }
+        if (dragPath.startsWith(welcomeActionPrefix) && !dropPath.startsWith(welcomeActionPrefix)) {
+            return false;
+        }
+        if (dragPath.startsWith(smartviewPrefix) && !dropPath.startsWith(smartviewPrefix)) {
+            return false;
+        }
+        if (dragPath.startsWith(otherPrefix) && !dropPath.startsWith(otherPrefix)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -134,6 +209,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         return null;
     }
 
+    @Override
     public IStatus handleDrop(CommonDropAdapter dropAdapter, DropTargetEvent dropTargetEvent, Object aTarget) {
         IRepositoryViewObject dropViewObj = (IRepositoryViewObject) aTarget;
         IRepositoryViewObject dragViewObj = getSelectedDragViewObj();
@@ -215,23 +291,24 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         byte[] content = refFileItem.getContent().getInnerContent();
                         IFolder folder = RepositoryResourceUtil.getFolder(type);
                         String fileName = refFileItem.getName().replace(name, newName);
-                        fileName=  fileName.replace("#", "$");  //$NON-NLS-1$ //$NON-NLS-2$
+                        fileName = fileName.replace("#", "$"); //$NON-NLS-1$ //$NON-NLS-2$
                         IFile file = folder.getFile(fileName);
                         InputStream inputStream = new ByteArrayInputStream(content);
                         try {
-                            if (!file.exists())
+                            if (!file.exists()) {
                                 file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
-                            else
+                            } else {
                                 file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
+                            }
                             file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
-                            
-                            IMDMRepositoryEnterpriseServiceExt service = (IMDMRepositoryEnterpriseServiceExt) GlobalServiceRegister.getDefault().getService(
-                            		IMDMRepositoryEnterpriseServiceExt.class);
+
+                            IMDMRepositoryEnterpriseServiceExt service = (IMDMRepositoryEnterpriseServiceExt) GlobalServiceRegister
+                                    .getDefault().getService(IMDMRepositoryEnterpriseServiceExt.class);
                             newName = newName.replace("#", "$"); //$NON-NLS-1$//$NON-NLS-2$
                             if (service != null) {
-                                 service.updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);
+                                service.updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);
                             }
-                            
+
                             return true;
                         } catch (CoreException e) {
                             log.error(e.getMessage(), e);
@@ -279,14 +356,15 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                 initLabel, new IInputValidator() {
 
                     public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0)
+                        if (newText == null || newText.trim().length() == 0) {
                             return Messages.Common_nameCanNotBeEmpty;
+                        }
                         if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
                                 || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
-                            if (!Pattern.matches("\\w*(#|\\.|\\w*)+(#|\\w+)", newText)) {//$NON-NLS-1$
+                            if (!ValidateUtil.matchViewProcessRegex(newText)) {
                                 return Messages.Common_nameInvalid;
                             }
-                        } else if (!Pattern.matches("\\w*(#|-|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
+                        } else if (!ValidateUtil.matchCommonRegex(newText)) {
                             return Messages.Common_nameInvalid;
                         }
                         //
@@ -297,8 +375,9 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                     };
                 });
         dlg.setBlockOnOpen(true);
-        if (dlg.open() == Window.CANCEL)
+        if (dlg.open() == Window.CANCEL) {
             return null;
+        }
         return dlg.getValue();
 
     }
