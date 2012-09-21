@@ -14,6 +14,8 @@ package org.talend.mdm.repository.core.dnd;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -74,14 +76,23 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     private static Logger log = Logger.getLogger(RepositoryDropAssistant.class);
 
+    @Override
     public IStatus validateDrop(Object target, int operation, TransferData transferType) {
         if (operation == DND.DROP_COPY || operation == DND.DROP_MOVE) {
             if (!(target instanceof IRepositoryViewObject)) {
                 return Status.CANCEL_STATUS;
             }
-            IRepositoryViewObject dragViewObj = getSelectedDragViewObj();
+
+            List<IRepositoryViewObject> dragViewObjs = getSelectedDragViewObj();
             IRepositoryViewObject dropViewObj = (IRepositoryViewObject) target;
-            return validate(operation, dragViewObj, dropViewObj) ? Status.OK_STATUS : Status.CANCEL_STATUS;
+            for (IRepositoryViewObject dragViewObj : dragViewObjs) {
+                boolean valid = validate(operation, dragViewObj, dropViewObj);
+                if (!valid) {
+                    return Status.CANCEL_STATUS;
+                }
+            }
+
+            return Status.OK_STATUS;
         }
         return Status.CANCEL_STATUS;
     }
@@ -112,48 +123,62 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
         // can't move to self folder
         if (operation == DND.DROP_MOVE) {
             IRepositoryViewObject dragParent = getParentRepositoryViewObject(dragViewObj);
-            if (dragParent.equals(dropViewObj))
+            if (dragParent.equals(dropViewObj)) {
                 return false;
+            }
         }
         // can't move/copy to different node folder
         ERepositoryObjectType dropType = dropViewObj.getRepositoryObjectType();
 
-        if (dragType != null && !dragType.equals(dropType))
+        if (dragType != null && !dragType.equals(dropType)) {
             return false;
+        }
         return true;
     }
 
-    private IRepositoryViewObject getSelectedDragViewObj() {
+    private List<IRepositoryViewObject> getSelectedDragViewObj() {
+        List<IRepositoryViewObject> selectedViewObjects = new ArrayList<IRepositoryViewObject>();
+
         ISelection selection = LocalSelectionTransfer.getTransfer().getSelection();
         if (selection instanceof IStructuredSelection) {
-            Object object = ((IStructuredSelection) selection).getFirstElement();
-            if (object instanceof IRepositoryViewObject) {
-                return (IRepositoryViewObject) object;
+            List<Object> list = ((IStructuredSelection) selection).toList();
+            for (Object obj : list) {
+                if (obj instanceof IRepositoryViewObject) {
+                    selectedViewObjects.add((IRepositoryViewObject) obj);
+                }
             }
         }
-        return null;
+
+        return selectedViewObjects;
     }
 
+    @Override
     public IStatus handleDrop(CommonDropAdapter dropAdapter, DropTargetEvent dropTargetEvent, Object aTarget) {
         IRepositoryViewObject dropViewObj = (IRepositoryViewObject) aTarget;
-        IRepositoryViewObject dragViewObj = getSelectedDragViewObj();
-        IRepositoryViewObject dragParent = getParentRepositoryViewObject(dragViewObj);
         IRepositoryViewObject dropParent = getParentRepositoryViewObject(dropViewObj);
-        int detail = dropTargetEvent.detail;
-        if (detail == DND.DROP_COPY) {
-            if (copyViewObj(dragViewObj, dropViewObj)) {
+
+        List<IRepositoryViewObject> dragViewObjs = getSelectedDragViewObj();
+
+        for (IRepositoryViewObject dragViewObj : dragViewObjs) {
+            IRepositoryViewObject dragParent = getParentRepositoryViewObject(dragViewObj);
+            int detail = dropTargetEvent.detail;
+            if (detail == DND.DROP_COPY) {
+                if (!copyViewObj(dragViewObj, dropViewObj)) {
+                    return Status.CANCEL_STATUS;
+                }
+
                 refreshContainer(dropParent);
-                return Status.OK_STATUS;
-            }
-        } else if (detail == DND.DROP_MOVE) {
-            if (moveViewObj(dragViewObj, dropViewObj)) {
+            } else if (detail == DND.DROP_MOVE) {
+                if (!moveViewObj(dragViewObj, dropViewObj)) {
+                    return Status.CANCEL_STATUS;
+                }
+
                 refreshContainer(dropParent);
                 refreshContainer(dragParent);
-                return Status.OK_STATUS;
             }
         }
 
-        return Status.CANCEL_STATUS;
+        return Status.OK_STATUS;
     }
 
     /**
@@ -215,23 +240,24 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         byte[] content = refFileItem.getContent().getInnerContent();
                         IFolder folder = RepositoryResourceUtil.getFolder(type);
                         String fileName = refFileItem.getName().replace(name, newName);
-                        fileName=  fileName.replace("#", "$");  //$NON-NLS-1$ //$NON-NLS-2$
+                        fileName = fileName.replace("#", "$"); //$NON-NLS-1$ //$NON-NLS-2$
                         IFile file = folder.getFile(fileName);
                         InputStream inputStream = new ByteArrayInputStream(content);
                         try {
-                            if (!file.exists())
+                            if (!file.exists()) {
                                 file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
-                            else
+                            } else {
                                 file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
+                            }
                             file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
-                            
-                            IMDMRepositoryEnterpriseServiceExt service = (IMDMRepositoryEnterpriseServiceExt) GlobalServiceRegister.getDefault().getService(
-                            		IMDMRepositoryEnterpriseServiceExt.class);
+
+                            IMDMRepositoryEnterpriseServiceExt service = (IMDMRepositoryEnterpriseServiceExt) GlobalServiceRegister
+                                    .getDefault().getService(IMDMRepositoryEnterpriseServiceExt.class);
                             newName = newName.replace("#", "$"); //$NON-NLS-1$//$NON-NLS-2$
                             if (service != null) {
-                                 service.updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);
+                                service.updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);
                             }
-                            
+
                             return true;
                         } catch (CoreException e) {
                             log.error(e.getMessage(), e);
@@ -279,8 +305,9 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                 initLabel, new IInputValidator() {
 
                     public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0)
+                        if (newText == null || newText.trim().length() == 0) {
                             return Messages.Common_nameCanNotBeEmpty;
+                        }
                         if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
                                 || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
                             if (!Pattern.matches("\\w*(#|\\.|\\w*)+(#|\\w+)", newText)) {//$NON-NLS-1$
@@ -297,8 +324,9 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                     };
                 });
         dlg.setBlockOnOpen(true);
-        if (dlg.open() == Window.CANCEL)
+        if (dlg.open() == Window.CANCEL) {
             return null;
+        }
         return dlg.getValue();
 
     }
