@@ -12,12 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.process;
 
-import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
@@ -28,6 +29,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -42,9 +44,13 @@ public class RenameProcessAction extends AbstractRepositoryAction {
 
     private static Logger log = Logger.getLogger(RenameProcessAction.class);
 
-    private ERepositoryObjectType etype;
+    private String oldPrefix = null;
 
     protected IInputValidator validator;
+
+    private boolean processTypeChanged = false;
+
+    private ERepositoryObjectType etype;
 
     public RenameProcessAction() {
         super(Messages.RenameObjectAction_rename);
@@ -58,53 +64,109 @@ public class RenameProcessAction extends AbstractRepositoryAction {
 
     @Override
     protected void doRun() {
-
         Object selectObj = getSelectedObject().get(0);
         if (selectObj instanceof IRepositoryViewObject) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) selectObj;
-            MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
-
-            int type = getType(item);
+            IRepositoryViewObject parent = ContainerCacheService.getParent(viewObj);
             etype = viewObj.getRepositoryObjectType();
 
-            MDMServerObject serverObject = item.getMDMServerObject();
+            //
+            renameProcessObject(viewObj);
 
-            if (serverObject != null) {
-                String oldName = serverObject.getName();
-                RenameProcessDialog dialog = getRenameDialog(getSite(), oldName, type, getInputValidator());
-                int returnCode = dialog.open();
+            if (processTypeChanged) {
+                moveToOtherTypeNode(parent, viewObj);
+            }
+        }
 
-                if (returnCode == Window.OK) {
-                    IProxyRepositoryFactory factory = getFactory();
-                    String newName = dialog.getValue();
+    }
 
-                    try {
-                        if (factory.isEditableAndLockIfPossible(item)) {
-                            serverObject.setName(newName);
-                            viewObj.getProperty().setLabel(newName);
-                            factory.save(item, false);
-                            if (serverObject.getLastServerDef() != null) {
-                                CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
-                                        new String[] { oldName, newName });
-                            }
+    private void renameProcessObject(IRepositoryViewObject viewObj) {
+        MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
+        MDMServerObject serverObject = item.getMDMServerObject();
+
+        int type = getType(item);
+        if (serverObject != null) {
+            String oldName = serverObject.getName();
+            RenameProcessDialog dialog = getRenameDialog(getSite(), oldName, type, getInputValidator());
+            int returnCode = dialog.open();
+
+            if (returnCode == Window.OK) {
+                IProxyRepositoryFactory factory = getFactory();
+                String newName = dialog.getValue();
+
+                transformPath(viewObj, newName);
+
+                try {
+                    if (factory.isEditableAndLockIfPossible(item)) {
+                        serverObject.setName(newName);
+                        viewObj.getProperty().setLabel(newName);
+                        viewObj.getProperty().setDisplayName(newName);
+
+                        factory.save(item, false);
+                        if (serverObject.getLastServerDef() != null) {
+                            CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
+                                    new String[] { oldName, newName });
                         }
+                    }
 
-                        commonViewer.refresh(viewObj);
+                    commonViewer.refresh(viewObj);
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                } finally {
+                    try {
+                        factory.unlock(item);
                     } catch (PersistenceException e) {
                         log.error(e.getMessage(), e);
-                    } finally {
-                        try {
-                            factory.unlock(item);
-                        } catch (PersistenceException e) {
-                            log.error(e.getMessage(), e);
-                        } catch (LoginException e) {
-                            log.error(e.getMessage(), e);
-                        }
+                    } catch (LoginException e) {
+                        log.error(e.getMessage(), e);
                     }
                 }
             }
         }
+    }
 
+    private void waitSomeTime(IRepositoryViewObject viewObj) {
+        boolean lockedViewObject = RepositoryResourceUtil.isLockedViewObject(viewObj);
+        System.out.println(lockedViewObject);
+
+        if (lockedViewObject) {
+            try {
+                Thread.sleep(300);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    public void moveToOtherTypeNode(IRepositoryViewObject parent, IRepositoryViewObject viewObj) {
+        MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
+
+        waitSomeTime(viewObj);
+
+        IProxyRepositoryFactory factory = getFactory();
+        try {
+            if (factory.isEditableAndLockIfPossible(item)) {
+                String path = item.getState().getPath();
+                IPath ipath = new Path(path);
+                factory.moveObject(viewObj, ipath);
+
+                IRepositoryViewObject iRepositoryViewObject = ContainerCacheService.get(viewObj.getRepositoryObjectType(), path);
+                commonViewer.refresh(parent);
+                commonViewer.refresh(iRepositoryViewObject);
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        } catch (BusinessException e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            try {
+                factory.unlock(item);
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            } catch (LoginException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
     }
 
     private IWorkbenchPartSite getSite() {
@@ -127,23 +189,58 @@ public class RenameProcessAction extends AbstractRepositoryAction {
         int type = 0;
 
         String path = item.getState().getPath();
-        if (path.startsWith("/")) //$NON-NLS-1$
+        if (path.startsWith("/")) { //$NON-NLS-1$
             path = path.substring(1);
+        }
         if (path.startsWith(ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
             type = 1;
+            oldPrefix = ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER;
         } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
             type = 2;
+            oldPrefix = ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER;
         } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
             type = 3;
+            oldPrefix = ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER;
         } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
             type = 4;
+            oldPrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER;
         } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
             type = 5;
+            oldPrefix = ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER;
         } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_OTHER)) {
             type = 6;
+            oldPrefix = ""; //$NON-NLS-1$
         }
 
         return type;
+    }
+
+    private void transformPath(IRepositoryViewObject viewObj, String newName) {
+        String newPath = getNewPath(newName);
+        if (newPath != null) {
+            processTypeChanged = true;
+            viewObj.getProperty().getItem().getState().setPath(newPath);
+        }
+    }
+
+    private String getNewPath(String newName) {
+        String path = null;
+
+        if (oldPrefix.isEmpty()) {
+            if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
+            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
+            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
+            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
+            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
+            }
+        }
+
+        return path;
     }
 
     private IInputValidator getInputValidator() {
@@ -151,8 +248,9 @@ public class RenameProcessAction extends AbstractRepositoryAction {
             validator = new IInputValidator() {
 
                 public String isValid(String newText) {
-                    if (newText == null || newText.trim().length() == 0)
+                    if (newText == null || newText.trim().length() == 0) {
                         return Messages.Common_nameCanNotBeEmpty;
+                    }
 
                     if (!ValidateUtil.matchViewProcessRegex(newText)) {
                         return Messages.Common_nameInvalid;
@@ -167,19 +265,6 @@ public class RenameProcessAction extends AbstractRepositoryAction {
         }
 
         return validator;
-    }
-
-    public boolean matchViewProcessRegex(String newText) {
-        String regex = "\\w*(#|\\.|\\w*)+(#|\\w+)";//$NON-NLS-1$
-        String tailRegex = ".*(#|\\w+)";//$NON-NLS-1$
-
-        return matches(regex, tailRegex, newText);
-    }
-
-    private boolean matches(String regex, String tailRegex, String newText) {
-        Pattern p1 = Pattern.compile(regex);
-
-        return p1.matcher(newText).matches();
     }
 
     @Override

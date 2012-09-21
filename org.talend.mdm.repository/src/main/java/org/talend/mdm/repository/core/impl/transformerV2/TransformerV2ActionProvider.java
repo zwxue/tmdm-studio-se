@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -34,6 +34,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.process.NewProcessAction;
 import org.talend.mdm.repository.ui.actions.process.RenameProcessAction;
+import org.talend.mdm.repository.ui.actions.view.MDMEditViewProcessPropertyAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -43,19 +44,23 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAdapter {
 
     AbstractRepositoryAction addAction;
-    
+
     AbstractRepositoryAction renameProcessAction;
+
+    AbstractRepositoryAction editViewProcessPropertyAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
 
         addAction = new NewProcessAction();
-        renameProcessAction = new RenameProcessAction(); 
+        renameProcessAction = new RenameProcessAction();
+        editViewProcessPropertyAction = new MDMEditViewProcessPropertyAction();
 
         //
         addAction.initCommonViewer(commonViewer);
         renameProcessAction.initCommonViewer(commonViewer);
+        editViewProcessPropertyAction.initCommonViewer(commonViewer);
     }
 
     @Override
@@ -65,7 +70,7 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
         if (!canDelete(viewObj)) {
             actions.remove(removeFromRepositoryAction);
         }
-        if(isProcessNode(viewObj)) {
+        if (isProcessNode(viewObj)) {
             actions.remove(createFolderAction);
         }
 
@@ -74,6 +79,12 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
 
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            int index = actions.indexOf(mdmEditPropertyAction);
+            if (index != -1) {
+                actions.add(index, editViewProcessPropertyAction);
+                actions.remove(mdmEditPropertyAction);
+            }
+
             addAction(actions, renameProcessAction, viewObj);
             // deploy
             actions.add(deployToAction);
@@ -86,23 +97,25 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
 
     private boolean isProcessNode(IRepositoryViewObject viewObj) {
         String path = viewObj.getProperty().getItem().getState().getPath();
-        
+
         return path.isEmpty();
     }
 
     private boolean canDelete(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
-        if(!(item instanceof ContainerItem))
+        if (!(item instanceof ContainerItem)) {
             return true;
-        
+        }
+
         String path = item.getState().getPath();
         List<String> paths = Arrays.asList(ITransformerV2NodeConsDef.PATH_BEFOREDEL, ITransformerV2NodeConsDef.PATH_BEFORESAVE,
                 ITransformerV2NodeConsDef.PATH_ENTITYACTION, ITransformerV2NodeConsDef.PATH_WELCOMEACTION,
                 ITransformerV2NodeConsDef.PATH_SMARTVIEW, ITransformerV2NodeConsDef.PATH_OTHER);
-        if(path.startsWith("/")) //$NON-NLS-1$
+        if (path.startsWith("/")) {
             path = path.substring(1);
+        }
         boolean canDel = !paths.contains(path);
-        
+
         return canDel;
     }
 

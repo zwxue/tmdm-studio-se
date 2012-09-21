@@ -29,23 +29,28 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class MDMEditPropertyAction extends AbstractRepositoryAction {
 
+    protected IRepositoryViewObject viewObject;
+
     public MDMEditPropertyAction() {
         super(Messages.EditPropertiesAction_action_title);
         setImageDescriptor(ImageCache.getImage(EImage.EDIT_PROPERTY.getPath()));
     }
 
+    @Override
     public String getGroupName() {
         return GROUP_COMMON;
     }
 
+    @Override
     protected boolean needValidateLockedObject() {
         return true;
     }
 
+    @Override
     protected void doRun() {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
-                IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+                viewObject = (IRepositoryViewObject) obj;
                 MdmPropertiesWizard wizard = new MdmPropertiesWizard(viewObject, new Path(viewObject.getPath()), false);
 
                 WizardDialog dlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
@@ -58,6 +63,7 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
 
     }
 
+    @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         return getSelectedObject().size() == 1;
     }

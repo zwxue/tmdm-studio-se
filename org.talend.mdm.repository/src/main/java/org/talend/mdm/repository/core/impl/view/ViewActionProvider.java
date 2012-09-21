@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,6 +33,7 @@ import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.view.BrowseViewAction;
+import org.talend.mdm.repository.ui.actions.view.MDMEditViewProcessPropertyAction;
 import org.talend.mdm.repository.ui.actions.view.NewViewAction;
 import org.talend.mdm.repository.ui.actions.view.RenameViewAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -46,7 +47,10 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
     AbstractRepositoryAction addAction;
 
     AbstractRepositoryAction browseViewAction;
+
     AbstractRepositoryAction renameViewAction;
+
+    private AbstractRepositoryAction editViewProcessPropertyAction;
 
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
@@ -54,30 +58,37 @@ public class ViewActionProvider extends RepositoryNodeActionProviderAdapter {
         addAction = initRepositoryAction(new NewViewAction(), commonViewer);
         browseViewAction = initRepositoryAction(new BrowseViewAction(), commonViewer);
         renameViewAction = initRepositoryAction(new RenameViewAction(), commonViewer);
+        editViewProcessPropertyAction = initRepositoryAction(new MDMEditViewProcessPropertyAction(), commonViewer);
         //
     }
 
     @Override
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
         List<AbstractRepositoryAction> actions = super.getActions(viewObj);
-        
+
         Item item = viewObj.getProperty().getItem();
         String path = item.getState().getPath();
-        if(path.isEmpty())
+        if (path.isEmpty()) {
             actions.remove(createFolderAction);
-        
+        }
+
         if ((item instanceof ContainerItem)
                 && (path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER) || path.equals(IPath.SEPARATOR
                         + IViewNodeConstDef.PATH_WEBFILTER))) {
             actions.remove(removeFromRepositoryAction);
         }
-        
 
         if (RepositoryResourceUtil.hasContainerItem(viewObj, FolderType.SYSTEM_FOLDER_LITERAL, FolderType.FOLDER_LITERAL)) {
             actions.add(addAction);
 
         }
         if (viewObj.getProperty().getItem() instanceof MDMServerObjectItem) {
+            int index = actions.indexOf(mdmEditPropertyAction);
+            if (index != -1) {
+                actions.add(index, editViewProcessPropertyAction);
+                actions.remove(mdmEditPropertyAction);
+            }
+
             addAction(actions, renameViewAction, viewObj);
             actions.add(browseViewAction);
             // deploy
