@@ -55,20 +55,20 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
         this.dataModelName = dataModelName;
     }
 
+    @Override
     public IStatus doAction() {
         try {
 
             if (page.isDirty()) {
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource, "'" //$NON-NLS-1$
-                        + page.getXObject().getDisplayName() + "' " + Messages.modifiedChanges); //$NON-NLS-1$ 
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
+                        Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName()));
 
                 if (save) {
                     IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
-                }
-
-                else
+                } else {
                     return Status.CANCEL_STATUS;
+                }
             }
             IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
             XSDComponent xSDCom = null;
@@ -76,19 +76,22 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
             if (selection.getFirstElement() instanceof Element) {
                 TreePath tPath = ((TreeSelection) selection).getPaths()[0];
                 for (int i = 0; i < tPath.getSegmentCount(); i++) {
-                    if (tPath.getSegment(i) instanceof XSDAnnotation)
+                    if (tPath.getSegment(i) instanceof XSDAnnotation) {
                         xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+                    }
                 }
-            } else
+            } else {
                 xSDCom = (XSDComponent) selection.getFirstElement();
+            }
             if (xSDCom instanceof XSDElementDeclaration) {
                 conceptName = xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();//$NON-NLS-1$
             }
             if (xSDCom instanceof XSDParticle) {
             }
             XSDAnnotationsStructure struc = null;
-            if (xSDCom != null)
+            if (xSDCom != null) {
                 struc = new XSDAnnotationsStructure(xSDCom);
+            }
             if (struc == null || struc.getAnnotation() == null) {
                 throw new RuntimeException(Messages.bind(Messages.UnableEditAnnotationType, xSDCom.getClass().getName()));
             }
@@ -132,6 +135,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
         }
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
