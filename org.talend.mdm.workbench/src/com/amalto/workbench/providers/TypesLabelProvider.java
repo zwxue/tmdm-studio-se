@@ -53,14 +53,16 @@ public class TypesLabelProvider extends LabelProvider {
 
     private static Log log = LogFactory.getLog(TypesLabelProvider.class);
 
+    @Override
     public String getText(Object obj) {
 
         // System.out.println("getText   "+obj.getClass().getName());
 
         if (obj instanceof XSDElementDeclaration) {
             String name = ((XSDElementDeclaration) obj).getName();
-            if (((XSDElementDeclaration) obj).isAbstract())
+            if (((XSDElementDeclaration) obj).isAbstract()) {
                 name += "   (abstract)";
+            }
             String tail = ((XSDElementDeclaration) obj).getTargetNamespace() == null ? "" : " : "//$NON-NLS-1$//$NON-NLS-2$
                     + ((XSDElementDeclaration) obj).getTargetNamespace();
             return name + tail;
@@ -110,12 +112,13 @@ public class TypesLabelProvider extends LabelProvider {
 
         if (obj instanceof XSDModelGroup) {
             // return the name of the complex type definition
-        	XSDParticle particle = (XSDParticle) (((XSDModelGroup) obj).getContainer());
+            XSDParticle particle = (XSDParticle) (((XSDModelGroup) obj).getContainer());
             XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) particle.getContainer();
-            
+
             String name = complexTypeDefinition.getName();
-            if (name == null)
+            if (name == null) {
                 name = "";//$NON-NLS-1$
+            }
             // return the occurence
             if (!((particle.getMinOccurs() == 1) && (particle.getMaxOccurs() == 1))) {
                 name += "  [";//$NON-NLS-1$
@@ -125,13 +128,12 @@ public class TypesLabelProvider extends LabelProvider {
                 name += "]";//$NON-NLS-1$
             }
 
-
             XSDTypeDefinition extendType = complexTypeDefinition.getBaseTypeDefinition();
             String extendTypeName = ""; //$NON-NLS-1$
             if (extendType != null && extendType != complexTypeDefinition && !"anyType".equals(extendType.getName())) { //$NON-NLS-1$
                 extendTypeName = ":" + extendType.getName(); //$NON-NLS-1$
             }
-            
+
             return name + extendTypeName;
         }
 
@@ -162,16 +164,18 @@ public class TypesLabelProvider extends LabelProvider {
         if (obj instanceof XSDAttributeGroupDefinition) {
             XSDAttributeGroupDefinition attributeGroupDefinition = (XSDAttributeGroupDefinition) obj;
             String name = (attributeGroupDefinition.getName() == null ? "" : attributeGroupDefinition.getName());//$NON-NLS-1$
-            if (attributeGroupDefinition.getContents().size() == 0) // a ref
+            if (attributeGroupDefinition.getContents().size() == 0) {
                 name += " [" + attributeGroupDefinition.getResolvedAttributeGroupDefinition().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
+            }
             return name;
         }
 
         if (obj instanceof XSDAttributeUse) {
             XSDAttributeUse attributeUse = (XSDAttributeUse) obj;
             String name = attributeUse.getAttributeDeclaration().getName();
-            if (name == null)
+            if (name == null) {
                 name = " [" + attributeUse.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
+            }
             return name;
         }
 
@@ -195,7 +199,7 @@ public class TypesLabelProvider extends LabelProvider {
                             return "Foreign Key:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey_NotSep")) {//$NON-NLS-1$
                             Boolean v = Boolean.valueOf(e.getChildNodes().item(0).getNodeValue());
-                            return Messages.getString("SimpleXpathInputDialog_sepFkTabPanel")+": " + v;
+                            return Messages.getString("SimpleXpathInputDialog_sepFkTabPanel") + ": " + v;
                         } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return "Foreign Key Info:  " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
@@ -219,6 +223,12 @@ public class TypesLabelProvider extends LabelProvider {
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_AutoExpand")) {//$NON-NLS-1$
                             return "Auto Expand : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_Retrieve_FKinfos")) {//$NON-NLS-1$
+                            return "Foreign Key resolution: " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_FKIntegrity")) {//$NON-NLS-1$
+                            return "Foreign Key integrity: " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_FKIntegrity_Override")) {//$NON-NLS-1$
+                            return "Foreign Key integrity override: " + e.getChildNodes().item(0).getNodeValue();
                         } else {
                             return source + ": " + Util.nodeToString((Element) obj);//$NON-NLS-1$
                         }
@@ -234,12 +244,14 @@ public class TypesLabelProvider extends LabelProvider {
             }
         }
 
-        if (obj == null)
+        if (obj == null) {
             return "NULL";//$NON-NLS-1$
+        }
         return "?? " + obj.getClass().getName() + " : " + obj.toString();//$NON-NLS-1$//$NON-NLS-2$
 
     }
 
+    @Override
     public Image getImage(Object obj) {
 
         // System.out.println("getImage "+obj.getClass().getName());
@@ -275,8 +287,9 @@ public class TypesLabelProvider extends LabelProvider {
             XSDTerm xsdTerm = xsdParticle.getTerm();
             if (xsdTerm instanceof XSDElementDeclaration) {
                 // get Type of Parent Group
-                if (Util.getKeyInfo(xsdTerm) != null && Util.getKeyInfo(xsdTerm).size() > 0)
+                if (Util.getKeyInfo(xsdTerm) != null && Util.getKeyInfo(xsdTerm).size() > 0) {
                     return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
+                }
                 XSDConcreteComponent xsdConcreteComponent = xsdParticle.getContainer();
                 if (xsdConcreteComponent instanceof XSDModelGroup) {
                     /*
@@ -353,15 +366,17 @@ public class TypesLabelProvider extends LabelProvider {
 
         if (obj instanceof XSDIdentityConstraintDefinition) {
             XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
-            if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+            if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                 return ImageCache.getCreatedImage(EImage.KEYS.getPath());
+            }
             return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
         }
 
         if (obj instanceof XSDXPathDefinition) {
             XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
-            if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
+            if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL)) {
                 return ImageCache.getCreatedImage("icons/field.gif");//$NON-NLS-1$
+            }
             return ImageCache.getCreatedImage("icons/selector.gif");//$NON-NLS-1$
         }
 
@@ -374,10 +389,11 @@ public class TypesLabelProvider extends LabelProvider {
             if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {//$NON-NLS-1$
                 return ImageCache.getCreatedImage(EImage.ANNOTATION.getPath());
             }
-            if (att.getUse().equals(XSDAttributeUseCategory.REQUIRED_LITERAL))
+            if (att.getUse().equals(XSDAttributeUseCategory.REQUIRED_LITERAL)) {
                 return ImageCache.getCreatedImage("icons/attribute_mandatory.gif");//$NON-NLS-1$
-            else
+            } else {
                 return ImageCache.getCreatedImage("icons/attribute.gif");//$NON-NLS-1$
+            }
         }
 
         if (obj instanceof XSDAnnotation) {
@@ -412,7 +428,7 @@ public class TypesLabelProvider extends LabelProvider {
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
-                        }else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
+                        } else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
                         } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
@@ -502,8 +518,9 @@ public class TypesLabelProvider extends LabelProvider {
 
         XSDTypeDefinition baseType = type.getBaseType();
 
-        if (baseType == null || "anyType".equals(baseType.getName()))//$NON-NLS-1$
+        if (baseType == null || "anyType".equals(baseType.getName())) {
             return "";//$NON-NLS-1$
+        }
 
         return " : " + baseType.getName();//$NON-NLS-1$
     }
