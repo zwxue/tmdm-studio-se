@@ -53,8 +53,9 @@ public class JobResourceListener implements IResourceChangeListener {
                 IPath path = resource.getProjectRelativePath();
                 String segment = path.segment(0);
                 if (segment != null) {
-                    if (!segment.equals(PROCESS_DIR))
+                    if (!segment.equals(PROCESS_DIR)) {
                         return false;
+                    }
                     if (resource.getType() == IResource.FILE) {
                         if ("screenshot".equalsIgnoreCase(resource.getFileExtension()) && resource.exists()) {//$NON-NLS-1$
                             String name = resource.getName();
@@ -76,31 +77,35 @@ public class JobResourceListener implements IResourceChangeListener {
                     }
                 }
             }
-            
+
             if ((delta.getKind() & IResourceDelta.ADDED) != 0) {
                 IResource resource = delta.getResource();
                 if (resource.getType() == IResource.FILE) {
                     if ("properties".equals(resource.getFileExtension()) || "item".equals(resource.getFileExtension())) {//$NON-NLS-1$//$NON-NLS-2$
                         String name = resource.getName();
                         int lastIndex = name.lastIndexOf("_");//$NON-NLS-1$
-                        String jobName = name.substring(0, lastIndex);
-                        IRepositoryViewObject job = RepositoryResourceUtil.findViewObjectByName(ERepositoryObjectType.PROCESS,
-                                jobName);
-                        if (job != null) {
-                            CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, job.getId(), jobName);
+                        if (lastIndex != -1) {
+                            String jobName = name.substring(0, lastIndex);
+                            IRepositoryViewObject job = RepositoryResourceUtil.findViewObjectByName(
+                                    ERepositoryObjectType.PROCESS, jobName);
+                            if (job != null) {
+                                CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, job.getId(), jobName);
+                            }
                         }
                     }
                 }
             }
-            
+
             return true;
         }
     };
 
     private boolean isOpenInEditor(IRepositoryViewObject vObj) {
-        if (!ProxyRepositoryFactory.getInstance().isFullLogonFinished())
+        if (!ProxyRepositoryFactory.getInstance().isFullLogonFinished()) {
             return false;
-        if(PlatformUI.getWorkbench()==null || PlatformUI.getWorkbench().getActiveWorkbenchWindow()==null ||PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()==null){
+        }
+        if (PlatformUI.getWorkbench() == null || PlatformUI.getWorkbench().getActiveWorkbenchWindow() == null
+                || PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() == null) {
             return false;
         }
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -124,8 +129,9 @@ public class JobResourceListener implements IResourceChangeListener {
     }
 
     public void resourceChanged(IResourceChangeEvent event) {
-        if (!ProxyRepositoryFactory.getInstance().isFullLogonFinished())
+        if (!ProxyRepositoryFactory.getInstance().isFullLogonFinished()) {
             return;
+        }
         IResourceDelta delta = event.getDelta();
         try {
             if (delta != null) {

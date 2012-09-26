@@ -26,11 +26,18 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
+import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.PropertiesFactory;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
@@ -58,10 +65,12 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         super();
     }
 
+    @Override
     protected String getDialogTitle() {
         return Messages.NewProcessAction_newProcess;
     }
 
+    @Override
     protected void doRun() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);
@@ -83,8 +92,39 @@ public class NewProcessAction extends AbstractSimpleAddAction {
             commonViewer.expandToLevel(selectObj, 1);
 
             openEditor(item);
+            openJobEditor(item);
         }
-       
+
+    }
+
+    private void openJobEditor(Item item) {
+        String label = item.getProperty().getLabel();
+        IRepositoryViewObject jobViewObject = RepositoryResourceUtil.findViewObjectByName(ERepositoryObjectType.PROCESS, label);
+        if (jobViewObject != null) {
+            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            IEditorPart[] editorReferences = activePage.getEditors();
+
+            ProcessItem jobItem = null;
+            if (editorReferences != null) {
+                for (IEditorPart editorPart : editorReferences) {
+                    IEditorInput editorInput = editorPart.getEditorInput();
+                    if (editorInput instanceof ProcessEditorInput) {
+                        ProcessEditorInput processInput = (ProcessEditorInput) editorInput;
+                        jobItem = (ProcessItem) processInput.getItem();
+
+                        String plabel = jobItem.getProperty().getLabel();
+                        if (plabel.equals(label)) {
+                            activePage.closeEditor(editorPart, false);
+                            break;
+                        }
+
+                        jobItem = null;
+                    }
+                }
+            }
+
+            openEditor(jobItem);
+        }
     }
 
     private WSTransformerV2E newProcess(String key) {
@@ -133,6 +173,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         return transformer;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
         WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
