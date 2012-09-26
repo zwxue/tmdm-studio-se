@@ -18,6 +18,7 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
+import org.talend.mdm.repository.i18n.Messages;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -44,8 +45,7 @@ public class DeleteCommand extends AbstractDeployCommand {
                 return DeployStatus.getOKStatus(this, typeLabel + " \"" + objectName + "\"" + " was deleted successfully");
 
             } catch (Exception e) {
-                return DeployStatus.getErrorStatus(null,
-                        "Fail to delete " + typeLabel + " \"" + objectName + "\",Cause is:" + e.getMessage(), e);
+                return getDetailErrorMsg(Messages._ErrorStatusMsg1, typeLabel, objectName, e);
             }
         } else {
             return DeployStatus.getErrorStatus(null, "Not support for deploying \"" + objectName + "\"");
