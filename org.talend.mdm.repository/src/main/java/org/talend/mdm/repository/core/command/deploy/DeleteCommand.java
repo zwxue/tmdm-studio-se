@@ -45,8 +45,7 @@ public class DeleteCommand extends AbstractDeployCommand {
                 return DeployStatus.getOKStatus(this, Messages.bind(Messages._OkStatusMsg, typeLabel, objectName));
 
             } catch (Exception e) {
-                return DeployStatus.getErrorStatus(null,
-                        Messages.bind(Messages._ErrorStatusMsg1, typeLabel, objectName, e.getMessage()));
+                return getDetailErrorMsg(Messages._ErrorStatusMsg1, typeLabel, objectName, e);
             }
         } else {
             return DeployStatus.getErrorStatus(null, Messages.bind(Messages._ErrorStatusMsg2, objectName));
