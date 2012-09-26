@@ -27,11 +27,18 @@ import java.util.List;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
+import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.PropertiesFactory;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -47,29 +54,32 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class NewProcessAction extends AbstractSimpleAddAction {
 
     /**
      * DOC AddProcess constructor comment.
-     * 
+     *
      * @param text
      */
     public NewProcessAction() {
         super();
     }
 
+    @Override
     protected String getDialogTitle() {
         return Messages.NewProcessAction_newProcess;
     }
 
+    @Override
     protected void doRun() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);
-        
+
+
         int type = getType();
-        
+
         if (selectObj instanceof IRepositoryViewObject) {
             Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
             if (pItem instanceof ContainerItem) {
@@ -88,10 +98,41 @@ public class NewProcessAction extends AbstractSimpleAddAction {
             commonViewer.expandToLevel(selectObj, 1);
 
             openEditor(item);
+            openJobEditor(item);
         }
-       
+
     }
-    
+
+    private void openJobEditor(Item item) {
+        String label = item.getProperty().getLabel();
+        IRepositoryViewObject jobViewObject = RepositoryResourceUtil.findViewObjectByName(ERepositoryObjectType.PROCESS, label);
+        if (jobViewObject != null) {
+            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            IEditorPart[] editorReferences = activePage.getEditors();
+
+            ProcessItem jobItem = null;
+            if (editorReferences != null) {
+                for (IEditorPart editorPart : editorReferences) {
+                    IEditorInput editorInput = editorPart.getEditorInput();
+                    if (editorInput instanceof ProcessEditorInput) {
+                        ProcessEditorInput processInput = (ProcessEditorInput) editorInput;
+                        jobItem = (ProcessItem) processInput.getItem();
+
+                        String plabel = jobItem.getProperty().getLabel();
+                        if (plabel.equals(label)) {
+                             activePage.closeEditor(editorPart, false);
+                            break;
+                        }
+
+                        jobItem = null;
+                    }
+                }
+            }
+
+            openEditor(jobItem);
+        }
+    }
+
     private int getType() {
         int type = 0;
 
@@ -101,17 +142,17 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         String path = containerItem.getState().getPath();
         if (path.isEmpty()) {
             type = 0;
-        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
+        } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
             type = 1;
-        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
+        } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
             type = 2;
-        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
+        } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
             type = 3;
-        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
+        } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
             type = 4;
-        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
+        } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
             type = 5;
-        } else if (path.startsWith(IPath.SEPARATOR+ITransformerV2NodeConsDef.PATH_OTHER)) {
+        } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER)) {
             type = 6;
         }
 
@@ -128,7 +169,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
             final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"//$NON-NLS-1$
                     + "   <xsl:output method='html' indent='yes' omit-xml-declaration='yes'/>\n"//$NON-NLS-1$
                     + "   <xsl:template match='/'>\n" + "       <html>\n"//$NON-NLS-1$//$NON-NLS-2$
-                    + "          <head><title>Smart View</title></head>\n" + "          <body>\n"//$NON-NLS-1$//$NON-NLS-2$ 
+                    + "          <head><title>Smart View</title></head>\n" + "          <body>\n"//$NON-NLS-1$//$NON-NLS-2$
                     + "            <h1>This is the default Smart View for: <xsl:value-of select='./text()'/></h1>\n"//$NON-NLS-1$
                     + "            <xsl:copy-of select='.'/>\n" + "            <!-- Customize the stylesheet -->\n"//$NON-NLS-1$//$NON-NLS-2$
                     + "          </body>\n" + "       </html>\n" + "    </xsl:template>" + "</xsl:stylesheet>";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -164,6 +205,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         return transformer;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
         WSTransformerV2Item item = MdmpropertiesFactory.eINSTANCE.createWSTransformerV2Item();
@@ -190,7 +232,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
 
         if (parentItem != null) {
             String path = rebuildItemPath(process.getName());
-            
+
             item.getState().setPath(path);
             RepositoryResourceUtil.createItem(item, process.getName());
         }
@@ -200,23 +242,19 @@ public class NewProcessAction extends AbstractSimpleAddAction {
     private String rebuildItemPath(String processName) {
         String path = parentItem.getState().getPath();
         processName = processName.toLowerCase();
-        if(path.isEmpty()) {
-            if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE))
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;                
-            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)){
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;                
-            }
-            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)){
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;                
-            }
-            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)){
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;                
-            }
-            else if(processName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)){
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;                
-            }
-            else {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;                
+        if (path.isEmpty()) {
+            if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
+            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
+            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
+            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
+            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
+            } else {
+                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;
             }
         }
         return path;

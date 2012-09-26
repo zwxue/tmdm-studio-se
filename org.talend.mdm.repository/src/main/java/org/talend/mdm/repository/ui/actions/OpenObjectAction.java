@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.talend.commons.exception.PersistenceException;
@@ -60,7 +62,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class OpenObjectAction extends AbstractRepositoryAction {
 
@@ -74,7 +76,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong OpenObjectAction constructor comment.
-     * 
+     *
      * @param text
      */
     public OpenObjectAction() {
@@ -97,8 +99,9 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             if (object instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
                 ERepositoryStatus status = factory.getStatus(viewObj);
-                if (status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER)
+                if (status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER) {
                     return !status.isEditable();
+                }
 
             }
         }
@@ -131,17 +134,20 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         editorInput.setVersion(version);
     }
 
+    @Override
     protected void doRun() {
         List<Object> sels = getSelectedObject();
         if (selObjects != null) {
             sels = selObjects;
         }
-        if (sels.isEmpty())
+        if (sels.isEmpty()) {
             return;
+        }
         Object obj = sels.get(0);
         if (obj instanceof IRepositoryViewObject) {
-            if (obj instanceof WSRootRepositoryObject)
+            if (obj instanceof WSRootRepositoryObject) {
                 return;
+            }
             IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
 
             Item item = viewObject.getProperty().getItem();
@@ -162,13 +168,14 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     private void openServiceConfig(MDMServerDef serverDef) {
         TreeParent serverRoot = getServerRoot(serverDef);
-            
+
         if (!isNull(serverRoot)) {
             TreeObject xobject = new TreeObject(EXtentisObjects.ServiceConfiguration.getDisplayName(), serverRoot,
                     TreeObject.SERVICE_CONFIGURATION, null, null);
             try {
-                if (page == null)
+                if (page == null) {
                     this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                }
                 page.openEditor(new XObjectEditorInput(xobject, xobject.getDisplayName()),
                         "com.amalto.workbench.editors.XObjectEditor"); //$NON-NLS-1$
             } catch (PartInitException e) {
@@ -185,13 +192,15 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             if (actionProvider != null) {
                 IRepositoryViewEditorInput editorInput = actionProvider.getOpenEditorInput(viewObject);
                 if (editorInput != null) {
-                    if (page == null)
+                    if (page == null) {
                         this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                    }
                     // do extra action
                     MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
                     boolean selected = doSelectServer(serverObject, editorInput);
-                    if (!selected)
+                    if (!selected) {
                         return;
+                    }
                     try { // svn lock
                         ERepositoryStatus status = factory.getStatus(item);
                         if (factory.isEditableAndLockIfPossible(item)) {
@@ -221,19 +230,29 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     }
 
     @Override
+    public IStructuredSelection getStructuredSelection() {
+        if(selObjects != null) {
+            return new StructuredSelection(selObjects);
+        }
+        return super.getStructuredSelection();
+    }
+
+    @Override
     protected boolean needValidateLockedObject() {
         return true;
     }
 
+    @Override
     public String getGroupName() {
         // this action not be shown in context menu,so Nothing need to do in here
         return null;
     }
 
     public TreeParent getServerRoot(MDMServerDef serverDef) {
-        if(isNull(serverDef))
+        if(isNull(serverDef)) {
             return null;
-        
+        }
+
         String serverName = serverDef.getHost();
         String universe = serverDef.getUniverse();
         String username = serverDef.getUser();
@@ -271,7 +290,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * return a decrypted server def
-     * 
+     *
      * @param serverObject
      * @return a decrypted server def
      */
@@ -285,7 +304,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         }
         return null;
     }
-    
+
     private boolean isNull(Object obj) {
         return obj == null;
     }
