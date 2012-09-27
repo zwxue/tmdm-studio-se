@@ -29,22 +29,26 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPartSite;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
-import com.amalto.workbench.views.ServerView;
 
 public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
     // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
     private final TreeParent treeParent;
 
-    public DataModelSelectDialog(Shell parentShell, TreeParent treeParent) {
+    private IWorkbenchPartSite site;
+
+    public DataModelSelectDialog(Shell parentShell, IWorkbenchPartSite iWorkbenchPartSite, TreeParent treeParent) {
         super(parentShell);
+        this.site = iWorkbenchPartSite;
         this.treeParent = treeParent;
     }
+
     // The ending| bug:21784
     private static final long serialVersionUID = 1L;
 
@@ -64,6 +68,7 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
     protected TreeViewer domViewer;
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText("Select a Data Model");
         Composite composite = (Composite) super.createDialogArea(parent);
@@ -84,22 +89,25 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
         TreeParent parent = null;
         // Modified by hbhong,to fix bug 21784
         TreeObject[] children = treeParent.getChildren();
-        for (int i = 0; i < children.length; i++) {
-            parent = (TreeParent)children[i];
-            if (parent.getType() == TreeObject.DATA_MODEL)
+        for (TreeObject element : children) {
+            parent = (TreeParent) element;
+            if (parent.getType() == TreeObject.DATA_MODEL) {
                 break;
+            }
         }
         // The ending| bug:21784
-        contentProvider = new ServerTreeContentProvider(ServerView.show().getSite(), parent);
+        contentProvider = new ServerTreeContentProvider(site, parent);
         setTreeContentProvider(contentProvider);
         domViewer.setLabelProvider(new ServerTreeLabelProvider());
         domViewer.setSorter(new ViewerSorter() {
 
+            @Override
             public int category(Object element) {
                 if (element instanceof TreeParent) {
                     TreeParent category = (TreeParent) element;
-                    if (category.getType() == TreeObject.CATEGORY_FOLDER)
+                    if (category.getType() == TreeObject.CATEGORY_FOLDER) {
                         return -1;
+                    }
                 }
                 return 0;
             }
@@ -111,16 +119,17 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
                 StructuredSelection sel = (StructuredSelection) e.getSelection();
 
                 TreeObject selectNode = (TreeObject) sel.getFirstElement();
-                if (selectNode != null && selectNode.getType() == TreeObject.DATA_MODEL)
+                if (selectNode != null && selectNode.getType() == TreeObject.DATA_MODEL) {
                     xpath = selectNode.getDisplayName();
-                else
+                } else {
                     xpath = "";//$NON-NLS-1$
+                }
                 sel.getFirstElement();
 
                 getButton(IDialogConstants.OK_ID).setEnabled(xpath.length() > 0);
             }
         });
-        domViewer.setInput(ServerView.show().getSite());
+        domViewer.setInput(site);
 
     }
 
@@ -131,6 +140,7 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
         domViewer.setContentProvider(treeContentProvider);
     }
 
+    @Override
     protected Control createButtonBar(Composite parent) {
         Control btnBar = super.createButtonBar(parent);
         getButton(IDialogConstants.OK_ID).setText("OK");

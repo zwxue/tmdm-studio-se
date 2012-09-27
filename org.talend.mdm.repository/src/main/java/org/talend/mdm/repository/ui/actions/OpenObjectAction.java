@@ -253,7 +253,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             return null;
         }
 
-        String serverName = serverDef.getHost();
+        String serverName = serverDef.getName();
         String universe = serverDef.getUniverse();
         String username = serverDef.getUser();
         String password = serverDef.getPasswd();
