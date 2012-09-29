@@ -21,8 +21,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.view;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.window.Window;
@@ -49,7 +47,7 @@ import org.talend.mdm.repository.utils.ValidateUtil;
 
 /**
  * DOC class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class NewViewAction extends AbstractSimpleAddAction {
 
@@ -68,6 +66,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
         return Messages.NewViewAction_newView;
     }
 
+    @Override
     protected void doRun() {
         getParentItem();
 
@@ -78,20 +77,23 @@ public class NewViewAction extends AbstractSimpleAddAction {
                 getInputValidator(), false, type);
         vid.setBtnShow(true);
         vid.create();
-        vid.getShell().setSize(new Point(500, 280));
+        vid.getShell().setSize(new Point(500, 320));
         vid.setBlockOnOpen(true);
-        if (vid.open() == Window.CANCEL)
+        if (vid.open() == Window.CANCEL) {
             return;
+        }
         String key = vid.getEntityName();
         String filterName = vid.getFilterName();
 
         Item item = null;
-        if (filterName == null)
+        if (filterName == null) {
             item = createServerObject(key);
-        else {
+        } else {
             String filterPart = ""; //$NON-NLS-1$
             if (!filterName.isEmpty())
+             {
                 filterPart = "#" + filterName; //$NON-NLS-1$
+            }
 
             item = createServerObject(IViewNodeConstDef.PREFIX_VIEW_UPPER + key + filterPart);
         }
@@ -102,8 +104,8 @@ public class NewViewAction extends AbstractSimpleAddAction {
     }
 
     private int getType() {
-        
-        
+
+
         int type = 0;
 
         IRepositoryViewObject repositoryViewObject = (IRepositoryViewObject) selectObj;
@@ -121,6 +123,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
         return type;
     }
 
+    @Override
     protected Item createServerObject(String key) {
 
         WSViewItem item = MdmpropertiesFactory.eINSTANCE.createWSViewItem();
@@ -134,17 +137,17 @@ public class NewViewAction extends AbstractSimpleAddAction {
         if (parentItem != null) {
             String path = parentItem.getState().getPath();
             if(path.isEmpty()) {
-                if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW))
-                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;                
-                else {
-                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;                
+                if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
+                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;
+                } else {
+                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;
                 }
             }
             item.getState().setPath(path);
         } else {
-            if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW))
+            if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
                 item.getState().setPath(IViewNodeConstDef.PATH_WEBFILTER);
-            else {
+            } else {
                 item.getState().setPath(IViewNodeConstDef.PATH_SEARCHFILTER);
             }
         }
@@ -175,8 +178,9 @@ public class NewViewAction extends AbstractSimpleAddAction {
         return new IInputValidator() {
 
             public String isValid(String newText) {
-                if (newText == null || newText.trim().length() == 0)
+                if (newText == null || newText.trim().length() == 0) {
                     return Messages.Common_nameCanNotBeEmpty;
+                }
                 if (!ValidateUtil.matchViewProcessRegex(newText)) {
                     return Messages.Common_nameInvalid;
                 }

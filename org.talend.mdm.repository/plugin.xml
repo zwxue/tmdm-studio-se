@@ -658,6 +658,10 @@
             class="org.talend.mdm.repository.core.service.RemoveCommandService"
             serviceId="IRemoveCommandService">
       </Service>
+      <Service
+            class="org.talend.mdm.repository.utils.RepositoryTransformUtil"
+            serviceId="ITransformService">
+      </Service>
    </extension>
       
    

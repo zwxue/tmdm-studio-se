@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,10 +33,12 @@ import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
+
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class ViewLabelProvider extends AbstractLabelProvider {
 
@@ -64,38 +66,42 @@ public class ViewLabelProvider extends AbstractLabelProvider {
         }
         return img;
     }
-    
+
     @Override
     protected String getConainerItemText(Item item) {
-        if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_SEARCHFILTER))
+        if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_SEARCHFILTER)) {
             return Messages.ViewLabelProvider_WebfilterNodeName;
-        else if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER))
+        } else if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER)) {
             return Messages.ViewLabelProvider_SearchfilterNodeName;
-        
+        }
+
         return super.getConainerItemText(item);
     }
-    
+
     @Override
     protected String getServerObjectItemText(Item item) {
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject != null) {
             String name = serverObject.getName();
-            
-            name = filterName(name);
-            
+
+            name = RepositoryTransformUtil.getInstance().transformToSilyViewName(name);
+
             return name;
         }
         return null;
     }
-    
+
     private String filterName(String name) {
         String prefix = IViewNodeConstDef.PREFIX_VIEW;
-        if(name != null && !name.isEmpty() && name.toLowerCase().startsWith(prefix)) {
-            name = name.substring(prefix.length());
-            if(name.indexOf("#") != -1)//$NON-NLS-1$
-                name = name.replace("#", "(") + ")";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        String filteredName = name;
+        if (filteredName != null && !filteredName.isEmpty() && filteredName.startsWith(prefix)) {
+            filteredName = filteredName.substring(prefix.length());
+            if (filteredName.indexOf("#") != -1) //$NON-NLS-1$
+             {
+                filteredName = filteredName.replace("#", "(") + ")";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            }
         }
-        
+
         return name;
     }
 
@@ -105,10 +111,11 @@ public class ViewLabelProvider extends AbstractLabelProvider {
         if(item instanceof ContainerItem) {
             String path = item.getState().getPath();
             if (path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)
-                    || path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER))
+                    || path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER)) {
                 return true;
+            }
         }
-        
+
         return false;
     }
 

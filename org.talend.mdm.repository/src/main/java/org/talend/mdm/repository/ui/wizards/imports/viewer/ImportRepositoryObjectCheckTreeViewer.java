@@ -26,7 +26,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.ui.widgets.AbstractNodeCheckTreeViewer;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.repository.imports.ImportItemUtil;
 import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.TreeBuilder.IContainerNode;
@@ -42,7 +47,7 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
-     * 
+     *
      * @param repositoryUtil
      */
     public ImportRepositoryObjectCheckTreeViewer(ImportItemUtil repositoryUtil) {
@@ -52,13 +57,14 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
-     * 
+     *
      * @param selection
      */
     public ImportRepositoryObjectCheckTreeViewer(IStructuredSelection selection) {
         super(selection);
     }
 
+    @Override
     protected void createTreeViewer(Composite itemComposite) {
         filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI) {
 
@@ -120,7 +126,30 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                         if (element instanceof IContainerNode) {
                             return ((IContainerNode) element).getLabel();
                         }
-                        return ((ItemRecord) element).getLabel();
+                        String itemRecordLabel = ((ItemRecord) element).getLabel();
+
+                        itemRecordLabel = filterVieProcessName(itemRecordLabel, (ItemRecord) element);
+
+                        return itemRecordLabel;
+                    }
+
+                    private String filterVieProcessName(String itemRecordLabel, ItemRecord record) {
+                        String filteredName = itemRecordLabel;
+                        if (filteredName != null && !filteredName.isEmpty()) {
+                            IRepositoryViewObject repositoryViewObject = ContainerCacheService.get(record.getProperty());
+                            if(repositoryViewObject != null){
+                                ERepositoryObjectType repositoryObjectType = repositoryViewObject.getRepositoryObjectType();
+                                if (repositoryObjectType == IServerObjectRepositoryType.TYPE_VIEW) {
+                                    filteredName = RepositoryTransformUtil.getInstance().transformToSilyViewName(filteredName);
+                                }
+
+                                if (repositoryObjectType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
+                                    filteredName = RepositoryTransformUtil.getInstance().transformToSilyProcessName(filteredName);
+                                }
+                            }
+                        }
+
+                        return filteredName;
                     }
 
                 });

@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -31,10 +31,12 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
+
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
@@ -51,18 +53,19 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
     @Override
     protected String getConainerItemText(Item item) {
-        if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE))
+        if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
             return Messages.TransformerV2XX_BeforeSaving;
-        else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL))
+        } else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
             return Messages.TransformerV2XX_BeforeDeleting;
-        else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION))
+        } else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
             return Messages.TransformerV2XX_EntityAction;
-        else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION))
+        } else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
             return Messages.TransformerV2XX_WelcomeAction;
-        else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
+        } else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
             return Messages.TransformerV2XX_SmartView;
-        else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER))
+        } else if (item.getState().getPath().equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER)) {
             return Messages.TransformerV2XX_Other;
+        }
 
         return super.getConainerItemText(item);
     }
@@ -72,36 +75,36 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
         String itemText = super.getServerObjectItemText(item);
 
-        itemText = transformItemText(itemText);
+        itemText = RepositoryTransformUtil.getInstance().transformToSilyProcessName(itemText);
 
         return itemText;
     }
 
     protected String transformItemText(String itemText) {
         String prefix = null;
-        
+
         String sepA = "#";//$NON-NLS-1$
         String sepB = "(";//$NON-NLS-1$
         String sepC = ")";//$NON-NLS-1$
-        if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
+        if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
             prefix = ITransformerV2NodeConsDef.PREFIX_BEFORESAVE;
             itemText = itemText.substring(prefix.length());
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
+        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
             prefix = ITransformerV2NodeConsDef.PREFIX_BEFOREDEL;
             itemText = itemText.substring(prefix.length());
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
+        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
             prefix = ITransformerV2NodeConsDef.PREFIX_RUNNABLE;
             itemText = itemText.substring(prefix.length());
             if (itemText.indexOf(sepA) != -1) {
                 itemText = itemText.replace(sepA, sepB) + sepC;
             }
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)) {
+        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)) {
             prefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
             itemText = itemText.substring(prefix.length());
             if (itemText.indexOf(sepA) != -1) {
                 itemText = itemText.replace(sepA, sepB) + sepC;
             }
-        } else if (itemText.toLowerCase().startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
+        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
             prefix = ITransformerV2NodeConsDef.PREFIX_SMARTVIEW;
             itemText = itemText.substring(prefix.length());
             if (itemText.indexOf(sepA) != -1) {
@@ -111,7 +114,7 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
             prefix = "";//$NON-NLS-1$
             itemText = itemText.substring(prefix.length());
         }
-        
+
         return itemText;
     }
 
@@ -139,9 +142,9 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
                     || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)
                     || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)
                     || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)
-                    || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER))
-                
+                    || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER)) {
                 return true;
+            }
         }
 
         return false;

@@ -39,7 +39,7 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
-     * 
+     *
      * @param selection
      */
     IRepositoryViewObject[] categoryViewObjects;
@@ -48,6 +48,7 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
         super(selection);
     }
 
+    @Override
     protected void createTreeViewer(Composite itemComposite) {
         filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI) {
 
@@ -59,7 +60,7 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                 IRepositoryViewObject[] viewObjs = getSortedViewObjects(categoryViewObjects);
 
                 treeViewer = new ContainerCheckedTreeViewer(parent);
-                treeViewer.setLabelProvider(new MDMExporterLabelProvider());
+                treeViewer.setLabelProvider(new MDMRepositoryLabelProvider());
                 treeViewer.setContentProvider(new MDMRepositoryContentProvider());
                 treeViewer.setInput(viewObjs);
                 return treeViewer;
@@ -95,14 +96,15 @@ public class ExportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
             sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_ROLE));
             sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_SYNCHRONIZATIONPLAN));
             sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_UNIVERSE));
-            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_WORKFLOW));            
+            sortedViewObjs.add(getViewObjectByType(IServerObjectRepositoryType.TYPE_WORKFLOW));
         }
-        return (IRepositoryViewObject[]) sortedViewObjs.toArray(new IRepositoryViewObject[0]);
+        return sortedViewObjs.toArray(new IRepositoryViewObject[0]);
     }
 
     public IRepositoryViewObject getViewObjectByType(ERepositoryObjectType type) {
-        if (categoryViewObjects == null || type == null)
+        if (categoryViewObjects == null || type == null) {
             return null;
+        }
         for (IRepositoryViewObject viewObj : categoryViewObjects) {
             if (viewObj.getRepositoryObjectType().equals(type)) {
                 return viewObj;

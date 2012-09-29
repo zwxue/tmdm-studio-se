@@ -50,7 +50,6 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
-import org.talend.mdm.repository.ui.wizards.exports.viewers.MDMExporterLabelProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
@@ -103,7 +102,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * if type==null, return all type
-     * 
+     *
      * @param parent
      * @param type
      * @param commands
@@ -133,8 +132,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     public List<AbstractDeployCommand> getSelectedCommands() {
         List<AbstractDeployCommand> commands = new LinkedList<AbstractDeployCommand>();
         for (Object obj : treeViewer.getCheckedElements()) {
-            if (obj instanceof FolderRepositoryObject)
+            if (obj instanceof FolderRepositoryObject) {
                 continue;
+            }
             String id = ((IRepositoryViewObject) obj).getId();
             commands.add(cmdMap.get(id));
         }
@@ -144,8 +144,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     public List<IRepositoryViewObject> getSelectededViewObjs() {
         List<IRepositoryViewObject> selectededViewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : treeViewer.getCheckedElements()) {
-            if (obj instanceof FolderRepositoryObject)
+            if (obj instanceof FolderRepositoryObject) {
                 continue;
+            }
             selectededViewObjs.add((IRepositoryViewObject) obj);
         }
         return selectededViewObjs;
@@ -169,7 +170,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * DOC hbhong Comment method "initInput".
-     * 
+     *
      * @param type
      * @return
      */
@@ -224,7 +225,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
         treeViewer = new ContainerCheckedTreeViewer(this, SWT.BORDER);
         ILabelDecorator labelDecorator = RepositoryPlugin.getDefault().getWorkbench().getDecoratorManager().getLabelDecorator();
-        DecoratingLabelProvider labelProvider = new DecoratingLabelProvider(new MDMExporterLabelProvider(), labelDecorator);
+        DecoratingLabelProvider labelProvider = new DecoratingLabelProvider(new MDMRepositoryLabelProvider(), labelDecorator);
         treeViewer.setLabelProvider(labelProvider);
         treeViewer.setContentProvider(new ContentProvider());
 
@@ -328,8 +329,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     private void updateServerDef(IRepositoryViewObject viewObj) {
         if (hasSameServerDef) {
             Item item = viewObj.getProperty().getItem();
-            if (item == null || item instanceof ContainerItem)
+            if (item == null || item instanceof ContainerItem) {
                 return;
+            }
             MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(item);
             if (lastServerDef == null) {
                 lastServerDef = serverDef;
