@@ -20,7 +20,7 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 public class RenameFolderAction extends AbstractBridgeRepositoryAction {
 
     public RenameFolderAction() {
-        super(new org.talend.repository.ui.actions.folder.RenameFolderAction());
+        super(new org.talend.repository.ui.actions.RenameFolderAction());
     }
 
     public String getGroupName() {

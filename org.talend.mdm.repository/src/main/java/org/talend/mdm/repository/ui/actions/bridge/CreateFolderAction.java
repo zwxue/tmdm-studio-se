@@ -20,7 +20,7 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 public class CreateFolderAction extends AbstractBridgeRepositoryAction {
 
     public CreateFolderAction() {
-        super(new org.talend.repository.ui.actions.folder.CreateFolderAction());
+        super(new org.talend.repository.ui.actions.CreateFolderAction());
 
     }
 
