@@ -44,9 +44,10 @@ public class DefaultUpdateObjectPathMigrationTask extends AbstractProjectMigrati
         try {
             IProject fsProject = ResourceUtils.getProject(project.getTechnicalLabel());
             IFolder folder = ResourceUtils.getFolder(fsProject,
-                    ERepositoryObjectType.getFolderName(migrateObjectPathHandler.getRule().getRepositoryObjectType()), true);
-            if (folder != null)
+                    ERepositoryObjectType.getFolderName(migrateObjectPathHandler.getRule().getRepositoryObjectType()), false);
+            if (folder != null && folder.getLocation().toFile().exists()) {
                 migrateObjectPathHandler.migrate(folder);
+            }
             return ExecutionResult.SUCCESS_NO_ALERT;
         } catch (PersistenceException e) {
             ExceptionHandler.process(e);
