@@ -22,28 +22,36 @@ import org.talend.core.ui.branding.IBrandingService;
 import org.talend.mdm.repository.ui.starting.editor.MDMStartingEditor;
 import org.talend.mdm.repository.ui.starting.editor.MDMStartingEditorInput;
 
-
 public class ShowWelcomeEditor {
-    
+
     private static final Log log = LogFactory.getLog(ShowWelcomeEditor.class);
-    
+
+    private static MDMStartingEditorInput editorInput;
+
     public static IEditorPart showWelcomeEditor() {
-        if(!isWorkbenchCreated())
+        if(!isWorkbenchCreated()) {
             return null;
-        
+        }
+
         IEditorPart welcomeEditor = null;
+
         try {
             org.talend.core.ui.branding.IBrandingService service = null;
             service = (IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class);
+
+            if (editorInput == null) {
+                editorInput = new MDMStartingEditorInput(service);
+            }
+
             IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-            welcomeEditor = activePage.openEditor(new MDMStartingEditorInput(service), MDMStartingEditor.ID);
+            welcomeEditor = activePage.openEditor(editorInput, MDMStartingEditor.ID);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        
+
         return welcomeEditor;
     }
-    
+
     private static boolean isWorkbenchCreated() {
         boolean isHere = false;
         try {
@@ -51,8 +59,8 @@ public class ShowWelcomeEditor {
         } catch (Exception e) {
             isHere = false;
         }
-        
-        return isHere;        
+
+        return isHere;
     }
 
 }
