@@ -14,7 +14,6 @@ package org.talend.mdm.repository.ui.dialogs.datacontent;
 
 import java.util.List;
 
-import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -43,6 +42,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.talend.mdm.repository.core.datacontent.DataEntityUnit;
 import org.talend.mdm.repository.core.datacontent.DataProcessRule;
+import org.talend.mdm.repository.i18n.Messages;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -81,8 +81,6 @@ public class DataProcessRuleDialog extends Dialog {
 
     private CheckboxTableViewer tableViewer;
 
-    private WritableList input;
-
     private Label lblNewLabel;
 
     private Button downBun;
@@ -111,7 +109,7 @@ public class DataProcessRuleDialog extends Dialog {
 
         lblNewLabel = new Label(container, SWT.NONE);
         lblNewLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-        lblNewLabel.setText("Please select the entity to import and adjust the order of processing.");
+        lblNewLabel.setText(Messages.DataProcessRuleDialog_title);
 
         tableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
         table = tableViewer.getTable();
@@ -149,7 +147,7 @@ public class DataProcessRuleDialog extends Dialog {
                 updateOKButton();
             }
         });
-        selectAllBun.setText("Select/Unselect All");
+        selectAllBun.setText(Messages.DataProcessRuleDialog_selectAll);
         new Label(container, SWT.NONE);
         initTableViewer();
         updateSelectAllBun();

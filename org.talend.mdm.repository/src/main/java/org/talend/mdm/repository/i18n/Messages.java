@@ -112,6 +112,10 @@ public class Messages extends NLS {
 
     public static String DataModelInteractiveHandler_label;
 
+    public static String DataProcessRuleDialog_selectAll;
+
+    public static String DataProcessRuleDialog_title;
+
     public static String DeployAction_lockedObjectMessage;
 
     public static String DeployAction_singleLockedObjectMessage;
