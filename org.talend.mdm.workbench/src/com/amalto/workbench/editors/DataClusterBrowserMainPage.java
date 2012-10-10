@@ -541,26 +541,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 // Modified by hbhong,to fix bug 21784|
                 TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
 
-                TreeObject xObject = getXObject();
-                if(xObject != null) {
-                    TreeParent serverRoot = xObject.getServerRoot();
-                    UserInfo user = serverRoot.getUser();
-
-                    String serverName = serverRoot.getName();
-                    String password = user.getPassword();
-                    String universe = user.getUniverse();
-                    String url = user.getServerUrl();
-                    String username = user.getUsername();
-
-
-                    final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName,
-                            url, username, password, universe, null);
-
-                    retriever.setRetriveWSObject(true);
-                    retriever.run(new NullProgressMonitor());
-                    treeParent = retriever.getServerRoot();//get the real server toot as the treeParent
-                }
-
                 DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell(), getSite(), treeParent);
                 // The ending| bug:21784
                 dialog.setBlockOnOpen(true);
@@ -1672,9 +1652,49 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     @Override
     public Object getAdapter(Class adapter) {
         if (adapter == TreeParent.class) {
-            return Util.getServerTreeParent(getXObject());
+            TreeParent treeParent = Util.getServerTreeParent(getXObject());
+
+            if (treeParent == null || treeParent.getChildren().length == 0) {
+                TreeParent serverRoot = getRealTreeParent();
+                if (serverRoot != null) {
+                    treeParent = serverRoot;
+                }
+            }
+
+            return treeParent;
         }
         return super.getAdapter(adapter);
     }
     // The ending| bug:21784
+
+    private TreeParent getRealTreeParent() {
+        TreeParent treeParent = null;
+        TreeObject xObject = getXObject();
+        if (xObject != null) {
+            TreeParent serverRoot = xObject.getServerRoot();
+            UserInfo user = serverRoot.getUser();
+
+            String serverName = serverRoot.getName();
+            String password = user.getPassword();
+            String universe = user.getUniverse();
+            String url = user.getServerUrl();
+            String username = user.getUsername();
+
+            final XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(serverName, url, username,
+                    password, universe, null);
+
+            retriever.setRetriveWSObject(true);
+
+            try {
+                retriever.run(new NullProgressMonitor());
+                treeParent = retriever.getServerRoot();// get the real server root as the treeParent
+            } catch (InvocationTargetException e) {
+                log.error(e.getMessage(), e);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        return treeParent;
+    }
 }
