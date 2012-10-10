@@ -23,7 +23,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -226,7 +226,7 @@ public class ImportDataContentProcess extends AbstractDataContentProcess {
 
             List<File> files = getFilesOrderByRule();
             monitor.beginTask(Messages.ImportDataClusterAction_importProcessTitle, files.size() + 10);
-            Map<String, List<String>> conceptMap = new HashMap<String, List<String>>();
+            Map<String, List<String>> conceptMap = new LinkedHashMap<String, List<String>>();
 
             for (File file : files) {
                 String concept = ""; //$NON-NLS-1$
