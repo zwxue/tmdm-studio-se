@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.actions.datacontainer;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -22,11 +21,9 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.IProgressService;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.datacontent.IDataContentProcess;
 import org.talend.mdm.repository.core.service.DataClusterService;
-import org.talend.mdm.repository.core.service.DataClusterService.ExportContentProcess;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -57,6 +54,7 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
         setImageDescriptor(ImageCache.getImage(EImage.EXPORT.getPath()));
     }
 
+    @Override
     protected void doRun() {
         List<Object> selectedObject = getSelectedObject();
         if (!selectedObject.isEmpty()) {
@@ -80,17 +78,19 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
                             File tempFolder = IOUtil.getTempFolder();
                             String tempFolderPath = tempFolder.getAbsolutePath();
                             dataClusterService.storeIndexFile(tempFolderPath, dName);
-                            ExportContentProcess process = dataClusterService.getNewExportContentProcess(port, tempFolderPath,
+
+                            //
+
+                            IDataContentProcess process = dataClusterService.getNewExportContentProcess(port, tempFolderPath,
                                     dName, fPath);
                             try {
-                                IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
-                                progressService.run(true, true, process);
+                                process.run();
                                 // show success info
                                 MessageDialog.openInformation(getShell(), Messages.ExportDataClusterAction_exportContent,
                                         Messages.bind(Messages.ExportDataClusterAction_successExport, dName));
-                            } catch (InvocationTargetException e) {
-                                log.error(e.getMessage(), e);
                             } catch (InterruptedException e) {
+                                // do nothing
+                                return;
                             }
 
                         } else {
@@ -107,5 +107,4 @@ public class ExportDataClusterAction extends AbstractDataClusterAction {
             }
         }
     }
-
 }

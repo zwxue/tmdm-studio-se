@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.actions.datacontainer;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
@@ -22,10 +21,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.IProgressService;
+import org.talend.mdm.repository.core.datacontent.IDataContentProcess;
 import org.talend.mdm.repository.core.service.DataClusterService;
-import org.talend.mdm.repository.core.service.DataClusterService.ImportContentProcess;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -56,6 +53,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
         setImageDescriptor(ImageCache.getImage(EImage.IMPORT.getPath()));
     }
 
+    @Override
     protected void doRun() {
         FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
         fd.setFilterExtensions(new String[] { "*.zip" }); //$NON-NLS-1$
@@ -88,18 +86,15 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                         }
                     }
 
-                    ImportContentProcess process = dataClusterService
-                            .getNewImportContentProcess(serverDef, dName,
-                            tempFolderPath);
+                    IDataContentProcess process = dataClusterService.getNewImportContentProcess(serverDef, dName, tempFolderPath);
                     try {
-                        IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
-                        progressService.run(true, true, process);
+                        process.run();
 
-                    } catch (InvocationTargetException e) {
-                        log.error(e.getMessage(), e);
                     } catch (InterruptedException e) {
+                        // do nothing
+                        return;
                     }
-                    MultiStatus multiStatus = process.getImportStatus();
+                    MultiStatus multiStatus = process.getResult();
                     if (multiStatus != null && multiStatus.getChildren().length > 0) {
                         MultiStatusDialog statusDialog = new MultiStatusDialog(getShell(), multiStatus.getMessage(), multiStatus);
                         statusDialog.open();

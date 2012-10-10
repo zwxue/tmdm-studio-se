@@ -324,6 +324,8 @@ public class Messages extends NLS {
 
     public static String ImportDataClusterAction_title;
 
+    public static String ImportDataContentProcess_LoadListFileFailed;
+
     public static String ImportObjectAction_error;
 
     public static String ImportObjectAction_hasError;
@@ -400,6 +402,8 @@ public class Messages extends NLS {
     public static String ExportDataClusterAction_successExport;
 
     public static String ExportDataClusterAction_title;
+
+    public static String ExportDataContentProcess_CanNotConnectServer;
 
     public static String ExportObjectAction_error;
 

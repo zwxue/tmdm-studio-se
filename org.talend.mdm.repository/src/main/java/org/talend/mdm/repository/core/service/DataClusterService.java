@@ -12,53 +12,28 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URLEncoder;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.XMLException;
-import org.talend.mdm.bulkload.client.BulkloadClient;
-import org.talend.mdm.bulkload.client.BulkloadOptions;
-import org.talend.mdm.bulkload.client.InputStreamMerger;
+import org.talend.mdm.repository.core.datacontent.IDataContentProcess;
+import org.talend.mdm.repository.core.datacontent.impl.ExportDataContentCommandProcess;
+import org.talend.mdm.repository.core.datacontent.impl.ExportDataContentProcess;
+import org.talend.mdm.repository.core.datacontent.impl.ImportDataContentCommandProcess;
+import org.talend.mdm.repository.core.datacontent.impl.ImportDataContentProcess;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.plugin.RepositoryPlugin;
-import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.repository.utils.ZipFileUtils;
 
-import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSExistsDataCluster;
-import com.amalto.workbench.webservices.WSGetItem;
-import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
-import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -66,224 +41,6 @@ import com.amalto.workbench.webservices.XtentisPort;
  * DOC hbhong class global comment. Detailled comment
  */
 public class DataClusterService {
-
-    public class ExportContentProcess implements IRunnableWithProgress {
-
-        private String dName;
-
-        private String fPath;
-
-        private XtentisPort port;
-
-        private String tempFolderPath;
-
-        /**
-         * DOC hbhong ExprocessContentProcess constructor comment.
-         * 
-         * @param port
-         * @param tempFolderPath
-         * @param dName
-         */
-        public ExportContentProcess(XtentisPort port, String tempFolderPath, String dName, String fPath) {
-            this.port = port;
-            this.tempFolderPath = tempFolderPath;
-            this.dName = dName;
-            this.fPath = fPath;
-        }
-
-        protected void exportCluster(XtentisPort port, String tempFolderPath, String dName, IProgressMonitor monitor) {
-
-            String encodedID = null;
-            // List<TreeObject> exports = new ArrayList<TreeObject>();
-            WSDataClusterPK pk = new WSDataClusterPK(dName);
-            try {
-                List<String> items = new ArrayList<String>();
-                WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
-                        new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE))
-                        .getResults();
-                if (results == null)
-                    return;
-                monitor.beginTask(Messages.ExportDataClusterAction_exportContent, results.length + 10);
-                monitor.subTask(Messages.ExportDataClusterAction_exporting);
-                for (WSItemPKsByCriteriaResponseResults item : results) {
-                    if (item.getWsItemPK().getIds() == null)
-                        continue;
-                    WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
-
-                    // Marshal
-                    StringWriter sw = new StringWriter();
-                    Marshaller.marshal(wsitem, sw);
-
-                    String uniqueId = pk.getPk() + "." + wsitem.getConceptName();//$NON-NLS-1$
-                    for (String id : wsitem.getIds()) {
-                        uniqueId = uniqueId + "." + id;//$NON-NLS-1$
-                    }
-                    encodedID = URLEncoder.encode(uniqueId, "UTF-8");//$NON-NLS-1$
-                    writeString(tempFolderPath, sw.toString(), pk.getPk() + "/" + encodedID);//$NON-NLS-1$ 
-                    items.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
-                    monitor.worked(1);
-                }
-                //            TreeObject obj1 = new TreeObject(pk.getPk(), null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);//$NON-NLS-1$
-                // obj1.setItems(items.toArray(new String[items.size()]));
-                // exports.add(obj1);
-                // return exports;
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            }
-            // return null;
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-         */
-        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-            exportCluster(port, tempFolderPath, dName, monitor);
-            zipFile(tempFolderPath, fPath, monitor);
-            IOUtil.cleanFolder(new File(tempFolderPath));
-            monitor.done();
-        }
-
-        protected void writeString(String exportFolder, String outputStr, String filename) {
-
-            File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
-
-            if (!f.getParentFile().exists()) {
-                f.getParentFile().mkdir();
-            }
-            FileWriter fo = null;
-            try {
-                fo = new FileWriter(f);
-                //            IOUtils.write(outputStr, fo, "UTF-8");//$NON-NLS-1$
-                fo.write(outputStr);
-                fo.flush();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            } finally {
-                if (fo != null)
-                    try {
-                        fo.close();
-                    } catch (IOException e) {
-                        log.error(e.getMessage(), e);
-                    }
-            }
-
-        }
-
-    }
-
-    public class ImportContentProcess implements IRunnableWithProgress {
-
-        private String dName;
-
-        private MultiStatus multiStatus;
-
-        private String path;
-
-        private MDMServerDef serverDef;
-
-        /**
-         * DOC hbhong ExportContentProcess constructor comment.
-         * 
-         * @param serverDef
-         * @param dName
-         * @param path
-         */
-        public ImportContentProcess(MDMServerDef serverDef, String dName, String path) {
-            super();
-            this.serverDef = serverDef;
-            this.dName = dName;
-            this.path = path;
-        }
-
-        public MultiStatus getImportStatus() {
-            return this.multiStatus;
-        }
-
-        protected MultiStatus importClusterContents(MDMServerDef serverDef, String dName, String path, IProgressMonitor monitor) {
-            this.serverDef = serverDef;
-            this.dName = dName;
-            this.path = path;
-            String url = "http://" + serverDef.getHost() + ":" + serverDef.getPort() + "/datamanager/loadServlet"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            String userName = serverDef.getUser();
-            String password = serverDef.getPasswd();
-            Reader reader = null;
-            MultiStatus ms = new MultiStatus(RepositoryPlugin.PLUGIN_ID, IStatus.ERROR,
-                    Messages.ImportDataClusterAction_errorTitle, null);
-            File[] files = new File(path).listFiles();
-            monitor.beginTask(Messages.ImportDataClusterAction_importProcessTitle, files.length + 10);
-            Map<String, List<String>> conceptMap = new HashMap<String, List<String>>();
-            
-            for (File file : files) {
-                String concept = ""; //$NON-NLS-1$
-                try {
-                    reader = new InputStreamReader(new FileInputStream(file), "UTF-8");//$NON-NLS-1$ 
-                    WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
-                    String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
-                    + wsItem.getDataModelName();
-                    List<String> list = null;
-                    list = conceptMap.get(key);
-                    if (list == null) {
-                        list = new ArrayList<String>();
-                        conceptMap.put(key, list);
-                    }
-                    String content = wsItem.getContent();
-                    list.add(content);    
-                } catch (Exception e) {
-                    log.error(e.getLocalizedMessage(),e);
-                    String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
-                            e.getLocalizedMessage());
-                    IStatus errStatus = new Status(IStatus.ERROR, RepositoryPlugin.PLUGIN_ID, msg, e);
-                    ms.add(errStatus);
-                    return ms;
-                } finally {
-                    try {
-                        if (reader != null)
-                            reader.close();
-                    } catch (Exception e) {
-                    }                    
-                }
-                monitor.worked(1);
-            }
-            // store the items to db using bulkloadclient
-            for (Entry<String, List<String>> entry : conceptMap.entrySet()) {
-                String[] keys = entry.getKey().split("##");//$NON-NLS-1$
-                String cluster = keys[0];
-                String concept = keys[1];
-                String datamodel = keys[2];
-                BulkloadClient bulkloadClient = new BulkloadClient(url, userName, password, null, cluster,
-                        concept, datamodel);
-                bulkloadClient.setOptions(new BulkloadOptions(false, false, 500));
-
-                StringBuilder sb = new StringBuilder();
-                for (String xml : entry.getValue()) {
-                    sb.append(xml).append("\n"); //$NON-NLS-1$
-                }
-                try {
-                    InputStreamMerger manager = bulkloadClient.load();
-                    InputStream bin = new ByteArrayInputStream(sb.toString().getBytes("utf-8"));//$NON-NLS-1$
-                    manager.push(bin);
-                    // bulkloadClient.load(sb.toString());
-                    manager.close(); 
-                } catch (Exception e) {
-                    log.error(e.getLocalizedMessage(),e);
-                    String msg = Messages.bind(Messages.ImportDataClusterAction_importErrorMsg, concept, dName,
-                            e.getLocalizedMessage());
-                    IStatus errStatus = new Status(IStatus.ERROR, RepositoryPlugin.PLUGIN_ID, msg, e);
-                    ms.add(errStatus);
-                } 
-                monitor.worked(1);
-            }
-            monitor.done();
-            return ms;
-        }
-
-        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-            this.multiStatus = importClusterContents(serverDef, dName, path, monitor);
-
-        }
-    }
 
     private static final String INDEX_FILE_NAME = "DataCluster.list"; //$NON-NLS-1$
 
@@ -315,18 +72,27 @@ public class DataClusterService {
         return folderPath + File.separator + INDEX_FILE_NAME;
     }
 
-    public ImportContentProcess getNewImportContentProcess(MDMServerDef serverDef, String dName, String path) {
-        return new ImportContentProcess(serverDef, dName, path);
+    public IDataContentProcess getNewImportContentProcess(MDMServerDef serverDef, String dName, String path) {
+        return new ImportDataContentProcess(serverDef, dName, path);
     }
 
-    public ExportContentProcess getNewExportContentProcess(XtentisPort port, String tempFolderPath, String dName, String fPath) {
-        return new ExportContentProcess(port, tempFolderPath, dName, fPath);
+    public IDataContentProcess getNewImportContentCommandProcess(MDMServerDef serverDef, String dName, String path) {
+        return new ImportDataContentCommandProcess(serverDef, dName, path);
+    }
+
+    public IDataContentProcess getNewExportContentProcess(XtentisPort port, String tempFolderPath, String dName, String fPath) {
+        return new ExportDataContentProcess(port, tempFolderPath, dName, fPath);
+    }
+
+    public IDataContentProcess getNewExportContentCommandProcess(XtentisPort port, String tempFolderPath, String dName,
+            String fPath) {
+        return new ExportDataContentCommandProcess(port, tempFolderPath, dName, fPath);
     }
 
     public boolean isExistDataCluster(XtentisPort port, String dName) throws RemoteException {
-            WSExistsDataCluster wsExistsDataCluster = new WSExistsDataCluster(new WSDataClusterPK(dName));
-            WSBoolean wsBoolean = port.existsDataCluster(wsExistsDataCluster);
-            return wsBoolean.is_true();
+        WSExistsDataCluster wsExistsDataCluster = new WSExistsDataCluster(new WSDataClusterPK(dName));
+        WSBoolean wsBoolean = port.existsDataCluster(wsExistsDataCluster);
+        return wsBoolean.is_true();
     }
 
     public String loadIndexFile(String folderPath) {
