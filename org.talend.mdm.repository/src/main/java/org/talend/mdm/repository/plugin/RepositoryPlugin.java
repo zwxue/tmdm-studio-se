@@ -1,9 +1,10 @@
 package org.talend.mdm.repository.plugin;
 
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.impl.jobmodel.JobResourceListener;
 
 /**
@@ -17,7 +18,7 @@ public class RepositoryPlugin extends AbstractUIPlugin {
     // The shared instance
     private static RepositoryPlugin plugin;
 
-    IResourceChangeListener jobResourceListener = new JobResourceListener();
+    PropertyChangeListener jobListener = new JobResourceListener();
 
     /**
      * The constructor
@@ -30,10 +31,11 @@ public class RepositoryPlugin extends AbstractUIPlugin {
      * 
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
      */
+    @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(jobResourceListener);
+        ProxyRepositoryFactory.getInstance().addPropertyChangeListener(jobListener);
     }
 
     /*
@@ -41,9 +43,11 @@ public class RepositoryPlugin extends AbstractUIPlugin {
      * 
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
+    @Override
     public void stop(BundleContext context) throws Exception {
-        if (jobResourceListener != null)
-            ResourcesPlugin.getWorkspace().removeResourceChangeListener(jobResourceListener);
+        if (jobListener != null) {
+            ProxyRepositoryFactory.getInstance().removePropertyChangeListener(jobListener);
+        }
         plugin = null;
         super.stop(context);
     }
