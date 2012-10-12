@@ -153,12 +153,14 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     boolean doUpdateSourceLocation = false;
 
+    @Override
     protected void pageChange(int newPageIndex) {
         super.pageChange(newPageIndex);
         doUpdateSourceLocation = newPageIndex == SOURCE_PAGE_INDEX;
 
-        if (doUpdateSourceLocation && fXSDSelectionListener != null)
+        if (doUpdateSourceLocation && fXSDSelectionListener != null) {
             fXSDSelectionListener.doSetSelection();
+        }
 
     }
 
@@ -221,7 +223,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
         /**
          * Determines DOM node based on object (xsd node)
-         * 
+         *
          * @param object
          * @return
          */
@@ -377,7 +379,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
             for (int i = 0; i < getPageCount(); i++) {
                 if (getEditor(i) instanceof DataModelMainPage) {
-                    return (DataModelMainPage) getEditor(i);
+                    return getEditor(i);
                 }
             }
         }
@@ -401,7 +403,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.editors.IServerObjectEditorState#isLocalInput()
      */
     public boolean isLocalInput() {
@@ -425,10 +427,18 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
+            try {
+                XSDEditorInput editorInput = (XSDEditorInput) getEditorInput();
+                editorInput.finalize();
+                System.gc();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+
             super.dispose();
         }
     }
-    
+
 
     public DataModelMainPage getdMainPage() {
         return null;

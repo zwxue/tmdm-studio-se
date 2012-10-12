@@ -30,9 +30,10 @@ public class XSDEditorInput extends FileEditorInput {
 
     @Override
     public boolean equals(Object obj) {
-        
-        if (!(obj instanceof XSDEditorInput))
+
+        if (!(obj instanceof XSDEditorInput)) {
             return false;
+        }
         XSDEditorInput input = (XSDEditorInput) obj;
         boolean ret = input.file.getFullPath().toOSString().equals(file.getFullPath().toOSString());
         return ret;
@@ -41,5 +42,10 @@ public class XSDEditorInput extends FileEditorInput {
     @Override
     public ImageDescriptor getImageDescriptor() {
         return ImageCache.getImage(EImage.DATA_MODEL.getPath());
+    }
+
+    @Override
+    public void finalize() throws Throwable {
+        super.finalize();
     }
 }
