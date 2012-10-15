@@ -429,14 +429,14 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         } finally {
             try {
                 XSDEditorInput editorInput = (XSDEditorInput) getEditorInput();
-                editorInput.finalize();
+                editorInput.dispose();
                 System.gc();
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-
-            super.dispose();
+             } catch (Throwable e) {
+                log.error(e.getMessage(), e);
+             }
         }
+
+        super.dispose();
     }
 
 
