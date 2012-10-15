@@ -12,9 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -53,7 +50,7 @@ public class RenameObjectAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
-     * 
+     *
      * @param text
      */
     public RenameObjectAction() {
@@ -66,9 +63,11 @@ public class RenameObjectAction extends AbstractRepositoryAction {
         return GROUP_EDIT;
     }
 
+    @Override
     protected boolean needValidateLockedObject() {
         return true;
     }
+    @Override
     protected void doRun() {
         Object obj = getSelectedObject().get(0);
         if (obj instanceof IRepositoryViewObject) {
@@ -88,6 +87,8 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                         if (newName != null && factory.isEditableAndLockIfPossible(item)) {
                             serverObject.setName(newName);
                             viewObj.getProperty().setLabel(newName);
+                            viewObj.getProperty().setDisplayName(newName);
+
                             factory.save(viewObj.getProperty().getItem(), false);
                             if (serverObject.getLastServerDef() != null) {
                                 CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, viewObj.getId(),
@@ -118,9 +119,10 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                 new IInputValidator() {
 
                     public String isValid(String newText) {
-                        if (newText == null || newText.trim().length() == 0)
+                        if (newText == null || newText.trim().length() == 0) {
                             return Messages.Common_nameCanNotBeEmpty;
-                        
+                        }
+
                         
                         if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)
                                 || type.equals(IServerObjectRepositoryType.TYPE_VIEW)) {
@@ -138,12 +140,14 @@ public class RenameObjectAction extends AbstractRepositoryAction {
                     };
                 });
         dlg.setBlockOnOpen(true);
-        if (dlg.open() == Window.CANCEL)
+        if (dlg.open() == Window.CANCEL) {
             return null;
+        }
         return dlg.getValue();
 
     }
 
+    @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         if (getSelectedObject().size() == 1) {
             String path = viewObj.getPath();

@@ -44,8 +44,7 @@ public class XSDEditorInput extends FileEditorInput {
         return ImageCache.getImage(EImage.DATA_MODEL.getPath());
     }
 
-    @Override
-    public void finalize() throws Throwable {
-        super.finalize();
+    public void dispose() throws Throwable {
+        finalize();
     }
 }
