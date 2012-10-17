@@ -26,7 +26,7 @@ public class MDMStartingEditorInput implements IPathEditorInput {
     public MDMStartingEditorInput(IBrandingService service) {
         this.service = service;
     }
-    
+
     public boolean exists() {
         return true;
     }
@@ -37,7 +37,9 @@ public class MDMStartingEditorInput implements IPathEditorInput {
 
     public String getName() {
         if(service == null)
+         {
             return "product name";//$NON-NLS-1$
+        }
         return service.getProductName();
     }
 
@@ -47,7 +49,9 @@ public class MDMStartingEditorInput implements IPathEditorInput {
 
     public String getToolTipText() {
         if(service == null)
+         {
             return "full product name";//$NON-NLS-1$
+        }
         return service.getFullProductName();
     }
 
@@ -59,4 +63,16 @@ public class MDMStartingEditorInput implements IPathEditorInput {
         return null;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj instanceof MDMStartingEditorInput) {
+            return true;
+        }
+
+        return false;
+    }
 }

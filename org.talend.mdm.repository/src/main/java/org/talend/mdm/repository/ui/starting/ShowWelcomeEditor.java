@@ -26,8 +26,6 @@ public class ShowWelcomeEditor {
 
     private static final Log log = LogFactory.getLog(ShowWelcomeEditor.class);
 
-    private static MDMStartingEditorInput editorInput;
-
     public static IEditorPart showWelcomeEditor() {
         if(!isWorkbenchCreated()) {
             return null;
@@ -39,12 +37,8 @@ public class ShowWelcomeEditor {
             org.talend.core.ui.branding.IBrandingService service = null;
             service = (IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class);
 
-            if (editorInput == null) {
-                editorInput = new MDMStartingEditorInput(service);
-            }
-
             IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-            welcomeEditor = activePage.openEditor(editorInput, MDMStartingEditor.ID);
+            welcomeEditor = activePage.openEditor(new MDMStartingEditorInput(service), MDMStartingEditor.ID);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
