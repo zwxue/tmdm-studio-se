@@ -250,11 +250,16 @@ public class ImportServerObjectWizard extends Wizard {
             UnsupportedEncodingException {
         WSWorkflowProcessDefinitionUUID wsKey = (WSWorkflowProcessDefinitionUUID) treeObj.getWsKey();
         String workflowURL = treeObj.getEndpointIpAddress() + TreeObject.BARFILE_URI + treeObj.getDisplayName();
-
+        // correct the URL to Bonita 5.8 version
+        Pattern PATTERN_53 = Pattern.compile("(.+?)_(\\d+\\.\\d+)");
+        Matcher matcher = PATTERN_53.matcher(workflowURL);
+        if (matcher.matches()) {
+            workflowURL = matcher.group(1) + "--" + matcher.group(2);
+        }
         DefaultHttpClient httpclient = new DefaultHttpClient();
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(treeObj.getEndpointHost(), Integer.valueOf(treeObj.getEndpointPort())),
-                new UsernamePasswordCredentials(treeObj.getUsername(), treeObj.getPassword()));//$NON-NLS-1$//$NON-NLS-2$
+                new UsernamePasswordCredentials(treeObj.getUsername(), treeObj.getPassword()));
         HttpGet httpget = new HttpGet(workflowURL);
         // System.out.println("executing request" + httpget.getRequestLine());
         HttpResponse response = httpclient.execute(httpget);
@@ -333,11 +338,12 @@ public class ImportServerObjectWizard extends Wizard {
                 } catch (IOException e) {
                 }
             }
-            if (zipFile != null)
+            if (zipFile != null) {
                 try {
                     zipFile.close();
                 } catch (IOException e) {
                 }
+            }
 
         }
         return processBytes;
@@ -368,9 +374,9 @@ public class ImportServerObjectWizard extends Wizard {
             String url = strBuf.toString();
             byte[] bytes = Util.downloadFile(url);
             resource.setFileContent(bytes);
-            //add imageCatalog
+            // add imageCatalog
             resource.setImageCatalog(dirName);
-            
+
             treeObj.setName(fileName);
             return resource;
         }
@@ -389,8 +395,9 @@ public class ImportServerObjectWizard extends Wizard {
             if (type != null && treeObjName != null) {
                 String uniqueName = getUniqueName(treeObj, treeObjName);
                 IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(type, uniqueName);
-                if (viewObject != null)
+                if (viewObject != null) {
                     viewObjs.add(viewObject);
+                }
             }
         }
         LockedObjectDialog lockDialog = new LockedObjectDialog(getShell(), Messages.ImportServerObjectWizard_lockedObjectMessage,
@@ -431,8 +438,9 @@ public class ImportServerObjectWizard extends Wizard {
 
                 if (eobj == null) {
                     if (!types.contains(treeObj.getType()) || treeObj.getWsObject() == null
-                            || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) //$NON-NLS-1$
+                            || ("JCAAdapers".equals(treeObj.getName()) && treeObj.getType() == TreeObject.DATA_CLUSTER)) {
                         continue;
+                    }
                     eobj = (MDMServerObject) Bean2EObjUtil.getInstance().convertFromBean2EObj(treeObj.getWsObject(), null);
                 }
                 eobj.setLastServerDef(serverDef.getEncryptedServerDef());
@@ -482,7 +490,7 @@ public class ImportServerObjectWizard extends Wizard {
                     handlePath(itemState, type);
                     item.setState(itemState);
                     String version = getVersion(treeObj);
-                    
+
                     RepositoryResourceUtil.createItem(item, uniqueName, version, false);
 
                 }
@@ -507,63 +515,70 @@ public class ImportServerObjectWizard extends Wizard {
         }
 
         if (treeObj.getType() == TreeObject.ROUTING_RULE) {
-            if (treeObj.getPath().equals("Trigger"))//$NON-NLS-1$
+            if (treeObj.getPath().equals("Trigger")) {
                 return "";//$NON-NLS-1$
-            else
+            } else {
                 return treeObj.getPath().substring(8);
+            }
 
         }
-        
-        if(treeObj.getType() == TreeObject.VIEW) {
+
+        if (treeObj.getType() == TreeObject.VIEW) {
             return getViewTypeObjectPath(treeObj);
         }
 
         return treeObj.getPath();
 
     }
-    
+
     private String getProcessTypeObjectPath(TreeObject treeObj) {
         String transformerStandalonePrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
         String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
-        
+
         String path = treeObj.getPath();
         String lowerCaseName = treeObj.getName().toLowerCase();
-        
+
         if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
             } else if (!path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)
-                    && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
+                    && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + path.substring(8);
+            }
         } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
             } else if (!path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)
-                    && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL))
+                    && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + path.substring(8);
+            }
         } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
-            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION))
+            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION + path.substring(8);
+            }
         } else if (lowerCaseName.startsWith(transformerStandalonePrefix)
                 || lowerCaseName.startsWith(transformerStandalonePrefix2)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
-            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION))
+            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + path.substring(8);
+            }
         } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
-            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
+            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW + path.substring(8);
+            }
         } else {
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;
-            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER))
+            } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER + path.substring(8);
+            }
         }
-        
+
         return path.substring(8);
     }
 
@@ -571,9 +586,9 @@ public class ImportServerObjectWizard extends Wizard {
         if (treeObj.getName().toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
             if (!treeObj.getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
                 String path = treeObj.getPath();
-                if (path.length() > 8)
+                if (path.length() > 8) {
                     path = IPath.SEPARATOR + path.substring(8);
-                else if (!path.isEmpty()) {
+                } else if (!path.isEmpty()) {
                     path = IPath.SEPARATOR + path;
                 }
                 return IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + path;
@@ -581,12 +596,13 @@ public class ImportServerObjectWizard extends Wizard {
         } else {
             if (!treeObj.getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER)) {
                 String path = treeObj.getPath();
-                if (path.length() > 8)
+                if (path.length() > 8) {
                     path = path.substring(8);
+                }
                 return IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + IPath.SEPARATOR + path;
             }
         }
-        
+
         return treeObj.getPath();
     }
 
@@ -672,7 +688,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     class RetriveProcess implements IRunnableWithProgress {
-        
+
         private void retrieverCustomForms(TreeParent parent, IProgressMonitor monitor) {
             try {
                 XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
@@ -686,12 +702,12 @@ public class ImportServerObjectWizard extends Wizard {
 
                 if (xdmPKs != null) {
                     monitor.subTask(Messages.ImportServerObjectWizard_loadCustomForm);
-                    for (int i = 0; i < xdmPKs.length; i++) {
+                    for (WSCustomFormPK xdmPK : xdmPKs) {
 
                         try {
                             WSCustomForm wsobj = null;
-                            wsobj = port.getCustomForm(new WSGetCustomForm(xdmPKs[i]));
-                            TreeObject obj = new TreeObject(wsobj.getName(), parent, TreeObject.CUSTOM_FORM, xdmPKs[i], wsobj);
+                            wsobj = port.getCustomForm(new WSGetCustomForm(xdmPK));
+                            TreeObject obj = new TreeObject(wsobj.getName(), parent, TreeObject.CUSTOM_FORM, xdmPK, wsobj);
                             models.addChild(obj);
                         } catch (RemoteException e) {
                             log.error(e.getMessage(), e);
@@ -756,12 +772,12 @@ public class ImportServerObjectWizard extends Wizard {
             try {
                 getContainer().run(true, false, new RetriveProcess());
             } catch (InvocationTargetException e) {
-                MessageDialog.openWarning(getShell(), Messages.Common_Warning, Messages.bind(Messages.Server_cannot_connected,
-                        serverDef.getName()));
+                MessageDialog.openWarning(getShell(), Messages.Common_Warning,
+                        Messages.bind(Messages.Server_cannot_connected, serverDef.getName()));
                 log.error(e);
             } catch (InterruptedException e) {
-                MessageDialog.openWarning(getShell(), Messages.Common_Warning, Messages.bind(Messages.Server_cannot_connected,
-                        serverDef.getName()));
+                MessageDialog.openWarning(getShell(), Messages.Common_Warning,
+                        Messages.bind(Messages.Server_cannot_connected, serverDef.getName()));
                 log.error(e);
             }
         }
@@ -818,8 +834,9 @@ public class ImportServerObjectWizard extends Wizard {
                     SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
                     if (dlg.open() == IDialogConstants.OK_ID) {
                         serverDef = dlg.getSelectedServerDef();
-                        if (serverDef == null)
+                        if (serverDef == null) {
                             return;
+                        }
                         txtServer.setText(serverDef.getUrl());
 
                         String url = serverDef.getUrl();
@@ -836,8 +853,8 @@ public class ImportServerObjectWizard extends Wizard {
                                 universeCombo.removeAll();
                                 universeCombo.add(""); //$NON-NLS-1$
                                 if (universePKs != null && universePKs.length > 0) {
-                                    for (int i = 0; i < universePKs.length; i++) {
-                                        String universe = universePKs[i].getPk();
+                                    for (WSUniversePK universePK : universePKs) {
+                                        String universe = universePK.getPk();
                                         universeCombo.add(universe);
                                     }
                                 }
@@ -860,7 +877,7 @@ public class ImportServerObjectWizard extends Wizard {
                 comboVersion.getCombo().setEditable(false);
 
                 comboVersion.getCombo().addSelectionListener(new SelectionAdapter() {
-  
+
                     @Override
                     public void widgetSelected(SelectionEvent e) {
                         serverDef.setUniverse(comboVersion.getCombo().getText());
@@ -884,24 +901,25 @@ public class ImportServerObjectWizard extends Wizard {
             treeViewer.getViewer().setInput(null);
             itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 5));
             treeViewer.setItemText(Messages.Select_Items_To_Imports);
-            
+
             CheckboxTreeViewer checkboxViewer = (CheckboxTreeViewer) treeViewer.getViewer();
             checkboxViewer.addCheckStateListener(new ICheckStateListener() {
-                
+
                 public void checkStateChanged(CheckStateChangedEvent checkstatechangedevent) {
                     updateSelectedObjects();
                     checkCompleted();
                 }
             });
-            
+
             treeViewer.getViewer().addFilter(new ViewerFilter() {
 
                 @Override
                 public boolean select(Viewer viewer, Object parentElement, Object element) {
                     if (element instanceof TreeObject) {
                         int type = ((TreeObject) element).getType();
-                        if (type == 26 || type == 24 || type == 25)
+                        if (type == 26 || type == 24 || type == 25) {
                             return false;
+                        }
                     }
                     return true;
                 }
