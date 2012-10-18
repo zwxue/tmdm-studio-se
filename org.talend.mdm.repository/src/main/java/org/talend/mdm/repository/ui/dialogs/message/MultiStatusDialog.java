@@ -79,6 +79,7 @@ public class MultiStatusDialog extends Dialog {
 
     private static class ViewerLabelProvider extends LabelProvider {
 
+        @Override
         public Image getImage(Object element) {
             if (element instanceof DeployStatus) {
                 DeployStatus status = (DeployStatus) element;
@@ -102,6 +103,14 @@ public class MultiStatusDialog extends Dialog {
                 if (((MultiStatus) element).isOK()) {
                     return IMG_OK;
                 }
+
+                MultiStatus mStatus = (MultiStatus) element;
+                int mSeverity = mStatus.getSeverity();
+                if (mSeverity == IStatus.INFO) {
+                    return IMG_INFO;
+                } else if (mSeverity == IStatus.ERROR) {
+                    return IMG_ERR;
+                }
             } else if (element instanceof Status) {
                 Status status = (Status) element;
                 int severity = status.getSeverity();
@@ -117,6 +126,7 @@ public class MultiStatusDialog extends Dialog {
             return null;
         }
 
+        @Override
         public String getText(Object element) {
             if (element instanceof IStatus) {
                 return ((IStatus) element).getMessage();
@@ -211,8 +221,9 @@ public class MultiStatusDialog extends Dialog {
      * DOC hbhong Comment method "initInput".
      */
     private void initInput() {
-        if (message != null)
+        if (message != null) {
             msgLabel.setText(message);
+        }
         //
         if (mutliStatus != null && mutliStatus.isMultiStatus()) {
             treeViewer.setInput(mutliStatus.getChildren());

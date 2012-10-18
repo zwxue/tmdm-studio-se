@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.command.deploy;
 
 import java.rmi.RemoteException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
@@ -23,6 +24,7 @@ import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.UserExceptionStackFilter;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -49,9 +51,8 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
     }
 
     protected IStatus getDetailErrorMsg(String bindMsg, String typeLabel, String objectName, Exception e) {
-        String topMsg = Messages.bind(bindMsg, typeLabel, objectName, e.getMessage().split(";")[0]); //$NON-NLS-1$
-
         Throwable cause = null;
+
         if (e instanceof RemoteException) {
             cause = ((RemoteException) e).detail;
         } else {
@@ -64,54 +65,28 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
             return status;
         }
 
-        MultiStatus mStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, topMsg, null);
-        DeployStatus errorStatus = null;
-        while (cause != null) {
-            String message = cause.getMessage().split(";")[0]; //$NON-NLS-1$
+        return null;
+    }
 
-            errorStatus = DeployStatus.getErrorStatus(this, message);
-            mStatus.add(errorStatus);
+    private IStatus buildErrorStatus(String bindMsg, String typeLabel, String objectName, Exception e) {
+        String msg = e.getMessage();
 
-            if (cause instanceof RemoteException) {
-                cause = ((RemoteException) cause).detail;
-            } else {
-                cause = cause.getCause();
-            }
+        String[] exceptionMsgs = UserExceptionStackFilter.filterExceptionMsg(msg);
+
+        IStatus status = null;
+        if (exceptionMsgs.length == 1) {
+            status = DeployStatus.getErrorStatus(this, Messages.bind(bindMsg, typeLabel, objectName, exceptionMsgs[0]), e);
+
+            return status;
         }
 
-        return mStatus;
-    }
-    private IStatus buildErrorStatus(String bindMsg, String typeLabel, String objectName, Exception e) {
-        IStatus status = null;
-
-        String msg = e.getMessage();
-        //
-        int indexOf = msg.indexOf(";"); //$NON-NLS-1$
-        if (indexOf != -1) {
-            String top = msg.substring(0, indexOf);
-            int topIndex = top.indexOf(":"); //$NON-NLS-1$
-            if (topIndex != -1) {
-                top = top.substring(topIndex + 1);
-            }
-            top = Messages.bind(bindMsg, typeLabel, objectName, top);
-            status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, top, null);
-
-            msg = msg.substring(indexOf + 1);
-            String[] splits = msg.split(":"); //$NON-NLS-1$
-            for (int i = 1; i < splits.length; i++) {
-                if (splits[i].endsWith("Exception") || splits[i].endsWith("Error")) { //$NON-NLS-1$ //$NON-NLS-2$
-                    continue;
-                }
-
-                ((MultiStatus) status).add(DeployStatus.getErrorStatus(this, splits[i]));
-            }
-        } else {
-            status = DeployStatus.getErrorStatus(this,
-                    Messages.bind(Messages.Deploy_fail_cause_text, typeLabel, objectName, e.getMessage()), e);
+        status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, exceptionMsgs[0], null);
+        for (int i = 1; i < exceptionMsgs.length; i++) {
+            DeployStatus errorStatus = DeployStatus.getErrorStatus(this, exceptionMsgs[i]);
+            ((MultiStatus) status).add(errorStatus);
         }
 
         return status;
     }
 
 }
-
