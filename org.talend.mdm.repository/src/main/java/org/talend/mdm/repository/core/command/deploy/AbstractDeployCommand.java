@@ -23,6 +23,7 @@ import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.utils.UserExceptionStackFilter;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -83,32 +84,22 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
     }
 
     private IStatus buildErrorStatus(String bindMsg, String typeLabel, String objectName, Exception e) {
-        IStatus status = null;
-
         String msg = e.getMessage();
-        //
-        int indexOf = msg.indexOf(";"); //$NON-NLS-1$
-        if (indexOf != -1) {
-            String top = msg.substring(0, indexOf);
-            int topIndex = top.indexOf(":"); //$NON-NLS-1$
-            if (topIndex != -1) {
-                top = top.substring(topIndex + 1);
-            }
-            top = Messages.bind(bindMsg, typeLabel, objectName, top);
-            status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, top, null);
 
-            msg = msg.substring(indexOf + 1);
-            String[] splits = msg.split(":"); //$NON-NLS-1$
-            for (int i = 1; i < splits.length; i++) {
-                if (splits[i].endsWith("Exception") || splits[i].endsWith("Error")) { //$NON-NLS-1$ //$NON-NLS-2$
-                    continue;
-                }
+        String[] exceptionMsgs = UserExceptionStackFilter.filterExceptionMsg(msg);
 
-                ((MultiStatus) status).add(DeployStatus.getErrorStatus(this, splits[i]));
-            }
-        } else {
+        IStatus status = null;
+        if (exceptionMsgs.length == 1) {
             status = DeployStatus.getErrorStatus(this,
-                    Messages.bind(Messages.Deploy_fail_cause_text, typeLabel, objectName, e.getMessage()), e);
+                    Messages.bind(Messages.Deploy_fail_cause_text, typeLabel, objectName, exceptionMsgs[0]), e);
+
+            return status;
+        }
+
+        status = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, exceptionMsgs[0], null);
+        for (int i = 1; i < exceptionMsgs.length; i++) {
+            DeployStatus errorStatus = DeployStatus.getErrorStatus(this, exceptionMsgs[i]);
+            ((MultiStatus) status).add(errorStatus);
         }
 
         return status;
