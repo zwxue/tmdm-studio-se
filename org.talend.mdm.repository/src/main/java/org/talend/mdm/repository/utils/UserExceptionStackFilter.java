@@ -15,12 +15,16 @@ package org.talend.mdm.repository.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * created by liusongbo on 2012-10-17
  *
  */
 public class UserExceptionStackFilter {
+
+    private static final Log log = LogFactory.getLog(UserExceptionStackFilter.class);
 
     private static final String SUFFIX = ";"; //$NON-NLS-1$
 
@@ -34,50 +38,56 @@ public class UserExceptionStackFilter {
 
 
     public static String[] filterExceptionMsg(String msg) {
-        List<String> msgs = new ArrayList<String>();
-
         if (msg == null || msg.trim().isEmpty()) {
             return new String[0];
         }
 
+        List<String> msgs = new ArrayList<String>();
 
-        String[] splits = split(msg, CAUSEBY_SEP);
+        try {
+            String[] splits = split(msg, CAUSEBY_SEP);
 
-        // add parent exception message
-        int index = splits[0].indexOf(SEP);
-        int lastIndex = splits[0].lastIndexOf(SEP);
-        String mainMsg = splits[0].substring(0, index).trim();
-        mainMsg += splits[0].substring(lastIndex).trim();
-        if (mainMsg.endsWith(SUFFIX)) {
-            mainMsg = mainMsg.substring(0, mainMsg.length() - 1);
-        }
-        msgs.add(mainMsg);
-
-        // add children exception message
-        if (splits.length > 1) {
-            String s = null;
-            for (int i = 1; i < splits.length; i++) {
-                s = splits[i].trim();
-                int subIndex = s.indexOf(NEST_SEP);
-                if (subIndex != -1) {
-                    s = s.substring(0, subIndex);
-                }
-
-                int lastSubIndex = s.lastIndexOf(EXCEPTION_SEP);
-                if (lastSubIndex != -1) {
-                    s = s.substring(lastSubIndex + EXCEPTION_SEP.length()).trim();
-                }
-
-                s = s.trim();
-                if (s.endsWith(SUFFIX)) {
-                    s = s.substring(0, s.length() - 1);
-                }
-
-                msgs.add(s);
+            // add parent exception message
+            int index = splits[0].indexOf(SEP);
+            int lastIndex = splits[0].lastIndexOf(SEP);
+            String mainMsg = splits[0].substring(0, index).trim();
+            mainMsg += splits[0].substring(lastIndex).trim();
+            if (mainMsg.endsWith(SUFFIX)) {
+                mainMsg = mainMsg.substring(0, mainMsg.length() - 1);
             }
-        }
+            msgs.add(mainMsg);
 
-        removeDupMsg(msgs);
+            // add children exception message
+            if (splits.length > 1) {
+                String s = null;
+                for (int i = 1; i < splits.length; i++) {
+                    s = splits[i].trim();
+                    int subIndex = s.indexOf(NEST_SEP);
+                    if (subIndex != -1) {
+                        s = s.substring(0, subIndex);
+                    }
+
+                    int lastSubIndex = s.lastIndexOf(EXCEPTION_SEP);
+                    if (lastSubIndex != -1) {
+                        s = s.substring(lastSubIndex + EXCEPTION_SEP.length()).trim();
+                    }
+
+                    s = s.trim();
+                    if (s.endsWith(SUFFIX)) {
+                        s = s.substring(0, s.length() - 1);
+                    }
+
+                    msgs.add(s);
+                }
+            }
+
+            removeDupMsg(msgs);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+
+            msgs.clear();
+            msgs.add(msg);
+        }
 
         return msgs.toArray(new String[0]);
     }
