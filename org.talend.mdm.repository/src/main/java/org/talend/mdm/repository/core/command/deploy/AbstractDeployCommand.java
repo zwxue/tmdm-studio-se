@@ -50,9 +50,8 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
     }
 
     protected IStatus getDetailErrorMsg(String bindMsg, String typeLabel, String objectName, Exception e) {
-        String topMsg = Messages.bind(bindMsg, typeLabel, objectName, e.getMessage().split(";")[0]); //$NON-NLS-1$
-
         Throwable cause = null;
+
         if (e instanceof RemoteException) {
             cause = ((RemoteException) e).detail;
         } else {
@@ -65,22 +64,7 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
             return status;
         }
 
-        MultiStatus mStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.ERROR, topMsg, null);
-        DeployStatus errorStatus = null;
-        while (cause != null) {
-            String message = cause.getMessage().split(";")[0]; //$NON-NLS-1$
-
-            errorStatus = DeployStatus.getErrorStatus(this, message);
-            mStatus.add(errorStatus);
-
-            if (cause instanceof RemoteException) {
-                cause = ((RemoteException) cause).detail;
-            } else {
-                cause = cause.getCause();
-            }
-        }
-
-        return mStatus;
+        return null;
     }
 
     private IStatus buildErrorStatus(String bindMsg, String typeLabel, String objectName, Exception e) {
@@ -91,7 +75,7 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
         IStatus status = null;
         if (exceptionMsgs.length == 1) {
             status = DeployStatus.getErrorStatus(this,
-                    Messages.bind(Messages.Deploy_fail_cause_text, typeLabel, objectName, exceptionMsgs[0]), e);
+                    Messages.bind(bindMsg, typeLabel, objectName, exceptionMsgs[0]), e);
 
             return status;
         }

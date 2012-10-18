@@ -30,7 +30,7 @@ public class UserExceptionStackFilter {
 
     private static final String CAUSEBY_SEP = "\\[Caused by\\]:"; //$NON-NLS-1$
 
-    private static final String NEST_SEP = "; nested exception"; //$NON-NLS-1$
+    private static final String NEST_SEP = "nested exception"; //$NON-NLS-1$
 
 
     public static String[] filterExceptionMsg(String msg) {
@@ -66,6 +66,11 @@ public class UserExceptionStackFilter {
                 int lastSubIndex = s.lastIndexOf(EXCEPTION_SEP);
                 if (lastSubIndex != -1) {
                     s = s.substring(lastSubIndex + EXCEPTION_SEP.length()).trim();
+                }
+
+                s = s.trim();
+                if (s.endsWith(SUFFIX)) {
+                    s = s.substring(0, s.length() - 1);
                 }
 
                 msgs.add(s);
