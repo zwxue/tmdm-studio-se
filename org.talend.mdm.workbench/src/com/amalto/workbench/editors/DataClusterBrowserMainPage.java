@@ -95,8 +95,9 @@ import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSConceptRevisionMap;
 import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
-import com.amalto.workbench.webservices.WSCount;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -532,62 +533,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             String clusterName = URLEncoder.encode(cluster.getName(), "utf-8");//$NON-NLS-1$
 
-            WSString countStr = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100)); //$NON-NLS-1$
-            long count = Long.parseLong(countStr.getValue());
+            //            WSString countStr = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100)); //$NON-NLS-1$
+            // long count = Long.parseLong(countStr.getValue());
 
-            if (count > 100000) {
-
-                // if (false) {
-                // Modified by hbhong,to fix bug 21784|
-                TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
-
-                DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell(), getSite(), treeParent);
-                // The ending| bug:21784
-                dialog.setBlockOnOpen(true);
-                dialog.open();
-                if (dialog.getReturnCode() == Window.OK) {
-                    String xpath = dialog.getXpath();
-                    WSDataModel dm = Util.getPort(this.getXObject()).getDataModel(new WSGetDataModel(new WSDataModelPK(xpath)));
-                    if (dm == null) {
-                        return;
-                    }
-                    concepts = new String[Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).size()];
-                    Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).toArray(concepts);
-                    TreeObject object = null;
-                    TreeObject[] children = treeParent.getChildren();
-                    for (TreeObject element : children) {
-                        object = element;
-                        if (object.getType() == TreeObject.DATA_MODEL) {
-                            break;
-                        }
-                    }
-                    String revision = "";//$NON-NLS-1$
-                    if (object != null) {
-                        // TMDM-2606: Don't expect data model to contain revision name (CE edition doesn't support
-                        // revisions).
-                        if (object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_16) && object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_17)) {
-                            revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
-                                    object.getDisplayName().indexOf("]"));//$NON-NLS-1$
-                        }
-                    }
-
-                    for (int i = 0; i < concepts.length; i++) {
-                        String concept = concepts[i];
-                        if (revision == null || revision.equals("")) { //$NON-NLS-1$
-                            revision = "HEAD";//$NON-NLS-1$
-                        }
-                        concepts[i] = concept + " " + "[" + revision + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                    }
-                    conceptCombo.removeAll();
-                    conceptCombo.add("*");//$NON-NLS-1$
-                    for (String concept : concepts) {
-                        conceptCombo.add(concept);
-                    }
-                }
-            } else {
-                WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = port.getConceptsInDataClusterWithRevisions(
-                        new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(clusterName), new WSUniversePK(
-                                currentUniverseName))).getMapEntry();
+            WSConceptRevisionMap conceptsRevisionMap = port
+                    .getConceptsInDataClusterWithRevisions(new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(
+                            clusterName), new WSUniversePK(currentUniverseName)));
+            if (conceptsRevisionMap != null) {
+                WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = conceptsRevisionMap.getMapEntry();
 
                 concepts = new String[wsConceptRevisionMapMapEntries.length];
                 for (int i = 0; i < wsConceptRevisionMapMapEntries.length; i++) {
@@ -604,7 +557,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 for (String concept : concepts) {
                     conceptCombo.add(concept);
                 }
+            } else {
+                boolean selected = doSelectDataModelForEntityRecords(clusterName);
+                if (!selected) {
+                    return;
+                }
             }
+
             conceptCombo.select(0);
             searchText.setFocus();
         } catch (ServerException e) {
@@ -620,6 +579,74 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             MessageDialog.openError(this.getSite().getShell(), Messages._Error,
                     Messages.bind(Messages.DataClusterBrowser_error, e.getLocalizedMessage()));
         }
+    }
+
+    /**
+     * @param clusterName
+     * @throws RemoteException
+     * @throws XtentisException
+     * @throws Exception
+     */
+    private boolean doSelectDataModelForEntityRecords(String clusterName) throws RemoteException, XtentisException, Exception {
+        // if (false) {
+        // Modified by hbhong,to fix bug 21784|
+        TreeParent treeParent = (TreeParent) getAdapter(TreeParent.class);
+
+        DataModelSelectDialog dialog = new DataModelSelectDialog(getSite(), treeParent, clusterName);
+        // The ending| bug:21784
+        dialog.setBlockOnOpen(true);
+        dialog.open();
+
+        if (dialog.getReturnCode() == Window.OK) {
+            List<String> allConcept = new ArrayList<String>();
+
+            String[] xpaths = dialog.getXpath();
+            for (String xpath : xpaths) {
+                WSDataModel dm = Util.getPort(this.getXObject()).getDataModel(new WSGetDataModel(new WSDataModelPK(xpath)));
+                if (dm == null) {
+                    return false;
+                }
+                List<String> concepts = Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema()));
+                allConcept.addAll(concepts);
+            }
+
+            String[] concepts = allConcept.toArray(new String[0]);
+
+            TreeObject object = null;
+            TreeObject[] children = treeParent.getChildren();
+            for (TreeObject element : children) {
+                object = element;
+                if (object.getType() == TreeObject.DATA_MODEL) {
+                    break;
+                }
+            }
+            String revision = "";//$NON-NLS-1$
+            if (object != null) {
+                // TMDM-2606: Don't expect data model to contain revision name (CE edition doesn't support
+                // revisions).
+                if (object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_16) && object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_17)) {
+                    revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
+                            object.getDisplayName().indexOf("]"));//$NON-NLS-1$
+                }
+            }
+
+            for (int i = 0; i < concepts.length; i++) {
+                String concept = concepts[i];
+                if (revision == null || revision.equals("")) { //$NON-NLS-1$
+                    revision = "HEAD";//$NON-NLS-1$
+                }
+                concepts[i] = concept + " " + "[" + revision + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            }
+            conceptCombo.removeAll();
+            conceptCombo.add("*");//$NON-NLS-1$
+            for (String concept : concepts) {
+                conceptCombo.add(concept);
+            }
+        } else {
+            conceptCombo.add("*");//$NON-NLS-1$
+        }
+
+        return true;
     }
 
     @Override

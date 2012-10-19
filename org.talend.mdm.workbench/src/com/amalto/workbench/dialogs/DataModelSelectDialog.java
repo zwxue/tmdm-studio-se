@@ -13,11 +13,15 @@
 package com.amalto.workbench.dialogs;
 
 import java.awt.Panel;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -28,7 +32,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPartSite;
 
 import com.amalto.workbench.i18n.Messages;
@@ -39,24 +42,21 @@ import com.amalto.workbench.providers.ServerTreeLabelProvider;
 
 public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
+    // The ending| bug:21784
+    private static final long serialVersionUID = 1L;
+
     // Modified by hbhong,to fix bug 21784|Add a TreeParent parameter to constructor
     private final TreeParent treeParent;
 
     private IWorkbenchPartSite site;
 
-    public DataModelSelectDialog(Shell parentShell, IWorkbenchPartSite iWorkbenchPartSite, TreeParent treeParent) {
-        super(parentShell);
-        this.site = iWorkbenchPartSite;
-        this.treeParent = treeParent;
-    }
-    // The ending| bug:21784
-    private static final long serialVersionUID = 1L;
+    private String clusterName;// cluster for default datamodel selection
 
     protected Label schemaLabel = null;
 
     private String title = Messages.DataModelSelectDialog_Title;
 
-    private String xpath;
+    private String[] xpaths;
 
     protected Panel panel;
 
@@ -68,6 +68,13 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
 
     protected TreeViewer domViewer;
 
+    public DataModelSelectDialog(IWorkbenchPartSite iWorkbenchPartSite, TreeParent treeParent2, String clusterName) {
+        super(iWorkbenchPartSite.getShell());
+        this.site = iWorkbenchPartSite;
+        this.treeParent = treeParent2;
+        this.clusterName = clusterName;
+    }
+
     @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(Messages.DataModelSelectDialog_SelectDataModel);
@@ -77,11 +84,12 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
         schemaLabel = new Label(composite, SWT.NONE);
         schemaLabel.setText(title);
         GridData dg = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
-        domViewer = new TreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        domViewer = new TreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.MULTI);
         domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
         ((GridData) domViewer.getControl().getLayoutData()).heightHint = 400;
         ((GridData) domViewer.getControl().getLayoutData()).widthHint = 400;
         changeToResource();
+        selectDataModel();
         return composite;
     }
 
@@ -118,20 +126,52 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
             public void selectionChanged(SelectionChangedEvent e) {
                 StructuredSelection sel = (StructuredSelection) e.getSelection();
 
-                TreeObject selectNode = (TreeObject) sel.getFirstElement();
-                if (selectNode != null && selectNode.getType() == TreeObject.DATA_MODEL) {
-                    xpath = selectNode.getDisplayName();
+                List<String> xpathList = new ArrayList<String>();
+                Object[] selections = sel.toArray();
+                for (Object obj : selections) {
+                    TreeObject treeObj = (TreeObject) obj;
+                    if (treeObj != null && treeObj.getType() == TreeObject.DATA_MODEL) {
+                        xpathList.add(treeObj.getDisplayName());
+                    }
                 }
-                else {
-                    xpath = "";//$NON-NLS-1$
-                }
-                sel.getFirstElement();
 
-                getButton(IDialogConstants.OK_ID).setEnabled(xpath.length() > 0);
+                xpaths = xpathList.toArray(new String[0]);
+
+                if (getButton(IDialogConstants.OK_ID) != null) {
+                    getButton(IDialogConstants.OK_ID).setEnabled(xpathList.size() > 0);
+                }
             }
         });
-        domViewer.setInput(site);
 
+        domViewer.setInput(site);
+    }
+
+    private void selectDataModel() {
+        Object input = domViewer.getInput();
+        TreeObject[] elements = (TreeObject[]) contentProvider.getElements(input);
+
+        selectDefaultDataModel(elements);
+
+        domViewer.addTreeListener(new ITreeViewerListener() {
+
+            public void treeExpanded(TreeExpansionEvent event) {
+                TreeParent parent = (TreeParent) event.getElement();
+                TreeObject[] children = parent.getChildren();
+                selectDefaultDataModel(children);
+            }
+
+            public void treeCollapsed(TreeExpansionEvent event) {//
+            }
+        });
+    }
+
+    private void selectDefaultDataModel(TreeObject[] children) {
+        for (TreeObject treeObj : children) {
+            if (treeObj.getType() == TreeObject.DATA_MODEL && clusterName.equals(treeObj.getName())) {
+                domViewer.setSelection(new StructuredSelection(treeObj));
+                break;
+            }
+        }
     }
 
     private void setTreeContentProvider(ServerTreeContentProvider treeContentProvider) {
@@ -148,8 +188,8 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
         return btnBar;
     }
 
-    public String getXpath() {
-        return xpath;
+    public String[] getXpath() {
+        return xpaths;
     }
 
 }
