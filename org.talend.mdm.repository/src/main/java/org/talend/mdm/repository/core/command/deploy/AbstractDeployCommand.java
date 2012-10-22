@@ -59,13 +59,15 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
             cause = e.getCause();
         }
 
+        IStatus status = null;
         if (cause == null) {
-            IStatus status = buildErrorStatus(bindMsg, typeLabel, objectName, e);
-
-            return status;
+            status = buildErrorStatus(bindMsg, typeLabel, objectName, e);
+        } else {
+            status = DeployStatus.getErrorStatus(this, Messages.bind(bindMsg, typeLabel, objectName, e.getMessage()), e);
         }
 
-        return null;
+
+        return status;
     }
 
     private IStatus buildErrorStatus(String bindMsg, String typeLabel, String objectName, Exception e) {
