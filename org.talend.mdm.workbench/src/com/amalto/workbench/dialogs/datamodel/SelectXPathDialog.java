@@ -56,7 +56,7 @@ public class SelectXPathDialog extends Dialog {
     @Override
     protected Control createDialogArea(Composite parent) {
 
-        getShell().setText("Set XPath");
+        getShell().setText("Select Xpath ..."); //$NON-NLS-1$
 
         Composite container = (Composite) super.createDialogArea(parent);
 
@@ -78,6 +78,7 @@ public class SelectXPathDialog extends Dialog {
         return new Point(500, 575);
     }
 
+    @Override
     protected int getShellStyle() {
         return super.getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE;
     }
