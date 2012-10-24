@@ -49,7 +49,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
     /**
      * DOC achen MDMOpenExistVersionProcessWizard constructor comment.
-     * 
+     *
      * @param processObject
      */
     public MDMOpenExistVersionProcessWizard(IRepositoryViewObject processObject) {
@@ -57,8 +57,8 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
 
         ERepositoryStatus status = processObject.getRepositoryStatus();
         if ( status.equals(ERepositoryStatus.LOCK_BY_USER)
-                && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {        	
-        	alreadyEditedByUser = true;        
+                && RepositoryResourceUtil.isOpenedItemInEditor(processObject)) {
+        	alreadyEditedByUser = true;
         }
         this.viewObject = processObject;
     }
@@ -67,11 +67,11 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
     public void addPages() {
         mainPage = new MDMOpenExistVersionProcessPage(alreadyEditedByUser, viewObject);
         addPage(mainPage);
-        setWindowTitle(Messages.MDMOpenExistVersionProcessWizard_NewObject); //$NON-NLS-1$
+        setWindowTitle(Messages.MDMOpenExistVersionProcessWizard_NewObject);
     }
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.designer.core.ui.wizards.OpenExistVersionProcessWizard#openAnotherVersion(org.talend.repository.model
      * .RepositoryNode, boolean)
@@ -102,7 +102,7 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
             }
         }
     }
-    
+
     private void updateEditorInputVersionInfo(IRepositoryViewEditorInput editorInput, IRepositoryViewObject viewObject) {
         String version = viewObject.getVersion();
         try {
@@ -126,31 +126,30 @@ public class MDMOpenExistVersionProcessWizard extends OpenExistVersionProcessWiz
         }
 
         editorInput.setVersion(version);
-    }    
+    }
     public IRepositoryViewObject getViewObj(){
         return this.viewObject;
     }
 
-//    @Override
+    @Override
     protected boolean refreshNewJob() {
-//        IFolder folder = RepositoryResourceUtil.getFolder(getViewObj());
-//        if (folder != null && folder.exists()) {
-//            try {
-//                for (IResource r : folder.members()) {
-//                    if (r instanceof IFile) {
-//                        if (r.getFileExtension().equalsIgnoreCase("bak")) {//$NON-NLS-1$
-//                            IFile file = (IFile) r;
-//                            if (file.exists()) {
-//                                file.delete(true, null);
-//                            }
-//                        }
-//                    }
-//                }
-//            } catch (CoreException e) {
-//                log.error(e.getMessage(), e);
-//            }
-//        }
-//        return super.refreshNewJob();
-        return true;
+        IFolder folder = RepositoryResourceUtil.getFolder(getViewObj());
+        if (folder != null && folder.exists()) {
+            try {
+                for (IResource r : folder.members()) {
+                    if (r instanceof IFile) {
+                        if (r.getFileExtension().equalsIgnoreCase("bak")) {//$NON-NLS-1$
+                            IFile file = (IFile) r;
+                            if (file.exists()) {
+                                file.delete(true, null);
+                            }
+                        }
+                    }
+                }
+            } catch (CoreException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return super.refreshNewJob();
     }
 }
