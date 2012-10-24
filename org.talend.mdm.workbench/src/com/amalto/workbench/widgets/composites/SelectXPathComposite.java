@@ -145,11 +145,9 @@ public class SelectXPathComposite extends Composite {
     }
 
     private void initFilterText() {
-
-        txtFilter.setText("*");//$NON-NLS-1$
-
-        if (conceptName != null)
+        if (conceptName != null) {
             txtFilter.setText(conceptName);
+        }
     }
 
     private void initDataModelComboContents() {
@@ -157,11 +155,13 @@ public class SelectXPathComposite extends Composite {
         List<String> allCurDataModels = Arrays.asList(allDataModelHolder.getAllDataModelNames());
         comboDataModels.setItems(allCurDataModels.toArray(new String[0]));
 
-        if (allCurDataModels.size() > 0)
+        if (allCurDataModels.size() > 0) {
             comboDataModels.select(0);
+        }
 
-        if (allCurDataModels.contains(defaultSelectedDataModel))
+        if (allCurDataModels.contains(defaultSelectedDataModel)) {
             comboDataModels.select(allCurDataModels.indexOf(defaultSelectedDataModel));
+        }
     }
 
     private void initXPathTreeContents() {
@@ -181,8 +181,9 @@ public class SelectXPathComposite extends Composite {
 
                 comboDataModels.setItems(allModels);
 
-                if (Arrays.asList(allModels).contains(old))
+                if (Arrays.asList(allModels).contains(old)) {
                     comboDataModels.setText(old);
+                }
             }
 
         });
@@ -229,11 +230,15 @@ public class SelectXPathComposite extends Composite {
     }
 
     private String getFilterExpression() {
+        String starFlag = "*"; //$NON-NLS-1$
 
-        if ("".equals(txtFilter.getText().trim()))//$NON-NLS-1$
-            return "*";//$NON-NLS-1$
+        String filterText = txtFilter.getText().trim();
+        if (filterText.isEmpty())
+         {
+            return starFlag;
+        }
 
-        return txtFilter.getText().trim();
+        return filterText + starFlag;
     }
 
     private String getXpath() {
@@ -245,23 +250,28 @@ public class SelectXPathComposite extends Composite {
         for (int i = 0; i < items.length; i++) {
             item = items[i];
             XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
-            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration))
+            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration)) {
                 continue;
+            }
             do {
                 component = (XSDConcreteComponent) item.getData();
                 if (component instanceof XSDParticle) {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
+                     {
                         path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
+                    }
                 } else if (component instanceof XSDElementDeclaration) {
                     path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;//$NON-NLS-1$//$NON-NLS-2$
                 }
                 item = item.getParentItem();
 
             } while (item != null);
-            if (i == 0)
+            if (i == 0) {
                 totalXpath = path;
-            else
+            }
+            else {
                 totalXpath += "&" + path;//$NON-NLS-1$
+            }
             path = "";//$NON-NLS-1$
         }// for(i=0
         if (context != null && conceptName != null) {
