@@ -49,6 +49,7 @@ import org.eclipse.ui.internal.wizards.datatransfer.ZipLeveledStructureProvider;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -57,9 +58,9 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
+import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
@@ -103,7 +104,13 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         if (!showLockedObjDialog(getCheckedObjects())) {
             return false;
         }
-        return super.performFinish();
+        boolean result = super.performFinish();
+        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
+                ISyncWorkflowService.class);
+        if (syncService != null) {
+            syncService.startSyncWorkflowTask();
+        }
+        return result;
     }
 
     List<ItemRecord> toImportItemRecords = new LinkedList<ItemRecord>();
@@ -138,51 +145,59 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }
         return true;
     }
-    
-    
+
     private void filterImportedItems(List<ItemRecord> toImportItemRecords) {
         String transformerStandalonePrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
         String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
-        for (Iterator<ItemRecord> it = toImportItemRecords.iterator(); it.hasNext();) {
-            Item item = it.next().getProperty().getItem();
+        for (ItemRecord itemRecord : toImportItemRecords) {
+            Item item = itemRecord.getProperty().getItem();
             if (item instanceof WSViewItem) {
                 if (item.getProperty().getLabel().toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
-                    if(!item.getState().getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER))
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
                         item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + item.getState().getPath());
-                }
-                else {
-                    if(!item.getState().getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER))
-                        item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + item.getState().getPath());
+                    }
+                } else {
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER)) {
+                        item.getState()
+                                .setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + item.getState().getPath());
+                    }
                 }
             }
-            
-            if(item instanceof WSTransformerV2Item) {
+
+            if (item instanceof WSTransformerV2Item) {
                 String lowerCaseItemLabel = item.getProperty().getLabel().toLowerCase();
-                
+
                 if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
-                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE))
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + item.getState().getPath());
+                    }
                 } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
-                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL))
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + item.getState().getPath());
+                    }
                 } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
-                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION))
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION + item.getState().getPath());
-                } else if (lowerCaseItemLabel.startsWith(transformerStandalonePrefix) || 
-                        lowerCaseItemLabel.startsWith(transformerStandalonePrefix2)) {
-                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION))
+                    }
+                } else if (lowerCaseItemLabel.startsWith(transformerStandalonePrefix)
+                        || lowerCaseItemLabel.startsWith(transformerStandalonePrefix2)) {
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + item.getState().getPath());
+                    }
                 } else if (lowerCaseItemLabel.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
-                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW))
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
                         item.getState().setPath(
                                 IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW + item.getState().getPath());
+                    }
                 } else {
-                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER))
-                        item.getState().setPath(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER + item.getState().getPath());
+                    if (!item.getState().getPath().startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER)) {
+                        item.getState().setPath(
+                                IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER + item.getState().getPath());
+                    }
                 }
             }
         }
@@ -198,7 +213,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             @Override
             protected void run() throws LoginException, PersistenceException {
                 filterImportedItems(toImportItemRecords);
-                
+
                 repositoryUtil.importItemRecords(manager, toImportItemRecords, monitor, isOverride, null, ""); //$NON-NLS-1$
 
                 for (ItemRecord itemRec : toImportItemRecords) {
@@ -264,6 +279,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     }
 
+    @Override
     protected void createOverwriteBtn(Composite composite) {
         btnOverwrite = new Button(composite, SWT.CHECK);
         btnOverwrite.setText(Messages.Overwrite_Exists_Items);
@@ -277,7 +293,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
         });
     }
-    
+
     @Override
     protected ImportExchangeOptionsDialog getExchangeOptionsDialog() {
         FormToolkit toolkit = WidgetFactory.getWidgetFactory();
@@ -334,8 +350,9 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             monitor.worked(60);
         }
         repositoryUtil.clearAllData();
-        if (manager != null)
+        if (manager != null) {
             items.addAll(repositoryUtil.populateItems(manager, isOverride, monitor));
+        }
 
         selectedItems.addAll(items);
 
@@ -420,6 +437,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }.schedule();
     }
 
+    @Override
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.getViewer().setInput(null);

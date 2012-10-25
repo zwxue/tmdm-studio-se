@@ -43,6 +43,7 @@ public class ContainerCacheService {
         viewObjMap.clear();
         containerMap.clear();
     }
+
     public static void putContainer(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
         if (item instanceof ContainerItem) {
@@ -58,16 +59,17 @@ public class ContainerCacheService {
         }
     }
 
-
     public static void put(Property prop, IRepositoryViewObject viewObj) {
-        if (prop == null || viewObj == null)
+        if (prop == null || viewObj == null) {
             throw new IllegalArgumentException();
+        }
         viewObjMap.put(prop.getId(), viewObj);
     }
 
     public static void remove(Property prop) {
-        if (prop != null)
+        if (prop != null) {
             remove(prop.getId());
+        }
     }
 
     public static void remove(String propId) {
@@ -84,10 +86,11 @@ public class ContainerCacheService {
                 if (next.startsWith(path)) {
                     IRepositoryViewObject viewObj = map.get(next);
                     if (viewObj != null && viewObj instanceof FolderRepositoryObject) {
-                        if (viewObj.getChildren() != null)
+                        if (viewObj.getChildren() != null) {
                             for (IRepositoryViewObject child : viewObj.getChildren()) {
                                 remove(child.getProperty());
                             }
+                        }
                     }
                     il.remove();
                 }
@@ -114,9 +117,17 @@ public class ContainerCacheService {
     }
 
     public static IRepositoryViewObject get(Property prop) {
-        if (prop == null)
+        if (prop == null) {
             throw new IllegalArgumentException();
+        }
         return viewObjMap.get(prop.getId());
+    }
+
+    public static IRepositoryViewObject get(String propId) {
+        if (propId == null) {
+            throw new IllegalArgumentException();
+        }
+        return viewObjMap.get(propId);
     }
 
     public static IRepositoryViewObject getParent(IRepositoryViewObject obj) {

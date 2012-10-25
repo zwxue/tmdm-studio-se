@@ -214,11 +214,12 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             File[] files = file.listFiles();
             if (files != null) {
 
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].getName().equals(".svn")) //$NON-NLS-1$
+                for (File file2 : files) {
+                    if (file2.getName().equals(".svn")) {
                         continue;
+                    }
 
-                    IFile ifile = targetFolder.getFile(files[i].getName());
+                    IFile ifile = targetFolder.getFile(file2.getName());
                     String fileExtension = ifile.getFileExtension();
 
                     if ("item".equals(fileExtension) || "properties".equals(fileExtension) || "xsd".equals(fileExtension)) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
@@ -227,7 +228,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                         File sunfile = ifile.getLocation().toFile();
                         if (!sunfile.exists()) {
                             try {
-                                fileInputStream = new FileInputStream(files[i]);
+                                fileInputStream = new FileInputStream(file2);
                                 ifile.create(fileInputStream, IFile.FORCE, new NullProgressMonitor());
                             } catch (FileNotFoundException e) {
                                 log.error("file not found.", e);//$NON-NLS-1$
@@ -317,8 +318,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             }
             // if editor is talend job editor, switch to org.talend.rcp.perspective
             if (partRef.getId().equals(JOB_EDITOR_ID)) {
-                if (deactivePerspective != null && deactivePerspective.getId().equals(DI_PERSPECTIVE_ID))
+                if (deactivePerspective != null && deactivePerspective.getId().equals(DI_PERSPECTIVE_ID)) {
                     return;
+                }
                 dialog = new SwitchPerspectiveDialog(getSite().getShell(), "Integration", DI_PERSPECTIVE_ID, //$NON-NLS-1$
                         PreferenceConstants.P_AUTO_SWITCH_TO_DI, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI);
 
@@ -330,8 +332,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         }
 
     };
-
-
 
     private IPerspectiveDescriptor deactivePerspective;// record current deactivated perspective for temp use
 
@@ -359,8 +359,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     }
                 }
 
-                if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId()))
+                if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
                     getCommonViewer().refresh();
+                }
             }
         });
     }
@@ -373,22 +374,22 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (part instanceof IEditorPart) {
                 IEditorInput input = ((IEditorPart) part).getEditorInput();
                 if (input != null && input instanceof IRepositoryViewEditorInput) {
-                    Item item = ((IRepositoryViewEditorInput) input).getInputItem();
-                    if (item != null) {
-                        Property property = item.getProperty();
-                        final IRepositoryViewObject viewObject = ContainerCacheService.get(property);
-                        if (viewObject != null) {
-                            Display.getDefault().asyncExec(new Runnable() {
 
-                                public void run() {
-                                    if (!getCommonViewer().getTree().isDisposed()) {
-                                        getCommonViewer().refresh(viewObject);
-                                    }
+                    IRepositoryViewEditorInput repositoryViewEditorInput = (IRepositoryViewEditorInput) input;
+                    final String id = repositoryViewEditorInput.getViewObject().getId();
+                    Display.getDefault().asyncExec(new Runnable() {
+
+                        public void run() {
+
+                            if (!getCommonViewer().getTree().isDisposed()) {
+                                final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
+                                if (viewObject != null) {
+                                    getCommonViewer().refresh(viewObject);
                                 }
-                            });
-
+                            }
                         }
-                    }
+                    });
+
                 }
             }
         }
@@ -405,18 +406,20 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                         try {
                             factory.unlock(item);
                             Property property = item.getProperty();
-                            final IRepositoryViewObject viewObject = ContainerCacheService.get(property);
-                            if (viewObject != null) {
-                                Display.getDefault().asyncExec(new Runnable() {
+                            final String id = property.getId();
 
-                                    public void run() {
-                                        if (!getCommonViewer().getTree().isDisposed()) {
+                            Display.getDefault().asyncExec(new Runnable() {
+
+                                public void run() {
+                                    if (!getCommonViewer().getTree().isDisposed()) {
+                                        final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
+                                        if (viewObject != null) {
                                             getCommonViewer().refresh(viewObject);
                                         }
                                     }
-                                });
+                                }
+                            });
 
-                            }
                         } catch (PersistenceException e) {
                             log.error(e.getMessage(), e);
                         } catch (LoginException e) {

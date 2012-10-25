@@ -71,6 +71,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.utils.VersionUtils;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -81,6 +82,7 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
+import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
@@ -167,6 +169,11 @@ public class ImportServerObjectWizard extends Wizard {
         } catch (InterruptedException e) {
             log.error(e);
             return false;
+        }
+        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
+                ISyncWorkflowService.class);
+        if (syncService != null) {
+            syncService.startSyncWorkflowTask();
         }
         return true;
     }
