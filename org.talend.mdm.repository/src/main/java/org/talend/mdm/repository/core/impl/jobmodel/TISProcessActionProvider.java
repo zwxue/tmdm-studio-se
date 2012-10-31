@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,6 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.ui.actions.bridge.CreateFolderAction;
 import org.talend.mdm.repository.ui.actions.bridge.DeleteAction;
 import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
 import org.talend.mdm.repository.ui.actions.job.CreateProcessAction;
@@ -48,11 +47,9 @@ import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapter {
-
-    AbstractRepositoryAction createFolderAction;
 
     AbstractRepositoryAction createProcessAction;
 
@@ -77,7 +74,6 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
-        createFolderAction = new CreateFolderAction();
         renameFolderAction = new RenameFolderAction();
         createProcessAction = new CreateProcessAction();
         editProcessAction = new EditProcessAction();
@@ -90,7 +86,6 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         editPropAction = new EditJobPropertiesAction();
         //
-        createFolderAction.initCommonViewer(commonViewer);
         renameFolderAction.initCommonViewer(commonViewer);
         createProcessAction.initCommonViewer(commonViewer);
         editProcessAction.initCommonViewer(commonViewer);
@@ -113,16 +108,13 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             FolderType type = ((FolderItem) item).getType();
             switch (type.getValue()) {
             case FolderType.SYSTEM_FOLDER:
-                actions.add(createFolderAction);
                 actions.add(createProcessAction);
                 break;
             case FolderType.STABLE_SYSTEM_FOLDER:
-                actions.add(createFolderAction);
                 break;
 
             case FolderType.FOLDER:
                 actions.add(createProcessAction);
-                actions.add(createFolderAction);
                 actions.add(renameFolderAction);
                 actions.add(deleteAction);
                 break;
