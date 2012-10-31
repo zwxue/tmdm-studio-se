@@ -48,6 +48,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -457,6 +458,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     protected void doImportSchema(final List<String> addList, final List<String> delList) {
         TimerTask task = new TimerTask() {
 
+            @Override
             public void run() {
                 getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
@@ -476,7 +478,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             // and in the case of deleting the included xsd
                             setXsdSchema(xsdSchema);
                             refreshData();
-                            MessageDialog.openInformation(getSite().getShell(), Messages.ImportXSDSche, Messages.ImportingXSDSchemaCompleted);
+                            MessageDialog.openInformation(getSite().getShell(), Messages.ImportXSDSche,
+                                    Messages.ImportingXSDSchemaCompleted);
                         } catch (Exception ex) {
                             log.error(ex.getMessage(), ex);
                             String detail = "";//$NON-NLS-1$
@@ -486,7 +489,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             setXsdSchema(schemaCpy);
                             commit();
                             refresh();
-                            MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.bind(Messages.ImportingXSDSchemaFailed, detail));
+                            MessageDialog.openError(getSite().getShell(), Messages._Error,
+                                    Messages.bind(Messages.ImportingXSDSchemaFailed, detail));
                         }
                     }
                 });
@@ -498,8 +502,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     public void validateSchema() throws IllegalAccessException {
-        final String msg_omit[] = { Messages.XsdOmit1, Messages.XsdOmit2,
-                Messages.XsdOmit3, Messages.XsdOmit4, Messages.XsdOmit5 };
+        final String msg_omit[] = { Messages.XsdOmit1, Messages.XsdOmit2, Messages.XsdOmit3, Messages.XsdOmit4, Messages.XsdOmit5 };
 
         final String msg_shouldRefresh[] = { Messages.XsdRefresh };
 
@@ -589,8 +592,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private void addLabelForTheItem(TreeItem[] items, boolean isAdd) {
         XSDComponent xSDCom = null;
-        for (int i = 0; i < items.length; i++) {
-            TreeItem item = items[i];
+        for (TreeItem item : items) {
             XSDAnnotationsStructure struc = null;
             String labelValue = null;
             if (item.getData() instanceof XSDElementDeclaration) {
@@ -605,22 +607,22 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void setLabelForElement(XSDElementDeclaration xSDEle, boolean isAdd) {
-        if (((XSDElementDeclaration) xSDEle).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+        if (xSDEle.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             XSDAnnotationsStructure struc = null;
             String labelValue = null;
-            List childrenList = Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) ((XSDElementDeclaration) xSDEle)
-                    .getTypeDefinition());
+            List childrenList = Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) xSDEle.getTypeDefinition());
             for (int j = 0; j < childrenList.size(); j++) {
                 List<XSDParticle> particles = new ArrayList<XSDParticle>();
-                if (childrenList.get(j) instanceof XSDModelGroup)
+                if (childrenList.get(j) instanceof XSDModelGroup) {
                     particles = ((XSDModelGroup) childrenList.get(j)).getParticles();
+                }
                 for (int k = 0; k < particles.size(); k++) {
                     XSDParticle xSDCom = particles.get(k);
                     struc = new XSDAnnotationsStructure(xSDCom);
-                    if (((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
-                        labelValue = ((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent()).getName();
+                    if (xSDCom.getContent() instanceof XSDElementDeclaration) {
+                        labelValue = ((XSDElementDeclaration) xSDCom.getContent()).getName();
                         setLabel(struc, labelValue, isAdd);
-                        setLabelForElement((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent(), isAdd);
+                        setLabelForElement((XSDElementDeclaration) xSDCom.getContent(), isAdd);
                     }
                 }
             }
@@ -711,6 +713,34 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
 
         });
+        viewer.setComparer(new ElementComparer());
+
+    }
+
+    class ElementComparer implements IElementComparer {
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
+         */
+        public boolean equals(Object a, Object b) {
+            if (a instanceof XSDElementDeclaration && b instanceof XSDElementDeclaration) {
+                String aURL = ((XSDElementDeclaration) a).getURI();
+                String bURL = ((XSDElementDeclaration) b).getURI();
+                return aURL.equals(bURL);
+            }
+            return a.equals(b);
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
+         */
+        public int hashCode(Object element) {
+            return element.hashCode();
+        }
 
     }
 
@@ -738,8 +768,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         TreeItem item;
         TreeItem[] items = targetTreeViewer.getTree().getSelection();
         boolean isDirty = false;
-        for (int i = 0; i < items.length; i++) {
-            item = items[i];
+        for (TreeItem item2 : items) {
+            item = item2;
             Object data = item.getData();
             EList content = getXSDComponentContainer(data);
             if (content != null) {
@@ -751,8 +781,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
             }
         }
-        if (isDirty)
+        if (isDirty) {
             this.markDirtyWithoutCommit();
+        }
     }
 
     public void stepDown(TreeViewer targetTreeViewer) {
@@ -771,8 +802,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
             }
         }
-        if (isDirty)
+        if (isDirty) {
             this.markDirtyWithoutCommit();
+        }
     }
 
     public SashForm createSash(Composite parent) {
@@ -900,8 +932,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
             String s;
             s = wsObject.getDescription() == null ? "" : wsObject.getDescription();//$NON-NLS-1$
-            if (!s.equals(descriptionText.getText()))
+            if (!s.equals(descriptionText.getText())) {
                 descriptionText.setText(s);
+            }
             String schema = Util.formatXsdSource(wsObject.getXsdSchema());
 
             XSDSchema xsd = Util.createXsdSchema(schema, xobject);
@@ -940,8 +973,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
 
             }
-            if (xsdSchema == null || (xsd != null && !xsd.equals(wsObject.getXsdSchema())))
+            if (xsdSchema == null || (xsd != null && !xsd.equals(wsObject.getXsdSchema()))) {
                 xsdSchema = Util.createXsdSchema(schema, xobject);
+            }
             wsObject.setXsdSchema(schema);
 
             EList<XSDSchemaContent> elist = xsdSchema.getContents();
@@ -964,7 +998,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             doSave(wsObject);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.ErrorCommittingPage, CommonUtil.getErrMsgFromException(e));
+            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.ErrorCommittingPage,
+                    CommonUtil.getErrMsgFromException(e));
             return 1;
         }
         dirty = false;
@@ -975,8 +1010,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     protected void doSave(WSDataModel wsObject) throws Exception {
         XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
                 xobject.getPassword());
-        port.putDataModel(new WSPutDataModel((WSDataModel) wsObject));
-        RoleAssignmentDialog.doSave(port, ((WSDataModel) wsObject).getName(), Messages.DataModelText);
+        port.putDataModel(new WSPutDataModel(wsObject));
+        RoleAssignmentDialog.doSave(port, wsObject.getName(), Messages.DataModelText);
     }
 
     protected void commit() {
@@ -1051,44 +1086,63 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
             return 1;
         }
-        if (decl instanceof XSDComplexTypeDefinition)
+        if (decl instanceof XSDComplexTypeDefinition) {
             return 2;
-        if (decl instanceof XSDIdentityConstraintDefinition)
+        }
+        if (decl instanceof XSDIdentityConstraintDefinition) {
             return 3;
-        if (decl instanceof XSDXPathDefinition)
+        }
+        if (decl instanceof XSDXPathDefinition) {
             return 4;
-        if (decl instanceof XSDSimpleTypeDefinition)
+        }
+        if (decl instanceof XSDSimpleTypeDefinition) {
             return 5;
-        if (decl instanceof XSDAnnotation)
+        }
+        if (decl instanceof XSDAnnotation) {
             return 6;
-        if (decl instanceof XSDParticle)
+        }
+        if (decl instanceof XSDParticle) {
             return 7;
-        if (decl instanceof XSDModelGroup)
+        }
+        if (decl instanceof XSDModelGroup) {
             return 8;
-        if (decl instanceof XSDWhiteSpaceFacet)
+        }
+        if (decl instanceof XSDWhiteSpaceFacet) {
             return 201;
-        if (decl instanceof XSDLengthFacet)
+        }
+        if (decl instanceof XSDLengthFacet) {
             return 202;
-        if (decl instanceof XSDMinLengthFacet)
+        }
+        if (decl instanceof XSDMinLengthFacet) {
             return 203;
-        if (decl instanceof XSDMaxLengthFacet)
+        }
+        if (decl instanceof XSDMaxLengthFacet) {
             return 204;
-        if (decl instanceof XSDTotalDigitsFacet)
+        }
+        if (decl instanceof XSDTotalDigitsFacet) {
             return 205;
-        if (decl instanceof XSDFractionDigitsFacet)
+        }
+        if (decl instanceof XSDFractionDigitsFacet) {
             return 206;
-        if (decl instanceof XSDMaxInclusiveFacet)
+        }
+        if (decl instanceof XSDMaxInclusiveFacet) {
             return 207;
-        if (decl instanceof XSDMaxExclusiveFacet)
+        }
+        if (decl instanceof XSDMaxExclusiveFacet) {
             return 208;
-        if (decl instanceof XSDMinInclusiveFacet)
+        }
+        if (decl instanceof XSDMinInclusiveFacet) {
             return 209;
-        if (decl instanceof XSDMinExclusiveFacet)
+        }
+        if (decl instanceof XSDMinExclusiveFacet) {
             return 210;
-        if (decl instanceof XSDPatternFacet)
+        }
+        if (decl instanceof XSDPatternFacet) {
             return 211;
-        if (decl instanceof XSDEnumerationFacet)
+        }
+        if (decl instanceof XSDEnumerationFacet) {
             return 212;
+        }
         if (decl instanceof Element) {
             Element e = (Element) decl;
             if (e.getLocalName().equals("appinfo")) {//$NON-NLS-1$
@@ -1187,28 +1241,31 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     protected void fillContextMenu(IMenuManager manager, boolean isType) {
 
         IStructuredSelection selection;
-        if (!isType)
+        if (!isType) {
             selection = ((IStructuredSelection) viewer.getSelection());
-        else
+        } else {
             selection = ((IStructuredSelection) typesViewer.getSelection());
+        }
 
         Object[] selectedObjs = selection.toArray();
         Object obj = selection.getFirstElement();
 
-        if (!isType)
+        if (!isType) {
             manager.add(newConceptAction);
-        else {
+        } else {
             manager.add(newComplexTypeAction);
             manager.add(newSimpleTypeAction);
 
             // add by ymli; fix the bug:0012228. Made the multiple types can be deleted.
             XSDDeleteTypeDefinition deleteTypeDefinition1;
-            if (selectedObjs.length > 1)
+            if (selectedObjs.length > 1) {
                 deleteTypeDefinition1 = new XSDDeleteTypeDefinition(this, true);
-            else
+            } else {
                 deleteTypeDefinition1 = new XSDDeleteTypeDefinition(this, false);
-            if (selectedObjs.length >= 1 && deleteTypeDefinition1.isTypeDefinition(selectedObjs))
+            }
+            if (selectedObjs.length >= 1 && deleteTypeDefinition1.isTypeDefinition(selectedObjs)) {
                 manager.add(deleteTypeDefinition1);
+            }
 
             deleteConceptWrapAction.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
 
@@ -1219,8 +1276,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             if (selectedObjs.length > 1 && deleteConceptWrapAction.outPutDeleteActions() != null) {
                 manager.add(deleteConceptWrapAction.outPutDeleteActions());
 
-                if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
+                if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs)) {
                     manager.add(newBrowseItemAction);
+                }
             }
             if (Util.IsEnterPrise() && obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
                 manager.add(new Separator());
@@ -1233,10 +1291,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(new Separator(ADDITIONMENUID));
             // add by ymli, fix bug 0009770
             String title = "";//$NON-NLS-1$
-            if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
+            if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1) {
                 title = Messages.PasteEntityText;
-            else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
+            } else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1) {
                 title = Messages.PasteEntitiesText;
+            }
 
             XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
             if (pasteConceptAction.checkInPasteType()) {
@@ -1274,18 +1333,20 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                  * isMulti = true;
                  */
                 String title = "";//$NON-NLS-1$
-                if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
+                if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1) {
                     title = Messages.PasteEntitiesText;
-                else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
+                } else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1) {
                     title = Messages.PasteEntityText;
-                else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() > 1)
+                } else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() > 1) {
                     title = Messages.PasteElementsText;
-                else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() == 1)
+                } else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() == 1) {
                     title = Messages.PasteElement;
+                }
 
                 XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
-                if (pasteConceptAction.checkInPasteType())
+                if (pasteConceptAction.checkInPasteType()) {
                     manager.add(pasteConceptAction);
+                }
 
                 manager.add(new Separator());
                 manager.add(newElementAction);
@@ -1307,8 +1368,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
 
             // Annotations
-            if (!Util.IsAImporedElement(decl, xsdSchema) || !Util.IsAImporedElement(decl.getTypeDefinition(), xsdSchema))
+            if (!Util.IsAImporedElement(decl, xsdSchema) || !Util.IsAImporedElement(decl.getTypeDefinition(), xsdSchema)) {
                 setAnnotationActions2(obj, manager);
+            }
         }
         // add by rhou.fix bug 0012073: Enable to create element from sub element group
         if (obj instanceof XSDModelGroup) {
@@ -1332,8 +1394,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         }
                         manager.add(deleteParticleAction);
                         // edit by ymli. fix the bug:0011523
-                        XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,
-                                Messages.CopyElementText);
+                        XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, Messages.CopyElementText);
                         manager.add(copyConceptAction);
 
                         manager.add(new Separator());
@@ -1394,8 +1455,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(editXPathAction);
             manager.add(newXPathAction);
             XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
-            if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
+            if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL)) {
                 manager.add(deleteXPathAction);
+            }
         }
         // for the anonymous simpleType
         if (obj instanceof XSDSimpleTypeDefinition
@@ -1426,14 +1488,16 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         if (selectedObjs.length > 1 && deleteConceptWrapAction.outPutDeleteActions() != null) {
 
-            if (!isType)
+            if (!isType) {
                 manager.add(deleteConceptWrapAction.outPutDeleteActions());
+            }
 
             String title = "";//$NON-NLS-1$
-            if (Util.checkInCopyTypeElement(selectedObjs))
+            if (Util.checkInCopyTypeElement(selectedObjs)) {
                 title = Messages.CopyEntitiesText;
-            else if (Util.checkInCOpyTypeParticle(selectedObjs))
+            } else if (Util.checkInCOpyTypeParticle(selectedObjs)) {
                 title = Messages.CopyElements;
+            }
             XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, title);
 
             if (Util.checkInCopy(selectedObjs)) {
@@ -1552,8 +1616,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         XSDTerm xsdTerm = obj.getTerm();
         if (xsdTerm != null && xsdTerm instanceof XSDElementDeclaration) {
             XSDElementDeclaration element = (XSDElementDeclaration) xsdTerm;
-            if (Util.isUUID(element))
+            if (Util.isUUID(element)) {
                 return true;
+            }
         }
         return false;
     }
@@ -1617,8 +1682,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
             }
 
-            for (XSDNewParticleFromParticleAction xsdNewElementAction : newParticleFromParticleActions)
+            for (XSDNewParticleFromParticleAction xsdNewElementAction : newParticleFromParticleActions) {
                 menu.add(xsdNewElementAction);
+            }
 
         } else if (typeClass == XSDComplexTypeDefinition.class || typeClass == XSDModelGroup.class) {
             if (newParticleFromTypeActions == null) {
@@ -1631,8 +1697,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
             }
 
-            for (XSDNewParticleFromTypeAction xsdNewElementAction : newParticleFromTypeActions)
+            for (XSDNewParticleFromTypeAction xsdNewElementAction : newParticleFromTypeActions) {
                 menu.add(xsdNewElementAction);
+            }
         }
 
         menu.add(new Separator());
@@ -1644,20 +1711,24 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private boolean checkMandatoryElement(Object obj) {
-        if (obj instanceof XSDParticle)
-            if (((XSDParticle) obj).getMinOccurs() > 0)
+        if (obj instanceof XSDParticle) {
+            if (((XSDParticle) obj).getMinOccurs() > 0) {
                 return false;
+            }
+        }
         return true;
 
     }
 
     private boolean checkMandatoryElement(Object[] objArray) {
         for (Object obj : objArray) {
-            if (obj instanceof XSDParticle)
-                if (((XSDParticle) obj).getMinOccurs() > 0)
+            if (obj instanceof XSDParticle) {
+                if (((XSDParticle) obj).getMinOccurs() > 0) {
                     return false;
-                else
+                } else {
                     continue;
+                }
+            }
 
         }
         return true;
@@ -1768,6 +1839,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         markDirtyWithoutCommit();
     }
 
+    @Override
     public boolean isDirty() {
         return dirty;
     }
@@ -1820,28 +1892,32 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     public int getValue(String name) {
         int value = 0;
-        for (int i = 0; i < name.length(); i++)
+        for (int i = 0; i < name.length(); i++) {
             value = value * 10 + name.charAt(i);
+        }
         return value;
     }
 
     private void openXSDParticle(TreeViewer targetViewer) {
-        if (targetViewer == null)
+        if (targetViewer == null) {
             return;
+        }
 
-        if (targetViewer.equals(viewer))
+        if (targetViewer.equals(viewer)) {
             openXSDParticleInSchemaTree();
-        else if (targetViewer.equals(typesViewer))
+        } else if (targetViewer.equals(typesViewer)) {
             openXSDParticleInTypeTree();
+        }
     }
 
     private void openXSDParticleInTypeTree() {
         for (Object eachSelectedObj : getSelectionInTypeTree()) {
             typesViewer.collapseToLevel(eachSelectedObj, 3);
-            if (eachSelectedObj instanceof XSDModelGroup)
+            if (eachSelectedObj instanceof XSDModelGroup) {
                 typesViewer.expandToLevel(eachSelectedObj, 1);
-            else if (eachSelectedObj instanceof XSDComplexTypeDefinition)
+            } else if (eachSelectedObj instanceof XSDComplexTypeDefinition) {
                 typesViewer.expandToLevel(eachSelectedObj, 1);
+            }
         }
     }
 
@@ -1868,16 +1944,20 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
         dropTarget.addDropListener(new DropTargetAdapter() {
 
+            @Override
             public void dragEnter(DropTargetEvent event) {
             }
 
+            @Override
             public void dragLeave(DropTargetEvent event) {
             }
 
+            @Override
             public void dragOver(DropTargetEvent event) {
                 event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
             }
 
+            @Override
             public void drop(DropTargetEvent event) {
                 List<String> nameList = new ArrayList<String>();
                 if (dropTargetValidate(event, nameList)) {
@@ -1897,16 +1977,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private boolean dropTargetValidate(DropTargetEvent event, List<String> customTypeNamelist) {
-        if (event.data == null)
+        if (event.data == null) {
             return false;
+        }
         Object obj = event.data;
         if (obj instanceof TreeObject[]) {
             uriPre = ((TreeObject[]) obj)[0].getServerRoot().getEndpointIpAddress();
             for (TreeObject ob : (TreeObject[]) obj) {
-                if (ob.getType() == TreeObject.CUSTOM_TYPES_RESOURCE)
+                if (ob.getType() == TreeObject.CUSTOM_TYPES_RESOURCE) {
                     customTypeNamelist.add(ob.getDisplayName());
-                else
+                } else {
                     return false;
+                }
             }
             return true;
         }
@@ -2032,8 +2114,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         if (fileName.lastIndexOf(".") != -1) { //$NON-NLS-1$
             inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
         }
-        if (!inputType.equals(".xsd"))//$NON-NLS-1$
+        if (!inputType.equals(".xsd")) {
             return;
+        }
         File file = new File(fileName);
 
         try {
@@ -2054,9 +2137,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(source);
         ns = document.getDocumentElement().getAttribute("targetNamespace");//$NON-NLS-1$
-        if (xsdSchema == null)
+        if (xsdSchema == null) {
             xsdSchema = getXSDSchema(Util.nodeToString(document));
-        else {
+        } else {
             WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
             xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), xobject);
         }
@@ -2148,8 +2231,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         createSortByLabelToolItem(parentToolBar, viewer);
         createFiltUniqueElementToolItem(parentToolBar, viewer);
 
-        if (Util.IsEnterPrise())
+        if (Util.IsEnterPrise()) {
             createFilterToolItem(parentToolBar, viewer);
+        }
 
     }
 
@@ -2163,8 +2247,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         createSortByLabelToolItem(parentToolBar, typesViewer);
 
-        if (Util.IsEnterPrise())
+        if (Util.IsEnterPrise()) {
             createFilterToolItem(parentToolBar, typesViewer);
+        }
     }
 
     private ToolItem createFilterToolItem(ToolBar parentToolBar, final TreeViewer tTreeViewer) {
@@ -2175,6 +2260,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         filterToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 targetTreeViewer = tTreeViewer;
                 dataModelFilter = new DataModelFilter("", false, false, false, true);//$NON-NLS-1$
@@ -2199,10 +2285,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         expanedToolItem.setToolTipText(Messages.ExpandText);
         expanedToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 IStructuredSelection selection = (IStructuredSelection) targetTreeViewer.getSelection();
-                for (Object eachSelectedObj : selection.toArray())
+                for (Object eachSelectedObj : selection.toArray()) {
                     targetTreeViewer.expandToLevel(eachSelectedObj, 3);
+                }
             }
         });
 
@@ -2216,10 +2304,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         collapseToolItem.setToolTipText(Messages.CollapseText);
         collapseToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 IStructuredSelection selection = (IStructuredSelection) targetTreeViewer.getSelection();
-                for (Object eachSelectedObj : selection.toArray())
+                for (Object eachSelectedObj : selection.toArray()) {
                     targetTreeViewer.collapseToLevel(eachSelectedObj, 3);
+                }
             }
         });
 
@@ -2233,6 +2323,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         expandGroupToolItem.setToolTipText(Messages.ExpandModelGroup);
         expandGroupToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 openXSDParticle(targetTreeViewer);
             }
@@ -2248,6 +2339,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         moveUpToolItem.setToolTipText(Messages.UPText);
         moveUpToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 stepUp(targetTreeViewer);
             }
@@ -2263,6 +2355,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         moveDownToolItem.setToolTipText(Messages.DownText);
         moveDownToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 stepDown(targetTreeViewer);
             }
@@ -2278,6 +2371,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         sortByLabelToolItem.setToolTipText(Messages.SortDescText);
         sortByLabelToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 sortByLabel(sortByLabelToolItem, targetTreeViewer);
             }
@@ -2293,6 +2387,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         filtUniqueElementToolItem.setToolTipText(Messages.HideElementsText);
         filtUniqueElementToolItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 filtUniqueElement(filtUniqueElementToolItem, targetTreeViewer);
             }
@@ -2312,8 +2407,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private Object[] getSelectionInViewer(Viewer viewer) {
 
-        if (viewer.getSelection() == null || !(viewer.getSelection() instanceof IStructuredSelection))
+        if (viewer.getSelection() == null || !(viewer.getSelection() instanceof IStructuredSelection)) {
             return new Object[0];
+        }
 
         return ((IStructuredSelection) viewer.getSelection()).toArray();
 
@@ -2337,12 +2433,14 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private ViewerFilter getTreeViewerFilter(TreeViewer viewer, Class<? extends ViewerFilter> filterType) {
 
-        if (viewer == null || filterType == null)
+        if (viewer == null || filterType == null) {
             return null;
+        }
 
         for (ViewerFilter eachFilter : viewer.getFilters()) {
-            if (filterType.isAssignableFrom(eachFilter.getClass()))
+            if (filterType.isAssignableFrom(eachFilter.getClass())) {
                 return eachFilter;
+            }
         }
 
         return null;
@@ -2350,8 +2448,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected SchemaElementNameFilterDes getSchemaElementNameFilterDesByTreeViewer(TreeViewer targetViewer) {
 
-        if (typesViewer.equals(targetViewer))
+        if (typesViewer.equals(targetViewer)) {
             return typeElementNameFilterDes;
+        }
 
         return schemaElementNameFilterDes;
     }
@@ -2360,8 +2459,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         SchemaElementSorter sorter = getTreeViewerSchemaElementSorter(targetTreeViewer);
 
-        if (sorter == null)
+        if (sorter == null) {
             return;
+        }
 
         sortByLabelToolItem.setImage(getToolImageAfterClickSortByLabel(sorter.isSortedASC()));
         sortByLabelToolItem.setToolTipText(getTooltipAfterClickSortByLabel(sorter.isSortedASC()));
@@ -2376,34 +2476,38 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         SchemaUniqueElementFilter filter = getSchemaUniqueElementFilterFromSchemaTree();
 
         filter.setSelector(filtUniqueElementToolItem.getSelection());
-        if (filtUniqueElementToolItem.getSelection())
+        if (filtUniqueElementToolItem.getSelection()) {
             filtUniqueElementToolItem.setToolTipText(Messages.ShowElementsText);
-        else
+        } else {
             filtUniqueElementToolItem.setToolTipText(Messages.HideElementsText);
+        }
 
         targetTreeViewer.refresh();
     }
 
     private SchemaElementSorter getTreeViewerSchemaElementSorter(TreeViewer targetTreeViewer) {
 
-        if (targetTreeViewer.getSorter() instanceof SchemaElementSorter)
+        if (targetTreeViewer.getSorter() instanceof SchemaElementSorter) {
             return (SchemaElementSorter) targetTreeViewer.getSorter();
+        }
 
         return null;
     }
 
     private Image getToolImageAfterClickSortByLabel(boolean isCurrentASC) {
 
-        if (isCurrentASC)
+        if (isCurrentASC) {
             return ImageCache.getCreatedImage(EImage.SORT_ASC.getPath());
+        }
 
         return ImageCache.getCreatedImage(EImage.SORT_DESC.getPath());
     }
 
     private String getTooltipAfterClickSortByLabel(boolean isCurrentASC) {
 
-        if (isCurrentASC)
+        if (isCurrentASC) {
             return Messages.SortAscText;
+        }
 
         return Messages.SortDescText;
     }
@@ -2418,8 +2522,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         public void doubleClick(DoubleClickEvent event) {
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-            if (selection.isEmpty())
+            if (selection.isEmpty()) {
                 return;
+            }
             int elem = getElementType(selection.getFirstElement());
             // available models
             java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels(isLocalInput());
@@ -2542,8 +2647,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 setAnnotationFKIntegrityOverride.run();
                 break;
             case -1:
-                if (drillDownAdapter.canGoInto() == true)
+                if (drillDownAdapter.canGoInto() == true) {
                     drillDownAdapter.goInto();
+                }
             }
         }
     }
@@ -2655,8 +2761,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
                 fd.setText(Messages.SelectXMLDefinition);
                 String filename = fd.open();
-                if (filename == null)
+                if (filename == null) {
                     return;
+                }
                 xsdSchema = null;
                 inferXsdFromXml(filename);
             }
@@ -2725,8 +2832,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
                 fd.setText(Messages.SaveDataModuleXSDSchema);
                 String filename = fd.open();
-                if (filename == null)
+                if (filename == null) {
                     return;
+                }
                 inferXsdFromDataModule(filename);
             }
 
@@ -2743,6 +2851,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         importSchemalItem.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 SelectImportedModulesDialog dlg = createSelectImportedModulesDialog();
                 dlg.create();
@@ -2827,14 +2936,17 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         if (selection.getFirstElement() instanceof Element) {
             TreePath tPath = ((TreeSelection) selection).getPaths()[0];
             for (int i = 0; i < tPath.getSegmentCount(); i++) {
-                if (tPath.getSegment(i) instanceof XSDAnnotation)
+                if (tPath.getSegment(i) instanceof XSDAnnotation) {
                     xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+                }
             }
-        } else
+        } else {
             xSDCom = (XSDComponent) selection.getFirstElement();
+        }
 
-        if (xSDCom != null)
+        if (xSDCom != null) {
             struc = new XSDAnnotationsStructure(xSDCom);
+        }
 
         return struc;
     }
