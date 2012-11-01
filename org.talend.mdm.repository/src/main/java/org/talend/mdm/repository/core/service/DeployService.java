@@ -137,8 +137,9 @@ public class DeployService {
     }
 
     public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType, boolean removeLocked) {
-        if (removeLocked)
+        if (removeLocked) {
             removeLockedViewObj(viewObjs);
+        }
         CommandManager manager = CommandManager.getInstance();
         List<AbstractDeployCommand> commands = manager.getDeployCommands(viewObjs, defaultCmdType);
         return runCommands(commands, serverDef);
@@ -169,8 +170,9 @@ public class DeployService {
     }
 
     public void autoDeploy(Shell shell, IRepositoryViewObject viewObj) {
-        if (shell == null || viewObj == null)
+        if (shell == null || viewObj == null) {
             throw new IllegalArgumentException();
+        }
         MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObj);
         if (serverDef != null) {
 
@@ -184,8 +186,9 @@ public class DeployService {
             }
         } else {
             boolean warnUser = PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_WARN_USER_AUTO_DEPLOY);
-            if (warnUser)
+            if (warnUser) {
                 MessageDialog.openWarning(shell, Messages.Warning_text, Messages.NeverDeploy_text);
+            }
         }
     }
 
@@ -273,8 +276,9 @@ public class DeployService {
     }
 
     private Set<String> getValidUpdateIds(IStatus status) {
-        if (status == null || !(status.isMultiStatus()))
+        if (status == null || !(status.isMultiStatus())) {
             return null;
+        }
         Set<String> ids = new HashSet<String>();
         for (IStatus childStatus : status.getChildren()) {
             DeployStatus deployStatus = null;
@@ -282,8 +286,9 @@ public class DeployService {
             if (childStatus instanceof DeployStatus) {
                 deployStatus = (DeployStatus) childStatus;
             } else if (childStatus instanceof MultiStatus) {
-                if (((MultiStatus) childStatus).getChildren().length > 0)
+                if (((MultiStatus) childStatus).getChildren().length > 0) {
                     deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
+                }
             }
             if (deployStatus != null && deployStatus.isOK()) {
                 ICommand command = deployStatus.getCommand();
@@ -307,36 +312,51 @@ public class DeployService {
     public void updateChangedStatus(IStatus status, boolean isUpdateServer) {
         if (status.isMultiStatus()) {
             for (IStatus childStatus : status.getChildren()) {
-                DeployStatus deployStatus = null;
+                List<DeployStatus> deployStatuses = new ArrayList<DeployStatus>();
                 if (childStatus instanceof DeployStatus) {
-                    deployStatus = (DeployStatus) childStatus;
+                    deployStatuses.add((DeployStatus) childStatus);
                 } else if (childStatus instanceof MultiStatus) {
-                    if (((MultiStatus) childStatus).getChildren().length > 0)
-                        deployStatus = (DeployStatus) ((MultiStatus) childStatus).getChildren()[0];
-                }
-
-                if (deployStatus != null && deployStatus.isOK()) {
-                    ICommand command = deployStatus.getCommand();
-                    CommandManager manager = CommandManager.getInstance();
-                    manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
-                    if (isUpdateServer) {
-                        MDMServerDef serverDef = null;
-                        if (command instanceof AbstractDeployCommand) {
-                            serverDef = ((AbstractDeployCommand) command).getServerDef();
-                        } else if (command instanceof DeployCompoundCommand) {
-                            serverDef = ((DeployCompoundCommand) command).getServerDef();
-                        }
-                        if (command instanceof BatchDeployJobCommand) {
-                            BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) command;
-                            pushRestoreCommand(manager, deployJobCommand.getSubCmds(), serverDef);
-                            pushRestoreCommand(manager, deployJobCommand.getSubDeleteCmds(), serverDef);
-                        } else {
-                            // updateserver
-                            pushRestoreCommand(manager, command, serverDef);
+                    IStatus[] childrenStatus = ((MultiStatus) childStatus).getChildren();
+                    if (childrenStatus.length > 0) {
+                        for (IStatus cstatus : childrenStatus) {
+                            if (cstatus instanceof DeployStatus) {
+                                deployStatuses.add((DeployStatus) cstatus);
+                            }
                         }
                     }
                 }
 
+                updateForStatus(isUpdateServer, deployStatuses);
+            }
+        }
+    }
+
+    private void updateForStatus(boolean isUpdateServer, List<DeployStatus> deployStatuses) {
+        if (deployStatuses == null || deployStatuses.size() == 0) {
+            return;
+        }
+
+        for (DeployStatus deployStatus : deployStatuses) {
+            if (deployStatus != null && deployStatus.isOK()) {
+                ICommand command = deployStatus.getCommand();
+                CommandManager manager = CommandManager.getInstance();
+                manager.removeCommandStack(command, ICommand.PHASE_DEPLOY);
+                if (isUpdateServer) {
+                    MDMServerDef serverDef = null;
+                    if (command instanceof AbstractDeployCommand) {
+                        serverDef = ((AbstractDeployCommand) command).getServerDef();
+                    } else if (command instanceof DeployCompoundCommand) {
+                        serverDef = ((DeployCompoundCommand) command).getServerDef();
+                    }
+                    if (command instanceof BatchDeployJobCommand) {
+                        BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) command;
+                        pushRestoreCommand(manager, deployJobCommand.getSubCmds(), serverDef);
+                        pushRestoreCommand(manager, deployJobCommand.getSubDeleteCmds(), serverDef);
+                    } else {
+                        // updateserver
+                        pushRestoreCommand(manager, command, serverDef);
+                    }
+                }
             }
         }
     }
