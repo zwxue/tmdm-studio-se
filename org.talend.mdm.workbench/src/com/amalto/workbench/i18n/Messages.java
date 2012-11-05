@@ -689,8 +689,6 @@ public class Messages extends NLS {
 
     public static String RoutingEngineV2BrowserMainPage_ItemIDs;
 
-    public static String RoutingEngineV2BrowserMainPage_Manager;
-
     public static String RoutingEngineV2BrowserMainPage_Message;
 
     public static String RoutingEngineV2BrowserMainPage_ProcessingItem;

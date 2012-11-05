@@ -128,13 +128,13 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     protected ListViewer wcListViewer;
 
     protected Button suspendButton;
-    
+
     private PageingToolBar pageToolBar;
 
     protected boolean[] ascending = { true, false, false, false };
 
     public RoutingEngineV2BrowserMainPage(FormEditor editor) {
-        super(editor, RoutingEngineV2BrowserMainPage.class.getName(), Messages.bind(Messages.RoutingEngineV2BrowserMainPage_Manager, ((XObjectBrowserInput) editor.getEditorInput()).getName()));
+        super(editor, RoutingEngineV2BrowserMainPage.class.getName(), ((XObjectBrowserInput) editor.getEditorInput()).getName());
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
     }
@@ -433,10 +433,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 ascending[0] = !ascending[0];
                 RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(0, ascending[0]));
                 table.setSortColumn(column0);
-                if (ascending[0])
+                if (ascending[0]) {
                     table.setSortDirection(SWT.UP);
-                else
+                } else {
                     table.setSortDirection(SWT.DOWN);
+                }
 
             }
         });
@@ -457,10 +458,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 ascending[1] = !ascending[1];
                 RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(1, ascending[1]));
                 table.setSortColumn(column1);
-                if (ascending[1])
+                if (ascending[1]) {
                     table.setSortDirection(SWT.UP);
-                else
+                } else {
                     table.setSortDirection(SWT.DOWN);
+                }
 
             }
         });
@@ -481,10 +483,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 ascending[2] = !ascending[2];
                 RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(2, ascending[2]));
                 table.setSortColumn(column2);
-                if (ascending[2])
+                if (ascending[2]) {
                     table.setSortDirection(SWT.UP);
-                else
+                } else {
                     table.setSortDirection(SWT.DOWN);
+                }
 
             }
         });
@@ -506,20 +509,23 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(3, ascending[3]));
 
                 table.setSortColumn(column3);
-                if (ascending[3])
+                if (ascending[3]) {
                     table.setSortDirection(SWT.UP);
-                else
+                } else {
                     table.setSortDirection(SWT.DOWN);
+                }
             }
         });
 
         return table;
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
         // Everything is implemented in createFormContent
     }// createCharacteristicsContent
 
+    @Override
     protected void refreshData() {
         try {
 
@@ -542,6 +548,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
+    @Override
     protected void commit() {
         try {
             // Nothing to do
@@ -552,6 +559,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
+    @Override
     protected void createActions() {
 
     }
@@ -589,13 +597,13 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
         return;
     }
-    
+
     public void doSearch() {
         resultsViewer.setInput(getResults());
         pageToolBar.getComposite().setVisible(true);
         pageToolBar.getComposite().layout(true);
         pageToolBar.getComposite().getParent().layout(true);
-        
+
         doSearchSort();//
     }
 
@@ -611,8 +619,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             sort(index, sortColumn);
         }
     }
-    
-    private void sort(int index, TableColumn column) 
+
+    private void sort(int index, TableColumn column)
     {
         resultsViewer.setSorter(new TableSorter(index, ascending[index]));
         Table table = resultsViewer.getTable();
@@ -624,7 +632,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             table.setSortDirection(SWT.UP);
         }
     }
-    
+
     protected WSRoutingOrderV2[] getResults() {
 
         Cursor waitCursor = null;
@@ -699,8 +707,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }
 
             String serviceJNDI = serviceCombo.getItem(serviceCombo.getSelectionIndex());
-            if ("".equals(serviceJNDI)) //$NON-NLS-1$
+            if ("".equals(serviceJNDI)) {
                 serviceJNDI = null;
+            }
 
             int start = pageToolBar.getStart();
             int limit = pageToolBar.getLimit();
@@ -720,30 +729,31 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                                     "*".equals(documentTypeText.getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$ //$NON-NLS-2$
                                     "*".equals(idText.getText()) || "".equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$//$NON-NLS-2$
                                     serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
-            
-            
+
+
             if (wsRoutingOrder.length == 1) {
                 MessageDialog.openInformation(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_Info, Messages.RoutingEngineV2BrowserMainPage_SorryNoResult);
                 return new WSRoutingOrderV2[0];
             }
-            
+
 
             int totalSize = Integer.parseInt(wsRoutingOrder[0].getName());
-           
+
             pageToolBar.setTotalsize(totalSize);
             pageToolBar.refreshUI();
-            
+
             WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.length-1];
             System.arraycopy(wsRoutingOrder, 1, resultOrderV2s, 0, resultOrderV2s.length);
-            
+
             return resultOrderV2s;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_TooManyResults,
                         Messages.RoutingEngineV2BrowserMainPage_ErrorMsg1);
-            else
+            } else {
                 MessageDialog.openError(this.getSite().getShell(), Messages.ErrorTitle1, e.getLocalizedMessage());
+            }
             return null;
         } finally {
             try {
@@ -764,9 +774,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Edit Item Action
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class EditItemAction extends Action {
 
@@ -783,6 +793,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ViewRoutingOrderDetails);
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -812,6 +823,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -820,9 +832,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Delete Items Action
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class DeleteItemsAction extends Action {
 
@@ -836,13 +848,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             this.viewer = viewer;
             setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-            if (selection.size() == 1)
+            if (selection.size() == 1) {
                 setText(Messages.RoutingEngineV2BrowserMainPage_DelSelectedItem);
-            else
+            } else {
                 setText(Messages.bind(Messages.RoutingEngineV2BrowserMainPage_DeleteThese, selection.size()));
+            }
             setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -851,12 +865,14 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 List<WSRoutingOrderV2> lineItems = selection.toList();
 
-                if (lineItems.size() == 0)
+                if (lineItems.size() == 0) {
                     return;
+                }
 
                 if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmDeletion, Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg2
-                        , lineItems.size())))
+                        , lineItems.size()))) {
                     return;
+                }
 
                 // Instantiate the Monitor with actual deletes
                 DeleteItemsWithProgress diwp = new DeleteItemsWithProgress(getXObject(), lineItems, this.shell);
@@ -874,6 +890,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -930,9 +947,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Execute Routing Orders
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class ExecuteRoutingOrdersAction extends Action {
 
@@ -949,15 +966,17 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             this.synchronously = synchronously;
             setImageDescriptor(ImageCache.getImage("icons/execute.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-            if (selection.size() == 1)
+            if (selection.size() == 1) {
                 setText(Messages.RoutingEngineV2BrowserMainPage_Text + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_TextA);
-            else
+            } else {
                 setText(Messages.RoutingEngineV2BrowserMainPage_Text1 + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_Text1A + selection.size()
                         + Messages.RoutingEngineV2BrowserMainPage_Text1B);
+            }
             setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ActionTip + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ActionTipA
                     + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -966,13 +985,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 List<WSRoutingOrderV2> lineItems = selection.toList();
 
-                if (lineItems.size() == 0)
+                if (lineItems.size() == 0) {
                     return;
+                }
 
                 if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmTitle, Messages.RoutingEngineV2BrowserMainPage_ConfirmContent
                         + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ConfirmContentA + lineItems.size()
-                        + Messages.RoutingEngineV2BrowserMainPage_B))
+                        + Messages.RoutingEngineV2BrowserMainPage_B)) {
                     return;
+                }
 
                 // Instantiate the Monitor with actual deletes
                 ExecuteRoutingOrdersWithProgress diwp = new ExecuteRoutingOrdersWithProgress(getXObject(), lineItems, this.shell);
@@ -990,6 +1011,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -1042,7 +1064,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                             WSString wsResult = port.executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
                                     new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
                             if (wsResult.getValue() != null)
+                             {
                                 results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
+                            }
                         } else {
                             port.executeRoutingOrderV2Asynchronously(new WSExecuteRoutingOrderV2Asynchronously(
                                     new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
@@ -1067,9 +1091,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Table Label Provider
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -1116,9 +1140,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Table Sorter
-     * 
+     *
      * @author bgrieder
-     * 
+     *
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
@@ -1161,10 +1185,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             default:
                 res = 0;
             }
-            if (asc)
+            if (asc) {
                 return res;
-            else
+            } else {
                 return -res;
+            }
         }
 
     }
