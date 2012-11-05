@@ -22,7 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -103,6 +106,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteItemWithReport;
+import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetDataCluster;
@@ -119,6 +123,7 @@ import com.amalto.workbench.webservices.WSPutItemWithReport;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSString;
+import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUpdateMetadataItem;
@@ -174,7 +179,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     private PageingToolBar pageToolBar;
 
     public DataClusterBrowserMainPage(FormEditor editor) {
-        super(editor, DataClusterBrowserMainPage.class.getName(), Messages.bind(Messages.DataClusterBrowserMainPage_0, ((XObjectBrowserInput) editor.getEditorInput()).getName()));
+        super(editor, DataClusterBrowserMainPage.class.getName(), Messages.bind(Messages.DataClusterBrowserMainPage_0,
+                ((XObjectBrowserInput) editor.getEditorInput()).getName()));
         // listen to events
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
     }
@@ -305,7 +311,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         MessageDialog.openError(
                                 DataClusterBrowserMainPage.this.getSite().getShell(),
                                 Messages._Error,
-                                Messages.bind(Messages.DataClusterBrowserMainPage_10, e.getClass().getName(), e.getLocalizedMessage()));
+                                Messages.bind(Messages.DataClusterBrowserMainPage_10, e.getClass().getName(),
+                                        e.getLocalizedMessage()));
                     }
                 }
             });
@@ -475,8 +482,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
     }
 
-    private void sort(int index, TableColumn column)
-    {
+    private void sort(int index, TableColumn column) {
         DataClusterBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(index, ascending[index]));
         Table table = DataClusterBrowserMainPage.this.resultsViewer.getTable();
         if (ascending[index]) {
@@ -522,8 +528,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             if (currentUniverse != null) {
                 currentUniverseName = currentUniverse.getName();
             }
-            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]"))
-             {
+            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]")) { //$NON-NLS-1$
                 currentUniverseName = "";//$NON-NLS-1$
             }
 
@@ -568,12 +573,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             searchText.setFocus();
         } catch (ServerException e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(getSite().getShell(), Messages._Error,
-                    Messages.DataClusterBrowser_dataContainerError);
+            MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_dataContainerError);
         } catch (RemoteException e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(getSite().getShell(), Messages._Error,
-                    Messages.DataClusterBrowser_connectionError);
+            MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_connectionError);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages._Error,
@@ -624,7 +627,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             if (object != null) {
                 // TMDM-2606: Don't expect data model to contain revision name (CE edition doesn't support
                 // revisions).
-                if (object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_16) && object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_17)) {
+                if (object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_16)
+                        && object.getDisplayName().contains(Messages.DataClusterBrowserMainPage_17)) {
                     revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
                             object.getDisplayName().indexOf("]"));//$NON-NLS-1$
                 }
@@ -741,7 +745,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 String dateTimeText = fromText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
+                    MessageDialog
+                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_21);
                     return new LineItem[0];
                 }
 
@@ -756,7 +761,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 String dateTimeText = toText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
+                    MessageDialog
+                            .openWarning(this.getSite().getShell(), Messages.Warning, Messages.DataClusterBrowserMainPage_23);
                     return new LineItem[0];
                 }
 
@@ -768,20 +774,20 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
 
             String concept = conceptCombo.getText();
-            if ("*".equals(concept) | "".equals(concept)) {
+            if ("*".equals(concept) | "".equals(concept)) { //$NON-NLS-1$ //$NON-NLS-2$
                 concept = null;
             }
             if (concept != null) {
                 concept = concept.replaceAll("\\[.*\\]", "").trim();//$NON-NLS-1$//$NON-NLS-2$
             }
             String keys = keyText.getText();
-            if ("*".equals(keys) | "".equals(keys)) {
+            if ("*".equals(keys) | "".equals(keys)) { //$NON-NLS-1$ //$NON-NLS-2$
                 keys = null;
             }
 
             boolean useFTSearch = checkFTSearchButton.getSelection();
             String search = searchText.getText();
-            if ("*".equals(search) | "".equals(search)) {
+            if ("*".equals(search) | "".equals(search)) { //$NON-NLS-1$ //$NON-NLS-2$
                 search = null;
             }
 
@@ -796,7 +802,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             limit), useFTSearch)).getResults();
 
             if (showResultInfo && (results.length == 1)) {
-                MessageDialog.openInformation(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_24, Messages.DataClusterBrowserMainPage_25);
+                MessageDialog.openInformation(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_24,
+                        Messages.DataClusterBrowserMainPage_25);
                 return new LineItem[0];
             }
             if (results.length == 1) {
@@ -818,11 +825,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             return ress.toArray(new LineItem[ress.size()]);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) {
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) { //$NON-NLS-1$
                 MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_26,
                         Messages.DataClusterBrowserMainPage_27);
             } else {
-                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_28, e.getLocalizedMessage());
+                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_28,
+                        e.getLocalizedMessage());
             }
             return null;
         } finally {
@@ -875,15 +883,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
                     for (int i = 0; i < dmPKs.length; i++) {
-                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk())) {
+                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk())) { //$NON-NLS-1$
                             dataModels.add(dmPKs[i].getPk());
                         }
                     }
                 }
 
                 final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), port,
-                        Util.parse(xml),
-                        true, dataModels, DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
+                        Util.parse(xml), true, dataModels, DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
                 d.addListener(new Listener() {
 
                     public void handleEvent(Event event) {
@@ -898,11 +905,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 WSPutItemWithReport itemWithReport = new WSPutItemWithReport(putItem,
                                         "genericUI", d.isBeforeVerification());//$NON-NLS-1$
                                 if (isModified) {
-                                    if (MessageDialog
-                                            .openConfirm(
-                                                    null,
-                                                    Messages.DataClusterBrowserMainPage_31,
-                                                    Messages.DataClusterBrowserMainPage_32)) {
+                                    if (MessageDialog.openConfirm(null, Messages.DataClusterBrowserMainPage_31,
+                                            Messages.DataClusterBrowserMainPage_32)) {
                                         if (d.isTriggerProcess()) {
                                             Util.getPort(getXObject()).putItemWithReport(itemWithReport);
                                         } else {
@@ -917,10 +921,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                     }
                                 }
                             } catch (Exception e) {
-                                MessageDialog
-                                        .openError(shell,
-                                                Messages.DataClusterBrowserMainPage_33,
-                                                Messages.bind(Messages.DataClusterBrowserMainPage_34, Util.formatErrorMessage(e.getLocalizedMessage())));
+                                MessageDialog.openError(
+                                        shell,
+                                        Messages.DataClusterBrowserMainPage_33,
+                                        Messages.bind(Messages.DataClusterBrowserMainPage_34,
+                                                Util.formatErrorMessage(e.getLocalizedMessage())));
                                 return;
                             }
                         }// if
@@ -968,8 +973,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 LineItem li = (LineItem) selection.getFirstElement();
 
-                InputDialog input = new InputDialog(DataClusterBrowserMainPage.this.getSite().getShell(), Messages.DataClusterBrowserMainPage_39,
-                        Messages.DataClusterBrowserMainPage_40, li.getTaskId(), null);
+                InputDialog input = new InputDialog(DataClusterBrowserMainPage.this.getSite().getShell(),
+                        Messages.DataClusterBrowserMainPage_39, Messages.DataClusterBrowserMainPage_40, li.getTaskId(), null);
                 input.setBlockOnOpen(true);
 
                 if (input.open() == Window.OK) {
@@ -1116,8 +1121,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     CompareHeadInfo compareHeadInfo = new CompareHeadInfo(getXObject());
                     compareHeadInfo.setItem(true);
                     compareHeadInfo.setDataModelName(wsItem.getDataModelName());
-                    CompareManager.getInstance().compareTwoStream(xml, itemcontent, true, compareHeadInfo, Messages.DataClusterBrowserMainPage_56,
-                            Messages.DataClusterBrowserMainPage_57, true, false);
+                    CompareManager.getInstance().compareTwoStream(xml, itemcontent, true, compareHeadInfo,
+                            Messages.DataClusterBrowserMainPage_56, Messages.DataClusterBrowserMainPage_57, true, false);
                 }
 
             } catch (Exception e) {
@@ -1130,9 +1135,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Delete Items Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
 
     class LogicalDeleteItemsAction extends Action {
@@ -1154,7 +1159,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 setText(Messages.bind(Messages.DataClusterBrowserMainPage_61, selection.size()));
             }
 
-            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_62, (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : Messages.DataClusterBrowserMainPage_63)));
+            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_62,
+                    (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : Messages.DataClusterBrowserMainPage_63)));
         }
 
         @Override
@@ -1171,16 +1177,17 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                InputDialog id = new InputDialog(this.shell, Messages.DataClusterBrowserMainPage_64, Messages.bind(Messages.DataClusterBrowserMainPage_65
-                        , lineItems.size()), Messages.DataClusterBrowserMainPage_67, new IInputValidator() {
+                InputDialog id = new InputDialog(this.shell, Messages.DataClusterBrowserMainPage_64, Messages.bind(
+                        Messages.DataClusterBrowserMainPage_65, lineItems.size()), Messages.DataClusterBrowserMainPage_67,
+                        new IInputValidator() {
 
-                    public String isValid(String newText) {
-                        if ((newText == null) || !newText.matches("^\\/.*$")) {
-                            return Messages.DataClusterBrowserMainPage_68;
-                        }
-                        return null;
-                    };
-                });
+                            public String isValid(String newText) {
+                                if ((newText == null) || !newText.matches("^\\/.*$")) { //$NON-NLS-1$
+                                    return Messages.DataClusterBrowserMainPage_68;
+                                }
+                                return null;
+                            };
+                        });
 
                 id.setBlockOnOpen(true);
                 int ret = id.open();
@@ -1242,7 +1249,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_72, (i++), itemID));
                         if (monitor.isCanceled()) {
                             MessageDialog.openWarning(this.parentShell, Messages.DataClusterBrowserMainPage_74,
-                                    Messages.bind(Messages.DataClusterBrowserMainPage_75, i ));
+                                    Messages.bind(Messages.DataClusterBrowserMainPage_75, i));
                             return;
                         }
                         WSItemPK itempk = new WSItemPK((WSDataClusterPK) xObject.getWsKey(), lineItem.getConcept(),
@@ -1285,7 +1292,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 setText(Messages.bind(Messages.DataClusterBrowserMainPage_81, selection.size()));
             }
 
-            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_82, (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : Messages.DataClusterBrowserMainPage_83)));
+            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_82,
+                    (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : Messages.DataClusterBrowserMainPage_83)));
         }
 
         @Override
@@ -1302,8 +1310,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_64, Messages.bind(Messages.DataClusterBrowserMainPage_85
-                        , lineItems.size()))) {
+                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_64,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_85, lineItems.size()))) {
                     return;
                 }
 
@@ -1344,14 +1352,47 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 this.parentShell = shell;
             }
 
+            private List<LineItem> orderItems(XtentisPort port) {
+
+                WSDataClusterPK pk = (WSDataClusterPK) getXObject().getWsKey();
+                WSGetConceptsInDataCluster param = new WSGetConceptsInDataCluster(pk);
+                List<LineItem> orderItems = new LinkedList<LineItem>();
+                try {
+                    WSStringArray concepts = port.getConceptsInDataCluster(param);
+                    Map<String, List<LineItem>> orderMap = new LinkedHashMap<String, List<LineItem>>();
+                    for (String concept : concepts.getStrings()) {
+                        orderMap.put(concept, new LinkedList<LineItem>());
+                    }
+                    // order
+                    List<LineItem> otherItems = new LinkedList<LineItem>();
+                    for (LineItem lineItem : lineItems) {
+                        String concept = lineItem.getConcept();
+                        if (orderMap.containsKey(concept)) {
+                            List<LineItem> items = orderMap.get(concept);
+                            items.add(lineItem);
+                        } else {
+                            otherItems.add(lineItem);
+                        }
+                    }
+                    // generate
+                    for (List<LineItem> items : orderMap.values()) {
+                        orderItems.addAll(0, items);
+                    }
+                    orderItems.addAll(otherItems);
+                } catch (RemoteException e) {
+                    log.error(e.getMessage(), e);
+                }
+                return orderItems;
+            }
+
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
                 try {
                     monitor.beginTask(Messages.DataClusterBrowserMainPage_89, lineItems.size());
 
                     XtentisPort port = Util.getPort(getXObject());
-
+                    List<LineItem> orderItems = orderItems(port);
                     int i = 0;
-                    for (LineItem lineItem : lineItems) {
+                    for (LineItem lineItem : orderItems) {
                         String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
                                 + Util.joinStrings(lineItem.getIds(), ".");//$NON-NLS-1$
                         monitor.subTask(Messages.bind(Messages.DataClusterBrowserMainPage_90, (i++), itemID));
@@ -1369,21 +1410,42 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                     monitor.done();
                 } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_96,
-                            Messages.bind(Messages.DataClusterBrowserMainPage_97, e.getLocalizedMessage()));
+                    String constraintMsg = getConstraintViolationExceptionMsg(e);
+                    if (constraintMsg != null) {
+                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_96,
+                                Messages.bind(Messages.DataClusterBrowserMainPage_referedRecord, constraintMsg));
+                    } else {
+                        log.error(e.getMessage(), e);
+                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_96,
+                                Messages.bind(Messages.DataClusterBrowserMainPage_97, e.getLocalizedMessage()));
+                    }
                 }// try
 
             }// run
+
+            private String getConstraintViolationExceptionMsg(Exception ex) {
+                if (ex instanceof ServerException) {
+                    String message = ex.getMessage().trim();
+                    if (message.indexOf("org.hibernate.exception.ConstraintViolationException") > 0) { //$NON-NLS-1$
+                        String prefix = ": com.amalto.core.util.XtentisException:"; //$NON-NLS-1$
+                        int begin = message.indexOf(prefix);
+
+                        if (begin > 0) {
+                            return message.substring(0, begin);
+                        }
+                    }
+                }
+                return null;
+            }
         }// class DeleteItemsWithProgress
 
     }// class DeletItemsAction
 
     /***************************************************************
      * New Item Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class NewItemAction extends Action {
 
@@ -1412,15 +1474,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
                     for (int i = 0; i < dmPKs.length; i++) {
-                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk())) {
+                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk())) { //$NON-NLS-1$
                             dataModels.add(dmPKs[i].getPk());
                         }
                     }
                 }
                 final XtentisPort port = Util.getPort(getXObject());
                 final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), port,
-                        Util.parse(xml),
-                        true, dataModels, DOMViewDialog.SOURCE_VIEWER, null);
+                        Util.parse(xml), true, dataModels, DOMViewDialog.SOURCE_VIEWER, null);
                 d.addListener(new Listener() {
 
                     public void handleEvent(Event event) {
@@ -1470,9 +1531,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * SubmitItems Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class SubmitItemsAction extends Action {
 
@@ -1491,7 +1552,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             } else {
                 setText(Messages.bind(Messages.DataClusterBrowserMainPage_105, selection.size()));
             }
-            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_107, (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : "")));//$NON-NLS-1$
+            setToolTipText(Messages.bind(Messages.DataClusterBrowserMainPage_107,
+                    (selection.size() > 1 ? Messages.DataClusterBrowserMainPage_108 : "")));//$NON-NLS-1$
         }
 
         @Override
@@ -1508,8 +1570,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     return;
                 }
 
-                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_110, Messages.bind(Messages.DataClusterBrowserMainPage_111
-                        , (lineItems.size() > 1 ? lineItems.size() + " " : "")))) {
+                if (!MessageDialog.openConfirm(this.shell, Messages.DataClusterBrowserMainPage_110, Messages.bind(
+                        Messages.DataClusterBrowserMainPage_111, (lineItems.size() > 1 ? lineItems.size() + " " : "")))) { //$NON-NLS-1$ //$NON-NLS-2$
                     return;
                 }
 
@@ -1522,7 +1584,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error, Messages.bind(Messages.DataClusterBrowserMainPage_116, e.getLocalizedMessage()));
+                MessageDialog.openError(shell, Messages._Error,
+                        Messages.bind(Messages.DataClusterBrowserMainPage_116, e.getLocalizedMessage()));
             }
         }
 
@@ -1573,7 +1636,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 .getConcept(), lineItem.getIds())));
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
-                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127, Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
+                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127,
+                                Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
                     }// try
                     monitor.worked(1);
                 }// for
@@ -1587,9 +1651,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Table Label Provider
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -1630,9 +1694,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Table Sorter
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
@@ -1661,7 +1725,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 res = li1.getConcept().compareToIgnoreCase(li2.getConcept());
                 break;
             case 2:
-                res = Util.joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
+                res = Util
+                        .joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), Messages.DataClusterBrowserMainPage_130)); //$NON-NLS-1$
                 break;
             default:
                 res = 0;
@@ -1692,6 +1757,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }
         return super.getAdapter(adapter);
     }
+
     // The ending| bug:21784
 
     private TreeParent getRealTreeParent() {
