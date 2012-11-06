@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -27,9 +28,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.dialogs.MDMXSDSchemaEntryDialog;
 import com.amalto.workbench.image.EImage;
@@ -90,11 +88,8 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.WSSynchronizationGetItemXML;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSSynchronizationPutItemXML;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -728,7 +723,7 @@ public class PasteXObjectAction extends Action {
                         new WSGetItemPKsByCriteria(new WSDataClusterPK(oldXObjectPk), null, null, null, (long) -1, (long) -1, 0,
                                 Integer.MAX_VALUE)).getResults();
 
-                ArrayList<String> conceptList = new ArrayList<String>();
+                List<String> conceptList = new ArrayList<String>();
                 WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = destPort.getConceptsInDataClusterWithRevisions(
                         new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(oldXObjectPk), new WSUniversePK(
                                 revisionID))).getMapEntry();

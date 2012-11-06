@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.dialogs;
 
-import java.util.ArrayList;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -23,18 +23,18 @@ import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
-import com.amalto.workbench.dialogs.MDMXSDSchemaEntryDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
- * DOC Administrator  class global comment. Detailled comment
+ * DOC Administrator class global comment. Detailled comment
  */
 public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
 
     MDMServerDef serverDef;
+
     public SelectImportedModulesDialog2(Shell parentShell, XSDSchema schema, TreeObject treeObj, String title) {
         super(parentShell, schema, treeObj, title);
 
@@ -43,23 +43,22 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
     @Override
     protected XtentisPort getPort() throws XtentisException {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
-            if (dialog.open() == IDialogConstants.OK_ID) {
-                MDMServerDef serverDef = dialog.getSelectedServerDef();
-                this.serverDef = serverDef;
-                return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-            }
+        if (dialog.open() == IDialogConstants.OK_ID) {
+            MDMServerDef serverDef = dialog.getSelectedServerDef();
+            this.serverDef = serverDef;
+            return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+        }
         return null;
     }
 
     @Override
-    protected void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) {
-        schemaList = RepositoryQueryService.findAllDataModelNames();
-        dlg.create();
-        ArrayList<String> newList = new ArrayList<String>();
-        for (String string : schemaList) {
-            newList.add(string);
+    protected boolean resolveSchemaList(List<String> schemaList) throws XtentisException, RemoteException {
+        List<String> newList = RepositoryQueryService.findAllDataModelNames();
+        for (String string : newList) {
+            schemaList.add(string);
         }
-        dlg.retrieveDataModels(newList, false);
+
+        return true;
     }
 
     @Override

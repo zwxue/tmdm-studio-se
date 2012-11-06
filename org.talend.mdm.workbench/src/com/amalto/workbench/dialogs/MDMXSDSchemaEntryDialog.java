@@ -51,6 +51,7 @@ public class MDMXSDSchemaEntryDialog extends Dialog {
         this.title = title;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
 
@@ -133,6 +134,7 @@ public class MDMXSDSchemaEntryDialog extends Dialog {
         super.cancelPressed();
     }
 
+    @Override
     protected Control createButtonBar(Composite parent) {
         Control control = super.createButtonBar(parent);
         getButton(IDialogConstants.OK_ID).setEnabled(false);
@@ -148,7 +150,7 @@ public class MDMXSDSchemaEntryDialog extends Dialog {
         getButton(IDialogConstants.OK_ID).setEnabled(enabled);
     }
 
-    public void retrieveDataModels(ArrayList<String> objs, boolean selectAll) {
+    public void retrieveDataModels(List<String> objs, boolean selectAll) {
         urls.addAll(objs);
         wcListViewer.refresh();
         if (selectAll) {

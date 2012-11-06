@@ -1891,7 +1891,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
     }
 
-    private void performDeletion(List<String> toDels) {
+    private void performDeletion(List<String> toDels) throws Exception {
         List<XSDSchemaContent> impToDels = new ArrayList<XSDSchemaContent>();
         List<String> nsToDels = new ArrayList<String>();
         for (String delName : toDels) {
@@ -1937,27 +1937,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             xsdSchema.updateElement();
             setXsdSchema(xsdSchema);
+
+            String xsd = Util.nodeToString(xsdSchema.getDocument());
+            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+            wsObject.setXsdSchema(xsd);
         }
 
     }
 
     private void performImport(List<String> list) throws Exception {
-        Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*)(\\:)+(.*)");//$NON-NLS-1$
-
         for (String fileName : list) {
-            Matcher match = httpUrl.matcher(fileName);
-            if (match.matches()) {
-                importSchemaWithURL(fileName);
-            } else {
-                importSchemaFromFile(fileName);
-            }
+            importSchemaFromFile(fileName);
         }
-    }
-
-    private void importSchemaWithURL(String url) throws Exception {
-        String response = Util.getResponseFromURL(url, xobject);
-        InputSource source = new InputSource(new StringReader(response));
-        importSchema(source, url);
     }
 
     private void importSchemaFromFile(String fileName) throws Exception {
