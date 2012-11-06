@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -27,10 +28,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.amalto.workbench.dialogs.MDMXSDSchemaEntryDialog;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
@@ -91,11 +88,8 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.WSSynchronizationGetItemXML;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSSynchronizationPutItemXML;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -144,6 +138,7 @@ public class PasteXObjectAction extends Action {
         parent = p;
     }
 
+    @Override
     public void run() {
         TreeObject selected = (TreeObject) ((IStructuredSelection) view.getViewer().getSelection()).getFirstElement();
         Map<TreeObject, Object> keyTrackMap = new HashMap<TreeObject, Object>();
@@ -177,14 +172,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -224,14 +220,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent2, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -275,14 +272,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent3, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -324,14 +322,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent4, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -373,14 +372,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent5, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -421,14 +421,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent6, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -472,14 +473,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent7, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -519,14 +521,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent8, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -566,14 +569,15 @@ public class PasteXObjectAction extends Action {
                                     view.getSite().getShell(),
                                     Messages.bind(Messages.PasteXObjectAction_DialogTitle2, key.getPk()),
                                     Messages.bind(Messages.PasteXObjectAction_MsgContent9, (latestValue != null ? newKey.getPk() : key.getPk())),
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -618,14 +622,15 @@ public class PasteXObjectAction extends Action {
                                     Messages.PasteXObjectAction_MsgContent10
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + Messages.PasteXObjectAction_MsgContent10t,
-                                    "CopyOf"//$NON-NLS-1$ 
+                                    "CopyOf"//$NON-NLS-1$
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
                                                     .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                            if ((newText == null) || "".equals(newText)) { //$NON-NLS-1$
                                                 return Messages.PasteXObjectAction_NameCannotBeEmpty;
+                                            }
                                             return null;
                                         };
                                     });
@@ -670,8 +675,9 @@ public class PasteXObjectAction extends Action {
 
                 }
 
-                if (list.isEmpty())
+                if (list.isEmpty()) {
                     break;
+                }
             }
 
         } catch (Exception e) {
@@ -688,9 +694,9 @@ public class PasteXObjectAction extends Action {
     }
 
     private void newTreeObject(TreeObject newObj, TreeObject selected) {
-        if (parent != null)
+        if (parent != null) {
             parent.addChild(newObj);
-        else {
+        } else {
             if (selected instanceof TreeParent) {
                 if (((TreeParent) selected).findObject(newObj.getType(), newObj.getDisplayName()) == null) {
                     ((TreeParent) selected).addChild(newObj);
@@ -711,7 +717,7 @@ public class PasteXObjectAction extends Action {
                         new WSGetItemPKsByCriteria(new WSDataClusterPK(oldXObjectPk), null, null, null, (long) -1, (long) -1, 0,
                                 Integer.MAX_VALUE)).getResults();
 
-                ArrayList<String> conceptList = new ArrayList<String>();
+                List<String> conceptList = new ArrayList<String>();
                 WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = destPort.getConceptsInDataClusterWithRevisions(
                         new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(oldXObjectPk), new WSUniversePK(
                                 revisionID))).getMapEntry();
@@ -760,6 +766,7 @@ public class PasteXObjectAction extends Action {
 
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

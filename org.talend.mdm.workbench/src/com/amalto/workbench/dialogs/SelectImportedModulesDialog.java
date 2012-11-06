@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -181,8 +182,9 @@ public class SelectImportedModulesDialog extends Dialog {
                 fd.setText(Messages.ImportXSDSchema);
                 String filename = fd.open();
 
-                if (filename == null)
+                if (filename == null) {
                     return;
+                }
                 File file = new File(filename);
                 try {
                     log.info(file.toURL());
@@ -208,14 +210,13 @@ public class SelectImportedModulesDialog extends Dialog {
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                     MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), Messages.SelectXSDSchemaWebSite);
                     try {
-                        ArrayList<String> schemaList = new ArrayList<String>();
+                        List<String> schemaList = new ArrayList<String>();
                         resolveSchemaList(schemaList, dlg);
-
-                     
                     } catch (Exception es) {
                         log.error(es.getMessage(), es);
                         return;
                     }
+                    
                     dlg.setBlockOnOpen(true);
                     dlg.open();
                     if (dlg.getReturnCode() == Window.OK) {
@@ -281,8 +282,9 @@ public class SelectImportedModulesDialog extends Dialog {
                         Messages.EnterTextUrl, "", new IInputValidator() {  //$NON-NLS-1$
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
+                                if ((newText == null) || "".equals(newText)) {
                                     return Messages.NameNotEmpty;
+                                }
                                 return null;
                             };
                         });
@@ -311,7 +313,7 @@ public class SelectImportedModulesDialog extends Dialog {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
                 for (Iterator<XSDDesc> iter = selection.iterator(); iter.hasNext();) {
-                    XSDDesc desc = (XSDDesc) iter.next();
+                    XSDDesc desc = iter.next();
                     xsdDescList.remove(desc);
                     toDelList.add(desc.getURL());
                 }
@@ -337,8 +339,9 @@ public class SelectImportedModulesDialog extends Dialog {
                 } else if (cnt instanceof XSDIncludeImpl) {
                     XSDIncludeImpl incu = (XSDIncludeImpl) cnt;
                     schemaLocation = incu.getSchemaLocation();
-                } else
+                } else {
                     continue;
+                }
                 if (schemaLocation != null) {
                     Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");//$NON-NLS-1$
                     Matcher match = httpUrl.matcher(schemaLocation);
@@ -363,8 +366,9 @@ public class SelectImportedModulesDialog extends Dialog {
 
     private void include(XSDDesc xsdDesc) {
         for (XSDDesc xc : xsdDescList) {
-            if (xc.getURL().equals(xsdDesc.getURL()))
+            if (xc.getURL().equals(xsdDesc.getURL())) {
                 return;
+            }
         }
 
         xsdDescList.add(xsdDesc);
@@ -398,12 +402,25 @@ public class SelectImportedModulesDialog extends Dialog {
         return toDelList;
     }
 
-    protected void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) throws Exception {
+    private void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) throws Exception {
 
+        boolean resolved = resolveSchemaList(schemaList);
+        if (!resolved) {
+            return;
+        }
+
+        String currentModelName = treeObject.getName();
+        schemaList.remove(currentModelName);
+
+        dlg.create();
+        dlg.retrieveDataModels(schemaList, false);
+    }
+
+    protected boolean resolveSchemaList(List<String> schemaList) throws XtentisException, RemoteException {
         XtentisPort port = getPort();
         if (port == null) {
             MessageDialog.openError(getShell(), Messages._Error, Messages.ServerNotNull);
-            return;
+            return false;
         }
         WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
         if (xdmPKs != null) {
@@ -413,10 +430,9 @@ public class SelectImportedModulesDialog extends Dialog {
                     schemaList.add(name);
                 }
             }
-            dlg.create();
-            dlg.retrieveDataModels((ArrayList<String>) schemaList, false);
         }
 
+        return true;
     }
 
     protected XtentisPort getPort() throws XtentisException {

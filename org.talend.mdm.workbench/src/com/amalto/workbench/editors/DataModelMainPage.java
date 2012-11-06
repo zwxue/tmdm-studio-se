@@ -721,7 +721,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         public boolean equals(Object a, Object b) {
@@ -735,7 +735,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         public int hashCode(Object element) {
@@ -1608,7 +1608,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -1752,7 +1752,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     * 
+     *
      * @param schema
      * @return
      * @throws Exception
@@ -2023,7 +2023,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
     }
 
-    private void performDeletion(List<String> toDels) {
+    private void performDeletion(List<String> toDels) throws Exception {
         List<XSDSchemaContent> impToDels = new ArrayList<XSDSchemaContent>();
         List<String> nsToDels = new ArrayList<String>();
         for (String delName : toDels) {
@@ -2069,27 +2069,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             xsdSchema.updateElement();
             setXsdSchema(xsdSchema);
+
+            String xsd = Util.nodeToString(xsdSchema.getDocument());
+            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+            wsObject.setXsdSchema(xsd);
         }
 
     }
 
     private void performImport(List<String> list) throws Exception {
-        Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*)(\\:)+(.*)");//$NON-NLS-1$
-
         for (String fileName : list) {
-            Matcher match = httpUrl.matcher(fileName);
-            if (match.matches()) {
-                importSchemaWithURL(fileName);
-            } else {
-                importSchemaFromFile(fileName);
-            }
+            importSchemaFromFile(fileName);
         }
-    }
-
-    private void importSchemaWithURL(String url) throws Exception {
-        String response = Util.getResponseFromURL(url, xobject);
-        InputSource source = new InputSource(new StringReader(response));
-        importSchema(source, url);
     }
 
     private void importSchemaFromFile(String fileName) throws Exception {
@@ -2104,7 +2095,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             importSchema(source, fileName);
         } else {
             importFromFile(source, fileName);
-
         }
 
     }
@@ -2114,7 +2104,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         if (fileName.lastIndexOf(".") != -1) { //$NON-NLS-1$
             inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
         }
-        if (!inputType.equals(".xsd")) {
+        if (!inputType.equals(".xsd")) { //$NON-NLS-1$
             return;
         }
         File file = new File(fileName);
