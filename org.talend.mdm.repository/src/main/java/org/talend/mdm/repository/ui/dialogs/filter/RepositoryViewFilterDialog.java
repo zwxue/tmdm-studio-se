@@ -41,10 +41,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.core.IRepositoryViewFilter;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.AbstractLabelProvider;
 import org.talend.mdm.repository.core.impl.eventmanager.EventManagerNodeConfiguration;
 import org.talend.mdm.repository.core.impl.transformerV2.TransformerV2NodeConfiguration;
@@ -84,9 +86,8 @@ public class RepositoryViewFilterDialog extends Dialog {
         if (element instanceof IRepositoryViewObject) {
             Item item = ((IRepositoryViewObject) element).getProperty().getItem();
             IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);
-            if (conf != null) {
+            if (conf != null)
                 return conf.getLabelProvider().getText(element);
-            }
         }
         return ""; //$NON-NLS-1$
     }
@@ -149,6 +150,7 @@ public class RepositoryViewFilterDialog extends Dialog {
         enableNameFilterBun = new Button(nameGroup, SWT.CHECK);
         enableNameFilterBun.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 namePatternTxt.setEnabled(enableNameFilterBun.getSelection());
             }
@@ -168,6 +170,7 @@ public class RepositoryViewFilterDialog extends Dialog {
         enableServerObjFilterBun.setSize(183, 16);
         enableServerObjFilterBun.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 enableServerObjFilterComposite(enableServerObjFilterBun.getSelection());
             }
@@ -183,15 +186,15 @@ public class RepositoryViewFilterDialog extends Dialog {
         enableAllBun.setSize(171, 16);
         enableAllBun.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent e) {
                 boolean selected = enableAllBun.getSelection();
                 enableAllBun.setSelection(selected);
                 serverObjViewer.setAllChecked(selected);
-                if (selected) {
+                if (selected)
                     enabledConfigs.addAll(allConfigs);
-                } else {
+                else
                     enabledConfigs.clear();
-                }
             }
         });
         enableAllBun.setText(Messages.RepositoryViewFilterDialog_enableAllServerObject);
@@ -201,11 +204,10 @@ public class RepositoryViewFilterDialog extends Dialog {
 
             public void checkStateChanged(CheckStateChangedEvent event) {
             	IRepositoryViewObject config = (IRepositoryViewObject) event.getElement();
-                if (event.getChecked()) {
+                if (event.getChecked())
                     enabledConfigs.add(config);
-                } else {
+                else
                     enabledConfigs.remove(config);
-                }
 
                 solveProcTriCase();
 
@@ -266,7 +268,7 @@ public class RepositoryViewFilterDialog extends Dialog {
 
         for (IRepositoryViewObject conf : enabledConfigs) {
 
-            Item item = ((IRepositoryViewObject) conf).getProperty().getItem();
+            Item item = conf.getProperty().getItem();
             IRepositoryNodeConfiguration repositoryConf = RepositoryNodeConfigurationManager.getConfiguration(item);
 
             
@@ -275,12 +277,9 @@ public class RepositoryViewFilterDialog extends Dialog {
                 break;
             }
 
-            if (repositoryConf instanceof IRepositoryViewObject || repositoryConf instanceof TransformerV2NodeConfiguration) {
-
-                for (IRepositoryViewObject confi : allConfigs) {
-                        eventMgr = confi;
-                }
-            }
+            if (repositoryConf instanceof IRepositoryViewObject || repositoryConf instanceof TransformerV2NodeConfiguration)
+                for (IRepositoryViewObject confi : allConfigs)
+                    eventMgr = confi;
         }
 
         if (eventMgr != null && !exist)
@@ -296,9 +295,8 @@ public class RepositoryViewFilterDialog extends Dialog {
         boolean enableNamePatternFilter = PreferenceUtil.getBoolean(NamePatternViewFilter.PROP_ENABLE);
         enableNameFilterBun.setSelection(enableNamePatternFilter);
         String namePattern = PreferenceUtil.getString(NamePatternViewFilter.PROP_NAME_PATTERN);
-        if (namePattern == null || namePattern.trim().length() == 0) {
+        if (namePattern == null || namePattern.trim().length() == 0)
             namePattern = "*"; //$NON-NLS-1$
-        }
         namePatternTxt.setText(namePattern);
         namePatternTxt.setEnabled(enableNamePatternFilter);
 
@@ -344,6 +342,7 @@ public class RepositoryViewFilterDialog extends Dialog {
      * 
      * @param parent
      */
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
         createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
@@ -352,10 +351,12 @@ public class RepositoryViewFilterDialog extends Dialog {
     /**
      * Return the initial size of the dialog.
      */
+    @Override
     protected Point getInitialSize() {
         return new Point(451, 362);
     }
 
+    @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
             // name pattern pref
@@ -380,11 +381,24 @@ public class RepositoryViewFilterDialog extends Dialog {
         Set<String> values = new HashSet<String>();
         for (IRepositoryViewObject conf : enabledConfigs) {
             String label = getLabel(conf);
-            if (label.length() > 0) {
+            if (label.length() > 0)
                 values.add(label);
-            }
+
+            if (conf.getRepositoryObjectType() == IServerObjectRepositoryType.TYPE_EVENTMANAGER)
+                updateForEventManager(values);
         }
         return values;
     }
 
+    private void updateForEventManager(Set<String> values) {
+        ERepositoryObjectType types[] = new ERepositoryObjectType[] { IServerObjectRepositoryType.TYPE_TRANSFORMERV2,
+                IServerObjectRepositoryType.TYPE_ROUTINGRULE };
+
+        for (ERepositoryObjectType type : types) {
+            IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(type);
+            IRepositoryViewObject viewObject = RepositoryResourceUtil.getCategoryViewObject(conf);
+            if (viewObject != null)
+                values.add(viewObject.getProperty().getLabel());
+        }
+    }
 }
