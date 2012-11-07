@@ -19,10 +19,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -206,15 +208,28 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
             String name = fileName.substring(0, fileName.indexOf(suffix));
             IRepositoryViewObject viewObj = getViewObjForDataModel(name);
-            ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
             String prjLabel = viewObj.getProjectLabel();
-            fileName = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + "\\" + prjLabel.toUpperCase() + "\\" //$NON-NLS-1$ //$NON-NLS-2$
-                    + "MDM" + "\\" + "datamodel" + "\\" + viewObj.getLabel() + "_" + viewObj.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+
+            String parentPath = buildParentPath(viewObj);
+            String sep = "" + IPath.SEPARATOR; //$NON-NLS-1$
+
+            fileName = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + sep + prjLabel.toUpperCase() + sep
+                    + "MDM" + sep + "datamodel" + parentPath + viewObj.getLabel() + "_" + viewObj.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
 
             result.add(fileName);
         }
 
         return result;
+    }
+    private String buildParentPath(IRepositoryViewObject viewObj) {
+        String path = "" + IPath.SEPARATOR; //$NON-NLS-1$
+
+        ItemState state = viewObj.getProperty().getItem().getState();
+        String itemPath = state.getPath();
+        if (!itemPath.isEmpty())
+            path = itemPath + path;
+
+        return path;
     }
     private IRepositoryViewObject getViewObjForDataModel(String name) {
         List<IRepositoryViewObject> vObjs = RepositoryResourceUtil.findAllViewObjects(IServerObjectRepositoryType.TYPE_DATAMODEL);
