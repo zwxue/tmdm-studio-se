@@ -30,15 +30,26 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class DataProcessRuleFactory {
 
+    /**
+     * if using XML DB and the return records exceed limit, it will return null;
+     * 
+     * @param port
+     * @param dataClusterName
+     * @return
+     * @throws RemoteException
+     */
     public static DataProcessRule createProcessRouterFromRemote(XtentisPort port, String dataClusterName) throws RemoteException {
 
         WSGetConceptsInDataCluster param = new WSGetConceptsInDataCluster(new WSDataClusterPK(dataClusterName));
         WSStringArray concepts = port.getConceptsInDataCluster(param);
-        DataProcessRule rule = new DataProcessRule();
-        for (String concept : concepts.getStrings()) {
-            rule.addNewEnityUnit(concept);
+        if (concepts != null) {
+            DataProcessRule rule = new DataProcessRule();
+            for (String concept : concepts.getStrings()) {
+                rule.addNewEnityUnit(concept);
+            }
+            return rule;
         }
-        return rule;
+        return null;
     }
 
     public static DataProcessRule createProcessRouterFromLocal(File folder, String dataClusterName) {

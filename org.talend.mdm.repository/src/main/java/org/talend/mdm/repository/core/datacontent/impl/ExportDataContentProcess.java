@@ -112,13 +112,15 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
     protected MultiStatus processResult;
 
     private boolean saveRuleFile(DataProcessRule rule) {
-        File file = new File(tempFolderPath + File.separator + RULE_FILE_NAME);
-        try {
-            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");//$NON-NLS-1$ 
-            Marshaller.marshal(rule, writer);
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        if (rule != null) {
+            File file = new File(tempFolderPath + File.separator + RULE_FILE_NAME);
+            try {
+                OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");//$NON-NLS-1$ 
+                Marshaller.marshal(rule, writer);
+                return true;
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
         return false;
     }

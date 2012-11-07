@@ -1359,26 +1359,30 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 List<LineItem> orderItems = new LinkedList<LineItem>();
                 try {
                     WSStringArray concepts = port.getConceptsInDataCluster(param);
-                    Map<String, List<LineItem>> orderMap = new LinkedHashMap<String, List<LineItem>>();
-                    for (String concept : concepts.getStrings()) {
-                        orderMap.put(concept, new LinkedList<LineItem>());
-                    }
-                    // order
-                    List<LineItem> otherItems = new LinkedList<LineItem>();
-                    for (LineItem lineItem : lineItems) {
-                        String concept = lineItem.getConcept();
-                        if (orderMap.containsKey(concept)) {
-                            List<LineItem> items = orderMap.get(concept);
-                            items.add(lineItem);
-                        } else {
-                            otherItems.add(lineItem);
+                    if (concepts == null || concepts.getStrings() == null || concepts.getStrings().length == 0) {
+                        orderItems.addAll(lineItems);
+                    } else {
+                        Map<String, List<LineItem>> orderMap = new LinkedHashMap<String, List<LineItem>>();
+                        for (String concept : concepts.getStrings()) {
+                            orderMap.put(concept, new LinkedList<LineItem>());
                         }
+                        // order
+                        List<LineItem> otherItems = new LinkedList<LineItem>();
+                        for (LineItem lineItem : lineItems) {
+                            String concept = lineItem.getConcept();
+                            if (orderMap.containsKey(concept)) {
+                                List<LineItem> items = orderMap.get(concept);
+                                items.add(lineItem);
+                            } else {
+                                otherItems.add(lineItem);
+                            }
+                        }
+                        // generate
+                        for (List<LineItem> items : orderMap.values()) {
+                            orderItems.addAll(0, items);
+                        }
+                        orderItems.addAll(otherItems);
                     }
-                    // generate
-                    for (List<LineItem> items : orderMap.values()) {
-                        orderItems.addAll(0, items);
-                    }
-                    orderItems.addAll(otherItems);
                 } catch (RemoteException e) {
                     log.error(e.getMessage(), e);
                 }

@@ -39,6 +39,7 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.webservices.WSConceptRevisionMap;
 import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -718,12 +719,15 @@ public class PasteXObjectAction extends Action {
                                 Integer.MAX_VALUE)).getResults();
 
                 List<String> conceptList = new ArrayList<String>();
-                WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = destPort.getConceptsInDataClusterWithRevisions(
-                        new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(oldXObjectPk), new WSUniversePK(
-                                revisionID))).getMapEntry();
+                WSConceptRevisionMap concepts = destPort
+                        .getConceptsInDataClusterWithRevisions(new WSGetConceptsInDataClusterWithRevisions(new WSDataClusterPK(
+                                oldXObjectPk), new WSUniversePK(revisionID)));
+                if (concepts != null) {
+                    WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = concepts.getMapEntry();
 
-                for (WSConceptRevisionMapMapEntry entry : wsConceptRevisionMapMapEntries) {
-                    conceptList.add(entry.getConcept());
+                    for (WSConceptRevisionMapMapEntry entry : wsConceptRevisionMapMapEntries) {
+                        conceptList.add(entry.getConcept());
+                    }
                 }
 
                 MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(this.view.getSite().getShell(),
