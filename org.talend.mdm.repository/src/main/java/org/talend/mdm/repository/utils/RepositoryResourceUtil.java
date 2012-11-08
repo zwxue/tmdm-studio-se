@@ -694,9 +694,17 @@ public class RepositoryResourceUtil {
         try {
             for (IResource res : folder.members()) {
                 if (res instanceof IFolder) {
-
                     if (!isDeletedFolder((IFolder) res) && !isSVNFolder((IFolder) res)) {
-                        IRepositoryViewObject folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
+                        IRepositoryViewObject folderObject = null;
+
+                        // firstly,to get the cached one, if not find, create it
+                        String resPath = parentItem.getState().getPath() + IPath.SEPARATOR + res.getName();
+                        folderObject = ContainerCacheService.get(type, resPath);
+
+                        if (folderObject == null) {
+                            folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
+                        }
+
                         viewObjects.add(folderObject);
                     }
                 }
