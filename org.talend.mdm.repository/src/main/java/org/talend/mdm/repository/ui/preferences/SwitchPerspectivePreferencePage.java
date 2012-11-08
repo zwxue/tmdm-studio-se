@@ -24,8 +24,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
-import com.amalto.workbench.utils.Util;
-
 public class SwitchPerspectivePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
     public SwitchPerspectivePreferencePage() {
@@ -33,7 +31,7 @@ public class SwitchPerspectivePreferencePage extends PreferencePage implements I
 
     private Button askUserForJobBun;
 
-    private Button askUserForWorkflowBun;
+    // private Button askUserForWorkflowBun;
 
     public void init(IWorkbench workbench) {
         IPreferenceStore store = PlatformUI.getPreferenceStore();
@@ -55,17 +53,17 @@ public class SwitchPerspectivePreferencePage extends PreferencePage implements I
         gridData.horizontalSpan = 2;
         askUserForJobBun.setLayoutData(gridData);
         //
-        if (Util.IsEnterPrise()) {
-            askUserForWorkflowBun = new Button(composite, SWT.CHECK);
-
-            askUserForWorkflowBun
-                    .setText("Automatically open the BPM perspective without asking user, When open a Workflow object.");
-            askUserForWorkflowBun.setSelection(getPreferenceStore().getBoolean(
-                    PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA));
-            gridData = new GridData();
-            gridData.horizontalSpan = 2;
-            askUserForWorkflowBun.setLayoutData(gridData);
-        }
+        // if (Util.IsEnterPrise()) {
+        // askUserForWorkflowBun = new Button(composite, SWT.CHECK);
+        //
+        // askUserForWorkflowBun
+        // .setText("Automatically open the BPM perspective without asking user, When open a Workflow object.");
+        // askUserForWorkflowBun.setSelection(getPreferenceStore().getBoolean(
+        // PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA));
+        // gridData = new GridData();
+        // gridData.horizontalSpan = 2;
+        // askUserForWorkflowBun.setLayoutData(gridData);
+        // }
         initCheckedBuns();
         return composite;
     }
@@ -73,9 +71,9 @@ public class SwitchPerspectivePreferencePage extends PreferencePage implements I
     public boolean performOk() {
         IPreferenceStore store = getPreferenceStore();
         store.setValue(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI, askUserForJobBun.getSelection());
-        if (Util.IsEnterPrise()) {
-            store.setValue(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA, askUserForWorkflowBun.getSelection());
-        }
+        // if (Util.IsEnterPrise()) {
+        // store.setValue(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA, askUserForWorkflowBun.getSelection());
+        // }
 
         return true;
     }
@@ -83,17 +81,17 @@ public class SwitchPerspectivePreferencePage extends PreferencePage implements I
     private void initCheckedBuns() {
         IPreferenceStore store = getPreferenceStore();
         askUserForJobBun.setSelection(store.getBoolean(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI));
-        if (Util.IsEnterPrise()) {
-            askUserForWorkflowBun.setSelection(store.getBoolean(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA));
-        }
+        // if (Util.IsEnterPrise()) {
+        // askUserForWorkflowBun.setSelection(store.getBoolean(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA));
+        // }
     }
 
     protected void performDefaults() {
         IPreferenceStore store = getPreferenceStore();
         store.setValue(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI, false);
-        if (Util.IsEnterPrise()) {
-            store.setValue(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA, false);
-        }
+        // if (Util.IsEnterPrise()) {
+        // store.setValue(PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA, false);
+        // }
         initCheckedBuns();
     }
 

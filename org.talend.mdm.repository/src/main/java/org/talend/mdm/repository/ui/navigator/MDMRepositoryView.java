@@ -75,7 +75,6 @@ import org.talend.mdm.repository.ui.actions.ImportServerObjectAction;
 import org.talend.mdm.repository.ui.actions.RefreshViewAction;
 import org.talend.mdm.repository.ui.dialogs.SwitchPerspectiveDialog;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
-import org.talend.mdm.repository.ui.editors.WorkflowEditorInput;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -97,7 +96,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     /**
      * 
      */
-    private static final String BONITA_PERSPECTIVE_ID = "org.bonitasoft.studio.perspective.process"; //$NON-NLS-1$
+    //    private static final String BONITA_PERSPECTIVE_ID = "org.bonitasoft.studio.perspective.process"; //$NON-NLS-1$
 
     public static final String CONTRIBUTER_ID = "org.talend.mdm.repository.propertycontributer"; //$NON-NLS-1$
 
@@ -132,8 +131,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     @Override
     public void dispose() {
-        super.dispose();
         unRegisterEditorListener();
+        unRegisitPerspectiveBarSelectListener();
+        super.dispose();
     }
 
     private void contributeToActionBars() {
@@ -311,16 +311,15 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
         public void partActivated(IWorkbenchPartReference partRef) {
             SwitchPerspectiveDialog dialog = null;
-            if (partRef.getId().equals(WorkflowEditorInput.EDITOR_ID)) {
-                dialog = new SwitchPerspectiveDialog(getSite().getShell(), "BPM", BONITA_PERSPECTIVE_ID, //$NON-NLS-1$
-                        PreferenceConstants.P_AUTO_SWITCH_TO_BONITA, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA);
-
-            }
+            String curPerspectiveId = (currentPerspective == null) ? null : currentPerspective.getId();
+            String curPartId = partRef.getId();
+            // if (!BONITA_PERSPECTIVE_ID.equals(curPerspectiveId) && WorkflowEditorInput.EDITOR_ID.equals(curPartId)) {
+            //                dialog = new SwitchPerspectiveDialog(getSite().getShell(), "BPM", BONITA_PERSPECTIVE_ID, //$NON-NLS-1$
+            // PreferenceConstants.P_AUTO_SWITCH_TO_BONITA, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA);
+            //
+            // }
             // if editor is talend job editor, switch to org.talend.rcp.perspective
-            if (partRef.getId().equals(JOB_EDITOR_ID)) {
-                if (deactivePerspective != null && deactivePerspective.getId().equals(DI_PERSPECTIVE_ID)) {
-                    return;
-                }
+            if (!DI_PERSPECTIVE_ID.equals(curPerspectiveId) && JOB_EDITOR_ID.equals(curPartId)) {
                 dialog = new SwitchPerspectiveDialog(getSite().getShell(), "Integration", DI_PERSPECTIVE_ID, //$NON-NLS-1$
                         PreferenceConstants.P_AUTO_SWITCH_TO_DI, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI);
 
@@ -328,42 +327,41 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (dialog != null) {
                 dialog.run();
             }
-            deactivePerspective = null;
         }
 
     };
 
-    private IPerspectiveDescriptor deactivePerspective;// record current deactivated perspective for temp use
+    private IPerspectiveDescriptor currentPerspective;
+
+    PerspectiveAdapter perspectiveListener = new PerspectiveAdapter() {
+
+        @Override
+        public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+            currentPerspective = perspective;
+            if (first) {
+                first = false;
+                if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
+                    ShowWelcomeEditor.showWelcomeEditor();
+                }
+            }
+
+            if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
+                getCommonViewer().refresh();
+            }
+        }
+    };
 
     /**
      * Register one perspective selection listener
      */
     private void regisitPerspectiveBarSelectListener() {
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
 
-            @Override
-            public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-                deactivePerspective = perspective;
-            }
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(perspectiveListener);
+    }
 
-        });
+    private void unRegisitPerspectiveBarSelectListener() {
 
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPerspectiveListener(new PerspectiveAdapter() {
-
-            @Override
-            public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-                if (first) {
-                    first = false;
-                    if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
-                        ShowWelcomeEditor.showWelcomeEditor();
-                    }
-                }
-
-                if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
-                    getCommonViewer().refresh();
-                }
-            }
-        });
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().removePerspectiveListener(perspectiveListener);
     }
 
     private static boolean first = true;
