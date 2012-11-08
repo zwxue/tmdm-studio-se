@@ -321,6 +321,8 @@ public class DeployService {
                         for (IStatus cstatus : childrenStatus) {
                             if (cstatus instanceof DeployStatus) {
                                 deployStatuses.add((DeployStatus) cstatus);
+                                if (((DeployStatus) cstatus).getCommand() instanceof BatchDeployJobCommand)
+                                    break;
                             }
                         }
                     }
