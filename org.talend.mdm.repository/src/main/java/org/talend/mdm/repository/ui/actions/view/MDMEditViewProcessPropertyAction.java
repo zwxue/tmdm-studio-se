@@ -80,21 +80,26 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
                 path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;
             }
         } else if (type == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
-            if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)
-                    && !oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)
-                    && !oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)
-                    && !oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)
-                    && !oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)
-                    && !oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
+            if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)) {
+                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)) {
+                    path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
+                }
+            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)) {
+                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)) {
+                    path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
+                }
+            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)) {
+                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)) {
+                    path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
+                }
+            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)) {
+                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)) {
+                    path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
+                }
+            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                    path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
+                }
             } else {
                 if (oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)
                         || oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)
