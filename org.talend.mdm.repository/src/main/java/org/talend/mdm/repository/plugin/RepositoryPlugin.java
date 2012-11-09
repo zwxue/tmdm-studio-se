@@ -35,7 +35,17 @@ public class RepositoryPlugin extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+        startupJobListener();
+    }
+
+    public void startupJobListener() {
         ProxyRepositoryFactory.getInstance().addPropertyChangeListener(jobListener);
+    }
+
+    public void stopJobListener() {
+        if (jobListener != null) {
+            ProxyRepositoryFactory.getInstance().removePropertyChangeListener(jobListener);
+        }
     }
 
     /*
@@ -45,9 +55,7 @@ public class RepositoryPlugin extends AbstractUIPlugin {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-        if (jobListener != null) {
-            ProxyRepositoryFactory.getInstance().removePropertyChangeListener(jobListener);
-        }
+        stopJobListener();
         plugin = null;
         super.stop(context);
     }

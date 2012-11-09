@@ -54,6 +54,8 @@ public class JobResourceListener implements PropertyChangeListener {
         }
     }
 
+    private static final String JOB_EDITOR_ID = "org.talend.designer.core.ui.MultiPageTalendEditor"; //$NON-NLS-1$
+
     private boolean isOpenInEditor(IRepositoryViewObject vObj) {
         if (!ProxyRepositoryFactory.getInstance().isFullLogonFinished()) {
             return false;
@@ -65,13 +67,14 @@ public class JobResourceListener implements PropertyChangeListener {
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         IEditorReference[] editorReferences = activePage.getEditorReferences();
         for (IEditorReference ref : editorReferences) {
-            if (ref != null) {
+            String editorId = ref.getId();
+            if (ref != null && JOB_EDITOR_ID.equals(editorId)) {
                 try {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof RepositoryEditorInput) {
                         RepositoryNode repositoryNode = ((RepositoryEditorInput) editorInput).getRepositoryNode();
-                        if (repositoryNode != null) {
-                            return repositoryNode.getObject().equals(vObj);
+                        if (repositoryNode != null && repositoryNode.getObject().equals(vObj)) {
+                            return true;
                         }
                     }
                 } catch (PartInitException e) {
