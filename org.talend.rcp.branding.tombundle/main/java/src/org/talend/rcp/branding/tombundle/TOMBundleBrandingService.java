@@ -78,4 +78,7 @@ public class TOMBundleBrandingService extends AbstractTalendBrandingService {
         return "for MDM"; //$NON-NLS-1$
     }
 
+    public String getUserManuals() {
+        return "MDM"; //$NON-NLS-1$
+    }
 }
