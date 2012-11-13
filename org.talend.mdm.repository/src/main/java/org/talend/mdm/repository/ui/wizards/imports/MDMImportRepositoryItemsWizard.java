@@ -105,11 +105,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             return false;
         }
         boolean result = super.performFinish();
-        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
-                ISyncWorkflowService.class);
-        if (syncService != null) {
-            syncService.startSyncWorkflowTask();
-        }
+
         return result;
     }
 
@@ -276,7 +272,12 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 MDMRepositoryView.show().getCommonViewer().refresh();
             }
         });
-
+        // sync workflow object to bonita
+        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
+                ISyncWorkflowService.class);
+        if (syncService != null) {
+            syncService.startSyncWorkflowTask();
+        }
     }
 
     @Override
