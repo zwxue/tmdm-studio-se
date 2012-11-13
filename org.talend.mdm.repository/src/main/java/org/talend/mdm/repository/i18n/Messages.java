@@ -152,6 +152,8 @@ public class Messages extends NLS {
 
     public static String RemoveFromRepositoryAction_Title;
 
+    public static String RemoveFromRepositoryAction_AlterLockMsg;
+
     public static String RemoveFromServerAction_removeFromServer;
 
     public static String RemovePhysicallyFromRepositoryAction_title;

@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -49,6 +52,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
+    private List<Object> lockedObjs;
     /**
      * DOC hbhong RemoveFromRepositoryAction constructor comment.
      * 
@@ -70,7 +74,8 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     }
 
     protected void doRun() {
-        int size = getSelectedObject().size();
+        List<Object> selectedObject = getSelectedObject();
+        int size = selectedObject.size();
         if (size > 0) {
             if (!MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
                     Messages.RemoveFromRepositoryAction_confirm, size, size > 1 ? Messages.RemoveFromRepositoryAction_instances
@@ -79,7 +84,9 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
             }
 
         }
-        for (Object obj : getSelectedObject()) {
+
+        selectedObject.removeAll(lockedObjs);
+        for (Object obj : selectedObject) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
                 if (isServerObject(viewObj)) {
@@ -98,6 +105,9 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         }
 
         commonViewer.refresh();
+
+        if (lockedObjs.size() > 0)
+            MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
     }
 
     private boolean isServerObject(IRepositoryViewObject viewObj) {
@@ -107,7 +117,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     private void removeServerObject(IRepositoryViewObject viewObj) {
         try {
             Item item = viewObj.getProperty().getItem();
-            IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObj);
+            IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor(viewObj);
 
             if (ref != null) {
                 RepositoryResourceUtil.closeEditor(ref, true);
@@ -145,9 +155,43 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     }
 
     @Override
+    protected boolean isLocked() {
+        initLockedObjectArray();
+
+        boolean unlocked = false;
+
+        List<Object> selectedObject = getSelectedObject();
+        if (selectedObject != null && !selectedObject.isEmpty()) {
+            for (Object obj : selectedObject) {
+                if (obj instanceof IRepositoryViewObject) {
+                    boolean locked = RepositoryResourceUtil.isLockedAndEdited((IRepositoryViewObject) obj);
+                    if (locked) {
+                        lockedObjs.add(obj);
+                        continue;
+                    }
+
+                    unlocked = true;
+                }
+            }
+        }
+
+        return !unlocked;
+    }
+
+    private void initLockedObjectArray() {
+        if (lockedObjs == null)
+            lockedObjs = new ArrayList<Object>();
+        lockedObjs.clear();
+    }
+
+    protected String getAlertMsg() {
+        return Messages.bind(Messages.RemoveFromRepositoryAction_AlterLockMsg, lockedObjs.size());
+    }
+
+    @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
         String path = viewObj.getPath();
-        if (path != null && path.equalsIgnoreCase("system")) {
+        if (path != null && path.equalsIgnoreCase("system")) { //$NON-NLS-1$
             return false;
         }
         return true;
