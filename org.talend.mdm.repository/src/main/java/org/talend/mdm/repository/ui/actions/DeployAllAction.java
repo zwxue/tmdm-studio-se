@@ -41,6 +41,8 @@ public class DeployAllAction extends AbstractDeployAction {
     private static final ImageDescriptor DEPLOY_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/server_export.png"); //$NON-NLS-1$
 
+    private List<IRepositoryViewObject> deployViewObject;
+
     public DeployAllAction(boolean isDeployAll) {
         super(Messages.DeployAllAction_label);
         this.isDeployAll = isDeployAll;
@@ -69,9 +71,11 @@ public class DeployAllAction extends AbstractDeployAction {
         if (dialog.open() == IDialogConstants.OK_ID) {
             List<AbstractDeployCommand> selectededCommands = dialog.getSelectedCommands();
             if (selectededCommands.size() >= 0) {
+                deployViewObject = getDeployViewObject(selectededCommands);
+
                 // save editors
                 LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
-                        Messages.AbstractDeployAction_promptToSaveEditors, getDeployViewObject(selectededCommands));
+                        Messages.AbstractDeployAction_promptToSaveEditors, deployViewObject);
                 if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
                     return;
                 }
@@ -87,7 +91,6 @@ public class DeployAllAction extends AbstractDeployAction {
                 updateLastServer(status, new NullProgressMonitor());
             }
         }
-        commonViewer.refresh();
     }
 
     private List<IRepositoryViewObject> getDeployViewObject(List<AbstractDeployCommand> selectededCommands) {
@@ -98,6 +101,16 @@ public class DeployAllAction extends AbstractDeployAction {
                 viewObjs.add(viewObject);
         }
         return viewObjs;
+    }
+
+    @Override
+    protected void refreshDeployedViewObjects() {
+        if (deployViewObject.size() > 0) {
+            for (IRepositoryViewObject viewObj : deployViewObject) {
+                IRepositoryViewObject iRepositoryViewObject = ContainerCacheService.get(viewObj.getProperty());
+                commonViewer.refresh(iRepositoryViewObject);
+            }
+        }
     }
 
     protected void refreshParent(Object object) {

@@ -84,7 +84,14 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
     protected void updateLastServer(IStatus status, IProgressMonitor monitor) {
         DeployService.getInstance().updateLastServer(status, monitor);
-        commonViewer.refresh();
+        refreshDeployedViewObjects();
+    }
+
+    protected void refreshDeployedViewObjects() {
+        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
+        for (IRepositoryViewObject viewObj : viewObjs) {
+            commonViewer.refresh(viewObj);
+        }
     }
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
