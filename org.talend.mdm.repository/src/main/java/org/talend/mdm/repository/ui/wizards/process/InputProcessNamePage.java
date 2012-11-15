@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.process;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
@@ -23,10 +21,12 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -196,13 +196,15 @@ public class InputProcessNamePage extends WizardPage {
         optionNameText.setParent(grpEnterProcessName);
         padLabel.setParent(grpEnterProcessName);
         
-        
+        Color grayColor = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
         //bottom part
         internalNameLabel = new Label(grpEnterProcessName, SWT.NONE);
+        internalNameLabel.setForeground(grayColor);
         internalNameLabel.setText(Messages.InputProcessNamePage_processName);
 
         processNameLabel = new Label(grpEnterProcessName, SWT.NONE);
         processNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+        processNameLabel.setForeground(grayColor);
         pad2Label = new Label(grpEnterProcessName, SWT.NONE);
         
         updateOptionPart();

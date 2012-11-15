@@ -46,6 +46,10 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
 
     private Composite descContainer;
 
+    private Label lblMessage;
+
+    private Button btnNewButton;
+
     /**
      * DOC hbhong BeforeProcessTypeComposite constructor comment.
      * 
@@ -63,10 +67,10 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
         descContainer = new Composite(this, SWT.NONE);
         descContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         descContainer.setLayout(new GridLayout(3, false));
-        Label lblMessage = new Label(descContainer, SWT.NONE);
+        lblMessage = new Label(descContainer, SWT.NONE);
         lblMessage.setText(Messages.SelectProcessTypePage_descText);
 
-        Button btnNewButton = new Button(descContainer, SWT.NONE);
+        btnNewButton = new Button(descContainer, SWT.NONE);
         btnNewButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -96,6 +100,18 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
         standaloneBun = new Button(this, SWT.RADIO);
         standaloneBun.setText(Messages.RunnableTypeComposite_createStandaloneProcess);
         standaloneBun.addSelectionListener(selectionListener);
+
+        runnableBun.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                boolean selected = runnableBun.getSelection();
+                descContainer.setEnabled(selected);
+                lblMessage.setEnabled(selected);
+                btnNewButton.setEnabled(selected);
+                messageText.setEnabled(selected);
+            }
+        });
 
         updateBtnState(defaultProcessType);
     }
