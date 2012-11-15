@@ -116,7 +116,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 IEditorReference editorRef = getJobEditor(item);
                 if (editorRef != null) {
                     IEditorPart editor = editorRef.getEditor(false);
-                    if (editor != null && !editor.isDirty()) {
+                    if (editor != null) {
                         editor.doSave(new NullProgressMonitor());
                         return;
                     }
