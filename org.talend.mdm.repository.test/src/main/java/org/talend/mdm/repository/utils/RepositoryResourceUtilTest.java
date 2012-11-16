@@ -1,21 +1,10 @@
 package org.talend.mdm.repository.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.support.membermodification.MemberMatcher.method;
-import static org.powermock.api.support.membermodification.MemberModifier.stub;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.powermock.api.support.membermodification.MemberMatcher.*;
+import static org.powermock.api.support.membermodification.MemberModifier.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -108,7 +97,6 @@ public class RepositoryResourceUtilTest {
         PowerMockito.mockStatic(CoreRuntimePlugin.class);
         CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
         when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
-
 
     }
 
@@ -757,6 +745,11 @@ public class RepositoryResourceUtilTest {
         boolean useRepositoryViewObject = true;
 
         Item mockParentItem = mock(Item.class);
+        String path = "mockPath"; //$NON-NLS-1$
+        ItemState mockItemState = mock(ItemState.class);
+        when(mockParentItem.getState()).thenReturn(mockItemState);
+        when(mockItemState.getPath()).thenReturn(path);
+
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
 
         IFolder[] mockResources = { mock(IFolder.class), mock(IFolder.class), mock(IFolder.class) };
@@ -776,6 +769,11 @@ public class RepositoryResourceUtilTest {
         IRepositoryViewObject mock1ViewObject = mock(IRepositoryViewObject.class);
         when(RepositoryResourceUtil.createFolderViewObject(mockType, "folder", mockParentItem, false))
                 .thenReturn(mock1ViewObject);
+
+        PowerMockito.mockStatic(ContainerCacheService.class);
+        // to mock ContainerCacheService.get(type, resPath);
+        IRepositoryViewObject folderObject = mock(IRepositoryViewObject.class);
+        PowerMockito.doReturn(folderObject).when(ContainerCacheService.class, "get", mockType, path); //$NON-NLS-1$
 
         List<IRepositoryViewObject> mockViewObjects = new ArrayList<IRepositoryViewObject>();
         mockViewObjects.add(mock(IRepositoryViewObject.class));
@@ -870,7 +868,5 @@ public class RepositoryResourceUtilTest {
         assertEquals(mockType, node.getProperties(EProperties.LABEL));
         assertEquals(mockType, node.getProperties(EProperties.CONTENT_TYPE));
     }
-
-
 
 }
