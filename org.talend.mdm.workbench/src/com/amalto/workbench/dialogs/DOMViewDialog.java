@@ -258,20 +258,20 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
             if (firstTab == SOURCE_VIEWER)
                 node = null; // force refresh of tree
 
-            // this.getShell().setSize(600, 600);
-            // this.getShell().layout();
-            triggerBtn = new Button(composite, SWT.CHECK);
-            triggerBtn.setText(Messages.DOMViewDialog_TriggerBtnText);
-            triggerBtn.addSelectionListener(new SelectionAdapter() {
+            if (editable) {
+                triggerBtn = new Button(composite, SWT.CHECK);
+                triggerBtn.setText(Messages.DOMViewDialog_TriggerBtnText);
+                triggerBtn.addSelectionListener(new SelectionAdapter() {
 
-                @Override
-                public void widgetSelected(SelectionEvent e) {
-                    beforeBtn.setEnabled(triggerBtn.getSelection());
-                }
-            });
-            beforeBtn = new Button(composite, SWT.CHECK);
-            beforeBtn.setText(Messages.DOMViewDialog_BeforeBtnText);
-            beforeBtn.setEnabled(triggerBtn.getSelection());
+                    @Override
+                    public void widgetSelected(SelectionEvent e) {
+                        beforeBtn.setEnabled(triggerBtn.getSelection());
+                    }
+                });
+                beforeBtn = new Button(composite, SWT.CHECK);
+                beforeBtn.setText(Messages.DOMViewDialog_BeforeBtnText);
+                beforeBtn.setEnabled(triggerBtn.getSelection());
+            }
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
