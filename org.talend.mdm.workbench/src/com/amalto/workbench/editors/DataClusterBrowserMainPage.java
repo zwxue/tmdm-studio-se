@@ -87,6 +87,7 @@ import com.amalto.workbench.compare.CompareHeadInfo;
 import com.amalto.workbench.compare.CompareManager;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.DataModelSelectDialog;
+import com.amalto.workbench.dialogs.datacontainer.DataContainerDOMViewDialog;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -889,8 +890,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     }
                 }
 
-                final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), port,
-                        Util.parse(xml), true, dataModels, DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
+                final DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(DataClusterBrowserMainPage.this.getSite()
+                        .getShell(), port, Util.parse(xml), dataModels, DOMViewDialog.TREE_VIEWER, wsItem.getDataModelName());
                 d.addListener(new Listener() {
 
                     public void handleEvent(Event event) {
@@ -1484,8 +1485,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     }
                 }
                 final XtentisPort port = Util.getPort(getXObject());
-                final DOMViewDialog d = new DOMViewDialog(DataClusterBrowserMainPage.this.getSite().getShell(), port,
-                        Util.parse(xml), true, dataModels, DOMViewDialog.SOURCE_VIEWER, null);
+                final DataContainerDOMViewDialog d = new DataContainerDOMViewDialog(DataClusterBrowserMainPage.this.getSite()
+                        .getShell(), port, Util.parse(xml), dataModels, DOMViewDialog.SOURCE_VIEWER, null);
                 d.addListener(new Listener() {
 
                     public void handleEvent(Event event) {

@@ -40,7 +40,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -118,10 +117,6 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
     private String desc;
 
     private Collection<Listener> listeners = new ArrayList<Listener>();
-
-    private Button triggerBtn;
-
-    private Button beforeBtn;
 
     private final XtentisPort port;
 
@@ -258,20 +253,6 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
             if (firstTab == SOURCE_VIEWER)
                 node = null; // force refresh of tree
 
-            if (editable) {
-                triggerBtn = new Button(composite, SWT.CHECK);
-                triggerBtn.setText(Messages.DOMViewDialog_TriggerBtnText);
-                triggerBtn.addSelectionListener(new SelectionAdapter() {
-
-                    @Override
-                    public void widgetSelected(SelectionEvent e) {
-                        beforeBtn.setEnabled(triggerBtn.getSelection());
-                    }
-                });
-                beforeBtn = new Button(composite, SWT.CHECK);
-                beforeBtn.setText(Messages.DOMViewDialog_BeforeBtnText);
-                beforeBtn.setEnabled(triggerBtn.getSelection());
-            }
             return composite;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -280,14 +261,6 @@ public class DOMViewDialog extends Dialog implements IKeyWordProvider {
             return null;
         }
 
-    }
-
-    public boolean isTriggerProcess() {
-        return triggerBtn.getSelection();
-    }
-
-    public boolean isBeforeVerification() {
-        return beforeBtn.getSelection();
     }
 
     public int getButtonPressed() {
