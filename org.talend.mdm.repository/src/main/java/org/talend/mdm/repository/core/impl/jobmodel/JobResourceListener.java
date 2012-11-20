@@ -28,6 +28,7 @@ import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -115,6 +116,10 @@ public class JobResourceListener implements PropertyChangeListener {
             MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObject);
             if (viewObject != null && serverDef != null && isOpenInEditor(viewObject)) {
                 CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
+                IRepositoryViewObject cacheViewObject = ContainerCacheService.get(item.getProperty());
+                if (cacheViewObject != null) {
+                    viewObject = cacheViewObject;
+                }
                 MDMRepositoryView.show().getCommonViewer().refresh(viewObject);
             }
         }
