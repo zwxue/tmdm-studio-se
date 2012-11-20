@@ -337,7 +337,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                     int number = 0;
 
                     while (true) {
-                        Pattern p = Pattern.compile(".*[^\\\\]%" + number + "[^\\d].*", Pattern.DOTALL);//$NON-NLS-1$//$NON-NLS-2$
+                        Pattern p = Pattern.compile(".*[^\\\\]%" + number + "[^\\d]*.*", Pattern.DOTALL);//$NON-NLS-1$//$NON-NLS-2$
                         Matcher m = p.matcher(proc);
                         if (!m.matches())
                             break;
