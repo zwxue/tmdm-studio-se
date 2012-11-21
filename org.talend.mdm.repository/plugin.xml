@@ -662,6 +662,10 @@
             class="org.talend.mdm.repository.utils.RepositoryTransformUtil"
             serviceId="ITransformService">
       </Service>
+      <Service
+            class="org.talend.mdm.repository.core.service.UpdateLastServerService"
+            serviceId="IUpdateLastServerService">
+      </Service>
    </extension>
       
    
