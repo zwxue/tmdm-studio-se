@@ -42,6 +42,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
@@ -102,7 +103,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * if type==null, return all type
-     *
+     * 
      * @param parent
      * @param type
      * @param commands
@@ -170,7 +171,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * DOC hbhong Comment method "initInput".
-     *
+     * 
      * @param type
      * @return
      */
@@ -290,7 +291,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                     } else if (viewObj instanceof IRepositoryViewObject) {
                         boolean r = cmdMap.containsKey(viewObj.getId());
 
-                        if (r) {
+                        if (isVisibleViewObj(viewObj)) {
                             updateServerDef(viewObj);
                             // updateLockedObject(viewObj);
                             result = true;
@@ -300,12 +301,21 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 return result;
             }
 
+            private boolean isVisibleViewObj(IRepositoryViewObject viewObj) {
+                AbstractDeployCommand cmd = cmdMap.get(viewObj.getId());
+                if (cmd != null)
+                    return viewObj.getRepositoryObjectType() != ERepositoryObjectType.PROCESS
+                            || (viewObj.getRepositoryObjectType() == ERepositoryObjectType.PROCESS && cmd.getCommandType() == ICommand.CMD_MODIFY);
+                return false;
+            }
+
             @Override
             public boolean select(Viewer viewer, Object parentElement, Object element) {
                 if (element instanceof FolderRepositoryObject) {
                     return containVisibleElement((FolderRepositoryObject) element);
                 } else {
-                    return cmdMap.containsKey(((IRepositoryViewObject) element).getId());
+                    IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+                    return isVisibleViewObj(viewObj);
                 }
 
             }
