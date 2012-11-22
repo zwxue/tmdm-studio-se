@@ -34,13 +34,14 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
-public class RenameProcessAction extends AbstractRepositoryAction {
+public class RenameProcessAction extends AbstractRepositoryAction implements ITransformerV2NodeConsDef {
 
     private static Logger log = Logger.getLogger(RenameProcessAction.class);
 
@@ -192,23 +193,23 @@ public class RenameProcessAction extends AbstractRepositoryAction {
         if (path.startsWith("/")) { //$NON-NLS-1$
             path = path.substring(1);
         }
-        if (path.startsWith(ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
-            type = 1;
-            oldPrefix = ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER;
-        } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
-            type = 2;
-            oldPrefix = ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER;
-        } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
-            type = 3;
-            oldPrefix = ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER;
-        } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
-            type = 4;
-            oldPrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER;
-        } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
-            type = 5;
-            oldPrefix = ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER;
-        } else if (path.startsWith(ITransformerV2NodeConsDef.PATH_OTHER)) {
-            type = 6;
+        if (path.startsWith(PATH_BEFORESAVE)) {
+            type = TYPE_BEFORESAVE;
+            oldPrefix = PREFIX_BEFORESAVE_UPPER;
+        } else if (path.startsWith(PATH_BEFOREDEL)) {
+            type = TYPE_BEFOREDEL;
+            oldPrefix = PREFIX_BEFOREDEL_UPPER;
+        } else if (path.startsWith(PATH_ENTITYACTION)) {
+            type = TYPE_ENTITYACTION;
+            oldPrefix = PREFIX_RUNNABLE_UPPER;
+        } else if (path.startsWith(PATH_WELCOMEACTION)) {
+            type = TYPE_WELCOMEACTION;
+            oldPrefix = PREFIX_STANDLONE_UPPER;
+        } else if (path.startsWith(PATH_SMARTVIEW)) {
+            type = TYPE_SMARTVIEW;
+            oldPrefix = PREFIX_SMARTVIEW_UPPER;
+        } else if (path.startsWith(PATH_OTHER)) {
+            type = TYPE_OTHER;
             oldPrefix = ""; //$NON-NLS-1$
         }
 
@@ -227,17 +228,7 @@ public class RenameProcessAction extends AbstractRepositoryAction {
         String path = null;
 
         if (oldPrefix.isEmpty()) {
-            if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
-            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
-            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
-            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
-            } else if (newName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
-            }
+            return RepositoryTransformUtil.getInstance().getProcessPath(newName,true);
         }
 
         return path;

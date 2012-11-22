@@ -47,7 +47,7 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
-     *
+     * 
      * @param repositoryUtil
      */
     public ImportRepositoryObjectCheckTreeViewer(ImportItemUtil repositoryUtil) {
@@ -57,7 +57,7 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
-     *
+     * 
      * @param selection
      */
     public ImportRepositoryObjectCheckTreeViewer(IStructuredSelection selection) {
@@ -137,14 +137,16 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                         String filteredName = itemRecordLabel;
                         if (filteredName != null && !filteredName.isEmpty()) {
                             IRepositoryViewObject repositoryViewObject = ContainerCacheService.get(record.getProperty());
-                            if(repositoryViewObject != null){
+                            if (repositoryViewObject != null) {
                                 ERepositoryObjectType repositoryObjectType = repositoryViewObject.getRepositoryObjectType();
                                 if (repositoryObjectType == IServerObjectRepositoryType.TYPE_VIEW) {
-                                    filteredName = RepositoryTransformUtil.getInstance().transformToSilyViewName(filteredName);
+                                    filteredName = RepositoryTransformUtil.getInstance().transformToSilyViewName(filteredName,
+                                            true);
                                 }
 
                                 if (repositoryObjectType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
-                                    filteredName = RepositoryTransformUtil.getInstance().transformToSilyProcessName(filteredName);
+                                    filteredName = RepositoryTransformUtil.getInstance().transformToSilyProcessName(filteredName,
+                                            true);
                                 }
                             }
                         }

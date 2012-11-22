@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.wizards.process.ConfigRedirectURLPage;
-import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 
@@ -54,7 +53,7 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
      * DOC hbhong BeforeProcessTypeComposite constructor comment.
      * 
      * @param parent
-     * @param defaultProcessType 
+     * @param defaultProcessType
      */
     public RunnableTypeComposite(Composite parent, int defaultProcessType, SelectionListener selectionListener) {
         super(parent, selectionListener);
@@ -117,12 +116,11 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
     }
 
     public void updateBtnState(int defaultProcessType) {
-        if(defaultProcessType == NewProcessWizard.RUNNABLE_RUNNABLE) {
+        if (defaultProcessType == TYPE_ENTITYACTION) {
             runnableBun.setSelection(true);
             standaloneBun.setSelection(false);
             standaloneBun.setEnabled(false);
-        }
-        else if(defaultProcessType == NewProcessWizard.RUNNABLE_STANDALONE) {
+        } else if (defaultProcessType == TYPE_WELCOMEACTION) {
             standaloneBun.setSelection(true);
             runnableBun.setSelection(false);
             runnableBun.setEnabled(false);
@@ -131,12 +129,12 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
             standaloneBun.setSelection(false);
         }
     }
-    
+
     public int getCurrentProcessType() {
         if (runnableBun.getSelection())
-            return NewProcessWizard.RUNNABLE_RUNNABLE;
+            return TYPE_ENTITYACTION;
         if (standaloneBun.getSelection())
-            return NewProcessWizard.RUNNABLE_STANDALONE;
+            return TYPE_WELCOMEACTION;
         return -1;
     }
 
@@ -150,9 +148,9 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
 
     public String getProcessPrefix() {
         switch (getCurrentProcessType()) {
-        case NewProcessWizard.RUNNABLE_RUNNABLE:
+        case TYPE_ENTITYACTION:
             return "Runnable_"; //$NON-NLS-1$
-        case NewProcessWizard.RUNNABLE_STANDALONE:
+        case TYPE_WELCOMEACTION:
             return "Runnable#"; //$NON-NLS-1$
         }
         return ""; //$NON-NLS-1$

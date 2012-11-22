@@ -18,14 +18,16 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.migrate.AbstractMigrateObjectPathRule;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 
 /**
- * DOC HHB  class global comment. Detailled comment
+ * DOC HHB class global comment. Detailled comment
  */
 public class ViewMigrateObjectPathRule extends AbstractMigrateObjectPathRule {
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.talend.mdm.repository.core.migrate.IMigrateObjectPathRule#getRepositoryObjectType()
      */
     public ERepositoryObjectType getRepositoryObjectType() {
@@ -34,7 +36,10 @@ public class ViewMigrateObjectPathRule extends AbstractMigrateObjectPathRule {
     }
 
     String[] folderNames = new String[] { IViewNodeConstDef.PATH_WEBFILTER, IViewNodeConstDef.PATH_SEARCHFILTER };
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.talend.mdm.repository.core.migrate.IMigrateObjectPathRule#getAllNewFolderNames()
      */
     public String[] getAllNewFolderNames() {
@@ -42,23 +47,12 @@ public class ViewMigrateObjectPathRule extends AbstractMigrateObjectPathRule {
         return folderNames;
     }
 
-
-
-
     public String routeObject(Item item) {
         if (item instanceof MDMServerObjectItem) {
-            String name = ((MDMServerObjectItem) item).getMDMServerObject().getName().toLowerCase();
-            if (name != null) {
-                if (name.startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
-                    return IViewNodeConstDef.PATH_WEBFILTER;
-                } else {
-                    return IViewNodeConstDef.PATH_SEARCHFILTER;
-                }
-            }
+            String name = ((MDMServerObjectItem) item).getMDMServerObject().getName();
+            return RepositoryTransformUtil.getInstance().getViewPath(name);
         }
         return null;
     }
-
-
 
 }

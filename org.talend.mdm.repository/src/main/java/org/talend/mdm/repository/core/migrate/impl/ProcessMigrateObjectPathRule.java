@@ -18,17 +18,17 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.migrate.AbstractMigrateObjectPathRule;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 
-public class ProcessMigrateObjectPathRule extends AbstractMigrateObjectPathRule {
+public class ProcessMigrateObjectPathRule extends AbstractMigrateObjectPathRule implements ITransformerV2NodeConsDef {
 
     public ERepositoryObjectType getRepositoryObjectType() {
 
         return IServerObjectRepositoryType.TYPE_TRANSFORMERV2;
     }
 
-    String[] folderNames = new String[] { ITransformerV2NodeConsDef.PATH_BEFORESAVE, ITransformerV2NodeConsDef.PATH_BEFOREDEL,
-            ITransformerV2NodeConsDef.PATH_ENTITYACTION, ITransformerV2NodeConsDef.PATH_WELCOMEACTION,
-            ITransformerV2NodeConsDef.PATH_SMARTVIEW, ITransformerV2NodeConsDef.PATH_OTHER };
+    String[] folderNames = new String[] { PATH_BEFORESAVE, PATH_BEFOREDEL, PATH_ENTITYACTION, PATH_WELCOMEACTION, PATH_SMARTVIEW,
+            PATH_OTHER };
 
     public String[] getAllNewFolderNames() {
 
@@ -43,29 +43,10 @@ public class ProcessMigrateObjectPathRule extends AbstractMigrateObjectPathRule 
      */
     public String routeObject(Item item) {
         if (item instanceof MDMServerObjectItem) {
-            String lowerCaseName = ((MDMServerObjectItem) item).getMDMServerObject().getName().toLowerCase();
-            if (lowerCaseName != null) {
-                if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
-                    return ITransformerV2NodeConsDef.PATH_BEFORESAVE;
-                } 
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)){
-                    return ITransformerV2NodeConsDef.PATH_BEFOREDEL;
-                }
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)){
-                    return ITransformerV2NodeConsDef.PATH_ENTITYACTION;
-                }
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)){
-                    return ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
-                }
-                else if(lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)){
-                    return ITransformerV2NodeConsDef.PATH_SMARTVIEW;
-                }
-                else {
-                    return ITransformerV2NodeConsDef.PATH_OTHER;
-                }
-            }
+            String processName = ((MDMServerObjectItem) item).getMDMServerObject().getName();
+            return RepositoryTransformUtil.getInstance().getProcessPath(processName, false);
         }
-        
+
         return null;
     }
 }

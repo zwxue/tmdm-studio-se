@@ -51,16 +51,17 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerVariablesMap
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
-public class NewProcessAction extends AbstractSimpleAddAction {
+public class NewProcessAction extends AbstractSimpleAddAction implements ITransformerV2NodeConsDef {
 
     /**
      * DOC AddProcess constructor comment.
-     *
+     * 
      * @param text
      */
     public NewProcessAction() {
@@ -76,7 +77,6 @@ public class NewProcessAction extends AbstractSimpleAddAction {
     protected void doRun() {
         parentItem = null;
         selectObj = getSelectedObject().get(0);
-
 
         int type = getType();
 
@@ -120,7 +120,7 @@ public class NewProcessAction extends AbstractSimpleAddAction {
 
                         String plabel = jobItem.getProperty().getLabel();
                         if (plabel.equals(label)) {
-                             activePage.closeEditor(editorPart, false);
+                            activePage.closeEditor(editorPart, false);
                             break;
                         }
 
@@ -141,19 +141,19 @@ public class NewProcessAction extends AbstractSimpleAddAction {
         ContainerItem containerItem = (ContainerItem) repositoryViewObject.getProperty().getItem();
         String path = containerItem.getState().getPath();
         if (path.isEmpty()) {
-            type = 0;
+            type = TYPE_PROCESS;
         } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE)) {
-            type = 1;
+            type = TYPE_BEFORESAVE;
         } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
-            type = 2;
+            type = TYPE_BEFOREDEL;
         } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
-            type = 3;
+            type = TYPE_ENTITYACTION;
         } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
-            type = 4;
+            type = TYPE_WELCOMEACTION;
         } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
-            type = 5;
+            type = TYPE_SMARTVIEW;
         } else if (path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER)) {
-            type = 6;
+            type = TYPE_OTHER;
         }
 
         return type;
@@ -241,21 +241,8 @@ public class NewProcessAction extends AbstractSimpleAddAction {
 
     private String rebuildItemPath(String processName) {
         String path = parentItem.getState().getPath();
-        processName = processName.toLowerCase();
         if (path.isEmpty()) {
-            if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
-            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
-            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
-            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
-            } else if (processName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
-            } else {
-                path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;
-            }
+            path = RepositoryTransformUtil.getInstance().getProcessPath(processName, true);
         }
         return path;
     }

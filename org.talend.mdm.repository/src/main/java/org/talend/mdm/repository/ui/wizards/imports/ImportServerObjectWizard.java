@@ -98,6 +98,7 @@ import org.talend.mdm.repository.ui.wizards.imports.viewer.TreeObjectCheckTreeVi
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
@@ -535,51 +536,57 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private String getProcessTypeObjectPath(TreeObject treeObj) {
-        String transformerStandalonePrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE.replace("#", "$");//$NON-NLS-1$//$NON-NLS-2$
-        String transformerStandalonePrefix2 = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
 
         String path = treeObj.getPath();
-        String lowerCaseName = treeObj.getName().toLowerCase();
-
-        if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
+        String processName = treeObj.getName();
+        int processType = RepositoryTransformUtil.getInstance().getProcessType(processName);
+        switch (processType) {
+        case ITransformerV2NodeConsDef.TYPE_BEFORESAVE:
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
             } else if (!path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)
                     && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE + path.substring(8);
             }
-        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
+            break;
+        case ITransformerV2NodeConsDef.TYPE_BEFOREDEL:
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
             } else if (!path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)
                     && !path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL + path.substring(8);
             }
-        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
+            break;
+        case ITransformerV2NodeConsDef.TYPE_ENTITYACTION:
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
             } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION + path.substring(8);
             }
-        } else if (lowerCaseName.startsWith(transformerStandalonePrefix)
-                || lowerCaseName.startsWith(transformerStandalonePrefix2)) {
+            break;
+        case ITransformerV2NodeConsDef.TYPE_WELCOMEACTION:
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
             } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION + path.substring(8);
             }
-        } else if (lowerCaseName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
+            break;
+        case ITransformerV2NodeConsDef.TYPE_SMARTVIEW:
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
             } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW + path.substring(8);
             }
-        } else {
+            break;
+        case ITransformerV2NodeConsDef.TYPE_OTHER:
+
+        default:
             if (path.equals(ITransformerV2NodeConsDef.PATH_PROCESS)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;
             } else if (!path.startsWith(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER)) {
                 return IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER + path.substring(8);
             }
+            break;
         }
 
         return path.substring(8);

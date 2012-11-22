@@ -30,6 +30,7 @@ import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
@@ -71,41 +72,45 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
         String label = item.getProperty().getLabel();
 
         ERepositoryObjectType type = viewObject.getRepositoryObjectType();
+
         if (type == IServerObjectRepositoryType.TYPE_VIEW) {
-            if (label.startsWith(IViewNodeConstDef.PREFIX_VIEW_UPPER)
-                    && !oldProcessName.startsWith(IViewNodeConstDef.PREFIX_VIEW_UPPER)) {
+            int labelType = RepositoryTransformUtil.getInstance().getViewType(label);
+            int oldProcessType = RepositoryTransformUtil.getInstance().getViewType(oldProcessName);
+            if (labelType == IViewNodeConstDef.TYPE_WEBFILTER && oldProcessType != IViewNodeConstDef.TYPE_WEBFILTER) {
                 path = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;
-            } else if (!label.startsWith(IViewNodeConstDef.PREFIX_VIEW_UPPER)
-                    && oldProcessName.startsWith(IViewNodeConstDef.PREFIX_VIEW_UPPER)) {
+            } else if (labelType != IViewNodeConstDef.TYPE_WEBFILTER && oldProcessType == IViewNodeConstDef.TYPE_WEBFILTER) {
                 path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;
             }
         } else if (type == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
-            if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)) {
-                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)) {
+            int labelType = RepositoryTransformUtil.getInstance().getProcessType(label);
+            int oldProcessType = RepositoryTransformUtil.getInstance().getProcessType(oldProcessName);
+            if (labelType == ITransformerV2NodeConsDef.TYPE_BEFORESAVE) {
+                if (oldProcessType != ITransformerV2NodeConsDef.TYPE_BEFORESAVE) {
                     path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;
                 }
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)) {
-                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)) {
+            } else if (labelType == ITransformerV2NodeConsDef.TYPE_BEFOREDEL) {
+                if (oldProcessType != ITransformerV2NodeConsDef.TYPE_BEFOREDEL) {
                     path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL;
                 }
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)) {
-                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)) {
+            } else if (labelType == ITransformerV2NodeConsDef.TYPE_ENTITYACTION) {
+                if (oldProcessType != ITransformerV2NodeConsDef.TYPE_ENTITYACTION) {
                     path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_ENTITYACTION;
                 }
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)) {
-                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)) {
+            } else if (labelType == ITransformerV2NodeConsDef.TYPE_WELCOMEACTION) {
+                if (oldProcessType != ITransformerV2NodeConsDef.TYPE_WELCOMEACTION) {
                     path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_WELCOMEACTION;
                 }
-            } else if (label.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
-                if (!oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+            } else if (labelType == ITransformerV2NodeConsDef.TYPE_SMARTVIEW) {
+                if (oldProcessType != ITransformerV2NodeConsDef.TYPE_SMARTVIEW) {
                     path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_SMARTVIEW;
                 }
             } else {
-                if (oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER)
-                        || oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER)
-                        || oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER)
-                        || oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER)
-                        || oldProcessName.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER)) {
+                switch (oldProcessType) {
+                case ITransformerV2NodeConsDef.TYPE_BEFORESAVE:
+                case ITransformerV2NodeConsDef.TYPE_BEFOREDEL:
+                case ITransformerV2NodeConsDef.TYPE_ENTITYACTION:
+                case ITransformerV2NodeConsDef.TYPE_WELCOMEACTION:
+                case ITransformerV2NodeConsDef.TYPE_SMARTVIEW:
                     path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_OTHER;
                 }
             }

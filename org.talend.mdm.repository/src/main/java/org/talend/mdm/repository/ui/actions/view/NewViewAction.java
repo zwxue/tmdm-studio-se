@@ -43,13 +43,14 @@ import org.talend.mdm.repository.model.mdmserverobject.WSViewE;
 import org.talend.mdm.repository.ui.actions.AbstractSimpleAddAction;
 import org.talend.mdm.repository.ui.dialogs.ViewInputDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
 
 /**
  * DOC class global comment. Detailled comment <br/>
- *
+ * 
  */
-public class NewViewAction extends AbstractSimpleAddAction {
+public class NewViewAction extends AbstractSimpleAddAction implements IViewNodeConstDef {
 
     private XSDElementDeclaration decl;
 
@@ -90,12 +91,11 @@ public class NewViewAction extends AbstractSimpleAddAction {
             item = createServerObject(key);
         } else {
             String filterPart = ""; //$NON-NLS-1$
-            if (!filterName.isEmpty())
-             {
+            if (!filterName.isEmpty()) {
                 filterPart = "#" + filterName; //$NON-NLS-1$
             }
 
-            item = createServerObject(IViewNodeConstDef.PREFIX_VIEW_UPPER + key + filterPart);
+            item = createServerObject(PREFIX_VIEW_UPPER + key + filterPart);
         }
         commonViewer.refresh(selectObj);
         commonViewer.expandToLevel(selectObj, 1);
@@ -105,19 +105,18 @@ public class NewViewAction extends AbstractSimpleAddAction {
 
     private int getType() {
 
-
-        int type = 0;
+        int type = TYPE_VIEW;
 
         IRepositoryViewObject repositoryViewObject = (IRepositoryViewObject) selectObj;
 
         ContainerItem containerItem = (ContainerItem) repositoryViewObject.getProperty().getItem();
         String path = containerItem.getState().getPath();
         if (path.isEmpty()) {
-            type = 0;
-        } else if (path.startsWith(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER)) {
-            type = 1;
-        } else if (path.startsWith(IPath.SEPARATOR+IViewNodeConstDef.PATH_SEARCHFILTER)) {
-            type = 2;
+            type = TYPE_VIEW;
+        } else if (path.startsWith(IPath.SEPARATOR + PATH_WEBFILTER)) {
+            type = TYPE_WEBFILTER;
+        } else if (path.startsWith(IPath.SEPARATOR + PATH_SEARCHFILTER)) {
+            type = TYPE_SEARCHFILTER;
         }
 
         return type;
@@ -133,22 +132,22 @@ public class NewViewAction extends AbstractSimpleAddAction {
         //
         WSViewE view = newView(key);
         item.setWsView(view);
-
+        int viewType = RepositoryTransformUtil.getInstance().getViewType(key);
         if (parentItem != null) {
             String path = parentItem.getState().getPath();
-            if(path.isEmpty()) {
-                if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
-                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;
+            if (path.isEmpty()) {
+                if (viewType == TYPE_WEBFILTER) {
+                    path = IPath.SEPARATOR + PATH_WEBFILTER;
                 } else {
-                    path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;
+                    path = IPath.SEPARATOR + PATH_SEARCHFILTER;
                 }
             }
             item.getState().setPath(path);
         } else {
-            if(key.toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
-                item.getState().setPath(IViewNodeConstDef.PATH_WEBFILTER);
+            if (viewType == TYPE_WEBFILTER) {
+                item.getState().setPath(PATH_WEBFILTER);
             } else {
-                item.getState().setPath(IViewNodeConstDef.PATH_SEARCHFILTER);
+                item.getState().setPath(PATH_SEARCHFILTER);
             }
         }
         RepositoryResourceUtil.createItem(item, key);
@@ -191,6 +190,7 @@ public class NewViewAction extends AbstractSimpleAddAction {
             };
         };
     }
+
     public void createNewView(String viewName) {
         RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_VIEW, viewName, null, null);
         createServerObject(viewName);

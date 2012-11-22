@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -21,15 +21,19 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.view;
 
-
 public interface IViewNodeConstDef {
-    public static final String TYPE_WEBFILTER = "webfilter";//$NON-NLS-1$
-    public static final String TYPE_SEARCHFILTER = "searchfilter";//$NON-NLS-1$
-    public static final String TYPE_VIEW = "view";//$NON-NLS-1$
-    
+
+    public static final int TYPE_WEBFILTER = 2;
+
+    public static final int TYPE_SEARCHFILTER = 3;
+
+    public static final int TYPE_VIEW = 1;
+
     public static final String PREFIX_VIEW = "browse_items_";//$NON-NLS-1$
+
     public static final String PREFIX_VIEW_UPPER = "Browse_items_";//$NON-NLS-1$
-    
+
     public static final String PATH_WEBFILTER = "web";//$NON-NLS-1$
+
     public static final String PATH_SEARCHFILTER = "search";//$NON-NLS-1$
 }

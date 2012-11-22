@@ -33,10 +33,9 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 
-
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
@@ -75,45 +74,7 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
 
         String itemText = super.getServerObjectItemText(item);
 
-        itemText = RepositoryTransformUtil.getInstance().transformToSilyProcessName(itemText);
-
-        return itemText;
-    }
-
-    protected String transformItemText(String itemText) {
-        String prefix = null;
-
-        String sepA = "#";//$NON-NLS-1$
-        String sepB = "(";//$NON-NLS-1$
-        String sepC = ")";//$NON-NLS-1$
-        if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFORESAVE)) {
-            prefix = ITransformerV2NodeConsDef.PREFIX_BEFORESAVE;
-            itemText = itemText.substring(prefix.length());
-        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_BEFOREDEL)) {
-            prefix = ITransformerV2NodeConsDef.PREFIX_BEFOREDEL;
-            itemText = itemText.substring(prefix.length());
-        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_RUNNABLE)) {
-            prefix = ITransformerV2NodeConsDef.PREFIX_RUNNABLE;
-            itemText = itemText.substring(prefix.length());
-            if (itemText.indexOf(sepA) != -1) {
-                itemText = itemText.replace(sepA, sepB) + sepC;
-            }
-        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_STANDLONE)) {
-            prefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE;
-            itemText = itemText.substring(prefix.length());
-            if (itemText.indexOf(sepA) != -1) {
-                itemText = itemText.replace(sepA, sepB) + sepC;
-            }
-        } else if (itemText.startsWith(ITransformerV2NodeConsDef.PREFIX_SMARTVIEW)) {
-            prefix = ITransformerV2NodeConsDef.PREFIX_SMARTVIEW;
-            itemText = itemText.substring(prefix.length());
-            if (itemText.indexOf(sepA) != -1) {
-                itemText = itemText.replace(sepA, sepB) + sepC;
-            }
-        } else {
-            prefix = "";//$NON-NLS-1$
-            itemText = itemText.substring(prefix.length());
-        }
+        itemText = RepositoryTransformUtil.getInstance().transformToSilyProcessName(itemText, false);
 
         return itemText;
     }
@@ -135,7 +96,7 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
     @Override
     protected boolean isSystemServerObjectItem(Object element) {
         Item item = getItem(element);
-        if(item instanceof ContainerItem) {
+        if (item instanceof ContainerItem) {
             String path = item.getState().getPath();
             if (path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE)
                     || path.equals(IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFOREDEL)

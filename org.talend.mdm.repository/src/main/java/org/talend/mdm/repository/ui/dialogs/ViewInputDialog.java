@@ -44,15 +44,16 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
 
-public class ViewInputDialog extends Dialog implements SelectionListener {
+public class ViewInputDialog extends Dialog implements SelectionListener, IViewNodeConstDef {
+
     private final String seprator3 = "#";//$NON-NLS-1$
+
     private final String blankText = "";//$NON-NLS-1$
-    
+
     /**
      * The title of the dialog.
      */
     private String title;
-
 
     /**
      * The input value; the empty string by default.
@@ -85,23 +86,29 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     private Composite composite;
 
     boolean isBtnShow = true;
+
     private Button webFilterRadioBtn;
+
     private Button searchFilterRadioBtn;
+
     private Label lblNewLabel;
+
     private Label lblFilterName;
+
     private Text filterText1;
 
     private Composite bottom1;
+
     private Composite bottom2;
-    
+
     private int parentType;
 
     private String filterName;
 
     private Text filterText2;
 
-
     private Text errorMessageText1;
+
     private Text errorMessageText2;
 
     public ViewInputDialog(IWorkbenchPartSite site, TreeParent treeParent, Shell parentShell, String dialogTitle,
@@ -113,7 +120,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         this.treeParent = treeParent;
         this.parentType = type;
         this.validator = validator;
-        
+
         value = blankText;
     }
 
@@ -124,25 +131,25 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
-            if(parentType == 1) {
+            if (parentType == TYPE_WEBFILTER) {
                 value = entityText.getText().trim();
                 filterName = filterText1.getText().trim();
-                if(filterName.equals(Messages.ViewInputDialog_Default))
+                if (filterName.equals(Messages.ViewInputDialog_Default))
                     filterName = blankText;
-                if(value.isEmpty()) {
+                if (value.isEmpty()) {
                     MessageDialog.openError(getShell(), Messages.Warning, Messages.ViewInputDialog_NameCannotbeEmpty);
                     return;
                 }
             }
-            if(parentType == 2) {
+            if (parentType == TYPE_SEARCHFILTER) {
                 value = filterText2.getText().trim();
-                if(value.isEmpty()) {
+                if (value.isEmpty()) {
                     MessageDialog.openError(getShell(), Messages.Warning, Messages.ViewInputDialog_NameCannotbeEmpty);
                     return;
                 }
             }
-        } 
-        
+        }
+
         super.buttonPressed(buttonId);
     }
 
@@ -172,35 +179,35 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         GridLayout layout = (GridLayout) composite.getLayout();
         layout.makeColumnsEqualWidth = false;
         layout.numColumns = 3;
-        
+
         webFilterRadioBtn = new Button(composite, SWT.RADIO);
         webFilterRadioBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
         webFilterRadioBtn.setText(Messages.ViewInputDialog_webFilterRadioBtnText);
-        
+
         searchFilterRadioBtn = new Button(composite, SWT.RADIO);
         searchFilterRadioBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
         searchFilterRadioBtn.setText(Messages.ViewInputDialog_searchFilterRadioBtnText);
-        
+
         lblNewLabel = new Label(composite, SWT.WRAP);
         GridData gd_lblNewLabel = new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1);
         gd_lblNewLabel.widthHint = 423;
         lblNewLabel.setLayoutData(gd_lblNewLabel);
-        
+
         final Composite botComposite = new Composite(composite, SWT.NONE);
         final StackLayout stackLayout = new StackLayout();
         botComposite.setLayout(stackLayout);
-        botComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3,1));
-        
+        botComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
+
         bottom1 = getBottom1(botComposite);
         bottom2 = getBottom2(botComposite);
-        
-        if(parentType == 0) {
+
+        if (parentType == TYPE_VIEW) {
             webFilterRadioBtn.setSelection(true);
             searchFilterRadioBtn.setSelection(false);
             lblNewLabel.setText(Messages.ViewInputDialog_lblNewLabel_text1);
             stackLayout.topControl = bottom1;
-            parentType = 1;
-        } else if(parentType == 1) {
+            parentType = TYPE_WEBFILTER;
+        } else if (parentType == TYPE_WEBFILTER) {
             webFilterRadioBtn.setSelection(true);
             searchFilterRadioBtn.setSelection(false);
             searchFilterRadioBtn.setEnabled(false);
@@ -213,28 +220,29 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
             lblNewLabel.setText(Messages.ViewInputDialog_lblNewLabel_text2);
             stackLayout.topControl = bottom2;
         }
-        
-        
+
         webFilterRadioBtn.addSelectionListener(new SelectionAdapter() {
+
             @Override
             public void widgetSelected(SelectionEvent e) {
                 lblNewLabel.setText(Messages.ViewInputDialog_lblNewLabel_text1);
                 stackLayout.topControl = bottom1;
                 botComposite.layout();
-                parentType = 1;
+                parentType = TYPE_WEBFILTER;
             }
         });
-        
+
         searchFilterRadioBtn.addSelectionListener(new SelectionAdapter() {
+
             @Override
             public void widgetSelected(SelectionEvent e) {
                 lblNewLabel.setText(Messages.ViewInputDialog_lblNewLabel_text2);
                 stackLayout.topControl = bottom2;
                 botComposite.layout();
-                parentType = 2;
+                parentType = TYPE_SEARCHFILTER;
             }
         });
-        
+
         new Label(composite, SWT.NONE);
         new Label(composite, SWT.NONE);
         new Label(composite, SWT.NONE);
@@ -246,15 +254,14 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         Composite panel1 = new Composite(botComposite, SWT.NONE);
         GridLayout layout = new GridLayout(3, false);
         panel1.setLayout(layout);
-        
+
         Label label2 = new Label(panel1, SWT.NONE);
         label2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         label2.setText(Messages.ViewInputDialog_Entity);
         entityText = new Text(panel1, getInputTextStyle() | SWT.WRAP);
         GridData layoutData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-//        layoutData.widthHint = 350;
+        // layoutData.widthHint = 350;
         entityText.setLayoutData(layoutData);
-
 
         openDLG = new Button(panel1, SWT.NONE);
         openDLG.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
@@ -262,11 +269,11 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         openDLG.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         openDLG.setVisible(isBtnShow);
         openDLG.setToolTipText(Messages.ViewInputDialog_SelectOneEntity);
-        
+
         lblFilterName = new Label(panel1, SWT.NONE);
         lblFilterName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         lblFilterName.setText(Messages.ViewInputDialog_lblFilterName_text);
-        
+
         filterText1 = new Text(panel1, SWT.BORDER);
         GridData layoutData2 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
         layoutData2.widthHint = 330;
@@ -274,39 +281,40 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         filterText1.setText(Messages.ViewInputDialog_Default);
         filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
         new Label(panel1, SWT.NONE);
-       
+
         final Label internalLabel = new Label(panel1, SWT.NONE | SWT.WRAP);
-        internalLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        internalLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
         internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
-        
+
         errorMessageText1 = new Text(panel1, 72);
-        errorMessageText1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        errorMessageText1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
         errorMessageText1.setBackground(Display.getCurrent().getSystemColor(22));
         errorMessageText1.setText(Messages.Common_nameCanNotBeEmpty);
-        
+
         filterText1.addModifyListener(new ModifyListener() {
+
             public void modifyText(ModifyEvent e) {
                 updateoOkButtonForWebType();
-                
+
                 internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
                 filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
             }
         });
-        
+
         filterText1.addFocusListener(new FocusAdapter() {
 
             @Override
             public void focusGained(FocusEvent e) {
-                if(filterText1.getText().trim().equals(Messages.ViewInputDialog_Default)) {
+                if (filterText1.getText().trim().equals(Messages.ViewInputDialog_Default)) {
                     filterText1.setText(blankText);
                     filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
                 }
             }
-            
+
             @Override
             public void focusLost(FocusEvent e) {
-                if(filterText1.getText().trim().isEmpty()) {
+                if (filterText1.getText().trim().isEmpty()) {
                     filterText1.setText(Messages.ViewInputDialog_Default);
                     filterText1.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
                 }
@@ -317,35 +325,34 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
             public void modifyText(ModifyEvent e) {
                 updateoOkButtonForWebType();
-                
+
                 internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, getInternalName()));
             }
 
         });
         return panel1;
     }
-    
+
     private void updateoOkButtonForWebType() {
-        if(validator != null) {
+        if (validator != null) {
             String entityName = entityText.getText().trim();
-            String prefix1 = IViewNodeConstDef.PREFIX_VIEW_UPPER;
-            if(entityName.isEmpty()) {
+            String prefix1 = PREFIX_VIEW_UPPER;
+            if (entityName.isEmpty()) {
                 prefix1 = blankText;
             }
-            
+
             String filter1 = filterText1.getText().trim();
             String suffix1 = seprator3 + filter1;
-            if(filter1.isEmpty() || filter1.equals(Messages.ViewInputDialog_Default)) {
+            if (filter1.isEmpty() || filter1.equals(Messages.ViewInputDialog_Default)) {
                 suffix1 = blankText;
             }
-            
+
             String validMsg = validator.isValid(prefix1 + entityName + suffix1);
-            
-            if(validMsg == null) {
+
+            if (validMsg == null) {
                 errorMessageText1.setText(blankText);
                 okButton.setEnabled(true);
-            }
-            else {
+            } else {
                 errorMessageText1.setText(validMsg);
                 okButton.setEnabled(false);
             }
@@ -354,15 +361,15 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
     private String getInternalName() {
         StringBuffer internalBuffer = new StringBuffer();
-        internalBuffer.append(IViewNodeConstDef.PREFIX_VIEW_UPPER);
+        internalBuffer.append(PREFIX_VIEW_UPPER);
         internalBuffer.append(entityText.getText().trim());
-        
+
         String filterStr = filterText1.getText().trim();
-        if(!filterStr.isEmpty() && !filterStr.equalsIgnoreCase(Messages.ViewInputDialog_Default)) {
+        if (!filterStr.isEmpty() && !filterStr.equalsIgnoreCase(Messages.ViewInputDialog_Default)) {
             internalBuffer.append(seprator3);
             internalBuffer.append(filterStr);
         }
-        
+
         return internalBuffer.toString();
     }
 
@@ -370,7 +377,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         Composite panel2 = new Composite(botComposite, SWT.NONE);
         GridLayout layout = new GridLayout(3, false);
         panel2.setLayout(layout);
-        
+
         Label label2 = new Label(panel2, SWT.NONE);
         label2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         label2.setText(Messages.ViewInputDialog_Name);
@@ -379,39 +386,38 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         gd_text.widthHint = 420;
         filterText2.setLayoutData(gd_text);
         new Label(panel2, SWT.NONE);
-        
+
         final Label internalLabel = new Label(panel2, SWT.NONE | SWT.WRAP);
-        internalLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        internalLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
         internalLabel.setText(Messages.ViewInputDialog_InternalName);
         internalLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
-        
+
         errorMessageText2 = new Text(panel2, 72);
-        errorMessageText2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3,1));
+        errorMessageText2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
         errorMessageText2.setBackground(Display.getCurrent().getSystemColor(22));
         errorMessageText2.setText(Messages.Common_nameCanNotBeEmpty);
-        
+
         filterText2.addModifyListener(new ModifyListener() {
-            
+
             public void modifyText(ModifyEvent e) {
-                if(validator != null) {
+                if (validator != null) {
                     String validMsg = validator.isValid(filterText2.getText().trim());
-                    if(validMsg == null) {
+                    if (validMsg == null) {
                         errorMessageText2.setText(blankText);
                         okButton.setEnabled(true);
-                    }
-                    else {
+                    } else {
                         errorMessageText2.setText(validMsg);
                         okButton.setEnabled(false);
                     }
                 }
-                
+
                 internalLabel.setText(Messages.bind(Messages.ViewInputDialog_InternalNameX, filterText2.getText().trim()));
             }
         });
-        
+
         return panel2;
     }
-    
+
     protected Label getErrorMessageLabel() {
         return null;
     }
@@ -427,7 +433,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     public String getEntityName() {
         return value;
     }
-    
+
     public String getFilterName() {
         return filterName;
     }

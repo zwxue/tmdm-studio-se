@@ -31,7 +31,7 @@ import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
-public class RenameProcessDialog extends Dialog implements SelectionListener {
+public class RenameProcessDialog extends Dialog implements SelectionListener, ITransformerV2NodeConsDef {
 
     public static int typeAll = 1;
 
@@ -115,16 +115,16 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
         botComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
         switch (processType) {
-        case 1:
-        case 2:
+        case TYPE_BEFOREDEL:
+        case TYPE_BEFORESAVE:
             createTwo(botComposite);
             break;
-        case 3:
-        case 5:
+        case TYPE_ENTITYACTION:
+        case TYPE_SMARTVIEW:
             createOne(botComposite);
             break;
-        case 4:
-        case 6:
+        case TYPE_WELCOMEACTION:
+        case TYPE_OTHER:
             createThree(botComposite);
             break;
         default:
@@ -296,7 +296,7 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
 
     private void init() {
         switch (processType) {
-        case 1:
+        case TYPE_BEFORESAVE:
             stackLayout.topControl = container2;
             uiType = typeEntity;
             processPrefix = ITransformerV2NodeConsDef.PREFIX_BEFORESAVE_UPPER;
@@ -305,7 +305,7 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
             entityText2.setText(value);
 
             break;
-        case 2:
+        case TYPE_BEFOREDEL:
             stackLayout.topControl = container2;
             uiType = typeEntity;
             processPrefix = ITransformerV2NodeConsDef.PREFIX_BEFOREDEL_UPPER;
@@ -314,7 +314,7 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
             entityText2.setText(value);
 
             break;
-        case 3:
+        case TYPE_ENTITYACTION:
             stackLayout.topControl = container1;
             uiType = typeAll;
             processPrefix = ITransformerV2NodeConsDef.PREFIX_RUNNABLE_UPPER;
@@ -330,7 +330,7 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
             }
 
             break;
-        case 4:
+        case TYPE_WELCOMEACTION:
             stackLayout.topControl = container3;
             uiType = typeOption;
             processPrefix = ITransformerV2NodeConsDef.PREFIX_STANDLONE_UPPER;
@@ -339,7 +339,7 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
             optionText3.setText(value);
 
             break;
-        case 5:
+        case TYPE_SMARTVIEW:
             stackLayout.topControl = container1;
             uiType = typeAll;
             processPrefix = ITransformerV2NodeConsDef.PREFIX_SMARTVIEW_UPPER;
@@ -355,7 +355,7 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
             }
 
             break;
-        case 6:
+        case TYPE_OTHER:
             stackLayout.topControl = container3;
             uiType = typeOption;
             processPrefix = blankText;
@@ -415,7 +415,7 @@ public class RenameProcessDialog extends Dialog implements SelectionListener {
                 return false;
             }
 
-            if (processType == 4)
+            if (processType == TYPE_WELCOMEACTION)
                 processName = processPrefix + optionName;
             else
                 processName = optionName;

@@ -35,10 +35,9 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 
-
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class ViewLabelProvider extends AbstractLabelProvider {
 
@@ -69,10 +68,10 @@ public class ViewLabelProvider extends AbstractLabelProvider {
 
     @Override
     protected String getConainerItemText(Item item) {
-        if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_SEARCHFILTER)) {
-            return Messages.ViewLabelProvider_WebfilterNodeName;
-        } else if(item.getState().getPath().equals(IPath.SEPARATOR+IViewNodeConstDef.PATH_WEBFILTER)) {
+        if (item.getState().getPath().equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER)) {
             return Messages.ViewLabelProvider_SearchfilterNodeName;
+        } else if (item.getState().getPath().equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
+            return Messages.ViewLabelProvider_WebfilterNodeName;
         }
 
         return super.getConainerItemText(item);
@@ -84,31 +83,17 @@ public class ViewLabelProvider extends AbstractLabelProvider {
         if (serverObject != null) {
             String name = serverObject.getName();
 
-            name = RepositoryTransformUtil.getInstance().transformToSilyViewName(name);
+            name = RepositoryTransformUtil.getInstance().transformToSilyViewName(name, false);
 
             return name;
         }
         return null;
     }
 
-    private String filterName(String name) {
-        String prefix = IViewNodeConstDef.PREFIX_VIEW;
-        String filteredName = name;
-        if (filteredName != null && !filteredName.isEmpty() && filteredName.startsWith(prefix)) {
-            filteredName = filteredName.substring(prefix.length());
-            if (filteredName.indexOf("#") != -1) //$NON-NLS-1$
-             {
-                filteredName = filteredName.replace("#", "(") + ")";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-            }
-        }
-
-        return name;
-    }
-
     @Override
     protected boolean isSystemServerObjectItem(Object element) {
         Item item = getItem(element);
-        if(item instanceof ContainerItem) {
+        if (item instanceof ContainerItem) {
             String path = item.getState().getPath();
             if (path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)
                     || path.equals(IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER)) {

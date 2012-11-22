@@ -13,16 +13,15 @@
 package org.talend.mdm.repository.ui.wizards.process.composite;
 
 import org.talend.mdm.repository.ui.wizards.process.IProcessTypeComposite;
-import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 
 /**
- * DOC Administrator  class global comment. Detailled comment
+ * DOC Administrator class global comment. Detailled comment
  */
 public class SmartviewProcessTypeComposite implements IProcessTypeComposite {
 
     public int getCurrentProcessType() {
 
-        return NewProcessWizard.SMARTVIEW_TYPE;
+        return TYPE_SMARTVIEW;
     }
 
     public boolean needShowSelectEntityBun() {

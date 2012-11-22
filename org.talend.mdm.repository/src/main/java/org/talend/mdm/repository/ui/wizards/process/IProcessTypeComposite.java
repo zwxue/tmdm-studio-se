@@ -12,10 +12,12 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.process;
 
+import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public interface IProcessTypeComposite {
+public interface IProcessTypeComposite extends ITransformerV2NodeConsDef {
 
     public int getCurrentProcessType();
 

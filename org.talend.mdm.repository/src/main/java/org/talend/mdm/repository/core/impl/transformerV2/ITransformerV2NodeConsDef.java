@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -21,36 +21,45 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.transformerV2;
 
-
 public interface ITransformerV2NodeConsDef {
-    public static final String TYPE_PROCESS = "process";//$NON-NLS-1$
-    
-    public static final String TYPE_BEFORESAVE = "beforeSaving";//$NON-NLS-1$
-    public static final String TYPE_BEFOREDEL = "beforeDeleting";//$NON-NLS-1$
-    public static final String TYPE_ENTITYACTION = "RunnableCommon";//$NON-NLS-1$
-    public static final String TYPE_WELCOMEACTION = "RunnableStandlone";//$NON-NLS-1$
-    public static final String TYPE_SMARTVIEW = "smartView";//$NON-NLS-1$
-    public static final String TYPE_OTHER = "other";//$NON-NLS-1$
-    
-    public static final String PREFIX_BEFOREDEL = "beforedeleting_";//$NON-NLS-1$
+
+    public static final int TYPE_PROCESS = 1;
+
+    public static final int TYPE_BEFORESAVE = 2;
+
+    public static final int TYPE_BEFOREDEL = 3;
+
+    public static final int TYPE_ENTITYACTION = 4;
+
+    public static final int TYPE_WELCOMEACTION = 5;
+
+    public static final int TYPE_SMARTVIEW = 6;
+
+    public static final int TYPE_OTHER = 7;
+
     public static final String PREFIX_BEFOREDEL_UPPER = "beforeDeleting_";//$NON-NLS-1$
-    public static final String PREFIX_BEFORESAVE = "beforesaving_";//$NON-NLS-1$
+
     public static final String PREFIX_BEFORESAVE_UPPER = "beforeSaving_";//$NON-NLS-1$
-    
-    public static final String PREFIX_RUNNABLE = "runnable_";//$NON-NLS-1$
+
     public static final String PREFIX_RUNNABLE_UPPER = "Runnable_";//$NON-NLS-1$
-    public static final String PREFIX_STANDLONE = "runnable#";//$NON-NLS-1$
+
     public static final String PREFIX_STANDLONE_UPPER = "Runnable#";//$NON-NLS-1$
-    
-    public static final String PREFIX_SMARTVIEW = "smart_view_";//$NON-NLS-1$
+
+    public static final String PREFIX_STANDLONE_UPPER_OLD = "Runnable$";//$NON-NLS-1$
+
     public static final String PREFIX_SMARTVIEW_UPPER = "Smart_view_";//$NON-NLS-1$
-    
-    
+
     public static final String PATH_PROCESS = "Process";//$NON-NLS-1$
+
     public static final String PATH_BEFORESAVE = "beforesaving";//$NON-NLS-1$
+
     public static final String PATH_BEFOREDEL = "beforedeleting";//$NON-NLS-1$
+
     public static final String PATH_ENTITYACTION = "entityaction";//$NON-NLS-1$
+
     public static final String PATH_WELCOMEACTION = "welcomeaction";//$NON-NLS-1$
+
     public static final String PATH_SMARTVIEW = "smartview";//$NON-NLS-1$
+
     public static final String PATH_OTHER = "other";//$NON-NLS-1$
 }

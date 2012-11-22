@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.wizards.process.ConfigReturnMessagePage;
-import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -46,17 +45,16 @@ public class BeforeProcessTypeComposite extends AbstractProcessTypeComposite {
         beforeDeleteBun = new Button(this, SWT.RADIO);
         beforeDeleteBun.setText(Messages.BeforeProcessTypeComposite_createBeforeDeletingProcess);
         beforeDeleteBun.addSelectionListener(selectionListener);
-        
+
         updateBtnState(defaultProcessType);
     }
 
     public void updateBtnState(int defaultProcessType) {
-        if(defaultProcessType == NewProcessWizard.BEFORE_SAVING) {
+        if (defaultProcessType == TYPE_BEFORESAVE) {
             beforeSaveBun.setSelection(true);
             beforeDeleteBun.setSelection(false);
             beforeDeleteBun.setEnabled(false);
-        }
-        else if(defaultProcessType == NewProcessWizard.BEFORE_DELETING) {
+        } else if (defaultProcessType == TYPE_BEFOREDEL) {
             beforeDeleteBun.setSelection(true);
             beforeSaveBun.setSelection(false);
             beforeSaveBun.setEnabled(false);
@@ -68,9 +66,9 @@ public class BeforeProcessTypeComposite extends AbstractProcessTypeComposite {
 
     public int getCurrentProcessType() {
         if (beforeSaveBun.getSelection())
-            return NewProcessWizard.BEFORE_SAVING;
+            return TYPE_BEFORESAVE;
         if (beforeDeleteBun.getSelection())
-            return NewProcessWizard.BEFORE_DELETING;
+            return TYPE_BEFOREDEL;
         return -1;
     }
 
@@ -80,9 +78,9 @@ public class BeforeProcessTypeComposite extends AbstractProcessTypeComposite {
 
     public String getProcessPrefix() {
         switch (getCurrentProcessType()) {
-        case NewProcessWizard.BEFORE_SAVING:
+        case TYPE_BEFORESAVE:
             return "beforeSaving_"; //$NON-NLS-1$
-        case NewProcessWizard.BEFORE_DELETING:
+        case TYPE_BEFOREDEL:
             return "beforeDeleting_"; //$NON-NLS-1$
         }
         return ""; //$NON-NLS-1$

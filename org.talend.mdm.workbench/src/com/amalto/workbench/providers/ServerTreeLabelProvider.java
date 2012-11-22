@@ -71,7 +71,7 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
     private String filterName(String label, TreeObject treeObject) {
         String transformedName = label;
 
-        if(label == null || label.isEmpty()) {
+        if (label == null || label.isEmpty()) {
             return transformedName;
         }
 
@@ -79,9 +79,9 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         ITransformService transformService = (ITransformService) GlobalServiceRegister.getDefault().getService(
                 ITransformService.class);
         if (wsObject instanceof WSTransformerV2) {
-            transformedName = transformService.transformToSilyProcessName(label);
+            transformedName = transformService.transformToSilyProcessName(label, true);
         } else if (wsObject instanceof WSView) {
-            transformedName = transformService.transformToSilyViewName(label);
+            transformedName = transformService.transformToSilyViewName(label, true);
         }
 
         return transformedName;
@@ -148,8 +148,7 @@ public class ServerTreeLabelProvider extends ColumnLabelProvider implements ICol
         } else if (object.getType() == TreeObject.CATEGORY_FOLDER) {
             return ImageCache.getCreatedImage("icons/folder.gif");//$NON-NLS-1$
         } else if (object.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER) {
-            if (object.getDisplayName().equals("Deployed Jobs"))
-             {
+            if (object.getDisplayName().equals("Deployed Jobs")) {
                 return ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");//$NON-NLS-1$
             }
             return ImageCache.getCreatedImage("icons/folder_source-jobs.png");//$NON-NLS-1$

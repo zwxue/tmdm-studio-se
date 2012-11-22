@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.wizards.process.composite;
 
 import org.talend.mdm.repository.ui.wizards.process.IProcessTypeComposite;
-import org.talend.mdm.repository.ui.wizards.process.NewProcessWizard;
 
 import com.amalto.workbench.utils.Util;
 
@@ -29,7 +28,7 @@ public class OtherTypeComposite implements IProcessTypeComposite {
      */
     public int getCurrentProcessType() {
 
-        return NewProcessWizard.OTHER_TYPE;
+        return TYPE_OTHER;
     }
 
     public boolean needShowSelectEntityBun() {
