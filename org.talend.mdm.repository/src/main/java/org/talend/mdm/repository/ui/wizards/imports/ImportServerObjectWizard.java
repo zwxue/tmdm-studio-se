@@ -593,7 +593,7 @@ public class ImportServerObjectWizard extends Wizard {
     }
 
     private String getViewTypeObjectPath(TreeObject treeObj) {
-        if (treeObj.getName().toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
+        if (RepositoryTransformUtil.getInstance().getViewType(treeObj.getName()) == IViewNodeConstDef.TYPE_WEBFILTER) {
             if (!treeObj.getPath().startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
                 String path = treeObj.getPath();
                 if (path.length() > 8) {

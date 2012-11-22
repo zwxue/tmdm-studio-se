@@ -105,11 +105,9 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 boolean selected = runnableBun.getSelection();
-                descContainer.setEnabled(selected);
-                lblMessage.setEnabled(selected);
-                btnNewButton.setEnabled(selected);
-                messageText.setEnabled(selected);
+                enableRunnablePart(selected);
             }
+
         });
 
         updateBtnState(defaultProcessType);
@@ -124,10 +122,18 @@ public class RunnableTypeComposite extends AbstractProcessTypeComposite {
             standaloneBun.setSelection(true);
             runnableBun.setSelection(false);
             runnableBun.setEnabled(false);
+            enableRunnablePart(false);
         } else {
             runnableBun.setSelection(true);
             standaloneBun.setSelection(false);
         }
+    }
+
+    private void enableRunnablePart(boolean selected) {
+        descContainer.setEnabled(selected);
+        lblMessage.setEnabled(selected);
+        btnNewButton.setEnabled(selected);
+        messageText.setEnabled(selected);
     }
 
     public int getCurrentProcessType() {

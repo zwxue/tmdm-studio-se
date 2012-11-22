@@ -29,8 +29,6 @@ public interface IViewNodeConstDef {
 
     public static final int TYPE_VIEW = 1;
 
-    public static final String PREFIX_VIEW = "browse_items_";//$NON-NLS-1$
-
     public static final String PREFIX_VIEW_UPPER = "Browse_items_";//$NON-NLS-1$
 
     public static final String PATH_WEBFILTER = "web";//$NON-NLS-1$

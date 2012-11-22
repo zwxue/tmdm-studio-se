@@ -36,21 +36,20 @@ import org.talend.mdm.repository.ui.actions.RenameObjectAction;
 import org.talend.mdm.repository.ui.dialogs.RenameViewDialog;
 import org.talend.mdm.repository.ui.dialogs.RenameViewDialog2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
-public class RenameViewAction extends AbstractRepositoryAction {
+public class RenameViewAction extends AbstractRepositoryAction implements IViewNodeConstDef {
 
     private static Logger log = Logger.getLogger(RenameObjectAction.class);
 
     private IInputValidator inputValidator;
 
     private ERepositoryObjectType etype;
-
-    private String viewPrefix = IViewNodeConstDef.PREFIX_VIEW;
 
     private boolean viewTypeChanged = false;
 
@@ -100,13 +99,13 @@ public class RenameViewAction extends AbstractRepositoryAction {
                 if (returnCode == IDialogConstants.OK_ID) {
                     String newName = dialog.getValue();
 
-                    if (oldName.toLowerCase().startsWith(viewPrefix)) {
-                        newName = IViewNodeConstDef.PREFIX_VIEW_UPPER + newName;
+                    if (RepositoryTransformUtil.getInstance().getViewType(oldName) == TYPE_WEBFILTER) {
+                        newName = PREFIX_VIEW_UPPER + newName;
                     } else {
-                        if (newName.startsWith(IViewNodeConstDef.PREFIX_VIEW_UPPER)) {
+                        if (newName.startsWith(PREFIX_VIEW_UPPER)) {
                             viewTypeChanged = true;
 
-                            item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER);
+                            item.getState().setPath(IPath.SEPARATOR + PATH_WEBFILTER);
                         }
                     }
 
@@ -171,7 +170,6 @@ public class RenameViewAction extends AbstractRepositoryAction {
 
     private void waitSomeTime(IRepositoryViewObject viewObj) {
         boolean lockedViewObject = RepositoryResourceUtil.isLockedViewObject(viewObj);
-        System.out.println(lockedViewObject);
 
         if (lockedViewObject) {
             try {
@@ -186,9 +184,9 @@ public class RenameViewAction extends AbstractRepositoryAction {
         RenameViewDialog dialog = null;
 
         IWorkbenchPartSite site = commonViewer.getCommonNavigator().getSite();
-        if (oldName.toLowerCase().startsWith(viewPrefix)) {
+        if (RepositoryTransformUtil.getInstance().getViewType(oldName) == TYPE_WEBFILTER) {
             dialog = new RenameViewDialog(getShell(), Messages.RenameObjectAction_rename, Messages.Common_rename,
-                    oldName.substring(viewPrefix.length()), getInputValidator(), site);
+                    oldName.substring(PREFIX_VIEW_UPPER.length()), getInputValidator(), site);
         } else {
             dialog = new RenameViewDialog2(getShell(), Messages.RenameObjectAction_rename, Messages.Common_rename, oldName,
                     getInputValidator(), site);

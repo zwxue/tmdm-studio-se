@@ -136,15 +136,20 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
                     private String filterVieProcessName(String itemRecordLabel, ItemRecord record) {
                         String filteredName = itemRecordLabel;
                         if (filteredName != null && !filteredName.isEmpty()) {
-                            IRepositoryViewObject repositoryViewObject = ContainerCacheService.get(record.getProperty());
-                            if (repositoryViewObject != null) {
-                                ERepositoryObjectType repositoryObjectType = repositoryViewObject.getRepositoryObjectType();
-                                if (repositoryObjectType == IServerObjectRepositoryType.TYPE_VIEW) {
+
+                            ERepositoryObjectType type = record.getRepositoryType();
+
+                            if (type == null) {
+                                IRepositoryViewObject repositoryViewObject = ContainerCacheService.get(record.getProperty());
+                                type = repositoryViewObject.getRepositoryObjectType();
+                            }
+                            if (type != null) {
+                                if (type == IServerObjectRepositoryType.TYPE_VIEW) {
                                     filteredName = RepositoryTransformUtil.getInstance().transformToSilyViewName(filteredName,
                                             true);
                                 }
 
-                                if (repositoryObjectType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
+                                if (type == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
                                     filteredName = RepositoryTransformUtil.getInstance().transformToSilyProcessName(filteredName,
                                             true);
                                 }

@@ -61,6 +61,11 @@ public class RepositoryTransformUtil implements ITransformService, ITransformerV
             if (index > 0) {
                 filterName = transformedName.substring(index + 1);
                 transformedName = transformedName.substring(0, index);
+                int spaceIndex = filterName.indexOf(" "); //$NON-NLS-1$
+                if (spaceIndex > 0) {
+                    transformedName += filterName.substring(spaceIndex);
+                    filterName = filterName.substring(0, spaceIndex);
+                }
             } else {
                 filterName = null;
             }
@@ -133,6 +138,11 @@ public class RepositoryTransformUtil implements ITransformService, ITransformerV
             if (index > 0) {
                 optionalName = transformedName.substring(index + 1);
                 transformedName = transformedName.substring(0, index);
+                int spaceIndex = optionalName.indexOf(" "); //$NON-NLS-1$
+                if (spaceIndex > 0) {
+                    transformedName += optionalName.substring(spaceIndex);
+                    optionalName = optionalName.substring(0, spaceIndex);
+                }
             } else {
                 optionalName = null;
             }

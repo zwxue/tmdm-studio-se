@@ -148,7 +148,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
             Item item = itemRecord.getProperty().getItem();
             String statePath = item.getState().getPath();
             if (item instanceof WSViewItem) {
-                if (item.getProperty().getLabel().toLowerCase().startsWith(IViewNodeConstDef.PREFIX_VIEW)) {
+                if (RepositoryTransformUtil.getInstance().getViewType(item.getProperty().getLabel()) == IViewNodeConstDef.TYPE_WEBFILTER) {
                     if (!statePath.startsWith(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER)) {
                         item.getState().setPath(IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER + statePath);
                     }
