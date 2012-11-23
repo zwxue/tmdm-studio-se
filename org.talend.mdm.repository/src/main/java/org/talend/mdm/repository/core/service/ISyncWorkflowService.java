@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
+import org.eclipse.core.resources.IFile;
 import org.talend.core.IService;
 
 /**
@@ -21,4 +22,6 @@ import org.talend.core.IService;
 public interface ISyncWorkflowService extends IService {
 
     public void startSyncWorkflowTask();
+
+    public void updateWorkflowContent(String oldName, String newName, IFile file);
 }

@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.core.dnd;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +59,7 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
-import org.talend.mdm.repository.core.service.IMDMRepositoryEnterpriseServiceExt;
+import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -314,7 +313,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         String fileName = refFileItem.getName().replace(name, newName);
                         fileName = fileName.replace("#", "$"); //$NON-NLS-1$ //$NON-NLS-2$
                         IFile file = folder.getFile(fileName);
-                        InputStream inputStream = new ByteArrayInputStream(content);
+
                         try {
                             if (!file.exists()) {
                                 file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
@@ -323,11 +322,11 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                             }
                             file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
 
-                            IMDMRepositoryEnterpriseServiceExt service = (IMDMRepositoryEnterpriseServiceExt) GlobalServiceRegister
-                                    .getDefault().getService(IMDMRepositoryEnterpriseServiceExt.class);
+                            ISyncWorkflowService service = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
+                                    ISyncWorkflowService.class);
                             newName = newName.replace("#", "$"); //$NON-NLS-1$//$NON-NLS-2$
                             if (service != null) {
-                                service.updateWorkflowContent(newName, fileName, inputStream, dragParentViewObj);
+                                service.updateWorkflowContent(name, newName, file);
                             }
 
                             return true;
