@@ -303,9 +303,16 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
             private boolean isVisibleViewObj(IRepositoryViewObject viewObj) {
                 AbstractDeployCommand cmd = cmdMap.get(viewObj.getId());
-                if (cmd != null)
-                    return viewObj.getRepositoryObjectType() != ERepositoryObjectType.PROCESS
-                            || (viewObj.getRepositoryObjectType() == ERepositoryObjectType.PROCESS && cmd.getCommandType() == ICommand.CMD_MODIFY);
+                if (cmd != null) {
+                    ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+                    if (type == ERepositoryObjectType.PROCESS) {
+                        int commandType = cmd.getCommandType();
+                        return commandType == ICommand.CMD_MODIFY || commandType == ICommand.CMD_DELETE;
+                    } else {
+                        return true;
+                    }
+                }
+
                 return false;
             }
 
