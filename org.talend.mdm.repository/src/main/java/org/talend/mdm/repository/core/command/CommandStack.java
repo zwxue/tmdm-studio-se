@@ -113,7 +113,7 @@ public class CommandStack implements IMementoAware {
                         lastAddPos = result.size() - 1;
                     }
                 } else {
-                    if (lastAddPos >= 0) {
+                    if (lastAddPos >= 0 && lastAddPos < result.size()) {
                         result.remove(lastAddPos);
                     }
                 }

@@ -874,7 +874,30 @@ public class RepositoryResourceUtil {
 
         node.setProperties(EProperties.LABEL, repObjType);
         node.setProperties(EProperties.CONTENT_TYPE, repObjType);
+
+        addChildrenToNode(viewObj, node);
+
         return node;
+    }
+
+    /**
+     * convert viewObj's children to RepositoryNode type and add to node as its children
+     * 
+     * @param viewObj
+     * @param node RepositoryNode Object corresponding to viewObj
+     */
+    private static void addChildrenToNode(IRepositoryViewObject viewObj, RepositoryNode node) {
+        if (viewObj instanceof FolderRepositoryObject) {
+            List<IRepositoryViewObject> children = findViewObjects(viewObj.getRepositoryObjectType(), viewObj.getProperty()
+                    .getItem());
+            if (children != null && children.size() > 0) {
+                for (IRepositoryViewObject child : children) {
+                    RepositoryNode convertToNode = convertToNode(child);
+                    convertToNode.setParent(node);
+                    node.getChildren().add(convertToNode);
+                }
+            }
+        }
     }
 
     public static IEditorReference isOpenedInEditor(IRepositoryViewObject viewObj) {
