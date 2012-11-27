@@ -123,6 +123,12 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
                     ItemState state = property.getItem().getState();
                     if (state.isDeleted()) {
                         String path = state.getPath();
+
+                        String prefix = "/"; //$NON-NLS-1$
+                        if (!path.startsWith(prefix)) {
+                            path = prefix + path;
+                        }
+
                         FolderRepositoryObject container = getParenContainer(rootViewObj, type, path, false);
                         // get from cache
                         IRepositoryViewObject cacheViewObj = ContainerCacheService.get(property);
