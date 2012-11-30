@@ -25,7 +25,9 @@ import org.eclipse.swt.widgets.Text;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryObject;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -43,6 +45,8 @@ import org.talend.repository.ui.wizards.PropertiesWizardPage;
  */
 public class MdmPropertiesWizard extends PropertiesWizard {
 
+    private String oldVersion;
+
     /**
      * DOC achen MdmPropertiesWizard constructor comment.
      * 
@@ -54,10 +58,13 @@ public class MdmPropertiesWizard extends PropertiesWizard {
         super(repositoryViewObject, path, useLastVersion);
 
         // reset the originaleObjectLabel
-        MDMServerObjectItem item = (MDMServerObjectItem) object.getProperty().getItem();
+        Property property = object.getProperty();
+        MDMServerObjectItem item = (MDMServerObjectItem) property.getItem();
         String oldName = item.getMDMServerObject().getName();
         // reset property's label
-        object.getProperty().setLabel(oldName);
+        property.setLabel(oldName);
+        this.oldVersion = property.getVersion();
+
     }
 
     @Override
@@ -69,33 +76,57 @@ public class MdmPropertiesWizard extends PropertiesWizard {
         MDMServerObjectItem item = (MDMServerObjectItem) object.getProperty().getItem();
         String newName = object.getLabel();
         MDMServerObject serverObject = item.getMDMServerObject();
-        try {
-            if (serverObject != null) {
-                String oldName = serverObject.getName();
+        if (serverObject != null) {
+            String oldName = serverObject.getName();
+            try {
+
                 if (newName != null && factory.isEditableAndLockIfPossible(item)) {
 
                     serverObject.setName(newName);
-                    object.getProperty().setLabel(newName);
+                    beforeSave(object, oldVersion);
+
                     factory.save(object.getProperty().getItem(), false);
+                    afterSave(object, oldVersion);
                     if (!oldName.equals(newName) && serverObject.getLastServerDef() != null) {
                         CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, object.getId(),
                                 new String[] { oldName, newName });
                     }
                 }
-            }
-        } catch (PersistenceException e) {
-            MessageBoxExceptionHandler.process(e);
-            return false;
-        } finally {
-            try {
-                factory.unlock(item);
+
             } catch (PersistenceException e) {
                 MessageBoxExceptionHandler.process(e);
-            } catch (LoginException e) {
-                MessageBoxExceptionHandler.process(e);
+                return false;
+            } finally {
+                try {
+                    factory.unlock(item);
+                } catch (PersistenceException e) {
+                    MessageBoxExceptionHandler.process(e);
+                    return false;
+                } catch (LoginException e) {
+                    MessageBoxExceptionHandler.process(e);
+                    return false;
+                }
             }
+
         }
         return true;
+    }
+
+    /**
+     * DOC HHB Comment method "afterSave".
+     * 
+     * @param object
+     * @param oldVersion
+     */
+    protected void afterSave(IRepositoryObject object, String oldVersion) {
+        // do nothing
+    }
+
+    /**
+     * DOC HHB Comment method "beforeSave".
+     */
+    protected void beforeSave(IRepositoryViewObject object, String oldVersion) {
+        // do nothing
     }
 
     @Override
@@ -121,6 +152,7 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
                 setControl(container);
                 updateContent();
+                nameText.setEnabled(canEditObjectName());
                 addListeners();
                 setPageComplete(false);
 
@@ -149,8 +181,17 @@ public class MdmPropertiesWizard extends PropertiesWizard {
         addPage(mainPage);
     }
 
+    /**
+     * DOC HHB Comment method "canEditObjectName".
+     * 
+     * @return
+     */
+    protected boolean canEditObjectName() {
+        return true;
+    }
+
     private Text addImageCatalogField(Composite container, WSResourceItem item) {
- 
+
         Label nameLab = new Label(container, SWT.NONE);
         nameLab.setText(Messages.MdmPropertiesWizard_imageCatalog);
 

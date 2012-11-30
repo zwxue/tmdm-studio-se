@@ -24,4 +24,8 @@ public interface ISyncWorkflowService extends IService {
     public void startSyncWorkflowTask();
 
     public void updateWorkflowContent(String oldName, String newName, IFile file);
+
+    public void updateVersion(String version, IFile file);
+
+    public void createAdapterForUpdateVersion(String name, String oldVersion, String newVersion);
 }

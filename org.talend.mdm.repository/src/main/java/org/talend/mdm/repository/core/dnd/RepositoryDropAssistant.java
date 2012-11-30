@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -310,7 +311,12 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                         ReferenceFileItem refFileItem = (ReferenceFileItem) refFiles.get(0);
                         byte[] content = refFileItem.getContent().getInnerContent();
                         IFolder folder = RepositoryResourceUtil.getFolder(type);
-                        String fileName = refFileItem.getName().replace(name, newName);
+
+                        URI uri = refFileItem.getContent().eResource().getURI();
+                        String fileName = uri.lastSegment();
+
+                        fileName = fileName.replace(name, newName);
+
                         fileName = fileName.replace("#", "$"); //$NON-NLS-1$ //$NON-NLS-2$
                         IFile file = folder.getFile(fileName);
 

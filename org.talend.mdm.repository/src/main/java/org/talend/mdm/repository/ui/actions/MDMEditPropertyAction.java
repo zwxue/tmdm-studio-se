@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.actions;
 
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -51,7 +52,7 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 viewObject = (IRepositoryViewObject) obj;
-                MdmPropertiesWizard wizard = new MdmPropertiesWizard(viewObject, new Path(viewObject.getPath()), false);
+                Wizard wizard = getEditWizard(viewObject);
 
                 WizardDialog dlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
                 if (dlg.open() == Window.OK) {
@@ -61,6 +62,10 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
             }
         }
 
+    }
+
+    protected Wizard getEditWizard(IRepositoryViewObject viewObject) {
+        return new MdmPropertiesWizard(viewObject, new Path(viewObject.getPath()), false);
     }
 
     @Override
