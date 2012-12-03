@@ -799,6 +799,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 super.run();
 
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
+
+                if (selection.isEmpty())
+                    return;
+
                 WSRoutingOrderV2 routingOrder = (WSRoutingOrderV2) selection.getFirstElement();
 
                 StringWriter sw = new StringWriter();
