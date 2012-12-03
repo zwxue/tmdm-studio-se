@@ -41,6 +41,7 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.detailtabs.sections.handlers.RefreshPropertySheetTitleHandler;
 import com.amalto.workbench.detailtabs.sections.providers.XSDNamedComponentLabelProvider;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -202,8 +203,11 @@ public class ComplexTypeConfigComposite extends Composite {
 
             public void modifyText(ModifyEvent e) {
                 caretOffset = txtName.getCaretPosition();
-                if (section != null && !complexType.getName().equals(txtName.getText()))
+                if (section != null && !complexType.getName().equals(txtName.getText())) {
                     section.autoCommit();
+
+                    RefreshPropertySheetTitleHandler.refreshPropertySheetTitle(section, complexType);
+                }
             }
         };
     }
