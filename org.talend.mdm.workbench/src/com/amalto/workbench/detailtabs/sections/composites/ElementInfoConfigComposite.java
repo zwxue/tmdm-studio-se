@@ -35,6 +35,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.detailtabs.sections.handlers.RefreshPropertySheetTitleHandler;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -283,19 +284,21 @@ public class ElementInfoConfigComposite extends Composite {
 		spinMin.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				if (section != null
-						&& curXSDParticle.getMinOccurs() != spinMin
-								.getSelection())
-					section.autoCommit();
+                if (section != null && curXSDParticle.getMinOccurs() != spinMin.getSelection()) {
+                    section.autoCommit();
+
+                    refreshPropertySheetTitle();
+                }
 			}
 		});
 		spinMax.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
-				if (section != null
-						&& curXSDParticle.getMaxOccurs() != spinMax
-								.getSelection())
-					section.autoCommit();
+                if (section != null && curXSDParticle.getMaxOccurs() != spinMax.getSelection()) {
+                    section.autoCommit();
+
+                    refreshPropertySheetTitle();
+                }
 			}
 		});
 	}
@@ -309,10 +312,11 @@ public class ElementInfoConfigComposite extends Composite {
 		textListener = new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				caretOffset = txtName.getCaretPosition();
-				if (section != null
-						&& !txtName.getText().equals(
-								Util.getParticleName(curXSDParticle)))
-					section.autoCommit();
+                if (section != null && !txtName.getText().equals(Util.getParticleName(curXSDParticle))) {
+                    section.autoCommit();
+
+                    refreshPropertySheetTitle();
+                }
 			}
 		};
 	}
@@ -344,10 +348,11 @@ public class ElementInfoConfigComposite extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				refresh();
-				if (section != null
-						&& !Util.getParticleReferenceName(curXSDParticle)
-								.equals(comboReference.getText()))
-					section.autoCommit();
+                if (section != null && !Util.getParticleReferenceName(curXSDParticle).equals(comboReference.getText())) {
+                    section.autoCommit();
+
+                    refreshPropertySheetTitle();
+                }
 			}
 
 		});
@@ -377,4 +382,8 @@ public class ElementInfoConfigComposite extends Composite {
 
 		return elementDeclarations.toArray(new String[0]);
 	}
+
+    private void refreshPropertySheetTitle() {
+        RefreshPropertySheetTitleHandler.refreshPropertySheetTitle(section, curXSDParticle);
+    }
 }
