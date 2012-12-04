@@ -145,9 +145,9 @@ public class NewViewAction extends AbstractSimpleAddAction implements IViewNodeC
             item.getState().setPath(path);
         } else {
             if (viewType == TYPE_WEBFILTER) {
-                item.getState().setPath(PATH_WEBFILTER);
+                item.getState().setPath(IPath.SEPARATOR + PATH_WEBFILTER);
             } else {
-                item.getState().setPath(PATH_SEARCHFILTER);
+                item.getState().setPath(IPath.SEPARATOR + PATH_SEARCHFILTER);
             }
         }
         RepositoryResourceUtil.createItem(item, key);
