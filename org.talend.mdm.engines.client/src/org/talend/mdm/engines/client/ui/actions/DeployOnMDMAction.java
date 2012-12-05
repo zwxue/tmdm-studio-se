@@ -39,10 +39,10 @@ import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
@@ -50,7 +50,6 @@ import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.ui.actions.AContextualAction;
 
-import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.service.bridge.IRemoveCommandService;
 import com.amalto.workbench.utils.MDMServerHelper;
 
@@ -63,7 +62,7 @@ import com.amalto.workbench.utils.MDMServerHelper;
 public final class DeployOnMDMAction extends AContextualAction {
     private static Logger log = Logger.getLogger(DeployOnMDMAction.class);
     
-    private static final String EXPORTJOBSCRIPTS = Messages.getString("DeployOnMDMAction_DeployToMDM"); //$NON-NLS-1$
+    private static final String EXPORTJOBSCRIPTS = Messages.getString("DeployOnMDMExportWizard.publishJob"); //$NON-NLS-1$
     private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /*
@@ -113,7 +112,7 @@ public final class DeployOnMDMAction extends AContextualAction {
     	IRepositoryViewObject viewObj = getSelectedViewObject();
     	
         DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
-        publishWizard.setWindowTitle(EXPORTJOBSCRIPTS); //$NON-NLS-1$
+        publishWizard.setWindowTitle(EXPORTJOBSCRIPTS);
         publishWizard.init(getWorkbench(), (IStructuredSelection) this.getSelection());
 
         Shell activeShell = Display.getCurrent().getActiveShell();
