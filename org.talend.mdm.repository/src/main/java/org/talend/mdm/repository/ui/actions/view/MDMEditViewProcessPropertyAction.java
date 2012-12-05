@@ -15,7 +15,6 @@ package org.talend.mdm.repository.ui.actions.view;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.viewers.TreePath;
 import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
@@ -131,7 +130,7 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
                 IPath ipath = new Path(path);
                 factory.moveObject(viewObj, ipath);
 
-                TreePath[] expandedTreePaths = commonViewer.getExpandedTreePaths();
+                unlockItem(item);
 
                 IRepositoryViewObject iRepositoryViewObject = ContainerCacheService.get(viewObj.getRepositoryObjectType(), item
                         .getState().getPath());
@@ -152,19 +151,12 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
         } catch (BusinessException e) {
             log.error(e.getMessage(), e);
         } finally {
-            try {
-                factory.unlock(item);
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            } catch (LoginException e) {
-                log.error(e.getMessage(), e);
-            }
+            // do nothing here
         }
     }
 
     private void waitSomeTime(IRepositoryViewObject viewObj) {
         boolean lockedViewObject = RepositoryResourceUtil.isLockedViewObject(viewObj);
-        System.out.println(lockedViewObject);
 
         if (lockedViewObject) {
             try {
@@ -172,6 +164,17 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
+        }
+    }
+
+    private void unlockItem(Item item) {
+        IProxyRepositoryFactory factory = getFactory();
+        try {
+            factory.unlock(item);
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        } catch (LoginException e) {
+            log.error(e.getMessage(), e);
         }
     }
 
