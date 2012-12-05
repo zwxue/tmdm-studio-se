@@ -26,6 +26,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -64,6 +65,8 @@ public class ComplexTypeConfigComposite extends Composite {
 
     private BasePropertySection section;
 
+    private SelectionListener abstractBunListener;
+
     public ComplexTypeConfigComposite(Composite parent, int style, BasePropertySection section,
             XSDComplexTypeDefinition complexType) {
         this(parent, style);
@@ -81,8 +84,7 @@ public class ComplexTypeConfigComposite extends Composite {
         lblName.setText(Messages.ComplexTypeConfigComposite_Name);
 
         txtName = new Text(this, SWT.BORDER);
-        final GridData gd_txtName = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        txtName.setLayoutData(gd_txtName);
+        txtName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
         final Label extensionLabel = new Label(this, SWT.NONE);
         extensionLabel.setText(Messages.ComplexTypeConfigComposite_Extends);
@@ -96,8 +98,7 @@ public class ComplexTypeConfigComposite extends Composite {
 
         final Group gpGroup = new Group(this, SWT.NONE);
         gpGroup.setText(Messages.ComplexTypeConfigComposite_SubElementsGroup);
-        final GridData gd_gpGroup = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
-        gpGroup.setLayoutData(gd_gpGroup);
+        gpGroup.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
         gpGroup.setLayout(new GridLayout());
 
         radGroupAll = new Button(gpGroup, SWT.RADIO);
@@ -109,6 +110,10 @@ public class ComplexTypeConfigComposite extends Composite {
 
         radGroupChoice = new Button(gpGroup, SWT.RADIO);
         radGroupChoice.setText("Choice");//$NON-NLS-1$
+
+        abstractBun = new Button(this, SWT.CHECK);
+        abstractBun.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+        abstractBun.setText(Messages.ComplexTypeConfigComposite_btnCheckButton_text);
 
         initUIListener();
     }
@@ -126,6 +131,7 @@ public class ComplexTypeConfigComposite extends Composite {
         initUIContentsInComboExtends();
         comboExtends.addSelectionChangedListener(typeSelectionListener);
         initUIContentsInGroup();
+        initAbstractCheckbox();
         refresh();
     }
 
@@ -150,6 +156,12 @@ public class ComplexTypeConfigComposite extends Composite {
             }
         }
         addNameTxtListener();
+    }
+
+    private void initAbstractCheckbox() {
+        removeAbstractBunListener();
+        abstractBun.setSelection(complexType.isAbstract());
+        addAbstractBunListener();
     }
 
     private void initUIContentsInComboExtends() {
@@ -192,6 +204,23 @@ public class ComplexTypeConfigComposite extends Composite {
         initUIListenerForComboExtends();
 
         initUIListenerForRadGroupTypes();
+        initUIListenerForAbstractButton();
+    }
+
+    /**
+     * DOC HHB Comment method "initUIListenerForAbstractButton".
+     */
+    private void initUIListenerForAbstractButton() {
+        abstractBunListener = new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                // complexType.setAbstract(abstractBun.getSelection());
+                section.autoCommit();
+            }
+
+        };
+
     }
 
     private int caretOffset;
@@ -212,6 +241,14 @@ public class ComplexTypeConfigComposite extends Composite {
         };
     }
 
+    private void addAbstractBunListener() {
+        abstractBun.addSelectionListener(abstractBunListener);
+    }
+
+    private void removeAbstractBunListener() {
+        abstractBun.removeSelectionListener(abstractBunListener);
+    }
+
     private void addNameTxtListener() {
         txtName.addModifyListener(nameTxtListener);
     }
@@ -227,6 +264,8 @@ public class ComplexTypeConfigComposite extends Composite {
             updateExtendType(element);
         }
     };
+
+    private Button abstractBun;
 
     private void initUIListenerForComboExtends() {
 
@@ -275,6 +314,10 @@ public class ComplexTypeConfigComposite extends Composite {
 
     public String getTypeName() {
         return txtName.getText().trim();
+    }
+
+    public boolean isAbstract() {
+        return abstractBun.getSelection();
     }
 
     public XSDComplexTypeDefinition getExtends() {

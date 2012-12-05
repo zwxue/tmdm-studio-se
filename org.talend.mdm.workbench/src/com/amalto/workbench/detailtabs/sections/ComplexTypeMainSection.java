@@ -30,7 +30,7 @@ public class ComplexTypeMainSection extends CommitBarListenerSection<XSDComplexT
     @Override
     protected ISubmittable getSubmittedObj() {
         return new ComplexTypeWrapper(complexType, compComplexType.getTypeName(), compComplexType.getExtends(),
-                compComplexType.getGroupTypeCompositor());
+                compComplexType.getGroupTypeCompositor(), compComplexType.isAbstract());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ComplexTypeMainSection extends CommitBarListenerSection<XSDComplexT
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compComplexType = new ComplexTypeConfigComposite(compSectionClient, SWT.NONE,this, complexType);
+        compComplexType = new ComplexTypeConfigComposite(compSectionClient, SWT.NONE, this, complexType);
     }
 
 }

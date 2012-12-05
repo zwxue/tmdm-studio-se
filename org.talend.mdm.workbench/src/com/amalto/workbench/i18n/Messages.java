@@ -3058,6 +3058,7 @@ public class Messages extends NLS {
     public static String QueryParametersDialog_ErroMsg;
 
     public static String QueryParametersDialog_Ok;
+    public static String ComplexTypeConfigComposite_btnCheckButton_text;
 
     // //////////////////////////////////////////////////////////////////////////
     //
