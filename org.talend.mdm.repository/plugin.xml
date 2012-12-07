@@ -591,13 +591,7 @@
       </action>
    </extension>
    
-   <extension
-         point="org.talend.core.runtime.service">
-      <Service
-            class="org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction"
-            serviceId="IEventMgrService">
-      </Service>
-   </extension>
+ 
    <extension
         point="org.eclipse.ui.editors">
      <editor
@@ -654,6 +648,10 @@
    </extension>
    <extension
          point="org.talend.core.runtime.service">
+               <Service
+            class="org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction"
+            serviceId="IEventMgrService">
+      </Service>
       <Service
             class="org.talend.mdm.repository.core.service.RemoveCommandService"
             serviceId="IRemoveCommandService">
@@ -665,6 +663,10 @@
       <Service
             class="org.talend.mdm.repository.core.service.UpdateLastServerService"
             serviceId="IUpdateLastServerService">
+      </Service>
+      <Service
+            class="org.talend.mdm.repository.core.service.ValidateService"
+            serviceId="IValidateService">
       </Service>
    </extension>
       

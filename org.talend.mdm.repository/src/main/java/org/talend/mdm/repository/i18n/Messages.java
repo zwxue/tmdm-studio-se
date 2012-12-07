@@ -44,6 +44,10 @@ public class Messages extends NLS {
 
     public static String _SubTaskTitle;
     
+    public static String ValidateService_DeletedObjectExist;
+
+    public static String ValidateService_ObjectExist;
+
     public static String ViewContentProvider_SearchFilter;
 
     public static String ViewContentProvider_WebFilter;

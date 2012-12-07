@@ -19,6 +19,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.talend.core.GlobalServiceRegister;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -26,13 +28,13 @@ import org.talend.mdm.repository.model.mdmserverobject.WSTransformerProcessStepE
 import org.talend.mdm.repository.model.mdmserverobject.WSTransformerV2E;
 import org.talend.mdm.repository.utils.JobTemplateUtil;
 
+import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.utils.Util;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDef {
-
 
     // BEFORE
     public static final int BEFORE_TYPE = 100;
@@ -223,8 +225,18 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
                 pMessage = ""; //$NON-NLS-1$
             }
         }
+        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
+                IValidateService.class);
+        String processName = inputProcessNamePage.getProcessName();
         for (IMDMJobTemplate job : jobTemplates) {
-            job.generateJobTemplate(type, inputProcessNamePage.getProcessName(), infoType, pMessage);
+            boolean result = true;
+
+            if (validateService != null) {
+                result = validateService.validateAndAlertObjectExistence(ERepositoryObjectType.PROCESS, processName, "Job"); //$NON-NLS-1$
+            }
+            if (result) {
+                job.generateJobTemplate(type, processName, infoType, pMessage);
+            }
         }
     }
 }

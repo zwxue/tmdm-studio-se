@@ -126,7 +126,7 @@ public class RepositoryResourceUtil {
     static XmiResourceManager resourceManager = new XmiResourceManager();
 
     private static final String DIVIDE = "/"; //$NON-NLS-1$
-    
+
     public static boolean createItem(Item item, String propLabel) {
         return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
     }
@@ -192,7 +192,7 @@ public class RepositoryResourceUtil {
             property.setAuthor(context.getUser());
             property.setLabel(propLabel);
             //
-            factory.create(item, new Path(item.getState().getPath()));
+            factory.create(item, new Path(item.getState().getPath()), true);
             //
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
             if (configuration != null) {
@@ -909,7 +909,7 @@ public class RepositoryResourceUtil {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
-                        if(inputItem!=null){
+                        if (inputItem != null) {
                             IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
                             if (vObj != null && vObj.equals(viewObj)) {
                                 return ref;
@@ -941,8 +941,8 @@ public class RepositoryResourceUtil {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         Item inputItem = ((IRepositoryViewEditorInput) editorInput).getInputItem();
-                        if(inputItem!=null){
-                            IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());                        
+                        if (inputItem != null) {
+                            IRepositoryViewObject vObj = ContainerCacheService.get(inputItem.getProperty());
                             if (vObj != null && vObj.equals(viewObj)) {
                                 activePage.closeEditors(new IEditorReference[] { ref }, save);
                             }
@@ -1070,7 +1070,7 @@ public class RepositoryResourceUtil {
                                 IEditorInput editorInput = editorReference.getEditorInput();
                                 if ((editorInput != null && editorInput instanceof IRepositoryViewEditorInput)) {
                                     IRepositoryViewEditorInput rInput = (IRepositoryViewEditorInput) editorInput;
-                                    if(rInput!=null){
+                                    if (rInput != null) {
                                         Property openedProperty = rInput.getInputItem().getProperty();
                                         if (openedProperty.getId().equals(objectToMove.getId())
                                                 && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
@@ -1081,10 +1081,11 @@ public class RepositoryResourceUtil {
                                     Object obj = editorInput.getAdapter(IRepositoryEditorInput.class);
                                     if (obj instanceof IRepositoryEditorInput) {
                                         IRepositoryEditorInput rInput = (IRepositoryEditorInput) obj;
-                                        if(rInput!=null){
+                                        if (rInput != null) {
                                             Property openedProperty = rInput.getItem().getProperty();
                                             if (openedProperty.getId().equals(objectToMove.getId())
-                                                    && VersionUtils.compareTo(openedProperty.getVersion(), objectToMove.getVersion()) == 0) {
+                                                    && VersionUtils.compareTo(openedProperty.getVersion(),
+                                                            objectToMove.getVersion()) == 0) {
                                                 return true;
                                             }
                                         }

@@ -98,7 +98,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     protected static String INSTANCE_NAME = "Browse Item View";//$NON-NLS-1$
 
-    protected static String BROWSE_ITEMS = "Browse_items_";//$NON-NLS-1$
+    public static String BROWSE_ITEMS = "Browse_items_";//$NON-NLS-1$
 
     private static ComplexTableViewerColumn[] roleConfigurationColumns = new ComplexTableViewerColumn[] {
             new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -156,31 +156,29 @@ public class AddBrowseItemsWizard extends Wizard {
     protected void newBrowseItemView(String browseItem) throws RemoteException {
         for (XSDElementDeclaration decl : declList) {
             String fullName = BROWSE_ITEMS + decl.getName();
-            if (fullName.equals(browseItem)) { 
-                
+            if (fullName.equals(browseItem)) {
+
                 TreeParent serverRoot = page.getXObject().getServerRoot();
                 TreeParent serverFolder = serverRoot.findServerFolder(TreeObject.VIEW);
                 TreeObject obj = serverFolder.findObject(TreeObject.VIEW, browseItem);
-                
-                if(obj != null) {
-                    
+
+                if (obj != null) {
+
                     IEditorInput xobjectEditorinput = new XObjectEditorInput(obj, obj.getDisplayName());
                     final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
                     IEditorPart currentEditor = activePage.findEditor(xobjectEditorinput);
-                    
+
                     if (currentEditor != null) {// editor is opened
                         if (MessageDialog.openConfirm(this.getShell(), Messages.Warning,
-                                Messages.AddBrowseItemsWizard_DuplicatedView))
-                        {
+                                Messages.AddBrowseItemsWizard_DuplicatedView)) {
                             refreshEditorContent(obj);
                         } else {
                             break;
                         }
-                        
+
                     }
                 }
-                
-                
+
                 obj = createNewTreeObject(decl, browseItem);
                 TreeParent folder = obj.findServerFolder(obj.getType());
                 folder.addChild(obj);
@@ -190,7 +188,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     private TreeObject createNewTreeObject(XSDElementDeclaration decl, String browseItem) throws RemoteException {
         XtentisPort port = getXtentisPort();
-        
+
         WSView view = new WSView();
         view.setIsTransformerActive(new WSBoolean(false));
         view.setTransformerPK("");//$NON-NLS-1$        
@@ -210,7 +208,7 @@ public class AddBrowseItemsWizard extends Wizard {
         }
         view.setSearchableBusinessElements(keys.toArray(new String[] {}));
         view.setViewableBusinessElements(keys.toArray(new String[] {}));
-        
+
         StringBuffer desc = new StringBuffer();
         LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
         if (decl.getAnnotation() != null)
@@ -221,7 +219,7 @@ public class AddBrowseItemsWizard extends Wizard {
             desc.append("[" + lan.toUpperCase() + ":" + labels.get(lan) + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         }
         view.setDescription(desc.toString());
-        
+
         WSPutView wrap = new WSPutView();
         wrap.setWsView(view);
 
@@ -250,10 +248,10 @@ public class AddBrowseItemsWizard extends Wizard {
         IEditorPart currentEditor = activePage.findEditor(xobjectEditorinput);
         if (currentEditor != null) {
             List<IEditorPart> editors = Arrays.asList(activePage.getDirtyEditors());
-            
+
             activePage.closeEditor(currentEditor, false);
-            
-            if(editors.contains(currentEditor))
+
+            if (editors.contains(currentEditor))
                 return true;
         }
 
@@ -296,8 +294,8 @@ public class AddBrowseItemsWizard extends Wizard {
                 newBrowseItemView(browse);
                 modifyRolesWithAttachedBrowseItem(browse, roles);
             } catch (RemoteException e) {
-                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages
-                        .bind(Messages.ErrorOccuredSaveView, e.getLocalizedMessage()));
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.ErrorOccuredSaveView, e.getLocalizedMessage()));
                 return false;
             }
         }
@@ -314,7 +312,7 @@ public class AddBrowseItemsWizard extends Wizard {
         public ConfigureRolePage() {
             super(Messages.ConfigureBrowseViews);
             setTitle(Messages.ConfigureBrowseViews);
-            setDescription(Messages.ConfigureTheBrowseViews); 
+            setDescription(Messages.ConfigureTheBrowseViews);
 
             // Page isn't complete until an e-mail address has been added
             setPageComplete(true);
@@ -460,7 +458,7 @@ public class AddBrowseItemsWizard extends Wizard {
                 ruleColumn.setComboValues(roles.toArray(new String[] {}));
                 ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
                 acsColumn.setColumnWidth(250);
-                acsColumn.setComboValues(new String[] { Messages.ReadOnly, Messages.ReadAndWrite});
+                acsColumn.setComboValues(new String[] { Messages.ReadOnly, Messages.ReadAndWrite });
                 complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns),
                         WidgetFactory.getWidgetFactory(), composite);
                 complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
@@ -485,7 +483,7 @@ public class AddBrowseItemsWizard extends Wizard {
             if (complexTableViewer != null) {
                 List<Line> roles = browseItemToRoles.get(browseItem);
                 if (roles != null)
-                complexTableViewer.getViewer().setInput(roles);
+                    complexTableViewer.getViewer().setInput(roles);
                 // complexTableViewer.getViewer().refresh();
             }
         }
