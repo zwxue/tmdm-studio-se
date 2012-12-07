@@ -645,8 +645,8 @@ public class Util {
             return d;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            String err = Messages.Util_14 + Messages.Util_15 + e.getClass().getName() + Messages.Util_16 + e.getLocalizedMessage() + Messages.Util_17
-                    + xmlString;
+            String err = Messages.Util_14 + Messages.Util_15 + e.getClass().getName() + Messages.Util_16
+                    + e.getLocalizedMessage() + Messages.Util_17 + xmlString;
             throw new Exception(err);
         }
     }
@@ -1759,8 +1759,7 @@ public class Util {
         XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
         if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
             // change the parent element to xsd:sequence
-            if (!MessageDialog.openConfirm(null, Messages.Util_32,
-                    Messages.Util_33)) {
+            if (!MessageDialog.openConfirm(null, Messages.Util_32, Messages.Util_33)) {
                 return Status.CANCEL_STATUS;
             }
 
@@ -2659,8 +2658,9 @@ public class Util {
         ArrayList<Object> list = new ArrayList<Object>();
 
         // Now determine whether ref. If ref look at the base Type definition
+        XSDTypeDefinition baseTypeDefinition = complexTypeDefinition.getBaseTypeDefinition();
         if (xsdComplexTypeContent == null) {
-            XSDTypeDefinition typeDefinition = complexTypeDefinition.getBaseTypeDefinition();
+            XSDTypeDefinition typeDefinition = baseTypeDefinition;
             // if a simple type return the simple type
             if (typeDefinition instanceof XSDSimpleTypeDefinition) {
                 list.add(typeDefinition);
@@ -2674,12 +2674,10 @@ public class Util {
         // check if we are extending a complex Definition
         if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {//$NON-NLS-1$
 
-            if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
-                String name = ((XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition()).getDerivationMethod()
-                        .getName();
+            if (baseTypeDefinition instanceof XSDComplexTypeDefinition && baseTypeDefinition != complexTypeDefinition) {
+                String name = ((XSDComplexTypeDefinition) baseTypeDefinition).getDerivationMethod().getName();
                 if (name.equals("restriction") || ignoreRestriction) //$NON-NLS-1$
-                    list.addAll(getComplexTypeDefinitionChildren(
-                            (XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition(), ignoreRestriction));
+                    list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) baseTypeDefinition, ignoreRestriction));
                 //
 
             }
@@ -2718,18 +2716,18 @@ public class Util {
         list.add(xsdComplexTypeContent);
         return list;
     }
-    
+
     public static List<Object> getSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition simpleTypeDefinition) {
         List<Object> result = new ArrayList<Object>();
-        
+
         // Annotations
-        if(!isBuildInType(simpleTypeDefinition)) {
+        if (!isBuildInType(simpleTypeDefinition)) {
             if (simpleTypeDefinition.getAnnotations() != null)
                 result.addAll(simpleTypeDefinition.getAnnotations());
         }
-        
+
         result.add(simpleTypeDefinition);
-        
+
         return result;
     }
 
