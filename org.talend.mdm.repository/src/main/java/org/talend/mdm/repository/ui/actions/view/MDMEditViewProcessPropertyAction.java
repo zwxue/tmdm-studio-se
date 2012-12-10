@@ -15,6 +15,7 @@ package org.talend.mdm.repository.ui.actions.view;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.widgets.Display;
 import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
@@ -130,28 +131,14 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
                 IPath ipath = new Path(path);
                 factory.moveObject(viewObj, ipath);
 
-                unlockItem(item);
-
-                IRepositoryViewObject iRepositoryViewObject = ContainerCacheService.get(viewObj.getRepositoryObjectType(), item
-                        .getState().getPath());
-                commonViewer.refresh(iRepositoryViewObject);
-
-                String parentPath = parent.getPath();
-                int index = parentPath.indexOf("/"); //$NON-NLS-1$
-                if (index != -1) {
-                    parentPath = parentPath.substring(0, index);
-                }
-
-                IRepositoryViewObject iRepositoryViewObject2 = ContainerCacheService.get(viewObj.getRepositoryObjectType(),
-                        parentPath);
-                commonViewer.refresh(iRepositoryViewObject2);
+                refreshTree(viewObj);
             }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
         } catch (BusinessException e) {
             log.error(e.getMessage(), e);
         } finally {
-            // do nothing here
+            unlockItem(item);
         }
     }
 
@@ -165,6 +152,30 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
                 log.error(e.getMessage(), e);
             }
         }
+    }
+
+    private void refreshTree(IRepositoryViewObject viewObj) {
+        MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
+        final ERepositoryObjectType repositoryObjectType = viewObj.getRepositoryObjectType();
+        final String newPath = item.getState().getPath();
+
+        Display.getCurrent().asyncExec(new Runnable() {
+
+            public void run() {
+                IRepositoryViewObject iRepositoryViewObject = ContainerCacheService.get(repositoryObjectType, newPath);
+                commonViewer.refresh(iRepositoryViewObject);
+
+                String parentPath = parent.getPath();
+                int index = parentPath.indexOf("/"); //$NON-NLS-1$
+                if (index != -1) {
+                    parentPath = parentPath.substring(0, index);
+                }
+
+                IRepositoryViewObject iRepositoryViewObject2 = ContainerCacheService
+                        .get(repositoryObjectType, parentPath);
+                commonViewer.refresh(iRepositoryViewObject2);
+            }
+        });
     }
 
     private void unlockItem(Item item) {
