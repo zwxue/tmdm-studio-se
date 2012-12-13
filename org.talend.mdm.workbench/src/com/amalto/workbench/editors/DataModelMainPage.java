@@ -967,15 +967,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             // save to db
             doSave(wsObject);
+            dirty = false;    
         } catch (Exception e) {
+        	dirty=true;
             log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.getString("ErrorCommittingPage"), //$NON-NLS-1$
                     CommonUtil.getErrMsgFromException(e));
-            return 1;
         }
-        dirty = false;
         firePropertyChange(PROP_DIRTY);
-        return 0;
+        return dirty?1:0;
     }
 
     protected void doSave(WSDataModel wsObject) throws Exception {
