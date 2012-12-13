@@ -14,9 +14,6 @@ package com.amalto.workbench.service;
 
 import org.talend.core.IService;
 
-import com.amalto.workbench.utils.MDMServerDef;
-
-
 /**
  * created by liusongbo on 2012-11-20
  * 
@@ -29,5 +26,5 @@ public interface IUpdateLastServerService extends IService {
      * @param repositoryViewObjType the valid value see constants in class TreeObject,like
      * TreeObject.WORKFLOW_PROCESS,TreeObject.DATA_MODEL
      */
-    public void updateLastServerDefInfo(MDMServerDef ser, String repositoryViewObjName, int repositoryViewObjType);
+    public void updateLastServerDefInfo(Object serverDef, String repositoryViewObjName, int repositoryViewObjType);
 }
