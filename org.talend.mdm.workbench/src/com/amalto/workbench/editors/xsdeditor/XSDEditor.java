@@ -80,6 +80,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     private XSDSelectionManagerSelectionListener fXSDSelectionListener;
 
+    private byte[] fileContents = null;
+    
     public void setXSDInput(IEditorInput input) {
         this.xsdInput = input;
     }
@@ -117,8 +119,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-
-        super.doSave(monitor);
+    	boolean savedSuccess=true;
         try {
             if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
                 DataModelMainPage mainPage = (DataModelMainPage) getSelectedPage();
@@ -136,13 +137,20 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             IEditorPart[] editors = findEditors(xsdInput);
             if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {
                 DataModelMainPage mainPage = (DataModelMainPage) editors[0];
-                mainPage.save(xsd);
+                savedSuccess=mainPage.save(xsd)==0;
             }
-
-            fileContents = xsd.getBytes("utf-8");
+            if(savedSuccess){
+            	fileContents = xsd.getBytes("utf-8");
+            }else{
+            	IFile file = getXSDFile(xobject);
+                fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8"); //$NON-NLS-1$
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
+        	if(savedSuccess){
+        		super.doSave(monitor);
+        	}
             monitor.done();
         }
     }
@@ -413,8 +421,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     public void setName(String name) {
         setPartName(name);
     }
-
-    private byte[] fileContents = null;
 
     @Override
     public void dispose() {
