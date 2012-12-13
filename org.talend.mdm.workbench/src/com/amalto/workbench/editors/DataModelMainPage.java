@@ -721,7 +721,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         public boolean equals(Object a, Object b) {
@@ -735,7 +735,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         public int hashCode(Object element) {
@@ -996,15 +996,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             // save to db
             doSave(wsObject);
+            dirty = false;
         } catch (Exception e) {
+            dirty = true;
             log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.ErrorCommittingPage,
                     CommonUtil.getErrMsgFromException(e));
-            return 1;
         }
-        dirty = false;
         firePropertyChange(PROP_DIRTY);
-        return 0;
+        return dirty ? 1 : 0;
     }
 
     protected void doSave(WSDataModel wsObject) throws Exception {
@@ -1608,7 +1608,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     *
+     * 
      * @param obj
      * @return
      */
@@ -1752,7 +1752,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     *
+     * 
      * @param schema
      * @return
      * @throws Exception
