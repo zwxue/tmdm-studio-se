@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -91,13 +91,17 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     public String getDescription(Object anElement) {
         if (anElement instanceof IRepositoryViewObject) {
-
             Property property = ((IRepositoryViewObject) anElement).getProperty();
             Item item = property.getItem();
             if (item instanceof MDMServerObjectItem) {
-                String label = getServerObjectItemText(item);
-                if (label != null) {
-                    return label;
+                MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                if (serverObject != null) {
+                    return serverObject.getName();
+
+                    // String label = getServerObjectItemText(item);
+                    // if (label != null) {
+                    // return label;
+                    // }
                 }
             }
             String label = property.getLabel();
@@ -113,8 +117,9 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
         }
         if (item instanceof MDMServerObjectItem) {
             String label = getServerObjectItemText(item);
-            if (label != null)
+            if (label != null) {
                 return label;
+            }
         }
         // default
         String label = item.getProperty().getLabel();
@@ -151,9 +156,10 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
             }
             if (item instanceof MDMServerObjectItem) {
 
-                    MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-                    if (serverObject != null)
-                        return serverObject.isSystem();
+                MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                if (serverObject != null) {
+                    return serverObject.isSystem();
+                }
 
             }
         }
@@ -161,9 +167,10 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
     }
 
     protected String getServerObjectItemText(Item item) {
-            MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-            if (serverObject != null)
-                return serverObject.getName();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+        if (serverObject != null) {
+            return serverObject.getName();
+        }
         return null;
     }
 
