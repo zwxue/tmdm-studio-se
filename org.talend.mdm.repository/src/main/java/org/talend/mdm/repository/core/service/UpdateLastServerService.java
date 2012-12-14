@@ -20,25 +20,26 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
-import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.service.IUpdateLastServerService;
-import com.amalto.workbench.utils.MDMServerDef;
-
 
 /**
- * created by talend2 on 2012-11-20
- * Detailled comment
- *
+ * created by talend2 on 2012-11-20 Detailled comment
+ * 
  */
 public class UpdateLastServerService implements IUpdateLastServerService {
 
-    /* (non-Javadoc)
-     * @see com.amalto.workbench.service.IUpdateLastServer#updateLastServerDefInfo(com.amalto.workbench.utils.MDMServerDef, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.amalto.workbench.service.IUpdateLastServer#updateLastServerDefInfo(com.amalto.workbench.utils.MDMServerDef,
+     * java.lang.Object)
      */
-    public void updateLastServerDefInfo(MDMServerDef ser, String repositoryViewObjName, int repositoryViewObjType) {
-        if (ser == null || repositoryViewObjName == null)
+    public void updateLastServerDefInfo(Object serverDef, String repositoryViewObjName, int repositoryViewObjType) {
+        if (serverDef == null || repositoryViewObjName == null || !(serverDef instanceof MDMServerDef))
             return;
 
         ERepositoryObjectType repositoryObjectType = RepositoryQueryService.getRepositoryObjectType(repositoryViewObjType);
@@ -54,22 +55,8 @@ public class UpdateLastServerService implements IUpdateLastServerService {
         DeployStatus deployStatus = DeployStatus.getOKStatus(deployCmd, ""); //$NON-NLS-1$
         mStatus.add(deployStatus);
         cmdManager.removeCommandStack(deployCmd, ICommand.PHASE_DEPLOY);
-        org.talend.mdm.repository.model.mdmmetadata.MDMServerDef emfMDMServerDef = transferToEMFMDMServer(ser);
-        deployService.pushRestoreCommand(cmdManager, deployCmd, emfMDMServerDef);
+        deployService.pushRestoreCommand(cmdManager, deployCmd, (MDMServerDef) serverDef);
         deployService.updateLastServer(mStatus, new NullProgressMonitor());
-
-    }
-
-    private org.talend.mdm.repository.model.mdmmetadata.MDMServerDef transferToEMFMDMServer(MDMServerDef serverDef) {
-        org.talend.mdm.repository.model.mdmmetadata.MDMServerDef mdmServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
-        mdmServerDef.setName(serverDef.getName());
-        mdmServerDef.setHost(serverDef.getHost());
-        mdmServerDef.setUniverse(serverDef.getUniverse());
-        mdmServerDef.setPort(serverDef.getPort());
-        mdmServerDef.setUser(serverDef.getUser());
-        mdmServerDef.setPasswd(serverDef.getPasswd());
-
-        return mdmServerDef;
     }
 
 }
