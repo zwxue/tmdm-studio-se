@@ -120,7 +120,7 @@ public class IdentityConstraintInputDialog extends Dialog {
         serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         serverLabel.setText("Field Name");
 
-        fieldNameCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.BORDER);
+        fieldNameCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
         fieldNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         fieldNameCombo.setItems(deElements.toArray(new String[deElements.size()]));
         if (deElements.size() > 0)

@@ -60,14 +60,14 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
         try {
             List<String> customTypes = new ArrayList<String>();
             for (Iterator<XSDTypeDefinition> iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+                XSDTypeDefinition type = iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
                     customTypes
                             .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
             }
             List<String>builtInTypes = new ArrayList<String>();
             for (Iterator<XSDTypeDefinition> iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+                XSDTypeDefinition type = iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
                     builtInTypes.add(type.getName());
             }

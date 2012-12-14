@@ -13,12 +13,16 @@
 package com.amalto.workbench.providers;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.viewers.ITreePathLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.ViewerLabel;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDAttributeGroupDefinition;
@@ -51,7 +55,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDTreeLabelProvider extends LabelProvider {
+public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabelProvider {
 
     private static Log log = LogFactory.getLog(XSDTreeLabelProvider.class);
 
@@ -300,7 +304,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
             XSDTerm xsdTerm = xsdParticle.getTerm();
             if (xsdTerm instanceof XSDElementDeclaration) {
                 // get Type of Parent Group
-                if (Util.getKeyInfo(xsdTerm) != null && Util.getKeyInfo(xsdTerm).size() > 0)
+                List<Object> realKeyInfos = Util.getRealKeyInfos(entity, xsdParticle);
+                if (realKeyInfos != null && realKeyInfos.size() > 0)
                     return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
                 XSDConcreteComponent xsdConcreteComponent = xsdParticle.getContainer();
                 if (xsdConcreteComponent instanceof XSDModelGroup) {
@@ -536,6 +541,15 @@ public class XSDTreeLabelProvider extends LabelProvider {
         else if (!tail.equals(""))//$NON-NLS-1$
             tail = " : " + tail;//$NON-NLS-1$
         return s + tail;
+    }
+
+    private XSDElementDeclaration entity;
+    public void updateLabel(ViewerLabel label, TreePath elementPath) {
+        entity = (XSDElementDeclaration) elementPath.getFirstSegment();
+
+        Object lastSegment = elementPath.getLastSegment();
+        label.setText(getText(lastSegment));
+        label.setImage(getImage(lastSegment));
     }
 
 }
