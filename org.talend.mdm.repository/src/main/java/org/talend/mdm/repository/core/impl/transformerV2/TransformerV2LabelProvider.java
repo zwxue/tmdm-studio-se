@@ -69,13 +69,25 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
         return super.getConainerItemText(item);
     }
 
+    // @Override
+    // protected String getServerObjectItemText(Item item) {
+    //
+    // String itemText = super.getServerObjectItemText(item);
+    //
+    // itemText = RepositoryTransformUtil.getInstance().transformToSilyProcessName(itemText, false);
+    //
+    // return itemText;
+    // }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.impl.AbstractLabelProvider#getText(org.talend.core.model.properties.Item)
+     */
     @Override
-    protected String getServerObjectItemText(Item item) {
-
-        String itemText = super.getServerObjectItemText(item);
-
-        itemText = RepositoryTransformUtil.getInstance().transformToSilyProcessName(itemText, false);
-
+    protected String getText(Item item) {
+        String text = super.getText(item);
+        String itemText = RepositoryTransformUtil.getInstance().transformToSilyProcessName(text, false);
         return itemText;
     }
 
