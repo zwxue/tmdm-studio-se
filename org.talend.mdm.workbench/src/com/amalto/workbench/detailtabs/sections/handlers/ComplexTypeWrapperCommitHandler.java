@@ -30,7 +30,8 @@ public class ComplexTypeWrapperCommitHandler extends CompositeCommitHandler<Comp
     @Override
     protected CommitHandler<ComplexTypeWrapper>[] createChildHandlers() {
         return new CommitHandler[] { new ComplexTypeNameCommitHandler(getCommitedObj()),
-                new ComplexTypeGroupTypeCommitHandler(getCommitedObj()), new ComplexTypeExtendsCommitHandler(getCommitedObj()), };
+                new ComplexTypeGroupTypeCommitHandler(getCommitedObj()), new ComplexTypeExtendsCommitHandler(getCommitedObj()),
+                new ComplexTypeAbstractCommitHandler(getCommitedObj()) };
     }
 
 }
@@ -57,6 +58,22 @@ class ComplexTypeNameCommitHandler extends CommitHandler<ComplexTypeWrapper> {
         return getCommitedObj().changeTypeName();
     }
 
+}
+
+class ComplexTypeAbstractCommitHandler extends CommitHandler<ComplexTypeWrapper> {
+
+    public ComplexTypeAbstractCommitHandler(ComplexTypeWrapper submittedObj) {
+        super(submittedObj);
+    }
+
+    @Override
+    protected void validateCommit() throws CommitValidationException {
+    }
+
+    @Override
+    protected boolean doSubmit() throws CommitException {
+        return getCommitedObj().changeAbstract();
+    }
 }
 
 class ComplexTypeExtendsCommitHandler extends CommitHandler<ComplexTypeWrapper> {

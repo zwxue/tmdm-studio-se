@@ -39,62 +39,21 @@ public class ComplexTypeWrapper implements ISubmittable {
 
     private XSDComplexTypeDefinition curXSDComplexType;
 
+    private boolean isAbstract;
+
     public ComplexTypeWrapper(XSDComplexTypeDefinition curXSDComplexType, String newTypeName,
-            XSDComplexTypeDefinition newExtends, XSDCompositor newGroupType) {
+            XSDComplexTypeDefinition newExtends, XSDCompositor newGroupType, boolean isAbstract) {
 
         this.curXSDComplexType = curXSDComplexType;
         this.newTypeName = newTypeName;
         this.newExtends = newExtends;
         this.newGroupType = newGroupType;
+        this.isAbstract = isAbstract;
     }
 
-    public String getNewTypeName() {
-        return newTypeName;
-    }
-
-    public XSDComplexTypeDefinition getNewExtends() {
-        return newExtends;
-    }
-
-    public boolean isDefaultExtends() {
-
-        return curXSDComplexType.getSchema()
-                .resolveComplexTypeDefinition(curXSDComplexType.getSchema().getSchemaForSchemaNamespace(), "anyType")//$NON-NLS-1$
-                .equals(newExtends);
-
-    }
-
-    public XSDCompositor getNewGroupType() {
-        return newGroupType;
-    }
-
-    public XSDComplexTypeDefinition getCurComplexType() {
-        return curXSDComplexType;
-    }
-
-    public CommitHandler<?> createCommitHandler() {
-        return new ComplexTypeWrapperCommitHandler(this);
-    }
-
-    public boolean changeTypeName() {
-
-        if (curXSDComplexType.getName().equals(newTypeName))
-            return false;
-
-        curXSDComplexType.setName(newTypeName);
+    public boolean changeAbstract() {
+        curXSDComplexType.setAbstract(isAbstract);
         curXSDComplexType.updateElement();
-
-        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IEditorPart activeEditor = activePage.getActiveEditor();
-        
-        if(activeEditor instanceof XSDEditor) {
-            XSDEditor editor = (XSDEditor) activeEditor;
-            DataModelMainPage page = editor.getdMainPage();
-            IStructuredContentProvider provider = (IStructuredContentProvider) page.getSchemaContentProvider();
-            Util.updateReferenceToXSDTypeDefinition(page.getSite(), curXSDComplexType, provider);
-        }
-        
-        
         return true;
     }
 
@@ -122,5 +81,63 @@ public class ComplexTypeWrapper implements ISubmittable {
         group.updateElement();
 
         return true;
+    }
+
+    public boolean changeTypeName() {
+
+        if (curXSDComplexType.getName().equals(newTypeName))
+            return false;
+
+        curXSDComplexType.setName(newTypeName);
+        curXSDComplexType.updateElement();
+
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IEditorPart activeEditor = activePage.getActiveEditor();
+
+        if (activeEditor instanceof XSDEditor) {
+            XSDEditor editor = (XSDEditor) activeEditor;
+            DataModelMainPage page = editor.getdMainPage();
+            IStructuredContentProvider provider = (IStructuredContentProvider) page.getSchemaContentProvider();
+            Util.updateReferenceToXSDTypeDefinition(page.getSite(), curXSDComplexType, provider);
+        }
+
+        return true;
+    }
+
+    public CommitHandler<?> createCommitHandler() {
+        return new ComplexTypeWrapperCommitHandler(this);
+    }
+
+    public XSDComplexTypeDefinition getCurComplexType() {
+        return curXSDComplexType;
+    }
+
+    public XSDComplexTypeDefinition getNewExtends() {
+        return newExtends;
+    }
+
+    public XSDCompositor getNewGroupType() {
+        return newGroupType;
+    }
+
+    public String getNewTypeName() {
+        return newTypeName;
+    }
+
+    /**
+     * Getter for isAbstract.
+     * 
+     * @return the isAbstract
+     */
+    public boolean isAbstract() {
+        return this.isAbstract;
+    }
+
+    public boolean isDefaultExtends() {
+
+        return curXSDComplexType.getSchema()
+                .resolveComplexTypeDefinition(curXSDComplexType.getSchema().getSchemaForSchemaNamespace(), "anyType")//$NON-NLS-1$
+                .equals(newExtends);
+
     }
 }
