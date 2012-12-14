@@ -110,24 +110,34 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 log.error(e.getMessage(), e);
             }
         } else {
-            // for job object
-            try {
-                RepositoryPlugin.getDefault().stopJobListener();
-                IEditorReference editorRef = getJobEditor(item);
-                if (editorRef != null) {
-                    IEditorPart editor = editorRef.getEditor(false);
-                    if (editor != null) {
-                        editor.doSave(new NullProgressMonitor());
-                        return;
+            if (isWorkInUI()) {
+                // for job object
+                try {
+                    RepositoryPlugin.getDefault().stopJobListener();
+                    IEditorReference editorRef = getJobEditor(item);
+                    if (editorRef != null) {
+                        IEditorPart editor = editorRef.getEditor(false);
+                        if (editor != null) {
+                            editor.doSave(new NullProgressMonitor());
+                            return;
+                        }
                     }
-                }
-                factory.save(item);
+                    factory.save(item);
 
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            } finally {
-                RepositoryPlugin.getDefault().startupJobListener();
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                } finally {
+                    RepositoryPlugin.getDefault().startupJobListener();
+                }
             }
+        }
+    }
+
+    private boolean isWorkInUI() {
+        try {
+            return PlatformUI.getWorkbench() != null;
+        } catch (Exception e) {
+            return false;
         }
     }
 
