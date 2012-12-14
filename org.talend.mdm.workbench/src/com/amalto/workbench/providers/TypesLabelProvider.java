@@ -297,9 +297,9 @@ public class TypesLabelProvider extends LabelProvider {
             XSDTerm xsdTerm = xsdParticle.getTerm();
             if (xsdTerm instanceof XSDElementDeclaration) {
                 // get Type of Parent Group
-                if (Util.getKeyInfo(xsdTerm) != null && Util.getKeyInfo(xsdTerm).size() > 0) {
-                    return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
-                }
+                // if (Util.getKeyInfo(xsdTerm) != null && Util.getKeyInfo(xsdTerm).size() > 0) {
+                // return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
+                // }
                 XSDConcreteComponent xsdConcreteComponent = xsdParticle.getContainer();
                 if (XSDUtil.hasFKInfo((XSDElementDeclaration) xsdTerm)) {
                     return ImageCache.getCreatedImage(EImage.FK_OBJ.getPath());
