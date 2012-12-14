@@ -97,6 +97,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         try {// temporarily store the file data for restore
             IFile file = getXSDFile(xobject);
             fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8");
+            preSavedXSD=fileContents;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
