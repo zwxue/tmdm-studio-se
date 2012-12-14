@@ -53,6 +53,7 @@ import org.talend.mdm.repository.core.impl.transformerV2.TransformerV2NodeConfig
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.ui.navigator.filter.LastServerViewFilter;
 import org.talend.mdm.repository.ui.navigator.filter.NamePatternViewFilter;
@@ -397,8 +398,10 @@ public class RepositoryViewFilterDialog extends Dialog {
         for (ERepositoryObjectType type : types) {
             IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(type);
             IRepositoryViewObject viewObject = RepositoryResourceUtil.getCategoryViewObject(conf);
-            if (viewObject != null)
-                values.add(viewObject.getProperty().getLabel());
+            if (viewObject != null) {
+                ContainerItem item = (ContainerItem) viewObject.getProperty().getItem();
+                values.add(item.getLabel());
+            }
         }
     }
 }
