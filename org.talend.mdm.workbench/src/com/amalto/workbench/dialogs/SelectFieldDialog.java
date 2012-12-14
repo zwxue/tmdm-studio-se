@@ -59,7 +59,7 @@ public class SelectFieldDialog extends Dialog {
         serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         serverLabel.setText(Messages.SelectFieldDialog_FieldName);
 
-        fieldNameCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.BORDER);
+        fieldNameCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.BORDER | SWT.READ_ONLY);
         fieldNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         fieldNameCombo.setItems(fields.toArray(new String[fields.size()]));
         if (fields.size() > 0) {
