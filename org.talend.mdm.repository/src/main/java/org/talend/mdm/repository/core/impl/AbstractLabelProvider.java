@@ -91,13 +91,17 @@ public abstract class AbstractLabelProvider implements IRepositoryNodeLabelProvi
 
     public String getDescription(Object anElement) {
         if (anElement instanceof IRepositoryViewObject) {
-
             Property property = ((IRepositoryViewObject) anElement).getProperty();
             Item item = property.getItem();
             if (item instanceof MDMServerObjectItem) {
-                String label = getServerObjectItemText(item);
-                if (label != null) {
-                    return label;
+            	MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                if (serverObject != null) {
+                    return serverObject.getName();
+
+                    // String label = getServerObjectItemText(item);
+                    // if (label != null) {
+                    // return label;
+                    // }
                 }
             }
             String label = property.getLabel();
