@@ -13,6 +13,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -25,12 +26,15 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.talend.core.GlobalServiceRegister;
 
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.utils.Util;
 
 public class XSDNewBrowseItemViewAction extends Action {
@@ -52,7 +56,8 @@ public class XSDNewBrowseItemViewAction extends Action {
 
     public void run() {
         if (page.isDirty()) {
-            boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource, Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName())); //$NON-NLS-1$
+            boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
+                    Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName())); //$NON-NLS-1$
             if (save) {
                 pageSave();
             } else
@@ -68,9 +73,25 @@ public class XSDNewBrowseItemViewAction extends Action {
                     declList.add(declaration);
             }
         }
-        AddBrowseItemsWizard wizard = getAddBrowseItemsWizard(declList);
-        WizardDialog dialog = new WizardDialog(page.getSite().getShell(), wizard);
-        dialog.open();
+        // check exist
+        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
+                IValidateService.class);
+        if (validateService != null) {
+            for (Iterator<XSDElementDeclaration> il = declList.iterator(); il.hasNext();) {
+                String name = AddBrowseItemsWizard.BROWSE_ITEMS + il.next().getName();
+
+                boolean result = validateService.validateAndAlertObjectExistence(TreeObject.VIEW, name);
+                if (!result) {
+                    il.remove();
+                }
+            }
+        }
+        if (!declList.isEmpty()) {
+            //
+            AddBrowseItemsWizard wizard = getAddBrowseItemsWizard(declList);
+            WizardDialog dialog = new WizardDialog(page.getSite().getShell(), wizard);
+            dialog.open();
+        }
     }
 
     protected void pageSave() {

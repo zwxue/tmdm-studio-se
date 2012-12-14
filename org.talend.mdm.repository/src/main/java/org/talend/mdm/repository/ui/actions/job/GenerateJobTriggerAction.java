@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.talend.commons.ui.runtime.image.ECoreImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -32,6 +33,8 @@ import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Execution;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Parameter;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+
+import com.amalto.workbench.service.IValidateService;
 
 /**
  * DOC jsxie class global comment. Detailled comment
@@ -62,7 +65,8 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
     protected void doRun() {
         selectObj = getSelectedObject().get(0);
 
-        JobOptionsDialog dialog = new JobOptionsDialog(getShell(), Messages.JobProcesssDialogTiggerTitle_title, Execution.EMBEDDED);
+        JobOptionsDialog dialog = new JobOptionsDialog(getShell(), Messages.JobProcesssDialogTiggerTitle_title,
+                Execution.EMBEDDED);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
         if (ret == Dialog.CANCEL)
@@ -76,7 +80,16 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             jobVersion = ((IRepositoryViewObject) selectObj).getProperty().getVersion();
 
         }
-
+        // check exist
+        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
+                IValidateService.class);
+        if (validateService != null) {
+            boolean result = validateService.validateAndAlertObjectExistence(IServerObjectRepositoryType.TYPE_ROUTINGRULE,
+                    getNewTriggerName(jobName), null);
+            if (!result)
+                return;
+        }
+        //
         WSRoutingRuleE routingRule = createTrigger(jobName, jobVersion, dialog);
         RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_ROUTINGRULE, PREFIX + jobName,
                 jobVersion, null);
@@ -98,29 +111,29 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
 
             Execution execution = dialog.getExecution();
             String url = ""; //$NON-NLS-1$
-    		switch (execution) {
-    		case EMBEDDED:
-    			url = "ltj://" + jobName + "/" + jobVersion; //$NON-NLS-1$ //$NON-NLS-2$
-    			break;
-    		case WEB_SERVICE:
-    			url = Messages.bind(Messages.GenerateJobXX_UrlString, server, jobName,jobVersion, jobName);
-    			break;
-    		}
-            
-    		Parameter executionParameter = dialog.getParameter();
-    		String parameter = ""; //$NON-NLS-1$
-			switch(executionParameter) {
-			case CONTEXT_VARIABLE:
-				parameter = "<configuration>\n" + "<url>" + url + "</url><contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-				+ "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-				+ "</configuration>\n";//$NON-NLS-1$
-				break;
-			case INTEGRATED:
-				parameter = "<configuration>\n" + "<url>" + url + "</url>"  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ "</configuration>\n";//$NON-NLS-1$
-				break;
-			}
-    		
+            switch (execution) {
+            case EMBEDDED:
+                url = "ltj://" + jobName + "/" + jobVersion; //$NON-NLS-1$ //$NON-NLS-2$
+                break;
+            case WEB_SERVICE:
+                url = Messages.bind(Messages.GenerateJobXX_UrlString, server, jobName, jobVersion, jobName);
+                break;
+            }
+
+            Parameter executionParameter = dialog.getParameter();
+            String parameter = ""; //$NON-NLS-1$
+            switch (executionParameter) {
+            case CONTEXT_VARIABLE:
+                parameter = "<configuration>\n" + "<url>" + url + "</url><contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                        + "<name>xmlInput</name>\n" + "<value>{exchange_data}</value>\n" + "</contextParam>\n"//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+                        + "</configuration>\n";//$NON-NLS-1$
+                break;
+            case INTEGRATED:
+                parameter = "<configuration>\n" + "<url>" + url + "</url>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                        + "</configuration>\n";//$NON-NLS-1$
+                break;
+            }
+
             // Generate the job call
             // create default CREATE operation express
             WSRoutingRuleExpressionE expression1 = MdmserverobjectFactory.eINSTANCE.createWSRoutingRuleExpressionE();
@@ -142,7 +155,7 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
             expression3.setWsOperator(newContainRoutingRuleOperator());
             expression3.setValue("DELETE"); //$NON-NLS-1$
 
-            routingRule.setName("CallJob_" + jobName);//$NON-NLS-1$
+            routingRule.setName(getNewTriggerName(jobName));
             routingRule.setDescription("Trigger that calls the Talend Job: " + jobName); //$NON-NLS-1$
             routingRule.setSynchronous(false);
             routingRule.setConcept("Update"); //$NON-NLS-1$
@@ -164,6 +177,10 @@ public class GenerateJobTriggerAction extends AbstractRepositoryAction {
         }
 
         return routingRule;
+    }
+
+    private String getNewTriggerName(String name) {
+        return "CallJob_" + name; //$NON-NLS-1$
     }
 
     private WSRoutingRuleOperatorE newContainRoutingRuleOperator() {

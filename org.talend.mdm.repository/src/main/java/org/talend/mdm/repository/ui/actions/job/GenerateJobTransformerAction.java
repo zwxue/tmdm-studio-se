@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.Dialog;
 import org.talend.commons.ui.runtime.image.ECoreImage;
 import org.talend.commons.ui.runtime.image.ImageProvider;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -39,6 +40,7 @@ import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Execution;
 import org.talend.mdm.repository.ui.dialogs.job.JobOptionsDialog.Parameter;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 
 /**
@@ -89,7 +91,15 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             jobVersion = ((IRepositoryViewObject) selectObj).getProperty().getVersion();
 
         }
-
+        // check exist
+        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
+                IValidateService.class);
+        if (validateService != null) {
+            boolean result = validateService.validateAndAlertObjectExistence(IServerObjectRepositoryType.TYPE_TRANSFORMERV2,
+                    getNewProcessName(jobName), null);
+            if (!result)
+                return;
+        }
         WSTransformerV2E transformer = createTransformer(jobName, jobVersion, dialog);
         RepositoryResourceUtil.removeViewObjectPhysically(IServerObjectRepositoryType.TYPE_TRANSFORMERV2, PREFIX + jobName,
                 jobVersion, null);
@@ -251,7 +261,7 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
 
         try {
             // Generate the job call
-            transformer.setName(PREFIX + jobName);
+            transformer.setName(getNewProcessName(jobName));
             transformer.setDescription(Messages.bind(Messages.GenerateJobXX_ProcessCallJob, jobName));
 
             transformer.getProcessSteps().addAll(steps);
@@ -259,6 +269,10 @@ public class GenerateJobTransformerAction extends AbstractRepositoryAction {
             log.error(e.getMessage(), e);
         }
         return transformer;
+    }
+
+    private String getNewProcessName(String name) {
+        return PREFIX + name;
     }
 
     /**
