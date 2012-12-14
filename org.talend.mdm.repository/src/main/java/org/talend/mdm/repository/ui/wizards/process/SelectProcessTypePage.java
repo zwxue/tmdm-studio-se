@@ -166,6 +166,7 @@ public class SelectProcessTypePage extends WizardPage implements ITransformerV2N
             currentSelectedType = TYPE_OTHER;
             break;
         default:
+            btnTypeBefore.setSelection(true);
             break;
         }
     }
@@ -177,6 +178,7 @@ public class SelectProcessTypePage extends WizardPage implements ITransformerV2N
         btnTypeOther.setEnabled(false);
 
         btn.setEnabled(true);
+        btn.setSelection(true);
     }
 
     private String inputName = null;
