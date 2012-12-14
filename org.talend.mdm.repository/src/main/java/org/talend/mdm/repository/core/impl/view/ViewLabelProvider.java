@@ -77,19 +77,19 @@ public class ViewLabelProvider extends AbstractLabelProvider {
         return super.getConainerItemText(item);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.impl.AbstractLabelProvider#getText(org.talend.core.model.properties.Item)
+     */
     @Override
-    protected String getServerObjectItemText(Item item) {
-        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        if (serverObject != null) {
-            String name = serverObject.getName();
-
-            name = RepositoryTransformUtil.getInstance().transformToSilyViewName(name, false);
-
-            return name;
-        }
-        return null;
+    protected String getText(Item item) {
+        String text = super.getText(item);
+        String itemText = RepositoryTransformUtil.getInstance().transformToSilyViewName(text, false);
+        return itemText;
     }
-
+    
+    
     @Override
     protected boolean isSystemServerObjectItem(Object element) {
         Item item = getItem(element);

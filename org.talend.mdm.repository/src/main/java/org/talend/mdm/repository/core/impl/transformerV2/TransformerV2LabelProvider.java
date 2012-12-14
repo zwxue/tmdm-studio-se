@@ -69,16 +69,6 @@ public class TransformerV2LabelProvider extends AbstractLabelProvider {
         return super.getConainerItemText(item);
     }
 
-//    @Override
-//    protected String getServerObjectItemText(Item item) {
-//
-//        String itemText = super.getServerObjectItemText(item);
-//
-//        itemText = RepositoryTransformUtil.getInstance().transformToSilyProcessName(itemText, false);
-//
-//        return itemText;
-//    }
-
     /*
      * (non-Javadoc)
      * 
