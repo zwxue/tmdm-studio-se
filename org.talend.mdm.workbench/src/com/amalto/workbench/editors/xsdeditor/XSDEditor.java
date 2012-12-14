@@ -82,6 +82,11 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     private byte[] fileContents = null;
 
+    /**
+     * For saving the last file's contents while it's saved successful.
+     */
+    private byte[] preSavedXSD = null;
+
     public void setXSDInput(IEditorInput input) {
         this.xsdInput = input;
     }
@@ -92,6 +97,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         try {// temporarily store the file data for restore
             IFile file = getXSDFile(xobject);
             fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8"); //$NON-NLS-1$
+            preSavedXSD = fileContents;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -141,9 +147,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             }
             if (savedSuccess) {
                 fileContents = xsd.getBytes("utf-8"); //$NON-NLS-1$
+                preSavedXSD = fileContents;
             } else {
-                IFile file = getXSDFile(xobject);
-                fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8"); //$NON-NLS-1$
+                fileContents = preSavedXSD;
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
