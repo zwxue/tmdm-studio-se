@@ -140,9 +140,9 @@ public class RepositoryResourceUtil {
     public static boolean isLockedAndEdited(IRepositoryViewObject viewObj) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         ERepositoryStatus status = factory.getStatus(viewObj);
-        if (status == ERepositoryStatus.LOCK_BY_OTHER)
+        if (status == ERepositoryStatus.LOCK_BY_OTHER) {
             return true;
-        else if (status == ERepositoryStatus.LOCK_BY_USER) {
+        } else if (status == ERepositoryStatus.LOCK_BY_USER) {
             IEditorReference openRef = RepositoryResourceUtil.isOpenedInEditor(viewObj);
             return openRef != null;
         }
@@ -232,8 +232,9 @@ public class RepositoryResourceUtil {
 
     public static IFile copyOSFileTOProject(IProject prj, String path, IFolder desFolder, String version, boolean overwrite,
             IProgressMonitor progressMonitor) throws CoreException, PersistenceException {
-        if (path == null || desFolder == null)
+        if (path == null || desFolder == null) {
             throw new IllegalArgumentException();
+        }
         if (prj == null) {
             Project project = ProjectManager.getInstance().getCurrentProject();
             prj = ResourceModelUtils.getProject(project);
@@ -302,8 +303,9 @@ public class RepositoryResourceUtil {
     public static String getTextFileContent(IFile file, String encode) {
         String filePath = file.getLocation().toOSString();
         File osfile = new File(filePath);
-        if (!osfile.exists() || !file.exists())
+        if (!osfile.exists() || !file.exists()) {
             return null;
+        }
         InputStream inputStream = null;
 
         ByteArrayOutputStream os = null;
@@ -468,8 +470,9 @@ public class RepositoryResourceUtil {
             for (IRepositoryNodeConfiguration conf : configurations) {
                 if (conf.getContentProvider().isShownInRoot()) {
                     IRepositoryViewObject categoryViewObject = getCategoryViewObject(conf);
-                    if (categoryViewObject != null)
+                    if (categoryViewObject != null) {
                         results.add(categoryViewObject);
+                    }
                 }
             }
             categoryViewObjects = results.toArray(new IRepositoryViewObject[0]);
@@ -524,8 +527,9 @@ public class RepositoryResourceUtil {
         item.setType(FolderType.SYSTEM_FOLDER_LITERAL);
 
         ERepositoryObjectType type = conf.getResourceProvider().getRepositoryObjectType(item);
-        if (type == null)
+        if (type == null) {
             return null;
+        }
         item.setRepObjType(type);
         ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
         itemState.setDeleted(false);
@@ -563,12 +567,15 @@ public class RepositoryResourceUtil {
     }
 
     public static void removeViewObjectPhysically(ERepositoryObjectType type, String name, String version, String path) {
-        if (type == null || name == null)
+        if (type == null || name == null) {
             throw new IllegalArgumentException();
-        if (version == null)
+        }
+        if (version == null) {
             version = VersionUtils.DEFAULT_VERSION;
-        if (path == null)
+        }
+        if (path == null) {
             path = ""; //$NON-NLS-1$
+        }
         try {
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             for (IRepositoryViewObject viewObj : factory.getAll(type)) {
@@ -675,8 +682,9 @@ public class RepositoryResourceUtil {
 
             String path = ERepositoryObjectType.getFolderName(type);
             if (!path.isEmpty()) {
-                if (!path.endsWith(DIVIDE))
+                if (!path.endsWith(DIVIDE)) {
                     path += DIVIDE;
+                }
                 path += parentItem.getState().getPath();
                 IFolder folder = fsProject.getFolder(new Path(path));
                 return findViewObjects(type, parentItem, folder, useRepositoryViewObject, withDeleted);
@@ -729,8 +737,9 @@ public class RepositoryResourceUtil {
     }
 
     private static boolean isDeletedFolder(String folderPath) {
-        if (folderPath == null)
+        if (folderPath == null) {
             throw new IllegalArgumentException();
+        }
         List deletedFolders = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
         return deletedFolders.contains(folderPath);
     }
@@ -837,12 +846,14 @@ public class RepositoryResourceUtil {
     public static boolean hasContainerItem(Object obj, FolderType... fTypes) {
 
         if (obj instanceof FolderRepositoryObject) {
-            if (fTypes == null)
+            if (fTypes == null) {
                 return true;
+            }
             FolderType type = ((FolderItem) ((FolderRepositoryObject) obj).getProperty().getItem()).getType();
             for (FolderType fType : fTypes) {
-                if (type == fType)
+                if (type == fType) {
                     return true;
+                }
             }
         }
         return false;
@@ -1016,8 +1027,9 @@ public class RepositoryResourceUtil {
         if (item != null) {
             if (item instanceof MDMServerObjectItem) {
                 MDMServerDef lastServerDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
-                if (lastServerDef != null)
+                if (lastServerDef != null) {
                     return lastServerDef.getDecryptedServerDef();
+                }
             }
             Property property = item.getProperty();
             if (property != null) {
@@ -1037,20 +1049,24 @@ public class RepositoryResourceUtil {
      */
     @SuppressWarnings("unchecked")
     public static void setLastServerDef(Item item, MDMServerDef def) {
-        if (item == null)
+        if (item == null) {
             return;
+        }
         if (item instanceof MDMServerObjectItem) {
+            MDMServerObject mdmServerObject = ((MDMServerObjectItem) item).getMDMServerObject();
             if (def != null) {
                 MDMServerDef encryptedServerDef = def.getEncryptedServerDef();
-                ((MDMServerObjectItem) item).getMDMServerObject().setLastServerDef(encryptedServerDef);
+                mdmServerObject.setLastServerDef(encryptedServerDef);
+            } else {
+                mdmServerObject.setLastServerDef(null);
             }
             return;
         }
         Property property = item.getProperty();
         if (property != null) {
-            if (def != null)
+            if (def != null) {
                 property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, def.getName());
-            else {
+            } else {
                 property.getAdditionalProperties().remove(PROP_LAST_SERVER_DEF);
             }
         }
