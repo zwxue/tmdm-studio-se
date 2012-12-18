@@ -276,7 +276,7 @@ public class RepositoryResourceUtilTest {
         verify(mockProperty, times(1)).setVersion(Mockito.anyString());
         verify(mockProperty, times(1)).setAuthor(user);
         verify(mockProperty, times(1)).setLabel(propLabel);
-        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class));
+        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class), Mockito.any(Boolean.class));
         verify(mockResourceProvider, times(1)).handleReferenceFile(mockItem);
 
         verify(repositoryFactory, times(1)).unlock(mockItem);

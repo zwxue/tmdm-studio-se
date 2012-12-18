@@ -12,17 +12,14 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.support.membermodification.MemberMatcher.method;
-import static org.powermock.api.support.membermodification.MemberModifier.stub;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.powermock.api.support.membermodification.MemberMatcher.*;
+import static org.powermock.api.support.membermodification.MemberModifier.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -186,7 +183,7 @@ public class RemoveFromRepositoryActionTest {
         selectedObjects.add(folderRO);
 
         when(removeActionM.getSelectedObject()).thenReturn(selectedObjects);
-
+        Whitebox.setInternalState(removeActionM, "lockedObjs", Collections.EMPTY_LIST);
         PowerMockito.mockStatic(MessageDialog.class);
         when(MessageDialog.openConfirm((Shell) anyObject(), anyString(), anyString())).thenReturn(true);
 
