@@ -61,6 +61,7 @@ import org.w3c.dom.Node;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.IServerObjectEditorState;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.MDMPerspective;
@@ -355,7 +356,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     Exception exc = getPageChangeException();
                     if (exc != null) {
                         setActivePage(preActivePageIndex);
-                        ErrorExceptionDialog.openError(getSite().getShell(), "Error changing the page",
+                        ErrorExceptionDialog.openError(getSite().getShell(), Messages.XSDEditor_ChangedPageErrorTitle,
                                 CommonUtil.getErrMsgFromException(exc));
                         return;
                     }
