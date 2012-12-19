@@ -71,7 +71,7 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
     @Override
     public void addPages() {
         selectProcessTypePage = new SelectProcessTypePage(type);
-        inputProcessNamePage = new InputProcessNamePage(site);
+        inputProcessNamePage = new InputProcessNamePage(site, type);
         configRedirectURLPage = new ConfigRedirectURLPage();
         configReturnMessagePage = new ConfigReturnMessagePage();
         // add
