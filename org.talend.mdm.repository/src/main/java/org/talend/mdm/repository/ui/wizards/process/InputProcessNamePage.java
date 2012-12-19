@@ -36,7 +36,6 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
-import org.talend.mdm.repository.ui.wizards.process.composite.AbstractProcessTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.BeforeProcessTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.OtherTypeComposite;
 import org.talend.mdm.repository.ui.wizards.process.composite.RunnableTypeComposite;
@@ -71,12 +70,17 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
 
     private int processType;
 
+    private int defaultSelectedType;
+
     /**
      * Create the wizard.
+     * 
+     * @param selectType
      */
-    public InputProcessNamePage(IWorkbenchPartSite site) {
+    public InputProcessNamePage(IWorkbenchPartSite site, int selectType) {
         super(PAGE_ID);
         this.site = site;
+        this.defaultSelectedType = selectType;
         setTitle(Messages.NewProcessWizard_title);
         setDescription(Messages.InputProcessNamePage_description);
     }
@@ -139,8 +143,7 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
         typeComposite = new Composite(container, SWT.NONE);
         typeComposite.setLayout(new GridLayout(1, false));
         typeComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        curProcessTypeComposite = (AbstractProcessTypeComposite) getProcessTypeComposite(NewProcessWizard.BEFORE_TYPE,
-                TYPE_PROCESS);
+        curProcessTypeComposite = getProcessTypeComposite(NewProcessWizard.BEFORE_TYPE, TYPE_PROCESS);
         ((Composite) curProcessTypeComposite).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         grpEnterProcessName = new Group(container, SWT.NONE);
@@ -154,13 +157,6 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
 
         nameText = new Text(grpEnterProcessName, SWT.BORDER);
         nameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        nameText.addModifyListener(new ModifyListener() {
-
-            public void modifyText(ModifyEvent e) {
-                updateProcessNameLabel();
-                getWizard().getContainer().updateButtons();
-            }
-        });
 
         selectEntityBun = new Button(grpEnterProcessName, SWT.NONE);
         selectEntityBun.addSelectionListener(new SelectionAdapter() {
@@ -185,13 +181,6 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
         optionNameLabel.setText(Messages.InputProcessNamePage_OptionalName);
 
         optionNameText = new Text(another, SWT.BORDER);
-        optionNameText.addModifyListener(new ModifyListener() {
-
-            public void modifyText(ModifyEvent e) {
-                updateProcessNameLabel();
-                getWizard().getContainer().updateButtons();
-            }
-        });
         optionNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         padLabel = new Label(another, SWT.NONE);
 
@@ -210,7 +199,48 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
         processNameLabel.setForeground(grayColor);
         pad2Label = new Label(grpEnterProcessName, SWT.NONE);
 
-        updateOptionPart();
+        updateProcessTypeComposite(getSelectedType(), defaultSelectedType);
+
+        nameText.addModifyListener(getModifyListener());
+        optionNameText.addModifyListener(getModifyListener());
+    }
+
+    public ModifyListener getModifyListener() {
+        if (modifyListener == null) {
+            modifyListener = new ModifyListener() {
+
+                public void modifyText(ModifyEvent e) {
+                    updateProcessNameLabel();
+                    getWizard().getContainer().updateButtons();
+                }
+            };
+        }
+
+        return modifyListener;
+    }
+
+    private int getSelectedType() {
+        int selectedType = -1;
+        switch (defaultSelectedType) {
+        case TYPE_BEFOREDEL:
+        case TYPE_BEFORESAVE:
+            selectedType = NewProcessWizard.BEFORE_TYPE;
+            break;
+        case TYPE_ENTITYACTION:
+        case TYPE_WELCOMEACTION:
+            selectedType = NewProcessWizard.RUNNABLE_TYPE;
+            break;
+        case TYPE_SMARTVIEW:
+            selectedType = NewProcessWizard.TYPE_SMARTVIEW;
+            break;
+        case TYPE_OTHER:
+            selectedType = NewProcessWizard.TYPE_OTHER;
+            break;
+        default:
+            break;
+        }
+
+        return selectedType;
     }
 
     private void updateOptionPart() {
@@ -232,6 +262,8 @@ public class InputProcessNamePage extends WizardPage implements ITransformerV2No
     }
 
     private boolean optionPartVisible = false;
+
+    private ModifyListener modifyListener;
 
     private void setOptionPartVisible(boolean visible) {
         optionPartVisible = visible;
