@@ -87,7 +87,7 @@ public class XSDEditConceptAction extends UndoAction {
 
             decl.setName(id.getValue().trim());
             decl.updateElement();
-            Util.updateReference(decl, objs, id.getValue());
+            Util.updateReference(decl, objs, oldName, id.getValue());
 
             // change unique key with new name of concept
             EList list = decl.getIdentityConstraintDefinitions();

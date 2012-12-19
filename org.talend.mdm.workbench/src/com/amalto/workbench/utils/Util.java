@@ -34,10 +34,12 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -1460,11 +1462,28 @@ public class Util {
 
     }
 
-    public static void updateReference(Object decl, Object[] objs, String newValue) {
+    private static void updatePrimaryKeyInfo(XSDElementDeclaration decl, String oldValue, String newValue) {
+        XSDAnnotationsStructure struc = new XSDAnnotationsStructure(decl);
+        Collection<String> primaryKeyInfos = struc.getPrimaryKeyInfos().values();
+        if (primaryKeyInfos != null && primaryKeyInfos.size() > 0) {
+            List<String> newInfos = new LinkedList<String>();
+            for (String info : primaryKeyInfos) {
+                if (info.startsWith(oldValue)) {
+                    info = info.replaceFirst(oldValue, newValue);
+                    newInfos.add(info);
+                }
+            }
+            if (newInfos.size() > 0) {
+                struc.setPrimaryKeyInfos(newInfos);
+            }
+        }
+    }
+
+    public static void updateReference(Object decl, Object[] objs, String oldValue, String newValue) {
         if (!(decl instanceof XSDElementDeclaration)) {
             return;
         }
-
+        updatePrimaryKeyInfo((XSDElementDeclaration) decl, oldValue, newValue);
         for (Object obj : objs) {
             if (obj instanceof XSDParticle) {
                 XSDTerm term = ((XSDParticle) obj).getTerm();
