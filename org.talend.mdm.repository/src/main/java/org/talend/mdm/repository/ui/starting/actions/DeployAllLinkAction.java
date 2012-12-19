@@ -19,28 +19,38 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.intro.IIntroSite;
-import org.eclipse.ui.intro.config.IIntroAction;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 
+public class DeployAllLinkAction extends AbstractShowViewAction {
 
-public class DeployAllLinkAction implements IIntroAction {
     private static Logger log = Logger.getLogger(DeployAllLinkAction.class);
-    
-    public void run(IIntroSite introSite, Properties prop) {
+
+    protected void doRun(IIntroSite site, Properties params) {
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         MDMRepositoryView findView = (MDMRepositoryView) activePage.findView(MDMRepositoryView.VIEW_ID);
         try {
-            if(findView == null)
+            if (findView == null)
                 findView = (MDMRepositoryView) activePage.showView(MDMRepositoryView.VIEW_ID);
             findView.setFocus();
-            
+
             DeployAllAction deployAllAction = findView.getDeployAllAction();
             deployAllAction.runWithType(null);
-            
+
         } catch (PartInitException e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.starting.actions.AbstractShowViewAction#getReadOnlyMessage()
+     */
+    @Override
+    protected String getReadOnlyMessage() {
+        return Messages.DeployAllLinkAction_authorityMessage;
     }
 
 }

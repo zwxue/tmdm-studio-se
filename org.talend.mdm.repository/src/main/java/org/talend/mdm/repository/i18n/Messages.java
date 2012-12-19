@@ -70,6 +70,8 @@ public class Messages extends NLS {
 
     public static String AbstractRepositoryAction_lockedObjTitle;
 
+    public static String AbstractShowViewAction_authorityTitle;
+
     public static String AbstractXXViewer_DeselectAll;
 
     public static String AbstractXXViewer_SelectAll;
@@ -79,6 +81,10 @@ public class Messages extends NLS {
     public static String AddBrowseItemsWizardR_duplicatedView;
 
 	public static String AddBrowseItemsWizardR_warning;
+
+    public static String AddDataModelLinkAction_authorityMessage;
+
+    public static String AddServerDefLinkAction_authorityMessage;
 
     public static String AnnotationXXDialogR_SelectXPath;
 	
@@ -139,6 +145,8 @@ public class Messages extends NLS {
     public static String DeployAllDialog_selectMoreItem;
 
     public static String DeployAllDialog_warning;
+
+    public static String DeployAllLinkAction_authorityMessage;
 
     public static String DeployService_processTitle;
 

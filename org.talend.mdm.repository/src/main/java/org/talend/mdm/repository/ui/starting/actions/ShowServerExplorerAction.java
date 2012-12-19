@@ -17,11 +17,11 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.intro.IIntroSite;
-import org.eclipse.ui.intro.config.IIntroAction;
 
-public class ShowServerExplorerAction extends AbstractShowViewAction implements IIntroAction {
+public class ShowServerExplorerAction extends AbstractShowViewAction {
 
     private static Logger log = Logger.getLogger(ShowServerExplorerAction.class);
+
     public void run(IIntroSite iintrosite, Properties properties) {
         try {
             showServerExplorer();
@@ -31,4 +31,25 @@ public class ShowServerExplorerAction extends AbstractShowViewAction implements 
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.starting.actions.AbstractShowViewAction#doRun(org.eclipse.ui.intro.IIntroSite,
+     * java.util.Properties)
+     */
+    @Override
+    protected void doRun(IIntroSite site, Properties params) {
+        // do nothing even current user is readonly user ,still can run this function
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.starting.actions.AbstractShowViewAction#getReadOnlyMessage()
+     */
+    @Override
+    protected String getReadOnlyMessage() {
+        return null;
+    }
 }
