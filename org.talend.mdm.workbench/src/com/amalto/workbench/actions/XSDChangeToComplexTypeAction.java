@@ -148,12 +148,13 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             // XSDTypeDefinition current = decl.getTypeDefinition();
             List<XSDComplexTypeDefinition> types = Util.getComplexTypes(decl.getSchema());
             if (showDlg) {
-                if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-                    boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning, Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
-                    if(!confirm)
+                if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                    boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning,
+                            Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
+                    if (!confirm)
                         return Status.CANCEL_STATUS;
                 }
-                
+
                 if (tPath != null)
                     for (int i = 0; i < tPath.getSegmentCount(); i++) {
                         if (tPath.getSegment(i) instanceof XSDElementDeclaration) {
@@ -251,21 +252,13 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                         break;
                     }
                 }
-                //updated by hhb,comment all it works,   fix bug:0021466
-                // modified by jsxie; fix the bug: 0019688 
-//                if (!anonymous) {
-//                    complexType.setName(typeName);
-//                }
-//                else{
-//                	 complexType.setName(decl.getTypeDefinition().getName());
-//                }
  
-                
+
                 if (superType != null) {
                     boolean status = updateCompositorType(superType, mdlGrp);
-                    if(!status)
+                    if (!status)
                         return Status.CANCEL_STATUS;
-                    
+
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                     complexType.setBaseTypeDefinition(superType);
                 }
@@ -307,9 +300,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
                 // create the complex type
                 complexType = factory.createXSDComplexTypeDefinition();
-                // complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                 if (!anonymous) {
-//                if (true) {
                     XSDTypeDefinition superType = null;
                     for (XSDTypeDefinition type : types) {
                         if (type.getName().equals(superTypeName)) {
@@ -321,6 +312,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                     if (superType != null) {
                         complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                         complexType.setBaseTypeDefinition(superType);
+                        updateCompositorType(superType, group);
                     }
                     if (isAbstract)
                         complexType.setAbstract(isAbstract);
@@ -410,15 +402,14 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
         return Status.OK_STATUS;
     }
-    
+
     private boolean updateCompositorType(XSDTypeDefinition superType, XSDModelGroup currentGroup) {
         XSDParticle superTypeParticle = superType.getComplexType();
         XSDTerm term = superTypeParticle.getTerm();
         if (term instanceof XSDModelGroup) {
             XSDModelGroup group = (XSDModelGroup) term;
             if (group.getCompositor() == XSDCompositor.ALL_LITERAL || currentGroup.getCompositor() == XSDCompositor.ALL_LITERAL) {
-                if(MessageDialog.openConfirm(null, Messages._ChangeToSequenceType,
-                        Messages._ComplexTypeToSequence)) {
+                if (MessageDialog.openConfirm(null, Messages._ChangeToSequenceType, Messages._ComplexTypeToSequence)) {
                     group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
                     superTypeParticle.updateElement();
                     currentGroup.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
@@ -476,7 +467,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDSimpleTypeDefinition) {
-                        MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDChangeToCXX_ErrorMsg2, typeName));
+                        MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                                Messages.bind(Messages.XSDChangeToCXX_ErrorMsg2, typeName));
                         return false;
                     }
                 }
