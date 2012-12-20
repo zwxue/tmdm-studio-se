@@ -12,39 +12,18 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
-import static org.junit.Assert.*;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.axis.utils.IOUtils;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.xsd.XSDComplexTypeDefinition;
-import org.eclipse.xsd.XSDCompositor;
-import org.eclipse.xsd.XSDConcreteComponent;
-import org.eclipse.xsd.XSDElementDeclaration;
-import org.eclipse.xsd.XSDModelGroup;
-import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
-import org.eclipse.xsd.XSDSimpleTypeDefinition;
-import org.eclipse.xsd.XSDTypeDefinition;
-import org.junit.Before;
-import org.junit.Test;
+import javax.rmi.CORBA.Util;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.webservices.WSRoutingRuleExpression;
-import com.amalto.workbench.webservices.WSRoutingRuleOperator;
-import com.amalto.workbench.webservices.WSStringPredicate;
-import com.amalto.workbench.webservices.WSWhereCondition;
-import com.amalto.workbench.webservices.WSWhereOperator;
 
 public class UtilTest {
 
@@ -56,11 +35,11 @@ public class UtilTest {
     }
 
     private TreeParent getServerRoot() {
-        String serverName = "localhost";
-        String universe = "";
-        String username = "username";
-        String password = "passwd";
-        String endpointaddress = "http://localhost";
+        String serverName = "localhost";//$NON-NLS-1$
+        String universe = "";//$NON-NLS-1$
+        String username = "username";//$NON-NLS-1$
+        String password = "passwd";//$NON-NLS-1$
+        String endpointaddress = "http://localhost";//$NON-NLS-1$
         TreeParent serverRoot = new TreeParent(serverName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
                 : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         UserInfo user = new UserInfo();
@@ -121,7 +100,7 @@ public class UtilTest {
     }
 
     private XSDSchema getXSDSchema() throws Exception {
-        InputStream in = UtilTest.class.getResourceAsStream("TestGetComplexTypeDefinitionChildren_0.1.xsd");
+        InputStream in = UtilTest.class.getResourceAsStream("TestGetComplexTypeDefinitionChildren_0.1.xsd");//$NON-NLS-1$
         try {
             byte[] buf = new byte[in.available()];
             IOUtils.readFully(in, buf);
@@ -138,16 +117,16 @@ public class UtilTest {
 
     @Test
     public void testJoinStrings() {
-        String[] strs = { "a", "b" };
-        String str = Util.joinStrings(strs, ";");
-        assertEquals("a;b", str);
+        String[] strs = { "a", "b" };//$NON-NLS-1$ //$NON-NLS-2$
+        String str = Util.joinStrings(strs, ";");//$NON-NLS-1$
+        assertEquals("a;b", str);//$NON-NLS-1$
     }
 
     @Test
     public void testGetConceptFromPath() {
-        String xpath = "Entity/Id[aa>0]";
+        String xpath = "Entity/Id[aa>0]";//$NON-NLS-1$
         String entity = Util.getConceptFromPath(xpath);
-        assertEquals("Entity", entity);
+        assertEquals("Entity", entity);//$NON-NLS-1$
     }
 
     @Test
@@ -156,12 +135,12 @@ public class UtilTest {
         XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) el.getType();
         ArrayList<Object> children = Util.getComplexTypeDefinitionChildren(type);
         String concept = Util.getConceptName((XSDConcreteComponent) children.get(0));
-        assertEquals("Entity", concept);
+        assertEquals("Entity", concept);//$NON-NLS-1$
     }
 
     @Test
     public void testNodeToString() throws Exception {
-        String xml = "<a>a</a>";
+        String xml = "<a>a</a>";//$NON-NLS-1$
         Node node = Util.parse(xml).getDocumentElement();
         String xml2 = Util.nodeToString(node);
         assertEquals(xml2.trim(), xml);
@@ -169,23 +148,23 @@ public class UtilTest {
 
     @Test
     public void testGetNodeList() throws Exception {
-        String xml = "<node><id>id</id><name>name</name></node>";
+        String xml = "<node><id>id</id><name>name</name></node>";//$NON-NLS-1$
         Node node = Util.parse(xml).getDocumentElement();
-        NodeList list = Util.getNodeList(node, "id");
-        assertEquals(list.item(0).getNodeName(), "id");
+        NodeList list = Util.getNodeList(node, "id");//$NON-NLS-1$
+        assertEquals(list.item(0).getNodeName(), "id");//$NON-NLS-1$
     }
 
     @Test
     public void testGetRootElement() throws Exception {
-        Element root = Util.getRootElement("elementName", "namespace", null);
-        assertEquals(root.getNamespaceURI(), "namespace");
+        Element root = Util.getRootElement("elementName", "namespace", null);//$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(root.getNamespaceURI(), "namespace");//$NON-NLS-1$
     }
 
     @Test
     public void testParse() throws Exception {
-        String xml = "<a>a</a>";
+        String xml = "<a>a</a>";//$NON-NLS-1$
         Document d = Util.parse(xml);
-        assertEquals(d.getDocumentElement().getNodeName(), "a");
+        assertEquals(d.getDocumentElement().getNodeName(), "a");//$NON-NLS-1$
     }
 
     @Test
@@ -215,86 +194,86 @@ public class UtilTest {
 
     @Test
     public void testGetChildElementNames() throws Exception {
-        List<String> list = Util.getChildElementNames(schema, "Entity");
+        List<String> list = Util.getChildElementNames(schema, "Entity");//$NON-NLS-1$
         assertEquals(list.size(), 7);
-        assertEquals(list.get(0), "Entity/id");
+        assertEquals(list.get(0), "Entity/id");//$NON-NLS-1$
     }
 
     @Test
     public void testConvertWhereCondition() {
-        WSWhereCondition wc = new WSWhereCondition("Entity/Id", WSWhereOperator.CONTAINS, "id1", WSStringPredicate.OR, false);
+        WSWhereCondition wc = new WSWhereCondition("Entity/Id", WSWhereOperator.CONTAINS, "id1", WSStringPredicate.OR, false);//$NON-NLS-1$ //$NON-NLS-2$
         String[] lines = Util.convertWhereCondition(wc);
         assertEquals(lines.length, 4);
-        assertEquals(lines[0], "Entity/Id");
-        assertEquals(lines[1], "Contains");
-        assertEquals(lines[2], "id1");
-        assertEquals(lines[3], "Or");
+        assertEquals(lines[0], "Entity/Id");//$NON-NLS-1$
+        assertEquals(lines[1], "Contains");//$NON-NLS-1$
+        assertEquals(lines[2], "id1");//$NON-NLS-1$
+        assertEquals(lines[3], "Or");//$NON-NLS-1$
     }
 
     @Test
     public void testConvertRoleWhereCondition() {
         RoleWhereCondition rc = new RoleWhereCondition();
-        rc.setLeftPath("Entity/Id");
-        rc.setOperator("Contains");
-        rc.setRightValueOrPath("id1");
-        rc.setPredicate("Or");
+        rc.setLeftPath("Entity/Id");//$NON-NLS-1$
+        rc.setOperator("Contains");//$NON-NLS-1$
+        rc.setRightValueOrPath("id1");//$NON-NLS-1$
+        rc.setPredicate("Or");//$NON-NLS-1$
 
         String[] lines = Util.convertRoleWhereCondition(rc);
         assertEquals(lines.length, 4);
-        assertEquals(lines[0], "Entity/Id");
-        assertEquals(lines[1], "Contains");
-        assertEquals(lines[2], "id1");
-        assertEquals(lines[3], "Or");
+        assertEquals(lines[0], "Entity/Id");//$NON-NLS-1$
+        assertEquals(lines[1], "Contains");//$NON-NLS-1$
+        assertEquals(lines[2], "id1");//$NON-NLS-1$
+        assertEquals(lines[3], "Or");//$NON-NLS-1$
     }
 
     @Test
     public void testConvertRouteCondition() {
-        WSRoutingRuleExpression wr = new WSRoutingRuleExpression("name", "Entity/Id", WSRoutingRuleOperator.CONTAINS, "value");
+        WSRoutingRuleExpression wr = new WSRoutingRuleExpression("name", "Entity/Id", WSRoutingRuleOperator.CONTAINS, "value");//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         String[] lines = Util.convertRouteCondition(wr);
         assertEquals(lines.length, 4);
-        assertEquals(lines[0], "Entity/Id");
-        assertEquals(lines[1], "Contains");
-        assertEquals(lines[2], "value");
-        assertEquals(lines[3], "name");
+        assertEquals(lines[0], "Entity/Id");//$NON-NLS-1$
+        assertEquals(lines[1], "Contains");//$NON-NLS-1$
+        assertEquals(lines[2], "value");//$NON-NLS-1$
+        assertEquals(lines[3], "name");//$NON-NLS-1$
 
     }
 
     @Test
     public void testConvertLineRoute() {
-        String[] values = { "Entity/Id", "Contains", "value", "name" };
+        String[] values = { "Entity/Id", "Contains", "value", "name" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         WSRoutingRuleExpression wr = Util.convertLineRoute(values);
-        assertEquals(wr.getXpath(), "Entity/Id");
-        assertEquals(wr.getWsOperator().getValue(), "CONTAINS");
-        assertEquals(wr.getValue(), "value");
-        assertEquals(wr.getName(), "name");
+        assertEquals(wr.getXpath(), "Entity/Id");//$NON-NLS-1$
+        assertEquals(wr.getWsOperator().getValue(), "CONTAINS");//$NON-NLS-1$
+        assertEquals(wr.getValue(), "value");//$NON-NLS-1$
+        assertEquals(wr.getName(), "name");//$NON-NLS-1$
     }
 
     @Test
     public void testConvertLine() {
-        String[] values = { "Entity/Id", "Contains", "id1", "Or" };
+        String[] values = { "Entity/Id", "Contains", "id1", "Or" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         WSWhereCondition wc = Util.convertLine(values);
-        assertEquals(wc.getLeftPath(), "Entity/Id");
-        assertEquals(wc.getOperator().getValue(), "CONTAINS");
-        assertEquals(wc.getRightValueOrPath(), "id1");
-        assertEquals(wc.getStringPredicate().getValue(), "OR");
+        assertEquals(wc.getLeftPath(), "Entity/Id");//$NON-NLS-1$
+        assertEquals(wc.getOperator().getValue(), "CONTAINS");//$NON-NLS-1$
+        assertEquals(wc.getRightValueOrPath(), "id1");//$NON-NLS-1$
+        assertEquals(wc.getStringPredicate().getValue(), "OR");//$NON-NLS-1$
     }
 
     @Test
     public void testConvertLineToRC() {
-        String[] values = { "Entity/Id", "Contains", "id1", "Or" };
+        String[] values = { "Entity/Id", "Contains", "id1", "Or" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         RoleWhereCondition wc = Util.convertLineToRC(values);
-        assertEquals(wc.getLeftPath(), "Entity/Id");
-        assertEquals(wc.getOperator(), "Contains");
-        assertEquals(wc.getRightValueOrPath(), "id1");
-        assertEquals(wc.getPredicate(), "Or");
+        assertEquals(wc.getLeftPath(), "Entity/Id");//$NON-NLS-1$
+        assertEquals(wc.getOperator(), "Contains");//$NON-NLS-1$
+        assertEquals(wc.getRightValueOrPath(), "id1");//$NON-NLS-1$
+        assertEquals(wc.getPredicate(), "Or");//$NON-NLS-1$
     }
 
     @Test
     public void testGetItemContent() {
-        String xmlstring = "<c>Entity></c><t>1313434343</t><p>abcdefg</p>";
+        String xmlstring = "<c>Entity></c><t>1313434343</t><p>abcdefg</p>";//$NON-NLS-1$
         String xml = Util.getItemContent(xmlstring);
-        assertEquals(xml, "abcdefg");
-        xmlstring = "<c>Entity></c><t>1313434343</t><p/>";
+        assertEquals(xml, "abcdefg");//$NON-NLS-1$
+        xmlstring = "<c>Entity></c><t>1313434343</t><p/>";//$NON-NLS-1$
         xml = Util.getItemContent(xmlstring);
         assertEquals(xml, "");
     }
@@ -309,14 +288,14 @@ public class UtilTest {
     public void testGetConcepts() {
         List<String> list = Util.getConcepts(schema);
         assertEquals(list.size(), 1);
-        assertEquals(list.get(0), "Entity");
+        assertEquals(list.get(0), "Entity");//$NON-NLS-1$
     }
 
     @Test
     public void testGetNewLabelString() {
-        String oldString = "Routing Engine V2";
+        String oldString = "Routing Engine V2";//$NON-NLS-1$
         String newLabel = Util.getNewLabelString(oldString);
-        assertEquals("Event Manager", newLabel);
+        assertEquals("Event Manager", newLabel);//$NON-NLS-1$
     }
 
     @Test
@@ -339,7 +318,7 @@ public class UtilTest {
                 .getTypeDefinition();
         XSDModelGroup group = (XSDModelGroup) ((XSDParticle) complexType.getContent()).getTerm();
         String name = Util.getParticleName(group.getParticles().get(0));
-        assertEquals(name, "id");
+        assertEquals(name, "id");//$NON-NLS-1$
     }
 
     @Test
@@ -367,7 +346,7 @@ public class UtilTest {
 
     @Test
     public void testIsCustomrType() {
-        boolean ret = Util.isCustomrType(schema, "id");
+        boolean ret = Util.isCustomrType(schema, "id");//$NON-NLS-1$
         assertEquals(ret, false);
     }
 
@@ -416,7 +395,7 @@ public class UtilTest {
         XSDComplexTypeDefinition complexType = (XSDComplexTypeDefinition) schema.getElementDeclarations().get(0)
                 .getTypeDefinition();
         XSDCompositor compositor = Util.getComplexTypeGroupType(complexType);
-        assertEquals(compositor.getName(), "all");
+        assertEquals(compositor.getName(), "all");//$NON-NLS-1$
     }
 
     @Test
@@ -470,15 +449,97 @@ public class UtilTest {
                 .getTypeDefinition();
         XSDModelGroup group = (XSDModelGroup) ((XSDParticle) complexType.getContent()).getTerm();
         XSDElementDeclaration el = (XSDElementDeclaration) group.getParticles().get(0).getTerm();
-        boolean ret = Util.isSpecifiedBuildInType((XSDSimpleTypeDefinition) el.getTypeDefinition(), "string");
+        boolean ret = Util.isSpecifiedBuildInType((XSDSimpleTypeDefinition) el.getTypeDefinition(), "string");//$NON-NLS-1$
         assertEquals(ret, true);
     }
 
     @Test
     public void testFormatErrorMessage() {
-        String sourceMessage = "[aaa]:3:5:a: ";
+        String sourceMessage = "[aaa]:3:5:a: ";//$NON-NLS-1$
         String xml = Util.formatErrorMessage(sourceMessage);
         assertEquals(xml, sourceMessage);
 
+    }
+
+    @Test
+    public void testGetAllSuperComplexTypes() throws Exception {
+        XSDSchema xsdSchema = createSchema();
+
+        XSDComplexTypeDefinition childType = null;
+        EList<XSDElementDeclaration> declarations = xsdSchema.getElementDeclarations();
+        for (XSDElementDeclaration xed : declarations) {
+            if (xed.getName().equals("opo")) { //$NON-NLS-1$
+                childType = (XSDComplexTypeDefinition) xed.getType();
+                break;
+            }
+        }
+
+        if (childType != null) {
+            List<XSDComplexTypeDefinition> superComplexTypes = Util.getAllSuperComplexTypes(childType);
+            assertNotNull(superComplexTypes);
+            assertEquals(superComplexTypes.size(), 3);
+            assertEquals("Manager", superComplexTypes.get(0).getName()); //$NON-NLS-1$
+            assertEquals("Employee", superComplexTypes.get(1).getName()); //$NON-NLS-1$
+            assertEquals("Person", superComplexTypes.get(2).getName()); //$NON-NLS-1$
+        }
+    }
+
+    @Test
+    public void testGetRealKeyInfos() throws Exception {
+        XSDSchema xsdSchema = createSchema();
+
+        XSDElementDeclaration elementDeclaration = null;
+        EList<XSDElementDeclaration> declarations = xsdSchema.getElementDeclarations();
+        for (XSDElementDeclaration xed : declarations) {
+            if (xed.getName().equals("opo")) { //$NON-NLS-1$
+                elementDeclaration = xed;
+                break;
+            }
+        }
+
+        if (elementDeclaration != null) {
+            XSDComplexTypeDefinition childType = (XSDComplexTypeDefinition) elementDeclaration.getType();
+            childType = (XSDComplexTypeDefinition) childType.getBaseTypeDefinition();
+            childType = (XSDComplexTypeDefinition) childType.getBaseTypeDefinition();
+            XSDParticle xsdParticle = (XSDParticle) childType.getContent();
+            XSDModelGroup modelGroup = (XSDModelGroup) xsdParticle.getTerm();
+            EList<XSDParticle> particles = modelGroup.getParticles();
+
+            XSDParticle primaryKeyParticle = null;
+            XSDParticle nonePrimaryKeyParticle = null;
+            for (XSDParticle particle : particles) {
+                XSDElementDeclaration term = (XSDElementDeclaration) particle.getTerm();
+                if (term.getName().equals("Id")) { //$NON-NLS-1$
+                    primaryKeyParticle = particle;
+                    break;
+                } else {
+                    nonePrimaryKeyParticle = particle;
+                }
+            }
+
+            if (nonePrimaryKeyParticle == null) {
+                nonePrimaryKeyParticle = particles.get(particles.size() - 1);
+            }
+
+            assertNull(Util.getRealKeyInfos(null, null));
+            assertNull(Util.getRealKeyInfos(elementDeclaration, null));
+            assertNull(Util.getRealKeyInfos(null, primaryKeyParticle));
+
+            assertEquals(Util.getRealKeyInfos(elementDeclaration, nonePrimaryKeyParticle).size(), 0);
+
+            List<Object> realKeyInfos = Util.getRealKeyInfos(elementDeclaration, primaryKeyParticle);
+            assertNotNull(realKeyInfos);
+            assertEquals(realKeyInfos.size(), 2);
+            assertTrue((realKeyInfos.get(0) instanceof XSDIdentityConstraintDefinition));
+            assertTrue((realKeyInfos.get(1) instanceof XSDXPathDefinition));
+            assertEquals(((XSDXPathDefinition) realKeyInfos.get(1)).getValue(), "Id"); //$NON-NLS-1$
+        }
+    }
+
+    private XSDSchema createSchema() throws Exception {
+        String fileName = "ComplexTypeWithInheritance.xsd"; //$NON-NLS-1$
+        String xsdContent = TestUtil.readTestResource(this.getClass(), fileName);
+
+        return Util.getXSDSchema(xsdContent);
     }
 }
