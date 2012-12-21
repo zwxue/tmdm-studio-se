@@ -95,13 +95,17 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public void setXObject(TreeObject xobject) {
         this.xobject = xobject;
+        InputStreamReader reader = null;
         try {// temporarily store the file data for restore
             IFile file = getXSDFile(xobject);
-            InputStreamReader reader = new InputStreamReader(file.getContents());
+            reader = new InputStreamReader(file.getContents());
             fileContents = IOUtils.toByteArray(reader, "utf-8"); //$NON-NLS-1$
-            IOUtils.closeQuietly(reader);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        } finally {
+            if (reader != null) {
+                IOUtils.closeQuietly(reader);
+            }
         }
     }
 
@@ -127,6 +131,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     @Override
     public void doSave(IProgressMonitor monitor) {
         boolean savedSuccess = true;
+        InputStreamReader reader = null;
         try {
             if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
                 DataModelMainPage mainPage = (DataModelMainPage) getSelectedPage();
@@ -151,15 +156,17 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 fileContents = xsd.getBytes("utf-8"); //$NON-NLS-1$
             } else {
                 IFile file = getXSDFile(xobject);
-                InputStreamReader reader = new InputStreamReader(file.getContents());
+                reader = new InputStreamReader(file.getContents());
                 fileContents = IOUtils.toByteArray(reader, "utf-8"); //$NON-NLS-1$
-                IOUtils.closeQuietly(reader);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
             if (savedSuccess) {
                 super.doSave(monitor);
+            }
+            if (reader != null) {
+                IOUtils.closeQuietly(reader);
             }
             monitor.done();
         }
