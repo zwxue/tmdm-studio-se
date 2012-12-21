@@ -13,7 +13,6 @@
 package com.amalto.workbench.editors.xsdeditor;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -96,12 +95,11 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public void setXObject(TreeObject xobject) {
         this.xobject = xobject;
-
         try {// temporarily store the file data for restore
             IFile file = getXSDFile(xobject);
-            InputStream inputStream = file.getContents();
-            fileContents = IOUtils.toByteArray(new InputStreamReader(inputStream), "utf-8"); //$NON-NLS-1$
-            IOUtils.closeQuietly(inputStream);
+            InputStreamReader reader = new InputStreamReader(file.getContents());
+            fileContents = IOUtils.toByteArray(reader, "utf-8"); //$NON-NLS-1$
+            IOUtils.closeQuietly(reader);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -109,7 +107,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     public String getPartName() {
-
         String part = super.getPartName();
         if (part.endsWith(".xsd")) {//$NON-NLS-1$
             return part.substring(0, part.length() - 4);
