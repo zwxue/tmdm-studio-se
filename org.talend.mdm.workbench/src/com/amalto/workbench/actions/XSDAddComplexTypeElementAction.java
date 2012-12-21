@@ -58,11 +58,11 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
 public class XSDAddComplexTypeElementAction extends UndoAction {
 
     private static Log log = LogFactory.getLog(XSDAddComplexTypeElementAction.class);
-    
+
     private final String defaultTypeName = "string"; //$NON-NLS-1$
 
     private XSDParticle selParticle = null;
-    
+
     private XSDModelGroup modelGroup = null;
 
     private ComplexTypeInputDialogR dialogR;
@@ -103,14 +103,14 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
     @Override
     public IStatus doAction() {
         IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
-//        modelGroup = (XSDModelGroup) selection.getFirstElement();
-        
-        if(selection.getFirstElement() instanceof XSDParticle) {
+        // modelGroup = (XSDModelGroup) selection.getFirstElement();
+
+        if (selection.getFirstElement() instanceof XSDParticle) {
             selParticle = (XSDParticle) selection.getFirstElement();
-            
+
             if (!(selParticle.getContainer() instanceof XSDModelGroup))
                 return Status.CANCEL_STATUS;
-            
+
             modelGroup = (XSDModelGroup) selParticle.getContainer();
         } else {
             if (selection.getFirstElement() instanceof XSDComplexTypeDefinition) {
@@ -126,7 +126,8 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             } else if (selection.getFirstElement() instanceof XSDModelGroup) {
                 modelGroup = (XSDModelGroup) selection.getFirstElement();
             } else {
-                log.info(Messages.bind(Messages._UnkownSection, selection.getFirstElement().getClass().getName(), selection.getFirstElement().toString())); //$NON-NLS-1$
+                log.info(Messages.bind(Messages._UnkownSection, selection.getFirstElement().getClass().getName(), selection
+                        .getFirstElement().toString())); //$NON-NLS-1$
                 return Status.CANCEL_STATUS;
             }
         }
@@ -138,7 +139,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
         updateElementFields();
 
-        if(selParticle != null) {
+        if (selParticle != null) {
             XSDElementDeclaration elem = (XSDElementDeclaration) selParticle.getContent();
             if (Util.changeElementTypeToSequence(elem, maxOccurs) == Status.CANCEL_STATUS) {
                 return Status.CANCEL_STATUS;
@@ -149,15 +150,15 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             XSDParticle particle = createParticle();
             XSDElementDeclaration declaration = (XSDElementDeclaration) particle.getContent();
             boolean flag = transformToComplexType(declaration);
-            if(!flag) {
+            if (!flag) {
                 modelGroup.getContents().remove(particle);
                 return Status.CANCEL_STATUS;
             }
-            
+
             page.refresh();
             page.getTreeViewer().setSelection(new StructuredSelection(particle), true);
             page.markDirty();
-            
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), Messages._Error,
@@ -188,7 +189,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
         XSDElementDeclaration resultElementDeclaration = factory.createXSDElementDeclaration();
         resultElementDeclaration.setName(elementName);
-        
+
         resultElementDeclaration.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(),
                 defaultTypeName));
 
@@ -210,18 +211,18 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 resultParticle.getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
             }
         }
-
+        Util.changeElementTypeToSequence(resultElementDeclaration, maxOccurs);
         if (dialogR.isInherit()) {
             XSDTerm totm = resultParticle.getTerm();
             XSDElementDeclaration concept = null;
-            
+
             Object parent = Util.getParent(resultParticle);
             if (parent instanceof XSDElementDeclaration)
                 concept = (XSDElementDeclaration) parent;
             else {
                 concept = (XSDElementDeclaration) resultParticle.getContent();
             }
-            
+
             XSDAnnotation fromannotation = null;
             if (concept != null)
                 fromannotation = concept.getAnnotation();
@@ -353,11 +354,11 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             }
 
             if (superType != null) {
-                
+
                 boolean status = updateCompositorType(superType, mdlGrp);
-                if(!status)
+                if (!status)
                     return false;
-                
+
                 complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                 complexType.setBaseTypeDefinition(superType);
             }
@@ -378,7 +379,8 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             // add an element declaration
             subElement = factory.createXSDElementDeclaration();
             subElement.setName("subelement");//$NON-NLS-1$
-            subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), defaultTypeName));
+            subElement
+                    .setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), defaultTypeName));
 
             subParticle = factory.createXSDParticle();
             subParticle.unsetMaxOccurs();
@@ -412,9 +414,9 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 complexType.setName(typeName);
                 if (superType != null) {
                     boolean status = updateCompositorType(superType, group);
-                    if(!status)
+                    if (!status)
                         return false;
-                    
+
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                     complexType.setBaseTypeDefinition(superType);
                 }
@@ -491,7 +493,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
         decl.updateElement();
         schema.update();
-        
+
         return true;
     }
 
@@ -501,8 +503,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         if (term instanceof XSDModelGroup) {
             XSDModelGroup group = (XSDModelGroup) term;
             if (group.getCompositor() == XSDCompositor.ALL_LITERAL || currentGroup.getCompositor() == XSDCompositor.ALL_LITERAL) {
-                if(MessageDialog.openConfirm(null, Messages._ChangeToSequenceType,
-                        Messages._ComplexTypeToSequence)) {
+                if (MessageDialog.openConfirm(null, Messages._ChangeToSequenceType, Messages._ComplexTypeToSequence)) {
                     group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
                     superTypeParticle.updateElement();
                     currentGroup.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
