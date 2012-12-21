@@ -95,10 +95,11 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public void setXObject(TreeObject xobject) {
         this.xobject = xobject;
-
         try {// temporarily store the file data for restore
             IFile file = getXSDFile(xobject);
-            fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8"); //$NON-NLS-1$
+            InputStreamReader reader = new InputStreamReader(file.getContents());
+            fileContents = IOUtils.toByteArray(reader, "utf-8"); //$NON-NLS-1$
+            IOUtils.closeQuietly(reader);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -106,7 +107,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     public String getPartName() {
-
         String part = super.getPartName();
         if (part.endsWith(".xsd")) {//$NON-NLS-1$
             return part.substring(0, part.length() - 4);
@@ -135,7 +135,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 wsDataModel.setXsdSchema(xsd);
                 IFile file = getXSDFile(xobject);
                 file.setCharset("utf-8", null);//$NON-NLS-1$
-                file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(xsd.getBytes("utf-8"));//$NON-NLS-1$
+                file.setContents(inputStream, IFile.FORCE, null);
+
             } // save the file's contents to DataModelMainPage
 
             IDocument doc = getTextEditor().getTextViewer().getDocument();
@@ -149,7 +151,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 fileContents = xsd.getBytes("utf-8"); //$NON-NLS-1$
             } else {
                 IFile file = getXSDFile(xobject);
-                fileContents = IOUtils.toByteArray(new InputStreamReader(file.getContents()), "utf-8"); //$NON-NLS-1$
+                InputStreamReader reader = new InputStreamReader(file.getContents());
+                fileContents = IOUtils.toByteArray(reader, "utf-8"); //$NON-NLS-1$
+                IOUtils.closeQuietly(reader);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
