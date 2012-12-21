@@ -89,11 +89,12 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
                 decl.updateElement();
             } else if (ref != null) {
 
-                getCommitedObj().getSourceXSDContent().setName(getCommitedObj().getNewName());
-                getCommitedObj().getSourceXSDContent().setTypeDefinition(
+                XSDElementDeclaration sourceXSDContent = getCommitedObj().getSourceXSDContent();
+                sourceXSDContent.setTypeDefinition(
                         getCommitedObj().getSchema().getSchemaForSchema()
                                 .resolveSimpleTypeDefinition(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001, "string"));//$NON-NLS-1$
 
+                sourceXSDContent.setResolvedElementDeclaration(sourceXSDContent);
                 // XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
                 // XSDElementDeclaration newD = (XSDElementDeclaration) factory.createXSDElementDeclaration();
                 // newD.setName(getCommitedObj().getNewName());
@@ -120,8 +121,8 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
 			int newMinOcur = getCommitedObj().getNewMinOcur();
 			getCommitedObj().getSourceElement().setMinOccurs(newMinOcur);
 			if (newMaxOcur == -1 || (newMaxOcur == 0 & newMinOcur == 0)) {
-				getCommitedObj().getSourceElement().getElement()
-						.setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
+                if (!"unbounded".equals(getCommitedObj().getSourceElement().getElement().getAttribute("maxOccurs")))//$NON-NLS-1$//$NON-NLS-2$
+                    getCommitedObj().getSourceElement().getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
 			} else {
 				getCommitedObj().getSourceElement().setMaxOccurs(newMaxOcur);
 			}
