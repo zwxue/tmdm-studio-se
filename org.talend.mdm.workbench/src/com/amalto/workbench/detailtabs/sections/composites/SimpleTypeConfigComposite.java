@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
@@ -155,6 +156,12 @@ public class SimpleTypeConfigComposite extends Composite {
     	removeNameTxtListener();
         String name = xsdSimpleType.getName() == null ? "" : xsdSimpleType.getName(); //$NON-NLS-1$
 		txtName.setText(name);
+
+        Set<String> uuidtypes = EUUIDCustomType.allTypes();
+        if (uuidtypes.contains(name)) {
+            txtName.setEditable(false);
+        }
+
 		if (name != null) {
 			int length = name.length();
 			if (length >= caretOffset) {
