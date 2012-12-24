@@ -109,19 +109,39 @@ public class PageingToolBar {
     KeyListener keylistener = new KeyListener() {
 
         public void keyReleased(KeyEvent e) {
-            
-            if (e.keyCode == SWT.CR) {
-                page = Integer.valueOf(pageText.getText());
-                pagesize = Integer.valueOf(pageSizeText.getText());
-                totalpage = totalsize / pagesize + 1;
-                if (listener != null) {
-                    listener.doSearch();
+
+            int keyCode = e.keyCode;
+            if (keyCode == SWT.CR || keyCode == SWT.KEYPAD_CR) {
+                try {
+                    page = Integer.valueOf(pageText.getText());
+                    pagesize = Integer.valueOf(pageSizeText.getText());
+                    totalpage = totalsize / pagesize + 1;
+                    if (page > totalpage) {
+                        page = totalpage;
+                        pageText.setText(String.valueOf(page));
+                    }
+                    if (page < 1) {
+                        page = 1;
+                        pageText.setText(String.valueOf(page));
+                    }
+                    if (listener != null) {
+                        listener.doSearch();
+                    }
+                    refreshUI();
+                } catch (NumberFormatException e1) {
+                    // do nothing
                 }
-                refreshUI();
             }
         }
 
         public void keyPressed(KeyEvent e) {
+            int keyCode = e.keyCode;
+            char c = e.character;
+            if ((c < '0' || c > '9') && c != '\b' && keyCode != SWT.DEL && keyCode != SWT.CR && keyCode != SWT.ARROW_LEFT
+                    && keyCode != SWT.ARROW_RIGHT && keyCode != SWT.KEYPAD_CR) {
+                e.doit = false;
+                return;
+            }
 
         }
     };
@@ -139,7 +159,6 @@ public class PageingToolBar {
         }
 
         public void widgetDefaultSelected(SelectionEvent e) {
-            
 
         }
     };
@@ -245,7 +264,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -260,7 +278,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -275,7 +292,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -290,7 +306,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -299,7 +314,8 @@ public class PageingToolBar {
 
     public void refreshUI() {
         long count = page * pagesize > totalsize ? totalsize : page * pagesize;
-        displayItems.setText(Messages.bind(Messages.PageingToolBar_DisplayText, ((page - 1) * pagesize + 1)+"", ""+count, ""+totalsize));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        displayItems.setText(Messages.bind(Messages.PageingToolBar_DisplayText,
+                ((page - 1) * pagesize + 1) + "", "" + count, "" + totalsize));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         pageSizeText.setText("" + pagesize);//$NON-NLS-1$
         pageText.setText("" + page);//$NON-NLS-1$
         totalPage.setText(Messages.bind(Messages.PageingToolBar_LabelText, totalpage));
