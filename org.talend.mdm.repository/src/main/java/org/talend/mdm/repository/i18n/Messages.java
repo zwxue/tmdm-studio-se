@@ -693,6 +693,8 @@ public class Messages extends NLS {
     
     public static String MdmPropertiesWizard_imageCatalog;
 
+    public static String MultiStatusDialog_MultiStatus_Messages;
+
     public static String Server_cannot_connected;
 
     public static String SmtpGetDocument_Desc0;

@@ -12,8 +12,14 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.dialogs.message;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
@@ -33,8 +39,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -158,21 +167,77 @@ public class MultiStatusDialog extends Dialog {
 
     /**
      * Create the dialog.
-     *
+     * 
      * @param parentShell
      */
     public MultiStatusDialog(Shell parentShell, String message, IStatus mutliStatus) {
         super(parentShell);
         //
         this.message = message;
-        this.mutliStatus = mutliStatus;
+        this.mutliStatus = initMultiStatus(mutliStatus);
         //
         this.setShellStyle(getShellStyle() | SWT.RESIZE);
     }
 
     /**
+     * DOC talend-mdm Comment method "initMultiStatus".
+     * 
+     * @param mutliStatus2
+     * @return
+     */
+    private IStatus initMultiStatus(IStatus multiStatus) {
+        IStatus[] children = multiStatus.getChildren();
+        if (!allSingleStatus(children)) {
+            return multiStatus;
+        }
+        Map<ERepositoryObjectType, List<IStatus>> map = new HashMap<ERepositoryObjectType, List<IStatus>>();
+        for (IStatus status : children) {
+            ERepositoryObjectType type = getType(status);
+            Assert.isNotNull(type);
+
+            List<IStatus> list = map.get(type);
+            if (list == null) {
+                list = new ArrayList<IStatus>();
+                map.put(type, list);
+            }
+            if (list.isEmpty() || !list.contains(status)) {
+                list.add(status);
+            }
+        }
+        MultiStatus retStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, "", null); //$NON-NLS-1$
+        for (Entry<ERepositoryObjectType, List<IStatus>> entry : map.entrySet()) {
+            ERepositoryObjectType key = entry.getKey();
+            MultiStatus submultiStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, Messages.bind(
+                    Messages.MultiStatusDialog_MultiStatus_Messages, key.getKey()), null);
+            for (IStatus status : entry.getValue()) {
+                submultiStatus.add(status);
+            }
+            retStatus.add(submultiStatus);
+        }
+        map.clear();
+        return retStatus;
+    }
+
+    private ERepositoryObjectType getType(IStatus status) {
+        IRepositoryViewObject viewObject = ((DeployStatus) status).getCommand().getViewObject();
+        if (viewObject == null) {
+            return null;
+        }
+        return viewObject.getRepositoryObjectType();
+    }
+
+    private boolean allSingleStatus(IStatus[] children) {
+        for (IStatus status : children) {
+            if (status.isMultiStatus()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Create contents of the button bar.
-     *
+     * 
      * @param parent
      */
     @Override
@@ -182,7 +247,7 @@ public class MultiStatusDialog extends Dialog {
 
     /**
      * Create contents of the dialog.
-     *
+     * 
      * @param parent
      */
     @Override
@@ -203,8 +268,6 @@ public class MultiStatusDialog extends Dialog {
         treeViewer.setContentProvider(new TreeContentProvider());
         treeViewer.setLabelProvider(new ViewerLabelProvider());
 
-        // treeViewer.setContentProvider(new ArrayContentProvider());
-        //
         initInput();
         return container;
     }
