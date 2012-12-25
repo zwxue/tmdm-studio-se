@@ -1154,10 +1154,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void hookDoubleClickAction() {
-        viewer.addDoubleClickListener(new DoubleClickListener(viewer) {
-        });
-        typesViewer.addDoubleClickListener(new DoubleClickListener(typesViewer) {
-        });
+        viewer.addDoubleClickListener(new DoubleClickListener(viewer));
+        typesViewer.addDoubleClickListener(new DoubleClickListener(typesViewer));
     }
 
     protected void initxsdEditFacetAction(String element) {
@@ -1280,18 +1278,23 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                  * isMulti = true;
                  */
                 String title = "";//$NON-NLS-1$
-                if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
-                    title = Messages.getString("PasteEntitiesText"); //$NON-NLS-1$
-                else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
-                    title = Messages.getString("PasteEntityText"); //$NON-NLS-1$
-                else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() > 1)
-                    title = Messages.getString("PasteElementsText"); //$NON-NLS-1$
-                else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() == 1)
-                    title = Messages.getString("PasteElement"); //$NON-NLS-1$
 
-                XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
-                if (pasteConceptAction.checkInPasteType())
-                    manager.add(pasteConceptAction);
+                if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 0
+                        || WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() > 0) {
+
+                    if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
+                        title = Messages.getString("PasteEntitiesText"); //$NON-NLS-1$
+                    else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
+                        title = Messages.getString("PasteEntityText"); //$NON-NLS-1$
+                    else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() > 1)
+                        title = Messages.getString("PasteElementsText"); //$NON-NLS-1$
+                    else if (WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() == 1)
+                        title = Messages.getString("PasteElement"); //$NON-NLS-1$
+
+                    XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
+                    if (pasteConceptAction.checkInPasteType())
+                        manager.add(pasteConceptAction);
+                }
 
                 manager.add(new Separator());
                 manager.add(newElementAction);
