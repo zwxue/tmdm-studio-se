@@ -1201,10 +1201,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void hookDoubleClickAction() {
-        viewer.addDoubleClickListener(new DoubleClickListener(viewer) {
-        });
-        typesViewer.addDoubleClickListener(new DoubleClickListener(typesViewer) {
-        });
+        viewer.addDoubleClickListener(new DoubleClickListener(viewer));
+        typesViewer.addDoubleClickListener(new DoubleClickListener(typesViewer));
     }
 
     protected void initxsdEditFacetAction(String element) {
@@ -1288,20 +1286,23 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         manager.add(new Separator());
         if ((selection == null) || (selection.getFirstElement() == null)) {
-            manager.add(new Separator(ADDITIONMENUID));
-            // add by ymli, fix bug 0009770
-            String title = "";//$NON-NLS-1$
-            if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1) {
-                title = Messages.PasteEntityText;
-            } else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1) {
-                title = Messages.PasteEntitiesText;
+            if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 0) {
+                manager.add(new Separator(ADDITIONMENUID));
+                // add by ymli, fix bug 0009770
+                String title = "";//$NON-NLS-1$
+                if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1) {
+                    title = Messages.PasteEntityText;
+                } else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1) {
+                    title = Messages.PasteEntitiesText;
+                }
+
+                XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
+                if (pasteConceptAction.checkInPasteType()) {
+                    manager.add(new Separator());
+                    manager.add(pasteConceptAction);
+                }
             }
 
-            XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
-            if (pasteConceptAction.checkInPasteType()) {
-                manager.add(new Separator());
-                manager.add(pasteConceptAction);
-            }
             return;
         }
 
@@ -1378,6 +1379,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(getAddElementMenuForTypeClass(XSDModelGroup.class, Messages._AddElement));
             manager.add(new Separator());
             manager.add(changeSubElementGroupAction);
+            manager.add(new XSDPasteConceptAction(this, "Paste Element")); //$NON-NLS-1$
         }
 
         if (obj instanceof XSDParticle && selectedObjs.length == 1) {

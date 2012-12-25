@@ -55,19 +55,16 @@ public class XSDPasteConceptAction extends UndoAction {
 
     private static Log log = LogFactory.getLog(XSDPasteConceptAction.class);
 
-    private DataModelMainPage page;
-
-    ArrayList<XSDElementDeclaration> conceptList = new ArrayList<XSDElementDeclaration>();
+    List<XSDElementDeclaration> conceptList = new ArrayList<XSDElementDeclaration>();
 
     Set<XSDTypeDefinition> copyTypeSet = new HashSet<XSDTypeDefinition>();
 
-    HashMap<String, XSDTypeDefinition> typeList = new HashMap<String, XSDTypeDefinition>();
+    Map<String, XSDTypeDefinition> typeList = new HashMap<String, XSDTypeDefinition>();
 
     String displayName = Messages.XSDPasteConceptAction_DisplayName;
 
     public XSDPasteConceptAction(DataModelMainPage page, String title) {
         super(page);
-        this.page = page;
 
         displayName = title;
         setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
@@ -85,7 +82,7 @@ public class XSDPasteConceptAction extends UndoAction {
             if (!conceptList.isEmpty()) {
                 // List<String> concepts = new ArrayList<String>();
                 int index = 0;
-                for (Iterator it = conceptList.iterator(); it.hasNext();) {
+                for (Iterator<XSDElementDeclaration> it = conceptList.iterator(); it.hasNext();) {
 
                     if (conceptList.get(index).getSchema() != null) {
                         // concepts = Util.getConcepts(conceptList.get(index).getSchema());
@@ -104,14 +101,15 @@ public class XSDPasteConceptAction extends UndoAction {
 
                         new_copy_concept = (XSDElementDeclaration) copy_concept.cloneConcreteComponent(true, false);
                         InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDPasteConceptAction_CopyElement,
-                                Messages.XSDPasteConceptAction_DialogTip, Messages.bind(Messages.XSDPasteConceptAction_CopyOf, copy_concept.getName()), new IInputValidator() {//$NON-NLS-2$
+                                Messages.XSDPasteConceptAction_DialogTip, Messages.bind(Messages.XSDPasteConceptAction_CopyOf,
+                                        copy_concept.getName()), new IInputValidator() {
 
                                     public String isValid(String newText) {
                                         if ((newText == null) || "".equals(newText)) //$NON-NLS-1$
                                             return Messages.XSDPasteConceptAction_NameCannNotbeEmpty;
-                                        EList list = schema.getElementDeclarations();
-                                        for (Iterator iter = list.iterator(); iter.hasNext();) {
-                                            XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+                                        EList<XSDElementDeclaration> list = schema.getElementDeclarations();
+                                        for (Iterator<XSDElementDeclaration> iter = list.iterator(); iter.hasNext();) {
+                                            XSDElementDeclaration d = iter.next();
                                             if (d.getName().equals(newText))
                                                 return Messages.XSDPasteConceptAction_EntityAlreadyExists;
                                         }
@@ -160,7 +158,7 @@ public class XSDPasteConceptAction extends UndoAction {
                     if (type instanceof XSDComplexTypeDefinition) {
                         typedefinitionClone = factory.createXSDComplexTypeDefinition();
                         typedefinitionClone = (XSDComplexTypeDefinition) type.cloneConcreteComponent(true, false);
-                        schema.getContents().add((XSDComplexTypeDefinition) typedefinitionClone);
+                        schema.getContents().add(typedefinitionClone);
                         addAnnotationForComplexType((XSDComplexTypeDefinition) type,
                                 (XSDComplexTypeDefinition) typedefinitionClone);
                     } else if (type instanceof XSDSimpleTypeDefinition) {
@@ -233,18 +231,18 @@ public class XSDPasteConceptAction extends UndoAction {
             XSDParticle fromxsdParticle = (XSDParticle) fromcomplexType;
             XSDParticle toxsdParticle = (XSDParticle) tocomplexType;
 
-            if (((XSDParticle) fromxsdParticle).getTerm() instanceof XSDModelGroup) {
+            if (fromxsdParticle.getTerm() instanceof XSDModelGroup) {
 
                 XSDModelGroup frommodelGroup = ((XSDModelGroup) fromxsdParticle.getTerm());
                 XSDModelGroup tomodelGroup = ((XSDModelGroup) toxsdParticle.getTerm());
 
-                EList fromlist = frommodelGroup.getContents();
-                EList tolist = tomodelGroup.getContents();
+                EList<XSDParticle> fromlist = frommodelGroup.getContents();
+                EList<XSDParticle> tolist = tomodelGroup.getContents();
 
-                Iterator toIt = tolist.iterator();
+                Iterator<XSDParticle> toIt = tolist.iterator();
 
-                for (XSDParticle fromel : (XSDParticle[]) fromlist.toArray(new XSDParticle[fromlist.size()])) {
-                    XSDParticle toel = (XSDParticle) toIt.next();
+                for (XSDParticle fromel : fromlist.toArray(new XSDParticle[fromlist.size()])) {
+                    XSDParticle toel = toIt.next();
                     XSDTerm totm = toel.getTerm();
                     XSDTerm fromtm = fromel.getTerm();
                     if (fromtm instanceof XSDElementDeclaration) {
@@ -284,18 +282,18 @@ public class XSDPasteConceptAction extends UndoAction {
                     XSDParticle fromxsdParticle = (XSDParticle) fromcomplexType;
                     XSDParticle toxsdParticle = (XSDParticle) tocomplexType;
 
-                    if (((XSDParticle) fromxsdParticle).getTerm() instanceof XSDModelGroup) {
+                    if (fromxsdParticle.getTerm() instanceof XSDModelGroup) {
 
                         XSDModelGroup frommodelGroup = ((XSDModelGroup) fromxsdParticle.getTerm());
                         XSDModelGroup tomodelGroup = ((XSDModelGroup) toxsdParticle.getTerm());
 
-                        EList fromlist = frommodelGroup.getContents();
-                        EList tolist = tomodelGroup.getContents();
+                        EList<XSDParticle> fromlist = frommodelGroup.getContents();
+                        EList<XSDParticle> tolist = tomodelGroup.getContents();
 
-                        Iterator toIt = tolist.iterator();
+                        Iterator<XSDParticle> toIt = tolist.iterator();
 
-                        for (XSDParticle fromel : (XSDParticle[]) fromlist.toArray(new XSDParticle[fromlist.size()])) {
-                            XSDParticle toel = (XSDParticle) toIt.next();
+                        for (XSDParticle fromel : fromlist.toArray(new XSDParticle[fromlist.size()])) {
+                            XSDParticle toel = toIt.next();
                             XSDTerm totm = toel.getTerm();
                             XSDTerm fromtm = fromel.getTerm();
                             if (fromtm instanceof XSDElementDeclaration) {
@@ -332,11 +330,11 @@ public class XSDPasteConceptAction extends UndoAction {
     }
 
     public void addAnnotion(XSDAnnotationsStructure struc, XSDAnnotation xsdannotationparent) {
-        Map infor = new HashMap<String, ArrayList<String>>();
+        Map<String, List<String>> infor = new HashMap<String, List<String>>();
         infor = cloneXSDAnnotation(xsdannotationparent);
-        Set keys = infor.keySet();
+        Set<String> keys = infor.keySet();
         for (int i = 0; i < infor.size(); i++) {
-            ArrayList<String> lists = (ArrayList<String>) infor.get(keys.toArray()[i]);
+            List<String> lists = infor.get(keys.toArray()[i]);
             try {
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
@@ -346,9 +344,9 @@ public class XSDPasteConceptAction extends UndoAction {
         }
     }
 
-    public Map cloneXSDAnnotation(XSDAnnotation oldAnn) {
+    public Map<String, List<String>> cloneXSDAnnotation(XSDAnnotation oldAnn) {
         XSDAnnotation xsdannotation = XSDFactory.eINSTANCE.createXSDAnnotation();
-        Map infor = new HashMap<String, List>();
+        Map<String, List<String>> infor = new HashMap<String, List<String>>();
         try {
             /*
              * Element oldAnnElem =oldAnn.getElement(); Element newAnnElem = (Element)oldAnnElem.cloneNode(true);
@@ -370,11 +368,11 @@ public class XSDPasteConceptAction extends UndoAction {
                      * listAppInfo.add(oldAnn.getApplicationInformation().get(i));
                      */
                     if (!infor.containsKey(type)) {
-                        List typeList = new ArrayList<String>();
+                        List<String> typeList = new ArrayList<String>();
                         typeList.add(oldElem.getFirstChild().getNodeValue());
                         infor.put(type, typeList);
                     } else {
-                        ((List) infor.get(type)).add(oldElem.getFirstChild().getNodeValue());
+                        infor.get(type).add(oldElem.getFirstChild().getNodeValue());
                     }
                 }
                 /*
@@ -409,14 +407,17 @@ public class XSDPasteConceptAction extends UndoAction {
         if(selection.getFirstElement() instanceof XSDElementDeclaration){
         	element = (XSDElementDeclaration) selection.getFirstElement();
         	content = ((XSDComplexTypeDefinition) element.getTypeDefinition()).getContent();
-        }
-        else{
-        	content = ((XSDComplexTypeDefinition) selection.getFirstElement()).getContent();
+        } else if (selection.getFirstElement() instanceof XSDComplexTypeDefinition) {
+            content = ((XSDComplexTypeDefinition) selection.getFirstElement()).getContent();
+        } else if (selection.getFirstElement() instanceof XSDModelGroup) {
+            XSDComplexTypeDefinition complexType = (XSDComplexTypeDefinition) ((XSDModelGroup) selection.getFirstElement())
+                    .getContainer().getContainer();
+            content = complexType.getContent();
         }
         
         if (content instanceof XSDParticle) {
             XSDParticle partile = (XSDParticle) content;
-            if (((XSDParticle) partile).getTerm() instanceof XSDModelGroup) {
+            if (partile.getTerm() instanceof XSDModelGroup) {
                 XSDModelGroup toGroup = ((XSDModelGroup) partile.getTerm());
                 for (XSDParticle particle : particles) {
                     // if the is particle with the same name, donot copy it.
