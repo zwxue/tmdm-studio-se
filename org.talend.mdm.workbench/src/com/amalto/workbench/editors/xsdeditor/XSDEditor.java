@@ -410,7 +410,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
      * @return
      */
     private String validateDiagnoses(XSDSchema xsdSchema) {
-        String msg_omit[] = { Messages.XsdOmit1, Messages.XsdOmit2, Messages.XsdOmit3, Messages.XsdOmit4, Messages.XsdOmit5 };
+    	String msg_omit[] = {Messages.getString("XsdOmit1"),Messages.getString("XsdOmit1"),Messages.getString("XsdOmit1"),Messages.getString("XsdOmit1"),Messages.getString("XsdOmit1")};
         xsdSchema.clearDiagnostics();
         xsdSchema.getAllDiagnostics().clear();
         xsdSchema.validate();
