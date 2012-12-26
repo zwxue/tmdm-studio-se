@@ -1233,19 +1233,21 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
         }
         manager.add(new Separator());
-        if ((selection == null) || (selection.getFirstElement() == null)) {
-            manager.add(new Separator(ADDITIONMENUID));
-            // add by ymli, fix bug 0009770
-            String title = "";//$NON-NLS-1$
-            if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
-                title = Messages.getString("PasteEntityText"); //$NON-NLS-1$
-            else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
-                title = Messages.getString("PasteEntitiesText"); //$NON-NLS-1$
+        if (!isType && ((selection == null) || (selection.getFirstElement() == null))) {
+            if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 0) {
+                manager.add(new Separator(ADDITIONMENUID));
+                // add by ymli, fix bug 0009770
+                String title = "";//$NON-NLS-1$
+                if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
+                    title = Messages.getString("PasteEntityText"); //$NON-NLS-1$
+                else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
+                    title = Messages.getString("PasteEntitiesText"); //$NON-NLS-1$
 
-            XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
-            if (pasteConceptAction.checkInPasteType()) {
-                manager.add(new Separator());
-                manager.add(pasteConceptAction);
+                XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
+                if (pasteConceptAction.checkInPasteType()) {
+                    manager.add(new Separator());
+                    manager.add(pasteConceptAction);
+                }
             }
             return;
         }
@@ -1325,6 +1327,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(newParticleFromTypeAction);
             manager.add(new Separator());
             manager.add(changeSubElementGroupAction);
+
+            addPasteElementAction(manager);
         }
 
         if (obj instanceof XSDParticle && selectedObjs.length == 1) {
@@ -1383,8 +1387,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(new Separator());
                 manager.add(editComplexTypeAction);
             }
-            XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, "Paste Element"); //$NON-NLS-1$
-            manager.add(pasteConceptAction);
+
+            addPasteElementAction(manager);
         }
 
         if (obj instanceof XSDIdentityConstraintDefinition && selectedObjs.length == 1
@@ -1484,6 +1488,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         // Other plug-ins can contribute there actions here
         manager.add(new Separator(ADDITIONMENUID));
         deleteConceptWrapAction.clearExtraClassToDel();
+    }
+
+    private void addPasteElementAction(IMenuManager manager) {
+        ArrayList<XSDParticle> particles = WorkbenchClipboard.getWorkbenchClipboard().getParticles();
+        if (particles.size() > 0) {
+            String title = "";//$NON-NLS-1$
+            if (particles.size() == 1) {
+                title = Messages.getString("PasteElement"); //$NON-NLS-1$
+            } else if (particles.size() > 1) {
+                title = Messages.getString("PasteElementsText"); //$NON-NLS-1$
+            }
+            manager.add(new XSDPasteConceptAction(this, title));
+        }
     }
 
     private void setAnnotationActions(Object obj, IMenuManager manager) {
