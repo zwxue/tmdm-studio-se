@@ -1285,7 +1285,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             }
         }
         manager.add(new Separator());
-        if ((selection == null) || (selection.getFirstElement() == null)) {
+        if (!isType && ((selection == null) || (selection.getFirstElement() == null))) {
             if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 0) {
                 manager.add(new Separator(ADDITIONMENUID));
                 // add by ymli, fix bug 0009770
@@ -1379,7 +1379,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(getAddElementMenuForTypeClass(XSDModelGroup.class, Messages._AddElement));
             manager.add(new Separator());
             manager.add(changeSubElementGroupAction);
-            manager.add(new XSDPasteConceptAction(this, "Paste Element")); //$NON-NLS-1$
+
+            addPasteElementAction(manager);
         }
 
         if (obj instanceof XSDParticle && selectedObjs.length == 1) {
@@ -1437,8 +1438,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(new Separator());
                 manager.add(editComplexTypeAction);
             }
-            XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, "Paste Element"); //$NON-NLS-1$
-            manager.add(pasteConceptAction);
+            
+            addPasteElementAction(manager);
         }
 
         if (obj instanceof XSDIdentityConstraintDefinition && selectedObjs.length == 1
@@ -1539,6 +1540,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         // Other plug-ins can contribute there actions here
         manager.add(new Separator(ADDITIONMENUID));
         deleteConceptWrapAction.clearExtraClassToDel();
+    }
+
+    private void addPasteElementAction(IMenuManager manager) {
+        ArrayList<XSDParticle> particles = WorkbenchClipboard.getWorkbenchClipboard().getParticles();
+        if (particles.size() > 0) {
+            String title = "";//$NON-NLS-1$
+            if (particles.size() == 1) {
+                title = Messages.PasteElement;
+            } else if (particles.size() > 1) {
+                title = Messages.PasteElementsText;
+            }
+            manager.add(new XSDPasteConceptAction(this, title));
+        }
     }
 
     private void setAnnotationActions(Object obj, IMenuManager manager) {
