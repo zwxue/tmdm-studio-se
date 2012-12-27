@@ -32,4 +32,6 @@ public interface IMDMRepositoryViewServiceExt {
     public IWorkbenchPartSite getMDMRepositoryViewSite();
 
     public void openJob(String jobName);
+
+    public List<String> getDataModel(String dataModel, String concept);
 }
