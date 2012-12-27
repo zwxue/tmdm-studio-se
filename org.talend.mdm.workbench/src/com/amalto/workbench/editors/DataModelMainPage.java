@@ -333,6 +333,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private XSDSetFacetMessageAction setFacetMsgAction = null;
 
+    private XSDCopyConceptAction copyConceptAction = null;
+
+    private XSDPasteConceptAction pasteConceptAction = null;
+
     private ObjectUndoContext undoContext;
 
     private MenuManager menuMgr;
@@ -1030,6 +1034,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.deleteParticleAction = new XSDDeleteParticleAction(this);
         this.newGroupFromTypeAction = new XSDNewGroupFromTypeAction(this);
 
+        this.copyConceptAction = new XSDCopyConceptAction(this, Messages.CopyEntityText);
+        this.pasteConceptAction = new XSDPasteConceptAction(this, ""); //$NON-NLS-1$
+
         this.editParticleAction = new XSDEditParticleAction(this);
         this.editConceptAction = new XSDEditConceptAction(this);
         this.editElementAction = new XSDEditElementAction(this);
@@ -1296,7 +1303,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     title = Messages.PasteEntitiesText;
                 }
 
-                XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
+                pasteConceptAction.setText(title);
                 if (pasteConceptAction.checkInPasteType()) {
                     manager.add(new Separator());
                     manager.add(pasteConceptAction);
@@ -1323,7 +1330,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 }
 
                 // add by ymli. fix bug 0009770 add the copy of concepts
-                XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, Messages.CopyEntityText);
+                copyConceptAction.setText(Messages.CopyEntityText);
                 if (Util.checkInCopy(selectedObjs)) {
                     manager.add(new Separator());
                     manager.add(copyConceptAction);
@@ -1344,7 +1351,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     title = Messages.PasteElement;
                 }
 
-                XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
+                pasteConceptAction.setText(title);
                 if (pasteConceptAction.checkInPasteType()) {
                     manager.add(pasteConceptAction);
                 }
@@ -1397,7 +1404,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         }
                         manager.add(deleteParticleAction);
                         // edit by ymli. fix the bug:0011523
-                        XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, Messages.CopyElementText);
+                        copyConceptAction.setText(Messages.CopyElementText);
                         manager.add(copyConceptAction);
 
                         manager.add(new Separator());
@@ -1501,7 +1508,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             } else if (Util.checkInCOpyTypeParticle(selectedObjs)) {
                 title = Messages.CopyElements;
             }
-            XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this, title);
+            copyConceptAction.setText(title);
 
             if (Util.checkInCopy(selectedObjs)) {
                 manager.add(copyConceptAction);
@@ -1543,16 +1550,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void addPasteElementAction(IMenuManager manager) {
-        ArrayList<XSDParticle> particles = WorkbenchClipboard.getWorkbenchClipboard().getParticles();
-        if (particles.size() > 0) {
-            String title = "";//$NON-NLS-1$
-            if (particles.size() == 1) {
-                title = Messages.PasteElement;
-            } else if (particles.size() > 1) {
-                title = Messages.PasteElementsText;
-            }
-            manager.add(new XSDPasteConceptAction(this, title));
+        String title = "";//$NON-NLS-1$
+
+        int size = WorkbenchClipboard.getWorkbenchClipboard().getParticles().size();
+        if (size == 0) {
+            return;
+        } else if (size == 1) {
+            title = Messages.PasteElement;
+        } else if (size > 1) {
+            title = Messages.PasteElementsText;
         }
+        pasteConceptAction.setText(title);
+
+        manager.add(pasteConceptAction);
     }
 
     private void setAnnotationActions(Object obj, IMenuManager manager) {
