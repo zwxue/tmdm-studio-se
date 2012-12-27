@@ -61,6 +61,8 @@ public class FKFilterDialog extends Dialog {
 
     Text customFiltersText;
 
+    protected String dataModelName;
+
     public FKFilterDialog(Shell parentShell, String title, String filter, DataModelMainPage page, String conceptName) {
         super(parentShell);
         this.filter = filter;
@@ -89,6 +91,7 @@ public class FKFilterDialog extends Dialog {
         columns[3].setColumnWidth(140);
         viewer = getNewTisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
         viewer.setXpath(true);
+        viewer.setDatamodelName(dataModelName);
         // viewer.setMainPage(page);//TODO
         // viewer.setConceptName(conceptName);
         // viewer.setContext(true);
@@ -244,6 +247,10 @@ public class FKFilterDialog extends Dialog {
             }
         }
         return lines;
+    }
+
+    public void setDataModel(String dataModelName) {
+        this.dataModelName = dataModelName;
     }
 
 }

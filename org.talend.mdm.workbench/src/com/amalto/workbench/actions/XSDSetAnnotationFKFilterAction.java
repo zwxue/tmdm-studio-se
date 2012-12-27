@@ -97,7 +97,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
             }
 
             fkd = getNewFKFilterDialog(page.getSite().getShell(), struc.getFKFilter(), page, conceptName);
-
+            fkd.setDataModel(dataModelName);
             fkd.setBlockOnOpen(true);
             int ret = fkd.open();
             if (ret == Window.CANCEL) {

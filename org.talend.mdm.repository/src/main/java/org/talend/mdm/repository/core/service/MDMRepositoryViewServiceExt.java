@@ -85,4 +85,9 @@ public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt
 
     }
 
+    public List<String> getDataModel(String dataModel, String concept) {
+        List<String> dataModels = RepositoryQueryService.getDataModel(dataModel, concept);
+
+        return dataModels;
+    }
 }

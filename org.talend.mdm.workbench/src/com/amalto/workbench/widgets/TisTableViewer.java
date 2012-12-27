@@ -43,6 +43,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
+import com.amalto.workbench.detailtabs.sections.util.MDMRepositoryViewExtensionService;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
@@ -523,6 +525,17 @@ public class TisTableViewer extends ComplexTableViewer {
         });
     }
 
+    @Override
+    public String getDatamodelName() {
+        String dataModelName = super.getDatamodelName();
+        if (dataModelName == null || dataModelName.isEmpty()) {
+            IMDMRepositoryViewServiceExt repositoryViewService = MDMRepositoryViewExtensionService.getRepositoryViewService();
+            List<String> dataModelNames = repositoryViewService.getDataModel(dataModelName, conceptName);
+            dataModelName = dataModelNames.get(0);
+        }
+
+        return dataModelName;
+    }
 
     protected CellEditor createValidationRuleEditor() {
         return new ValidationRuleEditor(table);

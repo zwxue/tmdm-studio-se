@@ -971,7 +971,7 @@ public class ComplexTableViewer {
             // The ending| bug:21784
             xpaths.add(xpath);
             xpath.setConceptName(conceptName);
-            xpath.setDataModelName(datamodelName);
+            xpath.setDataModelName(getDatamodelName());
             ((GridData) xpath.getComposite().getChildren()[0].getLayoutData()).heightHint = 15;
             ((GridData) xpath.getComposite().getChildren()[1].getLayoutData()).heightHint = 15;
             if (parent instanceof Table) {
