@@ -16,7 +16,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -102,15 +101,13 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
             toReturn = new ArrayList<Item>();
             for (RepositoryViewObject obj : objs) {
                 Item item = obj.getProperty().getItem();
-                if (item != null) {
-                    RepositoryResourceUtil.setLastServerDef(item, null);
-                }
                 toReturn.add(item);
             }
         }
         return toReturn;
     }
 
+    @Override
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = checkTreeViewer.createItemList(composite);
         checkTreeViewer.setItemText(Messages.MDMExportRepositoryItemsWizard_exportItem);
@@ -160,8 +157,8 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
         Map<String, ERepositoryObjectType> types = new HashMap<String, ERepositoryObjectType>();
 
         List<IRepositoryViewObject> seList = sel.toList();
-        for (Iterator<IRepositoryViewObject> iterator = seList.iterator(); iterator.hasNext();) {
-            IRepositoryViewObject viewObj = (IRepositoryViewObject) iterator.next();
+        for (IRepositoryViewObject iRepositoryViewObject : seList) {
+            IRepositoryViewObject viewObj = iRepositoryViewObject;
             ERepositoryObjectType repositoryObjectType = viewObj.getRepositoryObjectType();
             if (repositoryObjectType != null) {
                 List<IRepositoryViewObject> list = viewObjTypeMap.get(repositoryObjectType.name());
@@ -182,9 +179,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
         List<IRepositoryViewObject> childs = new LinkedList<IRepositoryViewObject>();
 
-        for (Iterator<String> iterator = types.keySet().iterator(); iterator.hasNext();) {
-            String etype = iterator.next();
-            
+        for (String etype : types.keySet()) {
             List<IRepositoryViewObject> viewObjectsWithDeleted = getAllViewObjectByType(types.get(etype));
             for (IRepositoryViewObject vObject : viewObjectsWithDeleted) {
                 List<String> pathList = pathMap.get(etype);
@@ -209,14 +204,14 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
         childs.addAll(seList);
 
         for (int i = 0; i < childs.size(); i++) {
-            if (childs.get(i) instanceof FolderRepositoryObject)
+            if (childs.get(i) instanceof FolderRepositoryObject) {
                 noneLeafItems.add(childs.get(i));
-            else {
+            } else {
                 leafItems.add(childs.get(i));
             }
         }
     }
-    
+
     private List<IRepositoryViewObject> getAllViewObjectByType(ERepositoryObjectType eType) {
         List<IRepositoryViewObject> viewObjectsWithDeleted = null;
 
