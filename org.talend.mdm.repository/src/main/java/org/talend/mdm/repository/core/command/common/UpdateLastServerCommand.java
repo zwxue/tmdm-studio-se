@@ -159,8 +159,16 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 try {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof RepositoryEditorInput) {
-                        RepositoryNode repositoryNode = ((RepositoryEditorInput) editorInput).getRepositoryNode();
-                        if (repositoryNode != null && repositoryNode.getId().equals(item.getProperty().getId())) {
+                        RepositoryEditorInput input = (RepositoryEditorInput) editorInput;
+                        String id = input.getId();
+                        if (id == null) {
+                            RepositoryNode repositoryNode = input.getRepositoryNode();
+                            if (repositoryNode != null) {
+                                id = repositoryNode.getId();
+                            }
+                        }
+
+                        if (id != null && id.equals(item.getProperty().getId())) {
                             return ref;
                         }
                     }
