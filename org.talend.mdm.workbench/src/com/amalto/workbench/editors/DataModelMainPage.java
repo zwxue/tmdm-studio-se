@@ -335,8 +335,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private XSDCopyConceptAction copyConceptAction = null;
 
-    private XSDPasteConceptAction pasteConceptAction = null;
-
     private ObjectUndoContext undoContext;
 
     private MenuManager menuMgr;
@@ -1035,7 +1033,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.newGroupFromTypeAction = new XSDNewGroupFromTypeAction(this);
 
         this.copyConceptAction = new XSDCopyConceptAction(this, Messages.CopyEntityText);
-        this.pasteConceptAction = new XSDPasteConceptAction(this, ""); //$NON-NLS-1$
 
         this.editParticleAction = new XSDEditParticleAction(this);
         this.editConceptAction = new XSDEditConceptAction(this);
@@ -1303,7 +1300,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     title = Messages.PasteEntitiesText;
                 }
 
-                pasteConceptAction.setText(title);
+                XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
                 if (pasteConceptAction.checkInPasteType()) {
                     manager.add(new Separator());
                     manager.add(pasteConceptAction);
@@ -1351,7 +1348,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     title = Messages.PasteElement;
                 }
 
-                pasteConceptAction.setText(title);
+                XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this, title);
                 if (pasteConceptAction.checkInPasteType()) {
                     manager.add(pasteConceptAction);
                 }
@@ -1560,9 +1557,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         } else if (size > 1) {
             title = Messages.PasteElementsText;
         }
-        pasteConceptAction.setText(title);
 
-        manager.add(pasteConceptAction);
+        manager.add(new XSDPasteConceptAction(this, title));
     }
 
     private void setAnnotationActions(Object obj, IMenuManager manager) {
