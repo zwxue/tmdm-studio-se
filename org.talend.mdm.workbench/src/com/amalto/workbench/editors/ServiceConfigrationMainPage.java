@@ -77,8 +77,6 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     protected WSServiceGetDocument document;
 
-    private boolean refreshing = false;
-
     protected WSServicePutConfiguration ws = new WSServicePutConfiguration();
 
     protected Text errorLabel;
@@ -98,7 +96,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         try {
             if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
                 document = port.getServiceDocument(new WSString(serviceName.trim()));
-                String documentConfigure = ServiceConfigrationMainPage.this.formartXml(document.getConfigure());
+                String documentConfigure = ServiceConfigrationMainPage.formartXml(document.getConfigure());
                 serviceConfigurationsText.setText(documentConfigure);
                 errorLabel.setText("");//$NON-NLS-1$
             }
@@ -120,8 +118,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 }
                 Arrays.sort(sortedList);
                 for (int i = 0; i < sortedList.length; i++) {
-                    WSServiceGetDocument document = port.getServiceDocument(new WSString(sortedList[i].trim()));
-                    if (document.getConfigureSchema() == null || document.getConfigureSchema().length() == 0)
+                    WSServiceGetDocument doc = port.getServiceDocument(new WSString(sortedList[i].trim()));
+                    if (doc.getConfigureSchema() == null || doc.getConfigureSchema().length() == 0)
                         continue;
                     serviceNameCombo.add(sortedList[i]);
                 }
@@ -133,36 +131,28 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     }
 
     protected String getDoc() {
-        WSServiceGetDocument document = null;
         try {
-            document = getServiceDocument(serviceNameCombo.getText());
+            WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
+            return doc.getDefaultConfig();
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
             log.error(e.getMessage(), e);
         }
-
-        String doc = document.getDefaultConfig();
-        return doc;
+        return null;
     }
 
     protected String getDesc() {
-
-        WSServiceGetDocument document = null;
         try {
-            document = getServiceDocument(serviceNameCombo.getText());
+            WSServiceGetDocument doc = getServiceDocument(serviceNameCombo.getText());
+            return doc.getDescription();
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
             log.error(e.getMessage(), e);
         }
-
-        String desc = document.getDescription();
-        return desc;
-
+        return null;
     }
 
     protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
 
-// return port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
+        // return port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
         return port.getServiceDocument(new WSString(jndiName.trim()));
     }
 
@@ -185,11 +175,11 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         serviceNameCombo.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                if (refreshing)
-                    return;
                 String serviceName = serviceNameCombo.getText();
+                setRefreshing(true);
                 setForConfigureContent(serviceName);
-                markDirty();
+                setRefreshing(false);
+                // markDirty();
             }
         });
 
@@ -252,9 +242,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         serviceConfigurationsText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                if (refreshing)
+                if (isRefreshing())
                     return;
-
                 markDirtyWithoutCommit();
             }
         });
