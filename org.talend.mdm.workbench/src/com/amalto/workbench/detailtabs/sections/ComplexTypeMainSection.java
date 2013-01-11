@@ -34,6 +34,12 @@ public class ComplexTypeMainSection extends CommitBarListenerSection<XSDComplexT
     }
 
     @Override
+    public void refresh() {
+        super.refresh();
+        updateSectionEnabled();
+    }
+
+    @Override
     public XSDComplexTypeDefinition getEditedObj() {
         return complexType;
     }

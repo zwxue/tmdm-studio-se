@@ -42,6 +42,7 @@ public class ElementFKInfosSection extends XSDComponentSection {
         compXPath.removeUIListener();
         compXPath.setIsResolveAutoInWeb(isResolveAutoInWeb);
         compXPath.addUIListener();
+        updateSectionEnabled();
     }
 
     @Override

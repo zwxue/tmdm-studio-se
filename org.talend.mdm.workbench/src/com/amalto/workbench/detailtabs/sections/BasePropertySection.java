@@ -12,7 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.detailtabs.sections;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
@@ -35,7 +34,7 @@ public abstract class BasePropertySection extends AbstractPropertySection {
     protected String parentTabID;
 
     protected Composite compSectionClient;
-        
+
     protected Section section;
     @Override
     public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
@@ -47,10 +46,9 @@ public abstract class BasePropertySection extends AbstractPropertySection {
         Composite compTop = getWidgetFactory().createComposite(parent);
         compTop.setLayout(new FillLayout());
 
-        
         Section section = getWidgetFactory().createSection(compTop, getSectionStyle());
         section.setText(getSectionTitle());
-        this.section=section;
+        this.section = section;
         section.setLayout(new FillLayout());
 
         if (hasTitleSeperator())
@@ -61,47 +59,69 @@ public abstract class BasePropertySection extends AbstractPropertySection {
 
         createControlsInSection(compSectionClient);
         this.compSectionClient=compSectionClient;
-        section.setClient(compSectionClient);      
-//        CommitSection commitsec=CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
-//    	if(!(this instanceof CommitSection) && commitsec!=null){ 
-//    		commitsec.section.setVisible(false);
-//    		commitsec.section.setExpanded(false); 
-//    		commitsec.section.layout(true);    		
-//    	}
+        section.setClient(compSectionClient);
+        // CommitSection commitsec=CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
+        // if(!(this instanceof CommitSection) && commitsec!=null){
+        // commitsec.section.setVisible(false);
+        // commitsec.section.setExpanded(false);
+        // commitsec.section.layout(true);
+        // }
     }
-    public void commit(){
-    	CommitSection commitsec=CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
-    	if(commitsec!=null){
-    		commitsec.getCommitBar().fireSubmit();
-    	}
+
+    public void commit() {
+        CommitSection commitsec = CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
+        if (commitsec != null) {
+            commitsec.getCommitBar().fireSubmit();
+        }
     }
-    public void autoCommit(){
-    	CommitSection commitsec=CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
-    	if(!(this instanceof CommitSection) && commitsec!=null){   
-    		commit();
-//    		commitsec.setTitle("Apply the changes to data-model");	
-//    		commitsec.section.setVisible(true);
-//    		commitsec.section.setExpanded(true); 
-//    		commitsec.section.layout(true);
-//    		commitsec.section.setForeground(section.getDisplay().getSystemColor(SWT.COLOR_RED));
-    	}    	
+
+    public void autoCommit() {
+        CommitSection commitsec = CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
+        if (!(this instanceof CommitSection) && commitsec != null) {
+            commit();
+            // commitsec.setTitle("Apply the changes to data-model");
+            // commitsec.section.setVisible(true);
+            // commitsec.section.setExpanded(true);
+            // commitsec.section.layout(true);
+            // commitsec.section.setForeground(section.getDisplay().getSystemColor(SWT.COLOR_RED));
+        }
     }
-    public void resetCommitSection(){
-//    	CommitSection commitsec=CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
-//    	if((this instanceof CommitSection) && commitsec!=null){    		
-//    		commitsec.setTitle("Commit");	
-////    		commitsec.section.setVisible(false);
-////    		commitsec.section.setExpanded(false);   
-//    		commitsec.section.layout(true);
-//    		commitsec.section.setForeground(section.getTitleBarForeground());
-//    	}   
+
+    public void resetCommitSection() {
+        // CommitSection commitsec=CommitBarListenerRegistry.getInstance().getRegistCommitSection(getParentTabID());
+        // if((this instanceof CommitSection) && commitsec!=null){
+        // commitsec.setTitle("Commit");
+        // // commitsec.section.setVisible(false);
+        // // commitsec.section.setExpanded(false);
+        // commitsec.section.layout(true);
+        // commitsec.section.setForeground(section.getTitleBarForeground());
+        // }
     }
 
     @Override
-    public void refresh() {    	
-    	super.refresh();
-    	resetCommitSection();
+    public void refresh() {
+        super.refresh();
+        resetCommitSection();
     }
+
+    protected void updateSectionEnabled() {
+        if (compSectionClient == null || compSectionClient.isDisposed()) {
+            return;
+        }
+        compSectionClient.setEnabled(!isReadOnly());
+    }
+
+    protected boolean isReadOnly() {
+        if (getPart() == null) {
+            return false;
+        }
+        Object adapter = getPart().getAdapter(Boolean.class);
+        if (adapter == null) {
+            return false;
+        }
+        return ((Boolean) adapter).booleanValue();
+    }
+
     public TabbedPropertySheetPage getTabbedPropertySheetPage() {
         return tabbedPropertySheetPage;
     }

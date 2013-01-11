@@ -34,6 +34,7 @@ public class ElementFKFilterSection extends XSDComponentSection {
     @Override
     public void refresh() {
         compFKFilter.setFilter(filterExpression);
+        updateSectionEnabled();
     }
 
     @Override

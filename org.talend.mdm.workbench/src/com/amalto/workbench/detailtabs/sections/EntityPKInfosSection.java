@@ -35,6 +35,7 @@ public class EntityPKInfosSection extends XSDComponentSection {
     @Override
     public void refresh() {
         compElements.setInfos(primaryKeyInfos.toArray(new String[0]));
+        updateSectionEnabled();
     }
 
     @Override
