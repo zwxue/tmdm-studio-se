@@ -27,6 +27,8 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
     private String version;
 
+    private boolean readOnly;
+
     public String getVersion() {
         return this.version;
     }
@@ -75,8 +77,6 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
         return null;
     }
 
-    private boolean readOnly;
-
     public boolean isReadOnly() {
         return this.readOnly;
     }
@@ -90,6 +90,19 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
         if (getVersion() != null)
             return super.getName() + " " + getVersion(); //$NON-NLS-1$
         return super.getName();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.amalto.workbench.providers.XObjectEditorInput#getAdapter(java.lang.Class)
+     */
+    @Override
+    public Object getAdapter(Class adapter) {
+        if (Boolean.class == adapter) {
+            return new Boolean(isReadOnly());
+        }
+        return super.getAdapter(adapter);
     }
 
 }

@@ -16,13 +16,10 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
-import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
@@ -46,8 +43,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     static Logger log = Logger.getLogger(XObjectEditor2.class);
 
-    private IEditorInput xobjectEditorinput;
-
     private DataModelMainPage2 dMainPage;
 
     private CTabFolder folder;
@@ -58,7 +53,9 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         super.createPages();
         XSDEditorInput2 editorInput = (XSDEditorInput2) getEditorInput();
         TreeObject treeObject = editorInput.getTreeObject();
-        xobjectEditorinput = new XObjectEditorInput2(editorInput.getViewObject(), treeObject, treeObject.getDisplayName());
+        IRepositoryViewEditorInput xobjectEditorinput = new XObjectEditorInput2(editorInput.getViewObject(), treeObject,
+                treeObject.getDisplayName());
+        xobjectEditorinput.setReadOnly(editorInput.isReadOnly());
         IFile xsdFile = null;
         try {
             xsdFile = getXSDFile(treeObject);
@@ -120,7 +117,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         }
     }
 
-
     @Override
     public void doSave(IProgressMonitor monitor) {
         super.doSave(monitor);
@@ -142,5 +138,5 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     public DataModelMainPage getdMainPage() {
         return dMainPage;
     }
-    
+
 }
