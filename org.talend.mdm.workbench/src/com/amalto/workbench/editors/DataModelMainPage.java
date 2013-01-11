@@ -50,10 +50,8 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -66,8 +64,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -431,6 +429,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
             descriptionText.addModifyListener(this);
+            descriptionText.setEnabled(!isReadOnly());
             Composite btnCmp = toolkit.createComposite(mainComposite);
             btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
             GridLayout gLayout = new GridLayout();
@@ -441,11 +440,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             xsdSchema = getXSDSchema(wsObject.getXsdSchema());
             createSash(mainComposite);
-            createCompDropTarget();
-            hookContextMenu();
 
-            hookDoubleClickAction();
-            hookTypesContextMenu();
+            if (!isReadOnly()) {
+                createCompDropTarget();
+                hookContextMenu();
+                hookDoubleClickAction();
+                hookTypesContextMenu();
+            }
 
             // init undo history
             initializeOperationHistory();
@@ -632,11 +633,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void setLabel(XSDAnnotationsStructure struc, String labelValue, boolean isAdd) {
-
     }
 
     private void createSchemaTreeComp(Composite parent) {
-
         Composite schemaSash = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout();
         layout.verticalSpacing = 0;
@@ -693,12 +692,13 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         viewer.setLabelProvider(new XSDTreeLabelProvider());
         viewer.setSorter(schemaTreeSorter);
         viewer.setInput(this.getSite());// getViewSite());
-        viewer.getTree().addKeyListener(new KeyListener() {
+        viewer.getTree().addKeyListener(new KeyAdapter() {
 
             public void keyPressed(KeyEvent e) {
-
+                if (isReadOnly()) {
+                    return;
+                }
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
-
                 // delete
                 if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
                     if (deleteConceptWrapAction.checkInDeletableType(selection.toArray())) {
@@ -709,14 +709,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     }
                 }
             }
-
-            public void keyReleased(KeyEvent e) {
-
-            }
-
         });
         viewer.setComparer(new ElementComparer());
-
     }
 
     class ElementComparer implements IElementComparer {
@@ -874,15 +868,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         typesTreeContentProvider = new TypesTreeContentProvider(this.getSite(), xsdSchema);
         typesViewer.setContentProvider(typesTreeContentProvider);
-
         typesViewer.setFilters(new ViewerFilter[] { new SchemaRoleAccessFilter(null), new TypeNameFilter() });
-
-        typesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-            public void selectionChanged(SelectionChangedEvent e) {
-
-            }
-        });
         typesViewer.getTree().addMouseListener(new MouseAdapter() {
 
             @Override
@@ -894,15 +880,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         typesViewer.setSorter(typeTreeSorter);
 
         typesViewer.setInput(this.getSite());// getViewSite());
-        typesViewer.getTree().addKeyListener(new KeyListener() {
+        typesViewer.getTree().addKeyListener(new KeyAdapter() {
 
             public void keyPressed(KeyEvent e) {
-
+                if (isReadOnly()) {
+                    return;
+                }
                 IStructuredSelection selection = ((IStructuredSelection) typesViewer.getSelection());
-
                 // delete
                 if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
-
                     deleteConceptWrapAction.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
                     if (deleteConceptWrapAction.checkInDeletableType(selection.toArray())) {
                         deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
@@ -919,13 +905,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     }
                 }
             }
-
-            public void keyReleased(KeyEvent e) {
-
-            }
-
         });
-
     }
 
     public void refreshData() {
@@ -1442,7 +1422,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 manager.add(new Separator());
                 manager.add(editComplexTypeAction);
             }
-            
+
             addPasteElementAction(manager);
         }
 
@@ -1835,7 +1815,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     public void refresh() {
-
         viewer.refresh(true);
         typesViewer.refresh(true);
 
@@ -2269,6 +2248,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         ToolItem filterToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         filterToolItem.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
         filterToolItem.setToolTipText(Messages.FilterText);
+        filterToolItem.setEnabled(!isReadOnly());
 
         filterToolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -2295,6 +2275,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         ToolItem expanedToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         expanedToolItem.setImage(ImageCache.getCreatedImage(EImage.EXPAND.getPath()));
         expanedToolItem.setToolTipText(Messages.ExpandText);
+        expanedToolItem.setEnabled(!isReadOnly());
         expanedToolItem.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -2314,6 +2295,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         ToolItem collapseToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         collapseToolItem.setImage(ImageCache.getCreatedImage(EImage.COLLAPSE.getPath()));
         collapseToolItem.setToolTipText(Messages.CollapseText);
+        collapseToolItem.setEnabled(!isReadOnly());
         collapseToolItem.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -2333,6 +2315,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         ToolItem expandGroupToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         expandGroupToolItem.setImage(ImageCache.getCreatedImage(EImage.ACTIVITY_CATEGORY.getPath()));
         expandGroupToolItem.setToolTipText(Messages.ExpandModelGroup);
+        expandGroupToolItem.setEnabled(!isReadOnly());
         expandGroupToolItem.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -2349,6 +2332,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         ToolItem moveUpToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         moveUpToolItem.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
         moveUpToolItem.setToolTipText(Messages.UPText);
+        moveUpToolItem.setEnabled(!isReadOnly());
         moveUpToolItem.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -2365,6 +2349,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         ToolItem moveDownToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         moveDownToolItem.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
         moveDownToolItem.setToolTipText(Messages.DownText);
+        moveDownToolItem.setEnabled(!isReadOnly());
         moveDownToolItem.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -2381,6 +2366,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         final ToolItem sortByLabelToolItem = new ToolItem(parentToolBar, SWT.PUSH);
         sortByLabelToolItem.setImage(ImageCache.getCreatedImage(EImage.SORT_DESC.getPath()));
         sortByLabelToolItem.setToolTipText(Messages.SortDescText);
+        sortByLabelToolItem.setEnabled(!isReadOnly());
         sortByLabelToolItem.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -2397,6 +2383,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         final ToolItem filtUniqueElementToolItem = new ToolItem(parentToolBar, SWT.CHECK);
         filtUniqueElementToolItem.setImage(ImageCache.getCreatedImage(EImage.ELEMENT_ONLY_SKIP.getPath()));
         filtUniqueElementToolItem.setToolTipText(Messages.HideElementsText);
+        filtUniqueElementToolItem.setEnabled(!isReadOnly());
         filtUniqueElementToolItem.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -2754,14 +2741,17 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         ToolItem importToolItem = new ToolItem(resultToolBar, SWT.PUSH);
         importToolItem.setImage(ImageCache.getCreatedImage(EImage.IMPORT.getPath()));
         importToolItem.setToolTipText(Messages.ImportText);
+        importToolItem.setEnabled(!isReadOnly());
 
         ToolItem exportToolItem = new ToolItem(resultToolBar, SWT.PUSH);
         exportToolItem.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
         exportToolItem.setToolTipText(Messages.ExportText);
+        exportToolItem.setEnabled(!isReadOnly());
 
         ToolItem importSchemalItem = new ToolItem(resultToolBar, SWT.PUSH);
         importSchemalItem.setImage(ImageCache.getCreatedImage(EImage.CHECKIN_ACTION.getPath()));
         importSchemalItem.setToolTipText(Messages.ImportIncludeSchema);
+        importSchemalItem.setEnabled(!isReadOnly());
 
         importToolItem.addSelectionListener(new SelectionAdapter() {
 
@@ -2884,7 +2874,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     @Override
     public void setFocus() {
-
+        if (getTreeViewer() != null && !getTreeViewer().getControl().isDisposed()) {
+            getTreeViewer().getControl().setFocus();
+        }
     }
 
     public void modifyText(ModifyEvent arg0) {
@@ -2984,5 +2976,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             return ((IServerObjectEditorState) site.getMultiPageEditor()).isLocalInput();
         }
         return false;
+    }
+
+    private boolean isReadOnly() {
+        Object readOnly = getEditorInput().getAdapter(Boolean.class);
+        return ((Boolean) readOnly).booleanValue();
     }
 }

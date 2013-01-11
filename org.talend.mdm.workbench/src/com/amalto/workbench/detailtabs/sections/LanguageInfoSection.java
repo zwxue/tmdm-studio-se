@@ -35,6 +35,7 @@ public abstract class LanguageInfoSection extends XSDComponentSection {
     @Override
     public void refresh() {
         compLabel.setLanguageInfos(langInfos.toArray(new LanguageInfo[0]));
+        updateSectionEnabled();
     }
 
     public LanguageInfo[] getLangInfos() {

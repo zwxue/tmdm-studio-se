@@ -1711,6 +1711,10 @@ public class Messages extends NLS {
 
     public static String XSDEditor_ChangedPageErrorTitle;
 
+    public static String XSDEditor_ErrorMessage;
+
+    public static String XSDEditor_SheetPageTitle;
+
     public static String XSDEditorUtil_Comment;
 
     public static String XSDEditorUtil_SchemaDesign;

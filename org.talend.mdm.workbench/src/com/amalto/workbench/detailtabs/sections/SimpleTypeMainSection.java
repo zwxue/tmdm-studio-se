@@ -36,6 +36,12 @@ public class SimpleTypeMainSection extends CommitBarListenerSection<XSDSimpleTyp
     }
 
     @Override
+    public void refresh() {
+        super.refresh();
+        updateSectionEnabled();
+    }
+
+    @Override
     public XSDSimpleTypeDefinition getEditedObj() {
         return xsdSimpleType;
     }

@@ -35,7 +35,7 @@ public class ElementFKSection extends XSDComponentSection {
 
     private String fksep;
 
-	private FKIntegrityComposite fkIntegrityConfig;
+    private FKIntegrityComposite fkIntegrityConfig;
 
     @Override
     public void refresh() {
@@ -43,6 +43,7 @@ public class ElementFKSection extends XSDComponentSection {
         if (fksep != null)
             compSimpleXPath.setFKSep(Boolean.valueOf(fksep));
         fkIntegrityConfig.setXSDComponent(curXSDComponent);
+        updateSectionEnabled();
     }
 
     @Override
@@ -65,7 +66,7 @@ public class ElementFKSection extends XSDComponentSection {
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-    	compSectionClient.setLayout(new GridLayout());
+        compSectionClient.setLayout(new GridLayout());
         dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
         compSimpleXPath = new SimpleXPathComposite(compSectionClient, SWT.NONE, SimpleXPathComposite.DEFAULTTITLE,
                 dataModelHolder, dataModelHolder.getDefaultDataModel(), this, true);

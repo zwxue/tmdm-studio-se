@@ -28,23 +28,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyComposite;
+import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyTitle;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
@@ -185,10 +188,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         if (doUpdateSourceLocation && fXSDSelectionListener != null) {
             fXSDSelectionListener.doSetSelection();
         }
-        pageChanged();
+        doPageChanged();
+        refreshPropertyView();
+        setFocus();
     }
 
-    private void pageChanged() {
+    private void doPageChanged() {
         if (xobject == null) {
             return;
         }
@@ -221,8 +226,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     initializeGraphicalViewer();
                 }
             }
-            updatePageReadOnly(getSelectedPage());
-            refreshPropertyView();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -344,24 +347,6 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         }
     }
 
-    private void updatePageReadOnly(Object pageObj) {
-        if (isReadOnly()) {
-            if (pageObj instanceof DataModelMainPage) {
-                DataModelMainPage page = (DataModelMainPage) getSelectedPage();
-                page.getMainControl().setEnabled(false);
-                Control[] children = ((Composite) page.getMainControl()).getChildren();
-                for (Control control : children) {
-                    control.setEnabled(false);
-                }
-            } else if (pageObj instanceof StructuredTextEditor) {
-                StructuredTextEditor textEditor = (StructuredTextEditor) pageObj;
-                textEditor.getTextViewer().getTextWidget().setEnabled(false);
-            } else if (pageObj instanceof Composite) {
-                ((Composite) pageObj).setEnabled(false);
-            }
-        }
-    }
-
     @Override
     protected void createPages() {
         super.createPages();
@@ -384,6 +369,30 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 preActivePageIndex = getActivePage();
             }
         });
+    }
+
+    @Override
+    protected void createSourcePage() {
+        this.structuredTextEditor = new StructuredTextEditor() {
+
+            @Override
+            public boolean isEditable() {
+                if (isReadOnly()) {
+                    return false;
+                }
+                return super.isEditable();
+            }
+        };
+        try {
+            int index = addPage(this.structuredTextEditor, getEditorInput());
+            setPageText(index, org.eclipse.wst.xsd.ui.internal.adt.editor.Messages._UI_LABEL_SOURCE);
+            this.structuredTextEditor.update();
+            this.structuredTextEditor.setEditorPart(this);
+            this.structuredTextEditor.addPropertyListener(this);
+            firePropertyChange(1);
+        } catch (PartInitException e) {
+            ErrorDialog.openError(getSite().getShell(), Messages.XSDEditor_ErrorMessage, null, e.getStatus());
+        }
     }
 
     private Exception validateXsdSourceEditor() {
@@ -451,7 +460,20 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             if (activePageIndex == DESIGN_PAGE_INDEX || activePageIndex == SOURCE_PAGE_INDEX) {
                 return new XSDTabbedPropertySheetPage(this);
             }
-            return new TabbedPropertySheetPage(this);
+            return new TabbedPropertySheetPage(this) {
+
+                protected void refreshTitleBar() {
+                    TabbedPropertyTitle title = ((TabbedPropertyComposite) getControl()).getTitle();
+                    if (getCurrentTab() == null) {
+                        title.setTitle(null, null);
+                        return;
+                    }
+                    String text = registry.getLabelProvider().getText(currentSelection);
+                    Image image = registry.getLabelProvider().getImage(currentSelection);
+                    String label = isReadOnly() ? NLS.bind(Messages.XSDEditor_SheetPageTitle, text) : text;
+                    title.setTitle(label, image);
+                }
+            };
         }
 
         if (type == DataModelMainPage.class) {
@@ -461,22 +483,38 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 }
             }
         }
-
+        if (Boolean.class == type) {
+            return new Boolean(isReadOnly());
+        }
+        // Add this for enable false the properties view while this editor is readOnly.
+        if (XSDSchema.class == type && isReadOnly()) {
+            return null;
+        }
         return super.getAdapter(type);
 
     }
 
-    private void refreshPropertyView() throws PartInitException {
-
+    private void refreshPropertyView() {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
         IViewPart propView = page.findView(MDMPerspective.VIEWID_PROPERTYVIEW);
-
         if (propView != null) {
             PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(propView);
         }
+        try {
+            page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
+        } catch (PartInitException e) {
+            e.printStackTrace();
+        }
+    }
 
-        page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
+    @Override
+    public void setFocus() {
+        Object selectedPage = getSelectedPage();
+        if (selectedPage instanceof IEditorPart) {
+            ((IEditorPart) selectedPage).setFocus();
+        } else {
+            super.setFocus();
+        }
     }
 
     /*
