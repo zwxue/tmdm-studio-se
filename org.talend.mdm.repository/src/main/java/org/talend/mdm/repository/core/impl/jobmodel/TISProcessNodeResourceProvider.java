@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -38,7 +38,7 @@ import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 public class TISProcessNodeResourceProvider extends AbstractRepositoryNodeResourceProvider {
 
     public ERepositoryObjectType getRepositoryObjectType(Item item) {
-        if (item instanceof ProcessItem || item instanceof ContainerItem) {
+        if (item.eClass().getInstanceClass() == ProcessItem.class || item instanceof ContainerItem) {
             return ERepositoryObjectType.PROCESS;
         }
         return null;
@@ -55,6 +55,7 @@ public class TISProcessNodeResourceProvider extends AbstractRepositoryNodeResour
         return null;
     }
 
+    @Override
     public Resource save(Item item) throws PersistenceException {
         // if (item instanceof WSJobModelItem) {
         // Resource resource = xmiResourceManager.getItemResource(item);
