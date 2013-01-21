@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="DataModelValidateVisitor" name="DataModelValidateVisitor" schema="schema/DataModelValidateVisitor.exsd"/>
+   <extension
+         id="dataModel"
+         name="DataModel Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="false"
+            class="org.talend.mdm.repository.core.validate.datamodel.DataModelDelegatingValidator"
+            manual="true"
+            markerId="org.talend.mdm.error.datamodel.xsdparse"
+            version="2">
+         <include>
+            <rules>
+               <fileext
+                     caseSensitive="false"
+                     ext="xsd">
+               </fileext>
+            </rules>
+         </include>
+      </validator>
+   </extension>
+   <extension
+         point="org.eclipse.wst.validation.validatorDelegates">
+      <delegate
+            class="org.talend.mdm.repository.core.validate.datamodel.DataModelValidator"
+            name="DataModel  Delegate Validator"
+            target="org.talend.mdm.repository.core.validate.datamodel.DataModelDelegatingValidator">
+      </delegate>
+   </extension>
+   
+   <extension
+         id="org.talend.mdm.error.datamodel.xsdparse"
+         name="MDM XSD parsing"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
+         id="org.talend.mdm.error.datamodel.model"
+         name="MDM Model"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerSupport">
+      <markerTypeCategory
+            name="Talend MDM Problem">
+         <markerTypeReference
+               id="org.talend.mdm.error.datamodel.model">
+         </markerTypeReference>
+         <markerTypeReference
+               id="org.talend.mdm.error.datamodel.xsdparse">
+         </markerTypeReference>
+      </markerTypeCategory>
+      <markerContentGenerator
+            id="org.talend.mdm.problemsGenerator"
+            name="MDM Problems">
+         <markerTypeReference
+               id="org.talend.mdm.error.datamodel.model">
+         </markerTypeReference>
+         <markerTypeReference
+               id="org.talend.mdm.error.datamodel.xsdparse">
+         </markerTypeReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.severityAndDescriptionField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.ModelField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.EntityField"
+               visible="true">
+         </markerFieldReference>
+                  <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.ElementTypeField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.talend.mdm.repository.ui.markers.ElementPathField"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldReference
+               id="org.eclipse.ui.ide.locationField">
+         </markerFieldReference>
+         
+         
+         <markerFieldReference
+               id="org.eclipse.ui.ide.markerType"
+               visible="true">
+         </markerFieldReference>
+         <markerFieldConfiguration
+               enabled="true"
+               id="org.talend.mdm.repository.ext.markerFieldConfiguration3"
+               name="All Errors"
+               scope="ON_ANY"
+               values="org.eclipse.ui.internal.views.markers.AllErrorsParameters">
+         </markerFieldConfiguration>
+      </markerContentGenerator>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.EntityField"
+            id="org.talend.mdm.repository.ui.markers.EntityField"
+            name="Model Entity">
+      </markerField>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.ModelField"
+            id="org.talend.mdm.repository.ui.markers.ModelField"
+            name="Model">
+      </markerField>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.ElementTypeField"
+            id="org.talend.mdm.repository.ui.markers.ElementTypeField"
+            name="Model Type">
+      </markerField>
+      <markerField
+            class="org.talend.mdm.repository.ui.markers.datamodel.ElementPathField"
+            id="org.talend.mdm.repository.ui.markers.ElementPathField"
+            name="XPath">
+      </markerField>
+      
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.talend.core.root"
+            class="org.talend.mdm.repository.ui.views.MDMProblemView"
+            icon="icons/problems_view.gif"
+            id="org.talend.mdm.repository.ui.views.MDMProblemView"
+            name="MDM Problem View"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.talend.mdm.repository.ui.views.MDMProblemView">
+         <command
+               commandId="org.eclipse.ui.ide.configureFilters"
+            label="Configure Content...."
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.talend.mdm.repository.validate.DataModelValidateVisitor">
+      <visitor
+            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoElementVisitor"
+            name="PKInfoElementVisitor">
+      </visitor>
+      <visitor
+            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoElementVisitor"
+            name="FKInfoElementVisitor">
+      </visitor>
+   </extension>
+   <!--
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.talend.mdm.perspective">
+         <view
+               closeable="true"
+               id="org.talend.mdm.repository.ui.views.MDMProblemView"
+               minimized="false"
+               moveable="true"
+               relationship="stack"
+               relative="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
+               showTitle="true"
+               visible="false">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   -->
+</plugin>
