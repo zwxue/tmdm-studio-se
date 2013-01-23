@@ -28,6 +28,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -60,6 +61,7 @@ import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -78,6 +80,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -87,6 +93,9 @@ import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.dialogs.VariableDefinitionDialog;
+import com.amalto.workbench.editors.xslteditor.PageRefresher;
+import com.amalto.workbench.editors.xslteditor.XSLTEditor;
+import com.amalto.workbench.editors.xslteditor.XSLTFileEditorInput;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -202,9 +211,21 @@ public class TransformerMainPage extends AMainPageV2 {
 
     java.util.List<Line> cacheList; // remember the setup transformerinputvariablesdialog's input list
 
+    private Button btnOpenXsltEditor;
+
+    protected XSLTFileEditorInput xsltEditorInput;
+
+    private Color oldBackground;
+
     private static final String TOOLTIP_AUTOINDENT_ENABLE = Messages.TransformerMainPage_AutoIndentEnabled;
 
     private static final String TOOLTIP_AUTOINDENT_DISABLE = Messages.TransformerMainPage_AutoIndentDisabled;
+
+    private static final Object XSLT_TYPE = "xslt"; //$NON-NLS-1$
+
+    private Composite descriptionComposite;
+
+    private Composite sequenceGroup;
 
     public TransformerMainPage(FormEditor editor) {
         super(editor, TransformerMainPage.class.getName(), Messages.TransformerMainPage_Process + ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -337,7 +358,7 @@ public class TransformerMainPage extends AMainPageV2 {
                                     /*
                                      * ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
                                      * parent.editor.addPage(page); parent.editor.setActivePage(page.getId());
-                                     * 
+                                     *
                                      * parent.editor.getEditorSite().getShell()
                                      */
                                     // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
@@ -377,8 +398,7 @@ public class TransformerMainPage extends AMainPageV2 {
         try {
             initTransformer();
 
-            // Description and File Process
-            Composite descriptionComposite = toolkit.createComposite(topComposite, SWT.NONE);
+            descriptionComposite = toolkit.createComposite(topComposite, SWT.NONE);
             descriptionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionComposite.setLayout(new GridLayout(3, false));
 
@@ -395,7 +415,7 @@ public class TransformerMainPage extends AMainPageV2 {
              * TransformerMainPage.this.comitting= false; //markDirtyWithoutCommit(); markDirtyWithoutCommit(); } });
              */
             desAntionComposite = new DescAnnotationComposite(Messages.TransformerMainPage_Description, " ...", toolkit, descriptionComposite, //$NON-NLS-1$
-                    (AMainPageV2) this, false);
+                    this, false);
             desAntionComposite.getTextWidget().addModifyListener(new ModifyListener() {
 
                 public void modifyText(ModifyEvent e) {
@@ -454,8 +474,7 @@ public class TransformerMainPage extends AMainPageV2 {
             windowTarget.setTransfer(new Transfer[] { TextTransfer.getInstance() });
             windowTarget.addDropListener(new DCDropTargetListener());
 
-            // Sequence
-            Composite sequenceGroup = this.getNewSectionComposite(Messages.TransformerMainPage_StepsSequence);
+            sequenceGroup = this.getNewSectionComposite(Messages.TransformerMainPage_StepsSequence);
             sequenceGroup.setLayout(new GridLayout(1, false));
 
             Composite sequenceComposite = toolkit.createComposite(sequenceGroup, SWT.NONE);
@@ -650,7 +669,7 @@ public class TransformerMainPage extends AMainPageV2 {
             btnAutoIndent = new Button(specsComposite, SWT.CHECK);
             btnAutoIndent.setText(Messages.TransformerMainPage_AutoIndent);
             btnAutoIndent.setImage(ImageCache.getCreatedImage(EImage.INTENT.getPath()));
-            btnAutoIndent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
+            btnAutoIndent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
             // refreshAutoIndentTooltip();
             btnAutoIndent.addSelectionListener(new SelectionAdapter() {
 
@@ -659,6 +678,32 @@ public class TransformerMainPage extends AMainPageV2 {
                     refreshAutoIndentTooltip();
                 }
 
+            });
+
+            btnOpenXsltEditor = new Button(specsComposite, SWT.PUSH);
+            btnOpenXsltEditor.setText(Messages.TransformerMainPage_open);
+            btnOpenXsltEditor.setToolTipText(Messages.TransformerMainPage_opentext);
+            btnOpenXsltEditor.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+            btnOpenXsltEditor.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    openInXSLTEditor();
+                }
+
+                public void openInXSLTEditor() {
+                    refreshEnableState(false);
+
+                    try {
+                        String xslcontent = parameterEditor.getContent().getContent();
+                        IFile file = XSLTFileProvider.getXSLTFile(xslcontent, getXSLTFileName());
+                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                        xsltEditorInput = new XSLTFileEditorInput(file, new MainPageRefresher(), true);
+                        page.openEditor(xsltEditorInput, XSLTEditor.ID);
+                    } catch (PartInitException e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
             });
 
             Group parametersGroup = new Group(specsComposite, SWT.SHADOW_NONE);
@@ -673,10 +718,32 @@ public class TransformerMainPage extends AMainPageV2 {
             refreshParameterEditor();
             refreshData();
 
+            this.oldBackground = parameterEditor.getBackground();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
 
+    }
+
+    private String getXSLTFileName() {
+        String xslfileExtension = ".xsl"; //$NON-NLS-1$
+        String[] invalidStr = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+
+        String name = getEditorInput().getName().split(" ")[0]; //$NON-NLS-1$
+
+        int minIndex = name.length();
+        for (String str : invalidStr) {
+            if (name.contains(str)) {
+                minIndex = (minIndex > name.indexOf(str)) ? name.indexOf(str) : minIndex;
+            }
+        }
+        name = name.substring(0, minIndex);
+
+        String step = stepsList.getSelection()[0];
+
+        name = name + "_XSLT_Step_" + step + xslfileExtension; //$NON-NLS-1$
+
+        return name;
     }
 
     public void refreshParameterEditor() {
@@ -730,6 +797,7 @@ public class TransformerMainPage extends AMainPageV2 {
             TransformerMainPage.this.stepsList.select(index);
             refreshStep(index);
             TransformerMainPage.this.stepsList.forceFocus();
+            refreshOpenXSLTBtnState();
             markDirtyWithoutCommit();
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
@@ -768,7 +836,62 @@ public class TransformerMainPage extends AMainPageV2 {
         disabledButton.setSelection(transformer.getProcessSteps()[index].getDisabled());
         WidgetUtils.enable(specsComposite, !disabledButton.getSelection());
 
+        refreshOpenXSLTBtnState();
         TransformerMainPage.this.refreshing = false;
+    }
+
+    private void refreshEnableState(boolean enable) {
+        if (!descriptionComposite.isDisposed()) {
+            descriptionComposite.setEnabled(enable);
+            sequenceGroup.setEnabled(enable);
+            section.setEnabled(enable);
+            specsComposite.setEnabled(enable);
+
+            if (!enable) {
+                Color grayColor = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+                setBackground(descriptionComposite, grayColor);
+                setBackground(sequenceGroup, grayColor);
+                setBackground(section, grayColor);
+                setBackground(specsComposite, grayColor);
+            } else {
+                setBackground(descriptionComposite, oldBackground);
+                setBackground(sequenceGroup, oldBackground);
+                setBackground(section, oldBackground);
+                setBackground(specsComposite, oldBackground);
+            }
+        }
+    }
+
+    private void setBackground(Control cotrl, Color colr) {
+        cotrl.setBackground(colr);
+        if (cotrl instanceof Composite) {
+            Composite comp = (Composite) cotrl;
+            Control[] children = comp.getChildren();
+            for (Control ch : children) {
+                setBackground(ch, colr);
+            }
+        }
+    }
+
+    private void saveAndCloseXSLTEditor(boolean close) {
+        if (xsltEditorInput != null) {
+            IWorkbenchPage workbenchPage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+            IEditorPart xsltEditor = workbenchPage.findEditor(xsltEditorInput);
+            if (xsltEditor != null) {
+                if (close) {
+                    workbenchPage.closeEditor(xsltEditor, false);
+                    xsltEditorInput = null;
+                } else {
+                    xsltEditor.doSave(new NullProgressMonitor());
+                }
+            }
+        }
+    }
+
+    private void refreshOpenXSLTBtnState() {
+        String jndi = pluginsCombo.getText();
+        boolean isXSLT = XSLT_TYPE.equals(jndi);
+        btnOpenXsltEditor.setEnabled(isXSLT);
     }
 
     protected void removeStep(int index) {
@@ -848,7 +971,7 @@ public class TransformerMainPage extends AMainPageV2 {
         } else if (view == stepWidget.inputViewer || view == stepWidget.outputViewer) {
             TableViewer viewer = (TableViewer) view;
             IStructuredSelection selections = (IStructuredSelection) viewer.getSelection();
-            java.util.List list = (java.util.List) Arrays.asList(selections.toArray());
+            java.util.List list = Arrays.asList(selections.toArray());
             if (list.size() == 0)
                 return;
             java.util.List<WSTransformerVariablesMapping> items = (java.util.List<WSTransformerVariablesMapping>) viewer
@@ -922,6 +1045,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
     @Override
     public void dispose() {
+        saveAndCloseXSLTEditor(true);
+
         super.dispose();
         // if (parametersTextViewer.getUndoManager() != null)
         // parametersTextViewer.getUndoManager().disconnect();
@@ -937,10 +1062,10 @@ public class TransformerMainPage extends AMainPageV2 {
     @Override
     public boolean beforeDoSave() {
         String processName = getXObject().getName();
-        
+
         if(processName.startsWith("beforeSaving_")) {//$NON-NLS-1$
             boolean has = false;
-            
+
             WSTransformerProcessStep processStep = stepWidget.getProcessStep();
             WSTransformerVariablesMapping[] outputMappings = processStep.getOutputMappings();
             for (WSTransformerVariablesMapping map : outputMappings) {
@@ -949,7 +1074,7 @@ public class TransformerMainPage extends AMainPageV2 {
                     break;
                 }
             }
-            
+
             if (!has) {
                 MessageDialog.openWarning(getSite().getShell(), Messages.Warning,
                         Messages.bind(Messages.TransformerMainPage_OutputReportMissing, processName));
@@ -958,9 +1083,10 @@ public class TransformerMainPage extends AMainPageV2 {
 
         return super.beforeDoSave();
     }
-    
+
     @Override
     public void doSave(IProgressMonitor monitor) {
+        saveAndCloseXSLTEditor(false);
         super.doSave(monitor);
         if (stepsList.getItemCount() > 0 && currentPlugin == -1) {
             refreshStep(0);
@@ -1286,8 +1412,11 @@ public class TransformerMainPage extends AMainPageV2 {
                     if (EInputTemplate.getXtentisObjexts().get(jndi) != null) {
                         String document = EInputTemplate.getXtentisObjexts().get(jndi).getContent();
                         parameterEditor.setContent(document);
-                    } else
+                    } else {
                         parameterEditor.setContent(""); //$NON-NLS-1$
+                    }
+
+                    refreshOpenXSLTBtnState();
                 }
             });
             // feed the combo once
@@ -1454,6 +1583,28 @@ public class TransformerMainPage extends AMainPageV2 {
 
         public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
             commitParameters(newCotent.getContent());
+        }
+    }
+
+    public class MainPageRefresher implements PageRefresher {
+
+        public void refreshPageContent(String xsltContent) {
+            if (xsltContent != null) {
+                transformer.getProcessSteps()[currentPlugin].setParameters(xsltContent);
+                if (!parameterEditor.isDisposed()) {
+                    parameterEditor.setContent(xsltContent);
+                }
+            }
+        }
+
+        public void refreshPageUIEnabled() {
+            refreshEnableState(true);
+
+            xsltEditorInput = null;
+        }
+
+        public void makeDirty() {
+            TransformerMainPage.this.markDirty();
         }
     }
 }

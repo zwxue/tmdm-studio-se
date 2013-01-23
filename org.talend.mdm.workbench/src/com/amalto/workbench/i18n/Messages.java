@@ -1883,6 +1883,8 @@ public class Messages extends NLS {
 
     public static String XSDTreeLabelProvider_9;
 
+    public static String XSLTEditor_saveback;
+
     public static String CommitBarComposite_Apply;
 
     public static String CommitBarComposite_Reset;
@@ -2470,6 +2472,10 @@ public class Messages extends NLS {
     public static String TransformerMainPage_MoveUpTheItem;
 
     public static String TransformerMainPage_NameCannotbeEmpty;
+
+    public static String TransformerMainPage_open;
+
+    public static String TransformerMainPage_opentext;
 
     public static String TransformerMainPage_OutputParameters;
 

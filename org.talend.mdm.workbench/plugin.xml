@@ -49,6 +49,17 @@
             id="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             name="com.amalto.workbench.editors.xsdeditor.XSDEditor">
       </editor>
+      <editor
+            class="com.amalto.workbench.editors.xslteditor.XSLTEditor"
+            default="true"
+            extensions="xsl,xslt"
+            icon="icons/xslt_file.gif"
+            id="com.amalto.workbench.editors.xslteditor.XSLTEditor"
+            name="com.amalto.workbench.editors.xslteditor.XSLTEditor">
+         <contentTypeBinding
+               contentTypeId="xslsource">
+         </contentTypeBinding>
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
