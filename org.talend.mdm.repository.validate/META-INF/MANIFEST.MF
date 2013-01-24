@@ -5,15 +5,17 @@ Bundle-SymbolicName: org.talend.mdm.repository.validate;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.talend.mdm.repository.validate.plugin.ValidatePlugin
 Require-Bundle: org.apache.log4j,
- org.eclipse.ui,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.ui.ide,
  org.eclipse.text,
  org.eclipse.wst.validation,
  org.eclipse.wst.validation.ui,
  org.eclipse.wst.xml.core,
  org.eclipse.xsd,
+ org.talend.core.runtime,
  org.talend.mdm.repository,
- org.eclipse.ui.ide
+ org.talend.model
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

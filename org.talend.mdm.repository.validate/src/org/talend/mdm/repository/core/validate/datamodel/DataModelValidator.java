@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.text.Document;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.AbstractNestedValidator;
 import org.eclipse.wst.xml.core.internal.validation.core.NestedValidatorContext;
@@ -45,6 +46,11 @@ import org.talend.mdm.repository.core.validate.datamodel.validator.ElementValida
 import org.xml.sax.helpers.LocatorImpl;
 
 public class DataModelValidator extends AbstractNestedValidator implements IDataModelMarkerConst {
+
+    /**
+     * 
+     */
+    private static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XSDEditor2"; //$NON-NLS-1$
 
     ModelBuilder builder = new ModelBuilder();
 
@@ -183,6 +189,7 @@ public class DataModelValidator extends AbstractNestedValidator implements IData
             message.setAttribute(PATH, msg.getPath());
             message.setAttribute(ELEMENT_TYPE, msg.getElementType());
             message.setAttribute(MSG_GROUP, msg.getMsgGroup());
+            message.setAttribute(IDE.EDITOR_ID_ATTR, EDITOR_ID);
         }
     }
 

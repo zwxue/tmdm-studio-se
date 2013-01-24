@@ -10,7 +10,7 @@
             build="false"
             class="org.talend.mdm.repository.core.validate.datamodel.DataModelDelegatingValidator"
             manual="true"
-            markerId="org.talend.mdm.error.datamodel.xsdparse"
+            markerId="org.talend.mdm.error.datamodel.model"
             version="2">
          <include>
             <rules>
@@ -164,6 +164,13 @@
             class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoElementVisitor"
             name="FKInfoElementVisitor">
       </visitor>
+   </extension>
+   <extension
+         point="org.talend.core.runtime.service">
+      <Service
+            class="org.talend.mdm.repository.core.validate.MDMValidationService"
+            serviceId="IModelValidationService">
+      </Service>
    </extension>
    <!--
    <extension

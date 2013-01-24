@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
@@ -35,6 +36,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryNodeActionProvider;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.extension.ActionProviderManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
@@ -56,6 +58,7 @@ import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.ui.actions.MDMOpenExistVersionProcessAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
+import org.talend.mdm.repository.ui.actions.ValidateAction;
 import org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
@@ -107,6 +110,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     private IStructuredSelection selection;
 
+    protected AbstractRepositoryAction validateAction;
+
     private AbstractRepositoryAction copyUrlAction;
 
     public void initCommonViewer(CommonViewer commonViewer) {
@@ -126,6 +131,10 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         mdmEditPropertyAction = initRepositoryAction(new MDMEditPropertyAction(), commonViewer);
         openVersionAction = initRepositoryAction(new MDMOpenExistVersionProcessAction(), commonViewer);
         //
+        if (hasValidateService()) {
+            validateAction = initRepositoryAction(new ValidateAction(), commonViewer);
+        }
+        //
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         copyAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.COPY);
         copyUrlAction = initRepositoryAction(new CopyUrlAction(), commonViewer);
@@ -142,6 +151,12 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     protected AbstractRepositoryAction initRepositoryAction(AbstractRepositoryAction action, CommonViewer commonViewer) {
         action.initCommonViewer(commonViewer);
         return action;
+    }
+
+    private boolean hasValidateService() {
+        IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(IModelValidationService.class);
+        return service != null;
+
     }
 
     public List<AbstractRepositoryAction> getActions(IRepositoryViewObject viewObj) {
@@ -252,10 +267,11 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     private IRepositoryNodeActionProvider[] getExtendActionProviders() {
         if (extendActionProviders == null) {
             IRepositoryNodeActionProvider svnProvider = ActionProviderManager.getActionProvider(SVN_ACTION_PROVIDER_ID);
-            if (svnProvider != null)
+            if (svnProvider != null) {
                 extendActionProviders = new IRepositoryNodeActionProvider[] { svnProvider };
-            else
+            } else {
                 extendActionProviders = new IRepositoryNodeActionProvider[0];
+            }
         }
         return extendActionProviders;
     }
