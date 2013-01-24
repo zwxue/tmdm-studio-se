@@ -172,6 +172,15 @@
             serviceId="IModelValidationService">
       </Service>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
+            class="org.talend.mdm.repository.ui.validate.preferences.RightClickValidationPreferencePage"
+            id="org.talend.mdm.repository.ui.validate.rightclickPrefPage"
+            name="Right Click">
+      </page>
+   </extension>
    <!--
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
