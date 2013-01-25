@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.talend.tom-feature"
+      id="org.talend.tom_feature"
       label="Tom workbench"
-      version="3.2.0.qualifier"
+      version="1.0.0.qualifier"
       provider-name=".Talend SA.">
 
    <description url="http://www.example.com/description">
@@ -121,7 +121,7 @@
       <import plugin="com.google.inject" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.emf.ecore" version="2.3.2" match="greaterOrEqual"/>
-      <import plugin="com.google.collect" version="0.8.0" match="compatible"/>
+      <import plugin="com.google.collect" version="0.8.0" match="equivalent"/>
       <import plugin="org.eclipse.core.runtime" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.4.0" match="greaterOrEqual"/>
@@ -160,7 +160,7 @@
       <import plugin="org.eclipse.jdt.junit.core" version="3.6.0" match="compatible"/>
       <import plugin="org.apache.batik.util" version="1.6.0" match="equivalent"/>
       <import plugin="org.eclipse.emf.ecore.xmi" version="2.4.0" match="compatible"/>
-      <import plugin="com.ibm.icu" version="3.8.1" match="greaterOrEqual"/>
+      <import plugin="com.ibm.icu" version="4.2.1.v20100412" match="equivalent"/>
       <import plugin="org.eclipse.wst.common.core" version="1.1.201" match="compatible"/>
       <import plugin="org.eclipse.ui.navigator" version="3.3.200" match="compatible"/>
       <import plugin="org.eclipse.team.core" version="3.4.100" match="compatible"/>
@@ -179,7 +179,7 @@
       <import plugin="org.eclipse.ui.forms" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.ui.navigator.resources" version="3.4.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.core.manipulation" version="1.3.0" match="compatible"/>
-      <import plugin="com.ibm.icu" version="3.4.4" match="greaterOrEqual"/>
+      <import plugin="com.ibm.icu" version="4.2.1.v20100412" match="equivalent"/>
       <import plugin="javax.xml" version="1.3.4" match="compatible"/>
       <import plugin="org.apache.xml.resolver" version="1.2.0" match="compatible"/>
       <import plugin="org.apache.xml.serializer" version="2.7.1" match="compatible"/>
@@ -550,7 +550,7 @@
          id="com.ibm.icu"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="4.2.1.v20100412"
          unpack="false"/>
 
    <plugin
@@ -927,7 +927,7 @@
          id="com.google.collect"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.8.0.v201008251220"
          unpack="false"/>
 
    <plugin
@@ -1038,7 +1038,7 @@
          id="org.apache.lucene"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.9.1.v20100518-1140"
          unpack="false"/>
 
    <plugin
