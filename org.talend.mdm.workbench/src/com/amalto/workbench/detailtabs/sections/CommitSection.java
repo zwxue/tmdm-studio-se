@@ -29,114 +29,118 @@ import com.amalto.workbench.i18n.Messages;
 
 public class CommitSection extends BasePropertySection {
 
-	private CommitBarComposite commitBar;
-	private String title=Messages.CommitSection_Commit;
-	@Override
-	public void createControls(Composite parent,
-			TabbedPropertySheetPage aTabbedPropertySheetPage) {
-		super.createControls(parent, aTabbedPropertySheetPage);
-		
-		initUIListeners();
+    private CommitBarComposite commitBar;
 
-		registListenersFromGlobalRegistry();
+    private String title = Messages.CommitSection_Commit;
 
-		CommitBarListenerRegistry.getInstance().registCommitSection(this);
-		CommitBarListenerRegistry.getInstance().registCommitSection(getParentTabID(), this);
-		
-		//hide the commit section
-		section.setVisible(false);
-		section.setExpanded(false); 
-		section.layout(true); 
-	}
+    @Override
+    public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
+        super.createControls(parent, aTabbedPropertySheetPage);
 
-	@Override
-	public boolean shouldUseExtraSpace() {
-		return true;
-	}
+        initUIListeners();
 
-	private void addCommbarListeners() {
+        registListenersFromGlobalRegistry();
 
-		for (ISection eachSelection : getCurrentTabSections()) {
+        CommitBarListenerRegistry.getInstance().registCommitSection(this);
+        CommitBarListenerRegistry.getInstance().registCommitSection(getParentTabID(), this);
 
-			if (!(eachSelection instanceof BasePropertySection))
-				continue;
+        // hide the commit section
+        section.setVisible(false);
+        section.setExpanded(false);
+        section.layout(true);
+    }
 
-			if (!(eachSelection instanceof CommitBarListener))
-				continue;
+    @Override
+    public boolean shouldUseExtraSpace() {
+        return true;
+    }
 
-			if (!((BasePropertySection) eachSelection).getParentTabID().equals(
-					getParentTabID()))
-				continue;
+    private void addCommbarListeners() {
 
-			commitBar.addCommitListener((CommitBarListener) eachSelection);
-		}
+        for (ISection eachSelection : getCurrentTabSections()) {
 
-	}
+            if (!(eachSelection instanceof BasePropertySection)) {
+                continue;
+            }
 
-	private void initUIListeners() {
+            if (!(eachSelection instanceof CommitBarListener)) {
+                continue;
+            }
 
-		tabbedPropertySheetPage
-				.addTabSelectionListener(new ITabSelectionListener() {
+            if (!((BasePropertySection) eachSelection).getParentTabID().equals(getParentTabID())) {
+                continue;
+            }
 
-					public void tabSelected(ITabDescriptor tabDescriptor) {
+            commitBar.addCommitListener((CommitBarListener) eachSelection);
+        }
 
-						if (tabDescriptor.getId().equals(getParentTabID())) {
-							addCommbarListeners();
-							getCommitBar().fireSubmitAllTabs();
-							resetCommitSection();
-						}
+    }
 
-					}
-				});
-	}
+    private void initUIListeners() {
 
-	private void registListenersFromGlobalRegistry() {
+        tabbedPropertySheetPage.addTabSelectionListener(new ITabSelectionListener() {
 
-		for (CommitBarListener eachListener : CommitBarListenerRegistry
-				.getInstance().moveOutRegistedListeners(getParentTabID())) {
-			commitBar.addCommitListener(eachListener);
-		}
-	}
+            public void tabSelected(ITabDescriptor tabDescriptor) {
 
-	@Override
-	protected void createControlsInSection(Composite compSectionClient) {
-		commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
-		SelectionListener listener=new SelectionListener() {
-			
-			public void widgetSelected(SelectionEvent e) {
-				resetCommitSection();
-				
-			}
-			
-			public void widgetDefaultSelected(SelectionEvent e) {
-				resetCommitSection();				
-			}
-		};
-		commitBar.getBtnSubmit().addSelectionListener(listener);
-		commitBar.getBtnReset().addSelectionListener(listener);
-	}
+                if (tabDescriptor.getId().equals(getParentTabID())) {
+                    addCommbarListeners();
+                    if (getCurDataModelMainPage().isDirty()) {
+                        getCommitBar().fireSubmitAllTabs();
+                        resetCommitSection();
+                    }
+                }
+            }
+        });
+    }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		CommitBarListenerRegistry.getInstance().unregistCommitSection(this);
-		CommitBarListenerRegistry.getInstance().unregistCommitSection(getParentTabID());
-	}
+    private void registListenersFromGlobalRegistry() {
 
-	public CommitBarComposite getCommitBar() {
-		return commitBar;
-	}
-	public void setTitle(String title){
-		this.title=title;
-		section.setText(title);
-	}
-	@Override
-	protected String getSectionTitle() {
-		return title;
-	}
+        for (CommitBarListener eachListener : CommitBarListenerRegistry.getInstance().moveOutRegistedListeners(getParentTabID())) {
+            commitBar.addCommitListener(eachListener);
+        }
+    }
 
-	@Override
-	protected int getSectionStyle() {
-		return Section.TITLE_BAR | Section.EXPANDED;
-	}
+    @Override
+    protected void createControlsInSection(Composite compSectionClient) {
+        commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
+        SelectionListener listener = new SelectionListener() {
+
+            public void widgetSelected(SelectionEvent e) {
+                resetCommitSection();
+
+            }
+
+            public void widgetDefaultSelected(SelectionEvent e) {
+                resetCommitSection();
+            }
+        };
+        commitBar.getBtnSubmit().addSelectionListener(listener);
+        commitBar.getBtnReset().addSelectionListener(listener);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        CommitBarListenerRegistry.getInstance().unregistCommitSection(this);
+        CommitBarListenerRegistry.getInstance().unregistCommitSection(getParentTabID());
+    }
+
+    public CommitBarComposite getCommitBar() {
+        return commitBar;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        section.setText(title);
+    }
+
+    @Override
+    protected String getSectionTitle() {
+        return title;
+    }
+
+    @Override
+    protected int getSectionStyle() {
+        return Section.TITLE_BAR | Section.EXPANDED;
+    }
 }
