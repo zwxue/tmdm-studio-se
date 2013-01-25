@@ -109,6 +109,62 @@
                scope="ON_ANY"
                values="org.eclipse.ui.internal.views.markers.AllErrorsParameters">
          </markerFieldConfiguration>
+        <markerGrouping
+               id="org.eclipse.ui.ide.allMarkers.severity"
+               label="Severity">
+            <markerGroupingEntry
+                  id="org.eclipse.ui.ide.allMarkers.errorSeverity"
+                  label="Errors"
+                  priority="30">
+            </markerGroupingEntry>
+            <markerGroupingEntry
+                  id="org.eclipse.ui.ide.allMarkers.warningSeverity"
+                  label="Warnings"
+                  priority="20">
+            </markerGroupingEntry>
+            <markerGroupingEntry
+                  id="org.eclipse.ui.ide.allMarkers.other"
+                  label="Other"
+                  priority="10">
+            </markerGroupingEntry>
+            <markerAttributeGrouping
+                  attribute="severity"
+                  markerType="org.eclipse.core.resources.marker">
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.errorSeverity"
+                     value="2">
+               </markerAttributeMapping>
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.warningSeverity"
+                     value="1">
+               </markerAttributeMapping>
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.other"
+                     value="0">
+               </markerAttributeMapping>
+               <markerAttributeMapping
+                     markerGroupingEntry="org.eclipse.ui.ide.allMarkers.other"
+                     value="-1">
+               </markerAttributeMapping>
+            </markerAttributeGrouping>
+         </markerGrouping>
+       <!--    <markerGrouping
+               id="org.talend.mdm.error.datamodel.groupby.model"
+               label="Model">
+             
+            <markerGroupingEntry
+                  id="org.talend.mdm.repository.validate.markerGrouping.model"
+                  label="Model"
+                  markerGrouping="org.talend.mdm.error.datamodel.groupby.model"
+                  priority="10">
+            </markerGroupingEntry>
+            <markerAttributeGrouping
+                  attribute="dataModel"
+                  defaultGroupingEntry="org.talend.mdm.repository.validate.markerGrouping.model"
+                  markerType="org.talend.mdm.error.datamodel.model">
+            </markerAttributeGrouping>
+         
+         </markerGrouping>   -->
       </markerContentGenerator>
       <markerField
             class="org.talend.mdm.repository.ui.markers.datamodel.EntityField"
@@ -152,6 +208,23 @@
             label="Configure Content...."
                style="push">
          </command>
+                  <menu
+               id="mdmProblemsGroupByMenu"
+               label="GroupBy">
+            <dynamic
+                  class="org.eclipse.ui.internal.views.markers.GroupsContribution"
+                  id="org.talend.mdm.problemView.groupBy">
+            </dynamic>
+         </menu>
+                  <menu
+               id="org.talend.mdm.problemView.markerSortMenu"
+               label="Sort">
+            <dynamic
+                  class="org.eclipse.ui.internal.views.markers.SortFieldContribution"
+                  id="org.talend.mdm.problemView.sortEntries">
+            </dynamic>
+         </menu>
+         
       </menuContribution>
    </extension>
    <extension

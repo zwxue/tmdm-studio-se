@@ -32,6 +32,9 @@ public class ElementTypeField extends AbstractDataModelField {
     @Override
     public String getValue(MarkerItem item) {
         IMarker marker = item.getMarker();
+        if (marker == null) {
+            return BLANK;
+        }
         int group = getMessageGroup(marker);
         String msg = BLANK;
         if (isBelongGroup(IComponentValidateVisitor.MSG_GROUP_TYPE, group)) {

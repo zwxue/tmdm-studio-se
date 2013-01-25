@@ -31,6 +31,9 @@ public class ElementPathField extends AbstractDataModelField {
     @Override
     public String getValue(MarkerItem item) {
         IMarker marker = item.getMarker();
+        if (marker == null) {
+            return BLANK;
+        }
         String msg = BLANK;
         msg = marker.getAttribute(PATH, BLANK);
         return msg;

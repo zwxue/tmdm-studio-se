@@ -31,6 +31,9 @@ public class ModelField extends AbstractDataModelField {
     @Override
     public String getValue(MarkerItem item) {
         IMarker marker = item.getMarker();
+        if (marker == null) {
+            return BLANK;
+        }
         String msg = marker.getAttribute(DATA_MODEL, BLANK);
         return msg;
 
