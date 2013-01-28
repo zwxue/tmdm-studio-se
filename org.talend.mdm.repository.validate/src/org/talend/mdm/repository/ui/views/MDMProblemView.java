@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.views;
 
 import java.lang.reflect.Field;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.IMemento;
@@ -62,21 +61,16 @@ public class MDMProblemView extends MarkerSupportView {
     private void hookModelGroup() {
 
         try {
-            Field generatorField = ExtendedMarkersView.class.getDeclaredField("generator");
-            Field descField = MarkerContentGenerator.class.getDeclaredField("generatorDescriptor");
-            Field groupsField = ContentGeneratorDescriptor.class.getDeclaredField("groups");
-            if (generatorField != null && descField != null && groupsField != null) {
+            Field generatorField = ExtendedMarkersView.class.getDeclaredField("generator"); //$NON-NLS-1$
+            Field descField = MarkerContentGenerator.class.getDeclaredField("generatorDescriptor"); //$NON-NLS-1$
+            if (generatorField != null && descField != null) {
                 generatorField.setAccessible(true);
                 descField.setAccessible(true);
-                groupsField.setAccessible(true);
                 Object object = generatorField.get(this);
                 if (object != null) {
                     Object descObj = descField.get(object);
                     if (descObj != null) {
-                        Object groupObj = groupsField.get(descObj);
-
-                        Set groups = (Set) groupObj;
-                        groups.add(new ModelNameMarkerGroup());
+                        ((ContentGeneratorDescriptor) descObj).getMarkerGroups().add(new ModelNameMarkerGroup());
                     }
                 }
             }
