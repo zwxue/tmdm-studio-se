@@ -18,11 +18,11 @@ import java.util.Set;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
-import org.talend.mdm.repository.core.validate.datamodel.model.MAnnotation;
-import org.talend.mdm.repository.core.validate.datamodel.model.MAnnotation.AnnotationUnit;
-import org.talend.mdm.repository.core.validate.datamodel.model.MComponent;
-import org.talend.mdm.repository.core.validate.datamodel.model.MElement;
-import org.talend.mdm.repository.core.validate.datamodel.model.MType;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 
 /**
@@ -58,7 +58,7 @@ public class PKInfoElementVisitor extends AbstractElementVisitor {
      * .lang.String)
      */
     @Override
-    public int getMsgGroup(IElementContainer container, MElement element, String msgKey) {
+    public int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
         // if (MK_NOT_EXIST.equals(msgKey) || MK_NOT_IN_SAME_ENTITY.equals(msgKey)) {
         // return MSG_GROUP_ENTITY;
         // }
@@ -79,23 +79,23 @@ public class PKInfoElementVisitor extends AbstractElementVisitor {
      * org.talend.mdm.repository.core.validate.datamodel.model.MComponent, java.util.List)
      */
     @Override
-    public boolean visit(DataModelValidateContext context, MComponent mComponent, Set<DataModelValidationMessage> messages) {
-        MElement element = (MElement) mComponent;
+    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<DataModelValidationMessage> messages) {
+        IMElement element = (IMElement) mComponent;
         if (isEntity(mComponent)) {
-            MAnnotation annotation = element.getAnnotation();
-            List<AnnotationUnit> infos = annotation.getPrimaryKeyInfo();
+            IMAnnotation annotation = element.getAnnotation();
+            List<IMAnnotationUnit> infos = annotation.getPrimaryKeyInfo();
             if (infos != null) {
-                for (AnnotationUnit info : infos) {
+                for (IMAnnotationUnit info : infos) {
                     String path = info.getValue();
-                    MElement elementByPath = element.getRoot().findElementByPath(path);
-                    MElement entity = element.getEntity();
+                    IMElement elementByPath = element.getRoot().findElementByPath(path);
+                    IMElement entity = element.getEntity();
                     if (elementByPath == null) {
                         DataModelValidationMessage msg = newMessage(context, SEV_ERROR,
                                 Messages.bind(Messages.PKInfoElementVisitor_MK_NOT_EXIST, path), MK_NOT_EXIST, element,
                                 info.getElement());
                         messages.add(msg);
                     } else {
-                        MElement foundEntity = elementByPath.getEntity();
+                        IMElement foundEntity = elementByPath.getEntity();
 
                         if (foundEntity != entity) {
                             DataModelValidationMessage msg = newMessage(context, SEV_ERROR,
@@ -103,7 +103,7 @@ public class PKInfoElementVisitor extends AbstractElementVisitor {
                                     MK_NOT_IN_SAME_ENTITY, element, info.getElement());
                             messages.add(msg);
                         } else {
-                            MType type = elementByPath.getType();
+                            IMType type = elementByPath.getType();
                             if (!type.isSimpleType()) {
                                 DataModelValidationMessage msg = newMessage(context, SEV_WARNING, Messages.bind(
                                         Messages.PKInfoElementVisitor_MK_FIELD_NOT_DISPLAY_TYPE, path, elementByPath.getName()),

@@ -14,17 +14,18 @@ package org.talend.mdm.repository.core.validate.datamodel.model;
 
 import java.util.List;
 
+import org.w3c.dom.Element;
+
 /**
- * created by HHB on 2013-1-6 Detailled comment
+ * created by HHB on 2013-1-28 Detailled comment
  * 
  */
-public interface IElementContainer {
+public interface IMAnnotation {
 
-    public List<IMElement> getElements();
+    public abstract void addAnnotation(String attribute, String value, Element element);
 
-    public void addElement(IMElement element);
+    public abstract List<IMAnnotationUnit> getPrimaryKeyInfo();
 
-    public IMRoot getRoot();
+    public abstract IMAnnotationUnit getForeignKey();
 
-    public void setRoot(IMRoot root);
 }

@@ -12,19 +12,34 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.model;
 
-import java.util.List;
+import org.w3c.dom.Element;
 
 /**
- * created by HHB on 2013-1-6 Detailled comment
- * 
+ * created by HHB on 2013-1-28
+ * Detailled comment
+ *
  */
-public interface IElementContainer {
+public interface IMAnnotationUnit {
 
-    public List<IMElement> getElements();
+    /**
+     * Getter for attribute.
+     * 
+     * @return the attribute
+     */
+    public abstract String getAttribute();
 
-    public void addElement(IMElement element);
+    /**
+     * Getter for value.
+     * 
+     * @return the value
+     */
+    public abstract String getValue();
 
-    public IMRoot getRoot();
+    /**
+     * Getter for element.
+     * 
+     * @return the element
+     */
+    public abstract Element getElement();
 
-    public void setRoot(IMRoot root);
 }

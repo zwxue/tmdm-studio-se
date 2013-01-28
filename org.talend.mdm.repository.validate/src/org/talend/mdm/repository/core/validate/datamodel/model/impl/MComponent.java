@@ -10,20 +10,21 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 
 import java.util.Set;
 
 import org.eclipse.xsd.XSDComponent;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
 import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
 
 /**
  * created by HHB on 2013-1-6 Detailled comment
  * 
  */
-public class MComponent {
+public class MComponent implements IMComponent {
 
     protected String name;
 
@@ -52,42 +53,42 @@ public class MComponent {
     public MComponent() {
     }
 
-    /**
-     * Getter for name.
-     * 
-     * @return the name
+    /* (non-Javadoc)
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#getName()
      */
+    @Override
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Getter for xsdComponent.
-     * 
-     * @return the xsdComponent
+    /* (non-Javadoc)
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#getXsdComponent()
      */
+    @Override
     public XSDComponent getXsdComponent() {
         return this.xsdComponent;
     }
 
-    /**
-     * Sets the name.
-     * 
-     * @param name the name to set
+    /* (non-Javadoc)
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#setName(java.lang.String)
      */
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Sets the xsdComponent.
-     * 
-     * @param xsdComponent the xsdComponent to set
+    /* (non-Javadoc)
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#setXsdComponent(org.eclipse.xsd.XSDComponent)
      */
+    @Override
     public void setXsdComponent(XSDComponent xsdComponent) {
         this.xsdComponent = xsdComponent;
     }
 
+    /* (non-Javadoc)
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#acceptValidateVisitor(org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor, org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext, java.util.Set)
+     */
+    @Override
     public boolean acceptValidateVisitor(IComponentValidateVisitor visitor, DataModelValidateContext context,
             Set<DataModelValidationMessage> messages) {
         return visitor.visit(context, this, messages);

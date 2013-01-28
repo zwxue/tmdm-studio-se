@@ -13,8 +13,8 @@
 package org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element;
 
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.model.MComponent;
-import org.talend.mdm.repository.core.validate.datamodel.model.MElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.AbstractComponentVisitor;
 
 /**
@@ -32,16 +32,16 @@ public abstract class AbstractElementVisitor extends AbstractComponentVisitor {
      * org.talend.mdm.repository.core.validate.datamodel.model.MComponent)
      */
     @Override
-    public boolean needValidate(DataModelValidateContext context, MComponent mComponent) {
+    public boolean needValidate(DataModelValidateContext context, IMComponent mComponent) {
         if (mComponent != null) {
-            return mComponent instanceof MElement;
+            return mComponent instanceof IMElement;
         }
         return false;
     }
 
-    protected boolean isEntity(MComponent component) {
-        if (component instanceof MElement) {
-            MElement entity = ((MElement) component).getEntity();
+    protected boolean isEntity(IMComponent component) {
+        if (component instanceof IMElement) {
+            IMElement entity = ((IMElement) component).getEntity();
             return entity == component;
         }
         return false;

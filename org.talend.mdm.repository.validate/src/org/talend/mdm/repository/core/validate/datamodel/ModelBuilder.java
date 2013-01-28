@@ -27,9 +27,12 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.util.XSDParser;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
-import org.talend.mdm.repository.core.validate.datamodel.model.MElement;
-import org.talend.mdm.repository.core.validate.datamodel.model.MRoot;
-import org.talend.mdm.repository.core.validate.datamodel.model.MType;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
+import org.talend.mdm.repository.core.validate.datamodel.model.impl.MElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.impl.MRoot;
+import org.talend.mdm.repository.core.validate.datamodel.model.impl.MType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -39,8 +42,8 @@ import org.w3c.dom.Node;
  */
 public class ModelBuilder {
 
-    public MRoot buildModel(XSDSchema schema, String fileName) {
-        MRoot root = new MRoot();
+    public IMRoot buildModel(XSDSchema schema, String fileName) {
+        IMRoot root = new MRoot();
         analyseTypeDefinitions(schema, root);
         analyseEntities(schema, root);
         String dataModelName = getDataModelName(fileName);
@@ -63,29 +66,29 @@ public class ModelBuilder {
      * @param schema
      * @param root
      */
-    private void analyseTypeDefinitions(XSDSchema schema, MRoot root) {
+    private void analyseTypeDefinitions(XSDSchema schema, IMRoot root) {
         for (XSDTypeDefinition typeDefine : schema.getTypeDefinitions()) {
             analyseType(typeDefine, root, true);
         }
     }
 
-    private void analyseEntities(XSDSchema schema, MRoot root) {
+    private void analyseEntities(XSDSchema schema, IMRoot root) {
         for (XSDElementDeclaration decl : schema.getElementDeclarations()) {
             analyseEntity(decl, root);
         }
     }
 
-    private MElement analyseEntity(XSDElementDeclaration decl, MRoot root) {
-        MElement entity = analyseElement(decl, root);
+    private IMElement analyseEntity(XSDElementDeclaration decl, IMRoot root) {
+        IMElement entity = analyseElement(decl, root);
         buildChildElementFromType(entity);
         return entity;
     }
 
-    private void buildChildElementFromType(MElement element) {
-        MType type = element.getType();
+    private void buildChildElementFromType(IMElement element) {
+        IMType type = element.getType();
         if (type.isComplexType() || type.isAnonymousType()) {
-            for (MElement child : type.getElements()) {
-                MElement cloneElement = child.cloneElement();
+            for (IMElement child : type.getElements()) {
+                IMElement cloneElement = child.cloneElement();
                 element.addElement(cloneElement);
                 cloneElement.setParent(element);
                 buildChildElementFromType(cloneElement);
@@ -94,8 +97,8 @@ public class ModelBuilder {
 
     }
 
-    private MType findType(XSDTypeDefinition typeDefine, MRoot root) {
-        for (MType type : root.getTypes()) {
+    private IMType findType(XSDTypeDefinition typeDefine, IMRoot root) {
+        for (IMType type : root.getTypes()) {
             if (typeDefine == type.getXsdComponent()) {
                 return type;
             }
@@ -103,8 +106,8 @@ public class ModelBuilder {
         return null;
     }
 
-    private MType analyseType(XSDTypeDefinition typeDefine, MRoot root, boolean declared) {
-        MType foundType = findType(typeDefine, root);
+    private IMType analyseType(XSDTypeDefinition typeDefine, IMRoot root, boolean declared) {
+        IMType foundType = findType(typeDefine, root);
         if (foundType != null) {
             if (declared && !foundType.isDeclared()) {
                 foundType.setDeclared(true);
@@ -113,7 +116,7 @@ public class ModelBuilder {
         }
         String typeName = typeDefine.getName();
         boolean isComplex = typeDefine instanceof XSDComplexTypeDefinition;
-        MType type = new MType(typeName, typeDefine, isComplex, declared);
+        IMType type = new MType(typeName, typeDefine, isComplex, declared);
         // important
         root.addType(type);
         if (isComplex) {
@@ -146,12 +149,12 @@ public class ModelBuilder {
         return type;
     }
 
-    private MElement analyseElement(XSDElementDeclaration decl, IElementContainer container) {
+    private IMElement analyseElement(XSDElementDeclaration decl, IElementContainer container) {
         return analyseElement(decl, container, null, null);
     }
 
-    private MElement analyseElement(XSDElementDeclaration decl, IElementContainer container, Integer min, Integer max) {
-        MElement element = new MElement(decl.getName(), decl);
+    private IMElement analyseElement(XSDElementDeclaration decl, IElementContainer container, Integer min, Integer max) {
+        IMElement element = new MElement(decl.getName(), decl);
         if (min != null && max != null) {
             element.setMinOccurs(min);
             element.setMaxOccurs(max);
@@ -160,15 +163,15 @@ public class ModelBuilder {
         analyseAnnotation(element);
         //
         XSDTypeDefinition anonymousTypeDefinition = decl.getAnonymousTypeDefinition();
-        MType elementType = null;
-        MRoot root = container.getRoot();
+        IMType elementType = null;
+        IMRoot root = container.getRoot();
         if (anonymousTypeDefinition != null) {
 
-            MType anonymousType = analyseType(anonymousTypeDefinition, root, false);
+            IMType anonymousType = analyseType(anonymousTypeDefinition, root, false);
             elementType = anonymousType;
         } else {
             XSDTypeDefinition typeDefinition = decl.getTypeDefinition();
-            MType foundType = root.findTypeByXSD(typeDefinition);
+            IMType foundType = root.findTypeByXSD(typeDefinition);
             if (foundType != null) {
                 elementType = foundType;
             } else {
@@ -181,7 +184,7 @@ public class ModelBuilder {
         return element;
     }
 
-    private void analyseAnnotation(MElement element) {
+    private void analyseAnnotation(IMElement element) {
         XSDElementDeclaration decl = (XSDElementDeclaration) element.getXsdComponent();
         XSDAnnotation annotation = decl.getAnnotation();
         if (annotation != null) {

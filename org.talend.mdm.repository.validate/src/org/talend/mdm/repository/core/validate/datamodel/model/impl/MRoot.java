@@ -10,42 +10,48 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.xsd.XSDComponent;
+import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
 
 /**
  * created by HHB on 2013-1-6 Detailled comment
  * 
  */
-public class MRoot implements IElementContainer {
+public class MRoot implements IMRoot {
 
     private String name;
 
-    /**
-     * Getter for name.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the name
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#getName()
      */
+    @Override
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Sets the name.
+    /*
+     * (non-Javadoc)
      * 
-     * @param name the name to set
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#setName(java.lang.String)
      */
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    List<MType> types = new ArrayList<MType>();
+    List<IMType> types = new ArrayList<IMType>();
 
-    List<MElement> elements = new ArrayList<MElement>();
+    List<IMElement> elements = new ArrayList<IMElement>();
 
     /**
      * Getter for elements.
@@ -53,32 +59,47 @@ public class MRoot implements IElementContainer {
      * @return the elements
      */
     @Override
-    public List<MElement> getElements() {
+    public List<IMElement> getElements() {
         return this.elements;
     }
 
-    /**
-     * Getter for types.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the types
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#getTypes()
      */
-    public List<MType> getTypes() {
+    @Override
+    public List<IMType> getTypes() {
         return this.types;
     }
 
-    public void addType(MType type) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#addType(org.talend.mdm.repository.core.validate
+     * .datamodel.model.MType)
+     */
+    @Override
+    public void addType(IMType type) {
         types.add(type);
         type.setRoot(this);
     }
 
     @Override
-    public void addElement(MElement element) {
+    public void addElement(IMElement element) {
         elements.add(element);
         element.setRoot(this);
     }
 
-    public MType findTypeByXSD(XSDComponent xsdComponent) {
-        for (MType type : types) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#findTypeByXSD(org.eclipse.xsd.XSDComponent)
+     */
+    @Override
+    public IMType findTypeByXSD(XSDComponent xsdComponent) {
+        for (IMType type : types) {
             if (type.getXsdComponent() == xsdComponent) {
                 return type;
             }
@@ -86,12 +107,20 @@ public class MRoot implements IElementContainer {
         return null;
     }
 
-    public IElementContainer findContainer(MElement element) {
-        MType type = element.getType();
-        if (type.isComplexType && type.isDeclared()) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#findContainer(org.talend.mdm.repository.core.validate
+     * .datamodel.model.IMElement)
+     */
+    @Override
+    public IElementContainer findContainer(IMElement element) {
+        IMType type = element.getType();
+        if (type.isComplexType() && type.isDeclared()) {
             return type;
         }
-        MElement parent = element.getParent();
+        IMElement parent = element.getParent();
         if (parent == null) {
             return element;
         }
@@ -104,7 +133,7 @@ public class MRoot implements IElementContainer {
      * @see org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer#getRoot()
      */
     @Override
-    public MRoot getRoot() {
+    public IMRoot getRoot() {
         return this;
     }
 
@@ -116,29 +145,35 @@ public class MRoot implements IElementContainer {
      * .validate.datamodel.model.MRoot)
      */
     @Override
-    public void setRoot(MRoot root) {
+    public void setRoot(IMRoot root) {
         // do nothing ,can't change itself
 
     }
 
-    public MElement findElementByPath(String path) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#findElementByPath(java.lang.String)
+     */
+    @Override
+    public IMElement findElementByPath(String path) {
         return findElementByPath(path, getElements());
     }
 
-    private MElement findElementByPath(String path, List<MElement> elements) {
+    private IMElement findElementByPath(String path, List<IMElement> elements) {
         if (path == null) {
             throw new IllegalArgumentException("Parameter Path IS NULL!"); //$NON-NLS-1$
         }
         if (elements == null) {
             return null;
         }
-        for (MElement e : elements) {
+        for (IMElement e : elements) {
             String pVar = e.getPath();
             if (path.startsWith(pVar)) {
                 if (path.equals(pVar)) {
                     return e;
                 } else {
-                    MElement found = findElementByPath(path, e.getElements());
+                    IMElement found = findElementByPath(path, e.getElements());
                     if (found != null) {
                         return found;
                     }

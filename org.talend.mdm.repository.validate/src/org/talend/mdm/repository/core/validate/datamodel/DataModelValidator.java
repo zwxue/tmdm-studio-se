@@ -40,7 +40,7 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.util.XSDParser;
 import org.eclipse.xsd.util.XSDResourceImpl;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
-import org.talend.mdm.repository.core.validate.datamodel.model.MRoot;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
 import org.talend.mdm.repository.core.validate.datamodel.validator.AbstractDataModelValidator;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ElementValidator;
 import org.xml.sax.helpers.LocatorImpl;
@@ -74,7 +74,7 @@ public class DataModelValidator extends AbstractNestedValidator implements IData
         EList<XSDDiagnostic> diagnostics = schema.getAllDiagnostics();
 
         File file = getFileFromURI(uri);
-        MRoot mRoot = buildValidateModel(schema, file.getName());
+        IMRoot mRoot = buildValidateModel(schema, file.getName());
         DataModelValidateContext modelContext = new DataModelValidateContext(schema, mRoot, document);
 
         DataModelValidationReport report = new DataModelValidationReport(uri);
@@ -159,9 +159,9 @@ public class DataModelValidator extends AbstractNestedValidator implements IData
 
     }
 
-    private MRoot buildValidateModel(XSDSchema schema, String fileName) {
+    private IMRoot buildValidateModel(XSDSchema schema, String fileName) {
 
-        MRoot root = builder.buildModel(schema, fileName);
+        IMRoot root = builder.buildModel(schema, fileName);
         return root;
     }
 

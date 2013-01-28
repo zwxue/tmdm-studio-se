@@ -17,8 +17,8 @@ import java.util.Set;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
-import org.talend.mdm.repository.core.validate.datamodel.model.MComponent;
-import org.talend.mdm.repository.core.validate.datamodel.model.MElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 
 /**
  * created by HHB on 2013-1-11 Detailled comment
@@ -42,11 +42,11 @@ public interface IComponentValidateVisitor {
     // to mark the error is caused by Type
     public static final int MSG_GROUP_TYPE = 4;
 
-    public boolean needValidate(DataModelValidateContext context, MComponent mComponent);
+    public boolean needValidate(DataModelValidateContext context, IMComponent mComponent);
 
-    public boolean visit(DataModelValidateContext context, MComponent mComponent, Set<DataModelValidationMessage> messages);
+    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<DataModelValidationMessage> messages);
 
     public String[] getMessageKeys();
 
-    public int getMsgGroup(IElementContainer container, MElement element, String msgKey);
+    public int getMsgGroup(IElementContainer container, IMElement element, String msgKey);
 }

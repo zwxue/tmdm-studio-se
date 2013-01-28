@@ -10,21 +10,24 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.talend.mdm.repository.core.validate.datamodel.model.IAnnotationConst;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit;
 import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-7 Detailled comment
  * 
  */
-public class MAnnotation implements IAnnotationConst {
+public class MAnnotation implements IAnnotationConst, IMAnnotation {
 
-    public class AnnotationUnit {
+    public class AnnotationUnit implements IMAnnotationUnit {
 
         String attribute;
 
@@ -41,29 +44,32 @@ public class MAnnotation implements IAnnotationConst {
             this.element = element;
         }
 
-        /**
-         * Getter for attribute.
+        /*
+         * (non-Javadoc)
          * 
-         * @return the attribute
+         * @see org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit#getAttribute()
          */
+        @Override
         public String getAttribute() {
             return this.attribute;
         }
 
-        /**
-         * Getter for value.
+        /*
+         * (non-Javadoc)
          * 
-         * @return the value
+         * @see org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit#getValue()
          */
+        @Override
         public String getValue() {
             return this.value;
         }
 
-        /**
-         * Getter for element.
+        /*
+         * (non-Javadoc)
          * 
-         * @return the element
+         * @see org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit#getElement()
          */
+        @Override
         public Element getElement() {
             return this.element;
         }
@@ -76,6 +82,13 @@ public class MAnnotation implements IAnnotationConst {
 
     private List<AnnotationUnit> annotations;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation#addAnnotation(java.lang.String,
+     * java.lang.String, org.w3c.dom.Element)
+     */
+    @Override
     public void addAnnotation(String attribute, String value, Element element) {
         if (annotations == null) {
             annotations = new ArrayList<AnnotationUnit>();
@@ -83,12 +96,12 @@ public class MAnnotation implements IAnnotationConst {
         annotations.add(new AnnotationUnit(attribute, value, element));
     }
 
-    private AnnotationUnit getAnnotation(String attribute) {
+    private IMAnnotationUnit getAnnotation(String attribute) {
         if (attribute == null) {
             throw new IllegalArgumentException();
         }
         if (annotations != null) {
-            for (AnnotationUnit unit : annotations) {
+            for (IMAnnotationUnit unit : annotations) {
                 if (attribute.equals(unit.getAttribute())) {
                     return unit;
                 }
@@ -97,11 +110,11 @@ public class MAnnotation implements IAnnotationConst {
         return null;
     }
 
-    private List<AnnotationUnit> getAnnotations(String attribute) {
+    private List<IMAnnotationUnit> getAnnotations(String attribute) {
         if (attribute == null) {
             throw new IllegalArgumentException();
         }
-        List<AnnotationUnit> units = new LinkedList<AnnotationUnit>();
+        List<IMAnnotationUnit> units = new LinkedList<IMAnnotationUnit>();
         if (annotations != null) {
             for (AnnotationUnit unit : annotations) {
                 if (attribute.equals(unit.getAttribute())) {
@@ -112,11 +125,23 @@ public class MAnnotation implements IAnnotationConst {
         return units;
     }
 
-    public List<AnnotationUnit> getPrimaryKeyInfo() {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation#getPrimaryKeyInfo()
+     */
+    @Override
+    public List<IMAnnotationUnit> getPrimaryKeyInfo() {
         return getAnnotations(PRIMARY_KEY_INFO);
     }
 
-    public AnnotationUnit getForeignKey() {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation#getForeignKey()
+     */
+    @Override
+    public IMAnnotationUnit getForeignKey() {
         return getAnnotation(FOREIGN_KEY);
     }
 }

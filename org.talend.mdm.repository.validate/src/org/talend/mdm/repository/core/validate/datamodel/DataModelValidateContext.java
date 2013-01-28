@@ -14,7 +14,7 @@ package org.talend.mdm.repository.core.validate.datamodel;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.xsd.XSDSchema;
-import org.talend.mdm.repository.core.validate.datamodel.model.MRoot;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
 
 /**
  * created by HHB on 2013-1-8 Detailled comment
@@ -31,7 +31,7 @@ public class DataModelValidateContext {
      * @param modelRoot
      * @param document
      */
-    public DataModelValidateContext(XSDSchema schema, MRoot modelRoot, Document document) {
+    public DataModelValidateContext(XSDSchema schema, IMRoot modelRoot, Document document) {
         super();
         this.schema = schema;
         this.modelRoot = modelRoot;
@@ -52,7 +52,7 @@ public class DataModelValidateContext {
      * 
      * @return the modelRoot
      */
-    public MRoot getModelRoot() {
+    public IMRoot getModelRoot() {
         return this.modelRoot;
     }
 
@@ -65,7 +65,7 @@ public class DataModelValidateContext {
         return this.document;
     }
 
-    private MRoot modelRoot;
+    private IMRoot modelRoot;
 
     private Document document;
 }

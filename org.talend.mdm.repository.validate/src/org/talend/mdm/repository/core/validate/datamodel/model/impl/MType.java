@@ -10,46 +10,52 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.xsd.XSDComponent;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
 
 /**
  * created by HHB on 2013-1-6 Detailled comment
  * 
  */
-public class MType extends MComponent implements IElementContainer {
+public class MType extends MComponent implements IMType {
 
     boolean isComplexType;
 
     boolean declared;
 
-    /**
-     * Getter for declared.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the declared
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#isDeclared()
      */
+    @Override
     public boolean isDeclared() {
         return this.declared;
     }
 
-    /**
-     * Sets the declared.
+    /*
+     * (non-Javadoc)
      * 
-     * @param declared the declared to set
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#setDeclared(boolean)
      */
+    @Override
     public void setDeclared(boolean declared) {
         this.declared = declared;
     }
 
-    /**
-     * Getter for isComplexType.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the isComplexType
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#isComplexType()
      */
+    @Override
     public boolean isComplexType() {
         if (this.isComplexType) {
             return name != null;
@@ -57,10 +63,22 @@ public class MType extends MComponent implements IElementContainer {
         return false;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#isSimpleType()
+     */
+    @Override
     public boolean isSimpleType() {
         return !this.isComplexType;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#isAnonymousType()
+     */
+    @Override
     public boolean isAnonymousType() {
         if (isComplexType) {
             return name == null;
@@ -68,11 +86,12 @@ public class MType extends MComponent implements IElementContainer {
         return false;
     }
 
-    /**
-     * Sets the isComplexType.
+    /*
+     * (non-Javadoc)
      * 
-     * @param isComplexType the isComplexType to set
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#setComplexType(boolean)
      */
+    @Override
     public void setComplexType(boolean isComplexType) {
         this.isComplexType = isComplexType;
     }
@@ -91,41 +110,55 @@ public class MType extends MComponent implements IElementContainer {
         this.declared = declared;
     }
 
-    List<MElement> elements = new ArrayList<MElement>();
+    List<IMElement> elements = new ArrayList<IMElement>();
 
-    /**
-     * Getter for elements.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the elements
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#getElements()
      */
     @Override
-    public List<MElement> getElements() {
+    public List<IMElement> getElements() {
         return this.elements;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.talend.mdm.repository.core.validate.datamodel.model.IMType#addElement(org.talend.mdm.repository.core.validate
+     * .datamodel.model.IMElement)
+     */
     @Override
-    public void addElement(MElement element) {
+    public void addElement(IMElement element) {
         elements.add(element);
     }
 
-    private MRoot root;
+    private IMRoot root;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMType#getRoot()
+     */
     @Override
-    public MRoot getRoot() {
+    public IMRoot getRoot() {
         return this.root;
     }
 
-    /**
-     * Sets the root.
+    /*
+     * (non-Javadoc)
      * 
-     * @param root the root to set
+     * @see
+     * org.talend.mdm.repository.core.validate.datamodel.model.IMType#setRoot(org.talend.mdm.repository.core.validate
+     * .datamodel.model.MRoot)
      */
     @Override
-    public void setRoot(MRoot root) {
+    public void setRoot(IMRoot root) {
         if (this.root == null || this.root != root) {
             this.root = root;
             if (elements != null) {
-                for (MElement child : elements) {
+                for (IMElement child : elements) {
                     child.setRoot(root);
                 }
             }
@@ -147,7 +180,6 @@ public class MType extends MComponent implements IElementContainer {
         }
         String declaredStr = declared ? " [*]" : ""; //$NON-NLS-1$ //$NON-NLS-2$
         return name + declaredStr + " Type:" + type; //$NON-NLS-1$
-        // return super.toString();
     }
 
 }

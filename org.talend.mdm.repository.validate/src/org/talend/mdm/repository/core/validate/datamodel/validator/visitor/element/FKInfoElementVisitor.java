@@ -17,10 +17,10 @@ import java.util.Set;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
-import org.talend.mdm.repository.core.validate.datamodel.model.MAnnotation;
-import org.talend.mdm.repository.core.validate.datamodel.model.MAnnotation.AnnotationUnit;
-import org.talend.mdm.repository.core.validate.datamodel.model.MComponent;
-import org.talend.mdm.repository.core.validate.datamodel.model.MElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 
 /**
@@ -52,7 +52,7 @@ public class FKInfoElementVisitor extends AbstractElementVisitor {
      * .lang.String)
      */
     @Override
-    public int getMsgGroup(IElementContainer container, MElement element, String msgKey) {
+    public int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
 
         return getContainerGroup(container);
     }
@@ -66,14 +66,14 @@ public class FKInfoElementVisitor extends AbstractElementVisitor {
      * org.talend.mdm.repository.core.validate.datamodel.model.MComponent, java.util.List)
      */
     @Override
-    public boolean visit(DataModelValidateContext context, MComponent mComponent, Set<DataModelValidationMessage> messages) {
-        MElement element = (MElement) mComponent;
+    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<DataModelValidationMessage> messages) {
+        IMElement element = (IMElement) mComponent;
         if (!isEntity(mComponent)) {
-            MAnnotation annotation = element.getAnnotation();
-            AnnotationUnit fk = annotation.getForeignKey();
+            IMAnnotation annotation = element.getAnnotation();
+            IMAnnotationUnit fk = annotation.getForeignKey();
             if (fk != null) {
                 String path = fk.getValue();
-                MElement elementByPath = element.getRoot().findElementByPath(path);
+                IMElement elementByPath = element.getRoot().findElementByPath(path);
                 if (elementByPath == null) {
                     DataModelValidationMessage msg = newMessage(context, SEV_ERROR,
                             Messages.bind(Messages.FKInfoElementVisitor_MK_NOT_EXIST, path), MK_NOT_EXIST, element,

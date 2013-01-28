@@ -16,8 +16,8 @@ import org.eclipse.xsd.util.XSDParser;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
-import org.talend.mdm.repository.core.validate.datamodel.model.MElement;
-import org.talend.mdm.repository.core.validate.datamodel.model.MType;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
 import org.w3c.dom.Element;
 
 /**
@@ -34,7 +34,7 @@ public abstract class AbstractComponentVisitor implements IComponentValidateVisi
      * .lang.String)
      */
     @Override
-    public int getMsgGroup(IElementContainer container, MElement element, String msgKey) {
+    public int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
         return MSG_GROUP_UNKNOW;
     }
 
@@ -52,7 +52,7 @@ public abstract class AbstractComponentVisitor implements IComponentValidateVisi
     }
 
     protected DataModelValidationMessage newMessage(DataModelValidateContext context, int severity, String message, String key,
-            MElement mElement, Element domElement) {
+            IMElement mElement, Element domElement) {
         int startLine = XSDParser.getStartLine(domElement);
         int startColumn = XSDParser.getStartColumn(domElement);
         IElementContainer container = mElement.getRoot().findContainer(mElement);
@@ -63,40 +63,40 @@ public abstract class AbstractComponentVisitor implements IComponentValidateVisi
 
     private String getContainerName(IElementContainer container) {
 
-        if (container instanceof MType) {
-            MType type = (MType) container;
+        if (container instanceof IMType) {
+            IMType type = (IMType) container;
             if (type.isComplexType()) {
                 return type.getName();
             }
             if (type.isAnonymousType()) {
                 return "<Anonymous>"; //$NON-NLS-1$
             }
-        } else if (container instanceof MElement) {
-            return ((MElement) container).getName();
+        } else if (container instanceof IMElement) {
+            return ((IMElement) container).getName();
         }
         return null;
     }
 
     protected int getContainerGroup(IElementContainer container) {
 
-        if (container instanceof MElement) {
+        if (container instanceof IMElement) {
             return MSG_GROUP_ENTITY;
         }
-        if (container instanceof MType) {
+        if (container instanceof IMType) {
             return MSG_GROUP_TYPE;
         }
 
         return MSG_GROUP_UNKNOW;
     }
 
-    protected String getPathToContainer(IElementContainer container, MElement element) {
-        if (container instanceof MElement) {
+    protected String getPathToContainer(IElementContainer container, IMElement element) {
+        if (container instanceof IMElement) {
             return element.getPath();
         }
-        if (container instanceof MType) {
-            MType type = (MType) container;
-            MElement parent;
-            MElement temp = element;
+        if (container instanceof IMType) {
+            IMType type = (IMType) container;
+            IMElement parent;
+            IMElement temp = element;
             parent = temp.getParent();
             while (parent != null && parent.getType() != type) {
                 temp = parent;
