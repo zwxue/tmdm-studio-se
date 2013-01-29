@@ -23,6 +23,8 @@ import org.eclipse.ui.views.markers.MarkerItem;
  */
 public class ElementPathField extends AbstractDataModelField {
 
+    public static final String ID = "org.talend.mdm.repository.ui.markers.ElementPathField"; //$NON-NLS-1$]
+
     /*
      * (non-Javadoc)
      * 

@@ -1,0 +1,299 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2013 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.mdm.repository.validate.ui.dialogs;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IconAndMessageDialog;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.eclipse.ui.views.markers.MarkerField;
+import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
+import org.eclipse.wst.validation.internal.ValidationResultSummary;
+import org.talend.mdm.repository.core.service.IModelValidationService;
+import org.talend.mdm.repository.core.validate.IValidationPreference;
+import org.talend.mdm.repository.core.validate.datamodel.MarkerEntry;
+import org.talend.mdm.repository.core.validate.i18n.Messages;
+import org.talend.mdm.repository.ui.markers.datamodel.ElementPathField;
+import org.talend.mdm.repository.ui.markers.datamodel.ElementTypeField;
+import org.talend.mdm.repository.ui.markers.datamodel.EntityField;
+import org.talend.mdm.repository.ui.markers.datamodel.ModelField;
+
+/**
+ * created by Huang Zhenlong on Jan 25, 2013 Detailled comment
+ * 
+ */
+@SuppressWarnings("restriction")
+public class ValidationResultDialog extends IconAndMessageDialog {
+
+    private static final String MARKERFIELD_DESC = "org.eclipse.ui.ide.allSeverityField"; //$NON-NLS-1$
+
+    private static final String MARKERTYPE_DATAMODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
+
+    private class MarkerColumnLabelProvider extends ColumnLabelProvider {
+
+        MarkerField field;
+
+        private ResourceManager imageManager;
+
+        /**
+         * Create a MarkerViewLabelProvider on a field.
+         * 
+         * @param field
+         */
+        MarkerColumnLabelProvider(MarkerField field) {
+            FieldDecorationRegistry.getDefault();
+            this.field = field;
+            imageManager = new LocalResourceManager(IDEWorkbenchPlugin.getDefault().getResourceManager());
+            field.setImageManager(imageManager);
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.viewers.BaseLabelProvider#dispose()
+         */
+        @Override
+        public void dispose() {
+            super.dispose();
+            imageManager.dispose();
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.viewers.ColumnLabelProvider#update(org.eclipse.jface.viewers.ViewerCell)
+         */
+        @Override
+        public void update(ViewerCell cell) {
+            field.update(cell);
+        }
+    }
+
+    private Composite detailsComposite;
+
+    private Button detailsButton;
+
+    private ValidationResultSummary result;
+
+    private IValidationPreference validationPrefs;
+
+    private List<MarkerEntry> markerEntries;
+
+    public ValidationResultDialog(Shell parentShell, ValidationResultSummary result, IValidationPreference validationPrefs,
+            Set<IResource> resources) {
+        super(parentShell);
+        this.result = result;
+        this.validationPrefs = validationPrefs;
+        this.markerEntries = createMarkerEntries(resources);
+        initMessage(resources.size());
+        setShellStyle(getShellStyle() | SWT.RESIZE);
+    }
+
+    private List<MarkerEntry> createMarkerEntries(Set<IResource> resources) {
+        List<MarkerEntry> ret = new ArrayList<MarkerEntry>();
+        for (IResource resource : resources) {
+            try {
+                IMarker[] markers = resource.findMarkers(MARKERTYPE_DATAMODEL, true, IResource.DEPTH_ONE);
+                for (IMarker marker : markers) {
+                    ret.add(new MarkerEntry(marker));
+                }
+            } catch (CoreException e) {
+                e.printStackTrace();
+            }
+        }
+        return ret;
+    }
+
+    private void initMessage(int totalSize) {
+        int errors = result.getSeverityError();
+        int warnings = result.getSeverityWarning();
+        this.message = NLS.bind(Messages.ValidationResultDialog_Message, new Object[] { totalSize, errors, warnings });
+    }
+
+    @Override
+    protected void configureShell(Shell newShell) {
+        super.configureShell(newShell);
+        newShell.setText(Messages.ValidationResultDialog_Title);
+    }
+
+    @Override
+    protected Control createDialogArea(Composite parent) {
+        Composite dialogAreaComposite = (Composite) super.createDialogArea(parent);
+        ((GridData) dialogAreaComposite.getLayoutData()).horizontalSpan = 2;
+        createMessageArea(dialogAreaComposite);
+        return dialogAreaComposite;
+    }
+
+    @Override
+    protected Control createMessageArea(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).applyTo(composite);
+        GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(composite);
+        return super.createMessageArea(composite);
+    }
+
+    @Override
+    protected Control createButtonBar(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        GridLayoutFactory.fillDefaults().numColumns(2).extendedMargins(5, -3, 5, 5).equalWidth(false).applyTo(composite);
+
+        GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).span(2, 1).applyTo(composite);
+        composite.setFont(parent.getFont());
+        createButtonsForButtonBar(composite);
+        return composite;
+    }
+
+    @Override
+    protected void createButtonsForButtonBar(Composite parent) {
+        detailsButton = createButton(parent, IDialogConstants.DETAILS_ID, IDialogConstants.SHOW_DETAILS_LABEL, false);
+        GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(detailsButton);
+
+        Composite rightArea = new Composite(parent, SWT.NONE);
+        GridLayoutFactory.fillDefaults().numColumns(0).equalWidth(true).applyTo(rightArea);
+        GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(rightArea);
+
+        createRightAreaButtons(rightArea);
+    }
+
+    private void createRightAreaButtons(Composite parent) {
+        int condition = validationPrefs.getValidationCondition();
+        switch (condition) {
+        case IModelValidationService.VALIDATE_IMMEDIATE:
+        case IModelValidationService.VALIDATE_AFTER_SAVE: {
+            createButton(parent, IModelValidationService.BUTTON_OK, IDialogConstants.OK_LABEL, true);
+        }
+        case IModelValidationService.VALIDATE_BEFORE_DEPLOY: {
+            // TODO:
+        }
+        }
+    }
+
+    @Override
+    protected void buttonPressed(int buttonId) {
+        if (IDialogConstants.DETAILS_ID == buttonId) {
+            toggleDetailsArea();
+        }
+        super.buttonPressed(buttonId);
+    }
+
+    private void toggleDetailsArea() {
+        Point windowSize = getShell().getSize();
+        if (detailsComposite != null) {
+            detailsComposite.dispose();
+            detailsComposite = null;
+            detailsButton.setText(IDialogConstants.SHOW_DETAILS_LABEL);
+            GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).span(2, 1).applyTo(dialogArea);
+        } else {
+            detailsComposite = createDetailsComposite((Composite) getContents());
+            detailsButton.setText(IDialogConstants.HIDE_DETAILS_LABEL);
+            GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).span(2, 1).applyTo(dialogArea);
+        }
+        ((Composite) getContents()).layout();
+        Point newSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT);
+        getShell().setSize(new Point(windowSize.x, newSize.y));
+    }
+
+    private Composite createDetailsComposite(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new GridLayout());
+        GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).span(2, 1).hint(5, 200).applyTo(composite);
+        TableViewer tableViewer = new TableViewer(composite, SWT.FULL_SELECTION | SWT.BORDER);
+        tableViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+        createColumns(tableViewer);
+        Table table = tableViewer.getTable();
+        table.setLinesVisible(true);
+        table.setHeaderVisible(true);
+        tableViewer.setContentProvider(new ArrayContentProvider());
+        tableViewer.setInput(markerEntries);
+        return composite;
+    }
+
+    private void createColumns(TableViewer tableViewer) {
+        Table table = tableViewer.getTable();
+        TableLayout layout = new TableLayout();
+        String[] markerFieldIds = new String[] { MARKERFIELD_DESC, ModelField.ID, EntityField.ID, ElementTypeField.ID,
+                ElementPathField.ID };
+        for (int i = 0; i < markerFieldIds.length; i++) {
+            TableViewerColumn column = new TableViewerColumn(tableViewer, SWT.NONE);
+            column.getColumn().setResizable(true);
+            column.getColumn().setMoveable(true);
+
+            MarkerField markerField = MarkerSupportRegistry.getInstance().getField(markerFieldIds[i]);
+            column.getColumn().setData("MARKER_FIELD", markerField); //$NON-NLS-1$
+            column.setLabelProvider(new MarkerColumnLabelProvider(markerField));
+            column.getColumn().setText(markerField.getColumnHeaderText());
+            column.getColumn().setToolTipText(markerField.getColumnTooltipText());
+            column.getColumn().setImage(markerField.getColumnHeaderImage());
+            int columnWidth = -1;
+
+            if (i == 0) {
+                GC gc = new GC(table);
+                gc.setFont(table.getFont());
+                FontMetrics fontMetrics = gc.getFontMetrics();
+                gc.dispose();
+                columnWidth = Math.max(markerField.getDefaultColumnWidth(table), fontMetrics.getAverageCharWidth() * 5);
+            }
+            if (columnWidth < 0) {
+                layout.addColumnData(new ColumnPixelData(markerField.getDefaultColumnWidth(table), true, true));
+            } else {
+                layout.addColumnData(new ColumnPixelData(columnWidth, true));
+            }
+        }
+        table.setLayout(layout);
+    }
+
+    @Override
+    protected Image getImage() {
+        int error = result.getSeverityError();
+        int warnings = result.getSeverityWarning();
+        if (error > 0) {
+            return getErrorImage();
+        }
+        if (warnings > 0) {
+            return getWarningImage();
+        }
+        return getInfoImage();
+    }
+
+}

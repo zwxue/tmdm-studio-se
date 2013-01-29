@@ -56,4 +56,8 @@ public class Messages extends NLS {
     public static String ValidationPrefPage_Button_Text;
 
     public static String ValidationPrefPage_RightClick_Title;
+
+    public static String ValidationResultDialog_Message;
+
+    public static String ValidationResultDialog_Title;
 }

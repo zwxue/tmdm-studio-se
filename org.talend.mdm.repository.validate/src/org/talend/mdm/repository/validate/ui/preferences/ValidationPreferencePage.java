@@ -1,4 +1,4 @@
-package org.talend.mdm.repository.ui.validate.preferences;
+package org.talend.mdm.repository.validate.ui.preferences;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -15,18 +15,18 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 
-public class RightClickValidationPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public class ValidationPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
     private Button needShowDialogButton;
 
-    public RightClickValidationPreferencePage() {
+    public ValidationPreferencePage() {
     }
 
-    public RightClickValidationPreferencePage(String title) {
+    public ValidationPreferencePage(String title) {
         super(title);
     }
 
-    public RightClickValidationPreferencePage(String title, ImageDescriptor image) {
+    public ValidationPreferencePage(String title, ImageDescriptor image) {
         super(title, image);
     }
 

@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.validate.preferences;
+package org.talend.mdm.repository.validate.ui.preferences;
 
 /**
  * created by talend-mdm on Jan 24, 2013 Detailled comment

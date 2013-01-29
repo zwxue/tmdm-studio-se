@@ -24,6 +24,8 @@ import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComp
  */
 public class ElementTypeField extends AbstractDataModelField {
 
+    public static final String ID = "org.talend.mdm.repository.ui.markers.ElementTypeField"; //$NON-NLS-1$
+
     /*
      * (non-Javadoc)
      * 

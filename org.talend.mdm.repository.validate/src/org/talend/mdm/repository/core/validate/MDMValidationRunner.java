@@ -30,6 +30,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wst.validation.internal.ValOperation;
 import org.eclipse.wst.validation.internal.ValType;
 import org.eclipse.wst.validation.internal.ValidationRunner;
@@ -38,7 +40,9 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.validate.ui.dialogs.ValidationResultDialog;
 import org.talend.repository.ProjectManager;
 
 /**
@@ -129,11 +133,32 @@ public class MDMValidationRunner extends WorkspaceJob {
         if (vo.isCanceled()) {
             return Status.CANCEL_STATUS;
         }
-        // if (validationPref.shouldShowResults()) {
-        // // TODO show the validation dialog
+        // if (!validationPref.shouldShowResults()) {
+        // TODO show the validation dialog
         // }
+        final IValidationPreference prefs = new IValidationPreference() {
 
+            @Override
+            public boolean shouldShowResults() {
+                return false;
+            }
+
+            @Override
+            public int getValidationCondition() {
+                return IModelValidationService.VALIDATE_IMMEDIATE;
+            }
+
+        };
+
+        final Set<IResource> resources = toValidate.values().iterator().next();
+        Display.getDefault().asyncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                ValidationResultDialog d = new ValidationResultDialog(new Shell(), vo.getResult(), prefs, resources);
+                d.open();
+            }
+        });
         return Status.OK_STATUS;
     }
-
 }
