@@ -12,8 +12,10 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.validator.visitor;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
@@ -51,16 +53,18 @@ public class ValidateVistorRegistry {
 
     private static final String PROP_CLASS = "class"; //$NON-NLS-1$
 
+    private static final String PROP_NAME = "name"; //$NON-NLS-1$
+
     private boolean inited = false;
 
-    private static List<IComponentValidateVisitor> visitors = new LinkedList<IComponentValidateVisitor>();
+    private Map<String, List<IComponentValidateVisitor>> visitorMap = new HashMap<String, List<IComponentValidateVisitor>>();
 
-    public List<IComponentValidateVisitor> getVisitors() {
+    public List<IComponentValidateVisitor> getVisitors(String groupName) {
         if (!inited) {
             initVisitors();
         }
 
-        return visitors;
+        return visitorMap.get(groupName);
     }
 
     private void initVisitors() {
@@ -74,14 +78,24 @@ public class ValidateVistorRegistry {
                 for (IExtension s : extensions) {
                     IConfigurationElement[] elements = s.getConfigurationElements();
                     for (IConfigurationElement element : elements) {
-                        if (element.getAttribute(PROP_CLASS) != null) {
-                            try {
-                                IComponentValidateVisitor visitor = (IComponentValidateVisitor) element
-                                        .createExecutableExtension(PROP_CLASS);
-                                visitors.add(visitor);
+                        String group = element.getAttribute(PROP_NAME);
+                        if (group != null) {
+                            List<IComponentValidateVisitor> visitors = visitorMap.get(group);
+                            if (visitors == null) {
+                                visitors = new LinkedList<IComponentValidateVisitor>();
+                                visitorMap.put(group, visitors);
+                            }
+                            for (IConfigurationElement visitorElement : element.getChildren()) {
+                                if (visitorElement.getAttribute(PROP_CLASS) != null) {
+                                    try {
+                                        IComponentValidateVisitor visitor = (IComponentValidateVisitor) visitorElement
+                                                .createExecutableExtension(PROP_CLASS);
+                                        visitors.add(visitor);
 
-                            } catch (CoreException e) {
-                                log.error(e.getMessage(), e);
+                                    } catch (CoreException e) {
+                                        log.error(e.getMessage(), e);
+                                    }
+                                }
                             }
                         }
                     }

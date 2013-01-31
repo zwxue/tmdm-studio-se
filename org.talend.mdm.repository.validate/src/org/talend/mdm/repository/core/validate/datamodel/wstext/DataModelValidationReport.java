@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel;
+package org.talend.mdm.repository.core.validate.datamodel.wstext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 
 /**
  * created by HHB on 2013-1-8 Detailled comment
@@ -74,9 +75,9 @@ public class DataModelValidationReport implements ValidationReport {
         return null;
     }
 
-    List<DataModelValidationMessage> messages = new ArrayList<DataModelValidationMessage>();
+    List<ModelValidationMessageAdapter> messages = new ArrayList<ModelValidationMessageAdapter>();
 
-    public boolean addMessage(DataModelValidationMessage message) {
+    public boolean addMessage(ModelValidationMessageAdapter message) {
         if (message == null) {
             valid = false;
             return false;
@@ -87,14 +88,27 @@ public class DataModelValidationReport implements ValidationReport {
         return true;
     }
 
-    public boolean addMessage(List<DataModelValidationMessage> msgs) {
+    public boolean addMessage(ModelValidationMessage message) {
         if (messages == null) {
             valid = false;
             return false;
         }
+        ModelValidationMessageAdapter msgAdapter = new ModelValidationMessageAdapter(message);
+        return addMessage(msgAdapter);
+    }
 
-        messages.addAll(msgs);
-        valid = true;
+    public boolean addMessages(List<ModelValidationMessage> msgs) {
+        if (messages == null) {
+            valid = false;
+            return false;
+        }
+        for (ModelValidationMessage msg : msgs) {
+            boolean result = addMessage(msg);
+            if (!result) {
+                return false;
+            }
+        }
         return true;
     }
+
 }

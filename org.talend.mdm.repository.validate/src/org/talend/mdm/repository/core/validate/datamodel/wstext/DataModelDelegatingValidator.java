@@ -10,18 +10,14 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
 
-import java.util.List;
+package org.talend.mdm.repository.core.validate.datamodel.wstext;
 
-/**
- * created by HHB on 2013-1-6 Detailled comment
- * 
- */
-public interface IElementContainer {
+import org.eclipse.wst.validation.internal.delegates.DelegatingValidator;
 
-    public List<IMElement> getElements();
+public class DataModelDelegatingValidator extends DelegatingValidator {
 
-    public IMRoot getRoot();
+    public DataModelDelegatingValidator() {
+    }
 
 }

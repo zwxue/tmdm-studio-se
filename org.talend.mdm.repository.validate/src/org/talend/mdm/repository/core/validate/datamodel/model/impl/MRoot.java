@@ -15,17 +15,17 @@ package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.xsd.XSDComponent;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
+import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-6 Detailled comment
  * 
  */
-public class MRoot implements IMRoot {
+public class MRoot implements IMRootWritable {
 
     private String name;
 
@@ -81,13 +81,13 @@ public class MRoot implements IMRoot {
      * .datamodel.model.MType)
      */
     @Override
-    public void addType(IMType type) {
+    public void addType(IMTypeWritable type) {
         types.add(type);
         type.setRoot(this);
     }
 
     @Override
-    public void addElement(IMElement element) {
+    public void addElement(IMElementWritable element) {
         elements.add(element);
         element.setRoot(this);
     }
@@ -95,12 +95,12 @@ public class MRoot implements IMRoot {
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#findTypeByXSD(org.eclipse.xsd.XSDComponent)
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#findTypeByW3CElement(org.w3c.dom.Element)
      */
     @Override
-    public IMType findTypeByXSD(XSDComponent xsdComponent) {
+    public IMType findTypeByW3CElement(Element element) {
         for (IMType type : types) {
-            if (type.getXsdComponent() == xsdComponent) {
+            if (type.getW3CElement() == element) {
                 return type;
             }
         }

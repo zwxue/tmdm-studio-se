@@ -15,16 +15,15 @@ package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.xsd.XSDComponent;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
-import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
+import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-6 Detailled comment
  * 
  */
-public class MType extends MComponent implements IMType {
+public class MType extends MComponent implements IMTypeWritable {
 
     boolean isComplexType;
 
@@ -104,13 +103,13 @@ public class MType extends MComponent implements IMType {
      * @param isComplex
      * @param declared
      */
-    public MType(String name, XSDComponent xsdComponent, boolean isComplex, boolean declared) {
-        super(name, xsdComponent);
+    public MType(String name, Element element, boolean isComplex, boolean declared) {
+        super(name, element);
         this.isComplexType = isComplex;
         this.declared = declared;
     }
 
-    List<IMElement> elements = new ArrayList<IMElement>();
+    List<IMElementWritable> elements = new ArrayList<IMElementWritable>();
 
     /*
      * (non-Javadoc)
@@ -119,7 +118,7 @@ public class MType extends MComponent implements IMType {
      */
     @Override
     public List<IMElement> getElements() {
-        return this.elements;
+        return (List) this.elements;
     }
 
     /*
@@ -130,7 +129,7 @@ public class MType extends MComponent implements IMType {
      * .datamodel.model.IMElement)
      */
     @Override
-    public void addElement(IMElement element) {
+    public void addElement(IMElementWritable element) {
         elements.add(element);
     }
 
@@ -158,7 +157,7 @@ public class MType extends MComponent implements IMType {
         if (this.root == null || this.root != root) {
             this.root = root;
             if (elements != null) {
-                for (IMElement child : elements) {
+                for (IMElementWritable child : elements) {
                     child.setRoot(root);
                 }
             }

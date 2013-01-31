@@ -16,15 +16,15 @@ import java.util.Set;
 
 import org.eclipse.xsd.XSDComponent;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
-import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
+import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-6 Detailled comment
  * 
  */
-public class MComponent implements IMComponent {
+public class MComponent implements IMComponentWritable {
 
     protected String name;
 
@@ -37,7 +37,7 @@ public class MComponent implements IMComponent {
         this.name = name;
     }
 
-    protected XSDComponent xsdComponent;
+    private Element element;
 
     /**
      * DOC HHB MComponent constructor comment.
@@ -45,15 +45,17 @@ public class MComponent implements IMComponent {
      * @param name
      * @param xsdComponent
      */
-    public MComponent(String name, XSDComponent xsdComponent) {
+    public MComponent(String name, Element element) {
         this.name = name;
-        this.xsdComponent = xsdComponent;
+        this.element = element;
     }
 
     public MComponent() {
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#getName()
      */
     @Override
@@ -61,15 +63,9 @@ public class MComponent implements IMComponent {
         return this.name;
     }
 
-    /* (non-Javadoc)
-     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#getXsdComponent()
-     */
-    @Override
-    public XSDComponent getXsdComponent() {
-        return this.xsdComponent;
-    }
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#setName(java.lang.String)
      */
     @Override
@@ -77,20 +73,50 @@ public class MComponent implements IMComponent {
         this.name = name;
     }
 
-    /* (non-Javadoc)
-     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#setXsdComponent(org.eclipse.xsd.XSDComponent)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#getW3CElement()
      */
     @Override
-    public void setXsdComponent(XSDComponent xsdComponent) {
-        this.xsdComponent = xsdComponent;
+    public Element getW3CElement() {
+        return element;
     }
 
-    /* (non-Javadoc)
-     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#acceptValidateVisitor(org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor, org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext, java.util.Set)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.talend.mdm.repository.core.validate.datamodel.model.impl.IMComponentWritable#setW3CElement(org.w3c.dom.Element
+     * )
+     */
+    @Override
+    public void setW3CElement(Element element) {
+        this.element = element;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#acceptValidateVisitor(org.talend.mdm.repository
+     * .core.validate.datamodel.validator.visitor.IComponentValidateVisitor,
+     * org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext, java.util.Set)
      */
     @Override
     public boolean acceptValidateVisitor(IComponentValidateVisitor visitor, DataModelValidateContext context,
-            Set<DataModelValidationMessage> messages) {
+            Set<ModelValidationMessage> messages) {
         return visitor.visit(context, this, messages);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#getXsdComponent()
+     */
+    @Override
+    public XSDComponent getXsdComponent() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

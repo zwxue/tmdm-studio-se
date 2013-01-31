@@ -10,30 +10,18 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.validator;
+
+import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
 
 /**
  * created by HHB on 2013-1-28 Detailled comment
  * 
  */
-public interface IMType extends IElementContainer, IMComponent {
+public interface IModelBuilder {
 
-    /**
-     * Getter for declared.
-     * 
-     * @return the declared
-     */
-    public abstract boolean isDeclared();
+    public abstract IMRoot buildModel(Object schemaObj, String fileName);
 
-    /**
-     * Getter for isComplexType.
-     * 
-     * @return the isComplexType
-     */
-    public abstract boolean isComplexType();
-
-    public abstract boolean isSimpleType();
-
-    public abstract boolean isAnonymousType();
+    public abstract Object parseSchema(String doc);
 
 }

@@ -10,30 +10,28 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
+
+import org.talend.mdm.repository.core.validate.datamodel.validator.IModelBuilder;
 
 /**
- * created by HHB on 2013-1-28 Detailled comment
+ * created by HHB on 2013-1-29 Detailled comment
  * 
  */
-public interface IMType extends IElementContainer, IMComponent {
+public class ServerDataModelChecker extends DataModelChecker {
 
     /**
-     * Getter for declared.
+     * DOC HHB StudioDataModelChecker constructor comment.
      * 
-     * @return the declared
+     * @param builder
      */
-    public abstract boolean isDeclared();
+    public ServerDataModelChecker(IModelBuilder builder) {
+        super(builder);
+    }
 
-    /**
-     * Getter for isComplexType.
-     * 
-     * @return the isComplexType
-     */
-    public abstract boolean isComplexType();
-
-    public abstract boolean isSimpleType();
-
-    public abstract boolean isAnonymousType();
+    @Override
+    public void initValidators() {
+        addValidator(new ServerElementValidator());
+    }
 
 }

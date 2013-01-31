@@ -14,10 +14,10 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.visitor;
 
 import org.eclipse.xsd.util.XSDParser;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.w3c.dom.Element;
 
 /**
@@ -26,32 +26,19 @@ import org.w3c.dom.Element;
  */
 public abstract class AbstractComponentVisitor implements IComponentValidateVisitor {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor#getMsgGroup(java
-     * .lang.String)
-     */
-    @Override
-    public int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
+    protected int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
         return MSG_GROUP_UNKNOW;
     }
 
-    protected DataModelValidationMessage newMessage(int severity, String message, int line, int column, String key,
-            String modelName, String entityName, String elementType, String path, Element domElement, int messageGroup) {
-        DataModelValidationMessage msg = new DataModelValidationMessage(severity, message, line, column, key);
-        msg.setDataModelName(modelName);
-        msg.setEntityName(entityName);
-        msg.setDomElement(domElement);
-        msg.setPath(path);
+    protected ModelValidationMessage newMessage(int severity, String message, int line, int column, String key, String modelName,
+            String entityName, String elementType, String path, Element domElement, int messageGroup) {
+        ModelValidationMessage msg = new ModelValidationMessage(severity, message, key, modelName, line, column, messageGroup,
+                domElement, entityName, elementType, path);
 
-        msg.setMsgGroup(messageGroup);
-        msg.setElementType(elementType);
         return msg;
     }
 
-    protected DataModelValidationMessage newMessage(DataModelValidateContext context, int severity, String message, String key,
+    protected ModelValidationMessage newMessage(DataModelValidateContext context, int severity, String message, String key,
             IMElement mElement, Element domElement) {
         int startLine = XSDParser.getStartLine(domElement);
         int startColumn = XSDParser.getStartColumn(domElement);

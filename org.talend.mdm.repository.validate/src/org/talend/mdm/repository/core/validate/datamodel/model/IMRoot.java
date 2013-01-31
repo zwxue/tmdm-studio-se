@@ -14,7 +14,7 @@ package org.talend.mdm.repository.core.validate.datamodel.model;
 
 import java.util.List;
 
-import org.eclipse.xsd.XSDComponent;
+import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-28 Detailled comment
@@ -30,22 +30,13 @@ public interface IMRoot extends IElementContainer {
     public abstract String getName();
 
     /**
-     * Sets the name.
-     * 
-     * @param name the name to set
-     */
-    public abstract void setName(String name);
-
-    /**
      * Getter for types.
      * 
      * @return the types
      */
     public abstract List<IMType> getTypes();
 
-    public abstract void addType(IMType type);
-
-    public abstract IMType findTypeByXSD(XSDComponent xsdComponent);
+    public abstract IMType findTypeByW3CElement(Element element);
 
     public abstract IElementContainer findContainer(IMElement element);
 

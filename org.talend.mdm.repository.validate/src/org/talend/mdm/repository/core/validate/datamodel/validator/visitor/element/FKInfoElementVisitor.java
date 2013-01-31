@@ -15,12 +15,12 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.visitor.elem
 import java.util.Set;
 
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 
 /**
@@ -52,8 +52,7 @@ public class FKInfoElementVisitor extends AbstractElementVisitor {
      * .lang.String)
      */
     @Override
-    public int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
-
+    protected int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
         return getContainerGroup(container);
     }
 
@@ -66,7 +65,7 @@ public class FKInfoElementVisitor extends AbstractElementVisitor {
      * org.talend.mdm.repository.core.validate.datamodel.model.MComponent, java.util.List)
      */
     @Override
-    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<DataModelValidationMessage> messages) {
+    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<ModelValidationMessage> messages) {
         IMElement element = (IMElement) mComponent;
         if (!isEntity(mComponent)) {
             IMAnnotation annotation = element.getAnnotation();
@@ -75,16 +74,16 @@ public class FKInfoElementVisitor extends AbstractElementVisitor {
                 String path = fk.getValue();
                 IMElement elementByPath = element.getRoot().findElementByPath(path);
                 if (elementByPath == null) {
-                    DataModelValidationMessage msg = newMessage(context, SEV_ERROR,
+                    ModelValidationMessage msg = newMessage(context, SEV_ERROR,
                             Messages.bind(Messages.FKInfoElementVisitor_MK_NOT_EXIST, path), MK_NOT_EXIST, element,
                             fk.getElement());
                     messages.add(msg);
                 } else {
                     String typeName = element.getType().getName();
                     if (typeName == null || !typeName.equals("string")) { //$NON-NLS-1$
-                        DataModelValidationMessage msg = newMessage(context, SEV_ERROR,
+                        ModelValidationMessage msg = newMessage(context, SEV_ERROR,
                                 Messages.bind(Messages.FKInfoElementVisitor_MK_NOT_TYPE_STRING, element.getName()),
-                                MK_NOT_TYPE_STRING, element, element.getXsdComponent().getElement());
+                                MK_NOT_TYPE_STRING, element, element.getW3CElement());
                         messages.add(msg);
                     }
                 }

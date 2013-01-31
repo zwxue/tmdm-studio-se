@@ -15,21 +15,21 @@ package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.xsd.XSDComponent;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
+import org.w3c.dom.Element;
 
 /**
  * created by HHB on 2013-1-6 Detailled comment
  * 
  */
-public class MElement extends MComponent implements Cloneable, IMElement {
+public class MElement extends MComponent implements Cloneable, IMElementWritable {
 
     protected List<IMElement> children;
 
-    protected IMElement parent;
+    protected IMElementWritable parent;
 
     protected String path;
 
@@ -93,8 +93,8 @@ public class MElement extends MComponent implements Cloneable, IMElement {
 
     private static final String SEPERATOR = "/"; //$NON-NLS-1$
 
-    public MElement(String name, XSDComponent xsdComponent) {
-        super(name, xsdComponent);
+    public MElement(String name, Element element) {
+        super(name, element);
     }
 
     /*
@@ -158,8 +158,8 @@ public class MElement extends MComponent implements Cloneable, IMElement {
      * @see org.talend.mdm.repository.core.validate.datamodel.model.IMElement#setChildren(java.util.List)
      */
     @Override
-    public void setChildren(List<IMElement> children) {
-        this.children = children;
+    public void setChildren(List<IMElementWritable> children) {
+        this.children = (List) children;
     }
 
     /*
@@ -170,7 +170,7 @@ public class MElement extends MComponent implements Cloneable, IMElement {
      * .datamodel.model.MElement)
      */
     @Override
-    public void setParent(IMElement parent) {
+    public void setParent(IMElementWritable parent) {
         this.parent = parent;
     }
 
@@ -202,9 +202,9 @@ public class MElement extends MComponent implements Cloneable, IMElement {
      * @see org.talend.mdm.repository.core.validate.datamodel.model.IMElement#cloneElement()
      */
     @Override
-    public IMElement cloneElement() {
+    public IMElementWritable cloneElement() {
         try {
-            IMElement clone = (IMElement) this.clone();
+            IMElementWritable clone = (IMElementWritable) this.clone();
 
             // cloneChildren(clone);
 
@@ -215,13 +215,13 @@ public class MElement extends MComponent implements Cloneable, IMElement {
         }
     }
 
-    private List<IMElement> cloneChildren(IMElement clonedParent) {
+    private List<IMElementWritable> cloneChildren(IMElementWritable clonedParent) {
         if (children == null) {
             return null;
         }
-        ArrayList<IMElement> cloneChildren = new ArrayList<IMElement>(children.size());
+        List<IMElementWritable> cloneChildren = new ArrayList<IMElementWritable>(children.size());
         for (IMElement child : children) {
-            IMElement cloneChild = child.cloneElement();
+            IMElementWritable cloneChild = ((IMElementWritable) child).cloneElement();
             cloneChild.setParent(clonedParent);
         }
         clonedParent.setChildren(cloneChildren);
@@ -243,7 +243,7 @@ public class MElement extends MComponent implements Cloneable, IMElement {
      * .datamodel.model.MElement)
      */
     @Override
-    public void addElement(IMElement element) {
+    public void addElement(IMElementWritable element) {
         if (children == null) {
             children = new ArrayList<IMElement>();
         }
@@ -278,7 +278,7 @@ public class MElement extends MComponent implements Cloneable, IMElement {
             this.root = root;
             if (children != null) {
                 for (IMElement child : children) {
-                    child.setRoot(root);
+                    ((IMElementWritable) child).setRoot(root);
                 }
             }
         }

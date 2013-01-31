@@ -15,10 +15,8 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.visitor;
 import java.util.Set;
 
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
-import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
-import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 
 /**
  * created by HHB on 2013-1-11 Detailled comment
@@ -44,9 +42,8 @@ public interface IComponentValidateVisitor {
 
     public boolean needValidate(DataModelValidateContext context, IMComponent mComponent);
 
-    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<DataModelValidationMessage> messages);
+    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<ModelValidationMessage> messages);
 
     public String[] getMessageKeys();
 
-    public int getMsgGroup(IElementContainer container, IMElement element, String msgKey);
 }

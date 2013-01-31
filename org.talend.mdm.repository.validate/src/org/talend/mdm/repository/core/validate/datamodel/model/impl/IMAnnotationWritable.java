@@ -10,18 +10,17 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 
-import java.util.List;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation;
+import org.w3c.dom.Element;
 
 /**
- * created by HHB on 2013-1-6 Detailled comment
+ * created by HHB on 2013-1-29 Detailled comment
  * 
  */
-public interface IElementContainer {
+public interface IMAnnotationWritable extends IMAnnotation {
 
-    public List<IMElement> getElements();
-
-    public IMRoot getRoot();
+    public abstract void addAnnotation(String attribute, String value, Element element);
 
 }

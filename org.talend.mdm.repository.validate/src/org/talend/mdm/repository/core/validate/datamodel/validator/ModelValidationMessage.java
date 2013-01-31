@@ -10,18 +10,16 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel;
+package org.talend.mdm.repository.core.validate.datamodel.validator;
 
-import org.eclipse.wst.xml.core.internal.validation.core.ValidationMessage;
+import org.talend.mdm.repository.core.validate.ValidationMessage;
 import org.w3c.dom.Element;
 
 /**
- * created by HHB on 2013-1-8 Detailled comment
+ * created by HHB on 2013-1-28 Detailled comment
  * 
  */
-public class DataModelValidationMessage extends ValidationMessage {
-
-    private String dataModelName;
+public class ModelValidationMessage extends ValidationMessage {
 
     private Element domElement;
 
@@ -31,27 +29,18 @@ public class DataModelValidationMessage extends ValidationMessage {
 
     private String path;
 
-    /**
-     * the value come from IComponentValidateVisitor's MSG_GROUP_XXX
-     */
-    private int msgGroup;
+    public ModelValidationMessage(int severity, String message, String key, String name, int lineNumber, int columnNumber,
+            int msgGroup, Element domElement, String entityName, String elementType, String path) {
+        super(severity, message, key, name, lineNumber, columnNumber, msgGroup);
+        this.domElement = domElement;
+        this.entityName = entityName;
+        this.elementType = elementType;
+        this.path = path;
 
-    /**
-     * Getter for msgGroup.
-     * 
-     * @return the msgGroup
-     */
-    public int getMsgGroup() {
-        return this.msgGroup;
     }
 
-    /**
-     * Sets the msgGroup.
-     * 
-     * @param msgGroup the msgGroup to set
-     */
-    public void setMsgGroup(int msgGroup) {
-        this.msgGroup = msgGroup;
+    public ModelValidationMessage() {
+
     }
 
     /**
@@ -70,28 +59,6 @@ public class DataModelValidationMessage extends ValidationMessage {
      */
     public void setPath(String path) {
         this.path = path;
-    }
-
-    /**
-     * DOC HHB DataModelValidationMessage constructor comment.
-     * 
-     * @param message
-     * @param lineNumber
-     * @param columnNumber
-     * @param uri
-     */
-    public DataModelValidationMessage(int severity, String message, int lineNumber, int columnNumber, String key) {
-        super(message, lineNumber, columnNumber, null, key, null);
-        setSeverity(severity);
-    }
-
-    /**
-     * Getter for dataModelName.
-     * 
-     * @return the dataModelName
-     */
-    public String getDataModelName() {
-        return this.dataModelName;
     }
 
     /**
@@ -119,15 +86,6 @@ public class DataModelValidationMessage extends ValidationMessage {
      */
     public String getElementType() {
         return this.elementType;
-    }
-
-    /**
-     * Sets the dataModelName.
-     * 
-     * @param dataModelName the dataModelName to set
-     */
-    public void setDataModelName(String dataModelName) {
-        this.dataModelName = dataModelName;
     }
 
     /**
@@ -164,12 +122,11 @@ public class DataModelValidationMessage extends ValidationMessage {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof DataModelValidationMessage)) {
+        if (obj == null || !(obj instanceof ModelValidationMessage)) {
             return false;
         }
-        DataModelValidationMessage msg = (DataModelValidationMessage) obj;
-        if (dataModelName.equals(msg.getDataModelName()) && lineNumber == msg.getLineNumber()
-                && domElement.equals(msg.getDomElement())) {
+        ModelValidationMessage msg = (ModelValidationMessage) obj;
+        if (name.equals(msg.getName()) && lineNumber == msg.getLineNumber() && domElement.equals(msg.getDomElement())) {
             if (key == null && msg.getKey() == null) {
                 return true;
             }
@@ -187,8 +144,7 @@ public class DataModelValidationMessage extends ValidationMessage {
      */
     @Override
     public int hashCode() {
-        int hash = dataModelName.hashCode() * 7 + (key != null ? key.hashCode() * 17 : 17) + lineNumber * 31
-                + domElement.hashCode() * 37;
+        int hash = name.hashCode() * 7 + (key != null ? key.hashCode() * 17 : 17) + lineNumber * 31 + domElement.hashCode() * 37;
         return hash;
     }
 

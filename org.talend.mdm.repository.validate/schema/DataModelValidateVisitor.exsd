@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="0" maxOccurs="unbounded">
-            <element ref="visitor"/>
+            <element ref="visitorGroup"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -74,6 +74,24 @@
                <documentation>
                   
                </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="visitorGroup">
+      <complexType>
+         <sequence minOccurs="0" maxOccurs="unbounded">
+            <element ref="visitor"/>
+         </sequence>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>

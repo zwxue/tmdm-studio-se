@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.model;
 
-import java.util.List;
 
 /**
  * created by HHB on 2013-1-28 Detailled comment
@@ -28,25 +27,11 @@ public interface IMElement extends IElementContainer, IMComponent {
     public abstract Integer getMinOccurs();
 
     /**
-     * Sets the minOccurs.
-     * 
-     * @param minOccurs the minOccurs to set
-     */
-    public abstract void setMinOccurs(Integer minOccurs);
-
-    /**
      * Getter for maxOccurs.
      * 
      * @return the maxOccurs
      */
     public abstract Integer getMaxOccurs();
-
-    /**
-     * Sets the maxOccurs.
-     * 
-     * @param maxOccurs the maxOccurs to set
-     */
-    public abstract void setMaxOccurs(Integer maxOccurs);
 
     /**
      * Getter for annotation.
@@ -75,36 +60,6 @@ public interface IMElement extends IElementContainer, IMComponent {
      * @return the type
      */
     public abstract IMType getType();
-
-    /**
-     * Sets the children.
-     * 
-     * @param children the children to set
-     */
-    public abstract void setChildren(List<IMElement> children);
-
-    /**
-     * Sets the parent.
-     * 
-     * @param parent the parent to set
-     */
-    public abstract void setParent(IMElement parent);
-
-    /**
-     * Sets the path.
-     * 
-     * @param path the path to set
-     */
-    public abstract void setPath(String path);
-
-    /**
-     * Sets the type.
-     * 
-     * @param type the type to set
-     */
-    public abstract void setType(IMType type);
-
-    public abstract IMElement cloneElement();
 
     public abstract IMElement getEntity();
 

@@ -10,14 +10,18 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
+package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 
-package org.talend.mdm.repository.core.validate.datamodel;
+import org.talend.mdm.repository.core.validate.datamodel.model.IElementContainer;
+import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
 
-import org.eclipse.wst.validation.internal.delegates.DelegatingValidator;
+/**
+ * created by HHB on 2013-1-29 Detailled comment
+ * 
+ */
+public interface IElementContainerWritable extends IElementContainer {
 
-public class DataModelDelegatingValidator extends DelegatingValidator {
+    public void addElement(IMElementWritable element);
 
-    public DataModelDelegatingValidator() {
-    }
-
+    public void setRoot(IMRoot root);
 }

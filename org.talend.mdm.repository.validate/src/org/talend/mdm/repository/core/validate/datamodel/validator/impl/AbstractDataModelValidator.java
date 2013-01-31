@@ -10,12 +10,13 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.validator;
+package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
 
 import java.util.List;
 
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
+import org.talend.mdm.repository.core.validate.datamodel.validator.IDataModelValidator;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 
 /**
  * created by HHB on 2013-1-8 Detailled comment
@@ -31,7 +32,7 @@ public abstract class AbstractDataModelValidator implements IDataModelValidator 
      * repository.core.validate.datamodel.DataModelValidateContext)
      */
     @Override
-    public List<DataModelValidationMessage> validate(DataModelValidateContext context) {
+    public List<ModelValidationMessage> validate(DataModelValidateContext context) {
         return null;
     }
 

@@ -8,7 +8,7 @@
          point="org.eclipse.wst.validation.validatorV2">
       <validator
             build="false"
-            class="org.talend.mdm.repository.core.validate.datamodel.DataModelDelegatingValidator"
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.DataModelDelegatingValidator"
             manual="true"
             markerId="org.talend.mdm.error.datamodel.model"
             version="2">
@@ -25,9 +25,9 @@
    <extension
          point="org.eclipse.wst.validation.validatorDelegates">
       <delegate
-            class="org.talend.mdm.repository.core.validate.datamodel.DataModelValidator"
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.DataModelValidator"
             name="DataModel  Delegate Validator"
-            target="org.talend.mdm.repository.core.validate.datamodel.DataModelDelegatingValidator">
+            target="org.talend.mdm.repository.core.validate.datamodel.wstext.DataModelDelegatingValidator">
       </delegate>
    </extension>
    
@@ -229,6 +229,9 @@
    </extension>
    <extension
          point="org.talend.mdm.repository.validate.DataModelValidateVisitor">
+
+      <visitorGroup
+            name="Element">
       <visitor
             class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoElementVisitor"
             name="PKInfoElementVisitor">
@@ -237,6 +240,7 @@
             class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoElementVisitor"
             name="FKInfoElementVisitor">
       </visitor>
+      </visitorGroup>
    </extension>
    <extension
          point="org.talend.core.runtime.service">

@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.talend.mdm.repository.core.validate.datamodel.model.IAnnotationConst;
-import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotation;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMAnnotationUnit;
 import org.w3c.dom.Element;
 
@@ -25,7 +24,7 @@ import org.w3c.dom.Element;
  * created by HHB on 2013-1-7 Detailled comment
  * 
  */
-public class MAnnotation implements IAnnotationConst, IMAnnotation {
+public class MAnnotation implements IAnnotationConst, IMAnnotationWritable {
 
     public class AnnotationUnit implements IMAnnotationUnit {
 

@@ -10,30 +10,27 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.model;
+package org.talend.mdm.repository.core.validate.datamodel.model.impl;
+
+import org.talend.mdm.repository.core.validate.datamodel.model.IMType;
 
 /**
- * created by HHB on 2013-1-28 Detailled comment
+ * created by HHB on 2013-1-29 Detailled comment
  * 
  */
-public interface IMType extends IElementContainer, IMComponent {
+public interface IMTypeWritable extends IMType, IElementContainerWritable, IMComponentWritable {
 
     /**
-     * Getter for declared.
+     * Sets the declared.
      * 
-     * @return the declared
+     * @param declared the declared to set
      */
-    public abstract boolean isDeclared();
+    public abstract void setDeclared(boolean declared);
 
     /**
-     * Getter for isComplexType.
+     * Sets the isComplexType.
      * 
-     * @return the isComplexType
+     * @param isComplexType the isComplexType to set
      */
-    public abstract boolean isComplexType();
-
-    public abstract boolean isSimpleType();
-
-    public abstract boolean isAnonymousType();
-
+    public abstract void setComplexType(boolean isComplexType);
 }

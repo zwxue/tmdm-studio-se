@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.validator;
+package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,16 +18,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.ValidateVistorRegistry;
 
 /**
  * created by HHB on 2013-1-8 Detailled comment
  * 
  */
-public class ElementValidator extends AbstractDataModelValidator {
+public abstract class ElementValidator extends AbstractDataModelValidator {
+
+    protected List<IComponentValidateVisitor> visitors;
 
     /*
      * (non-Javadoc)
@@ -37,14 +38,14 @@ public class ElementValidator extends AbstractDataModelValidator {
      * repository.core.validate.datamodel.DataModelValidateContext)
      */
     @Override
-    public List<DataModelValidationMessage> validate(DataModelValidateContext context) {
-        List<DataModelValidationMessage> messages = new LinkedList<DataModelValidationMessage>();
+    public List<ModelValidationMessage> validate(DataModelValidateContext context) {
+        List<ModelValidationMessage> messages = new LinkedList<ModelValidationMessage>();
         validateEntities(context, messages);
         return messages;
     }
 
-    private void validateEntities(DataModelValidateContext context, List<DataModelValidationMessage> messages) {
-        Set<DataModelValidationMessage> tempMsgs = new HashSet<DataModelValidationMessage>();
+    private void validateEntities(DataModelValidateContext context, List<ModelValidationMessage> messages) {
+        Set<ModelValidationMessage> tempMsgs = new HashSet<ModelValidationMessage>();
         for (IMElement entity : context.getModelRoot().getElements()) {
             validateElement(context, entity, tempMsgs);
         }
@@ -56,15 +57,14 @@ public class ElementValidator extends AbstractDataModelValidator {
      * 
      * @param entity
      */
-    private void validateElement(DataModelValidateContext context, IMElement element, Set<DataModelValidationMessage> messages) {
-        List<IComponentValidateVisitor> visitors = ValidateVistorRegistry.getInstance().getVisitors();
-        for (IComponentValidateVisitor visitor : visitors) {
+    private void validateElement(DataModelValidateContext context, IMElement element, Set<ModelValidationMessage> messages) {
+        for (IComponentValidateVisitor visitor : getVisitors()) {
             validateElement(context, visitor, element, messages);
         }
     }
 
     private void validateElement(DataModelValidateContext context, IComponentValidateVisitor visitor, IMElement element,
-            Set<DataModelValidationMessage> messages) {
+            Set<ModelValidationMessage> messages) {
         if (visitor.needValidate(context, element)) {
             boolean result = element.acceptValidateVisitor(visitor, context, messages);
             if (result && element.getElements() != null) {
@@ -74,4 +74,5 @@ public class ElementValidator extends AbstractDataModelValidator {
             }
         }
     }
+
 }

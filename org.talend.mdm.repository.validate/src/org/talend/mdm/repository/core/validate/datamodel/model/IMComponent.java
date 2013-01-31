@@ -16,13 +16,13 @@ import java.util.Set;
 
 import org.eclipse.xsd.XSDComponent;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidationMessage;
+import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
+import org.w3c.dom.Element;
 
 /**
- * created by HHB on 2013-1-28
- * Detailled comment
- *
+ * created by HHB on 2013-1-28 Detailled comment
+ * 
  */
 public interface IMComponent {
 
@@ -40,21 +40,9 @@ public interface IMComponent {
      */
     public abstract XSDComponent getXsdComponent();
 
-    /**
-     * Sets the name.
-     * 
-     * @param name the name to set
-     */
-    public abstract void setName(String name);
-
-    /**
-     * Sets the xsdComponent.
-     * 
-     * @param xsdComponent the xsdComponent to set
-     */
-    public abstract void setXsdComponent(XSDComponent xsdComponent);
+    public abstract Element getW3CElement();
 
     public abstract boolean acceptValidateVisitor(IComponentValidateVisitor visitor, DataModelValidateContext context,
-            Set<DataModelValidationMessage> messages);
+            Set<ModelValidationMessage> messages);
 
 }
