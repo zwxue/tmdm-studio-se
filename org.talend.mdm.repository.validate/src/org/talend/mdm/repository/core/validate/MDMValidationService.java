@@ -14,14 +14,18 @@ package org.talend.mdm.repository.core.validate;
 
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.IModelValidationService;
+import org.talend.mdm.repository.core.validate.impl.ImmediateValidationPreference;
 
 /**
  * created by HHB on 2013-1-24 Detailled comment
  * 
  */
 public class MDMValidationService implements IModelValidationService {
+
+    private IValidationPreference immediatePref = new ImmediateValidationPreference();
 
     /*
      * (non-Javadoc)
@@ -33,14 +37,13 @@ public class MDMValidationService implements IModelValidationService {
         if (viewObjs != null && viewObjs.size() > 0) {
             switch (condition) {
             case VALIDATE_IMMEDIATE:
-                MDMValidationRunner.validate(viewObjs, null);
-                break;
+                return MDMValidationRunner.validate(viewObjs, immediatePref);
 
             default:
                 break;
             }
         }
-        return BUTTON_OK;
+        return IDialogConstants.CANCEL_ID;
     }
 
 }

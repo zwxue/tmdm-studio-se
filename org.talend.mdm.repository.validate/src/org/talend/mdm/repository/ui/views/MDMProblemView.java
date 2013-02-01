@@ -20,6 +20,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.internal.views.markers.ExtendedMarkersView;
 import org.eclipse.ui.internal.views.markers.MarkerContentGenerator;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.markers.MarkerSupportView;
 import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
 import org.talend.mdm.repository.ui.markers.datamodel.ModelNameMarkerGroup;
@@ -52,6 +53,7 @@ public class MDMProblemView extends MarkerSupportView {
     @Override
     public void init(IViewSite site, IMemento memento) throws PartInitException {
         super.init(site, memento);
+        IMenuService menuService = (IMenuService) site.getService(IMenuService.class);
         hookModelGroup();
     }
 

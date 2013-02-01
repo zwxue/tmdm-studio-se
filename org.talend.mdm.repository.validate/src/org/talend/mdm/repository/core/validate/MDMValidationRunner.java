@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -30,19 +31,20 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wst.validation.internal.ValOperation;
 import org.eclipse.wst.validation.internal.ValType;
+import org.eclipse.wst.validation.internal.ValidationResultSummary;
 import org.eclipse.wst.validation.internal.ValidationRunner;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.core.service.IModelValidationService;
+import org.talend.mdm.repository.ui.dialogs.ValidationResultDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.mdm.repository.validate.ui.dialogs.ValidationResultDialog;
 import org.talend.repository.ProjectManager;
 
 /**
@@ -51,6 +53,8 @@ import org.talend.repository.ProjectManager;
  */
 public class MDMValidationRunner extends WorkspaceJob {
 
+    static Logger log = Logger.getLogger(MDMValidationRunner.class);
+
     private static boolean running = false;
 
     private final List<IRepositoryViewObject> viewObjs;
@@ -58,6 +62,26 @@ public class MDMValidationRunner extends WorkspaceJob {
     private final IValidationPreference validationPref;
 
     Map<IProject, Set<IResource>> toValidate = new HashMap<IProject, Set<IResource>>();
+
+    private int returnCode = IDialogConstants.CANCEL_ID;
+
+    /**
+     * Getter for returnCode.
+     * 
+     * @return the returnCode
+     */
+    public int getReturnCode() {
+        return this.returnCode;
+    }
+
+    /**
+     * Sets the returnCode.
+     * 
+     * @param returnCode the returnCode to set
+     */
+    private void setReturnCode(int returnCode) {
+        this.returnCode = returnCode;
+    }
 
     /**
      * DOC HHB ValidationRunner constructor comment.
@@ -82,7 +106,7 @@ public class MDMValidationRunner extends WorkspaceJob {
 
     }
 
-    public static void validate(List<IRepositoryViewObject> viewObjs, IValidationPreference validationPref) {
+    public static int validate(List<IRepositoryViewObject> viewObjs, IValidationPreference validationPref) {
         MDMValidationRunner runner = new MDMValidationRunner(viewObjs, validationPref);
         IJobChangeListener listener = new JobChangeAdapter() {
 
@@ -99,6 +123,12 @@ public class MDMValidationRunner extends WorkspaceJob {
         };
         runner.addJobChangeListener(listener);
         runner.schedule();
+        try {
+            runner.join();
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
+        return runner.returnCode;
     }
 
     private void init() {
@@ -133,32 +163,21 @@ public class MDMValidationRunner extends WorkspaceJob {
         if (vo.isCanceled()) {
             return Status.CANCEL_STATUS;
         }
-        // if (!validationPref.shouldShowResults()) {
-        // TODO show the validation dialog
-        // }
-        final IValidationPreference prefs = new IValidationPreference() {
+        final ValidationResultSummary result = vo.getResult();
+        if (validationPref.shouldShowResults(result)) {
+            final Set<IResource> resources = toValidate.values().iterator().next();
+            Display.getDefault().syncExec(new Runnable() {
 
-            @Override
-            public boolean shouldShowResults() {
-                return false;
-            }
+                @Override
+                public void run() {
 
-            @Override
-            public int getValidationCondition() {
-                return IModelValidationService.VALIDATE_IMMEDIATE;
-            }
+                    ValidationResultDialog d = new ValidationResultDialog(new Shell(), result, validationPref, resources);
+                    int code = d.open();
+                    setReturnCode(code);
+                }
+            });
+        }
 
-        };
-
-        final Set<IResource> resources = toValidate.values().iterator().next();
-        Display.getDefault().asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                ValidationResultDialog d = new ValidationResultDialog(new Shell(), vo.getResult(), prefs, resources);
-                d.open();
-            }
-        });
         return Status.OK_STATUS;
     }
 }

@@ -10,13 +10,13 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.validate.ui.preferences;
+package org.talend.mdm.repository.core.marker;
 
 /**
- * created by talend-mdm on Jan 24, 2013 Detailled comment
+ * created by HHB on 2013-1-31 Detailled comment
  * 
  */
-public class ValidationPerferenceConstant {
+public interface IValidationMarker {
 
-    public static final String SHOW_DIALOG_RIGHT_CLICK = "show_dialog_right_click"; //$NON-NLS-1$
+    public static final String DATA_MODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
 }

@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.validate.ui.dialogs;
+package org.talend.mdm.repository.ui.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,9 @@ import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontMetrics;
@@ -50,6 +52,7 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.views.markers.MarkerField;
 import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 import org.eclipse.wst.validation.internal.ValidationResultSummary;
+import org.talend.mdm.repository.core.marker.IValidationMarker;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.validate.IValidationPreference;
 import org.talend.mdm.repository.core.validate.datamodel.MarkerEntry;
@@ -67,8 +70,6 @@ import org.talend.mdm.repository.ui.markers.datamodel.ModelField;
 public class ValidationResultDialog extends IconAndMessageDialog {
 
     private static final String MARKERFIELD_DESC = "org.eclipse.ui.ide.allSeverityField"; //$NON-NLS-1$
-
-    private static final String MARKERTYPE_DATAMODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
 
     private class MarkerColumnLabelProvider extends ColumnLabelProvider {
 
@@ -110,6 +111,28 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         }
     }
 
+    class MessageComparator extends ViewerComparator {
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.viewers.ViewerComparator#compare(org.eclipse.jface.viewers.Viewer, java.lang.Object,
+         * java.lang.Object)
+         */
+        @Override
+        public int compare(Viewer viewer, Object e1, Object e2) {
+            if (e1 instanceof MarkerEntry && e2 instanceof MarkerEntry) {
+                MarkerEntry m1 = (MarkerEntry) e1;
+                MarkerEntry m2 = (MarkerEntry) e2;
+                int s1 = m1.getAttributeValue(IMarker.SEVERITY, 0);
+                int s2 = m2.getAttributeValue(IMarker.SEVERITY, 0);
+                return s2 - s1;
+            }
+            return 0;
+        }
+
+    }
+
     private Composite detailsComposite;
 
     private Button detailsButton;
@@ -134,7 +157,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         List<MarkerEntry> ret = new ArrayList<MarkerEntry>();
         for (IResource resource : resources) {
             try {
-                IMarker[] markers = resource.findMarkers(MARKERTYPE_DATAMODEL, true, IResource.DEPTH_ONE);
+                IMarker[] markers = resource.findMarkers(IValidationMarker.DATA_MODEL, true, IResource.DEPTH_ONE);
                 for (IMarker marker : markers) {
                     ret.add(new MarkerEntry(marker));
                 }
@@ -246,6 +269,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         table.setHeaderVisible(true);
         tableViewer.setContentProvider(new ArrayContentProvider());
         tableViewer.setInput(markerEntries);
+        tableViewer.setComparator(new MessageComparator());
         return composite;
     }
 

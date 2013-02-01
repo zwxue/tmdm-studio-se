@@ -1,4 +1,4 @@
-package org.talend.mdm.repository.validate.ui.preferences;
+package org.talend.mdm.repository.ui.preferences;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -75,7 +75,8 @@ public class ValidationPreferencePage extends PreferencePage implements IWorkben
 
     @Override
     public boolean performOk() {
-        getPreferenceStore().setValue(ValidationPerferenceConstant.SHOW_DIALOG_RIGHT_CLICK, needShowDialogButton.getSelection());
+        getPreferenceStore().setValue(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_IMMEDIATE,
+                needShowDialogButton.getSelection());
         return super.performOk();
     }
 
@@ -86,10 +87,11 @@ public class ValidationPreferencePage extends PreferencePage implements IWorkben
      */
     @Override
     protected void performDefaults() {
-        getPreferenceStore().setValue(ValidationPerferenceConstant.SHOW_DIALOG_RIGHT_CLICK, true);
+        getPreferenceStore().setValue(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_IMMEDIATE, true);
+        initControls();
     }
 
     private boolean needShowDialog() {
-        return getPreferenceStore().getBoolean(ValidationPerferenceConstant.SHOW_DIALOG_RIGHT_CLICK);
+        return getPreferenceStore().getBoolean(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_IMMEDIATE);
     }
 }

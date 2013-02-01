@@ -226,6 +226,16 @@
          </menu>
          
       </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.talend.mdm.repository.ui.views.MDMProblemView">
+         <command
+               commandId="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
+               disabledIcon="icons/delete_disable.gif"
+               icon="icons/delete.gif"
+               label="Clear all"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.talend.mdm.repository.validate.DataModelValidateVisitor">
@@ -253,10 +263,18 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
-            class="org.talend.mdm.repository.validate.ui.preferences.ValidationPreferencePage"
+            class="org.talend.mdm.repository.ui.preferences.ValidationPreferencePage"
             id="org.talend.mdm.repository.ui.validate.rightclickPrefPage"
-            name="Right Click">
+            name="DataModel Validation">
       </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.talend.mdm.repository.ui.validate.ClearAllMarkersHandler"
+            id="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
+            name="Clear all markers">
+      </command>
    </extension>
    <!--
    <extension

@@ -181,8 +181,6 @@ public class ModelBuilder implements IModelBuilder {
                             XSDParser.getStartColumn(element);
                             int maxOccurs = p.getMaxOccurs();
                             int minOccurs = p.getMinOccurs();
-                            // System.out.println(typeDefine.getName() + "\t" + type + " \tmin:" + minOccurs + "\tmax:"
-                            // + maxOccurs);
 
                             analyseElement((XSDElementDeclaration) particleContent, type, minOccurs, maxOccurs);
                         }

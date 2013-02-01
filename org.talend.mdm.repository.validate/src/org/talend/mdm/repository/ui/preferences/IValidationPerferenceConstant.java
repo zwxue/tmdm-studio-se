@@ -10,21 +10,13 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate;
-
-import org.eclipse.wst.validation.internal.ValidationResultSummary;
+package org.talend.mdm.repository.ui.preferences;
 
 /**
- * created by HHB on 2013-1-23 Detailled comment
+ * created by talend-mdm on Jan 24, 2013 Detailled comment
  * 
  */
-public interface IValidationPreference {
+public interface IValidationPerferenceConstant {
 
-    public boolean shouldShowResults(ValidationResultSummary result);
-
-    /**
-     * 
-     * @return IModelValidationService.VALIDATE_XXX
-     */
-    public int getValidationCondition();
+    public static final String SHOW_RESULT_DIALOG_AFTER_IMMEDIATE = "show_result_dialog_after_immediate"; //$NON-NLS-1$
 }
