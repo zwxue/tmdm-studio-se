@@ -1019,7 +1019,7 @@
          id="org.apache.batik.xml"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1243,7 +1243,7 @@
          id="org.apache.batik.pdf"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201105071520"
          unpack="false"/>
 
    <plugin
@@ -1355,7 +1355,7 @@
          id="org.apache.batik.dom.svg"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1432,7 +1432,7 @@
          id="org.apache.batik.util"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1460,14 +1460,14 @@
          id="org.apache.batik.svggen"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
          id="org.apache.batik.util.gui"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1509,7 +1509,7 @@
          id="org.apache.batik.ext.awt"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1544,7 +1544,7 @@
          id="org.apache.batik.dom"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1579,14 +1579,14 @@
          id="org.apache.batik.parser"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
          id="org.apache.batik.bridge"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1607,7 +1607,7 @@
          id="org.apache.batik.css"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
@@ -1642,7 +1642,7 @@
          id="org.apache.batik.transcoder"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.6.0.v201011041432"
          unpack="false"/>
 
    <plugin
