@@ -95,7 +95,9 @@ public class PKInfoValidationRules extends AbstractElementValidationRule {
                                         MK_FIELD_NOT_DISPLAY_TYPE, elementByPath, info.getElement());
                                 messages.add(msg);
                             }
-                            if (elementByPath.getMaxOccurs() != null && elementByPath.getMaxOccurs() > 1) {
+                            Integer maxOccurs = elementByPath.getMaxOccurs();
+                            Integer minOccurs = elementByPath.getMinOccurs();
+                            if (maxOccurs != null && minOccurs != null && (maxOccurs > 1 || (minOccurs != 0 || minOccurs != 1))) {
                                 ModelValidationMessage msg = newMessage(
                                         context,
                                         SEV_WARNING,

@@ -251,7 +251,7 @@
             category="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
             class="org.talend.mdm.repository.ui.preferences.ValidationPreferencePage"
             id="org.talend.mdm.repository.ui.validate.rightclickPrefPage"
-            name="DataModel Validation">
+            name="Data Model Validation">
       </page>
    </extension>
    <extension
@@ -272,8 +272,8 @@
             name="PKInfo">
       </rule>
       <rule
-            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoValidationRules"
-            name="FKInfo">
+            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKValidationRules"
+            name="FK">
       </rule>
       </ruleGroup>
  

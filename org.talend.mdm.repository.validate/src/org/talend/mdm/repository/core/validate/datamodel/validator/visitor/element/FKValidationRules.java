@@ -27,7 +27,7 @@ import org.talend.mdm.repository.core.validate.i18n.Messages;
  * created by HHB on 2013-1-14 Detailled comment
  * 
  */
-public class FKInfoValidationRules extends AbstractElementValidationRule {
+public class FKValidationRules extends AbstractElementValidationRule {
 
     private static final String MK_NOT_EXIST = "FK_NOT_EXIST"; //$NON-NLS-1$
 

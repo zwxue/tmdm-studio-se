@@ -22,6 +22,8 @@ public interface IValidationPreference {
 
     public boolean shouldShowResults(ValidationResultSummary result);
 
+    public void setShowResults(Boolean showing);
+
     /**
      * 
      * @return IModelValidationService.VALIDATE_XXX

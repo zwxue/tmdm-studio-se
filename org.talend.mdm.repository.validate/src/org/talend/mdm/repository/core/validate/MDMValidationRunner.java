@@ -43,7 +43,9 @@ import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.validate.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.ValidationResultDialog;
+import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 
@@ -63,7 +65,9 @@ public class MDMValidationRunner extends WorkspaceJob {
 
     Map<IProject, Set<IResource>> toValidate = new HashMap<IProject, Set<IResource>>();
 
-    private int returnCode = IDialogConstants.CANCEL_ID;
+    private int returnCode = IDialogConstants.OK_ID;
+
+    private LockedDirtyObjectDialog lockDirtyDialog;
 
     /**
      * Getter for returnCode.
@@ -148,6 +152,8 @@ public class MDMValidationRunner extends WorkspaceJob {
             }
 
             toValidate.put(project, files);
+            lockDirtyDialog = new LockedDirtyObjectDialog(null, Messages.MDMValidationRunner_promptToSaveEditors, viewObjs);
+
         }
     }
 
@@ -158,6 +164,23 @@ public class MDMValidationRunner extends WorkspaceJob {
      */
     @Override
     public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+        if (lockDirtyDialog.needShowDialog()) {
+            Display.getDefault().syncExec(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+                        setReturnCode(IDialogConstants.CANCEL_ID);
+                    } else {
+                        lockDirtyDialog.saveDirtyObjects();
+                    }
+
+                }
+            });
+            if (getReturnCode() == IDialogConstants.CANCEL_ID) {
+                return Status.CANCEL_STATUS;
+            }
+        }
 
         final ValOperation vo = ValidationRunner.validate(toValidate, ValType.Manual, monitor, false);
         if (vo.isCanceled()) {

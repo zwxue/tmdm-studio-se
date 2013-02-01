@@ -37,6 +37,8 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -139,15 +141,15 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
     private ValidationResultSummary result;
 
-    private IValidationPreference validationPrefs;
+    private IValidationPreference validationPref;
 
     private List<MarkerEntry> markerEntries;
 
-    public ValidationResultDialog(Shell parentShell, ValidationResultSummary result, IValidationPreference validationPrefs,
+    public ValidationResultDialog(Shell parentShell, ValidationResultSummary result, IValidationPreference validationPref,
             Set<IResource> resources) {
         super(parentShell);
         this.result = result;
-        this.validationPrefs = validationPrefs;
+        this.validationPref = validationPref;
         this.markerEntries = createMarkerEntries(resources);
         initMessage(resources.size());
         setShellStyle(getShellStyle() | SWT.RESIZE);
@@ -184,8 +186,24 @@ public class ValidationResultDialog extends IconAndMessageDialog {
     protected Control createDialogArea(Composite parent) {
         Composite dialogAreaComposite = (Composite) super.createDialogArea(parent);
         ((GridData) dialogAreaComposite.getLayoutData()).horizontalSpan = 2;
+
         createMessageArea(dialogAreaComposite);
+        createCheckboxBun(dialogAreaComposite);
         return dialogAreaComposite;
+    }
+
+    private void createCheckboxBun(Composite parent) {
+        final Button button = new Button(parent, SWT.CHECK);
+        button.setText(Messages.ValidationResultDialog_NotShowThis);
+        button.setSelection(!validationPref.shouldShowResults(null));
+        button.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                validationPref.setShowResults(!button.getSelection());
+            }
+
+        });
     }
 
     @Override
@@ -220,7 +238,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
     }
 
     private void createRightAreaButtons(Composite parent) {
-        int condition = validationPrefs.getValidationCondition();
+        int condition = validationPref.getValidationCondition();
         switch (condition) {
         case IModelValidationService.VALIDATE_IMMEDIATE:
         case IModelValidationService.VALIDATE_AFTER_SAVE: {

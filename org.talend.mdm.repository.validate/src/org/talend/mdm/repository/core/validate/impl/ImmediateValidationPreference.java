@@ -12,11 +12,10 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.impl;
 
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.validation.internal.ValidationResultSummary;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.validate.IValidationPreference;
+import org.talend.mdm.repository.core.validate.ValidationPreferenceService;
 import org.talend.mdm.repository.ui.preferences.IValidationPerferenceConstant;
 
 /**
@@ -25,6 +24,8 @@ import org.talend.mdm.repository.ui.preferences.IValidationPerferenceConstant;
  */
 public class ImmediateValidationPreference implements IValidationPreference, IValidationPerferenceConstant {
 
+    ValidationPreferenceService service = ValidationPreferenceService.getInstance();
+
     /*
      * (non-Javadoc)
      * 
@@ -32,10 +33,19 @@ public class ImmediateValidationPreference implements IValidationPreference, IVa
      */
     @Override
     public boolean shouldShowResults(ValidationResultSummary result) {
-        IPreferenceStore preferenceStore = PlatformUI.getPreferenceStore();
-        preferenceStore.setDefault(SHOW_RESULT_DIALOG_AFTER_IMMEDIATE, true);
-        return preferenceStore.getBoolean(SHOW_RESULT_DIALOG_AFTER_IMMEDIATE);
 
+        return service.isShowDlgAfterImmediateChecking();
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.IValidationPreference#setShowResults(java.lang.Boolean)
+     */
+    @Override
+    public void setShowResults(Boolean showing) {
+        service.setShowDlgAfterImmediateChecking(showing);
     }
 
     /*

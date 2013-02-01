@@ -45,6 +45,8 @@ public class Messages extends NLS {
 
     public static String FKInfoElementVisitor_MK_NOT_TYPE_STRING;
 
+    public static String MDMValidationRunner_promptToSaveEditors;
+
     public static String PKInfoElementVisitor_MK_FIELD_NOT_DISPLAY_TYPE;
 
     public static String PKInfoElementVisitor_MK_FIELD_NOT_LIST;
@@ -58,6 +60,8 @@ public class Messages extends NLS {
     public static String ValidationPrefPage_RightClick_Title;
 
     public static String ValidationResultDialog_Message;
+
+    public static String ValidationResultDialog_NotShowThis;
 
     public static String ValidationResultDialog_Title;
 }

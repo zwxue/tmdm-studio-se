@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoValidationRules;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKValidationRules;
 import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoValidationRules;
 
 /**
@@ -36,7 +36,7 @@ public class ServerElementValidator extends ElementValidator {
         if (rules == null) {
             rules = new LinkedList<IComponentValidationRule>();
             rules.add(new PKInfoValidationRules());
-            rules.add(new FKInfoValidationRules());
+            rules.add(new FKValidationRules());
         }
         return rules;
     }

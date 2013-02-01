@@ -118,14 +118,15 @@ public class LockedObjectDialog extends Dialog {
 
         titleLabel = new Label(container, SWT.WRAP);
         GridData gd_titleLabel = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
-        gd_titleLabel.heightHint = 30;
+        gd_titleLabel.heightHint = 40;
         gd_titleLabel.verticalIndent = 5;
         titleLabel.setLayoutData(gd_titleLabel);
         if (mutliObjAlertMsg != null) {
-            if (canContinueRestOperation())
+            if (canContinueRestOperation()) {
                 titleLabel.setText(mutliObjAlertMsg);
-            else
+            } else {
                 titleLabel.setText(singleObjAlertMsg);
+            }
         }
         treeViewer = new TreeViewer(container, SWT.BORDER);
         Tree tree = treeViewer.getTree();
