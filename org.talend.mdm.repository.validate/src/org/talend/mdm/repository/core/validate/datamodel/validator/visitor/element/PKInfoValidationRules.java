@@ -29,7 +29,7 @@ import org.talend.mdm.repository.core.validate.i18n.Messages;
  * created by HHB on 2013-1-14 Detailled comment
  * 
  */
-public class PKInfoElementVisitor extends AbstractElementVisitor {
+public class PKInfoValidationRules extends AbstractElementValidationRule {
 
     private static final String MK_NOT_EXIST = "PK_INFO_NOT_EXIST"; //$NON-NLS-1$
 
@@ -64,7 +64,7 @@ public class PKInfoElementVisitor extends AbstractElementVisitor {
      * org.talend.mdm.repository.core.validate.datamodel.model.MComponent, java.util.List)
      */
     @Override
-    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<ModelValidationMessage> messages) {
+    public boolean check(DataModelValidateContext context, IMComponent mComponent, Set<ModelValidationMessage> messages) {
         IMElement element = (IMElement) mComponent;
         if (isEntity(mComponent)) {
             IMAnnotation annotation = element.getAnnotation();

@@ -15,13 +15,13 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.visitor.elem
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.AbstractComponentVisitor;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.AbstractComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-14 Detailled comment
  * 
  */
-public abstract class AbstractElementVisitor extends AbstractComponentVisitor {
+public abstract class AbstractElementValidationRule extends AbstractComponentValidationRule {
 
     /*
      * (non-Javadoc)

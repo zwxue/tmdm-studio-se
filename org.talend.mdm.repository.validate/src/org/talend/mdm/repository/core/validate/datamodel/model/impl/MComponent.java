@@ -12,12 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.model.impl;
 
-import java.util.Set;
-
-import org.eclipse.xsd.XSDComponent;
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
 import org.w3c.dom.Element;
 
 /**
@@ -95,28 +89,19 @@ public class MComponent implements IMComponentWritable {
         this.element = element;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#acceptValidateVisitor(org.talend.mdm.repository
-     * .core.validate.datamodel.validator.visitor.IComponentValidateVisitor,
-     * org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext, java.util.Set)
-     */
-    @Override
-    public boolean acceptValidateVisitor(IComponentValidateVisitor visitor, DataModelValidateContext context,
-            Set<ModelValidationMessage> messages) {
-        return visitor.visit(context, this, messages);
-    }
+    // /*
+    // * (non-Javadoc)
+    // *
+    // * @see
+    // *
+    // org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#acceptValidateVisitor(org.talend.mdm.repository
+    // * .core.validate.datamodel.validator.visitor.IComponentValidateVisitor,
+    // * org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext, java.util.Set)
+    // */
+    // @Override
+    // public boolean acceptValidateVisitor(IComponentValidateVisitor visitor, DataModelValidateContext context,
+    // Set<ModelValidationMessage> messages) {
+    // return visitor.visit(context, this, messages);
+    // }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMComponent#getXsdComponent()
-     */
-    @Override
-    public XSDComponent getXsdComponent() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

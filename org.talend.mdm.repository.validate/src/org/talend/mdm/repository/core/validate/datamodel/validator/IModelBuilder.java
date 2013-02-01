@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.validator;
 
+import java.io.File;
+import java.io.InputStream;
+
 import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
 
 /**
@@ -20,8 +23,9 @@ import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
  */
 public interface IModelBuilder {
 
-    public abstract IMRoot buildModel(Object schemaObj, String fileName);
+    public abstract IMRoot buildModel(String modelName, String doc);
 
-    public abstract Object parseSchema(String doc);
+    public abstract IMRoot buildModel(String modelName, File file);
 
+    public abstract IMRoot buildModel(String modelName, InputStream inputStream);
 }

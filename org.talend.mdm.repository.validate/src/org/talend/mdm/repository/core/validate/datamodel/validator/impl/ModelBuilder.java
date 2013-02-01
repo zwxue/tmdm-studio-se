@@ -12,16 +12,17 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
@@ -55,27 +56,53 @@ public class ModelBuilder implements IModelBuilder {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.talend.mdm.repository.core.validate.datamodel.validator.impl.IModelBuilder#buildModel(org.eclipse.xsd.XSDSchema
-     * , java.lang.String)
+     * @see org.talend.mdm.repository.core.validate.datamodel.validator.IModelBuilder#buildModel(java.lang.String,
+     * java.lang.String)
      */
     @Override
-    public IMRoot buildModel(Object schemaObj, String fileName) {
-        if (schemaObj != null && schemaObj instanceof XSDSchema) {
-            XSDSchema schema = (XSDSchema) schemaObj;
+    public IMRoot buildModel(String modelName, String doc) {
+        XSDSchema schema = parseSchema(doc);
+        if (schema != null) {
             IMRootWritable root = new MRoot();
             analyseTypeDefinitions(schema, root);
             analyseEntities(schema, root);
-            String dataModelName = getDataModelName(fileName);
-            root.setName(dataModelName);
-
+            root.setName(modelName);
+            root.setXSDError(hasXSDError(schema));
             return root;
         }
         return null;
     }
 
+    boolean hasXSDError(XSDSchema schema) {
+        EList<XSDDiagnostic> diagnostics = schema.getAllDiagnostics();
+        schema.validate();
+
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.validator.IModelBuilder#buildModel(java.lang.String,
+     * java.io.File)
+     */
     @Override
-    public Object parseSchema(String doc) {
+    public IMRoot buildModel(String modelName, File file) {
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.validator.IModelBuilder#buildModel(java.lang.String,
+     * java.io.InputStream)
+     */
+    @Override
+    public IMRoot buildModel(String modelName, InputStream inputStream) {
+        return null;
+    }
+
+    private XSDSchema parseSchema(String doc) {
         XSDParser parse = new XSDParser(getOptions());
         parse.setDocumentLocator(new LocatorImpl());
         parse.parseString(doc);
@@ -92,15 +119,6 @@ public class ModelBuilder implements IModelBuilder {
             optionMap.put(XSDResourceImpl.XSD_TRACK_LOCATION, Boolean.TRUE);
         }
         return optionMap;
-    }
-
-    private String getDataModelName(String fileName) {
-        Pattern pattern = Pattern.compile("(\\w*?)_(\\d*?)\\.(\\d*?)\\.xsd"); //$NON-NLS-1$
-        Matcher matcher = pattern.matcher(fileName);
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return fileName;
     }
 
     /**

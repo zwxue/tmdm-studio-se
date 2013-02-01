@@ -182,4 +182,27 @@ public class MRoot implements IMRootWritable {
         }
         return null;
     }
+
+    boolean xsdError = false;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.IMRoot#hasXSDError()
+     */
+    @Override
+    public boolean hasXSDError() {
+        return xsdError;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.datamodel.model.impl.IMRootWritable#setXSDError(boolean)
+     */
+    @Override
+    public void setXSDError(boolean hasError) {
+        xsdError = hasError;
+    }
+
 }

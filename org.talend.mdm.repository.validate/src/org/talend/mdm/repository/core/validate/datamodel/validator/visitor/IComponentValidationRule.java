@@ -22,7 +22,7 @@ import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidati
  * created by HHB on 2013-1-11 Detailled comment
  * 
  */
-public interface IComponentValidateVisitor {
+public interface IComponentValidationRule {
 
     public static final int SEV_ERROR = 2;
 
@@ -42,7 +42,7 @@ public interface IComponentValidateVisitor {
 
     public boolean needValidate(DataModelValidateContext context, IMComponent mComponent);
 
-    public boolean visit(DataModelValidateContext context, IMComponent mComponent, Set<ModelValidationMessage> messages);
+    public boolean check(DataModelValidateContext context, IMComponent mComponent, Set<ModelValidationMessage> messages);
 
     public String[] getMessageKeys();
 

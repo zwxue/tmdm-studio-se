@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="0" maxOccurs="unbounded">
-            <element ref="visitorGroup"/>
+            <element ref="ruleGroup"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="visitor">
+   <element name="rule">
       <complexType>
          <attribute name="name" type="string" use="required">
             <annotation>
@@ -65,7 +65,7 @@
                   to implement IComponentValidateVisitor, or  extend AbstractElementVisitor (for Element)
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.AbstractComponentVisitor:org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor"/>
+                  <meta.attribute kind="java" basedOn="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.AbstractComponentValidationRule:org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -79,10 +79,10 @@
       </complexType>
    </element>
 
-   <element name="visitorGroup">
+   <element name="ruleGroup">
       <complexType>
          <sequence minOccurs="0" maxOccurs="unbounded">
-            <element ref="visitor"/>
+            <element ref="rule"/>
          </sequence>
          <attribute name="name" type="string" use="required">
             <annotation>

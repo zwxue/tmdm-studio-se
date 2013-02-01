@@ -24,7 +24,7 @@ import org.w3c.dom.Element;
  * created by HHB on 2013-1-14 Detailled comment
  * 
  */
-public abstract class AbstractComponentVisitor implements IComponentValidateVisitor {
+public abstract class AbstractComponentValidationRule implements IComponentValidationRule {
 
     protected int getMsgGroup(IElementContainer container, IMElement element, String msgKey) {
         return MSG_GROUP_UNKNOW;

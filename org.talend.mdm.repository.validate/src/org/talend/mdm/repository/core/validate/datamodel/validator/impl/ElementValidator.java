@@ -20,7 +20,7 @@ import java.util.Set;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-8 Detailled comment
@@ -28,7 +28,7 @@ import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComp
  */
 public abstract class ElementValidator extends AbstractDataModelValidator {
 
-    protected List<IComponentValidateVisitor> visitors;
+    protected List<IComponentValidationRule> rules;
 
     /*
      * (non-Javadoc)
@@ -58,15 +58,16 @@ public abstract class ElementValidator extends AbstractDataModelValidator {
      * @param entity
      */
     private void validateElement(DataModelValidateContext context, IMElement element, Set<ModelValidationMessage> messages) {
-        for (IComponentValidateVisitor visitor : getVisitors()) {
+        for (IComponentValidationRule visitor : getValidationRules()) {
             validateElement(context, visitor, element, messages);
         }
     }
 
-    private void validateElement(DataModelValidateContext context, IComponentValidateVisitor visitor, IMElement element,
+    private void validateElement(DataModelValidateContext context, IComponentValidationRule visitor, IMElement element,
             Set<ModelValidationMessage> messages) {
         if (visitor.needValidate(context, element)) {
-            boolean result = element.acceptValidateVisitor(visitor, context, messages);
+
+            boolean result = visitor.check(context, element, messages);
             if (result && element.getElements() != null) {
                 for (IMElement child : element.getElements()) {
                     validateElement(context, visitor, child, messages);

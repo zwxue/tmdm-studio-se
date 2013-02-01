@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.internal.views.markers.MarkerSupportInternalUtilities;
 import org.eclipse.ui.views.markers.MarkerItem;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-5 Detailled comment
@@ -39,8 +39,8 @@ public class EntityField extends AbstractDataModelField {
         }
         int group = getMessageGroup(marker);
         String msg = BLANK;
-        if (isBelongGroup(IComponentValidateVisitor.MSG_GROUP_ELEMENT, group)
-                || isBelongGroup(IComponentValidateVisitor.MSG_GROUP_ENTITY, group)) {
+        if (isBelongGroup(IComponentValidationRule.MSG_GROUP_ELEMENT, group)
+                || isBelongGroup(IComponentValidationRule.MSG_GROUP_ENTITY, group)) {
             msg = marker.getAttribute(ENTITY, BLANK);
         }
         return msg;

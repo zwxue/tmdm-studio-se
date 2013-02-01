@@ -15,7 +15,7 @@ package org.talend.mdm.repository.core.validate.datamodel.validator;
 import java.util.List;
 
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-8 Detailled comment
@@ -25,5 +25,5 @@ public interface IDataModelValidator {
 
     public List<ModelValidationMessage> validate(DataModelValidateContext context);
 
-    public List<IComponentValidateVisitor> getVisitors();
+    public List<IComponentValidationRule> getValidationRules();
 }

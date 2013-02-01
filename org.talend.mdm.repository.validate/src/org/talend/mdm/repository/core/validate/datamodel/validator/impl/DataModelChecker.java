@@ -19,14 +19,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.xsd.XSDDiagnostic;
-import org.eclipse.xsd.XSDSchema;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.IDataModelChecker;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
@@ -102,15 +101,7 @@ public abstract class DataModelChecker implements IDataModelChecker {
      */
     @Override
     public boolean shouldCheck(DataModelValidateContext context) {
-        Object schemaObj = context.getSchemaObject();
-        if (schemaObj != null && schemaObj instanceof XSDSchema) {
-            XSDSchema schema = (XSDSchema) schemaObj;
-            schema.validate();
-
-            EList<XSDDiagnostic> diagnostics = schema.getAllDiagnostics();
-            // TODO validate only no error is found
-        }
-        return true;
+        return !context.getModelRoot().hasXSDError();
 
     }
 
@@ -165,10 +156,13 @@ public abstract class DataModelChecker implements IDataModelChecker {
         return null;
     }
 
-    private IMRoot buildValidateModel(XSDSchema schema, String fileName) {
-
-        IMRoot root = builder.buildModel(schema, fileName);
-        return root;
+    private String getDataModelName(String fileName) {
+        Pattern pattern = Pattern.compile("(\\w*?)_(\\d*?)\\.(\\d*?)\\.xsd"); //$NON-NLS-1$
+        Matcher matcher = pattern.matcher(fileName);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return fileName;
     }
 
     /*
@@ -179,19 +173,11 @@ public abstract class DataModelChecker implements IDataModelChecker {
     @Override
     public List<ModelValidationMessage> toCheck(String uri) {
         String doc = loadXSDSchema(uri);
-        XSDSchema schema = (XSDSchema) builder.parseSchema(doc);
-
-        Object docObj = getDocumentObj(doc);
         File file = getFileFromURI(uri);
-        IMRoot mRoot = buildValidateModel(schema, file.getName());
-        DataModelValidateContext modelContext = new DataModelValidateContext(schema, mRoot, docObj);
+        String modelName = getDataModelName(file.getName());
+        IMRoot mRoot = builder.buildModel(modelName, doc);
+        DataModelValidateContext modelContext = new DataModelValidateContext(mRoot);
         return toCheck(modelContext);
-    }
-
-    protected Object getDocumentObj(String docStr) {
-        // for eclipse
-        // Document document = new Document(doc);
-        return null;
     }
 
     /*

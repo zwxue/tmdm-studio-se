@@ -15,7 +15,7 @@ package org.talend.mdm.repository.ui.markers.datamodel;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.views.markers.MarkerField;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-16 Detailled comment
@@ -26,7 +26,7 @@ public abstract class AbstractDataModelField extends MarkerField implements IDat
     protected static final String BLANK = ""; //$NON-NLS-1$
 
     protected int getMessageGroup(IMarker marker) {
-        int group = marker.getAttribute(MSG_GROUP, IComponentValidateVisitor.MSG_GROUP_UNKNOW);
+        int group = marker.getAttribute(MSG_GROUP, IComponentValidationRule.MSG_GROUP_UNKNOW);
         return group;
     }
 

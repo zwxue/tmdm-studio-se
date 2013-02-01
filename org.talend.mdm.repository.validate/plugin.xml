@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="DataModelValidateVisitor" name="DataModelValidateVisitor" schema="schema/DataModelValidateVisitor.exsd"/>
+   <extension-point id="DataModelValidationRule" name="DataModelValidationRule" schema="schema/DataModelValidationRule.exsd"/>
    <extension
          id="dataModel"
          name="DataModel Validator"
@@ -237,21 +237,7 @@
          </command>
       </menuContribution>
    </extension>
-   <extension
-         point="org.talend.mdm.repository.validate.DataModelValidateVisitor">
 
-      <visitorGroup
-            name="Element">
-      <visitor
-            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoElementVisitor"
-            name="PKInfoElementVisitor">
-      </visitor>
-      <visitor
-            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoElementVisitor"
-            name="FKInfoElementVisitor">
-      </visitor>
-      </visitorGroup>
-   </extension>
    <extension
          point="org.talend.core.runtime.service">
       <Service
@@ -275,6 +261,22 @@
             id="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
             name="Clear all markers">
       </command>
+   </extension>
+   <extension
+         point="org.talend.mdm.repository.validate.DataModelValidationRule">
+ 
+      <ruleGroup
+            name="Element">
+      <rule
+            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoValidationRules"
+            name="PKInfo">
+      </rule>
+      <rule
+            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoValidationRules"
+            name="FKInfo">
+      </rule>
+      </ruleGroup>
+ 
    </extension>
    <!--
    <extension

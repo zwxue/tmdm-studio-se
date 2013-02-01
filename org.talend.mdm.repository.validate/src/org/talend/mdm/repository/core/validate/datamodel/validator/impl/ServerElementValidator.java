@@ -15,9 +15,9 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoElementVisitor;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoElementVisitor;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKInfoValidationRules;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoValidationRules;
 
 /**
  * created by HHB on 2013-1-29 Detailled comment
@@ -32,12 +32,12 @@ public class ServerElementValidator extends ElementValidator {
      * @see org.talend.mdm.repository.core.validate.datamodel.validator.IDataModelValidator#getVisitors()
      */
     @Override
-    public List<IComponentValidateVisitor> getVisitors() {
-        if (visitors == null) {
-            visitors = new LinkedList<IComponentValidateVisitor>();
-            visitors.add(new PKInfoElementVisitor());
-            visitors.add(new FKInfoElementVisitor());
+    public List<IComponentValidationRule> getValidationRules() {
+        if (rules == null) {
+            rules = new LinkedList<IComponentValidationRule>();
+            rules.add(new PKInfoValidationRules());
+            rules.add(new FKInfoValidationRules());
         }
-        return visitors;
+        return rules;
     }
 }

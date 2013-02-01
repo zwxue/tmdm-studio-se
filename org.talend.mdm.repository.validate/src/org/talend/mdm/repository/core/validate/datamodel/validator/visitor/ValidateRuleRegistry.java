@@ -31,25 +31,25 @@ import org.talend.mdm.repository.validate.plugin.ValidatePlugin;
  * created by HHB on 2013-1-14 Detailled comment
  * 
  */
-public class ValidateVistorRegistry {
+public class ValidateRuleRegistry {
 
     private static Logger log = Logger.getLogger(RepositoryNodeConfigurationManager.class);
 
-    private ValidateVistorRegistry() {
+    private ValidateRuleRegistry() {
     }
 
-    private static ValidateVistorRegistry instance = new ValidateVistorRegistry();
+    private static ValidateRuleRegistry instance = new ValidateRuleRegistry();
 
     /**
      * Getter for instance.
      * 
      * @return the instance
      */
-    public static ValidateVistorRegistry getInstance() {
+    public static ValidateRuleRegistry getInstance() {
         return instance;
     }
 
-    private static final String EXTENSION_POINT_TEMPLATE = "DataModelValidateVisitor"; //$NON-NLS-1$
+    private static final String EXTENSION_POINT_TEMPLATE = "DataModelValidationRule"; //$NON-NLS-1$
 
     private static final String PROP_CLASS = "class"; //$NON-NLS-1$
 
@@ -57,17 +57,17 @@ public class ValidateVistorRegistry {
 
     private boolean inited = false;
 
-    private Map<String, List<IComponentValidateVisitor>> visitorMap = new HashMap<String, List<IComponentValidateVisitor>>();
+    private Map<String, List<IComponentValidationRule>> ruleMap = new HashMap<String, List<IComponentValidationRule>>();
 
-    public List<IComponentValidateVisitor> getVisitors(String groupName) {
+    public List<IComponentValidationRule> getRules(String groupName) {
         if (!inited) {
-            initVisitors();
+            initRules();
         }
 
-        return visitorMap.get(groupName);
+        return ruleMap.get(groupName);
     }
 
-    private void initVisitors() {
+    private void initRules() {
         if (!inited) {
             IExtensionRegistry registry = Platform.getExtensionRegistry();
 
@@ -80,15 +80,15 @@ public class ValidateVistorRegistry {
                     for (IConfigurationElement element : elements) {
                         String group = element.getAttribute(PROP_NAME);
                         if (group != null) {
-                            List<IComponentValidateVisitor> visitors = visitorMap.get(group);
+                            List<IComponentValidationRule> visitors = ruleMap.get(group);
                             if (visitors == null) {
-                                visitors = new LinkedList<IComponentValidateVisitor>();
-                                visitorMap.put(group, visitors);
+                                visitors = new LinkedList<IComponentValidationRule>();
+                                ruleMap.put(group, visitors);
                             }
                             for (IConfigurationElement visitorElement : element.getChildren()) {
                                 if (visitorElement.getAttribute(PROP_CLASS) != null) {
                                     try {
-                                        IComponentValidateVisitor visitor = (IComponentValidateVisitor) visitorElement
+                                        IComponentValidationRule visitor = (IComponentValidationRule) visitorElement
                                                 .createExecutableExtension(PROP_CLASS);
                                         visitors.add(visitor);
 

@@ -42,4 +42,6 @@ public interface IMRoot extends IElementContainer {
 
     public abstract IMElement findElementByPath(String path);
 
+    public abstract boolean hasXSDError();
+
 }

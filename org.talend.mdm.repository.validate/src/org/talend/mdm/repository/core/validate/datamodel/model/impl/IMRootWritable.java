@@ -28,4 +28,6 @@ public interface IMRootWritable extends IElementContainerWritable, IMRoot {
     public abstract void setName(String name);
 
     public abstract void addType(IMTypeWritable type);
+
+    public abstract void setXSDError(boolean hasError);
 }

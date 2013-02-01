@@ -14,8 +14,8 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
 
 import java.util.List;
 
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidateVisitor;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.ValidateVistorRegistry;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.ValidateRuleRegistry;
 
 /**
  * created by HHB on 2013-1-29 Detailled comment
@@ -29,10 +29,10 @@ public class StudioElementValidator extends ElementValidator {
      * @see org.talend.mdm.repository.core.validate.datamodel.validator.IDataModelValidator#getVisitors()
      */
     @Override
-    public List<IComponentValidateVisitor> getVisitors() {
-        if (visitors == null) {
-            visitors = ValidateVistorRegistry.getInstance().getVisitors("Element"); //$NON-NLS-1$
+    public List<IComponentValidationRule> getValidationRules() {
+        if (rules == null) {
+            rules = ValidateRuleRegistry.getInstance().getRules("Element"); //$NON-NLS-1$
         }
-        return visitors;
+        return rules;
     }
 }

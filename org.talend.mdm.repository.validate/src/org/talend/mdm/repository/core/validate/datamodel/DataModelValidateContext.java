@@ -20,8 +20,6 @@ import org.talend.mdm.repository.core.validate.datamodel.model.IMRoot;
  */
 public class DataModelValidateContext {
 
-    private Object schemaObj;
-
     /**
      * DOC HHB DataModelValidateContext constructor comment.
      * 
@@ -29,20 +27,10 @@ public class DataModelValidateContext {
      * @param modelRoot
      * @param document
      */
-    public DataModelValidateContext(Object schemaObj, IMRoot modelRoot, Object document) {
+    public DataModelValidateContext(IMRoot modelRoot) {
         super();
-        this.schemaObj = schemaObj;
         this.modelRoot = modelRoot;
 
-    }
-
-    /**
-     * Getter for schema.
-     * 
-     * @return the schema
-     */
-    public Object getSchemaObject() {
-        return this.schemaObj;
     }
 
     /**
