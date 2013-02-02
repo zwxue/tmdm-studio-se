@@ -21,7 +21,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.xsd.ui,
  org.eclipse.xsd,
- org.talend.commons,
  org.talend.commons.runtime,
  org.talend.commons.ui,
  org.talend.core,
@@ -36,7 +35,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.mdm.repository.model,
  org.talend.mdm.workbench,
  org.talend.mdm.workbench.serverexplorer,
- org.junit
+ org.junit,
+ org.apache.log4j
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.commons.logging
