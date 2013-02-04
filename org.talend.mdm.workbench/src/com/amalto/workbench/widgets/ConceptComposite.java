@@ -19,7 +19,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDCompositor;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.impl.XSDModelGroupImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
 
@@ -60,70 +62,63 @@ public class ConceptComposite {
     private CCombo superTypeNameText;
 
     public ConceptComposite(Composite parent, boolean encloseTextField, final List<XSDComplexTypeDefinition> types,
-            boolean newComplex) {
+            final boolean newComplex) {
 
         GridLayout layout = (GridLayout) parent.getLayout();
         layout.numColumns = 2;
         // layout.verticalSpacing = 10;
-        final List<String> typeNames = new ArrayList<String>();
-        for (XSDComplexTypeDefinition type : types) {
-            typeNames.add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));//$NON-NLS-1$//$NON-NLS-2$
-        }
         typeNameLabel = new Label(parent, SWT.NONE);
         typeNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        typeNameLabel.setText(newComplex == false ? Messages.ConceptComposite_TypeName1 : Messages.ConceptComposite_TypeName2);
 
-        typeNameLabel.setText(newComplex == false ? Messages.ConceptComposite_TypeName1
-                : Messages.ConceptComposite_TypeName2);
-
-        typeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER);
+        int readOnlyStyle = newComplex ? SWT.NONE : SWT.READ_ONLY;
+        typeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER | readOnlyStyle);
         typeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
-        typeNameText.setItems(typeNames.toArray(new String[typeNames.size()]));
-        typeNameText.addSelectionListener(new SelectionListener() {
+        for (XSDComplexTypeDefinition type : types) {
+            String typeName = type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : "");//$NON-NLS-1$//$NON-NLS-2$;
+            typeNameText.add(typeName);
+            typeNameText.setData(typeName, type);
+        }
+        typeNameText.addSelectionListener(new SelectionAdapter() {
 
-            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-            };
-
-            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                for (int i = 0; i < types.size(); i++) {
-                    XSDComplexTypeDefinition type = types.get(i);
-                    XSDParticleImpl partCnt = null;
-                    if (typeNameText.getText().equalsIgnoreCase(type.getName()))
-                        partCnt = (XSDParticleImpl) type.getContent();
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                Object data = typeNameText.getData(typeNameText.getText());
+                if (data != null) {
+                    XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) data;
+                    setAbstract(type.isAbstract());
+                    XSDParticleImpl partCnt = (XSDParticleImpl) type.getContent();
                     if (partCnt != null) {
                         XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
                         XSDCompositor typeComposite = mdlGrp.getCompositor();
-                        if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL))
+                        if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL)) {
                             setSequence();
-                        else if (typeComposite.equals(XSDCompositor.ALL_LITERAL))
+                        } else if (typeComposite.equals(XSDCompositor.ALL_LITERAL)) {
                             setAll();
-                        else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL))
+                        } else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL)) {
                             setChoice();
-                        break;
+                        }
                     }
-                }
-                List<String> typeNames1 = new ArrayList<String>();
-                typeNames1.addAll(typeNames);
-                if (typeNameText.getText().trim().length() > 0) {
-                    typeNames1.remove(typeNameText.getText());
-                    if (!typeNames1.contains("")) {//$NON-NLS-1$
-                        typeNames1.add(0, "");//$NON-NLS-1$
+                    if (newComplex) {
+                        fillSuperTypeNameText();
+                    } else {
+                        setSuperName(getSuperTypeName(type));
                     }
-                    superTypeNameText.setItems(typeNames1.toArray(new String[typeNames1.size()]));
                 }
             };
         });
 
         typeNameText.addModifyListener(new ModifyListener() {
-            
+
             public void modifyText(ModifyEvent e) {
                 String text = typeNameText.getText();
-                if(text.isEmpty())
+                if (text.isEmpty()) {
                     setAll();
-                
+                }
             }
         });
-        
-        final Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
+
+        Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
         radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");//$NON-NLS-1$//$NON-NLS-2$
 
         radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
@@ -131,18 +126,19 @@ public class ConceptComposite {
 
         allButton = new Button(radioGroup, SWT.RADIO);
         allButton.setText("All");//$NON-NLS-1$
-
+        allButton.setEnabled(newComplex);
         allButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         sequenceButton = new Button(radioGroup, SWT.RADIO);
         sequenceButton.setText("Sequence");//$NON-NLS-1$
-
+        sequenceButton.setEnabled(newComplex);
         sequenceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         choiceButton = new Button(radioGroup, SWT.RADIO);
         choiceButton.setText("Choice");//$NON-NLS-1$
-
+        choiceButton.setEnabled(newComplex);
         choiceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+
         allButton.setSelection(true);
 
         messageLabel = new Label(parent, SWT.NONE);
@@ -153,33 +149,27 @@ public class ConceptComposite {
 
         superTypeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY);
         superTypeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
+        superTypeNameText.setEnabled(newComplex);
+        fillSuperTypeNameText();
 
-        if (!typeNames.contains("")) {//$NON-NLS-1$
-            typeNames.add(0, "");//$NON-NLS-1$
-        }
+        superTypeNameText.addSelectionListener(new SelectionAdapter() {
 
-        superTypeNameText.setItems(typeNames.toArray(new String[typeNames.size()]));
-        superTypeNameText.addSelectionListener(new SelectionListener() {
-
-            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-            };
-
-            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                for (int i = 0; i < types.size(); i++) {
-                    XSDComplexTypeDefinition type = types.get(i);
-                    XSDParticleImpl partCnt = null;
-                    if (superTypeNameText.getText().equalsIgnoreCase(type.getName()))
-                        partCnt = (XSDParticleImpl) type.getContent();
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                Object data = typeNameText.getData(superTypeNameText.getText());
+                if (data != null) {
+                    XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) data;
+                    XSDParticleImpl partCnt = (XSDParticleImpl) type.getContent();
                     if (partCnt != null) {
                         XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
                         XSDCompositor typeComposite = mdlGrp.getCompositor();
-                        if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL))
+                        if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL)) {
                             setSequence();
-                        else if (typeComposite.equals(XSDCompositor.ALL_LITERAL))
+                        } else if (typeComposite.equals(XSDCompositor.ALL_LITERAL)) {
                             setAll();
-                        else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL))
+                        } else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL)) {
                             setChoice();
-                        break;
+                        }
                     }
                 }
                 boolean flag = superTypeNameText.getText().trim().length() == 0;
@@ -190,6 +180,7 @@ public class ConceptComposite {
             };
         });
         btnAbstract = new Button(parent, SWT.CHECK);
+        btnAbstract.setEnabled(newComplex);
         btnAbstract.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
         btnAbstract.setText(Messages.ConceptComposite_Abstract);
         container = parent;
@@ -200,6 +191,35 @@ public class ConceptComposite {
             superTypeNameText.setParent(radioGroup);
             btnAbstract.setParent(radioGroup);
         }
+    }
+
+    private void fillSuperTypeNameText() {
+        superTypeNameText.removeAll();
+
+        String[] items = typeNameText.getItems();
+        List<String> itemList = new ArrayList<String>();
+        for (String item : items) {
+            if (typeNameText.getText().trim().equals(item)) {
+                continue;
+            }
+            itemList.add(item);
+        }
+        if (!itemList.contains("")) {//$NON-NLS-1$
+            itemList.add(0, "");//$NON-NLS-1$
+        }
+        superTypeNameText.setItems(itemList.toArray(new String[0]));
+    }
+
+    private String getSuperTypeName(XSDComplexTypeDefinition type) {
+        XSDTypeDefinition baseType = type.getBaseTypeDefinition();
+        if (baseType == null) {
+            return ""; //$NON-NLS-1$
+        }
+        String superTypeName = baseType.getName();
+        if (superTypeName == null || "anyType".equalsIgnoreCase(superTypeName)) { //$NON-NLS-1$
+            return ""; //$NON-NLS-1$
+        }
+        return superTypeName;
     }
 
     public String getSuperName() {
