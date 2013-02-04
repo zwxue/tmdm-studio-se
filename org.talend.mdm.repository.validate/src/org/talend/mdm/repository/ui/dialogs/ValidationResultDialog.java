@@ -58,6 +58,8 @@ import org.talend.mdm.repository.core.marker.IValidationMarker;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.validate.IValidationPreference;
 import org.talend.mdm.repository.core.validate.datamodel.MarkerEntry;
+import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
+import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 import org.talend.mdm.repository.ui.markers.datamodel.ElementPathField;
 import org.talend.mdm.repository.ui.markers.datamodel.ElementTypeField;
@@ -113,7 +115,9 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         }
     }
 
-    class MessageComparator extends ViewerComparator {
+    class MessageComparator extends ViewerComparator implements IDataModelMarkerConst {
+
+        protected static final String BLANK = ""; //$NON-NLS-1$
 
         /*
          * (non-Javadoc)
@@ -126,13 +130,102 @@ public class ValidationResultDialog extends IconAndMessageDialog {
             if (e1 instanceof MarkerEntry && e2 instanceof MarkerEntry) {
                 MarkerEntry m1 = (MarkerEntry) e1;
                 MarkerEntry m2 = (MarkerEntry) e2;
-                int s1 = m1.getAttributeValue(IMarker.SEVERITY, 0);
-                int s2 = m2.getAttributeValue(IMarker.SEVERITY, 0);
-                return s2 - s1;
+
+                // 1 to compare severity
+
+                int result = compareSeverity(m2, m1);
+                if (result == 0) {
+                    // 2: to compare model name
+                    result = compareModelName(m1, m2);
+                    if (result == 0) {
+                        // 3: to compare entity name
+                        result = compareEntityName(m1, m2);
+                        if (result == 0) {
+                            // 4: to compare type
+                            result = compareEntityType(m1, m2);
+                            if (result == 0) {
+                                // 5: to compare path
+                                result = comparePath(m1, m2);
+
+                            }
+                        }
+                    }
+                }
+                return result;
             }
             return 0;
         }
 
+        private int compareSeverity(MarkerEntry m1, MarkerEntry m2) {
+            int s1 = m1.getAttributeValue(IMarker.SEVERITY, 0);
+            int s2 = m2.getAttributeValue(IMarker.SEVERITY, 0);
+            return s1 - s2;
+        }
+
+        private int compareModelName(MarkerEntry m1, MarkerEntry m2) {
+            String name1 = m1.getAttributeValue(DATA_MODEL, BLANK);
+            String name2 = m2.getAttributeValue(DATA_MODEL, BLANK);
+            return name1.compareTo(name2);
+        }
+
+        private int compareEntityName(MarkerEntry m1, MarkerEntry m2) {
+            int group1 = m1.getAttributeValue(MSG_GROUP, IComponentValidationRule.MSG_GROUP_UNKNOW);
+            int group2 = m2.getAttributeValue(MSG_GROUP, IComponentValidationRule.MSG_GROUP_UNKNOW);
+            String name1 = BLANK;
+            if (isBelongGroup(IComponentValidationRule.MSG_GROUP_ELEMENT, group1)
+                    || isBelongGroup(IComponentValidationRule.MSG_GROUP_ENTITY, group1)) {
+                name1 = m1.getAttributeValue(ENTITY, BLANK);
+            }
+            String name2 = BLANK;
+            if (isBelongGroup(IComponentValidationRule.MSG_GROUP_ELEMENT, group2)
+                    || isBelongGroup(IComponentValidationRule.MSG_GROUP_ENTITY, group2)) {
+                name2 = m2.getAttributeValue(ENTITY, BLANK);
+
+            }
+            return compareString(name1, name2);
+        }
+
+        private int compareString(String str1, String str2) {
+            int len1 = str1.length();
+            int len2 = str2.length();
+            if (len1 == 0 && len2 == 0) {
+                return 0;
+            }
+            if (len1 > 0 && len2 == 0) {
+                return -1;
+            }
+            if (len1 == 0 && len2 > 0) {
+                return 1;
+            }
+            return str1.compareTo(str2);
+        }
+
+        protected boolean isBelongGroup(int group, int cur) {
+            return (group & cur) == group;
+        }
+
+        private int compareEntityType(MarkerEntry m1, MarkerEntry m2) {
+            int group1 = m1.getAttributeValue(MSG_GROUP, IComponentValidationRule.MSG_GROUP_UNKNOW);
+            int group2 = m2.getAttributeValue(MSG_GROUP, IComponentValidationRule.MSG_GROUP_UNKNOW);
+
+            String name1 = BLANK;
+            String name2 = BLANK;
+            if (isBelongGroup(IComponentValidationRule.MSG_GROUP_ELEMENT, group1)
+                    || isBelongGroup(IComponentValidationRule.MSG_GROUP_TYPE, group1)) {
+                name1 = m1.getAttributeValue(ELEMENT_TYPE, BLANK);
+            }
+            if (isBelongGroup(IComponentValidationRule.MSG_GROUP_ELEMENT, group2)) {
+                name2 = m2.getAttributeValue(ELEMENT_TYPE, BLANK);
+            }
+
+            return compareString(name1, name2);
+        }
+
+        private int comparePath(MarkerEntry m1, MarkerEntry m2) {
+            String name1 = m1.getAttributeValue(PATH, BLANK);
+            String name2 = m2.getAttributeValue(PATH, BLANK);
+            return name1.compareTo(name2);
+        }
     }
 
     private Composite detailsComposite;
@@ -286,8 +379,8 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         table.setLinesVisible(true);
         table.setHeaderVisible(true);
         tableViewer.setContentProvider(new ArrayContentProvider());
-        tableViewer.setInput(markerEntries);
         tableViewer.setComparator(new MessageComparator());
+        tableViewer.setInput(markerEntries);
         return composite;
     }
 

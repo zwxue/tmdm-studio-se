@@ -66,6 +66,7 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
         return true;
     }
 
+    @Override
     protected void initInput(List<IRepositoryViewObject> inputObjs) {
         lockedObjs = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryViewObject viewObject : inputObjs) {
@@ -88,13 +89,14 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof IRepositoryViewEditorInput) {
                         IRepositoryViewObject viewObject = ((IRepositoryViewEditorInput) editorInput).getViewObject();
-                        if(viewObject!=null)
+                        if (viewObject != null) {
                             id = viewObject.getId();
+                        }
                     } else if (editorInput instanceof ProcessEditorInput) {
                         id = ((ProcessEditorInput) editorInput).getId();
                     }
                     IEditorPart editor = ref.getEditor(false);
-                    if (id != null && editor != null && editor.isDirty() && id.equals(viewObj.getId())) {
+                    if (id != null && editor != null && editor.isDirty()) {
                         editorRefMap.put(id, editor);
                     }
                 } catch (PartInitException e) {
