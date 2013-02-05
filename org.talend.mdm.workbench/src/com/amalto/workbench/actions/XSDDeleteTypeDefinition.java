@@ -77,6 +77,12 @@ public class XSDDeleteTypeDefinition extends UndoAction {
         Util.getAllObject(page.getSite(), objList, (IStructuredContentProvider) page.getSchemaContentProvider());
         Util.getAllObject(page.getSite(), objList, (IStructuredContentProvider) page.getTypeContentProvider());
 
+        XSDTypeDefinition usingElement = findUsingElement(selection, objList);
+        if (usingElement != null) {
+            String message = getInfoDialogMessage(usingElement);
+            MessageDialog.openInformation(page.getSite().getShell(), Messages.XSDDeleteTypeDefinition_ConfirmDel, message);
+            return Status.CANCEL_STATUS;
+        }
         // edit by ymli; fix the bug:0012228. Made the multiple types can be deleted.
         for (Iterator<XSDTypeDefinition> iter = selection.iterator(); iter.hasNext();) {
             XSDTypeDefinition type = iter.next();
@@ -85,33 +91,40 @@ public class XSDDeleteTypeDefinition extends UndoAction {
                 if (xsdSimpType != null) {
                     simpleType = xsdSimpType;
                 }
-                boolean find = Util.findElementsUsingType(objList, simpleType);
-                if (find) {
-                    MessageDialog.openInformation(page.getSite().getShell(), Messages.XSDDeleteTypeDefinition_ConfirmDel,
-                            Messages.bind(Messages.XSDDeleteTypeDefinition_ConfirmInfo, simpleType.getName()));
-                    xsdSimpType = null;
-                    return Status.CANCEL_STATUS;
-                }
                 schema.getContents().remove(simpleType);
             } else {
                 XSDComplexTypeDefinition complxType = (XSDComplexTypeDefinition) type;
                 if (xsdCmpexType != null) {
                     complxType = xsdCmpexType;
                 }
-                boolean find = Util.findElementsUsingType(objList, complxType);
-                if (find) {
-                    MessageDialog.openInformation(page.getSite().getShell(), Messages.XSDDeleteTypeDefinition_ConfirmDel,
-                            Messages.bind(Messages.XSDDeleteTypeDefinition_ConfirmInfo1, complxType.getName()));
-                    xsdCmpexType = null;
-                    return Status.CANCEL_STATUS;
-                }
                 schema.getContents().remove(complxType);
             }
         }
+        xsdSimpType = null;
         xsdCmpexType = null;
         page.refresh();
         page.markDirty();
         return Status.OK_STATUS;
+    }
+
+    private String getInfoDialogMessage(XSDTypeDefinition type) {
+        if (type instanceof XSDSimpleTypeDefinition) {
+            xsdSimpType = null;
+            return Messages.bind(Messages.XSDDeleteTypeDefinition_ConfirmInfo, type.getName());
+        }
+        xsdCmpexType = null;
+        return Messages.bind(Messages.XSDDeleteTypeDefinition_ConfirmInfo1, type.getName());
+    }
+
+    private XSDTypeDefinition findUsingElement(IStructuredSelection selection, ArrayList<Object> objList) {
+        for (Iterator<XSDTypeDefinition> iter = selection.iterator(); iter.hasNext();) {
+            XSDTypeDefinition type = iter.next();
+            boolean find = Util.findElementsUsingType(objList, type);
+            if (find) {
+                return type;
+            }
+        }
+        return null;
     }
 
     @Override
