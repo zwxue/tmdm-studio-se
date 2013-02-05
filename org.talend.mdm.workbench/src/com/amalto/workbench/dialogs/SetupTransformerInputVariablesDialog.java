@@ -44,6 +44,7 @@ import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
+import com.amalto.workbench.widgets.ComplexTableViewerR;
 
 public class SetupTransformerInputVariablesDialog extends Dialog {
 
@@ -113,7 +114,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
                         null, // Combo Values
                         10 // Text Lines
                 ) };
-        objectViewer = new ComplexTableViewer(Arrays.asList(columns), toolkit, comp);
+        objectViewer = new ComplexTableViewerR(Arrays.asList(columns), toolkit, comp, page.getSite());
         objectViewer.create();
 
         Table table = objectViewer.getViewer().getTable();
@@ -139,12 +140,12 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         combo.addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
+
 
             }
 
             public void widgetSelected(SelectionEvent e) {
-                
+
                 if (combo.getText().equals(EInputTemplate.APPLICATION_ITEMPK.getName())) {
                     Text t = (Text) objectViewer.getColumns().get(2).getControl();
                     t.setText(EInputTemplate.APPLICATION_ITEMPK.getContent());
@@ -156,6 +157,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));

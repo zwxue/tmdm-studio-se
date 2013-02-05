@@ -24,4 +24,6 @@ import com.amalto.workbench.utils.MDMServerDef;
 public interface ILegendServerDefService extends IService {
 
     public List<MDMServerDef> getLegendServerDefs();
+
+    public boolean checkServerDefConnection(String endpointaddress, String username, String password, String universe);
 }

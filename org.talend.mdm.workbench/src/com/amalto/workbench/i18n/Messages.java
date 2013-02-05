@@ -1465,6 +1465,20 @@ public class Messages extends NLS {
 
     public static String DataClusterBrowserMainPage_referedRecord;
 
+    public static String DataClusterDialog_0;
+
+    public static String DataClusterDialog_1;
+
+    public static String DataClusterDialog_2;
+
+    public static String DataClusterDialog_3;
+
+    public static String DataClusterDialog_4;
+
+    public static String DataClusterDialog_7;
+
+    public static String DataClusterDialog_8;
+
     public static String DataClusterMainPage_DataContainer;
 
     public static String DataClusterMainPage_Description;
@@ -1918,6 +1932,8 @@ public class Messages extends NLS {
     public static String ComplexTableViewer_TableTip;
 
     public static String ComplexTableViewer_UpBtnTip;
+
+    public static String ComplexTableViewerR_PickRecordFromContainer;
 
     public static String ComplexText;
 

@@ -12,48 +12,60 @@
 // ============================================================================
 package com.amalto.workbench.dialogs;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.vafada.swtcalendar.SWTCalendar;
 import org.vafada.swtcalendar.SWTCalendarListener;
 
 import com.amalto.workbench.i18n.Messages;
 
-public class CalendarDialog {
-
-    protected Shell shell;
+public class CalendarDialog extends Dialog {
 
     private SWTCalendar swtcal;
+    private Date date = null;
+    private List<SWTCalendarListener> listeners = new ArrayList<SWTCalendarListener>();
 
-    private Display display;
-
-    /**
-     * @param parentShell
-     */
     public CalendarDialog(Shell parentShell) {
-        display = parentShell.getDisplay();
-        shell = new Shell(display, SWT.CLOSE);
-        shell.setText(Messages.CalendarDialog_DatePicker);
-        shell.setLayout(new RowLayout());
-        swtcal = new SWTCalendar(shell);
+        super(parentShell);
+    }
+    
+    @Override
+    protected void configureShell(Shell newShell) {
+        super.configureShell(newShell);
+        newShell.setText(Messages.CalendarDialog_DatePicker);
+        newShell.setSize(170, 160);
     }
 
-    public void open() {
-        shell.pack();
-        shell.open();
-        while (!shell.isDisposed()) {
-            if (!display.readAndDispatch())
-                display.sleep();
+    @Override
+    protected Control createDialogArea(Composite parent) {
+        Composite comp = new Composite(parent, SWT.NONE);
+        comp.setLayout(new RowLayout());
+        swtcal = new SWTCalendar(comp);
+        for (SWTCalendarListener listener : listeners) {
+            swtcal.addSWTCalendarListener(listener);
         }
+
+        if (date != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            swtcal.setCalendar(calendar);
+        }
+
+        return comp;
     }
 
-    public void close() {
-        shell.dispose();
+    @Override
+    protected Control createButtonBar(Composite parent) {
+        return null;
     }
 
     public Calendar getCalendar() {
@@ -61,17 +73,18 @@ public class CalendarDialog {
     }
 
     public void setDate(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        swtcal.setCalendar(calendar);
+        this.date = date;
     }
 
     public void addDateChangedListener(SWTCalendarListener listener) {
-        swtcal.addSWTCalendarListener(listener);
+        listeners.add(listener);
     }
 
+    @Override
     public Shell getShell() {
-        return shell;
+        if (swtcal.isDisposed())
+            return null;
+        return swtcal.getShell();
     }
 
 }

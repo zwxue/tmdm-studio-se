@@ -21,6 +21,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -31,9 +32,9 @@ import com.amalto.workbench.proposal.ContentProposalAdapterExtended;
 import com.amalto.workbench.proposal.ProposalUtils;
 
 /**
- * 
+ *
  * @author aiming
- * 
+ *
  */
 public class WidgetUtils {
 
@@ -87,6 +88,24 @@ public class WidgetUtils {
             }
         }
 
+    }
+
+    public static void changeWidgetColor(Control cotrl, Color color, boolean[] backForeGround) {
+        if (backForeGround == null || backForeGround.length != 2)
+            return;
+
+        if (backForeGround[0])
+            cotrl.setBackground(color);
+        if (backForeGround[1])
+            cotrl.setForeground(color);
+
+        if (cotrl instanceof Composite) {
+            Composite comp = (Composite) cotrl;
+            Control[] children = comp.getChildren();
+            for (Control ch : children) {
+                changeWidgetColor(ch, color, backForeGround);
+            }
+        }
     }
 
     public static ContentProposalAdapterExtended addContentProposal(Control control, String[] proposals,

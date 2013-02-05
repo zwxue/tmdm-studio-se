@@ -1,15 +1,15 @@
 /*****************************************************************************
  * This file is part of Rinzo
- * 
+ *
  * Author: Claudio Cancinos WWW: https://sourceforge.net/projects/editorxml Copyright (C): 2008, Claudio Cancinos
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License along with this program; If not, see
  * <http://www.gnu.org/licenses/>
  ****************************************************************************/
@@ -17,6 +17,8 @@ package com.amalto.workbench.widgets.xmlviewer.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,6 +31,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
+import org.talend.core.model.general.Project;
+import org.talend.core.repository.model.ResourceModelUtils;
+import org.talend.repository.ProjectManager;
+
 public class FileUtils {
 	public static final String EOL;
 	private static final String FILE_PROTOCOL = "file:"; //$NON-NLS-1$
@@ -37,7 +46,7 @@ public class FileUtils {
 	public static final String TAB = "\t"; //$NON-NLS-1$
 
 	static {
-		EOL = File.separatorChar != '\\' ? 
+		EOL = File.separatorChar != '\\' ?
 				File.separatorChar != '/' ? "\r" //$NON-NLS-1$
 				: "\n" : "\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
@@ -49,7 +58,7 @@ public class FileUtils {
 
 	/**
 	 * Creates an absolute URI from a relative one
-	 * 
+	 *
 	 * @param basePath
 	 * @param relativePath
 	 * @return
@@ -83,7 +92,7 @@ public class FileUtils {
 		} while (true);
 		return ac1;
 	}
-	
+
 	public static String fileUrlToPath(String s) {
 		String s1 = s;
 		int i = s.indexOf(':');
@@ -97,7 +106,7 @@ public class FileUtils {
 			int i1;
 			for (i1 = 0; k < l && s.charAt(k) == '/'; i1++)
 				k++;
-	
+
 			if (i1 > 0 && (i1 & 1) == 0)
 				k -= 2;
 			s1 = (File.separatorChar != '/' ? "" : "/") + s.substring(k); //$NON-NLS-1$ //$NON-NLS-2$
@@ -109,7 +118,7 @@ public class FileUtils {
 
 	public static String addProtocol(String uri) {
 	    if (!hasProtocol(uri))
-	    {                           
+	    {
 	      String prefix = FILE_PROTOCOL;
 	      prefix += uri.startsWith("/") ? "//" : "///"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	      uri = prefix + uri;
@@ -120,11 +129,11 @@ public class FileUtils {
 	private static URI createURI(String path) throws URISyntaxException {
 		return new URI(path.replaceAll(" ", "%20")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 
 	private static boolean hasProtocol(String uri)
 	  {
-	    boolean result = false;     
+	    boolean result = false;
 	    if (uri != null)
 	    {
 	      int index = uri.indexOf(PROTOCOL_PATTERN);
@@ -134,7 +143,7 @@ public class FileUtils {
 	      }
 	    }
 	    return result;
-	  }     
+	  }
 
 
     /**
@@ -153,7 +162,7 @@ public class FileUtils {
 				reader = new BufferedReader(is);
 				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile,
                         false), encoding));
-				
+
 				String line = reader.readLine();
 				while(line != null) {
 					writer.write(line);
@@ -185,7 +194,38 @@ public class FileUtils {
 	public static boolean exists(String localCachedName) {
 		return new File(localCachedName).exists();
 	}
-	
+
+    public static IFile buildTempFileInWorkspace(String fileContent, String fileNameWithExtension) {
+        IFile file = null;
+        if (fileContent != null) {
+            try {
+                Project project = ProjectManager.getInstance().getCurrentProject();
+                IProject prj = ResourceModelUtils.getProject(project);
+                file = prj.getFile(new Path("temp/" + fileNameWithExtension)); //$NON-NLS-1$
+
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "utf-8"); //$NON-NLS-1$
+
+                outputStreamWriter.write(fileContent);
+                outputStreamWriter.flush();
+                outputStreamWriter.close();
+
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+                if (file.exists()) {
+                    file.setContents(inputStream, true, false, null);
+                } else {
+                    file.create(inputStream, true, null);
+                }
+
+                inputStream.close();
+            } catch (Exception e) {
+                throw new RuntimeException("Error trying to create file \'" + fileNameWithExtension + "\' in the cache.", e); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+        }
+
+        return file;
+    }
+
 	public static void safeClose(Closeable c) {
 		try {
 			if (c != null) {
@@ -194,7 +234,7 @@ public class FileUtils {
 		} catch (Exception e) {
 		}
 	}
-	
+
 	public static void safeDelete(File c) {
 		try {
 			if (c != null) {
@@ -203,5 +243,5 @@ public class FileUtils {
 		} catch (Exception e) {
 		}
 	}
-	
+
 }

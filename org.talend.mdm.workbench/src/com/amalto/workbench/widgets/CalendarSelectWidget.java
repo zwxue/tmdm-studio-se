@@ -32,9 +32,9 @@ import org.vafada.swtcalendar.SWTCalendarListener;
 import com.amalto.workbench.dialogs.CalendarDialog;
 
 /**
- * 
+ *
  * @author achen
- * 
+ *
  */
 public class CalendarSelectWidget {
 
@@ -66,7 +66,7 @@ public class CalendarSelectWidget {
         btn.addListener(SWT.Selection, new Listener() {
 
             public void handleEvent(Event event) {
-                if (cal == null || cal.getShell().isDisposed())
+                if (cal == null || (cal.getShell() != null && cal.getShell().isDisposed()))
                     cal = new CalendarDialog(composite.getShell());
                 if (text.getText() != null && text.getText().length() > 0) {
                     try {
@@ -81,11 +81,11 @@ public class CalendarSelectWidget {
 
                     public void dateChanged(SWTCalendarEvent calendarEvent) {
                         text.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-                        // cal.close();
                     }
                 });
 
                 Point sbPoint = btn.getDisplay().map(btn.getParent(), null, btn.getLocation());
+                cal.create();
                 cal.getShell().setLocation(new Point(sbPoint.x, sbPoint.y + btn.getSize().y));
                 cal.open();
             };

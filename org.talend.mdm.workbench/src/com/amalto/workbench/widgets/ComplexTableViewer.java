@@ -69,9 +69,9 @@ import com.amalto.workbench.models.TreeParent;
 
 /**
  * This table viewer has: 1.input Texts, add button 2.normal tableviewer with up/down/delete button
- * 
+ *
  * @author aiming
- * 
+ *
  */
 public class ComplexTableViewer {
 
@@ -148,6 +148,8 @@ public class ComplexTableViewer {
     protected XpathSelectDialog xpathDialog;
 
     protected ValidationRuleWidget validationRule;
+
+    protected Text text;
 
     public String getConceptName() {
         return conceptName;
@@ -319,27 +321,35 @@ public class ComplexTableViewer {
                 }
                 column.setControl(combo);
             } else {
-                int style = SWT.BORDER;
-                if (column.getTextLines() > 1) {
-                    style = SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL;
-                }
-                final Text text = toolkit.createText(mainComposite, column.getDefaultValue(), style);
-                GridData gdata = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-                if (column.getTextLines() > 1)
-                    gdata.heightHint = text.getLineHeight() * column.getTextLines();
-                text.setLayoutData(gdata);
-                column.setControl(text);
-                text.addFocusListener(new FocusAdapter() {
-
-                    @Override
-                    public void focusGained(FocusEvent e) {
-                        text.selectAll();
-                    }
-                });
+                creatTextPortion(mainComposite, column);
             }
         }
 
-        addButton = toolkit.createButton(mainComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
+        createRightmostPortion(mainComposite);
+    }
+
+    protected void creatTextPortion(Composite parent, ComplexTableViewerColumn column) {
+        int style = SWT.BORDER;
+        if (column.getTextLines() > 1) {
+            style = SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL;
+        }
+        text = toolkit.createText(parent, column.getDefaultValue(), style);
+        GridData gdata = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        if (column.getTextLines() > 1)
+            gdata.heightHint = text.getLineHeight() * column.getTextLines();
+        text.setLayoutData(gdata);
+        column.setControl(text);
+        text.addFocusListener(new FocusAdapter() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                text.selectAll();
+            }
+        });
+    }
+
+    protected void createRightmostPortion(Composite parent) {
+        addButton = toolkit.createButton(parent, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
         addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
         addButton.setToolTipText(Messages.ComplexTableViewer_Add);
@@ -552,7 +562,7 @@ public class ComplexTableViewer {
             if (columns.get(i).isText()) {
                 editors[i] = new TextCellEditor(table);
             } else if (columns.get(i).isCombo()) {
-                editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn) columns.get(i)).getComboValues(),
+                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(),
                         SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
                 editors[i] = new XpathCellEditor(table);
@@ -1069,7 +1079,7 @@ public class ComplexTableViewer {
             if (columns.get(i).isText()) {
                 editors[i] = new TextCellEditor(table);
             } else if (columns.get(i).isCombo()) {
-                editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn) columns.get(i)).getComboValues(),
+                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(),
                         SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
                 editors[i] = new XpathCellEditor(table);
