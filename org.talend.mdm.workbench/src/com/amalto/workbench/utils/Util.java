@@ -337,8 +337,7 @@ public class Util {
     public static LinkedHashMap<String, String> lang2iso = new LinkedHashMap<String, String>();
     static {
         Set<String> isos = iso2lang.keySet();
-        for (Iterator<String> iter = isos.iterator(); iter.hasNext();) {
-            String iso = iter.next();
+        for (String iso : isos) {
             String language = iso2lang.get(iso);
             lang2iso.put(language, iso);
             /*
@@ -356,8 +355,9 @@ public class Util {
 
     public static XtentisPort getPort(TreeObject xobject) throws XtentisException {
         try {
-            if (xobject == null)
+            if (xobject == null) {
                 return null;
+            }
             return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
                     xobject.getPassword());
         } catch (MalformedURLException e) {
@@ -402,20 +402,23 @@ public class Util {
             if (bundle != null) {
                 Class<?> cls = bundle.loadClass("org.talend.mdm.workbench.enterprice.webservices.XtentisServiceImpl"); //$NON-NLS-1$
                 service = (XtentisService) cls.newInstance();
-            } else
+            } else {
                 service = new XtentisService_Impl();
+            }
 
             Stub stub = (Stub) service.getXtentisPort();
             stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, url.toString());
             if (username != null) {
-                if (universe != null)
+                if (universe != null) {
                     stub._setProperty(Stub.USERNAME_PROPERTY, universe + "/" + username);//$NON-NLS-1$
-                else
+                } else {
                     stub._setProperty(Stub.USERNAME_PROPERTY, username);
+                }
 
             }
-            if (password != null)
+            if (password != null) {
                 stub._setProperty(Stub.PASSWORD_PROPERTY, password);
+            }
 
             // Attempt to reset the JDK Authenticator before a web service call is made.
             // However due to JDK Authenticator bad design, it does not prevent any other code or thread to change it.
@@ -455,8 +458,9 @@ public class Util {
     public static WSViewPK[] getAllViewPKs(URL url, String universe, String username, String password, String regex)
             throws XtentisException {
         try {
-            if ((regex == null) || ("".equals(regex)))//$NON-NLS-1$
+            if ((regex == null) || ("".equals(regex))) {
                 regex = "*";//$NON-NLS-1$
+            }
             XtentisPort port = Util.getPort(url, universe, username, password);
             return port.getViewPKs(new WSGetViewPKs(regex)).getWsViewPK();
         } catch (Exception e) {
@@ -476,8 +480,9 @@ public class Util {
             in = new FileInputStream(filename);
             return IOUtils.toString(in);
         } finally {
-            if (in != null)
+            if (in != null) {
                 in.close();
+            }
         }
     }
 
@@ -497,8 +502,9 @@ public class Util {
      * @return a single string or null
      */
     public static String joinStrings(String[] strings, String separator) {
-        if (strings == null)
+        if (strings == null) {
             return null;
+        }
         String res = "";//$NON-NLS-1$
         for (int i = 0; i < strings.length; i++) {
             res += (i > 0) ? separator : "";//$NON-NLS-1$
@@ -515,11 +521,13 @@ public class Util {
      */
     public static String getConceptFromPath(String path) {
         Pattern p = Pattern.compile("(.*?)[\\[|/].*");//$NON-NLS-1$
-        if (!path.endsWith("/"))//$NON-NLS-1$
+        if (!path.endsWith("/")) {
             path += "/";//$NON-NLS-1$
+        }
         Matcher m = p.matcher(path);
-        if (m.matches())
+        if (m.matches()) {
             return m.group(1);
+        }
         return null;
     }
 
@@ -533,8 +541,9 @@ public class Util {
         if (child.getContainer() instanceof XSDElementDeclaration && child.getContainer().getContainer() instanceof XSDSchema) {
             return child.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();//$NON-NLS-1$
         } else {
-            if (child != null && child.getContainer() != null)
+            if (child != null && child.getContainer() != null) {
                 return getConceptName(child.getContainer());
+            }
         }
         return null;
     }
@@ -581,8 +590,9 @@ public class Util {
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
         XObject xo = XPathAPI.eval(contextNode, xPath,
                 (namespace == null) ? contextNode : Util.getRootElement("nsholder", namespace, prefix));//$NON-NLS-1$
-        if (xo.getType() != XObject.CLASS_NODESET)
+        if (xo.getType() != XObject.CLASS_NODESET) {
             return null;
+        }
         return xo.nodelist();
     }
 
@@ -633,8 +643,9 @@ public class Util {
 
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             documentBuilder.setErrorHandler(seh);
-            if (xmlString == null || xmlString.length() == 0 || xmlString.matches("\\s+"))//$NON-NLS-1$
+            if (xmlString == null || xmlString.length() == 0 || xmlString.matches("\\s+")) {
                 return d;
+            }
             d = documentBuilder.parse(new InputSource(new StringReader(xmlString)));
 
             if (schema != null) {
@@ -662,13 +673,16 @@ public class Util {
         ;
 
         // test for hard-coded values
-        if (xPath.startsWith("\"") && xPath.endsWith("\""))//$NON-NLS-1$//$NON-NLS-2$
+        if (xPath.startsWith("\"") && xPath.endsWith("\"")) {
             return new String[] { xPath.substring(1, xPath.length() - 1) };
+        }
 
         // test for incomplete path (elements missing /text())
-        if (!xPath.matches(".*@[^/\\]]+")) // attribute//$NON-NLS-1$
-            if (!xPath.endsWith(")")) // function//$NON-NLS-1$
+        if (!xPath.matches(".*@[^/\\]]+")) {
+            if (!xPath.endsWith(")")) {
                 xPath += "/text()";//$NON-NLS-1$
+            }
+        }
 
         try {
             XObject xo = XPathAPI.eval(contextNode, xPath, namespaceNode);
@@ -694,8 +708,9 @@ public class Util {
 
     public static String getFirstTextNode(Node contextNode, String xPath, Node namespaceNode) throws XtentisException {
         String[] res = getTextNodes(contextNode, xPath, namespaceNode);
-        if (res.length == 0)
+        if (res.length == 0) {
             return null;
+        }
         return res[0];
     }
 
@@ -828,8 +843,9 @@ public class Util {
             client.getState().setAuthenticationPreemptive(true);
             client.getState().setCredentials(null, null, new UsernamePasswordCredentials(username, password));
             File file = new File(localFilename);
-            if (!Messages.Util_24.equalsIgnoreCase(localFilename))
+            if (!Messages.Util_24.equalsIgnoreCase(localFilename)) {
                 mppost.addParameter("imageFile", file);//$NON-NLS-1$
+            }
             if (imageCatalog != null) {
                 mppost.addParameter("catalogName", imageCatalog);//$NON-NLS-1$
             }
@@ -855,8 +871,9 @@ public class Util {
                     picturePathMap.put(fileName1, returnValue);
                 }
                 return returnValue;
-            } else
+            } else {
                 return "";//$NON-NLS-1$
+            }
         } catch (Exception e) {
             mppost.releaseConnection();
             log.error(e.getMessage(), e);
@@ -910,10 +927,10 @@ public class Util {
         // whether or not this returns types in included,
         // imported, or redefined schemas is subject to change
 
-        for (Iterator<Object> iter = objList.iterator(); iter.hasNext(); /* no-op */) {
-            Object obj = iter.next();
-            if (obj == localTypedef)
+        for (Object obj : objList) {
+            if (obj == localTypedef) {
                 continue;
+            }
             if (obj instanceof XSDElementDeclaration || obj instanceof XSDTypeDefinition) {
                 XSDTypeDefinition typedef = null;
                 if (obj instanceof XSDElementDeclaration) {
@@ -956,8 +973,9 @@ public class Util {
                 } else if (typedef instanceof XSDSimpleTypeDefinition) {
                     XSDSimpleTypeDefinition type = (XSDSimpleTypeDefinition) typedef;
                     XSDSimpleTypeDefinition baseType = type.getBaseTypeDefinition();
-                    if (baseType != null && baseType.getName().equals(localTypedef.getName()))
+                    if (baseType != null && baseType.getName().equals(localTypedef.getName())) {
                         return true;
+                    }
                 }
             }
         }
@@ -967,20 +985,22 @@ public class Util {
 
     public static List<String> getAllCustomSimpleDataType(XSDSchema schema) {
         ArrayList customTypes = new ArrayList();
-        for (Iterator iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
-            XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-            if (type instanceof XSDSimpleTypeDefinition)
+        for (Object element : schema.getTypeDefinitions()) {
+            XSDTypeDefinition type = (XSDTypeDefinition) element;
+            if (type instanceof XSDSimpleTypeDefinition) {
                 customTypes.add(type.getName());
+            }
         }
         return customTypes;
     }
 
     public static List<String> getAllSchemaSimpleDataType(XSDSchema schema) {
         List<String> builtInTypes = new ArrayList<String>();
-        for (Iterator<XSDTypeDefinition> iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-            XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-            if (type instanceof XSDSimpleTypeDefinition)
+        for (XSDTypeDefinition xsdTypeDefinition : schema.getSchemaForSchema().getTypeDefinitions()) {
+            XSDTypeDefinition type = xsdTypeDefinition;
+            if (type instanceof XSDSimpleTypeDefinition) {
                 builtInTypes.add(type.getName());
+            }
         }
         return builtInTypes;
     }
@@ -988,8 +1008,9 @@ public class Util {
     public static Object findElementUsingName(XSDSchema schema, String name) {
         EList<XSDElementDeclaration> elems = schema.getElementDeclarations();
         for (XSDElementDeclaration elem : elems) {
-            if (elem.getName().equals(name))
+            if (elem.getName().equals(name)) {
                 return elem;
+            }
         }
         return null;
     }
@@ -1013,8 +1034,9 @@ public class Util {
             for (int k = 0; k < annotList.size(); k++) {
                 if ("appinfo".equals(annotList.get(k).getLocalName())) {//$NON-NLS-1$
                     Node source = annotList.get(k).getAttributes().getNamedItem("source");//$NON-NLS-1$
-                    if (source == null)
+                    if (source == null) {
                         continue;
+                    }
                     String appinfoSource = annotList.get(k).getAttributes().getNamedItem("source").getNodeValue();//$NON-NLS-1$
                     if ("X_ForeignKey".equals(appinfoSource)) {//$NON-NLS-1$
                         String path = annotList.get(k).getFirstChild().getNodeValue();
@@ -1042,7 +1064,7 @@ public class Util {
 
                 XSDParticle particle = (XSDParticle) fromcomplexType;
 
-                if (((XSDParticle) particle).getTerm() instanceof XSDModelGroup) {
+                if (particle.getTerm() instanceof XSDModelGroup) {
 
                     XSDModelGroup modelGroup = ((XSDModelGroup) particle.getTerm());
                     EList fromlist = modelGroup.getContents();
@@ -1050,6 +1072,9 @@ public class Util {
                     for (XSDParticle el : (XSDParticle[]) fromlist.toArray(new XSDParticle[fromlist.size()])) {
                         XSDTerm term = el.getTerm();
                         if (term instanceof XSDElementDeclaration) {
+                            if (term.equals(element)) {
+                                continue;
+                            }
                             XSDAnnotation annotation = ((XSDElementDeclaration) term).getAnnotation();
 
                             if (annotation != null) {
@@ -1107,8 +1132,9 @@ public class Util {
     public static Set<String> getForeingKeyInSchema(Set<String> list, XSDSchema schema) {
         EList<XSDSchemaContent> contents = schema.getContents();
         for (XSDSchemaContent content : contents) {
-            if (content instanceof XSDElementDeclaration)
+            if (content instanceof XSDElementDeclaration) {
                 getforeignKeyOfElement(list, (XSDElementDeclaration) content);
+            }
         }
 
         return list;
@@ -1142,8 +1168,9 @@ public class Util {
         } else if (son instanceof XSDElementDeclaration) {
             elem = (XSDElementDeclaration) son;
         }
-        if (elem == null || elem.getSchema() == null)
+        if (elem == null || elem.getSchema() == null) {
             return null;
+        }
         EList<XSDSchemaContent> parentList = elem.getSchema().getContents();
         ArrayList<Object> list = new ArrayList<Object>();
         for (XSDSchemaContent top : parentList) {
@@ -1153,8 +1180,9 @@ public class Util {
             }
             if (top instanceof XSDElementDeclaration) {
                 XSDElementDeclaration decl = (XSDElementDeclaration) top;
-                if (decl == son)
+                if (decl == son) {
                     return decl;
+                }
                 if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
                     XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl.getTypeDefinition();
                     if (type.getContent() instanceof XSDParticle) {
@@ -1163,15 +1191,17 @@ public class Util {
                             XSDModelGroup group = (XSDModelGroup) particle.getTerm();
                             EList<XSDParticle> elist = group.getContents();
                             for (XSDParticle pt : elist) {
-                                if (pt.getContent() instanceof XSDElementDeclaration)
+                                if (pt.getContent() instanceof XSDElementDeclaration) {
                                     if (((XSDElementDeclaration) pt.getContent()) == elem) {
                                         return decl;
                                     }
+                                }
                                 ArrayList<String> complexTypes = new ArrayList<String>();
                                 XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(),
                                         elem, complexTypes);
-                                if (spec != null)
+                                if (spec != null) {
                                     return spec;
+                                }
                             }
                         }
                     }
@@ -1184,16 +1214,18 @@ public class Util {
                         XSDModelGroup group = (XSDModelGroup) particle.getTerm();
                         EList<XSDParticle> elist = group.getContents();
                         for (XSDParticle pt : elist) {
-                            if (pt.getContent() instanceof XSDElementDeclaration)
+                            if (pt.getContent() instanceof XSDElementDeclaration) {
                                 if (((XSDElementDeclaration) pt.getContent()) == elem) {
                                     return top;
                                 }
+                            }
                             if (pt.getContent() instanceof XSDElementDeclaration) {
                                 ArrayList<String> complexTypes = new ArrayList<String>();
                                 XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(),
                                         elem, complexTypes);
-                                if (spec != null)
+                                if (spec != null) {
                                     return spec;
+                                }
                             }
                         }
                     }
@@ -1211,8 +1243,9 @@ public class Util {
         XSDElementDeclaration elem = null;
 
         elem = (XSDElementDeclaration) son;
-        if (elem.getSchema() == null)
+        if (elem.getSchema() == null) {
             return null;
+        }
         EList<XSDSchemaContent> parentList = elem.getSchema().getContents();
         List<Object> list = new ArrayList<Object>();
         for (XSDSchemaContent top : parentList) {
@@ -1256,20 +1289,21 @@ public class Util {
                     for (XSDParticle pt : elist) {
                         if (pt.getContent() instanceof XSDElementDeclaration) {
                             XSDElementDeclaration ele = (XSDElementDeclaration) pt.getContent();
-                            if (ele == son)
+                            if (ele == son) {
                                 return ele.getName();
-                            /*
-                             * ArrayList<String> complexTypes = new ArrayList<String>(); XSDElementDeclaration spec =
-                             * findOutSpecialSonElement( (XSDElementDeclaration) pt.getContent(), son, complexTypes); if
-                             * (spec != null) return spec.getName();
-                             */
-                            // if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-                            //
-                            //                          return ele.getName() + "/"//$NON-NLS-1$
-                            // + getTopElement(ele, son, (XSDComplexTypeDefinition) ele.getTypeDefinition());
-                            //
-                            //
-                            // }
+                                /*
+                                 * ArrayList<String> complexTypes = new ArrayList<String>(); XSDElementDeclaration spec
+                                 * = findOutSpecialSonElement( (XSDElementDeclaration) pt.getContent(), son,
+                                 * complexTypes); if (spec != null) return spec.getName();
+                                 */
+                                // if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                                //
+                                //                          return ele.getName() + "/"//$NON-NLS-1$
+                                // + getTopElement(ele, son, (XSDComplexTypeDefinition) ele.getTypeDefinition());
+                                //
+                                //
+                                // }
+                            }
 
                         }
                     }
@@ -1284,8 +1318,9 @@ public class Util {
      * contains childType itself
      */
     public static List<XSDComplexTypeDefinition> getAllSuperComplexTypes(XSDComplexTypeDefinition childType) {
-        if (childType == null)
+        if (childType == null) {
             return new ArrayList<XSDComplexTypeDefinition>();
+        }
 
         XSDTypeDefinition rootType = childType.getRootType();
         XSDTypeDefinition typeDefinition = childType;
@@ -1294,8 +1329,9 @@ public class Util {
         while (typeDefinition != null && typeDefinition instanceof XSDComplexTypeDefinition) {
             hierarchyComplexTypes.add((XSDComplexTypeDefinition) typeDefinition);
 
-            if (typeDefinition.equals(rootType))
+            if (typeDefinition.equals(rootType)) {
                 break;
+            }
             typeDefinition = typeDefinition.getBaseType();
         }
 
@@ -1303,8 +1339,9 @@ public class Util {
     }
 
     public static List<Object> getRealKeyInfos(XSDElementDeclaration currentEntity, XSDParticle son) {
-        if (currentEntity == null || son == null)
+        if (currentEntity == null || son == null) {
             return null;
+        }
 
         List<Object> list = new ArrayList<Object>();
 
@@ -1329,7 +1366,7 @@ public class Util {
 
     private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son,
             ArrayList<String> complexTypes) {
-        ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements((XSDElementDeclaration) parent, complexTypes);
+        ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements(parent, complexTypes);
         XSDElementDeclaration specialParent = null;
         for (XSDElementDeclaration e : particleElemList) {
             if (e == son) {
@@ -1340,8 +1377,9 @@ public class Util {
         if (specialParent == null) {
             for (XSDElementDeclaration e : particleElemList) {
                 specialParent = findOutSpecialSonElement(e, son, complexTypes);
-                if (specialParent != null)
+                if (specialParent != null) {
                     break;
+                }
             }
         }
 
@@ -1354,8 +1392,9 @@ public class Util {
         if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl.getTypeDefinition();
             String typeDesc = type.getTargetNamespace() + " : " + type.getName();//$NON-NLS-1$
-            if (complexTypes.indexOf(typeDesc) != -1)
+            if (complexTypes.indexOf(typeDesc) != -1) {
                 return holder;
+            }
             if (type.getContent() instanceof XSDParticle) {
                 XSDParticle particle = (XSDParticle) type.getContent();
                 if (particle.getTerm() instanceof XSDModelGroup) {
@@ -1402,8 +1441,9 @@ public class Util {
     public static Object[] getAllObject(Object elem, List<Object> objList, IStructuredContentProvider provider) {
         Object[] elems = provider.getElements(elem);
         for (Object obj : elems) {
-            if (obj == null)
+            if (obj == null) {
                 continue;
+            }
             if (obj instanceof XSDModelGroup || obj instanceof XSDElementDeclaration || obj instanceof XSDParticle
                     || obj instanceof XSDTypeDefinition) {
                 if (!objList.contains(obj)) {
@@ -1445,10 +1485,11 @@ public class Util {
                     XSDModelGroup group = (XSDModelGroup) particle.getTerm();
                     EList<XSDParticle> elist = group.getContents();
                     for (XSDParticle pt : elist) {
-                        if (pt.getContent() instanceof XSDElementDeclaration)
+                        if (pt.getContent() instanceof XSDElementDeclaration) {
                             if (((XSDElementDeclaration) pt.getContent()).getTypeDefinition() == newType) {
                                 ((XSDElementDeclaration) pt.getContent()).setTypeDefinition(newType);
                             }
+                        }
 
                     }
                 } else if (particle.getTerm() instanceof XSDElementDeclaration) {
@@ -1495,8 +1536,9 @@ public class Util {
                         ((XSDParticle) obj).updateElement();
                     }
                 }
-                if (!(((XSDParticle) obj).getContent() instanceof XSDElementDeclaration))
+                if (!(((XSDParticle) obj).getContent() instanceof XSDElementDeclaration)) {
                     continue;
+                }
                 XSDElementDeclaration elem = (XSDElementDeclaration) ((XSDParticle) obj).getContent();
                 if (elem.isElementDeclarationReference()) {
                     if (elem.getResolvedElementDeclaration() == decl) {
@@ -1517,8 +1559,9 @@ public class Util {
                     XSDElementDeclaration xsdElem = (XSDElementDeclaration) term;
                     if (xsdElem == decl) {
                         XSDModelGroup group = (XSDModelGroup) ((XSDParticle) obj).getContainer();
-                        if (group != null)
+                        if (group != null) {
                             group.getContents().remove(obj);
+                        }
                     }
                 }
             }
@@ -1572,14 +1615,15 @@ public class Util {
      * @param objectType
      * @return
      */
+    @Deprecated
     public static List<String> getCachedXObjectsNameSet(TreeObject xObject, int objectType) {
         List<String> xObjectsNameSet = new ArrayList<String>();
         if (xObject != null) {
 
             TreeParent treeNode = xObject.findServerFolder(objectType);
             TreeObject[] xObjectsSet = treeNode.getChildren();
-            for (int i = 0; i < xObjectsSet.length; i++) {
-                xObject = xObjectsSet[i];
+            for (TreeObject element : xObjectsSet) {
+                xObject = element;
                 String xObjectName = xObject.getDisplayName();
                 xObjectsNameSet.add(xObjectName);
             }
@@ -1595,8 +1639,9 @@ public class Util {
                 TreeParent parent = (TreeParent) obj;
                 objs.addAll(getChildren(parent, objectType));
             } else {
-                if (obj.getType() == objectType)
+                if (obj.getType() == objectType) {
                     objs.add(obj.getDisplayName());
+                }
             }
         }
         return objs;
@@ -1605,17 +1650,20 @@ public class Util {
     // Modified by hbhong,to fix bug 21784
     public static TreeParent getServerTreeParent(TreeObject tObj) {
         TreeParent serverRoot = tObj.getServerRoot();
-        if (serverRoot == null)
+        if (serverRoot == null) {
             return getTreeParent(tObj, TreeObject._SERVER_);
+        }
         return serverRoot;
     }
 
     private static TreeParent getTreeParent(TreeObject tObj, int type) {
-        if (tObj == null)
+        if (tObj == null) {
             throw new IllegalArgumentException(Messages.Util_29);
+        }
         if (tObj instanceof TreeParent) {
-            if (tObj.getType() == type)
+            if (tObj.getType() == type) {
                 return (TreeParent) tObj;
+            }
         }
         TreeParent parent = tObj.getParent();
         if (parent != null) {
@@ -1651,8 +1699,9 @@ public class Util {
                 }
             }
         }
-        if (avaiList.size() == 0)
+        if (avaiList.size() == 0) {
             avaiList.addAll(systemDataModelValues);
+        }
         return avaiList;
     }
 
@@ -1660,7 +1709,7 @@ public class Util {
     public static List<TreeObject> getChildrenObj(TreeParent xObject) {
         List<TreeObject> objs = new ArrayList<TreeObject>();
 
-        if (xObject.getChildren() != null)
+        if (xObject.getChildren() != null) {
             for (TreeObject obj : xObject.getChildren()) {
                 if (obj instanceof TreeParent) {
                     TreeParent parent = (TreeParent) obj;
@@ -1670,10 +1719,12 @@ public class Util {
                             // Data container
                             if (obj.getParent().getType() == TreeObject.DATA_CLUSTER) {
                                 for (TreeObject chld : ((TreeParent) obj).getChildren()) {
-                                    if (chld.getName().equals(XSystemObjects.DC_PROVISIONING.getName()))
+                                    if (chld.getName().equals(XSystemObjects.DC_PROVISIONING.getName())) {
                                         objs.add(chld);
-                                    if (chld.getName().equals(XSystemObjects.DC_CONF.getName()))
+                                    }
+                                    if (chld.getName().equals(XSystemObjects.DC_CONF.getName())) {
                                         objs.add(chld);
+                                    }
                                 }
                                 continue;
                             } else {
@@ -1694,10 +1745,12 @@ public class Util {
                     }
 
                 } else {
-                    if (obj.isXObject())
+                    if (obj.isXObject()) {
                         objs.add(obj);
+                    }
                 }
             }
+        }
         return objs;
     }
 
@@ -1849,8 +1902,9 @@ public class Util {
             obj = parent;
         } while (!(parent instanceof XSDSchema));
         if (parent != null && parent instanceof XSDSchema) {
-            if (parent.equals(schema))
+            if (parent.equals(schema)) {
                 return false;
+            }
             try {
                 EList<XSDSchemaDirective> referencingDirectives = ((XSDSchema) parent).getReferencingDirectives();
                 return !referencingDirectives.isEmpty();
@@ -1862,8 +1916,9 @@ public class Util {
     }
 
     public static boolean IsAImporedElement(XSDConcreteComponent component, String schema) {
-        if (component == null)
+        if (component == null) {
             return true;
+        }
         String componentName = getComponentName(component);
         try {
             String xsd = schema;
@@ -1884,7 +1939,7 @@ public class Util {
 
         } else if (component instanceof XSDParticle) {
             XSDParticle particle = (XSDParticle) component;
-            XSDTerm term = (XSDTerm) particle.getTerm();
+            XSDTerm term = particle.getTerm();
             if (term instanceof XSDElementDeclaration) {
                 return Messages.Util_36 + ((XSDElementDeclaration) term).getName() + Messages.Util_37;
             }
@@ -1917,21 +1972,23 @@ public class Util {
             XSDElementDeclaration decl = (XSDElementDeclaration) component;
             name = decl.getName();
             buffer.add("//xsd:element[@name='" + name + "']");//$NON-NLS-1$//$NON-NLS-2$
-            if (decl.getContainer() instanceof XSDSchemaImpl)
+            if (decl.getContainer() instanceof XSDSchemaImpl) {
                 return buffer;
-            else
+            } else {
                 return retrieveXSDComponentPath(decl.getContainer(), schema, buffer);
+            }
         } else if (component instanceof XSDParticle) {
             XSDParticle particle = (XSDParticle) component;
-            XSDTerm term = (XSDTerm) particle.getTerm();
+            XSDTerm term = particle.getTerm();
             if (term instanceof XSDElementDeclaration && !(((XSDElementDeclaration) term).getContainer() instanceof XSDParticle)) {
                 String prefix = null;
                 String ns = ((XSDElementDeclaration) term).getTargetNamespace();
                 Iterator<Map.Entry<String, String>> iter = schema.getQNamePrefixToNamespaceMap().entrySet().iterator();
                 while (iter.hasNext() && ns != null) {
-                    Map.Entry<String, String> entry = (Map.Entry<String, String>) iter.next();
-                    if (entry.getValue().equals(ns))
+                    Map.Entry<String, String> entry = iter.next();
+                    if (entry.getValue().equals(ns)) {
                         prefix = entry.getKey();
+                    }
                 }
                 name = ((XSDElementDeclaration) term).getName();
                 buffer.add("//xsd:element[@name='" + name + "' or @ref='" + (prefix != null ? (prefix + ":" + name) : name) + "']");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -1943,8 +2000,9 @@ public class Util {
             XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) component;
             name = type.getName();
             buffer.add("//xsd:complexType" + (name != null ? "[@name='" + name + "']" : ""));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-            if (type.getContainer() instanceof XSDSchemaImpl)
+            if (type.getContainer() instanceof XSDSchemaImpl) {
                 return buffer;
+            }
             return retrieveXSDComponentPath(type.getContainer(), schema, buffer);
         } else if (component instanceof XSDSimpleTypeDefinition) {
             // TreePath tPath=((TreeSelection)selection).getPaths()[0];
@@ -1971,8 +2029,9 @@ public class Util {
             XSDAnnotation annon = (XSDAnnotation) component;
             buffer.add("//xsd:annotation");//$NON-NLS-1$
             return retrieveXSDComponentPath(annon.getContainer(), schema, buffer);
-        } else
+        } else {
             return buffer;
+        }
 
         return buffer;
     }
@@ -2003,8 +2062,9 @@ public class Util {
 
             return buffer.toString();
         } finally {
-            if (doc != null)
+            if (doc != null) {
                 doc.close();
+            }
         }
     }
 
@@ -2013,8 +2073,9 @@ public class Util {
         int imp = 0;
         for (XSDImport xsdImport : imports) {
             String ns = xsdImport.getNamespace();
-            if (ns.equals(""))//$NON-NLS-1$
+            if (ns.equals("")) {
                 continue;
+            }
             int last = ns.lastIndexOf("/");//$NON-NLS-1$
             if (!nsMap.containsValue(ns)) {
                 if (ns.equals("http://www.w3.org/XML/1998/namespace")) {//$NON-NLS-1$
@@ -2077,8 +2138,9 @@ public class Util {
                     URI fileURI = URI.createFileURI(xsdImpl.getSchemaLocation());
                     xsdImpl.setNamespace(fileURI.toFileString().replaceAll("[\\W]", ""));//$NON-NLS-1$//$NON-NLS-2$
                 }
-                if (xsdImpl.getSchemaLocation() == null)
+                if (xsdImpl.getSchemaLocation() == null) {
                     continue;
+                }
                 ((XSDImportImpl) schemaCnt).importSchema();
                 imports.add(((XSDImportImpl) schemaCnt));
             } else if (schemaCnt instanceof XSDInclude) {
@@ -2104,8 +2166,9 @@ public class Util {
             Document document = null;
             String schemaLocation = rawData;
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            if (rawData == null)
+            if (rawData == null) {
                 return XSDSchemaImpl.getSchemaForSchema("http://www.w3.org/2001/XMLSchema");//$NON-NLS-1$
+            }
             if (namespaceURI == null && rawData.endsWith(".xsd") && rawData.indexOf(File.separator) > 0) {//$NON-NLS-1$
                 File rawFile = new File(rawData);
                 if (!rawFile.exists()) {
@@ -2131,8 +2194,9 @@ public class Util {
                 if (file.exists()) {
                     fin = new FileInputStream(file);
                     source = new InputSource(fin);
-                } else
+                } else {
                     source = new InputSource(new StringReader(Util.getResponseFromURL(rawData, treeObj)));
+                }
             } else {
                 source = new InputSource(new StringReader(rawData));
             }
@@ -2152,8 +2216,9 @@ public class Util {
                         Integer rawCnt = schemaMonitor.get(rawSchemaLocationURI);
                         if (rawCnt == null) {
                             rawCnt = 0;
-                        } else
+                        } else {
                             rawCnt++;
+                        }
                         schemaMonitor.put(rawSchemaLocationURI, rawCnt);
                         if (rawCnt >= 10) {
                             schemaMonitor.put(rawSchemaLocationURI, -1);
@@ -2178,10 +2243,12 @@ public class Util {
 
                 protected SchemaLocator schemaLocator = new SchemaLocator();
 
+                @Override
                 public boolean isFactoryForType(Object type) {
                     return type == XSDSchemaLocator.class;
                 }
 
+                @Override
                 public Adapter adaptNew(Notifier target, Object type) {
                     return schemaLocator;
                 }
@@ -2203,16 +2270,18 @@ public class Util {
             // Add the root schema to the resource that was created above
             Iterator<Integer> iter = schemaMonitor.values().iterator();
             while (iter.hasNext()) {
-                Integer it = (Integer) iter.next();
-                if (it.intValue() == -1)
+                Integer it = iter.next();
+                if (it.intValue() == -1) {
                     return schema;
+                }
             }
             importSchema(schema, imports, schemaMonitor);
             schema.setElement(document.getDocumentElement());
             return schema;
         } finally {
-            if (fin != null)
+            if (fin != null) {
                 fin.close();
+            }
         }
     }
 
@@ -2277,8 +2346,9 @@ public class Util {
     }
 
     public static void copyFile(String source, String dest) {
-        if (source.equals(dest))
+        if (source.equals(dest)) {
             return;
+        }
         byte[] buf = new byte[1024];
         OutputStream os = null;
         InputStream is = null;
@@ -2293,17 +2363,19 @@ public class Util {
             // TODO Auto-generated catch block
             log.error(e.getMessage(), e);
         } finally {
-            if (is != null)
+            if (is != null) {
                 try {
                     is.close();
                 } catch (Exception e) {
                 }
+            }
             ;
-            if (os != null)
+            if (os != null) {
                 try {
                     os.close();
                 } catch (Exception e) {
                 }
+            }
             ;
         }
     }
@@ -2321,8 +2393,9 @@ public class Util {
                     if (map.get(id.getXtentisObjectName()) == null) {
                         map.put(id.getXtentisObjectName(), new ArrayList<String>());
                     }
-                    if (!map.get(id.getXtentisObjectName()).contains(id.getRevisionID()))
+                    if (!map.get(id.getXtentisObjectName()).contains(id.getRevisionID())) {
                         map.get(id.getXtentisObjectName()).add(id.getRevisionID());
+                    }
                 }
             }
         } catch (Exception e) {
@@ -2365,8 +2438,9 @@ public class Util {
                 for (WSUniversePK pk : universePKs) {
                     WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
                     for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
-                        if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID))
+                        if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID)) {
                             list.add(universe.getName());
+                        }
 
                     }
                 }
@@ -2381,15 +2455,17 @@ public class Util {
         List<WSUniverse> list = new ArrayList<WSUniverse>();
         String objectName = objectName1;
         WSUniversePK[] universePKs = null;
-        if (objectName1.equals("Transformer"))//$NON-NLS-1$
+        if (objectName1.equals("Transformer")) {
             objectName = "Transformer V2";//$NON-NLS-1$
+        }
         try {
             universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
             for (WSUniversePK pk : universePKs) {
                 WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
                 for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
-                    if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID))
+                    if (id.getXtentisObjectName().equals(objectName) && id.getRevisionID().equals(revisionID)) {
                         list.add(universe);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -2399,8 +2475,9 @@ public class Util {
     }
 
     public static boolean hasUniverse(TreeObject xobject) {
-        if (xobject.isXObject())
+        if (xobject.isXObject()) {
             return false;
+        }
         switch (xobject.getType()) {
         case TreeObject.DATA_MODEL:
         case TreeObject.VIEW:
@@ -2417,8 +2494,9 @@ public class Util {
     }
 
     public static boolean hasTags(TreeObject xobject) {
-        if (xobject.isXObject())
+        if (xobject.isXObject()) {
             return true;
+        }
         switch (xobject.getType()) {
         case TreeObject.DATA_CLUSTER: // is necessary
         case TreeObject.DATA_MODEL:
@@ -2440,46 +2518,48 @@ public class Util {
         List<String> list = new ArrayList<String>();
         list.add(wc.getLeftPath());
         String operator = "";//$NON-NLS-1$
-        if (wc.getOperator().equals(WSWhereOperator.CONTAINS))
+        if (wc.getOperator().equals(WSWhereOperator.CONTAINS)) {
             operator = "Contains";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.EQUALS))
+        } else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) {
             operator = "=";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN))
+        } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) {
             operator = ">";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL))
+        } else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL)) {
             operator = ">=";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF))
+        } else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF)) {
             operator = "Contains Text Of";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.JOIN))
+        } else if (wc.getOperator().equals(WSWhereOperator.JOIN)) {
             operator = "Join With";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN))
+        } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN)) {
             operator = "<";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL))
+        } else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL)) {
             operator = "<=";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS))
+        } else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS)) {
             operator = "!=";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH))
+        } else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH)) {
             operator = "Starts With";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS))
+        } else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS)) {
             operator = "Strict Contains";//$NON-NLS-1$
-        else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL))
+        } else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) {
             operator = "Is Empty Or Null";//$NON-NLS-1$
+        }
         list.add(operator);
         list.add(wc.getRightValueOrPath());
 
         String predicate = "";//$NON-NLS-1$
-        if (wc.getStringPredicate().equals(WSStringPredicate.AND))
+        if (wc.getStringPredicate().equals(WSStringPredicate.AND)) {
             predicate = "And";//$NON-NLS-1$
-        else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY))
+        } else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY)) {
             predicate = "Exactly";//$NON-NLS-1$
-        else if (wc.getStringPredicate().equals(WSStringPredicate.NONE))
+        } else if (wc.getStringPredicate().equals(WSStringPredicate.NONE)) {
             predicate = "";//$NON-NLS-1$
-        else if (wc.getStringPredicate().equals(WSStringPredicate.NOT))
+        } else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) {
             predicate = "Not";//$NON-NLS-1$
-        else if (wc.getStringPredicate().equals(WSStringPredicate.OR))
+        } else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) {
             predicate = "Or";//$NON-NLS-1$
-        else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND))
+        } else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND)) {
             predicate = "Strict And";//$NON-NLS-1$
+        }
         list.add(predicate);
         return list.toArray(new String[list.size()]);
     }
@@ -2497,28 +2577,29 @@ public class Util {
         List<String> list = new ArrayList<String>();
         list.add(wc.getXpath());
         String operator = "";//$NON-NLS-1$
-        if (wc.getWsOperator().equals(WSRoutingRuleOperator.CONTAINS))
+        if (wc.getWsOperator().equals(WSRoutingRuleOperator.CONTAINS)) {
             operator = "Contains";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.EQUALS))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.EQUALS)) {
             operator = "=";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN)) {
             operator = ">";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL)) {
             operator = ">=";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.MATCHES))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.MATCHES)) {
             operator = "Matches";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN)) {
             operator = "<";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL)) {
             operator = "<=";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.NOT_EQUALS))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.NOT_EQUALS)) {
             operator = "!=";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.STARTSWITH))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.STARTSWITH)) {
             operator = "Starts With";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NULL))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NULL)) {
             operator = "Is Null";//$NON-NLS-1$
-        else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NOT_NULL))
+        } else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NOT_NULL)) {
             operator = "Is Not Null";//$NON-NLS-1$
+        }
         list.add(operator);
         list.add(wc.getValue());
         list.add(wc.getName() == null ? "" : wc.getName());//$NON-NLS-1$
@@ -2531,28 +2612,29 @@ public class Util {
         wc.setXpath(values[0]);
 
         WSRoutingRuleOperator operator = null;
-        if (values[1].equals("Contains"))//$NON-NLS-1$
+        if (values[1].equals("Contains")) {
             operator = WSRoutingRuleOperator.CONTAINS;
-        else if (values[1].equals("Matches"))//$NON-NLS-1$
+        } else if (values[1].equals("Matches")) {
             operator = WSRoutingRuleOperator.MATCHES;
-        else if (values[1].equals("="))//$NON-NLS-1$
+        } else if (values[1].equals("=")) {
             operator = WSRoutingRuleOperator.EQUALS;
-        else if (values[1].equals(">"))//$NON-NLS-1$
+        } else if (values[1].equals(">")) {
             operator = WSRoutingRuleOperator.GREATER_THAN;
-        else if (values[1].equals(">="))//$NON-NLS-1$
+        } else if (values[1].equals(">=")) {
             operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
-        else if (values[1].equals("<"))//$NON-NLS-1$
+        } else if (values[1].equals("<")) {
             operator = WSRoutingRuleOperator.LOWER_THAN;
-        else if (values[1].equals("<="))//$NON-NLS-1$
+        } else if (values[1].equals("<=")) {
             operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
-        else if (values[1].equals("!="))//$NON-NLS-1$
+        } else if (values[1].equals("!=")) {
             operator = WSRoutingRuleOperator.NOT_EQUALS;
-        else if (values[1].equals("Starts With"))//$NON-NLS-1$
+        } else if (values[1].equals("Starts With")) {
             operator = WSRoutingRuleOperator.STARTSWITH;
-        else if (values[1].equals("Is Null"))//$NON-NLS-1$
+        } else if (values[1].equals("Is Null")) {
             operator = WSRoutingRuleOperator.IS_NULL;
-        else if (values[1].equals("Is Not Null"))//$NON-NLS-1$
+        } else if (values[1].equals("Is Not Null")) {
             operator = WSRoutingRuleOperator.IS_NOT_NULL;
+        }
         wc.setWsOperator(operator);
         wc.setValue(values[2]);
         wc.setName(values[3]);
@@ -2565,45 +2647,51 @@ public class Util {
         wc.setLeftPath(values[0]);
 
         WSWhereOperator operator = null;
-        if (values[1].equals("Contains"))//$NON-NLS-1$
+        if (values[1].equals("Contains")) {
             operator = WSWhereOperator.CONTAINS;
-        else if (values[1].equals("Contains Text Of"))//$NON-NLS-1$
+        } else if (values[1].equals("Contains Text Of")) {
             operator = WSWhereOperator.CONTAINS_TEXT_OF;
-        else if (values[1].equals("Join With")) {//$NON-NLS-1$
+        } else if (values[1].equals("Join With")) {//$NON-NLS-1$
             operator = WSWhereOperator.JOIN;
-        } else if (values[1].equals("="))//$NON-NLS-1$
+        } else if (values[1].equals("=")) {
             operator = WSWhereOperator.EQUALS;
-        else if (values[1].equals(">"))//$NON-NLS-1$
+        } else if (values[1].equals(">")) {
             operator = WSWhereOperator.GREATER_THAN;
-        else if (values[1].equals(">="))//$NON-NLS-1$
+        } else if (values[1].equals(">=")) {
             operator = WSWhereOperator.GREATER_THAN_OR_EQUAL;
-        else if (values[1].equals("<"))//$NON-NLS-1$
+        } else if (values[1].equals("<")) {
             operator = WSWhereOperator.LOWER_THAN;
-        else if (values[1].equals("<="))//$NON-NLS-1$
+        } else if (values[1].equals("<=")) {
             operator = WSWhereOperator.LOWER_THAN_OR_EQUAL;
-        else if (values[1].equals("!="))//$NON-NLS-1$
+        } else if (values[1].equals("!=")) {
             operator = WSWhereOperator.NOT_EQUALS;
-        else if (values[1].equals("Starts With"))//$NON-NLS-1$
+        } else if (values[1].equals("Starts With")) {
             operator = WSWhereOperator.STARTSWITH;
-        else if (values[1].equals("Strict Contains"))//$NON-NLS-1$
+        } else if (values[1].equals("Strict Contains")) {
             operator = WSWhereOperator.STRICTCONTAINS;
-        else if (values[1].equals("Is Empty Or Null"))//$NON-NLS-1$
+        } else if (values[1].equals("Is Empty Or Null")) {
             operator = WSWhereOperator.EMPTY_NULL;
+        }
         wc.setOperator(operator);
         wc.setRightValueOrPath(values[2]);
         WSStringPredicate predicate = null;
-        if (values[3].equals(""))//$NON-NLS-1$
+        if (values[3].equals("")) {
             predicate = WSStringPredicate.NONE;
-        else if (values[3].equals("Or"))//$NON-NLS-1$
+        } else if (values[3].equals("Or")) {
             predicate = WSStringPredicate.OR;
-        if (values[3].equals("And"))//$NON-NLS-1$
+        }
+        if (values[3].equals("And")) {
             predicate = WSStringPredicate.AND;
-        if (values[3].equals("Strict And"))//$NON-NLS-1$
+        }
+        if (values[3].equals("Strict And")) {
             predicate = WSStringPredicate.STRICTAND;
-        if (values[3].equals("Exactly"))//$NON-NLS-1$
+        }
+        if (values[3].equals("Exactly")) {
             predicate = WSStringPredicate.EXACTLY;
-        if (values[3].equals("Not"))//$NON-NLS-1$
+        }
+        if (values[3].equals("Not")) {
             predicate = WSStringPredicate.NOT;
+        }
         wc.setStringPredicate(predicate);
 
         return wc;
@@ -2747,21 +2835,24 @@ public class Util {
             if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
                 String name = ((XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition()).getDerivationMethod()
                         .getName();
-                if (name.equals("restriction") || ignoreRestriction) //$NON-NLS-1$
+                if (name.equals("restriction") || ignoreRestriction) {
                     list.addAll(getComplexTypeDefinitionChildren(
                             (XSDComplexTypeDefinition) complexTypeDefinition.getBaseTypeDefinition(), ignoreRestriction));
-                //
+                    //
+                }
 
             }
         }
 
         // Attributes
-        if (complexTypeDefinition.getAttributeContents() != null)
+        if (complexTypeDefinition.getAttributeContents() != null) {
             list.addAll(complexTypeDefinition.getAttributeContents());
+        }
 
         // Annotations
-        if (complexTypeDefinition.getAnnotations() != null)
+        if (complexTypeDefinition.getAnnotations() != null) {
             list.addAll(complexTypeDefinition.getAnnotations());
+        }
 
         // now check what we have in the content
 
@@ -2794,8 +2885,9 @@ public class Util {
         
         // Annotations
         if(!isBuildInType(simpleTypeDefinition)) {
-            if (simpleTypeDefinition.getAnnotations() != null)
+            if (simpleTypeDefinition.getAnnotations() != null) {
                 result.addAll(simpleTypeDefinition.getAnnotations());
+            }
         }
         
         result.add(simpleTypeDefinition);
@@ -2849,40 +2941,42 @@ public class Util {
         if ("Routing Engine V2".equals(oldString)) {//$NON-NLS-1$
             newLabel = EXtentisObjects.SubscriptionEngine.getDisplayName();
         }
-        if (newLabel == null)
+        if (newLabel == null) {
             return oldString;
-        else
+        } else {
             return newLabel;
+        }
     }
 
     public static Image getMenuImage(String menuName) {
         String menu = EImage.MENU.getPath();
-        if (menuName.startsWith("Browse"))//$NON-NLS-1$
+        if (menuName.startsWith("Browse")) {
             menu = EImage.BROWSE_MENU.getPath();
-        else if (menuName.equalsIgnoreCase("Cross Referencing"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("Cross Referencing")) {
             menu = EImage.CROSSREF.getPath();
-        else if (menuName.equalsIgnoreCase("Hierarchical View"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("Hierarchical View")) {
             menu = EImage.HIER_VIEW.getPath();
-        else if (menuName.equalsIgnoreCase("ItemsTrash"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("ItemsTrash")) {
             menu = EImage.TRASH.getPath();
-        else if (menuName.equalsIgnoreCase("logging"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("logging")) {
             menu = EImage.MENU.getPath();
-        else if (menuName.equalsIgnoreCase("Manage users"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("Manage users")) {
             menu = EImage.MANAGE_USERS.getPath();
-        else if (menuName.equalsIgnoreCase("Reporting"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("Reporting")) {
             menu = EImage.REPORTING.getPath();
-        else if (menuName.equalsIgnoreCase("Service Schedule"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("Service Schedule")) {
             menu = EImage.MENU.getPath();
-        else if (menuName.equalsIgnoreCase("SynchronizationAction"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("SynchronizationAction")) {
             menu = EImage.SYNCHRONIZE.getPath();
-        else if (menuName.equalsIgnoreCase("SynchronizationItem"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("SynchronizationItem")) {
             menu = EImage.SYNCHRO_ITEM.getPath();
-        else if (menuName.equalsIgnoreCase("Universe Manager"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("Universe Manager")) {
             menu = EImage.UNIVERSE.getPath();
-        else if (menuName.equalsIgnoreCase("UpdateReport"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("UpdateReport")) {
             menu = EImage.UPDATEREPORT.getPath();
-        else if (menuName.equalsIgnoreCase("WorkflowTasks"))//$NON-NLS-1$
+        } else if (menuName.equalsIgnoreCase("WorkflowTasks")) {
             menu = EImage.WORKFLOWTASKS.getPath();
+        }
         return ImageCache.getImage(menu).createImage();
     }
 
@@ -2912,19 +3006,24 @@ public class Util {
         dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
         dropTarget.addDropListener(new DropTargetAdapter() {
 
+            @Override
             public void dragEnter(DropTargetEvent event) {
             }
 
+            @Override
             public void dragLeave(DropTargetEvent event) {
             }
 
+            @Override
             public void dragOver(DropTargetEvent event) {
                 event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
             }
 
+            @Override
             public void drop(DropTargetEvent event) {
-                if (event.data instanceof TreeObject[])
+                if (event.data instanceof TreeObject[]) {
                     text.setText(text.getText() + ((TreeObject[]) event.data)[0].getDisplayName());
+                }
             }
         });
 
@@ -2932,10 +3031,11 @@ public class Util {
 
     public static boolean checkInCOpyTypeParticle(Object[] selectedObjs) {
         for (Object obj : selectedObjs) {
-            if (obj instanceof XSDParticle)
+            if (obj instanceof XSDParticle) {
                 continue;
-            else
+            } else {
                 return false;
+            }
         }
 
         return true;
@@ -2946,10 +3046,11 @@ public class Util {
          * if(selectedObjs.length>1) displayName = "Copy Entities";
          */
         for (Object obj : selectedObjs) {
-            if (obj instanceof XSDElementDeclaration)
+            if (obj instanceof XSDElementDeclaration) {
                 continue;
-            else
+            } else {
                 return false;
+            }
         }
 
         return true;
@@ -2980,12 +3081,14 @@ public class Util {
             WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager, null));
             versionComp += Messages.Util_47 + wsVersion.getMajor() + Messages.Util_48 + wsVersion.getMinor() + Messages.Util_49
                     + wsVersion.getRevision();
-            if (major != wsVersion.getMajor() || minor != wsVersion.getMinor())
+            if (major != wsVersion.getMajor() || minor != wsVersion.getMinor()) {
                 return versionComp;
+            }
             if (rev == 0) {
                 // major version compare
-                if (wsVersion.getRevision() != 0)
+                if (wsVersion.getRevision() != 0) {
                     return versionComp;
+                }
             }
         } catch (Exception e) {
 
@@ -3002,8 +3105,9 @@ public class Util {
             ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
             byte[] b = new byte[1000];
             int n;
-            while ((n = stream.read(b)) != -1)
+            while ((n = stream.read(b)) != -1) {
                 out.write(b, 0, n);
+            }
             stream.close();
             out.close();
             return out.toByteArray();
@@ -3089,16 +3193,18 @@ public class Util {
 
     public static boolean isSimpleTypedParticle(XSDParticle curXSDParticle) {
 
-        if (!isValidParticle(curXSDParticle))
+        if (!isValidParticle(curXSDParticle)) {
             return false;
+        }
 
         return (((XSDElementDeclaration) curXSDParticle.getContent()).getTypeDefinition() instanceof XSDSimpleTypeDefinition);
     }
 
     public static String getParticleName(XSDParticle curXSDParticle) {
 
-        if (!isValidParticle(curXSDParticle))
+        if (!isValidParticle(curXSDParticle)) {
             return "";//$NON-NLS-1$
+        }
 
         String name = ((XSDElementDeclaration) curXSDParticle.getContent()).getName();
 
@@ -3107,12 +3213,14 @@ public class Util {
 
     public static String getParticleReferenceName(XSDParticle curXSDParticle) {
 
-        if (!isValidParticle(curXSDParticle))
+        if (!isValidParticle(curXSDParticle)) {
             return "";//$NON-NLS-1$
+        }
 
         XSDElementDeclaration ref = null;
-        if (((XSDElementDeclaration) curXSDParticle.getContent()).isElementDeclarationReference())
+        if (((XSDElementDeclaration) curXSDParticle.getContent()).isElementDeclarationReference()) {
             ref = ((XSDElementDeclaration) curXSDParticle.getContent()).getResolvedElementDeclaration();
+        }
 
         return ((ref == null ? "" : ref.getQName()));//$NON-NLS-1$
     }
@@ -3127,20 +3235,24 @@ public class Util {
 
         List<String> customTypeNames = new ArrayList<String>();
 
-        for (String eachEUUIDCustomTypeName : EUUIDCustomType.allTypes())
+        for (String eachEUUIDCustomTypeName : EUUIDCustomType.allTypes()) {
             customTypeNames.add(eachEUUIDCustomTypeName);
+        }
 
         for (XSDTypeDefinition eachType : schema.getTypeDefinitions()) {
 
-            if (!(eachType instanceof XSDSimpleTypeDefinition))
+            if (!(eachType instanceof XSDSimpleTypeDefinition)) {
                 continue;
+            }
 
             if (eachType.getTargetNamespace() != null
-                    && eachType.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
+                    && eachType.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)) {
                 continue;
+            }
 
-            if (customTypeNames.contains(eachType.getName()))
+            if (customTypeNames.contains(eachType.getName())) {
                 continue;
+            }
 
             customTypeNames.add(eachType.getName());
         }
@@ -3173,14 +3285,16 @@ public class Util {
 
     public static List<XSDSimpleTypeDefinition> getAllBuildInTypes(XSDSchema schema) {
 
-        if (schema == null)
+        if (schema == null) {
             return new ArrayList<XSDSimpleTypeDefinition>();
+        }
 
         List<XSDSimpleTypeDefinition> builtInTypes = new ArrayList<XSDSimpleTypeDefinition>();
         for (XSDTypeDefinition eachBuildInTypeDef : schema.getSchemaForSchema().getTypeDefinitions()) {
 
-            if (!(eachBuildInTypeDef instanceof XSDSimpleTypeDefinition))
+            if (!(eachBuildInTypeDef instanceof XSDSimpleTypeDefinition)) {
                 continue;
+            }
 
             builtInTypes.add((XSDSimpleTypeDefinition) eachBuildInTypeDef);
         }
@@ -3207,8 +3321,9 @@ public class Util {
     public static XSDCompositor getComplexTypeGroupType(XSDComplexTypeDefinition type) {
 
         if (type == null || !(type.getContent() instanceof XSDParticle)
-                || !(((XSDParticle) type.getContent()).getContent() instanceof XSDModelGroup))
+                || !(((XSDParticle) type.getContent()).getContent() instanceof XSDModelGroup)) {
             return null;
+        }
 
         XSDParticle groupParticle = (XSDParticle) type.getContent();
         XSDModelGroup group = (XSDModelGroup) groupParticle.getContent();
@@ -3222,8 +3337,9 @@ public class Util {
     public static void updateChildrenReferenceToComplexType(XSDComplexTypeDefinition type) {
         List<XSDComplexTypeDefinition> complexTypes = getComplexTypes(type.getSchema());
         for (XSDComplexTypeDefinition complexType : complexTypes) {
-            if (complexType.equals(type))
+            if (complexType.equals(type)) {
                 continue;
+            }
 
             if (Util.getParentTypes(complexType).contains(type)) {
                 complexType.setBaseTypeDefinition(type);
@@ -3243,13 +3359,15 @@ public class Util {
         if (baseType == type) {
             return results;
         }
-        if (!results.contains(baseType))
+        if (!results.contains(baseType)) {
             results.add(baseType);
+        }
 
         if (baseType == null
                 || baseType.equals(type.getSchema().resolveTypeDefinition(type.getSchema().getSchemaForSchemaNamespace(),
-                        "anyType")))//$NON-NLS-1$
+                        "anyType"))) {
             return results;
+        }
 
         return getParentTypes(baseType, results);
 
@@ -3265,22 +3383,25 @@ public class Util {
 
     public static boolean isDecimal(XSDSimpleTypeDefinition simpleType) {
 
-        if (isSpecifiedBuildInType(simpleType, "integer"))//$NON-NLS-1$
+        if (isSpecifiedBuildInType(simpleType, "integer")) {
             return false;
+        }
 
         return isSpecifiedBuildInType(simpleType, "decimal");//$NON-NLS-1$
     }
 
     public static boolean isSpecifiedBuildInType(XSDSimpleTypeDefinition simpleType, String buildInTypeName) {
 
-        if (simpleType == null || simpleType.getSchema() == null)
+        if (simpleType == null || simpleType.getSchema() == null) {
             return false;
+        }
 
         XSDSimpleTypeDefinition systemDoubleType = simpleType.getSchema().resolveSimpleTypeDefinition(
                 simpleType.getSchema().getSchemaForSchemaNamespace(), buildInTypeName);
 
-        if (systemDoubleType == null)
+        if (systemDoubleType == null) {
             return false;
+        }
 
         return simpleType.equals(systemDoubleType) || systemDoubleType.equals(simpleType.getBaseType());
     }
@@ -3299,8 +3420,9 @@ public class Util {
                     while ((read = jarIn.read(buf, 0, 4096)) != -1) {
                         outBytes.write(buf, 0, read);
                     }
-                    if (outBytes.toByteArray().length > 0)
+                    if (outBytes.toByteArray().length > 0) {
                         return outBytes;
+                    }
                 }
             }
         } catch (Exception e) {
