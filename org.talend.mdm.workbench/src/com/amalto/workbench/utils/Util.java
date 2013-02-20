@@ -1072,9 +1072,10 @@ public class Util {
                     for (XSDParticle el : (XSDParticle[]) fromlist.toArray(new XSDParticle[fromlist.size()])) {
                         XSDTerm term = el.getTerm();
                         if (term instanceof XSDElementDeclaration) {
-                            if (term.equals(element)) {
+                            if (isReferrenced(element, (XSDElementDeclaration) term)) {
                                 continue;
                             }
+
                             XSDAnnotation annotation = ((XSDElementDeclaration) term).getAnnotation();
 
                             if (annotation != null) {
@@ -1087,6 +1088,29 @@ public class Util {
             }
         }
 
+    }
+
+    private static boolean isReferrenced(XSDElementDeclaration element, XSDElementDeclaration term) {
+        if (element == term) {
+            return true;
+        }
+        if (term.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+            XSDComplexTypeContent fromcomplexType = ((XSDComplexTypeDefinition) term.getTypeDefinition()).getContent();
+            if (fromcomplexType instanceof XSDParticle) {
+                XSDParticle particle = (XSDParticle) fromcomplexType;
+                if (particle.getTerm() instanceof XSDModelGroup) {
+                    XSDModelGroup modelGroup = ((XSDModelGroup) particle.getTerm());
+                    EList<?> fromlist = modelGroup.getContents();
+                    for (Object obj : fromlist) {
+                        XSDTerm t = ((XSDParticle) obj).getTerm();
+                        if (t == element) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     // keep all foreignkeys in the memory to improve performance
