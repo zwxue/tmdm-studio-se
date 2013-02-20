@@ -702,7 +702,7 @@ public class RepositoryResourceUtil {
         try {
             for (IResource res : folder.members()) {
                 if (res instanceof IFolder) {
-                    if (!isDeletedFolder((IFolder) res) && !isSVNFolder((IFolder) res)) {
+                    if ((withDeleted || !isDeletedFolder((IFolder) res)) && !isSVNFolder((IFolder) res)) {
                         IRepositoryViewObject folderObject = null;
 
                         // firstly,to get the cached one, if not find, create it
