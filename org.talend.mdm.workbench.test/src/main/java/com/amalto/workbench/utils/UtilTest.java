@@ -12,18 +12,41 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
+import static org.junit.Assert.*;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.rmi.CORBA.Util;
-
+import org.apache.axis.utils.IOUtils;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDCompositor;
+import org.eclipse.xsd.XSDConcreteComponent;
+import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDSimpleTypeDefinition;
+import org.eclipse.xsd.XSDTypeDefinition;
+import org.eclipse.xsd.XSDXPathDefinition;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.webservices.WSRoutingRuleExpression;
+import com.amalto.workbench.webservices.WSRoutingRuleOperator;
+import com.amalto.workbench.webservices.WSStringPredicate;
+import com.amalto.workbench.webservices.WSWhereCondition;
+import com.amalto.workbench.webservices.WSWhereOperator;
 
 public class UtilTest {
 
