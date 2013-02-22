@@ -52,12 +52,14 @@ public abstract class ListStringContentsComposite extends Composite {
     protected Button btnRemove;
 
     protected List<String> infos = new ArrayList<String>();
-    
+
     protected BasePropertySection section;
 
-    public ListStringContentsComposite(Composite parent, int style, Object[] initParas,BasePropertySection section) {
+    private boolean treeContentChanged = false;
+
+    public ListStringContentsComposite(Composite parent, int style, Object[] initParas, BasePropertySection section) {
         super(parent, style);
-        this.section=section;
+        this.section = section;
         initParas(initParas);
 
         final GridLayout gridLayout = new GridLayout();
@@ -69,7 +71,7 @@ public abstract class ListStringContentsComposite extends Composite {
         btnAdd = new Button(this, SWT.NONE);
         btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
         btnAdd.setToolTipText(Messages._Add);
-        
+
         tvInfos = new TreeViewer(this, SWT.FULL_SELECTION | SWT.BORDER);
         Tree tree = tvInfos.getTree();
         tree.setLinesVisible(true);
@@ -87,14 +89,14 @@ public abstract class ListStringContentsComposite extends Composite {
         btnUp = new Button(this, SWT.NONE);
         btnUp.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
         btnUp.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
-		btnUp.setToolTipText(Messages._Up);
-		
+        btnUp.setToolTipText(Messages._Up);
+
         btnDown = new Button(this, SWT.NONE);
         btnDown.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
         final GridData gd_btnDown = new GridData(SWT.CENTER, SWT.TOP, false, false);
         btnDown.setLayoutData(gd_btnDown);
         btnDown.setToolTipText(Messages._Down);
-        
+
         btnRemove = new Button(this, SWT.NONE);
         btnRemove.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
         btnRemove.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
@@ -205,16 +207,20 @@ public abstract class ListStringContentsComposite extends Composite {
 
     private void addInfoToInfoTree(String info) {
         infos.add(info);
+        treeContentChanged = true;
 
         tvInfos.refresh();
-        if(section!=null)section.autoCommit();
+        if (section != null)
+            section.autoCommit();
     }
 
     private void removeInfoFromInfoTree(String info) {
         infos.remove(info);
+        treeContentChanged = true;
 
         tvInfos.refresh();
-        if(section!=null)section.autoCommit();
+        if (section != null)
+            section.autoCommit();
     }
 
     private boolean hasSelectionInInfoTree() {
@@ -247,7 +253,8 @@ public abstract class ListStringContentsComposite extends Composite {
         infos.remove(info);
         infos.add(newIndex, info);
         tvInfos.refresh();
-        if(section!=null)section.autoCommit();
+        if (section != null)
+            section.autoCommit();
     }
 
     public void setInfos(String[] infos) {
@@ -266,6 +273,13 @@ public abstract class ListStringContentsComposite extends Composite {
         }
 
         tvInfos.refresh();
+    }
+
+    public boolean isContentChanged() {
+        boolean changed = treeContentChanged;
+        treeContentChanged = false;
+
+        return changed;
     }
 
     protected abstract String getInfoColTitle();

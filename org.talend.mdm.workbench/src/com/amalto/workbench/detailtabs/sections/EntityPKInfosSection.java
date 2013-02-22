@@ -55,7 +55,19 @@ public class EntityPKInfosSection extends XSDComponentSection {
 
     @Override
     protected ISubmittable getSubmittedObj() {
-        return new PrimaryKeyInfosAnnoInfo(curXSDComponent, compElements.getInfos());
+        String[] pkinfos = getPkInfos();
+
+        return new PrimaryKeyInfosAnnoInfo(curXSDComponent, pkinfos);
+    }
+
+    private String[] getPkInfos() {
+        String[] pkinfos = new XSDAnnotationsStructure(curXSDComponent).getPrimaryKeyInfos().values().toArray(new String[0]);
+
+        if (compElements.isContentChanged()) {
+            pkinfos = compElements.getInfos();
+        }
+
+        return pkinfos;
     }
 
     @Override
