@@ -30,7 +30,6 @@ import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
-import org.talend.core.model.repository.DynaEnum;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -49,7 +48,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class ServerDefService implements ILegendServerDefService {
 
@@ -58,26 +57,29 @@ public class ServerDefService implements ILegendServerDefService {
     private static Map<String, String> tmpPasswordCache = new HashMap<String, String>();
 
     public static void updateTempPassword(String id, String password) {
-        if (id == null)
+        if (id == null) {
             throw new IllegalArgumentException();
-        if (password != null && password.length() > 0)
+        }
+        if (password != null && password.length() > 0) {
             tmpPasswordCache.put(id, password);
-        else
+        } else {
             tmpPasswordCache.remove(id);
+        }
     }
 
     public static String getTempPassword(String id) {
-        if (id == null)
+        if (id == null) {
             throw new IllegalArgumentException();
+        }
         return tmpPasswordCache.get(id);
     }
 
-    public static ERepositoryObjectType REPOSITORY_TYPE_SERVER_DEF = DynaEnum.valueOf(ERepositoryObjectType.class,
+    public static ERepositoryObjectType REPOSITORY_TYPE_SERVER_DEF = ERepositoryObjectType.valueOf(ERepositoryObjectType.class,
             "MDM.ServerDef"); //$NON-NLS-1$
 
     /**
      * Warning: the return result is a encrypted List
-     *
+     * 
      * @return
      */
     public static List<IRepositoryViewObject> getAllServerDefViewObjects() {
@@ -107,7 +109,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /**
      * Warning: the return result is a decrypted serverDef
-     *
+     * 
      * @return
      */
     public static List<MDMServerDef> getAllServerDefs() {
@@ -128,7 +130,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /**
      * DOC hbhong Comment method "deleteServerDef".
-     *
+     * 
      * @param viewObject
      */
     public static boolean deleteServerDef(IRepositoryViewObject viewObject) {
@@ -147,31 +149,35 @@ public class ServerDefService implements ILegendServerDefService {
     }
 
     public static boolean isExistServerDefName(String name) {
-        if (name == null)
+        if (name == null) {
             throw new IllegalArgumentException();
+        }
         List<MDMServerDef> serverDefs = getAllServerDefs();
         if (serverDefs != null) {
             for (MDMServerDef def : serverDefs) {
-                if (def.getName().equalsIgnoreCase(name))
+                if (def.getName().equalsIgnoreCase(name)) {
                     return true;
+                }
             }
         }
         return false;
     }
 
     /**
-     *
+     * 
      * @param name
      * @return a decrypted serverDef
      */
     public static MDMServerDef findServerDefByName(String name) {
-        if (name == null)
+        if (name == null) {
             throw new IllegalArgumentException();
+        }
         List<MDMServerDef> serverDefs = getAllServerDefs();
         if (serverDefs != null) {
             for (MDMServerDef def : serverDefs) {
-                if (def.getName().equalsIgnoreCase(name))
+                if (def.getName().equalsIgnoreCase(name)) {
                     return def;
+                }
             }
         }
         return null;
@@ -227,7 +233,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /**
      * check connection
-     *
+     * 
      * @param serverDef need a decrypted serverDef
      * @return
      */
@@ -242,10 +248,11 @@ public class ServerDefService implements ILegendServerDefService {
             port.ping(new WSPing("ServerExplorer")); //$NON-NLS-1$
             return true;
         } catch (RemoteException e) {
-            if(log.isDebugEnabled())
+            if (log.isDebugEnabled()) {
                 log.debug(e.getMessage(), e);
-            else
+            } else {
                 log.info(e.getMessage());
+            }
         } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
         } catch (XtentisException e) {
@@ -279,7 +286,7 @@ public class ServerDefService implements ILegendServerDefService {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see com.amalto.workbench.service.ILegendServerDefService#getLegendServerDefs()
      */
     public List<com.amalto.workbench.utils.MDMServerDef> getLegendServerDefs() {
