@@ -276,10 +276,11 @@ public abstract class ListStringContentsComposite extends Composite {
     }
 
     public boolean isContentChanged() {
-        boolean changed = treeContentChanged;
-        treeContentChanged = false;
+        return treeContentChanged;
+    }
 
-        return changed;
+    public void setContentChanged(boolean changed) {
+        this.treeContentChanged = false;
     }
 
     protected abstract String getInfoColTitle();

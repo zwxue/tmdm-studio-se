@@ -64,6 +64,7 @@ public class EntityPKInfosSection extends XSDComponentSection {
         String[] pkinfos = new XSDAnnotationsStructure(curXSDComponent).getPrimaryKeyInfos().values().toArray(new String[0]);
 
         if (compElements.isContentChanged()) {
+            compElements.setContentChanged(false);
             pkinfos = compElements.getInfos();
         }
 
