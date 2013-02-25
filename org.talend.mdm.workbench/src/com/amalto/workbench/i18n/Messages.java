@@ -16,19 +16,19 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * Default implementation of MessageCore from org.talend.commons plug-in.<br/>
- * 
+ *
  * Developpers can copy this class in their plug-in and change :
  * <ul>
  * <li>the BUNDLE_NAME constant</li>
  * </ul>
- * 
+ *
  * $Id: Messages.java 23594 2009-04-13 10:33:00Z nrousseau $
- * 
+ *
  */
 public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "com.amalto.workbench.i18n.messages"; //$NON-NLS-1$
-    
+
     public static String DeployOnMDMAction_DeployToMDM;
 
     public static String _Add;
@@ -1573,6 +1573,10 @@ public class Messages extends NLS {
 
     public static String PageingToolBar_FirstPage;
 
+    public static String PageingToolBar_inputValidNumber;
+
+    public static String PageingToolBar_invalidNumber;
+
     public static String PageingToolBar_LabelText;
 
     public static String PageingToolBar_LastPage;
@@ -3100,7 +3104,7 @@ public class Messages extends NLS {
     public static String bind(String message, String... bindings) {
         return NLS.bind(message, bindings);
     }
-    
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Class initialization

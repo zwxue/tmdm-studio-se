@@ -12,11 +12,15 @@
 // ============================================================================
 package com.amalto.workbench.widgets;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -110,45 +114,65 @@ public class PageingToolBar {
 
         public void keyReleased(KeyEvent e) {
 
-            int keyCode = e.keyCode;
-            if (keyCode == SWT.CR || keyCode == SWT.KEYPAD_CR) {
-                try {
-                    page = Integer.valueOf(pageText.getText());
-                    pagesize = Integer.valueOf(pageSizeText.getText());
-                    totalpage = totalsize / pagesize + 1;
-                    if (page > totalpage) {
-                        page = totalpage;
-                        pageText.setText(String.valueOf(page));
-                    }
-                    if (page < 1) {
-                        page = 1;
-                        pageText.setText(String.valueOf(page));
-                    }
-                    if (listener != null) {
-                        listener.doSearch();
-                    }
-                    refreshUI();
-                } catch (NumberFormatException e1) {
-                    // do nothing
-                }
+            if (e.keyCode == SWT.CR) {
+                doSearchAndRefresh();
             }
         }
 
         public void keyPressed(KeyEvent e) {
-            int keyCode = e.keyCode;
-            char c = e.character;
-            if ((c < '0' || c > '9') && c != '\b' && keyCode != SWT.DEL && keyCode != SWT.CR && keyCode != SWT.ARROW_LEFT
-                    && keyCode != SWT.ARROW_RIGHT && keyCode != SWT.KEYPAD_CR) {
+        }
+    };
+
+    VerifyListener validator = new VerifyListener() {
+
+        public void verifyText(VerifyEvent e) {
+            String pattern = "[0-9]*"; //$NON-NLS-1$
+            boolean valid = true;
+
+            Text text = (Text) e.getSource();
+            if (text.getText().isEmpty() && e.text.startsWith("0")) {//$NON-NLS-1$
+                valid = false;
+                MessageDialog.openWarning(getComposite().getShell(), Messages.Warning, Messages.PageingToolBar_inputValidNumber);
                 e.doit = false;
-                return;
             }
 
+            if (valid) {
+                // selection occured
+                Point selection = text.getSelection();
+                if (selection.x != selection.y && selection.x == 0) {
+                    if (e.text.startsWith("0")) {//$NON-NLS-1$
+                        valid = false;
+                        MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
+                                Messages.PageingToolBar_inputValidNumber);
+                        e.doit = false;
+                    }
+                }
+            }
+
+            if (valid) {
+                valid = e.text.matches(pattern);
+                if (!valid) {
+                    e.doit = false;
+                    MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
+                            Messages.PageingToolBar_inputValidNumber);
+                }
+            }
         }
     };
 
     SelectionListener selListener = new SelectionListener() {
 
         public void widgetSelected(SelectionEvent e) {
+            doSearchAndRefresh();
+        }
+
+        public void widgetDefaultSelected(SelectionEvent e) {
+
+        }
+    };
+
+    private void doSearchAndRefresh() {
+        if (isPageNumValid()) {
             page = Integer.valueOf(pageText.getText());
             pagesize = Integer.valueOf(pageSizeText.getText());
             totalpage = totalsize / pagesize + 1;
@@ -157,11 +181,19 @@ public class PageingToolBar {
             }
             refreshUI();
         }
+    }
 
-        public void widgetDefaultSelected(SelectionEvent e) {
+    private boolean isPageNumValid() {
+        page = Integer.valueOf(pageText.getText());
+        pagesize = Integer.valueOf(pageSizeText.getText());
 
+        boolean valid = (page * pagesize <= totalsize) || ((page - 1) * pagesize < totalsize && page * pagesize > totalsize);
+        if (!valid) {
+            MessageDialog.openWarning(getComposite().getShell(), Messages.Warning, Messages.PageingToolBar_invalidNumber);
         }
-    };
+
+        return valid;
+    }
 
     private Composite comp;
 
@@ -201,6 +233,7 @@ public class PageingToolBar {
         gd.widthHint = 25;
         pageText.setLayoutData(gd);
         pageText.addKeyListener(keylistener);
+        pageText.addVerifyListener(validator);
 
         totalPage = toolkit.createLabel(comp, Messages.bind(Messages.PageingToolBar_LabelText, totalpage), SWT.NULL);
         gd = new GridData();
@@ -246,6 +279,7 @@ public class PageingToolBar {
         gd.widthHint = 25;
         pageSizeText.setLayoutData(gd);
         pageSizeText.addKeyListener(keylistener);
+        pageSizeText.addVerifyListener(validator);
 
         // display items
         displayItems = toolkit.createLabel(comp, "");//$NON-NLS-1$
