@@ -12,11 +12,15 @@
 // ============================================================================
 package com.amalto.workbench.widgets;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -109,15 +113,9 @@ public class PageingToolBar {
     KeyListener keylistener = new KeyListener() {
 
         public void keyReleased(KeyEvent e) {
-            
+
             if (e.keyCode == SWT.CR) {
-                page = Integer.valueOf(pageText.getText());
-                pagesize = Integer.valueOf(pageSizeText.getText());
-                totalpage = totalsize / pagesize + 1;
-                if (listener != null) {
-                    listener.doSearch();
-                }
-                refreshUI();
+                doSearchAndRefresh();
             }
         }
 
@@ -126,9 +124,45 @@ public class PageingToolBar {
         }
     };
 
-    SelectionListener selListener = new SelectionListener() {
+    VerifyListener validator = new VerifyListener() {
 
-        public void widgetSelected(SelectionEvent e) {
+        public void verifyText(VerifyEvent e) {
+            String pattern = "[0-9]*"; //$NON-NLS-1$
+            boolean valid = true;
+
+            Text text = (Text) e.getSource();
+            if (text.getText().isEmpty() && e.text.startsWith("0")) {//$NON-NLS-1$
+                valid = false;
+                MessageDialog.openWarning(getComposite().getShell(), Messages.Warning, Messages.PageingToolBar_inputValidNumber);
+                e.doit = false;
+            }
+
+            if (valid) {
+                // selection occured
+                Point selection = text.getSelection();
+                if (selection.x != selection.y && selection.x == 0) {
+                    if (e.text.startsWith("0")) {//$NON-NLS-1$
+                        valid = false;
+                        MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
+                                Messages.PageingToolBar_inputValidNumber);
+                        e.doit = false;
+                    }
+                }
+            }
+
+            if (valid) {
+                valid = e.text.matches(pattern);
+                if (!valid) {
+                    e.doit = false;
+                    MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
+                            Messages.PageingToolBar_inputValidNumber);
+                }
+            }
+        }
+    };
+
+    private void doSearchAndRefresh() {
+        if (isPageNumValid()) {
             page = Integer.valueOf(pageText.getText());
             pagesize = Integer.valueOf(pageSizeText.getText());
             totalpage = totalsize / pagesize + 1;
@@ -137,9 +171,27 @@ public class PageingToolBar {
             }
             refreshUI();
         }
+    }
+
+    private boolean isPageNumValid() {
+        page = Integer.valueOf(pageText.getText());
+        pagesize = Integer.valueOf(pageSizeText.getText());
+
+        boolean valid = (page * pagesize <= totalsize) || ((page - 1) * pagesize < totalsize && page * pagesize > totalsize);
+        if (!valid) {
+            MessageDialog.openWarning(getComposite().getShell(), Messages.Warning, Messages.PageingToolBar_invalidNumber);
+        }
+
+        return valid;
+    }
+
+    SelectionListener selListener = new SelectionListener() {
+
+        public void widgetSelected(SelectionEvent e) {
+            doSearchAndRefresh();
+        }
 
         public void widgetDefaultSelected(SelectionEvent e) {
-            
 
         }
     };
@@ -182,6 +234,7 @@ public class PageingToolBar {
         gd.widthHint = 25;
         pageText.setLayoutData(gd);
         pageText.addKeyListener(keylistener);
+        pageText.addVerifyListener(validator);
 
         totalPage = toolkit.createLabel(comp, Messages.bind(Messages.PageingToolBar_LabelText, totalpage), SWT.NULL);
         gd = new GridData();
@@ -227,6 +280,7 @@ public class PageingToolBar {
         gd.widthHint = 25;
         pageSizeText.setLayoutData(gd);
         pageSizeText.addKeyListener(keylistener);
+        pageSizeText.addVerifyListener(validator);
 
         // display items
         displayItems = toolkit.createLabel(comp, "");//$NON-NLS-1$
@@ -245,7 +299,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -260,7 +313,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -275,7 +327,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -290,7 +341,6 @@ public class PageingToolBar {
             }
 
             public void widgetDefaultSelected(SelectionEvent e) {
-                
 
             }
         });
@@ -299,7 +349,8 @@ public class PageingToolBar {
 
     public void refreshUI() {
         long count = page * pagesize > totalsize ? totalsize : page * pagesize;
-        displayItems.setText(Messages.bind(Messages.PageingToolBar_DisplayText, ((page - 1) * pagesize + 1)+"", ""+count, ""+totalsize));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        displayItems.setText(Messages.bind(Messages.PageingToolBar_DisplayText,
+                ((page - 1) * pagesize + 1) + "", "" + count, "" + totalsize));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         pageSizeText.setText("" + pagesize);//$NON-NLS-1$
         pageText.setText("" + page);//$NON-NLS-1$
         totalPage.setText(Messages.bind(Messages.PageingToolBar_LabelText, totalpage));
