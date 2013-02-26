@@ -46,6 +46,7 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+import com.amalto.workbench.detailtabs.sections.handlers.RefreshPropertySheetTitleHandler;
 import com.amalto.workbench.detailtabs.sections.providers.XSDNamedComponentLabelProvider;
 import com.amalto.workbench.detailtabs.sections.util.simpletype.SimpleTypeFacetPropSourceBuilder;
 import com.amalto.workbench.i18n.Messages;
@@ -263,8 +264,11 @@ public class SimpleTypeConfigComposite extends Composite {
 			
 			public void modifyText(ModifyEvent e) {
 				caretOffset = txtName.getCaretPosition();
-				if(section!=null && !txtName.getText().equals(xsdSimpleType.getName()))
-					section.autoCommit();				
+                if (section != null && !txtName.getText().equals(xsdSimpleType.getName())) {
+                    section.autoCommit();
+
+                    RefreshPropertySheetTitleHandler.refreshPropertySheetTitle(section, xsdSimpleType);
+                }
 			}
 		};
 		
