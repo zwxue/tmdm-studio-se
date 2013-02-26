@@ -1559,6 +1559,8 @@ public class Messages extends NLS {
 
     public static String PageingToolBar_FirstPage;
 
+    public static String PageingToolBar_greaterThanZero;
+
     public static String PageingToolBar_inputValidNumber;
 
     public static String PageingToolBar_invalidNumber;
