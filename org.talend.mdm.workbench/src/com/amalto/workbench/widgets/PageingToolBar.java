@@ -20,7 +20,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -127,35 +126,9 @@ public class PageingToolBar {
 
         public void verifyText(VerifyEvent e) {
             String pattern = "[0-9]*"; //$NON-NLS-1$
-            boolean valid = true;
 
-            Text text = (Text) e.getSource();
-            if (text.getText().isEmpty() && e.text.startsWith("0")) {//$NON-NLS-1$
-                valid = false;
-                MessageDialog.openWarning(getComposite().getShell(), Messages.Warning, Messages.PageingToolBar_inputValidNumber);
+            if (!e.text.matches(pattern)) {
                 e.doit = false;
-            }
-
-            if (valid) {
-                // selection occured
-                Point selection = text.getSelection();
-                if (selection.x != selection.y && selection.x == 0) {
-                    if (e.text.startsWith("0")) {//$NON-NLS-1$
-                        valid = false;
-                        MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
-                                Messages.PageingToolBar_inputValidNumber);
-                        e.doit = false;
-                    }
-                }
-            }
-
-            if (valid) {
-                valid = e.text.matches(pattern);
-                if (!valid) {
-                    e.doit = false;
-                    MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
-                            Messages.PageingToolBar_inputValidNumber);
-                }
             }
         }
     };
@@ -187,9 +160,24 @@ public class PageingToolBar {
         page = Integer.valueOf(pageText.getText());
         pagesize = Integer.valueOf(pageSizeText.getText());
 
+        if (pagesize == 0) {
+            MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
+                    Messages.PageingToolBar_greaterThanZero);
+            return false;
+        }
+
+        totalpage = totalsize % pagesize == 0 ? totalsize / pagesize : totalsize / pagesize + 1;
+        totalPage.setText(Messages.bind(Messages.PageingToolBar_LabelText, totalpage));
+        if (page == 0) {
+            MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
+                    Messages.bind(Messages.PageingToolBar_invalidNumber, totalpage));
+            return false;
+        }
+
         boolean valid = (page * pagesize <= totalsize) || ((page - 1) * pagesize < totalsize && page * pagesize > totalsize);
         if (!valid) {
-            MessageDialog.openWarning(getComposite().getShell(), Messages.Warning, Messages.PageingToolBar_invalidNumber);
+            MessageDialog.openWarning(getComposite().getShell(), Messages.Warning,
+                    Messages.bind(Messages.PageingToolBar_invalidNumber, totalpage));
         }
 
         return valid;
