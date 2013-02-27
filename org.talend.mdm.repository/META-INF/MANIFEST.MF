@@ -39,7 +39,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.log4j
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.apache.commons.logging
+Import-Package: org.apache.commons.logging,
+ org.apache.http,
+ org.apache.http.auth,
+ org.apache.http.client,
+ org.apache.http.client.methods,
+ org.apache.http.impl,
+ org.apache.http.impl.client
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-ClassPath: .,
  META-INF/lib/castor-1.1-xml.jar
