@@ -12,11 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.model;
 
+import org.talend.mdm.repository.core.validate.IModelMarkerConst;
+
 /**
  * created by HHB on 2013-1-8 Detailled comment
  * 
  */
-public interface IDataModelMarkerConst {
+public interface IDataModelMarkerConst extends IModelMarkerConst {
 
     public static final String ENTITY = "entity"; //$NON-NLS-1$
 

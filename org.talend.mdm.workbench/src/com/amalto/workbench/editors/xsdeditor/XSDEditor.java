@@ -462,6 +462,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             }
             return new TabbedPropertySheetPage(this) {
 
+                @Override
                 protected void refreshTitleBar() {
                     TabbedPropertyTitle title = ((TabbedPropertyComposite) getControl()).getTitle();
                     if (getCurrentTab() == null) {
@@ -542,8 +543,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             log.error(e.getMessage(), e);
         } finally {
             try {
-                XSDEditorInput editorInput = (XSDEditorInput) getEditorInput();
-                editorInput.dispose();
+
+                IEditorInput input = getEditorInput();
+                if (input != null && input instanceof XSDEditorInput) {
+                    XSDEditorInput editorInput = (XSDEditorInput) input;
+                    editorInput.dispose();
+                }
                 System.gc();
             } catch (Throwable e) {
                 log.error(e.getMessage(), e);

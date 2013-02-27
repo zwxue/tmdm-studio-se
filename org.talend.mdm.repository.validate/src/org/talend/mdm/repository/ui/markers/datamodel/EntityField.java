@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.internal.views.markers.MarkerSupportInternalUtilities;
 import org.eclipse.ui.views.markers.MarkerItem;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-5 Detailled comment

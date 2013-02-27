@@ -65,7 +65,7 @@
                   to implement IComponentValidateVisitor, or  extend AbstractElementVisitor (for Element)
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.AbstractComponentValidationRule:org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule"/>
+                  <meta.attribute kind="java" basedOn="org.talend.mdm.repository.core.validate.datamodel.validator.rule.AbstractComponentValidationRule:org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule"/>
                </appinfo>
             </annotation>
          </attribute>

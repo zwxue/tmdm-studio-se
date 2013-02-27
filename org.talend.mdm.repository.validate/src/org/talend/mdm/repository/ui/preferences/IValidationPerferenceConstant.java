@@ -19,4 +19,6 @@ package org.talend.mdm.repository.ui.preferences;
 public interface IValidationPerferenceConstant {
 
     public static final String SHOW_RESULT_DIALOG_AFTER_IMMEDIATE = "show_result_dialog_after_immediate"; //$NON-NLS-1$
+
+    public static final String SHOW_RESULT_DIALOG_AFTER_SAVING = "show_result_dialog_after_saving"; //$NON-NLS-1$    
 }

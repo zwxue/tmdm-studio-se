@@ -37,6 +37,8 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
@@ -52,6 +54,7 @@ import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -90,6 +93,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.operations.UndoRedoActionGroup;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.EditorPart;
@@ -225,7 +229,7 @@ import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-public class DataModelMainPage extends EditorPart implements ModifyListener {
+public class DataModelMainPage extends EditorPart implements ModifyListener, IGotoMarker {
 
     public static final String ADDITIONMENUID = "talend.menuadition.datamodel";//$NON-NLS-1$
 
@@ -694,6 +698,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         viewer.setInput(this.getSite());// getViewSite());
         viewer.getTree().addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (isReadOnly()) {
                     return;
@@ -882,6 +887,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         typesViewer.setInput(this.getSite());// getViewSite());
         typesViewer.getTree().addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent e) {
                 if (isReadOnly()) {
                     return;
@@ -2982,4 +2988,99 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         Object readOnly = getEditorInput().getAdapter(Boolean.class);
         return ((Boolean) readOnly).booleanValue();
     }
+
+    private static final String DOM_ELEMENT = "domElement"; //$NON-NLS-1$
+
+    private static final String MSG_GROUP = "messageGroup"; //$NON-NLS-1$
+
+    // to mark the error is caused by UNKNOW
+    private static final int MSG_GROUP_UNKNOW = 0;
+
+    // to mark the error is caused by Entity
+    private static final int MSG_GROUP_ENTITY = 1;
+
+    // to mark the error is caused by Element
+    private static final int MSG_GROUP_ELEMENT = 2;
+
+    // to mark the error is caused by Type
+    private static final int MSG_GROUP_TYPE = 4;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
+     */
+    public void gotoMarker(IMarker marker) {
+        try {
+            Object domElement = marker.getAttribute(DOM_ELEMENT);
+            Integer msgGroup = (Integer) marker.getAttribute(MSG_GROUP);
+
+            if (domElement != null && msgGroup != null) {
+                switch (msgGroup) {
+                case MSG_GROUP_TYPE:
+                    activeMarkerItem(typesViewer, (Element) domElement);
+                    break;
+                case MSG_GROUP_ELEMENT:
+                case MSG_GROUP_ENTITY:
+                    activeMarkerItem(viewer, (Element) domElement);
+                    break;
+                default:
+                    break;
+                }
+
+            }
+
+        } catch (CoreException e) {
+            log.error(e.getMessage(), e);
+        }
+
+    }
+
+    private void activeMarkerItem(TreeViewer v, Element dom) {
+        ITreeContentProvider provider = (ITreeContentProvider) v.getContentProvider();
+        for (Object data : provider.getElements(xsdSchema)) {
+            Object[] foundData = findMarkerData(provider, data, dom, new Object[0]);
+            if (foundData != null) {
+                TreePath treePath = new TreePath(foundData);
+                v.setSelection(new TreeSelection(treePath));
+                return;
+            }
+        }
+    }
+
+    private Object[] findMarkerData(ITreeContentProvider provider, Object data, Element dom, Object[] pathData) {
+
+        Element dataElement = null;
+
+        if (data != null) {
+            Object[] newPathData = contructNewPathData(pathData, data);
+            if (data instanceof XSDComponent) {
+                dataElement = ((XSDComponent) data).getElement();
+            } else if (data instanceof Element) {
+                dataElement = (Element) data;
+            }
+            if (dataElement != null && dataElement.isEqualNode(dom)) {
+
+                return newPathData;
+            }
+            for (Object childData : provider.getElements(data)) {
+
+                Object[] foundData = findMarkerData(provider, childData, dom, newPathData);
+                if (foundData != null) {
+                    return foundData;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Object[] contructNewPathData(Object[] oldPathData, Object newData) {
+        int length = oldPathData.length;
+        Object[] returnPath = new Object[length + 1];
+        System.arraycopy(oldPathData, 0, returnPath, 0, length);
+        returnPath[length] = newData;
+        return returnPath;
+    }
+
 }

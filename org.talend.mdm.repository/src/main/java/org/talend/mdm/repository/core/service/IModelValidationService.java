@@ -24,6 +24,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
  */
 public interface IModelValidationService extends IService {
 
+    public static final int MODEL_TYPE_DATAMODEL = 1;
+
     public static final int VALIDATE_IMMEDIATE = 1;
 
     public static final int VALIDATE_AFTER_SAVE = 2;

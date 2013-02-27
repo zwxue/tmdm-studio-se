@@ -12,17 +12,23 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.IGotoMarker;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -124,19 +130,42 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         IRepositoryViewObject viewObject = editorInput.getViewObject();
         Item item = viewObject.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-
-        //
-        DeployService deployService = DeployService.getInstance();
-        if (deployService.isAutoDeploy()) {
-            deployService.autoDeploy(getSite().getShell(), viewObject);
-        } else if (serverObject.getLastServerDef() != null) {
-            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
+        int result = validateModel(viewObject);
+        if (result == IModelValidationService.BUTTON_OK) {
+            //
+            DeployService deployService = DeployService.getInstance();
+            if (deployService.isAutoDeploy()) {
+                deployService.autoDeploy(getSite().getShell(), viewObject);
+            } else if (serverObject.getLastServerDef() != null) {
+                CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
+            }
         }
+    }
+
+    private int validateModel(IRepositoryViewObject viewObject) {
+        IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
+                IModelValidationService.class);
+        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+        viewObjs.add(viewObject);
+        return service.validate(viewObjs, IModelValidationService.VALIDATE_AFTER_SAVE);
     }
 
     @Override
     public DataModelMainPage getdMainPage() {
         return dMainPage;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.amalto.workbench.editors.xsdeditor.XSDEditor#getAdapter(java.lang.Class)
+     */
+    @Override
+    public Object getAdapter(Class type) {
+        if (type == IGotoMarker.class) {
+            return dMainPage;
+        }
+        return super.getAdapter(type);
     }
 
 }

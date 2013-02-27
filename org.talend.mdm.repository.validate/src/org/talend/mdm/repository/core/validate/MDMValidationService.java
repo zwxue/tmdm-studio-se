@@ -17,6 +17,8 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.IModelValidationService;
+import org.talend.mdm.repository.core.validate.impl.AfterSavingValidationPreference;
+import org.talend.mdm.repository.core.validate.impl.BeforeDeployingValidationPreference;
 import org.talend.mdm.repository.core.validate.impl.ImmediateValidationPreference;
 
 /**
@@ -26,6 +28,10 @@ import org.talend.mdm.repository.core.validate.impl.ImmediateValidationPreferenc
 public class MDMValidationService implements IModelValidationService {
 
     private IValidationPreference immediatePref = new ImmediateValidationPreference();
+
+    private IValidationPreference afterSavingPref = new AfterSavingValidationPreference();
+
+    private IValidationPreference beforeDeployingPref = new BeforeDeployingValidationPreference();
 
     /*
      * (non-Javadoc)
@@ -38,7 +44,10 @@ public class MDMValidationService implements IModelValidationService {
             switch (condition) {
             case VALIDATE_IMMEDIATE:
                 return MDMValidationRunner.validate(viewObjs, immediatePref);
-
+            case VALIDATE_AFTER_SAVE:
+                return MDMValidationRunner.validate(viewObjs, afterSavingPref);
+            case VALIDATE_BEFORE_DEPLOY:
+                return MDMValidationRunner.validate(viewObjs, beforeDeployingPref);
             default:
                 break;
             }

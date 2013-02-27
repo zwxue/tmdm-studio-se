@@ -14,8 +14,8 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
 
 import java.util.List;
 
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.ValidateRuleRegistry;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.ValidateRuleRegistry;
 
 /**
  * created by HHB on 2013-1-29 Detailled comment

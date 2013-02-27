@@ -15,7 +15,7 @@ package org.talend.mdm.repository.ui.markers.datamodel;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.views.markers.MarkerField;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-16 Detailled comment

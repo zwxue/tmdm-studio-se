@@ -20,7 +20,7 @@ import java.util.Set;
 import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
 import org.talend.mdm.repository.core.validate.datamodel.model.IMElement;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
 
 /**
  * created by HHB on 2013-1-8 Detailled comment

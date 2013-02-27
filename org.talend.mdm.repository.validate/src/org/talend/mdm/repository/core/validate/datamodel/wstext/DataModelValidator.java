@@ -22,6 +22,7 @@ import org.eclipse.wst.xml.core.internal.validation.core.AbstractNestedValidator
 import org.eclipse.wst.xml.core.internal.validation.core.NestedValidatorContext;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
+import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.validate.datamodel.IDataModelChecker;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
 import org.talend.mdm.repository.core.validate.datamodel.validator.IModelBuilder;
@@ -82,6 +83,8 @@ public class DataModelValidator extends AbstractNestedValidator implements IData
             message.setAttribute(PATH, msg.getPath());
             message.setAttribute(ELEMENT_TYPE, msg.getElementType());
             message.setAttribute(MSG_GROUP, msg.getMsgGroup());
+            message.setAttribute(DOM_ELEMENT, msg.getDomElement());
+            message.setAttribute(MODEL_TYPE, IModelValidationService.MODEL_TYPE_DATAMODEL);
             // message.setAttribute(IDE.EDITOR_ID_ATTR, EDITOR_ID);
         }
     }

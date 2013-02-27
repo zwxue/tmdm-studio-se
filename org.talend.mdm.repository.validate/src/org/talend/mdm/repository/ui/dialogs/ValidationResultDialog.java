@@ -59,7 +59,7 @@ import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.validate.IValidationPreference;
 import org.talend.mdm.repository.core.validate.datamodel.MarkerEntry;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 import org.talend.mdm.repository.ui.markers.datamodel.ElementPathField;
 import org.talend.mdm.repository.ui.markers.datamodel.ElementTypeField;

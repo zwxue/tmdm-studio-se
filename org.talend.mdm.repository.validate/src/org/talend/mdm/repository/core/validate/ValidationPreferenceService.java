@@ -47,6 +47,15 @@ public class ValidationPreferenceService implements IValidationPerferenceConstan
         getPreferenceStore().setValue(SHOW_RESULT_DIALOG_AFTER_IMMEDIATE, isShowing);
     }
 
+    public boolean isShowDlgAfterSaving() {
+        getPreferenceStore().setDefault(SHOW_RESULT_DIALOG_AFTER_SAVING, true);
+        return getPreferenceStore().getBoolean(SHOW_RESULT_DIALOG_AFTER_SAVING);
+    }
+
+    public void setShowDlgAfterSaving(boolean isShowing) {
+        getPreferenceStore().setValue(SHOW_RESULT_DIALOG_AFTER_SAVING, isShowing);
+    }
+
     private IPreferenceStore getPreferenceStore() {
         if (preferenceStore == null) {
             preferenceStore = PlatformUI.getPreferenceStore();

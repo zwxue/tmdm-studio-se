@@ -10,20 +10,13 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate.datamodel.validator;
-
-import java.util.List;
-
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
+package org.talend.mdm.repository.core.validate;
 
 /**
- * created by HHB on 2013-1-8 Detailled comment
+ * created by HHB on 2013-2-19 Detailled comment
  * 
  */
-public interface IDataModelValidator {
+public interface IModelMarkerConst {
 
-    public List<ModelValidationMessage> validate(DataModelValidateContext context);
-
-    public List<IComponentValidationRule> getValidationRules();
+    public static final String MODEL_TYPE = "modelType"; //$NON-NLS-1$
 }

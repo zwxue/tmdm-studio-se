@@ -236,6 +236,15 @@
                style="push">
          </command>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.talend.mdm.repository.ui.views.MDMProblemView">
+         <command
+               commandId="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
+               label="Clear all"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
 
    <extension
@@ -268,11 +277,11 @@
       <ruleGroup
             name="Element">
       <rule
-            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoValidationRules"
+            class="org.talend.mdm.repository.core.validate.datamodel.validator.rule.element.PKInfoValidationRules"
             name="PKInfo">
       </rule>
       <rule
-            class="org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKValidationRules"
+            class="org.talend.mdm.repository.core.validate.datamodel.validator.rule.element.FKValidationRules"
             name="FK">
       </rule>
       </ruleGroup>

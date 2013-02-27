@@ -21,14 +21,18 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.IDE;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
@@ -62,7 +66,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class OpenObjectAction extends AbstractRepositoryAction {
 
@@ -76,7 +80,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong OpenObjectAction constructor comment.
-     *
+     * 
      * @param text
      */
     public OpenObjectAction() {
@@ -88,6 +92,8 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     private IWorkbenchPage page = null;
 
     IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+    private IMarker marker;
 
     @Override
     protected boolean isLocked() {
@@ -214,7 +220,10 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                             editorInput.setReadOnly(item.getState().isDeleted());
                         }
                         updateEditorInputVersionInfo(editorInput, viewObject);
-                        this.page.openEditor(editorInput, editorInput.getEditorId());
+                        IEditorPart editor = this.page.openEditor(editorInput, editorInput.getEditorId());
+                        if (marker != null) {
+                            IDE.gotoMarker(editor, marker);
+                        }
                     } catch (PartInitException e) {
                         log.error(e.getMessage(), e);
                     }
@@ -231,7 +240,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     @Override
     public IStructuredSelection getStructuredSelection() {
-        if(selObjects != null) {
+        if (selObjects != null) {
             return new StructuredSelection(selObjects);
         }
         return super.getStructuredSelection();
@@ -249,7 +258,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
     }
 
     public TreeParent getServerRoot(MDMServerDef serverDef) {
-        if(isNull(serverDef)) {
+        if (isNull(serverDef)) {
             return null;
         }
 
@@ -290,7 +299,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * return a decrypted server def
-     *
+     * 
      * @param serverObject
      * @return a decrypted server def
      */
@@ -307,6 +316,14 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     private boolean isNull(Object obj) {
         return obj == null;
+    }
+
+    public void openMarker(IRepositoryViewObject viewObj, IMarker marker) {
+        this.marker = marker;
+        List<Object> selObjs = new ArrayList<Object>();
+        selObjs.add(viewObj);
+        setSelObjects(selObjs);
+        run();
     }
 
 }

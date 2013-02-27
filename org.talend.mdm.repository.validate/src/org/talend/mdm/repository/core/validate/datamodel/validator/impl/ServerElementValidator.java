@@ -15,9 +15,9 @@ package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.IComponentValidationRule;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.FKValidationRules;
-import org.talend.mdm.repository.core.validate.datamodel.validator.visitor.element.PKInfoValidationRules;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.element.FKValidationRules;
+import org.talend.mdm.repository.core.validate.datamodel.validator.rule.element.PKInfoValidationRules;
 
 /**
  * created by HHB on 2013-1-29 Detailled comment
