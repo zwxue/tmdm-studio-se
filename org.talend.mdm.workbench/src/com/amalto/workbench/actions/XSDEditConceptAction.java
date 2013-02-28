@@ -49,13 +49,13 @@ public class XSDEditConceptAction extends UndoAction {
         setToolTipText(Messages.XSDEditConceptAction_ActionTip);
     }
 
+    @Override
     public IStatus doAction() {
         try {
             ISelection selection = page.getTreeViewer().getSelection();
             XSDElementDeclaration decl = (XSDElementDeclaration) ((IStructuredSelection) selection).getFirstElement();
             ArrayList<Object> objList = new ArrayList<Object>();
             IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
-            Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
             String oldName = decl.getName();
 
             InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDEditConceptAction_Text, Messages.XSDEditConceptAction_DialogTip,
@@ -85,9 +85,13 @@ public class XSDEditConceptAction extends UndoAction {
                 return Status.CANCEL_STATUS;
             }
 
+            Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
+            Object[] allForeignKeyRelatedInfos = Util.getAllForeignKeyRelatedInfos(page.getSite(), new ArrayList<Object>(),
+                    provider);
+
             decl.setName(id.getValue().trim());
             decl.updateElement();
-            Util.updateReference(decl, objs, oldName, id.getValue());
+            Util.updateReference(decl, objs, allForeignKeyRelatedInfos, oldName, id.getValue());
 
             // change unique key with new name of concept
             EList list = decl.getIdentityConstraintDefinitions();
@@ -117,6 +121,7 @@ public class XSDEditConceptAction extends UndoAction {
         return Status.OK_STATUS;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

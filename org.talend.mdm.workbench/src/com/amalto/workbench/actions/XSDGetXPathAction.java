@@ -38,6 +38,8 @@ public class XSDGetXPathAction extends UndoAction {
 
     private static Log log = LogFactory.getLog(XSDGetXPathAction.class);
 
+    private String xpath = null;
+
     public XSDGetXPathAction(DataModelMainPage page) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
@@ -45,6 +47,7 @@ public class XSDGetXPathAction extends UndoAction {
         setToolTipText(Messages.XSDGetXPathAction_CopyTheXPath);
     }
 
+    @Override
     public IStatus doAction() {
         try {
 
@@ -71,7 +74,8 @@ public class XSDGetXPathAction extends UndoAction {
                 item = item.getParentItem();
             } while (item != null);
 
-            // System.out.println("PATH: "+path);
+            xpath = path;
+
             clipboard.setContents(new Object[] { path }, new Transfer[] { TextTransfer.getInstance() });
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -82,8 +86,12 @@ public class XSDGetXPathAction extends UndoAction {
         return Status.OK_STATUS;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
 
+    public String getCopiedXpath() {
+        return xpath;
+    }
 }

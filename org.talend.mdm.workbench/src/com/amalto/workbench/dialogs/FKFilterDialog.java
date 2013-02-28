@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
@@ -37,6 +36,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.utils.FKFilterParser;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ICellEditor;
@@ -44,8 +44,6 @@ import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class FKFilterDialog extends Dialog {
-
-    private static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
 
     String title;
 
@@ -141,17 +139,25 @@ public class FKFilterDialog extends Dialog {
     }
 
     private void parseRules() {
-
         List<Line> lines = new ArrayList<Line>();
-        if (filter != null && filter.length() > 0) {
-            if (filter.startsWith(CUSTOM_FILTERS_PREFIX)) {
-                filter = StringEscapeUtils.unescapeXml(filter);
-                customFiltersText.setText(filter.substring(6));
-            } else {
-                lines = buildLine(filter);
-            }
+
+        String[] keyNames = getKeyNames();
+        String parsedFilter = FKFilterParser.parseFilter(filter, lines, keyNames);
+
+        if (!parsedFilter.isEmpty()) {
+            filter = parsedFilter;
+            customFiltersText.setText(filter.substring(6));
         }
         viewer.getViewer().setInput(lines);
+    }
+
+    private String[] getKeyNames() {
+        String[] keyNames = new String[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            keyNames[i] = columns[i].getName();
+        }
+
+        return keyNames;
     }
 
     @Override
@@ -186,67 +192,26 @@ public class FKFilterDialog extends Dialog {
     }
 
     private String resetFilter() {
-
         if (customFiltersText.getText() != null && customFiltersText.getText().trim().length() > 0) {
-            filter = CUSTOM_FILTERS_PREFIX + customFiltersText.getText().trim();
-            filter = StringEscapeUtils.escapeXml(filter);
+            filter = FKFilterParser.getDeParseredCustomFilter(customFiltersText.getText().trim());
             return filter;
         }
 
+        List<Line> lines = new ArrayList<Line>();
         TableItem[] items = viewer.getViewer().getTable().getItems();
-        StringBuffer sb = new StringBuffer();
         if (items.length > 0) {
             for (TableItem item : items) {
                 Line line = (Line) item.getData();
-
-                String xpath = line.keyValues.get(0).value;
-                String operator = line.keyValues.get(1).value;
-                String value = line.keyValues.get(2).value;
-                value = normalizeValue(value);
-                String predicate = line.keyValues.get(3).value;
-                sb.append(xpath + "$$" + operator + "$$" + value + "$$" + predicate + "#");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                lines.add(line);
             }
-            // rules.add(sb.toString());
         }
+        filter = FKFilterParser.getDeParseredFilter(lines);
 
-        return filter = sb.toString();
-    }
-
-    private String normalizeValue(String value) {
-        if (value != null && value.trim().length() > 0) {
-            value = value.replaceAll("\"", "&quot;");//$NON-NLS-1$//$NON-NLS-2$
-            value = value.replaceAll("'", "&quot;");//$NON-NLS-1$//$NON-NLS-2$
-        }
-        return value;
+        return filter;
     }
 
     public String getFilter() {
         return filter;
-    }
-
-    public List<Line> buildLine(String criteria) {
-        List<Line> lines = new ArrayList<Line>();
-        if (criteria != null) {
-            String[] criterias = criteria.split("#");//$NON-NLS-1$
-            for (String cria : criterias) {
-                String[] values = cria.split("\\$\\$");//$NON-NLS-1$
-                List<String> list = new ArrayList<String>();
-                list.addAll(Arrays.asList(values));
-                int num = 4 - list.size();
-                for (int i = 0; i < num; i++) {
-                    list.add("");//$NON-NLS-1$
-                }
-                // filter value
-                if (list.get(2) != null && list.get(2).length() > 0) {
-                    String value = list.get(2);
-                    value = value.replaceAll("&quot;", "\"");//$NON-NLS-1$//$NON-NLS-2$
-                    list.set(2, value);
-                }
-                Line line = new Line(columns, list.toArray(new String[list.size()]));
-                lines.add(line);
-            }
-        }
-        return lines;
     }
 
     public void setDataModel(String dataModelName) {

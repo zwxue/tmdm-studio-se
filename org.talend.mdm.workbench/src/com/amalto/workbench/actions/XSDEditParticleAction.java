@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
@@ -72,9 +73,13 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
         setToolTipText(Messages.XSDEditParticleAction_EditBusinessElement);
     }
 
+    @Override
     public IStatus doAction() {
         try {
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
+
+            String originalXpath = getOriginalXpath();
+
             selParticle = (XSDParticle) selection.getFirstElement();
 
             if (!(selParticle.getTerm() instanceof XSDElementDeclaration))
@@ -154,7 +159,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
                 // FIXME: dereferecning and element is buggy
 
                 XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
-                XSDElementDeclaration newD = (XSDElementDeclaration) factory.createXSDElementDeclaration();
+                XSDElementDeclaration newD = factory.createXSDElementDeclaration();
                 newD.setName(this.elementName);
                 newD.updateElement();
                 XSDSimpleTypeDefinition stringType = ((SchemaTreeContentProvider) page.getTreeViewer().getContentProvider())
@@ -188,6 +193,8 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 
             selParticle.updateElement();
 
+            updateReference(originalXpath);
+
             page.refresh();
             page.markDirty();
 
@@ -201,6 +208,26 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
         return Status.OK_STATUS;
     }
 
+    private String getOriginalXpath() {
+        XSDGetXPathAction getXpathAction = new XSDGetXPathAction(page);
+        getXpathAction.doAction();
+        String originalXpath = getXpathAction.getCopiedXpath();
+        return originalXpath;
+    }
+
+    private void updateReference(String originalXpath) {
+        XSDElementDeclaration decl = (XSDElementDeclaration) selParticle.getContent();
+        int lastIndex = originalXpath.lastIndexOf("/"); //$NON-NLS-1$
+
+        String newXpath = decl.getName();
+        newXpath = originalXpath.substring(0, lastIndex + 1) + newXpath;
+        IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
+        Object[] allForeignKeyRelatedInfos = Util.getAllForeignKeyRelatedInfos(page.getSite(), new ArrayList<Object>(),
+                provider);
+        Util.updateForeignKeyRelatedInfo(originalXpath, newXpath, allForeignKeyRelatedInfos);
+    }
+
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

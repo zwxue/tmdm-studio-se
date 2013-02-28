@@ -63,6 +63,7 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
         super(entityWrapper);
     }
 
+    @Override
     protected boolean doSubmit() throws CommitException {
 
         try {
@@ -73,6 +74,7 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
     }
 
+    @Override
     protected void validateCommit() throws CommitValidationException {
 
         validateEntityName();
@@ -111,8 +113,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
         SchemaTreeContentProvider contentProvider = new SchemaTreeContentProvider(site, getCommitedObj().getSchema());
         Object[] objs = Util.getAllObject(site, new ArrayList<Object>(), contentProvider);
+        Object[] allForeignKeyAndInfos = Util.getAllForeignKeyRelatedInfos(site, new ArrayList<Object>(), contentProvider);
 
-        Util.updateReference(xsdElementDeclaration, objs, oldName, getCommitedObj().getName());
+        Util.updateReference(xsdElementDeclaration, objs, allForeignKeyAndInfos, oldName, getCommitedObj().getName());
     }
 
     private boolean commitEnitityKeys() {
