@@ -8,7 +8,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit4,
  org.talend.testutils,
  org.hamcrest,
- org.eclipse.osgi.services
+ org.eclipse.osgi.services,
+ org.apache.commons.lang
 Bundle-ClassPath: .
 Export-Package: org.talend.mdm.repository.ui.actions,
  org.talend.mdm.repository.ui.actions.datacontainer,
