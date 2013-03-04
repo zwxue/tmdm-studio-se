@@ -276,7 +276,7 @@ public class RepositoryResourceUtilTest {
         verify(mockProperty, times(1)).setVersion(Mockito.anyString());
         verify(mockProperty, times(1)).setAuthor(user);
         verify(mockProperty, times(1)).setLabel(propLabel);
-        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class));
+        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class), Mockito.anyBoolean());
         verify(mockResourceProvider, times(1)).handleReferenceFile(mockItem);
 
         verify(repositoryFactory, times(1)).unlock(mockItem);
@@ -316,9 +316,9 @@ public class RepositoryResourceUtilTest {
             RepositoryResourceUtil.copyOSFileTOProject(mockIProject, null, desFolder, version, overwrite, progressMonitor);
             fail();
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else {
+            } else {
                 assertTrue(false);
             }
         }
@@ -327,9 +327,9 @@ public class RepositoryResourceUtilTest {
             RepositoryResourceUtil.copyOSFileTOProject(mockIProject, path, null, version, overwrite, progressMonitor);
             fail();
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else {
+            } else {
                 assertTrue(false);
             }
         }
@@ -476,8 +476,8 @@ public class RepositoryResourceUtilTest {
         boolean result = Whitebox.invokeMethod(RepositoryResourceUtil.class, "isSystemFolder", mockContainerItem, folderName);
         assertTrue(result);
 
-        for (int i = 0; i < folderTypes.length; i++) {
-            when(mockContainerItem.getType()).thenReturn(folderTypes[i]);
+        for (FolderType folderType : folderTypes) {
+            when(mockContainerItem.getType()).thenReturn(folderType);
             result = Whitebox.invokeMethod(RepositoryResourceUtil.class, "isSystemFolder", mockContainerItem, folderName);
             assertFalse(result);
         }
@@ -554,16 +554,14 @@ public class RepositoryResourceUtilTest {
         when(mockConfiguration.getResourceProvider()).thenReturn(mockResourceProvider);
 
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
-        when(mockConfiguration.getResourceProvider().getRepositoryObjectType((Item) Mockito.any(Item.class)))
-                .thenReturn(mockType);
+        when(mockConfiguration.getResourceProvider().getRepositoryObjectType(Mockito.any(Item.class))).thenReturn(mockType);
 
         IRepositoryNodeLabelProvider mockLabelProvider = mock(IRepositoryNodeLabelProvider.class);
         when(mockConfiguration.getLabelProvider()).thenReturn(mockLabelProvider);
         when(mockLabelProvider.getCategoryLabel(Mockito.any(ERepositoryObjectType.class))).thenReturn("anystring");
 
         PowerMockito.mockStatic(ContainerCacheService.class);
-        PowerMockito.doNothing().when(ContainerCacheService.class, "putContainer",
-                (IRepositoryViewObject) Mockito.any(IRepositoryViewObject.class));
+        PowerMockito.doNothing().when(ContainerCacheService.class, "putContainer", Mockito.any(IRepositoryViewObject.class));
 
         IRepositoryViewObject categoryViewObject = RepositoryResourceUtil.getCategoryViewObject(mockConfiguration);
         assertNotNull(categoryViewObject);
@@ -581,20 +579,22 @@ public class RepositoryResourceUtilTest {
             RepositoryResourceUtil.removeViewObjectPhysically(null, name, version, path);
             fail("First parameter should not be null.");
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else
+            } else {
                 assertTrue("the throwed exception does not match", false);
+            }
         }
 
         try {
             RepositoryResourceUtil.removeViewObjectPhysically(mockType, null, version, path);
             fail("Second parameter should not be null.");
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException)
+            if (e instanceof IllegalArgumentException) {
                 assertTrue(true);
-            else
+            } else {
                 assertTrue("the throwed exception does not match", false);
+            }
         }
 
         // test method function
