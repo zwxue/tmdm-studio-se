@@ -336,6 +336,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         case IModelValidationService.VALIDATE_IMMEDIATE:
         case IModelValidationService.VALIDATE_AFTER_SAVE: {
             createButton(parent, IModelValidationService.BUTTON_OK, IDialogConstants.OK_LABEL, true);
+            break;
         }
         case IModelValidationService.VALIDATE_BEFORE_DEPLOY: {
             // TODO:

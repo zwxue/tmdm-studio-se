@@ -55,6 +55,10 @@ public class Messages extends NLS {
 
     public static String PKInfoElementVisitor_MK_NOT_IN_SAME_ENTITY;
 
+    public static String ValidationPreferencePage_SavingButton_Text;
+
+    public static String ValidationPreferencePage_SavingDialog_Title;
+
     public static String ValidationPrefPage_Button_Text;
 
     public static String ValidationPrefPage_RightClick_Title;
