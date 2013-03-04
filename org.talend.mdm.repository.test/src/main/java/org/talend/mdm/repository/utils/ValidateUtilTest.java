@@ -26,18 +26,21 @@ public class ValidateUtilTest {
         assertTrue(ValidateUtil.matchCommonRegex("a")); //$NON-NLS-1$
 
         // this four char in this middle or front will be all right
-        String ss[] = { "#", "-", ".", "a" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+        String ss[] = { "#", "-", "." };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         for (String s : ss) {
             String validStr1 = str + s + "a";//$NON-NLS-1$
             String validStr2 = s + "a";//$NON-NLS-1$
             boolean match1 = ValidateUtil.matchCommonRegex(validStr1);
             boolean match2 = ValidateUtil.matchCommonRegex(validStr2);
-            assertTrue(match1);
-            assertTrue(match2);
+            assertFalse(match1);
+            assertFalse(match2);
         }
 
+        String validStr3 = str + "a";
+        assertTrue(ValidateUtil.matchCommonRegex(validStr3));
+
         // invalid char in this middle or back
-        String sep[] = { " ", "+", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ 
+        String sep[] = { " ", "+", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$
         for (String s : sep) {
             String invalidStr1 = str + s + "a"; //$NON-NLS-1$
             String invalidStr2 = str + s;
@@ -76,7 +79,7 @@ public class ValidateUtilTest {
         }
 
         // invalid char in this middle or back
-        String sep[] = { " ", "+", "-", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$ 
+        String sep[] = { " ", "+", "-", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$
         for (String s : sep) {
             String invalidStr1 = str + s + "a"; //$NON-NLS-1$
             String invalidStr2 = str + s;
@@ -120,7 +123,7 @@ public class ValidateUtilTest {
         }
 
         // invalid char in this middle or back
-        String sep[] = { " ", "+", "-", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$ 
+        String sep[] = { " ", "+", "-", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$
         for (String s : sep) {
             String invalidStr1 = str + s + "a"; //$NON-NLS-1$
             String invalidStr2 = str + s;
@@ -156,7 +159,7 @@ public class ValidateUtilTest {
 
         // invalid char in this middle or back
         String sep[] = {
-                " ", "+", "-", ".", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&", "*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$ //$NON-NLS-21$ //$NON-NLS-22$ 
+                " ", "+", "-", ".", "*", "/", "\\", "(", ")", "[", "]", "{", "}", "|", "`", "~", "@", "$", "%", "^", "&", "*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$//$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$ //$NON-NLS-21$ //$NON-NLS-22$
         for (String s : sep) {
             String invalidStr1 = str + s + "a"; //$NON-NLS-1$
             String invalidStr2 = str + s;
