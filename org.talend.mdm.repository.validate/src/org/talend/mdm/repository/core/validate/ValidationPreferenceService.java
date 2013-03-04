@@ -14,6 +14,7 @@ package org.talend.mdm.repository.core.validate;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.PlatformUI;
+import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.ui.preferences.IValidationPerferenceConstant;
 
 /**
@@ -41,6 +42,24 @@ public class ValidationPreferenceService implements IValidationPerferenceConstan
     public boolean isShowDlgAfterImmediateChecking() {
         getPreferenceStore().setDefault(SHOW_RESULT_DIALOG_AFTER_IMMEDIATE, true);
         return getPreferenceStore().getBoolean(SHOW_RESULT_DIALOG_AFTER_IMMEDIATE);
+    }
+
+    public boolean isShowDlgBeforeDeploying() {
+        getPreferenceStore().setDefault(SHOW_RESULT_DIALOG_BEFORE_DEPLOYING, true);
+        return getPreferenceStore().getBoolean(SHOW_RESULT_DIALOG_BEFORE_DEPLOYING);
+    }
+
+    public void setShowDlgBeforeDeploying(boolean isShowing) {
+        getPreferenceStore().setValue(SHOW_RESULT_DIALOG_BEFORE_DEPLOYING, isShowing);
+    }
+
+    public int getDeployWayWhenValidateFail() {
+        getPreferenceStore().setDefault(DEPLOY_WAY_WHEN_VALIDATE_FAIL, IModelValidationService.BUTTON_CANCEL);
+        return getPreferenceStore().getInt(DEPLOY_WAY_WHEN_VALIDATE_FAIL);
+    }
+
+    public void setDeployWayWhenValidateFail(int id) {
+        getPreferenceStore().setValue(DEPLOY_WAY_WHEN_VALIDATE_FAIL, id);
     }
 
     public void setShowDlgAfterImmediateChecking(boolean isShowing) {
