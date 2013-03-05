@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.progress.IProgressService;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -40,6 +41,7 @@ import org.talend.mdm.repository.core.command.common.UpdateLastServerCommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.command.deploy.DeployCompoundCommand;
 import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
+import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -64,7 +66,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         *
+         * 
          * @param severity
          * @param pluginId
          * @param message
@@ -140,9 +142,37 @@ public class DeployService {
         if (removeLocked) {
             removeLockedViewObj(viewObjs);
         }
+        IModelValidateResult validateResult = validateModel(viewObjs);
+        int selectedButton = validateResult.getSelectedButton();
+        if (selectedButton == IModelValidationService.BUTTON_CANCEL) {
+            return Status.CANCEL_STATUS;
+        }
+        List<IRepositoryViewObject> validObjects = validateResult.getValidObjects(selectedButton);
+        List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
         CommandManager manager = CommandManager.getInstance();
-        List<AbstractDeployCommand> commands = manager.getDeployCommands(viewObjs, defaultCmdType);
-        return runCommands(commands, serverDef);
+        List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
+        IStatus mainStatus = runCommands(commands, serverDef);
+        generateCancelDeployStatus(mainStatus, invalidObjects);
+        return mainStatus;
+    }
+
+    public void generateCancelDeployStatus(IStatus mainStatus, List<IRepositoryViewObject> cancelViewObjs) {
+        for (IRepositoryViewObject viewObj : cancelViewObjs) {
+            ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
+            cancelCmd.updateViewObject(viewObj);
+            DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd,
+                    Messages.bind(Messages.Deploy_cancel_text, "", viewObj.getLabel()));
+            ((MultiStatus) mainStatus).add(cancelStatus);
+        }
+
+    }
+
+    public IModelValidateResult validateModel(List<IRepositoryViewObject> viewObjs) {
+        IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
+                IModelValidationService.class);
+
+        IModelValidateResult validateResult = service.validate(viewObjs, IModelValidationService.VALIDATE_BEFORE_DEPLOY);
+        return validateResult;
     }
 
     public IStatus deployAnotherVersion(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
@@ -180,6 +210,9 @@ public class DeployService {
             viewObjs.add(viewObj);
 
             IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY, false);
+            if (!status.isOK()) {
+                return;
+            }
             updateAutoStatus(status);
             if (status.isMultiStatus()) {
                 showDeployStatus(shell, status);
@@ -321,8 +354,9 @@ public class DeployService {
                         for (IStatus cstatus : childrenStatus) {
                             if (cstatus instanceof DeployStatus) {
                                 deployStatuses.add((DeployStatus) cstatus);
-                                if (((DeployStatus) cstatus).getCommand() instanceof BatchDeployJobCommand)
+                                if (((DeployStatus) cstatus).getCommand() instanceof BatchDeployJobCommand) {
                                     break;
+                                }
                             }
                         }
                     }

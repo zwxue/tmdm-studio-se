@@ -38,6 +38,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
 
     }
 
+    @Override
     protected void doRun() {
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
@@ -52,14 +53,15 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         MDMServerDef currentServerDef = RepositoryResourceUtil.getLastServerDef(viewObj);
         //
         IStatus status = deploy(currentServerDef, viewObjs, ICommand.CMD_MODIFY);
-        if (status.isMultiStatus()) {
-            showDeployStatus(status);
+        if (status.getSeverity() != IStatus.CANCEL) {
+            if (status.isMultiStatus()) {
+                showDeployStatus(status);
+            }
+            DeployService.getInstance().updateChangedStatus(status, false);
+            for (IRepositoryViewObject viewObject : viewObjs) {
+                commonViewer.refresh(viewObject);
+            }
         }
-        DeployService.getInstance().updateChangedStatus(status, false);
-        for (IRepositoryViewObject viewObject : viewObjs) {
-            commonViewer.refresh(viewObject);
-        }
-
     }
 
     @Override
@@ -67,11 +69,13 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         MDMServerDef firstDef = null;
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
-                if (obj instanceof FolderRepositoryObject)
+                if (obj instanceof FolderRepositoryObject) {
                     return false;
+                }
                 MDMServerDef currentServerDef = RepositoryResourceUtil.getLastServerDef((IRepositoryViewObject) obj);
-                if (currentServerDef == null)
+                if (currentServerDef == null) {
                     return false;
+                }
                 if (firstDef == null) {
                     firstDef = currentServerDef;
                 } else {

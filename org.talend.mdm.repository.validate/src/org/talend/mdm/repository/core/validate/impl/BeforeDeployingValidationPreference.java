@@ -33,8 +33,12 @@ public class BeforeDeployingValidationPreference implements IValidationPreferenc
      */
     @Override
     public boolean shouldShowResults(ValidationResultSummary result) {
-
-        return true;
+        int errorCount = result.getSeverityError();
+        int warningCount = result.getSeverityWarning();
+        if (errorCount == 0 && warningCount == 0) {
+            return false;
+        }
+        return service.isShowDlgBeforeDeploying();
 
     }
 
@@ -45,7 +49,7 @@ public class BeforeDeployingValidationPreference implements IValidationPreferenc
      */
     @Override
     public void setShowResults(Boolean showing) {
-        // do nothing
+        service.setShowDlgBeforeDeploying(showing);
     }
 
     /*

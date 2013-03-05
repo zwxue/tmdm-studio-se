@@ -27,6 +27,8 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.core.service.IModelValidationService;
+import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -52,6 +54,7 @@ public class DeployAllAction extends AbstractDeployAction {
         setImageDescriptor(DEPLOY_IMG);
     }
 
+    @Override
     protected void doRun() {
         if (isDeployAll) {
             runWithType(null);
@@ -75,10 +78,19 @@ public class DeployAllAction extends AbstractDeployAction {
             List<AbstractDeployCommand> selectededCommands = dialog.getSelectedCommands();
             if (selectededCommands.size() >= 0) {
                 deployViewObject = getDeployViewObject(selectededCommands);
-
+                DeployService deployService = DeployService.getInstance();
+                // validate object
+                IModelValidateResult validateResult = deployService.validateModel(deployViewObject);
+                int selectedButton = validateResult.getSelectedButton();
+                if (selectedButton == IModelValidationService.BUTTON_CANCEL) {
+                    return;
+                }
+                List<IRepositoryViewObject> validObjects = validateResult.getValidObjects(selectedButton);
+                List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
+                removeInvalidCommands(invalidObjects, selectededCommands);
                 // save editors
                 LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
-                        Messages.AbstractDeployAction_promptToSaveEditors, deployViewObject);
+                        Messages.AbstractDeployAction_promptToSaveEditors, validObjects);
                 if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
                     return;
                 }
@@ -86,13 +98,29 @@ public class DeployAllAction extends AbstractDeployAction {
 
                 MDMServerDef serverDef = dialog.getServerDef();
                 reorderCommandObjects(selectededCommands);
-                IStatus status = DeployService.getInstance().runCommands(selectededCommands, serverDef);
 
+                IStatus status = deployService.runCommands(selectededCommands, serverDef);
+                // add canceled object to status
+                deployService.generateCancelDeployStatus(status, invalidObjects);
+                //
                 updateChangedStatus(status);
                 if (status.isMultiStatus()) {
                     showDeployStatus(status);
                 }
                 updateLastServer(status, new NullProgressMonitor());
+            }
+        }
+    }
+
+    private void removeInvalidCommands(List<IRepositoryViewObject> invalidObjects, List<AbstractDeployCommand> selectededCommands) {
+        if (invalidObjects == null || invalidObjects.isEmpty()) {
+            return;
+        }
+        for (Iterator<AbstractDeployCommand> il = selectededCommands.iterator(); il.hasNext();) {
+            AbstractDeployCommand cmd = il.next();
+            IRepositoryViewObject viewObject = cmd.getViewObject();
+            if (viewObject != null && invalidObjects.contains(viewObject)) {
+                il.remove();
             }
         }
     }
@@ -116,8 +144,9 @@ public class DeployAllAction extends AbstractDeployAction {
         List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>(selectededCommands.size());
         for (AbstractDeployCommand command : selectededCommands) {
             IRepositoryViewObject viewObject = command.getViewObject();
-            if (viewObject != null && !viewObjs.contains(viewObject))
+            if (viewObject != null && !viewObjs.contains(viewObject)) {
                 viewObjs.add(viewObject);
+            }
         }
         return viewObjs;
     }

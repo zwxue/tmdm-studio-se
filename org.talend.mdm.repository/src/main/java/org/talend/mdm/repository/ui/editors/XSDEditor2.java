@@ -29,6 +29,7 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
+import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -130,16 +131,16 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         IRepositoryViewObject viewObject = editorInput.getViewObject();
         Item item = viewObject.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        int result = validateModel(viewObject);
-        if (result == IModelValidationService.BUTTON_OK) {
-            //
-            DeployService deployService = DeployService.getInstance();
-            if (deployService.isAutoDeploy()) {
-                deployService.autoDeploy(getSite().getShell(), viewObject);
-            } else if (serverObject.getLastServerDef() != null) {
-                CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
-            }
+
+        //
+        DeployService deployService = DeployService.getInstance();
+        if (deployService.isAutoDeploy()) {
+            deployService.autoDeploy(getSite().getShell(), viewObject);
+        } else if (serverObject.getLastServerDef() != null) {
+            CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
+            validateModel(viewObject);
         }
+
     }
 
     private int validateModel(IRepositoryViewObject viewObject) {
@@ -147,7 +148,11 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
                 IModelValidationService.class);
         List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
         viewObjs.add(viewObject);
-        return service.validate(viewObjs, IModelValidationService.VALIDATE_AFTER_SAVE);
+        IModelValidateResult validateResult = service.validate(viewObjs, IModelValidationService.VALIDATE_AFTER_SAVE);
+        if (validateResult != null) {
+            return validateResult.getSelectedButton();
+        }
+        return IModelValidationService.BUTTON_CANCEL;
     }
 
     @Override

@@ -24,6 +24,29 @@ import org.talend.core.model.repository.IRepositoryViewObject;
  */
 public interface IModelValidationService extends IService {
 
+    public interface IModelValidateResult {
+
+        public void setSelectedButton(int selectedButton);
+
+        public boolean hasErrOrWarning();
+
+        /**
+         * 
+         * @return Defined in IModelValidationService BUTTON_xxxx
+         */
+        public int getSelectedButton();
+
+        /**
+         * Defined in IModelValidationService BUTTON_xxxx
+         * 
+         * @param selectedButtons
+         * @return
+         */
+        public List<IRepositoryViewObject> getValidObjects(int selectedButtons);
+
+        public List<IRepositoryViewObject> getInvalidObjects(int selectedButtons);
+    }
+
     public static final int MODEL_TYPE_DATAMODEL = 1;
 
     public static final int VALIDATE_IMMEDIATE = 1;
@@ -47,5 +70,5 @@ public interface IModelValidationService extends IService {
      * @param condition defined in current interface VALIDATE_XXXX
      * @return TODO
      */
-    public int validate(List<IRepositoryViewObject> viewObjs, int condition);
+    public IModelValidateResult validate(List<IRepositoryViewObject> viewObjs, int condition);
 }

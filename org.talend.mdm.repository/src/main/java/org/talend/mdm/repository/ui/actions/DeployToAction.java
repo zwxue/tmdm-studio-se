@@ -17,12 +17,10 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
@@ -37,12 +35,13 @@ public class DeployToAction extends AbstractDeployAction {
 
     }
 
+    @Override
     protected void doRun() {
 
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
 
         SelectServerDefDialog dialog = getSelectServerDefDialog(viewObjs);
-        
+
         if (dialog.open() == IDialogConstants.OK_ID) {
             // save editors
             LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
@@ -55,25 +54,27 @@ public class DeployToAction extends AbstractDeployAction {
             MDMServerDef serverDef = dialog.getSelectedServerDef();
 
             IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY);
-            updateChangedStatus(status);
-            if (status.isMultiStatus()) {
-                showDeployStatus(status);
+            if (status.getSeverity() != IStatus.CANCEL) {
+                updateChangedStatus(status);
+                if (status.isMultiStatus()) {
+                    showDeployStatus(status);
+                }
+                updateLastServer(status, new NullProgressMonitor());
             }
-
-            updateLastServer(status, new NullProgressMonitor());
         }
 
     }
 
     private SelectServerDefDialog getSelectServerDefDialog(List<IRepositoryViewObject> viewObjs) {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
-        
+
         initializeSelection(viewObjs, dialog);
         return dialog;
     }
 
     /**
      * set the default selection in SelectServerDefDialog
+     * 
      * @param viewObjs current selected view objects
      * @param dialog
      */
@@ -92,10 +93,11 @@ public class DeployToAction extends AbstractDeployAction {
         dialog.create();
         dialog.setSelectServer(defServer);
     }
-    
+
     private boolean isSameMDMServerDef(MDMServerDef aServerDef, MDMServerDef bServerDef) {
-        if (aServerDef == null && bServerDef == null)
+        if (aServerDef == null && bServerDef == null) {
             return true;
+        }
 
         if (aServerDef != null && bServerDef != null) {
             if (aServerDef.getName().equals(bServerDef.getName())

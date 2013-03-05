@@ -79,5 +79,9 @@ public class Messages extends NLS {
 
     public static String ValidationResultDialog_NotShowThis;
 
+    public static String ValidationResultDialog_skipAllErrs;
+
+    public static String ValidationResultDialog_skipAllErrWarnings;
+
     public static String ValidationResultDialog_Title;
 }

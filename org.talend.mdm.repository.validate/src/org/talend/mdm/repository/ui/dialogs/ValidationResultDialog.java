@@ -288,7 +288,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
     private void createCheckboxBun(Composite parent) {
         final Button button = new Button(parent, SWT.CHECK);
         button.setText(Messages.ValidationResultDialog_NotShowThis);
-        button.setSelection(!validationPref.shouldShowResults(null));
+        button.setSelection(false);
         button.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -339,7 +339,12 @@ public class ValidationResultDialog extends IconAndMessageDialog {
             break;
         }
         case IModelValidationService.VALIDATE_BEFORE_DEPLOY: {
-            // TODO:
+            createButton(parent, IModelValidationService.BUTTON_SKIP_ERROR_WARNING,
+                    Messages.ValidationResultDialog_skipAllErrWarnings, false);
+            createButton(parent, IModelValidationService.BUTTON_SKIP_ERROR, Messages.ValidationResultDialog_skipAllErrs, false);
+            createButton(parent, IModelValidationService.BUTTON_CANCEL, IDialogConstants.CANCEL_LABEL, true);
+
+            break;
         }
         }
     }
@@ -349,7 +354,18 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         if (IDialogConstants.DETAILS_ID == buttonId) {
             toggleDetailsArea();
         }
-        super.buttonPressed(buttonId);
+        switch (buttonId) {
+        case IModelValidationService.BUTTON_SKIP_ERROR:
+        case IModelValidationService.BUTTON_SKIP_ERROR_WARNING:
+            setReturnCode(buttonId);
+            close();
+            break;
+
+        default:
+            super.buttonPressed(buttonId);
+            break;
+        }
+
     }
 
     private void toggleDetailsArea() {
