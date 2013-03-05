@@ -1,27 +1,42 @@
 package org.talend.mdm.repository.ui.preferences;
 
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.talend.mdm.repository.core.service.IModelValidationService;
+import org.talend.mdm.repository.core.validate.ValidationPreferenceService;
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 
 public class ValidationPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-    private Button needShowDialogAfterImmediateButton;
+    private Button showDialogAfterImmediateButton;
 
-    private Button needShowDialogAfterSavedButton;
+    private Button showDialogAfterSavedButton;
+
+    private Button showDialogBeforeDeployButton;
+
+    private Button cancelButton;
+
+    private Button skipErrorsButton;
+
+    private Button skipErrorsAndWarningsButton;
 
     public ValidationPreferencePage() {
     }
@@ -53,12 +68,34 @@ public class ValidationPreferencePage extends PreferencePage implements IWorkben
 
     protected void doCreateContent(Composite parent) {
         Composite immediateComposite = createExpandComposite(parent, Messages.ValidationPrefPage_RightClick_Title, true);
-        needShowDialogAfterImmediateButton = new Button(immediateComposite, SWT.CHECK);
-        needShowDialogAfterImmediateButton.setText(Messages.ValidationPrefPage_Button_Text);
+        showDialogAfterImmediateButton = new Button(immediateComposite, SWT.CHECK);
+        showDialogAfterImmediateButton.setText(Messages.ValidationPrefPage_Button_Text);
 
         Composite savedComposite = createExpandComposite(parent, Messages.ValidationPreferencePage_SavingDialog_Title, true);
-        needShowDialogAfterSavedButton = new Button(savedComposite, SWT.CHECK);
-        needShowDialogAfterSavedButton.setText(Messages.ValidationPreferencePage_SavingButton_Text);
+        showDialogAfterSavedButton = new Button(savedComposite, SWT.CHECK);
+        showDialogAfterSavedButton.setText(Messages.ValidationPreferencePage_SavingButton_Text);
+
+        Composite deployComposite = createExpandComposite(parent, Messages.ValidationPreferencePage_Before_Deplying_Title, true);
+        GridLayoutFactory.fillDefaults().extendedMargins(10, 10, 0, 0).applyTo(deployComposite);
+        showDialogBeforeDeployButton = new Button(deployComposite, SWT.CHECK);
+        showDialogBeforeDeployButton.setText(Messages.ValidationPreferencePage_Before_Deplying_Text);
+        final Group deployGroup = new Group(deployComposite, SWT.NONE);
+        deployGroup.setText(Messages.ValidationPreferencePage_DeplyGroup_Text);
+        deployGroup.setLayout(new GridLayout());
+        deployGroup.setLayoutData(new GridData());
+        cancelButton = new Button(deployGroup, SWT.RADIO);
+        cancelButton.setText(Messages.ValidationPreferencePage_CancelButton_Text);
+        skipErrorsButton = new Button(deployGroup, SWT.RADIO);
+        skipErrorsButton.setText(Messages.ValidationPreferencePage_SkipErrorsButton_Text);
+        skipErrorsAndWarningsButton = new Button(deployGroup, SWT.RADIO);
+        skipErrorsAndWarningsButton.setText(Messages.ValidationPreferencePage_SkipErrorsAndWarningsButton_Text);
+        showDialogBeforeDeployButton.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                updateDeplyWayButtons();
+            }
+        });
     }
 
     private Composite createExpandComposite(final Composite parent, String title, boolean needExpanded) {
@@ -86,36 +123,57 @@ public class ValidationPreferencePage extends PreferencePage implements IWorkben
     }
 
     private void initControls() {
-        needShowDialogAfterImmediateButton.setSelection(needShowDialog());
-        needShowDialogAfterSavedButton.setSelection(needShowDialogAfterSaved());
+        showDialogAfterImmediateButton.setSelection(ValidationPreferenceService.getInstance()
+                .isShowDlgAfterImmediateChecking());
+        showDialogAfterSavedButton.setSelection(ValidationPreferenceService.getInstance().isShowDlgAfterSaving());
+        showDialogBeforeDeployButton.setSelection(ValidationPreferenceService.getInstance().isShowDlgBeforeDeploying());
+
+        int value = ValidationPreferenceService.getInstance().getDeployWayWhenValidateFail();
+        switch (value) {
+        case IModelValidationService.BUTTON_CANCEL:
+            cancelButton.setSelection(true);
+            break;
+        case IModelValidationService.BUTTON_SKIP_ERROR:
+            skipErrorsButton.setSelection(true);
+            break;
+        case IModelValidationService.BUTTON_SKIP_ERROR_WARNING:
+            skipErrorsAndWarningsButton.setSelection(true);
+            break;
+        }
+        updateDeplyWayButtons();
+    }
+
+    private void updateDeplyWayButtons() {
+        boolean selected = showDialogBeforeDeployButton.getSelection();
+        cancelButton.setEnabled(!selected);
+        skipErrorsButton.setEnabled(!selected);
+        skipErrorsAndWarningsButton.setEnabled(!selected);
     }
 
     @Override
     public boolean performOk() {
-        getPreferenceStore().setValue(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_IMMEDIATE,
-                needShowDialogAfterImmediateButton.getSelection());
-        getPreferenceStore().setValue(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_SAVING,
-                needShowDialogAfterSavedButton.getSelection());
+        ValidationPreferenceService.getInstance().setShowDlgAfterImmediateChecking(
+                showDialogAfterImmediateButton.getSelection());
+        ValidationPreferenceService.getInstance().setShowDlgAfterSaving(showDialogAfterSavedButton.getSelection());
+        ValidationPreferenceService.getInstance().setShowDlgBeforeDeploying(showDialogBeforeDeployButton.getSelection());
+        ValidationPreferenceService.getInstance().setDeployWayWhenValidateFail(getDeployWayValue());
         return super.performOk();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
-     */
+    private int getDeployWayValue() {
+        if (cancelButton.getSelection()) {
+            return IModelValidationService.BUTTON_CANCEL;
+        } else if (skipErrorsButton.getSelection()) {
+            return IModelValidationService.BUTTON_SKIP_ERROR;
+        } else if (skipErrorsAndWarningsButton.getSelection()) {
+            return IModelValidationService.BUTTON_SKIP_ERROR_WARNING;
+        }
+        Assert.isTrue(false);
+        return -1;
+    }
+
     @Override
     protected void performDefaults() {
-        getPreferenceStore().setValue(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_IMMEDIATE, true);
-        getPreferenceStore().setValue(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_SAVING, true);
         initControls();
-    }
-
-    private boolean needShowDialog() {
-        return getPreferenceStore().getBoolean(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_IMMEDIATE);
-    }
-
-    private boolean needShowDialogAfterSaved() {
-        return getPreferenceStore().getBoolean(IValidationPerferenceConstant.SHOW_RESULT_DIALOG_AFTER_SAVING);
     }
 }
