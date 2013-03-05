@@ -36,6 +36,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -88,6 +89,7 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.wst.xsl.ui.internal.XSLUIPlugin;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
@@ -103,6 +105,7 @@ import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EInputTemplate;
+import com.amalto.workbench.utils.FileProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XmlUtil;
@@ -695,8 +698,11 @@ public class TransformerMainPage extends AMainPageV2 {
                     refreshEnableState(false);
 
                     try {
+                        IPreferenceStore preference = XSLUIPlugin.getDefault().getPreferenceStore();
+                        String charSet = preference.getString("outputCodeset"); //$NON-NLS-1$
                         String xslcontent = parameterEditor.getContent().getContent();
-                        IFile file = XSLTFileProvider.getXSLTFile(xslcontent, getXSLTFileName());
+                        IFile file = FileProvider.createdTempFile(xslcontent, getXSLTFileName(), charSet);
+
                         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
                         xsltEditorInput = new XSLTFileEditorInput(file, new MainPageRefresher(), true);
                         page.openEditor(xsltEditorInput, XSLTEditor.ID);

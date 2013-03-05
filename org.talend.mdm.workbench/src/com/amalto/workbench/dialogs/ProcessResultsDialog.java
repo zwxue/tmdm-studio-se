@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.dialogs;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
@@ -22,6 +24,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
@@ -30,8 +33,11 @@ import org.eclipse.jface.text.source.VerticalRuler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -41,6 +47,7 @@ import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.utils.FileProvider;
 import com.amalto.workbench.webservices.WSExtractedContent;
 
 public class ProcessResultsDialog extends Dialog {
@@ -69,6 +76,7 @@ public class ProcessResultsDialog extends Dialog {
         setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX);
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
 
         try {
@@ -86,19 +94,7 @@ public class ProcessResultsDialog extends Dialog {
 
             variablesCombo = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
             variablesCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1));
-            variablesCombo.addModifyListener(new ModifyListener() {
 
-                public void modifyText(ModifyEvent e) {
-                    String output = variablesCombo.getText();
-                    if (output.startsWith(TransformerMainPage.DEFAULT_DISPLAY))
-                        output = DEFAULT_DISPLAY_TEXT;// TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
-                    String text = variablesCombo.getText();
-                    if (text.equals(DEFAULT_DISPLAY_TEXT)) {
-                        text = TransformerMainPage.DEFAULT_DISPLAY;
-                    }
-                    variablesViewer.setDocument(new Document(getText(text)));
-                }
-            });
             /*
              * variablesCombo.addKeyListener( new KeyListener() { public void keyPressed(KeyEvent e) {} public void
              * keyReleased(KeyEvent e) { if ((e.stateMask==0) && (e.character == SWT.CR)) {
@@ -110,6 +106,44 @@ public class ProcessResultsDialog extends Dialog {
             variablesViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true, 2, 1));
             variablesViewer.configure(new TextSourceViewerConfiguration());
             ((GridData) variablesViewer.getControl().getLayoutData()).minimumHeight = 500;
+
+            final Button seeInBrowser = new Button(composite, SWT.PUSH);
+            seeInBrowser.setText(Messages.ProcessResultsDialog_display);
+            seeInBrowser.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    String htmlContent = variablesViewer.getTextWidget().getText();
+                    IFile file = FileProvider.createdTempFile(htmlContent, Messages.ProcessResultsDialog_temphtml, null);
+
+                    File htmlFile = file.getLocation().toFile();
+                    try {
+                        if (java.awt.Desktop.isDesktopSupported()) {
+                            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+                            desktop.browse(htmlFile.toURI());
+                        }
+
+                    } catch (IOException e1) {
+                        log.error(e1.getMessage(), e1);
+                    }
+                }
+            });
+
+            variablesCombo.addModifyListener(new ModifyListener() {
+
+                public void modifyText(ModifyEvent e) {
+                    String output = variablesCombo.getText();
+                    if (output.startsWith(TransformerMainPage.DEFAULT_DISPLAY))
+                        output = DEFAULT_DISPLAY_TEXT;// TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
+                    String text = variablesCombo.getText();
+                    if (text.equals(DEFAULT_DISPLAY_TEXT)) {
+                        text = TransformerMainPage.DEFAULT_DISPLAY;
+                    }
+                    variablesViewer.setDocument(new Document(getText(text)));
+
+                    seeInBrowser.setEnabled("html".equals(text)); //$NON-NLS-1$
+                }
+            });
 
             variablesCombo.setFocus();
 
@@ -126,10 +160,12 @@ public class ProcessResultsDialog extends Dialog {
 
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         createButton(parent, BUTTON_CLOSE, Messages.ProcessResultsDialog_Close, false);
     }
 
+    @Override
     protected void buttonPressed(int buttonId) {
         switch (buttonId) {
         case BUTTON_CLOSE:

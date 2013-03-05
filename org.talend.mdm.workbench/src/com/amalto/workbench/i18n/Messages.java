@@ -2921,6 +2921,8 @@ public class Messages extends NLS {
 
     public static String ProcessResultsDialog_DefaultDisplayText;
 
+    public static String ProcessResultsDialog_display;
+
     public static String ProcessResultsDialog_ErrorContent;
 
     public static String ProcessResultsDialog_ErrorMsg;
@@ -2930,6 +2932,8 @@ public class Messages extends NLS {
     public static String ProcessResultsDialog_ErrorTitle;
 
     public static String ProcessResultsDialog_PipelineVariables;
+
+    public static String ProcessResultsDialog_temphtml;
 
     public static String ProjectDecisionDialog_DataContainers;
 

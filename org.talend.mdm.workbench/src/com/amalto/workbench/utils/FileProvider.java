@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package com.amalto.workbench.editors;
+package com.amalto.workbench.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,8 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.wst.xsl.ui.internal.XSLUIPlugin;
 import org.talend.core.model.general.Project;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.repository.ProjectManager;
@@ -30,20 +28,18 @@ import org.talend.repository.ProjectManager;
 /**
  * created by liusongbo on 2013-1-6
  */
-public class XSLTFileProvider {
+public class FileProvider {
 
-    private static Log log = LogFactory.getLog(XSLTFileProvider.class);
+    private static Log log = LogFactory.getLog(FileProvider.class);
 
-    public static IFile getXSLTFile(String templateString, String fileName) {
+    public static IFile createdTempFile(String templateString, String fileNameWithExtension, String charSet) {
         IFile file = null;
         if (templateString != null) {
             try {
                 Project project = ProjectManager.getInstance().getCurrentProject();
                 IProject prj = ResourceModelUtils.getProject(project);
-                file = prj.getFile(new Path("temp/" + fileName)); //$NON-NLS-1$
+                file = prj.getFile(new Path("temp/" + fileNameWithExtension)); //$NON-NLS-1$
 
-                IPreferenceStore preference = XSLUIPlugin.getDefault().getPreferenceStore();
-                String charSet = preference.getString("outputCodeset"); //$NON-NLS-1$
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 OutputStreamWriter outputStreamWriter = null;
                 if ((charSet == null) || (charSet.trim().isEmpty())) {
