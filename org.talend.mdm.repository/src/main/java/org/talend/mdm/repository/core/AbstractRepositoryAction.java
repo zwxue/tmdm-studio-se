@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
@@ -49,7 +48,7 @@ import org.talend.repository.RepositoryWorkUnit;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public abstract class AbstractRepositoryAction extends BaseSelectionListenerAction {
 
@@ -69,7 +68,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     /**
      * DOC hbhong AbstractRepositoryAction constructor comment.
-     * 
+     *
      * @param text
      */
     protected AbstractRepositoryAction(String text) {
@@ -87,8 +86,9 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     public List<Object> getSelectedObject() {
 
         IStructuredSelection structuredSelection = getStructuredSelection();
-        if (structuredSelection.isEmpty())
+        if (structuredSelection.isEmpty()) {
             return Collections.EMPTY_LIST;
+        }
         List<Object> result = new LinkedList<Object>();
         for (Iterator<Object> il = structuredSelection.iterator(); il.hasNext();) {
             result.add(il.next());
@@ -97,10 +97,11 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     }
 
     protected Shell getShell() {
-        if(commonViewer!=null)
+        if(commonViewer!=null) {
             return commonViewer.getControl().getShell();
-        else
+        } else {
             return MDMRepositoryView.show().getCommonViewer().getControl().getShell();
+        }
     }
 
     public boolean isVisible(IRepositoryViewObject viewObj) {
@@ -109,15 +110,15 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     @Override
     public final void run() {
-        if (needValidateLockedObject()) {
-            if (isLocked()) {
-                MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertLockedMsg());
-            } else {
-                runRWU();
-            }
-        } else {
+        // if (needValidateLockedObject()) {
+        // if (isLocked()) {
+        // MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertLockedMsg());
+        // } else {
+        // runRWU();
+        // }
+        // } else {
             runRWU();
-        }
+        // }
     }
 
     protected boolean isLocked() {
