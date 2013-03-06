@@ -17,6 +17,7 @@ import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.validate.IValidationPreference;
 import org.talend.mdm.repository.core.validate.ValidationPreferenceService;
 import org.talend.mdm.repository.ui.preferences.IValidationPerferenceConstant;
+import org.talend.mdm.repository.utils.UIUtil;
 
 /**
  * created by HHB on 2013-1-31 Detailled comment
@@ -33,12 +34,15 @@ public class BeforeDeployingValidationPreference implements IValidationPreferenc
      */
     @Override
     public boolean shouldShowResults(ValidationResultSummary result) {
-        int errorCount = result.getSeverityError();
-        int warningCount = result.getSeverityWarning();
-        if (errorCount == 0 && warningCount == 0) {
-            return false;
+        if (UIUtil.isWorkInUI()) {
+            int errorCount = result.getSeverityError();
+            int warningCount = result.getSeverityWarning();
+            if (errorCount == 0 && warningCount == 0) {
+                return false;
+            }
+            return service.isShowDlgBeforeDeploying();
         }
-        return service.isShowDlgBeforeDeploying();
+        return false;
 
     }
 
@@ -50,6 +54,16 @@ public class BeforeDeployingValidationPreference implements IValidationPreferenc
     @Override
     public void setShowResults(Boolean showing) {
         service.setShowDlgBeforeDeploying(showing);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.core.validate.IValidationPreference#updateLastSelectedBun(int)
+     */
+    @Override
+    public void updateLastSelectedBun(int selectedBun) {
+        service.setDeployWayWhenValidateFail(selectedBun);
     }
 
     /*

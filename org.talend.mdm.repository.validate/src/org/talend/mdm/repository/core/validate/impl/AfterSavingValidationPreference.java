@@ -51,6 +51,16 @@ public class AfterSavingValidationPreference implements IValidationPreference, I
     /*
      * (non-Javadoc)
      * 
+     * @see org.talend.mdm.repository.core.validate.IValidationPreference#updateLastSelectedBun(int)
+     */
+    @Override
+    public void updateLastSelectedBun(int selectedBun) {
+        // do nothing
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#getValidationCondition()
      */
     @Override

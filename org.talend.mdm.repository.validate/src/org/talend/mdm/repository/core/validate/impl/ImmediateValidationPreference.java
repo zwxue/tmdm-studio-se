@@ -38,6 +38,11 @@ public class ImmediateValidationPreference implements IValidationPreference, IVa
 
     }
 
+    @Override
+    public void updateLastSelectedBun(int selectedBun) {
+        // do nothing
+    }
+
     /*
      * (non-Javadoc)
      * 

@@ -10,25 +10,26 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.core.validate;
+package org.talend.mdm.repository.utils;
 
-import org.eclipse.wst.validation.internal.ValidationResultSummary;
+import org.eclipse.ui.PlatformUI;
 
 /**
- * created by HHB on 2013-1-23 Detailled comment
+ * created by HHB on 2013-3-6 Detailled comment
  * 
  */
-public interface IValidationPreference {
+public class UIUtil {
 
-    public boolean shouldShowResults(ValidationResultSummary result);
+    private static Boolean workInUI = null;
 
-    public void setShowResults(Boolean showing);
-
-    public void updateLastSelectedBun(int selectedBun);
-
-    /**
-     * 
-     * @return IModelValidationService.VALIDATE_XXX
-     */
-    public int getValidationCondition();
+    public static boolean isWorkInUI() {
+        if (workInUI == null) {
+            try {
+                workInUI = PlatformUI.getWorkbench() != null;
+            } catch (Exception e) {
+                workInUI = false;
+            }
+        }
+        return workInUI;
+    }
 }

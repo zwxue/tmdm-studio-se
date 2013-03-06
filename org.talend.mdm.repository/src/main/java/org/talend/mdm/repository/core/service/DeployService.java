@@ -15,6 +15,7 @@ package org.talend.mdm.repository.core.service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -161,7 +162,7 @@ public class DeployService {
             ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
             cancelCmd.updateViewObject(viewObj);
             DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd,
-                    Messages.bind(Messages.Deploy_cancel_text, "", viewObj.getLabel()));
+                    Messages.bind(Messages.Deploy_cancel_text, "", viewObj.getLabel())); //$NON-NLS-1$
             ((MultiStatus) mainStatus).add(cancelStatus);
         }
 
@@ -221,6 +222,30 @@ public class DeployService {
             boolean warnUser = PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_WARN_USER_AUTO_DEPLOY);
             if (warnUser) {
                 MessageDialog.openWarning(shell, Messages.Warning_text, Messages.NeverDeploy_text);
+            }
+        }
+    }
+
+    public List<IRepositoryViewObject> getDeployViewObject(List<AbstractDeployCommand> selectededCommands) {
+        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>(selectededCommands.size());
+        for (AbstractDeployCommand command : selectededCommands) {
+            IRepositoryViewObject viewObject = command.getViewObject();
+            if (viewObject != null && !viewObjs.contains(viewObject)) {
+                viewObjs.add(viewObject);
+            }
+        }
+        return viewObjs;
+    }
+
+    public void removeInvalidCommands(List<IRepositoryViewObject> invalidObjects, List<AbstractDeployCommand> selectededCommands) {
+        if (invalidObjects == null || invalidObjects.isEmpty()) {
+            return;
+        }
+        for (Iterator<AbstractDeployCommand> il = selectededCommands.iterator(); il.hasNext();) {
+            AbstractDeployCommand cmd = il.next();
+            IRepositoryViewObject viewObject = cmd.getViewObject();
+            if (viewObject != null && invalidObjects.contains(viewObject)) {
+                il.remove();
             }
         }
     }

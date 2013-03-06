@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,8 +76,9 @@ public class DeployAllAction extends AbstractDeployAction {
         if (dialog.open() == IDialogConstants.OK_ID) {
             List<AbstractDeployCommand> selectededCommands = dialog.getSelectedCommands();
             if (selectededCommands.size() >= 0) {
-                deployViewObject = getDeployViewObject(selectededCommands);
                 DeployService deployService = DeployService.getInstance();
+                deployViewObject = deployService.getDeployViewObject(selectededCommands);
+
                 // validate object
                 IModelValidateResult validateResult = deployService.validateModel(deployViewObject);
                 int selectedButton = validateResult.getSelectedButton();
@@ -87,7 +87,7 @@ public class DeployAllAction extends AbstractDeployAction {
                 }
                 List<IRepositoryViewObject> validObjects = validateResult.getValidObjects(selectedButton);
                 List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
-                removeInvalidCommands(invalidObjects, selectededCommands);
+                deployService.removeInvalidCommands(invalidObjects, selectededCommands);
                 // save editors
                 LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
                         Messages.AbstractDeployAction_promptToSaveEditors, validObjects);
@@ -112,19 +112,6 @@ public class DeployAllAction extends AbstractDeployAction {
         }
     }
 
-    private void removeInvalidCommands(List<IRepositoryViewObject> invalidObjects, List<AbstractDeployCommand> selectededCommands) {
-        if (invalidObjects == null || invalidObjects.isEmpty()) {
-            return;
-        }
-        for (Iterator<AbstractDeployCommand> il = selectededCommands.iterator(); il.hasNext();) {
-            AbstractDeployCommand cmd = il.next();
-            IRepositoryViewObject viewObject = cmd.getViewObject();
-            if (viewObject != null && invalidObjects.contains(viewObject)) {
-                il.remove();
-            }
-        }
-    }
-
     protected void reorderCommandObjects(List<AbstractDeployCommand> commands) {
         List<AbstractDeployCommand> dataModelCommands = new LinkedList<AbstractDeployCommand>();
         for (Iterator<AbstractDeployCommand> il = commands.iterator(); il.hasNext();) {
@@ -138,17 +125,6 @@ public class DeployAllAction extends AbstractDeployAction {
         if (!dataModelCommands.isEmpty()) {
             commands.addAll(0, dataModelCommands);
         }
-    }
-
-    private List<IRepositoryViewObject> getDeployViewObject(List<AbstractDeployCommand> selectededCommands) {
-        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>(selectededCommands.size());
-        for (AbstractDeployCommand command : selectededCommands) {
-            IRepositoryViewObject viewObject = command.getViewObject();
-            if (viewObject != null && !viewObjs.contains(viewObject)) {
-                viewObjs.add(viewObject);
-            }
-        }
-        return viewObjs;
     }
 
     @Override
