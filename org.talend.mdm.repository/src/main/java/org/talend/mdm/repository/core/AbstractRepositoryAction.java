@@ -110,15 +110,10 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     @Override
     public final void run() {
-        // if (needValidateLockedObject()) {
-        // if (isLocked()) {
-        // MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertLockedMsg());
-        // } else {
-        // runRWU();
-        // }
-        // } else {
-            runRWU();
-        // }
+        if (needValidateLockedObject()) {
+            isLocked();
+        }
+        runRWU();
     }
 
     protected boolean isLocked() {
