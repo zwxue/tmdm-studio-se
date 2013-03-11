@@ -794,6 +794,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 int index = content.indexOf(data);
                 if (index < content.size() - 1) {
                     content.move(index, index + 1);
+                    isDirty = true;
                     this.refresh();
                 }
             }
