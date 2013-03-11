@@ -39,6 +39,8 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -133,6 +135,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             clusterComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
             resultsViewer = clusterComp.getResultsViewer();
 
+            hookDoubleClick();
+
             hookKeyboard();
 
             hookContextMenu();
@@ -174,6 +178,21 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     @Override
     protected void createActions() {
+    }
+
+    private void hookDoubleClick() {
+        resultsViewer.addDoubleClickListener(new IDoubleClickListener() {
+
+            public void doubleClick(DoubleClickEvent event) {
+                resultsViewer.setSelection(event.getSelection());
+                try {
+                    new EditItemAction(DataClusterBrowserMainPage.this.getSite().getShell(), resultsViewer).run();
+                } catch (Exception e) {
+                    MessageDialog.openError(DataClusterBrowserMainPage.this.getSite().getShell(), Messages._Error, Messages.bind(
+                            Messages.DataClusterBrowserMainPage_10, e.getClass().getName(), e.getLocalizedMessage()));
+                }
+            }
+        });
     }
 
     private void hookKeyboard() {
