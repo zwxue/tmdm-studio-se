@@ -44,15 +44,32 @@ public class DeleteAction extends AbstractBridgeRepositoryAction {
 
         List<Object> selectedObject = getSelectedObject();
         for (Object obj : selectedObject) {
-            if (obj instanceof IRepositoryViewObject && !(obj instanceof FolderRepositoryObject)) {
+            if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
-
-                ERepositoryStatus repositoryStatus = viewObj.getRepositoryStatus();
-                if (repositoryStatus == ERepositoryStatus.DELETED) {
-                    CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), viewObj.getLabel());
+                if (viewObj instanceof FolderRepositoryObject) {
+                    removeFolderObject(viewObj);
+                } else {
+                    removeServerObject(viewObj);
                 }
             }
         }
     }
 
+    private void removeFolderObject(IRepositoryViewObject viewObj) {
+        for (IRepositoryViewObject childObj : viewObj.getChildren()) {
+            if (childObj instanceof FolderRepositoryObject) {
+                removeFolderObject(childObj);
+            } else {
+                removeServerObject(childObj);
+            }
+        }
+
+    }
+
+    private void removeServerObject(IRepositoryViewObject viewObj) {
+        ERepositoryStatus repositoryStatus = viewObj.getRepositoryStatus();
+        if (repositoryStatus == ERepositoryStatus.DELETED) {
+            CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), viewObj.getLabel());
+        }
+    }
 }
