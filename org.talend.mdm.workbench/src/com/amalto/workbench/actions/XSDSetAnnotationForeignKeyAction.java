@@ -54,33 +54,38 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
         this.dataModelName = dataModelName;
     }
 
+    @Override
     public IStatus doAction() {
         try {
 
             // add by ymli. fix the bug:0010293
             if (page.isDirty()) {
                 // MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource, 
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
                         Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName()));
                 if (save) {
                     IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
-                } else
+                } else {
                     return Status.CANCEL_STATUS;
+                }
             }
             IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
             XSDComponent xSDCom = null;
             if (selection.getFirstElement() instanceof Element) {
                 TreePath tPath = ((TreeSelection) selection).getPaths()[0];
                 for (int i = 0; i < tPath.getSegmentCount(); i++) {
-                    if (tPath.getSegment(i) instanceof XSDAnnotation)
+                    if (tPath.getSegment(i) instanceof XSDAnnotation) {
                         xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+                    }
                 }
-            } else
+            } else {
                 xSDCom = (XSDComponent) selection.getFirstElement();
+            }
             XSDAnnotationsStructure struc = null;
-            if (xSDCom != null)
+            if (xSDCom != null) {
                 struc = new XSDAnnotationsStructure(xSDCom);
+            }
             if (struc == null || struc.getAnnotation() == null) {
                 throw new RuntimeException(Messages.bind(Messages.UnableEditType, xSDCom.getClass().getName()));
             }
@@ -99,14 +104,18 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             String fk = "".equals(sxid.getXpath()) ? null : sxid.getXpath().replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             // keep the foreignkey in memory to improve performance
             if (Util.getForeignKeys() != null && fk != null) {
-                if (struc.getForeignKey() != null)
+                if (struc.getForeignKey() != null) {
                     Util.getForeignKeys().remove(Util.getConceptFromPath(struc.getForeignKey()));
+                }
                 Util.getForeignKeys().add(Util.getConceptFromPath(fk));
             }
             struc.setForeignKey(fk);
             Boolean sep = sxid.getSepFk();
             struc.setForeignKeyNotSep(sep);
             if (struc.hasChanged()) {
+                if (fk == null) {
+                    struc.getDeclaration().setAnnotation(null);
+                }
                 page.refresh();
                 page.getTreeViewer().expandToLevel(xSDCom, 2);
                 page.markDirty();
@@ -125,6 +134,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
         return new SimpleXpathInputDialog(page, Messages.SetForeignKey,
                 Messages.EnterXpathForeignKey, foreignKey, new SelectionAdapter() {
 
+                    @Override
                     public void widgetSelected(SelectionEvent e) {
                         sxid.close();
                     }
@@ -132,6 +142,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
 
         );
     }
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
