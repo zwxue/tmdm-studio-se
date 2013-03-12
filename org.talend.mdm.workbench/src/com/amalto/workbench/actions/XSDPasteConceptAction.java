@@ -72,6 +72,7 @@ public class XSDPasteConceptAction extends UndoAction {
         setToolTipText(Messages.XSDPasteConceptAction_ActionTip);
     }
 
+    @Override
     public IStatus doAction() {
 
         try {
@@ -97,7 +98,7 @@ public class XSDPasteConceptAction extends UndoAction {
                         XSDElementDeclaration copy_concept = (XSDElementDeclaration) concept;
 
                         XSDElementDeclaration new_copy_concept = factory.createXSDElementDeclaration();
-                       
+
 
                         new_copy_concept = (XSDElementDeclaration) copy_concept.cloneConcreteComponent(true, false);
                         InputDialog id = new InputDialog(page.getSite().getShell(), Messages.XSDPasteConceptAction_CopyElement,
@@ -105,13 +106,14 @@ public class XSDPasteConceptAction extends UndoAction {
                                         copy_concept.getName()), new IInputValidator() {
 
                                     public String isValid(String newText) {
-                                        if ((newText == null) || "".equals(newText)) //$NON-NLS-1$
+                                        if ((newText == null) || "".equals(newText)) {
                                             return Messages.XSDPasteConceptAction_NameCannNotbeEmpty;
+                                        }
                                         EList<XSDElementDeclaration> list = schema.getElementDeclarations();
-                                        for (Iterator<XSDElementDeclaration> iter = list.iterator(); iter.hasNext();) {
-                                            XSDElementDeclaration d = iter.next();
-                                            if (d.getName().equals(newText))
+                                        for (XSDElementDeclaration d : list) {
+                                            if (d.getName().equals(newText)) {
                                                 return Messages.XSDPasteConceptAction_EntityAlreadyExists;
+                                            }
                                         }
                                         return null;
                                     };
@@ -129,11 +131,11 @@ public class XSDPasteConceptAction extends UndoAction {
                                     .replaceAll(copy_concept.getName(), new_copy_concept.getName());
                             new_copy_concept.getIdentityConstraintDefinitions().get(i).setName(name);
                         }
-                        
+
                         ///modified by xie to fix the bug 22077
-                        
+
                         if(new_copy_concept.getAnonymousTypeDefinition() == null) {
-                        
+
                            XSDComplexTypeDefinition copyType =(XSDComplexTypeDefinition) copy_concept.getTypeDefinition().cloneConcreteComponent(true, false);
                            String originalName =  copyType.getName();
                            String typeName = "Copy_of_" + originalName;    //$NON-NLS-1$
@@ -142,18 +144,19 @@ public class XSDPasteConceptAction extends UndoAction {
                            new_copy_concept.setTypeDefinition(copyType);
 
                         }
-                        
+
                         new_copy_concept.updateElement();
                         schema.getContents().add(new_copy_concept);
                         addAnnotationForXSDElementDeclaration(copy_concept, new_copy_concept);
 
-                      
+
                     }
                 }
                 HashMap<String, XSDTypeDefinition> typeDef = Util.getTypeDefinition(schema);
                 for (XSDTypeDefinition type : copyTypeSet) {
-                    if (typeDef.containsKey(type.getName()))
+                    if (typeDef.containsKey(type.getName())) {
                         continue;
+                    }
                     XSDTypeDefinition typedefinitionClone = null;
                     if (type instanceof XSDComplexTypeDefinition) {
                         typedefinitionClone = factory.createXSDComplexTypeDefinition();
@@ -195,8 +198,9 @@ public class XSDPasteConceptAction extends UndoAction {
 
                 getOperationHistory();
                 return Status.OK_STATUS;
-            } else
+            } else {
                 return Status.CANCEL_STATUS;
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), Messages._Error,
@@ -211,7 +215,7 @@ public class XSDPasteConceptAction extends UndoAction {
          * if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1) this.displayName = "Paste Entities";
          */
         if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() <= 0
-                && WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() <= 0)
+                && WorkbenchClipboard.getWorkbenchClipboard().getParticles().size() <= 0) {
             return false;
         // edit by ymli,fix the bug:0011523. let the element(simple or complex) can be pasted
         /*
@@ -219,8 +223,9 @@ public class XSDPasteConceptAction extends UndoAction {
          * ele:conceptList){ if(conceptList.get(t).getSchema()!=null){ List<String> concepts =
          * Util.getConcepts(conceptList.get(t).getSchema()); if(concepts.contains(ele.getName())) return true; } t++; }
          */
-        else
+        } else {
             return true;
+        }
     }
 
     public void addAnnotationForComplexType(XSDComplexTypeDefinition fromType, XSDComplexTypeDefinition toType) {
@@ -250,8 +255,9 @@ public class XSDPasteConceptAction extends UndoAction {
                         if (fromannotation != null) {
                             XSDAnnotationsStructure struc = new XSDAnnotationsStructure(totm);
                             addAnnotion(struc, fromannotation);
-                            if (this.typeList.containsKey(((XSDElementDeclaration) totm).getType().getName()))
+                            if (this.typeList.containsKey(((XSDElementDeclaration) totm).getType().getName())) {
                                 this.copyTypeSet.add(this.typeList.get(((XSDElementDeclaration) totm).getType().getName()));
+                            }
                             addAnnotationForXSDElementDeclaration((XSDElementDeclaration) fromtm, (XSDElementDeclaration) totm);
 
                         }
@@ -272,8 +278,9 @@ public class XSDPasteConceptAction extends UndoAction {
             XSDComplexTypeContent fromcomplexType = ((XSDComplexTypeDefinition) fromElem.getTypeDefinition()).getContent();
             // if the concept is a complex type itself. copy the complex type also,
             // in this situation,if not copy the complex type, the type change to simple type
-            if (this.typeList.containsKey(toElem.getTypeDefinition().getName()))
+            if (this.typeList.containsKey(toElem.getTypeDefinition().getName())) {
                 this.copyTypeSet.add(this.typeList.get(toElem.getTypeDefinition().getName()));
+            }
 
             if (toElem.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
                 XSDComplexTypeContent tocomplexType = ((XSDComplexTypeDefinition) toElem.getTypeDefinition()).getContent();
@@ -313,8 +320,9 @@ public class XSDPasteConceptAction extends UndoAction {
 
                                 }
                                 if (((XSDElementDeclaration) totm).getType() != null
-                                        && this.typeList.containsKey(((XSDElementDeclaration) totm).getType().getName()))
+                                        && this.typeList.containsKey(((XSDElementDeclaration) totm).getType().getName())) {
                                     this.copyTypeSet.add(this.typeList.get(((XSDElementDeclaration) totm).getType().getName()));
+                                }
                                 addAnnotationForXSDElementDeclaration((XSDElementDeclaration) fromtm,
                                         (XSDElementDeclaration) totm);
                             }
@@ -324,8 +332,9 @@ public class XSDPasteConceptAction extends UndoAction {
             }
         } else {
             String simpleType = fromElem.getTypeDefinition().getName();
-            if (this.typeList.containsKey(simpleType))
+            if (this.typeList.containsKey(simpleType)) {
                 this.copyTypeSet.add(fromElem.getTypeDefinition());
+            }
         }
     }
 
@@ -377,13 +386,13 @@ public class XSDPasteConceptAction extends UndoAction {
                 }
                 /*
                  * xsdannotation.getApplicationInformation().addAll(listAppInfo);
-                 * 
+                 *
                  * for (int i = 0; i < oldAnn.getUserInformation().size(); i++) { Element oldElemUserInfo =
                  * oldAnn.getUserInformation() .get(i); Element newElemUserInfo = (Element) oldElemUserInfo
                  * .cloneNode(true); listUserInfo.add(newElemUserInfo);
-                 * 
+                 *
                  * } xsdannotation.getUserInformation().addAll(listUserInfo);
-                 * 
+                 *
                  * for (int i = 0; i < oldAnn.getAttributes().size(); i++) { Attr oldAttri =
                  * oldAnn.getAttributes().get(i); Attr newAtri = (Attr) oldAttri.cloneNode(true);
                  * listAttri.add(newAtri); } xsdannotation.getAttributes().addAll(listAttri);
@@ -414,7 +423,7 @@ public class XSDPasteConceptAction extends UndoAction {
                     .getContainer().getContainer();
             content = complexType.getContent();
         }
-        
+
         if (content instanceof XSDParticle) {
             XSDParticle partile = (XSDParticle) content;
             if (partile.getTerm() instanceof XSDModelGroup) {
@@ -426,14 +435,16 @@ public class XSDPasteConceptAction extends UndoAction {
                                 Messages.bind(Messages.XSDPasteConceptAction_ErrorMsg3, ((XSDElementDeclaration) particle.getTerm()).getName()));
                         if (ifOverwrite) {
                             reomveElement(toGroup, particle);
-                        } else
+                        } else {
                             continue;
+                        }
                     }
 
                     XSDParticle newParticle = (XSDParticle) particle.cloneConcreteComponent(true, false);
                     if (newParticle.getContent() instanceof XSDElementDeclaration
-                            && Util.changeElementTypeToSequence(element, newParticle.getMaxOccurs()) == Status.CANCEL_STATUS)
+                            && Util.changeElementTypeToSequence(element, newParticle.getMaxOccurs()) == Status.CANCEL_STATUS) {
                         break;
+                    }
                     toGroup.getContents().add(newParticle);
                     toGroup.updateElement();
 
@@ -449,6 +460,8 @@ public class XSDPasteConceptAction extends UndoAction {
                         XSDAnnotationsStructure struc1 = new XSDAnnotationsStructure(newParticle.getTerm());
                         addAnnotion(struc1, ((XSDElementDeclaration) particle.getTerm()).getAnnotation());
 
+                        Util.changeElementTypeToSequence((XSDElementDeclaration) newParticle.getContent(),
+                                newParticle.getMaxOccurs());
                     }
 
                 }
@@ -461,8 +474,9 @@ public class XSDPasteConceptAction extends UndoAction {
             if (paticleContent.getTerm() instanceof XSDElementDeclaration) {
                 String contentName = ((XSDElementDeclaration) paticleContent.getTerm()).getName();
                 String copyParticleName = ((XSDElementDeclaration) particle.getTerm()).getName();
-                if (contentName.equals(copyParticleName))
+                if (contentName.equals(copyParticleName)) {
                     return true;
+                }
             }
         }
         return false;
