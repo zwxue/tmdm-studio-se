@@ -1,15 +1,13 @@
-// ============================================================================
-//
-// Copyright (C) 2006-2013 Talend Inc. - www.talend.com
-//
-// This source code is available under agreement available at
-// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
-//
-// You should have received a copy of the agreement
-// along with this program; if not, write to Talend SA
-// 9 rue Pages 92150 Suresnes, France
-//
-// ============================================================================
+/*
+ * Copyright (C) 2006-2013 Talend Inc. - www.talend.com
+ *
+ * This source code is available under agreement available at
+ * %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+ *
+ * You should have received a copy of the agreement
+ * along with this program; if not, write to Talend SA
+ * 9 rue Pages 92150 Suresnes, France
+ */
 
 package org.talend.mdm.repository.core.validate.datamodel.wstext;
 
@@ -23,7 +21,7 @@ import org.eclipse.wst.xml.core.internal.validation.core.NestedValidatorContext;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.ValidationReport;
 import org.talend.mdm.repository.core.service.IModelValidationService;
-import org.talend.mdm.repository.core.validate.datamodel.IDataModelChecker;
+import org.talend.mdm.repository.core.validate.datamodel.IChecker;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
 import org.talend.mdm.repository.core.validate.datamodel.validator.IModelBuilder;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
@@ -57,7 +55,7 @@ public class DataModelValidator extends AbstractNestedValidator implements IData
         return report;
     }
 
-    private IDataModelChecker modelChecker;
+    private IChecker modelChecker;
 
     // //////////// overwrite///////////////////
     private boolean fileIsAccessible(IFile file) {
