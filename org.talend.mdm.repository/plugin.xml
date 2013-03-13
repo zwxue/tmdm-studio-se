@@ -603,21 +603,6 @@
      </editor>
   </extension>
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="com.talend.mdm.repository.welcomeeditorextension"
-            label="for welcome editor"
-            visible="true">
-         <action
-               class="org.talend.mdm.repository.ui.starting.ShowWelcomeEditorAction"
-               id="com.talend.mdm.repository.welcomeeditor"
-               label="Get Started With Talend MDM"
-               menubarPath="help/welcome"
-               style="push">
-         </action>
-      </actionSet>
-   </extension>
-   <extension
          point="org.talend.core.migrationTask">
       <projecttask
             beforeLogon="true"
@@ -668,6 +653,32 @@
             class="org.talend.mdm.repository.core.service.ValidateService"
             serviceId="IValidateService">
       </Service>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.talend.mdm.repository.show.welcomeEditor.command"
+            name="Get Started With Talend MDM">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.talend.mdm.repository.ui.starting.handler.ShowWelcomeEditorHandler"
+            commandId="org.talend.mdm.repository.show.welcomeEditor.command">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:help?before=group help">
+         <command
+               commandId="org.talend.mdm.repository.show.welcomeEditor.command"
+               id="org.talend.mdm.repository.show.welcomeEditor.menus.command"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
       
    
