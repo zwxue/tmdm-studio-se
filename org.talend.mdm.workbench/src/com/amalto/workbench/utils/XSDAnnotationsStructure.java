@@ -55,7 +55,7 @@ public class XSDAnnotationsStructure {
     XSDComponent componet;
     /**
      * "Clever" Constructor that finds or creates annotations of an XSDComponent object
-     * 
+     *
      * @param component
      */
     public XSDAnnotationsStructure(XSDComponent component) {
@@ -78,7 +78,7 @@ public class XSDAnnotationsStructure {
             }
         }
         if(component instanceof XSDComplexTypeDefinition){
-        	XSDComplexTypeDefinition def = (XSDComplexTypeDefinition) component;    
+        	XSDComplexTypeDefinition def = (XSDComplexTypeDefinition) component;
         	XSDParticle paticle=(XSDParticle)def.getContent();
         	componet=paticle.getTerm();
         	if (def.getAnnotation() == null) {
@@ -290,14 +290,14 @@ public class XSDAnnotationsStructure {
 
     /****************************************************************************
      * Auto Expand
-     * @throws Exception 
+     * @throws Exception
      ****************************************************************************/
 
     public boolean setAutoExpand(String value) throws Exception {
     	if(!(declaration.getTypeDefinition() instanceof XSDComplexTypeDefinition)){
     		return false;
     	}
-        
+
         XSDSchema xsd = schema != null ? schema : declaration.getSchema();
         String auto="X_AutoExpand"; //$NON-NLS-1$
         String xsdString = Util.nodeToString(xsd.getDocument().getDocumentElement());
@@ -324,8 +324,8 @@ public class XSDAnnotationsStructure {
 
 
                 if (!isImported) {
-                    XSDAnnotationsStructure annotion = new XSDAnnotationsStructure((XSDComponent) obj);                                        
-                    annotion.setAppInfo(auto, value,true);                    
+                    XSDAnnotationsStructure annotion = new XSDAnnotationsStructure((XSDComponent) obj);
+                    annotion.setAppInfo(auto, value,true);
                 }
            }
         }
@@ -335,7 +335,7 @@ public class XSDAnnotationsStructure {
     public String getAutoExpand() {
         return getAppInfoValue("X_AutoExpand");//$NON-NLS-1$
     }
-    
+
     /****************************************************************************
      * FOREIGN KEY
      ****************************************************************************/
@@ -351,7 +351,7 @@ public class XSDAnnotationsStructure {
     }
 
     public boolean setForeignKeyNotSep(Boolean sep) {
-        boolean somethingChanged = setAppInfo("X_ForeignKey_NotSep", sep.toString(), true);//$NON-NLS-1$
+        boolean somethingChanged = setAppInfo("X_ForeignKey_NotSep", sep == null ? null : sep.toString(), true);//$NON-NLS-1$
         hasChanged = hasChanged | somethingChanged;
         return somethingChanged;
     }
@@ -401,19 +401,23 @@ public class XSDAnnotationsStructure {
      * FOREIGN KEY INFOS
      ****************************************************************************/
     public boolean setForeignKeyInfos(List<String> xPaths) {
-        removeAppInfos("X_ForeignKeyInfo");//$NON-NLS-1$
+        hasChanged = removeAppInfos("X_ForeignKeyInfo");//$NON-NLS-1$
+        boolean added = false;
         for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
             String xPath = iter.next();
             addAppInfo("X_ForeignKeyInfo", xPath);//$NON-NLS-1$
+            added = true;
         }
-        hasChanged = true;
+        hasChanged = hasChanged || added;
         return true;
     }
 
-    public boolean setRetrieveFKinfos(boolean retrieveFKinfos) {
-        removeAppInfos("X_Retrieve_FKinfos");//$NON-NLS-1$
-        addAppInfo("X_Retrieve_FKinfos", retrieveFKinfos + "");//$NON-NLS-1$//$NON-NLS-2$
-        hasChanged = true;
+    public boolean setRetrieveFKinfos(Boolean retrieveFKinfos) {
+        hasChanged = removeAppInfos("X_Retrieve_FKinfos");//$NON-NLS-1$
+        if (retrieveFKinfos != null) {
+            hasChanged = addAppInfo("X_Retrieve_FKinfos", retrieveFKinfos + "");//$NON-NLS-1$//$NON-NLS-2$
+            return true;
+        }
         return true;
     }
 
@@ -449,7 +453,7 @@ public class XSDAnnotationsStructure {
 
     /****************************************************************************
      * WRITE ACCESS
-     * 
+     *
      * @throws XtentisException
      ****************************************************************************/
     public boolean setAccessRole(Collection<String> roles, boolean recursive, IStructuredContentProvider provider, String access)
@@ -551,7 +555,7 @@ public class XSDAnnotationsStructure {
         LinkedHashMap<String, String> appInfos = getAppInfos("X_Deny_PhysicalDelete");//$NON-NLS-1$
         Set<String> keys = appInfos.keySet();
         for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
-            String key = (String) iter.next();
+            String key = iter.next();
             writeAccesses.put(key, appInfos.get(key));
         }
         return writeAccesses;
@@ -770,7 +774,7 @@ public class XSDAnnotationsStructure {
         LinkedHashMap<String, String> appInfos = getAppInfos(ICoreConstants.X_Workflow);
         Set<String> keys = appInfos.keySet();
         for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
-            String key = (String) iter.next();
+            String key = iter.next();
             String v = appInfos.get(key);
             if (v == null || v.trim().length() == 0)
                 continue;
@@ -977,7 +981,7 @@ public class XSDAnnotationsStructure {
         ArrayList<Element> list = new ArrayList<Element>();
         list.addAll(annotation.getApplicationInformation());
         list.addAll(annotation.getUserInformation());
-        
+
         if(componet!=null)
         	hasChanged = true;
         if (list.size() == 0) {
