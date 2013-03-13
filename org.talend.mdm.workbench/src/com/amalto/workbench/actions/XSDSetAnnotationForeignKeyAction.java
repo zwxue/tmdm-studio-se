@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import java.util.Collections;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
@@ -112,10 +114,8 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             struc.setForeignKey(fk);
             Boolean sep = sxid.getSepFk();
             struc.setForeignKeyNotSep(sep);
+            updateAnnotationStructure(struc);
             if (struc.hasChanged()) {
-                if (fk == null) {
-                    struc.getDeclaration().setAnnotation(null);
-                }
                 page.refresh();
                 page.getTreeViewer().expandToLevel(xSDCom, 2);
                 page.markDirty();
@@ -128,6 +128,16 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
+    }
+
+    private void updateAnnotationStructure(XSDAnnotationsStructure struc) {
+        String fk = struc.getForeignKey();
+        if (fk == null) {
+            struc.setForeignKeyNotSep(null);
+            struc.setFKFilter(null);
+            struc.setForeignKeyInfos(Collections.EMPTY_LIST);
+            struc.setRetrieveFKinfos(null);
+        }
     }
 
     protected SimpleXpathInputDialog getNewSimpleXpathInputDlg(String foreignKey) {
