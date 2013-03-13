@@ -401,23 +401,24 @@ public class XSDAnnotationsStructure {
      * FOREIGN KEY INFOS
      ****************************************************************************/
     public boolean setForeignKeyInfos(List<String> xPaths) {
-        hasChanged = removeAppInfos("X_ForeignKeyInfo");//$NON-NLS-1$
+        boolean somethingChanged = removeAppInfos("X_ForeignKeyInfo");//$NON-NLS-1$
         boolean added = false;
         for (Iterator<String> iter = xPaths.iterator(); iter.hasNext();) {
             String xPath = iter.next();
             addAppInfo("X_ForeignKeyInfo", xPath);//$NON-NLS-1$
             added = true;
         }
-        hasChanged = hasChanged || added;
+        hasChanged |= somethingChanged | added;
         return true;
     }
 
     public boolean setRetrieveFKinfos(Boolean retrieveFKinfos) {
-        hasChanged = removeAppInfos("X_Retrieve_FKinfos");//$NON-NLS-1$
+        boolean somethingChanged = removeAppInfos("X_Retrieve_FKinfos");//$NON-NLS-1$
         if (retrieveFKinfos != null) {
-            hasChanged = addAppInfo("X_Retrieve_FKinfos", retrieveFKinfos + "");//$NON-NLS-1$//$NON-NLS-2$
+            hasChanged = addAppInfo("X_Retrieve_FKinfos", retrieveFKinfos.toString());//$NON-NLS-1$
             return true;
         }
+        hasChanged |= somethingChanged;
         return true;
     }
 
