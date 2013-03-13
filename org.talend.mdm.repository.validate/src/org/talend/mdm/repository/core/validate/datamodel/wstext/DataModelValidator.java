@@ -11,9 +11,11 @@
 
 package org.talend.mdm.repository.core.validate.datamodel.wstext;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.xml.core.internal.validation.core.AbstractNestedValidator;
@@ -50,9 +52,15 @@ public class DataModelValidator extends AbstractNestedValidator implements IData
     public ValidationReport validate(String uri, InputStream inputstream, NestedValidatorContext context) {
         //
         DataModelValidationReport report = new DataModelValidationReport(uri);
-        List<ModelValidationMessage> messages = modelChecker.toCheck(uri);
+        List<ModelValidationMessage> messages = modelChecker.toCheck(getFileFromURI(uri));
         report.addMessages(messages);
         return report;
+    }
+
+    private File getFileFromURI(String uri) {
+        URI fileURI = URI.createURI(uri);
+        File file = new File(fileURI.devicePath());
+        return file;
     }
 
     private IChecker modelChecker;
