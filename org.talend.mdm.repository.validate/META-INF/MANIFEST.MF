@@ -17,6 +17,7 @@ Require-Bundle: org.apache.log4j,
  org.talend.core.runtime,
  org.talend.mdm.repository,
  org.talend.model,
- org.eclipse.ui.forms
+ org.eclipse.ui.forms,
+ org.talend.mdm.commmon;bundle-version="3.2.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
