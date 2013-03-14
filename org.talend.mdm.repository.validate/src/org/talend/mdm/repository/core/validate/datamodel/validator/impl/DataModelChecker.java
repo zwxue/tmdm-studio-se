@@ -18,9 +18,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.talend.mdm.commmon.metadata.MetadataRepository;
-import org.talend.mdm.commmon.metadata.TypeMetadata;
-import org.talend.mdm.commmon.metadata.ValidationHandler;
+import org.talend.mdm.commmon.metadata.*;
 import org.talend.mdm.repository.core.validate.datamodel.IChecker;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
@@ -67,21 +65,39 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
     private static class ValidationHandlerAdapter implements ValidationHandler {
 
+        public static final String ANONYMOUS_TYPE_NAME = "<Anonymous>";
         private final List<ModelValidationMessage> messages = new LinkedList<ModelValidationMessage>();
 
         private final String dataModelName;
+
+        private int errorCount;
 
         public ValidationHandlerAdapter(String dataModelName) {
             this.dataModelName = dataModelName;
         }
 
-        @Override
-        public void error(TypeMetadata type, String message, int lineNumber, int columnNumber) {
-            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR, message,
-                    "key", // TODO
-                    dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ENTITY,
-                    type.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT), type.getName(), type.getName(), type.getName());
-            messages.add(validationMessage);
+        // Compute a string representation from a field to its containing entity type.
+        private static String getPath(FieldMetadata field) {
+            StringBuilder pathAsAsString = new StringBuilder();
+            pathAsAsString.append(field.getName());
+            ComplexTypeMetadata containingType = field.getContainingType();
+            while (containingType instanceof ContainedComplexTypeMetadata) {
+                pathAsAsString.insert(0, '/');
+                String name = getTypeName(containingType);
+                pathAsAsString.insert(0, name);
+                containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
+            }
+            pathAsAsString.insert(0, '/');
+            pathAsAsString.insert(0, containingType.getName());
+            return pathAsAsString.toString();
+        }
+
+        private static String getTypeName(TypeMetadata type) {
+            String name = type.getName();
+            if (name.startsWith(MetadataRepository.ANONYMOUS_PREFIX)) {
+                name = ANONYMOUS_TYPE_NAME;
+            }
+            return name;
         }
 
         @Override
@@ -90,11 +106,74 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         }
 
         @Override
+        public void error(TypeMetadata type, String message, int lineNumber, int columnNumber) {
+            int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY : IComponentValidationRule.MSG_GROUP_TYPE;
+            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
+                    message,
+                    "key", // TODO
+                    dataModelName,
+                    lineNumber,
+                    columnNumber,
+                    group,
+                    type.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
+                    getTypeName(type),
+                    getTypeName(type),
+                    getTypeName(type));
+            messages.add(validationMessage);
+            errorCount++;
+        }
+
+        @Override
         public void warning(TypeMetadata type, String message, int lineNumber, int columnNumber) {
+            int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY : IComponentValidationRule.MSG_GROUP_TYPE;
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING, message,
                     "key", // TODO
-                    dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ENTITY,
-                    type.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT), type.getName(), type.getName(), type.getName());
+                    dataModelName,
+                    lineNumber,
+                    columnNumber,
+                    group,
+                    type.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
+                    getTypeName(type),
+                    getTypeName(type),
+                    getTypeName(type));
+            messages.add(validationMessage);
+        }
+
+        @Override
+        public void fatal(FieldMetadata field, String message, int lineNumber, int columnNumber) {
+            error(field, message, lineNumber, columnNumber);
+        }
+
+        @Override
+        public void error(FieldMetadata field, String message, int lineNumber, int columnNumber) {
+            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
+                    message,
+                    "key", // TODO
+                    dataModelName,
+                    lineNumber,
+                    columnNumber,
+                    IComponentValidationRule.MSG_GROUP_ELEMENT,
+                    field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
+                    field.getName(),
+                    field.getType().getName(),
+                    getPath(field));
+            messages.add(validationMessage);
+            errorCount++;
+        }
+
+        @Override
+        public void warning(FieldMetadata field, String message, int lineNumber, int columnNumber) {
+            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
+                    message,
+                    "key", // TODO
+                    dataModelName,
+                    lineNumber,
+                    columnNumber,
+                    IComponentValidationRule.MSG_GROUP_ELEMENT,
+                    field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
+                    field.getName(),
+                    field.getType().getName(),
+                    getPath(field));
             messages.add(validationMessage);
         }
 
@@ -104,7 +183,11 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
         @Override
         public void end() {
+        }
 
+        @Override
+        public int getErrorCount() {
+            return errorCount;
         }
     }
 }
