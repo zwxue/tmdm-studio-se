@@ -1,14 +1,22 @@
 /*
  * Copyright (C) 2006-2013 Talend Inc. - www.talend.com
- *
+ * 
  * This source code is available under agreement available at
  * %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
- *
- * You should have received a copy of the agreement
- * along with this program; if not, write to Talend SA
- * 9 rue Pages 92150 Suresnes, France
+ * 
+ * You should have received a copy of the agreement along with this program; if not, write to Talend SA 9 rue Pages
+ * 92150 Suresnes, France
  */
 package org.talend.mdm.repository.core.validate.datamodel.validator.impl;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.talend.mdm.commmon.metadata.MetadataRepository;
 import org.talend.mdm.commmon.metadata.TypeMetadata;
@@ -17,12 +25,6 @@ import org.talend.mdm.repository.core.validate.datamodel.IChecker;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
 import org.w3c.dom.Element;
-
-import java.io.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
@@ -75,17 +77,10 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
         @Override
         public void error(TypeMetadata type, String message, int lineNumber, int columnNumber) {
-            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
-                    message,
-                    "key",  // TODO
-                    dataModelName,
-                    lineNumber,
-                    columnNumber,
-                    IComponentValidationRule.MSG_GROUP_ENTITY,
-                    type.<Element>getData(MetadataRepository.XSD_DOM_ELEMENT),
-                    type.getName(),
-                    type.getName(),
-                    type.getName());
+            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR, message,
+                    "key", // TODO
+                    dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ENTITY,
+                    type.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT), type.getName(), type.getName(), type.getName());
             messages.add(validationMessage);
         }
 
@@ -96,22 +91,20 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
         @Override
         public void warning(TypeMetadata type, String message, int lineNumber, int columnNumber) {
-            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
-                    message,
+            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING, message,
                     "key", // TODO
-                    dataModelName,
-                    lineNumber,
-                    columnNumber,
-                    IComponentValidationRule.MSG_GROUP_ENTITY,
-                    type.<Element>getData(MetadataRepository.XSD_DOM_ELEMENT),
-                    type.getName(),
-                    type.getName(),
-                    type.getName());
+                    dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ENTITY,
+                    type.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT), type.getName(), type.getName(), type.getName());
             messages.add(validationMessage);
         }
 
         public List<ModelValidationMessage> getMessages() {
             return messages;
+        }
+
+        @Override
+        public void end() {
+
         }
     }
 }
