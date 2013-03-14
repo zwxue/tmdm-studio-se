@@ -37,6 +37,7 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class XSDEditConceptAction extends UndoAction {
 
@@ -68,7 +69,9 @@ public class XSDEditConceptAction extends UndoAction {
                             if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                                     || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
                                 return Messages.XSDEditConceptAction_NameCannotContainEmpty;
-
+                            if (!XSDUtil.isValidatedXSDName(newText)) {
+                                return Messages.InvalidName_Message;
+                            }
                             EList list = schema.getElementDeclarations();
                             for (Iterator iter = list.iterator(); iter.hasNext();) {
                                 XSDElementDeclaration d = (XSDElementDeclaration) iter.next();

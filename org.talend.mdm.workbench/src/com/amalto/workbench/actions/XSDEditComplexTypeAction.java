@@ -34,6 +34,7 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class XSDEditComplexTypeAction extends UndoAction {
 
@@ -47,6 +48,7 @@ public class XSDEditComplexTypeAction extends UndoAction {
         setDescription(getToolTipText());
     }
 
+    @Override
     public IStatus doAction() {
         try {
             ISelection selection = page.getTreeViewer().getSelection();
@@ -64,7 +66,9 @@ public class XSDEditComplexTypeAction extends UndoAction {
                             if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                                     || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
                                 return Messages.XSDEditComplexTypeAction_NameCannotContainEmpty;
-
+                            if (!XSDUtil.isValidatedXSDName(newText)) {
+                                return Messages.InvalidName_Message;
+                            }
                             EList list = schema.getTypeDefinitions();
                             for (Iterator iter = list.iterator(); iter.hasNext();) {
                                 Object d = iter.next();
@@ -84,7 +88,7 @@ public class XSDEditComplexTypeAction extends UndoAction {
                 return Status.CANCEL_STATUS;
             }
             decl.setName(id.getValue().trim());
-            
+
             Util.updateReferenceToXSDTypeDefinition(page.getSite(), decl, provider);
             page.refresh();
             page.markDirty();

@@ -35,6 +35,7 @@ import org.eclipse.xsd.impl.XSDParticleImpl;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDNewComplexTypeDefinition;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.utils.XSDUtil;
 import com.amalto.workbench.widgets.ConceptComposite;
 
 public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
@@ -74,7 +75,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         this.title = title;
         if(title == null || title.equals("")) //$NON-NLS-1$
             this.title = Messages._ComplexTypeProp;
-            
+
         this.caller = caller;
         this.types = types;
         this.isXSDModelGroup = isXSDModelGroup;
@@ -99,6 +100,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         }
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         // Should not really be here but well,....
         final Composite composite = (Composite) super.createDialogArea(parent);
@@ -106,7 +108,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         createTopPart(composite);
         // encapsulate all widgets into the ConceptComposite which can be applied to several cases
         parent.getShell().setText(title);
-        
+
         if (caller instanceof XSDNewComplexTypeDefinition) {
             conceptPanel = new ConceptComposite(composite, false, types, true);
         } else {
@@ -131,11 +133,13 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
     protected void createTopPart(Composite parent) {
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
     }
 
+    @Override
     protected void okPressed() {
         typeName = conceptPanel.getText();
         superTypeName = conceptPanel.getSuperName();
@@ -143,13 +147,13 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         isAll = conceptPanel.isAll();
         isChoice = conceptPanel.isChoice();
         isSequence = conceptPanel.isSequence();
-        
+
         if(superTypeName.equals(typeName) && (!superTypeName.equals(""))){//$NON-NLS-1$
             MessageDialog.openError(null, Messages._Error, Messages.typeCannotExtendsItsself);
             setReturnCode(CANCEL);
             return;
         }
-        
+
         setReturnCode(OK);
 //        super.okPressed();
         // no close let Action Handler handle it
@@ -167,8 +171,12 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         }
-
         type = type.trim();
+        if (!XSDUtil.isValidatedXSDName(type)) {
+            conceptPanel.setMessage(Messages.InvalidName_Message);
+            getButton(IDialogConstants.OK_ID).setEnabled(false);
+            return;
+        }
 
         for (XSDTypeDefinition specType : xsdSchema.getTypeDefinitions()) {
             String typeToCompare = specType.getName();

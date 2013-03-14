@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -53,5 +55,18 @@ public class XSDUtil {
     public static boolean hasFKInfo(XSDElementDeclaration elementDeclaration) {
         String value = XSDUtil.getAnnotationValue(elementDeclaration, X_FOREIGN_KEY);
         return value != null;
+    }
+
+    public static boolean isValidatedXSDName(String newText) {
+        Pattern pattern1 = Pattern.compile("\\d(\\.|\\-)*\\w*"); //$NON-NLS-1$
+        if (pattern1.matcher(newText).matches()) {
+            return false;
+        }
+        Pattern pattern2 = Pattern.compile("(\\.+|\\-+)\\w*"); //$NON-NLS-1$
+        if (pattern2.matcher(newText).matches()) {
+            return false;
+        }
+        Pattern pattern3 = Pattern.compile("\\w*(-|\\.|\\w*)+\\w*"); //$NON-NLS-1$
+        return pattern3.matcher(newText).matches();
     }
 }

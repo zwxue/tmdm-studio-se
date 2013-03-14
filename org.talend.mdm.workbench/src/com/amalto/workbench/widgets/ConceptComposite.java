@@ -25,6 +25,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
@@ -37,9 +38,9 @@ import com.amalto.workbench.i18n.Messages;
 
 /**
  * this class is meant to encapsulate all widgets rendering concept it can output a composite to populate concept form
- * 
+ *
  * @author fliu
- * 
+ *
  */
 public class ConceptComposite {
 
@@ -143,6 +144,7 @@ public class ConceptComposite {
 
         messageLabel = new Label(parent, SWT.NONE);
         messageLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        messageLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
         Label label = new Label(parent, 0);
         label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         label.setText(Messages.ConceptComposite_Label);

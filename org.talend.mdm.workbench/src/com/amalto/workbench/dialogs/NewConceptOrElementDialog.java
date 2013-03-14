@@ -39,14 +39,15 @@ import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDUtil;
 import com.amalto.workbench.widgets.ConceptComposite;
 import com.amalto.workbench.widgets.ElementComposite;
 
 /**
  * this class is to represent the concept or element creation dialog
- * 
+ *
  * @author fliu
- * 
+ *
  */
 public class NewConceptOrElementDialog extends Dialog implements ModifyListener, SelectionListener {
 
@@ -84,6 +85,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
         schema = sa;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(title);
 
@@ -127,12 +129,14 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
         return composite;
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).setEnabled(false);
         getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
     }
 
+    @Override
     protected void okPressed() {
         boolean valid = true;
         typeName = typeNameText.getText().trim();
@@ -152,6 +156,10 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
             return;
         } else if (typeNameText.getText().replaceAll("\\s", "").length() != typeNameText.getText().length()) {//$NON-NLS-1$//$NON-NLS-2$
             infoLabel.setText(Messages.NewConceptOrElementDialog_NameCannotContainEmpty);
+            getButton(IDialogConstants.OK_ID).setEnabled(false);
+            return;
+        } else if (!XSDUtil.isValidatedXSDName(typeNameText.getText().trim())) {
+            infoLabel.setText(Messages.InvalidName_Message);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         } else if (simpleTypeBtn.getSelection()

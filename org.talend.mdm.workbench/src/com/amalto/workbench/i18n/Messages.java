@@ -2241,6 +2241,8 @@ public class Messages extends NLS {
 
     public static String ImportItemsWizard_9;
 
+    public static String InvalidName_Message;
+
     public static String ItemsTrashBrowserMainPage_0;
 
     public static String ItemsTrashBrowserMainPage_1;

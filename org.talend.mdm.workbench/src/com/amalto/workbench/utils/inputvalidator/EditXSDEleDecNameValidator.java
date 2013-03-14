@@ -19,6 +19,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class EditXSDEleDecNameValidator implements IInputValidator {
 
@@ -36,6 +37,10 @@ public class EditXSDEleDecNameValidator implements IInputValidator {
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
                 || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
             return Messages.EditXSDEleDecNameValidator_EntityNameCannotContainEmpty;
+
+        if (!XSDUtil.isValidatedXSDName(newText)) {
+            return Messages.InvalidName_Message;
+        }
 
         for (XSDElementDeclaration eachElement : schema.getElementDeclarations()) {
             if (eachElement.getName().equals(newText.trim()))

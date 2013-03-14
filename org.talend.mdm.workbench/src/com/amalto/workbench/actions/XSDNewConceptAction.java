@@ -57,6 +57,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
         setToolTipText(Messages.XSDNewConceptAction_CreateNewEntity);
     }
 
+    @Override
     public IStatus doAction() {
         try {
             List<String> customTypes = new ArrayList<String>();
@@ -91,6 +92,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
         return Status.OK_STATUS;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
@@ -146,7 +148,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             if (status == Status.CANCEL_STATUS) {
                 schema.getContents().remove(decl);
             }
-            
+
             page.refresh();
         }
     }

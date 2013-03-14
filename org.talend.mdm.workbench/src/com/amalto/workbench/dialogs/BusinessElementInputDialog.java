@@ -18,7 +18,10 @@ import java.util.Collection;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -27,12 +30,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class BusinessElementInputDialog extends Dialog {
 
@@ -47,6 +52,8 @@ public class BusinessElementInputDialog extends Dialog {
     private Collection<String> elementDeclarations = null;
 
     protected Button checkBox;
+
+    private Label msgLabel = null;
 
     private String elementName = "";//$NON-NLS-1$
 
@@ -108,6 +115,7 @@ public class BusinessElementInputDialog extends Dialog {
         this.isPK = isPK;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         // Should not really be here but well,....
         parent.getShell().setText(this.title);
@@ -201,9 +209,25 @@ public class BusinessElementInputDialog extends Dialog {
         minOccursText.setEditable(!isPK);
         maxOccursText.setEditable(!isPK);
         refCombo.setEnabled(!isPK);
+
+        msgLabel = new Label(composite, SWT.NONE);
+        GridDataFactory.fillDefaults().span(2, 1).applyTo(msgLabel);
+        msgLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+
+        elementNameText.addModifyListener(new ModifyListener() {
+
+            public void modifyText(ModifyEvent e) {
+                String text = elementNameText.getText().trim();
+                boolean isValid = XSDUtil.isValidatedXSDName(text);
+                msgLabel.setText(isValid ? "" : Messages.InvalidName_Message); //$NON-NLS-1$
+                msgLabel.getParent().layout();
+                getButton(IDialogConstants.OK_ID).setEnabled(isValid);
+            }
+        });
         return composite;
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
@@ -213,6 +237,7 @@ public class BusinessElementInputDialog extends Dialog {
          */
     }
 
+    @Override
     protected void okPressed() {
         elementName = elementNameText.getText().trim();
         refName = refCombo.getText();

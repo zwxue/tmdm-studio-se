@@ -24,6 +24,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
@@ -34,6 +35,7 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDNewSimpleTypeDefinition;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.utils.XSDUtil;
 import com.amalto.workbench.widgets.ElementComposite;
 
 public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
@@ -67,6 +69,7 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
         xsdSchema = schema;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         // Should not really be here but well,....
         parent.getShell().setText(this.title);
@@ -78,10 +81,12 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
         infoLabel = new Label(composite, SWT.NONE);
         infoLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        infoLabel.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 
         return elemPanel.getComposite();
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
@@ -91,6 +96,7 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
          */
     }
 
+    @Override
     protected void okPressed() {
         typeName = elemPanel.getText().trim();
         // if ((typeName==null) || ("".equals(typeName))) {
@@ -118,20 +124,19 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
     public void modifyText(ModifyEvent e) {
         getButton(IDialogConstants.OK_ID).setEnabled(true);
         infoLabel.setText("");//$NON-NLS-1$
-
         String type = elemPanel.getText();
-
-
-
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
                 || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
             infoLabel.setText(Messages.SimpleTypeInputDialog_infoLabelText);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         }
-
         type = type.trim();
-
+        if (!XSDUtil.isValidatedXSDName(type)) {
+            infoLabel.setText(Messages.InvalidName_Message);
+            getButton(IDialogConstants.OK_ID).setEnabled(false);
+            return;
+        }
         for (XSDTypeDefinition simpType : xsdSchema.getTypeDefinitions()) {
             String typeToCompare = simpType.getName();
             int delimiter = type.indexOf(" : ");//$NON-NLS-1$
