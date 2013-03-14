@@ -17,7 +17,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-
 /*
  * user specification: the function's comment should contain keys as follows: 1. write about the function's comment.but
  * it must be before the "{talendTypes}" key.
@@ -64,8 +62,8 @@ import org.xml.sax.InputSource;
 public class MDM {
 
     /**
-     * getFK: Return one of the FK component by position in a mangled FK
-     * (FKs are mangled in MDM to accommodate for compound keys)
+     * getFK: Return one of the FK component by position in a mangled FK (FKs are mangled in MDM to accommodate for
+     * compound keys)
      * 
      * 
      * {talendTypes} String
@@ -82,22 +80,22 @@ public class MDM {
         if (mangledFK == null) {
             return null;
         }
-        Pattern p = Pattern.compile("(\\[[^\\[\\]]*\\])");
-        Matcher m = p.matcher(mangledFK.trim());        
+        Pattern p = Pattern.compile("(\\[[^\\[\\]]*\\])"); //$NON-NLS-1$
+        Matcher m = p.matcher(mangledFK.trim());
         int i = 0;
         while (m.find()) {
-            if(i == pos){
+            if (i == pos) {
                 String targetValue = m.group(0);
-                return targetValue.substring(1, targetValue.length()-1);
+                return targetValue.substring(1, targetValue.length() - 1);
             }
             i++;
         }
         return null;
     }
-    
+
     /**
-     * createFK: Return the Fk string by a singleKey
-     * (FKs are mangled in MDM to accommodate for compound keys)
+     * createFK: Returns the mangled FK string of a given key (FKs are mangled in MDM to accommodate for compound keys).
+     * Returns null if key is null.
      * 
      * 
      * {talendTypes} String
@@ -109,13 +107,17 @@ public class MDM {
      * 
      * {example} createFK("0") # return "[0]"
      */
-    public static  String createFK(String singleKey){
-    	return "["+singleKey+"]";
+    public static String createFK(String singleKey) {
+        if (singleKey != null) {
+            return "[" + singleKey + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+        } else {
+            return null;
+        }
     }
-    
+
     /**
-     * createFK: Return the Fk string by a key list
-     * (FKs are mangled in MDM to accommodate for compound keys)
+     * createFK: Returns the mangled FK string of a given array of keys (FKs are mangled in MDM to accommodate for
+     * compound keys). Returns null if one of the keys is null.
      * 
      * 
      * {talendTypes} String
@@ -127,14 +129,17 @@ public class MDM {
      * 
      * {example} createFK({"0","1"}) # return "[0][1]"
      */
-    public static String createFK(String[] keys){
-    	StringBuffer sb=new StringBuffer();
-    	for(String key :keys){
-    		sb.append("[").append(key).append("]");
-    	}
-    	return sb.toString();
+    public static String createFK(String[] keys) {
+        StringBuffer sb = new StringBuffer();
+        for (String key : keys) {
+            if (key == null) {
+                return null;
+            }
+            sb.append("[").append(key).append("]"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        return sb.toString();
     }
-    
+
     /**
      * get repeating element in xmlString according to the xpath & position
      * 
@@ -148,19 +153,19 @@ public class MDM {
      * 
      * {param} int(0) position: position.
      */
-    public static String getRepeatingElement(String xml, String xpath, int position)throws Exception{
+    public static String getRepeatingElement(String xml, String xpath, int position) throws Exception {
 
-		Node node =parse(xml);
-		NodeList list= getNodeList(node,xpath,false);	
-		for(int i=0; i<list.getLength(); i++){
-			if(i==position){
-				Node n=list.item(i);
-				return n.getNodeValue();
-			}
-		}
-		return null;
+        Node node = parse(xml);
+        NodeList list = getNodeList(node, xpath, false);
+        for (int i = 0; i < list.getLength(); i++) {
+            if (i == position) {
+                Node n = list.item(i);
+                return n.getNodeValue();
+            }
+        }
+        return null;
     }
-    
+
     /**
      * check repeating elements in xmlString according to xpath & text
      * 
@@ -174,18 +179,18 @@ public class MDM {
      * 
      * {param} String(text) text: text.
      */
-    public static boolean hasRepeatingElement(String xml, String xpath, String text)throws Exception{
-    	Node node =parse(xml);
-		NodeList list= getNodeList(node,xpath,false);	
-		for(int i=0; i<list.getLength(); i++){			
-			Node n=list.item(i);
-			if(n.getNodeValue().equals(text)){
-				return true;
-			}
-		}
-		return false;
+    public static boolean hasRepeatingElement(String xml, String xpath, String text) throws Exception {
+        Node node = parse(xml);
+        NodeList list = getNodeList(node, xpath, false);
+        for (int i = 0; i < list.getLength(); i++) {
+            Node n = list.item(i);
+            if (n.getNodeValue().equals(text)) {
+                return true;
+            }
+        }
+        return false;
     }
-    
+
     /**
      * list repeating elements in xmlString according to xpath & delimiter
      * 
@@ -199,24 +204,24 @@ public class MDM {
      * 
      * {param} char(delimiter) delimiter: delimiter.
      */
-    public static String listRepeatingElement(String xml, String xpath, char delimiter)throws Exception{
-    	Node node =parse(xml);
-    	
-		NodeList list= getNodeList(node,xpath,false);	
-		StringBuffer sb=new StringBuffer();
-		for(int i=0; i<list.getLength(); i++){			
-			Node n=list.item(i);
-			sb.append(n.getNodeValue());
-			if(i>=0 && i<list.getLength()-1){
-				sb.append(delimiter);
-			}
-		}
-		return sb.toString();
+    public static String listRepeatingElement(String xml, String xpath, char delimiter) throws Exception {
+        Node node = parse(xml);
+
+        NodeList list = getNodeList(node, xpath, false);
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < list.getLength(); i++) {
+            Node n = list.item(i);
+            sb.append(n.getNodeValue());
+            if (i >= 0 && i < list.getLength() - 1) {
+                sb.append(delimiter);
+            }
+        }
+        return sb.toString();
     }
-    
-	/**
-	 * add repeating elements in xmlString according to xpath & text
-	 * 
+
+    /**
+     * add repeating elements in xmlString according to xpath & text
+     * 
      * {talendTypes} String
      * 
      * {Category} MDM
@@ -226,23 +231,22 @@ public class MDM {
      * {param} string(xpath) xpath: xpath
      * 
      * {param} String(text) text: text
-	 */
-	public static String addRepeatingElement(String xml, String xpath, String text)throws Exception{
-		Node node =parse(xml);
-    	
-	    int pos= xpath.lastIndexOf('/');
-	    String name=xpath.substring(pos+1);
-	    String parentPath=xpath.substring(0,pos);
-	    NodeList plist= getNodeList(node,parentPath,true);	
-	    if(plist.getLength()>0){
-	    	Element el=node.getOwnerDocument().createElement(name);
-	    	el.setTextContent(text);
-	    	Node nn=plist.item(0).appendChild(el);
-	    	System.out.println(nn);
-	    }
-		
-		return nodeToString(node, true);
-	}
+     */
+    public static String addRepeatingElement(String xml, String xpath, String text) throws Exception {
+        Node node = parse(xml);
+
+        int pos = xpath.lastIndexOf('/');
+        String name = xpath.substring(pos + 1);
+        String parentPath = xpath.substring(0, pos);
+        NodeList plist = getNodeList(node, parentPath, true);
+        if (plist.getLength() > 0) {
+            Element el = node.getOwnerDocument().createElement(name);
+            el.setTextContent(text);
+            plist.item(0).appendChild(el);
+        }
+
+        return nodeToString(node, true);
+    }
 
     /**
      * @deprecated Generate an <error code="X">msg</error> fragment
@@ -258,10 +262,11 @@ public class MDM {
      * 
      * {example} genErrMsg("test message",0) # return <error code="0">test message</error>
      */
-    public static String createReturnMessage(String msg, int code){
+    @Deprecated
+    public static String createReturnMessage(String msg, int code) {
         return "<error code=\"" + code + "\">" + msg + "</error>"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
     }
-    
+
     /**
      * Generate an <report><message type="X">msg</message><report> fragment
      * 
@@ -279,7 +284,7 @@ public class MDM {
     public static String createReturnMessage(String msg, String type) {
         return "<report><message type=\"" + type + "\">" + msg + "</message></report>"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     }
-    
+
     /**
      * Add or update an ISO variant to the multi-lingual text value
      * 
@@ -298,7 +303,7 @@ public class MDM {
      */
     public static String setLanguageVariant(String iso, String value, String rawValue) {
 
-        return setLanguageVariant(iso, value, rawValue, "EN", true);//$NON-NLS-1$
+        return setLanguageVariant(iso, value, rawValue, "EN", true); //$NON-NLS-1$
 
     }
 
@@ -324,10 +329,11 @@ public class MDM {
      */
     public static String setLanguageVariant(String iso, String value, String rawValue, String defaultIso, boolean sort) {
 
-        if (iso == null || value == null)
+        if (iso == null || value == null) {
             throw new IllegalArgumentException();
-        
-        iso=iso.toUpperCase();
+        }
+
+        iso = iso.toUpperCase();
 
         Map<String, String> isoValues = new LinkedHashMap<String, String>();
 
@@ -335,7 +341,7 @@ public class MDM {
             isoValues.put(iso, value);
         } else {
 
-            Pattern p = Pattern.compile("\\[(\\w+)\\:([^\\[\\]\\:]*?)\\]{1,}");//$NON-NLS-1$
+            Pattern p = Pattern.compile("\\[(\\w+)\\:([^\\[\\]\\:]*?)\\]{1,}"); //$NON-NLS-1$
             Matcher m = p.matcher(rawValue);
             while (m.find()) {
                 isoValues.put(m.group(1).toUpperCase(), m.group(2));
@@ -344,10 +350,11 @@ public class MDM {
             // illegal/legacy raw value
             if (isoValues.size() == 0) {
                 // throw new IllegalArgumentException();
-                if (defaultIso != null && defaultIso.trim().length() > 0)
+                if (defaultIso != null && defaultIso.trim().length() > 0) {
                     isoValues.put(defaultIso.toUpperCase(), rawValue);
-                else
+                } else {
                     isoValues.put("EN", rawValue); //$NON-NLS-1$
+                }
             }
 
             isoValues.put(iso, value);
@@ -358,18 +365,44 @@ public class MDM {
 
             List<String> isoList = new ArrayList<String>(isoValues.keySet());
             // sort
-            if (sort)
+            if (sort) {
                 Collections.sort(isoList);
+            }
 
-            for (Iterator<String> iterator = isoList.iterator(); iterator.hasNext();) {
-                String isoKey = (String) iterator.next();
+            for (String string : isoList) {
+                String isoKey = string;
                 String isoValue = isoValues.get(isoKey);
-                result.append("[").append(isoKey).append(":").append(isoValue).append("]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                result.append("[").append(isoKey).append(":").append(isoValue).append("]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
         }
 
         return result.toString();
 
+    }
+
+    /**
+     * Give an ISO value from a multi-lingual text value, with default iso fallback
+     * 
+     * {talendTypes} String
+     * 
+     * {Category} MDM
+     * 
+     * {param} string(iso) iso: iso
+     * 
+     * {param} string(defaultIso) defaultIso: Default iso used in case of fallback
+     * 
+     * {param} string(rawValue) rawValue: rawValue
+     * 
+     * {example} getLanguageVariant("DE","EN","[EN:ab][FR:ab_fr]") # return [EN:ab]
+     */
+    public static String getLanguageVariant(String iso, String defaultIso, String rawValue) {
+        String requestedLanguageVariant = getLanguageVariant(iso, rawValue);
+        if (requestedLanguageVariant == null || "".equals(requestedLanguageVariant)) { //$NON-NLS-1$
+            // fallback to the default variant
+            return getLanguageVariant(defaultIso, rawValue);
+        } else {
+            return requestedLanguageVariant;
+        }
     }
 
     /**
@@ -388,56 +421,58 @@ public class MDM {
      */
     public static String getLanguageVariant(String iso, String rawValue) {
 
-        if (iso == null || rawValue == null)
+        if (iso == null || rawValue == null) {
             throw new IllegalArgumentException();
+        }
 
         iso = iso.toUpperCase();
 
         Map<String, String> isoValues = new HashMap<String, String>();
-        Pattern p = Pattern.compile("\\[(\\w+)\\:([^\\[\\]\\:]*?)\\]{1,}");//$NON-NLS-1$
+        Pattern p = Pattern.compile("\\[(\\w+)\\:([^\\[\\]\\:]*?)\\]{1,}"); //$NON-NLS-1$
         Matcher m = p.matcher(rawValue);
         while (m.find()) {
             isoValues.put(m.group(1).toUpperCase(), m.group(2));
         }
 
         return isoValues.get(iso);
-
     }
 
-    //Utility methods
+    // Utility methods
     /**
      * Get a nodelist from an xPath
      * 
      * @throws Exception
      */
-	private static NodeList getNodeList(Node contextNode, String xPath, boolean isParent) throws Exception {
-        if (!xPath.matches(".*@[^/\\]]+")) // attribute
-            if (!xPath.endsWith(")") && !isParent) // function
-                xPath += "/text()";
-    	XPathFactory factory = XPathFactory.newInstance();
+    private static NodeList getNodeList(Node contextNode, String xPath, boolean isParent) throws Exception {
+        if (!xPath.matches(".*@[^/\\]]+")) { //$NON-NLS-1$
+            if (!xPath.endsWith(")") && !isParent) { //$NON-NLS-1$
+                xPath += "/text()"; //$NON-NLS-1$
+            }
+        }
+        XPathFactory factory = XPathFactory.newInstance();
         XPath xpath = factory.newXPath();
-        XPathExpression expr 
-         = xpath.compile(xPath);
+        XPathExpression expr = xpath.compile(xPath);
 
         Object result = expr.evaluate(contextNode, XPathConstants.NODESET);
         NodeList nodes = (NodeList) result;
         return nodes;
     }
-	
-	
-	/**
-	 * parse the xml
-	 * @param xml
-	 * @return
-	 * @throws Exception
-	 */
-	private static Node parse(String xml)throws Exception{
-	    DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-	    domFactory.setNamespaceAware(true); // never forget this!
-	    DocumentBuilder builder = domFactory.newDocumentBuilder();
-	    Document doc = builder.parse(new InputSource(new StringReader(xml)));
-	    return doc.getDocumentElement();
-	}
+
+    /**
+     * parse the xml
+     * 
+     * @param xml
+     * @return
+     * @throws Exception
+     */
+    private static Node parse(String xml) throws Exception {
+        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+        domFactory.setNamespaceAware(true); // never forget this!
+        DocumentBuilder builder = domFactory.newDocumentBuilder();
+        Document doc = builder.parse(new InputSource(new StringReader(xml)));
+        return doc.getDocumentElement();
+    }
+
     /**
      * Generates an xml string from a node with or without the xml declaration (not pretty formatted)
      * 
@@ -448,15 +483,13 @@ public class MDM {
     private static String nodeToString(Node n, boolean omitXMLDeclaration) throws TransformerException {
         StringWriter sw = new StringWriter();
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        if (omitXMLDeclaration)
-            transformer.setOutputProperty("omit-xml-declaration", "yes");
-        else
-            transformer.setOutputProperty("omit-xml-declaration", "no");
-        transformer.setOutputProperty("indent", "yes");
+        if (omitXMLDeclaration) {
+            transformer.setOutputProperty("omit-xml-declaration", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
+        } else {
+            transformer.setOutputProperty("omit-xml-declaration", "no"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        transformer.setOutputProperty("indent", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
         transformer.transform(new DOMSource(n), new StreamResult(sw));
-        if (sw == null)
-            return null;
-        return sw.toString().replaceAll("\r\n", "\n");
+        return sw.toString().replaceAll("\r\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
     }
-    
 }
