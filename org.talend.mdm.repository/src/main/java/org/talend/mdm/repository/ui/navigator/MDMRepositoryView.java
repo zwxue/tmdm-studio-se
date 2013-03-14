@@ -84,17 +84,17 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
     /**
-     * 
+     *
      */
     private static final String JOB_EDITOR_ID = "org.talend.designer.core.ui.MultiPageTalendEditor"; //$NON-NLS-1$
 
     /**
-     * 
+     *
      */
     //    private static final String BONITA_PERSPECTIVE_ID = "org.bonitasoft.studio.perspective.process"; //$NON-NLS-1$
 
@@ -107,6 +107,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-1$
 
     private static final String DI_PERSPECTIVE_ID = "org.talend.rcp.perspective";//$NON-NLS-1$
+
+    private static final String MDM_PERSPECTIVE_ID = "org.talend.mdm.perspective"; //$NON-NLS-1$
 
     @Override
     public void createPartControl(Composite aParent) {
@@ -319,7 +321,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             //
             // }
             // if editor is talend job editor, switch to org.talend.rcp.perspective
-            if (!DI_PERSPECTIVE_ID.equals(curPerspectiveId) && JOB_EDITOR_ID.equals(curPartId)) {
+            if (MDM_PERSPECTIVE_ID.equals(curPerspectiveId) && JOB_EDITOR_ID.equals(curPartId)) {
                 dialog = new SwitchPerspectiveDialog(getSite().getShell(), "Integration", DI_PERSPECTIVE_ID, //$NON-NLS-1$
                         PreferenceConstants.P_AUTO_SWITCH_TO_DI, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI);
 
