@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="DataModelValidationRule" name="DataModelValidationRule" schema="schema/DataModelValidationRule.exsd"/>
    <extension
          id="dataModel"
          name="DataModel Validator"
@@ -270,22 +269,6 @@
             id="org.talend.mdm.repository.ui.validate.ClearAllMarkers"
             name="Clear all markers">
       </command>
-   </extension>
-   <extension
-         point="org.talend.mdm.repository.validate.DataModelValidationRule">
- 
-      <ruleGroup
-            name="Element">
-      <rule
-            class="org.talend.mdm.repository.core.validate.datamodel.validator.rule.element.PKInfoValidationRules"
-            name="PKInfo">
-      </rule>
-      <rule
-            class="org.talend.mdm.repository.core.validate.datamodel.validator.rule.element.FKValidationRules"
-            name="FK">
-      </rule>
-      </ruleGroup>
- 
    </extension>
    <!--
    <extension
