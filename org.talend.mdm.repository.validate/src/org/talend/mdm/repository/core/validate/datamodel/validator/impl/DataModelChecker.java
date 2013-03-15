@@ -80,15 +80,21 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         private static String getPath(FieldMetadata field) {
             StringBuilder pathAsAsString = new StringBuilder();
             pathAsAsString.append(field.getName());
-            ComplexTypeMetadata containingType = field.getContainingType();
-            while (containingType instanceof ContainedComplexTypeMetadata) {
+            try {
+                ComplexTypeMetadata containingType = field.getContainingType();
+                while (containingType instanceof ContainedComplexTypeMetadata) {
+                    pathAsAsString.insert(0, '/');
+                    String name = getTypeName(containingType);
+                    pathAsAsString.insert(0, name);
+                    containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
+                }
                 pathAsAsString.insert(0, '/');
-                String name = getTypeName(containingType);
-                pathAsAsString.insert(0, name);
-                containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
+                pathAsAsString.insert(0, containingType.getName());
+            } catch (Exception e) {
+                // TODO Temp solution (for building a path from a field that doesn't exist).
+                // In case of exception, return an incomplete path
+                pathAsAsString.insert(0, "../"); //$NON-NLS-1$
             }
-            pathAsAsString.insert(0, '/');
-            pathAsAsString.insert(0, containingType.getName());
             return pathAsAsString.toString();
         }
 
