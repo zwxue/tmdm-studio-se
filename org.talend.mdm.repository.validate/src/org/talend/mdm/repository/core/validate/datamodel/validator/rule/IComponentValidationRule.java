@@ -12,12 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.validate.datamodel.validator.rule;
 
-import java.util.Set;
-
-import org.talend.mdm.repository.core.validate.datamodel.DataModelValidateContext;
-import org.talend.mdm.repository.core.validate.datamodel.model.IMComponent;
-import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
-
 /**
  * created by HHB on 2013-1-11 Detailled comment
  * 
@@ -39,10 +33,6 @@ public interface IComponentValidationRule {
 
     // to mark the error is caused by Type
     public static final int MSG_GROUP_TYPE = 4;
-
-    public boolean needValidate(DataModelValidateContext context, IMComponent mComponent);
-
-    public boolean check(DataModelValidateContext context, IMComponent mComponent, Set<ModelValidationMessage> messages);
 
     public String[] getMessageKeys();
 
