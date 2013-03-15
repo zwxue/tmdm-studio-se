@@ -160,11 +160,20 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     columnNumber,
                     IComponentValidationRule.MSG_GROUP_ELEMENT,
                     field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
-                    field.getName(),
+                    getFieldName(field),
                     null,
                     getPath(field));
             messages.add(validationMessage);
             errorCount++;
+        }
+
+        private static String getFieldName(FieldMetadata field) {
+            try {
+                return field.getName();
+            } catch (Exception e) {
+                // TODO For case where FK is defined from a type that doesn't exist (just "Root" iso. "Root/Id").
+                return ""; //$NON-NLS-1$
+            }
         }
 
         @Override
@@ -177,7 +186,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     columnNumber,
                     IComponentValidationRule.MSG_GROUP_ELEMENT,
                     field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
-                    field.getName(),
+                    getFieldName(field),
                     null,
                     getPath(field));
             messages.add(validationMessage);
