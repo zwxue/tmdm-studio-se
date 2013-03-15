@@ -79,7 +79,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         // Compute a string representation from a field to its containing entity type.
         private static String getPath(FieldMetadata field) {
             StringBuilder pathAsAsString = new StringBuilder();
-            pathAsAsString.append(field.getName());
+            pathAsAsString.append(getFieldName(field));
             try {
                 ComplexTypeMetadata containingType = field.getContainingType();
                 while (containingType instanceof ContainedComplexTypeMetadata) {
