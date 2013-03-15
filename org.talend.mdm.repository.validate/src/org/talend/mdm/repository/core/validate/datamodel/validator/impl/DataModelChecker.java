@@ -155,7 +155,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     IComponentValidationRule.MSG_GROUP_ELEMENT,
                     field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
                     field.getName(),
-                    field.getType().getName(),
+                    null,
                     getPath(field));
             messages.add(validationMessage);
             errorCount++;
@@ -172,7 +172,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     IComponentValidationRule.MSG_GROUP_ELEMENT,
                     field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
                     field.getName(),
-                    field.getType().getName(),
+                    null,
                     getPath(field));
             messages.add(validationMessage);
         }
