@@ -19,16 +19,22 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SelectFieldDialog;
@@ -51,6 +57,7 @@ public class XSDNewXPathAction extends UndoAction {
         setToolTipText(Messages.XSDNewXPathAction_ActionTip);
     }
 
+    @Override
     public IStatus doAction() {
         try {
             int index = 0;
@@ -91,6 +98,13 @@ public class XSDNewXPathAction extends UndoAction {
                     topChilds.add(child);
                 }
             }
+            // forbid to add already exists field
+            EList<XSDXPathDefinition> fields = icd.getFields();
+            for (XSDXPathDefinition fd : fields) {
+                if (topChilds.contains(fd.getValue()))
+                    topChilds.remove(fd.getValue());
+            }
+
             SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), Messages.XSDNewXPathAction_SelectOnField, topChilds, null);
             id.create();
             id.setBlockOnOpen(true);
@@ -101,7 +115,7 @@ public class XSDNewXPathAction extends UndoAction {
             String field = id.getField();
             if (field.length() == 0)
                 return Status.CANCEL_STATUS;
-            ;
+
             XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
 
             XSDXPathDefinition xpath = factory.createXSDXPathDefinition();
@@ -110,6 +124,8 @@ public class XSDNewXPathAction extends UndoAction {
 
             icd.getFields().add(index, xpath);
             icd.updateElement();
+
+            updateElementForAddedfield(field);
 
             page.refresh();
             page.getTreeViewer().setSelection(new StructuredSelection(xpath), true);
@@ -125,6 +141,34 @@ public class XSDNewXPathAction extends UndoAction {
         return Status.OK_STATUS;
     }
 
+    private void updateElementForAddedfield(String fieldName) {
+        XSDElementDeclaration entity = (XSDElementDeclaration) icd.getContainer();
+
+        XSDComplexTypeDefinition ctype = (XSDComplexTypeDefinition) entity.getTypeDefinition();
+        if (ctype.getContent() instanceof XSDParticle) {
+            XSDParticleImpl particle = (XSDParticleImpl) ctype.getContent();
+            if (particle.getTerm() instanceof XSDModelGroup) {
+                XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+                EList<XSDParticle> particles = group.getParticles();
+                for (XSDParticle part : particles) {
+                    if (part.getTerm() instanceof XSDElementDeclaration) {
+                        XSDElementDeclaration el = (XSDElementDeclaration) part.getTerm();
+                        if (el.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
+                            if (fieldName.equals(el.getName())) {
+                                part.setMinOccurs(1);
+                                part.setMaxOccurs(1);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        entity.updateElement();
+    }
+
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
