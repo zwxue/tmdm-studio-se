@@ -138,9 +138,8 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
             deployService.autoDeploy(getSite().getShell(), viewObject);
         } else if (serverObject.getLastServerDef() != null) {
             CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
-            validateModel(viewObject);
         }
-
+        validateModel(viewObject);
     }
 
     private int validateModel(IRepositoryViewObject viewObject) {

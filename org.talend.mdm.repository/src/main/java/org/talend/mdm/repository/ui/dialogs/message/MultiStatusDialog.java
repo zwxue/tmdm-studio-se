@@ -109,17 +109,7 @@ public class MultiStatusDialog extends Dialog {
                     return IMG_ERR;
                 }
             } else if (element instanceof MultiStatus) {
-                if (((MultiStatus) element).isOK()) {
-                    return IMG_OK;
-                }
-
-                MultiStatus mStatus = (MultiStatus) element;
-                int mSeverity = mStatus.getSeverity();
-                if (mSeverity == IStatus.INFO) {
-                    return IMG_INFO;
-                } else if (mSeverity == IStatus.ERROR) {
-                    return IMG_ERR;
-                }
+                return null;
             } else if (element instanceof Status) {
                 Status status = (Status) element;
                 int severity = status.getSeverity();
