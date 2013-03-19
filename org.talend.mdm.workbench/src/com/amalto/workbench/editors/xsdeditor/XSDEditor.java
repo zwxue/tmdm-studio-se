@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -35,6 +36,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -62,7 +64,9 @@ import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDDiagnosticSeverity;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDXPathDefinition;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.w3c.dom.Node;
 
@@ -183,6 +187,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     protected void pageChange(int newPageIndex) {
+        resetTreeSelection();
+
         super.pageChange(newPageIndex);
         doUpdateSourceLocation = newPageIndex == SOURCE_PAGE_INDEX;
         if (doUpdateSourceLocation && fXSDSelectionListener != null) {
@@ -504,6 +510,26 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
         } catch (PartInitException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void resetTreeSelection() {
+        DataModelMainPage dataModelEditorPage = getDataModelEditorPage();
+        if (dataModelEditorPage != null) {
+            TreeViewer treeViewer = dataModelEditorPage.getTreeViewer();
+            IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
+            if (!selection.isEmpty()) {
+                Object firstElement = selection.getFirstElement();
+                if ((firstElement instanceof XSDIdentityConstraintDefinition)) {
+                    XSDIdentityConstraintDefinition cdf = (XSDIdentityConstraintDefinition) firstElement;
+                    XSDConcreteComponent container = cdf.getContainer();
+                    treeViewer.setSelection(new StructuredSelection(container));
+                } else if ((firstElement instanceof XSDXPathDefinition)) {
+                    XSDXPathDefinition pathdef = (XSDXPathDefinition) firstElement;
+                    XSDConcreteComponent container = pathdef.getContainer().getContainer();
+                    treeViewer.setSelection(new StructuredSelection(container));
+                }
+            }
         }
     }
 
