@@ -86,4 +86,22 @@
             serviceId="ILegendServerDefService">
       </Service>
    </extension>
+   <extension
+         point="org.eclipse.ui.console.consoleFactories">
+      <consoleFactory
+            class="org.talend.mdm.workbench.serverexplorer.console.MDMServerConsoleFactory"
+            label="MDM Server Console">
+      </consoleFactory>
+   </extension>
+   <extension
+         point="org.eclipse.ui.console.consolePageParticipants">
+      <consolePageParticipant
+            class="org.talend.mdm.workbench.serverexplorer.console.MDMServerConsolePageParticipant"
+            id="org.talend.mdm.workbench.serverexplorer.mdmServeConsolePageParticipant">
+         <enablement>
+            <instanceof
+                  value="org.talend.mdm.workbench.serverexplorer.console.MDMServerMessageConsole">
+            </instanceof></enablement>
+      </consolePageParticipant>
+   </extension>
 </plugin>

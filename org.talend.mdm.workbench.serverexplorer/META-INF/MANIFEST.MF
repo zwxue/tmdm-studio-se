@@ -16,7 +16,9 @@ Require-Bundle: org.eclipse.ui,
  org.talend.common.ui.runtime,
  org.talend.mdm.repository.model,
  org.talend.mdm.workbench,
- org.apache.log4j
+ org.apache.log4j,
+ org.eclipse.ui.console,
+ org.apache.commons.io
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -24,3 +26,9 @@ Export-Package: org.talend.mdm.workbench.serverexplorer.core,
  org.talend.mdm.workbench.serverexplorer.ui.actions,
  org.talend.mdm.workbench.serverexplorer.ui.dialogs,
  org.talend.mdm.workbench.serverexplorer.ui.views
+Import-Package: org.apache.http,
+ org.apache.http.auth,
+ org.apache.http.client,
+ org.apache.http.client.methods,
+ org.apache.http.impl,
+ org.apache.http.impl.client

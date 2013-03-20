@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -25,14 +25,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -41,6 +36,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -52,14 +48,17 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.IService;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
+import org.talend.mdm.workbench.serverexplorer.console.MDMServerConsoleFactory;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
@@ -76,7 +75,7 @@ import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class ServerExplorer extends ViewPart {
 
@@ -101,6 +100,8 @@ public class ServerExplorer extends ViewPart {
 
     private AddServerDefAction addServerDefAction;
 
+    private ShowConsoleAction showConsoleAction;
+
     public AddServerDefAction getAddServerDefAction() {
         return this.addServerDefAction;
     }
@@ -116,7 +117,7 @@ public class ServerExplorer extends ViewPart {
 
     /**
      * Create contents of the view part.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -171,8 +172,10 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
+    @Override
     public void dispose() {
         toolkit.dispose();
+        treeViewer.removeSelectionChangedListener(showConsoleAction);
         super.dispose();
     }
 
@@ -180,7 +183,8 @@ public class ServerExplorer extends ViewPart {
      * Create the actions.
      */
     private void createActions() {
-        // Create the actions
+        showConsoleAction = new ShowConsoleAction();
+        treeViewer.addSelectionChangedListener(showConsoleAction);
     }
 
     /**
@@ -205,6 +209,7 @@ public class ServerExplorer extends ViewPart {
         eventManagerAction = new EventManageAction();
         menuManager.add(eventManagerAction);
         menuManager.add(new RefreshServerCacheAction());
+        menuManager.add(showConsoleAction);
 
         // Context
         Menu contextMenu = menuManager.createContextMenu(tree);
@@ -267,6 +272,7 @@ public class ServerExplorer extends ViewPart {
             setText(Messages.ServerExplorer_AddServer);
         }
 
+        @Override
         public void run() {
             ServerDefDialog dialog = new ServerDefDialog(getViewSite().getShell(), null);
             if (dialog.open() == IDialogConstants.OK_ID) {
@@ -331,6 +337,7 @@ public class ServerExplorer extends ViewPart {
             setText(Messages.ServerExplorer_CheckConnection);
         }
 
+        @Override
         public void run() {
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
             if (viewObject != null) {
@@ -356,6 +363,7 @@ public class ServerExplorer extends ViewPart {
             setText(Messages.ServerExplorer_EventManager);
         }
 
+        @Override
         public void run() {
             doOpenEventManagerAction();
         }
@@ -376,6 +384,7 @@ public class ServerExplorer extends ViewPart {
             setText(Messages.ServerExplorer_EditServer);
         }
 
+        @Override
         public void run() {
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
             String name = null;
@@ -435,6 +444,7 @@ public class ServerExplorer extends ViewPart {
             setText(Messages.ServerExplorer_RemoveServer);
         }
 
+        @Override
         public void run() {
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
             if (viewObject != null) {
@@ -462,6 +472,40 @@ public class ServerExplorer extends ViewPart {
                 }
             }
             (viewPart).getViewer().refresh();
+        }
+    }
+
+    private class ShowConsoleAction extends BaseSelectionListenerAction {
+
+        public ShowConsoleAction() {
+            super("Show Server Log");
+            setEnabled(false);
+        }
+
+        @Override
+        protected boolean updateSelection(IStructuredSelection selection) {
+            return getSelectedServerDef(selection) != null;
+        }
+
+        private MDMServerDef getSelectedServerDef(IStructuredSelection selection) {
+            if (selection.isEmpty()) {
+                return null;
+            }
+            Object ele = selection.getFirstElement();
+            if (!(ele instanceof IRepositoryViewObject)) {
+                return null;
+            }
+            Item item = ((IRepositoryViewObject) ele).getProperty().getItem();
+            if (!(item instanceof MDMServerDefItem)) {
+                return null;
+            }
+            return ((MDMServerDefItem) item).getServerDef();
+        }
+
+        @Override
+        public void run() {
+            MDMServerDef selectedServerDef = getSelectedServerDef(getStructuredSelection());
+            MDMServerConsoleFactory.showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
         }
     }
 }
