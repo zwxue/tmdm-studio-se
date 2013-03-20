@@ -1385,6 +1385,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         copyConceptAction.setText(Messages.CopyElementText);
                         manager.add(copyConceptAction);
 
+                        if (((XSDElementDeclaration) term).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                            addPasteElementAction(manager);
+                        }
+
                         manager.add(new Separator());
                         manager.add(changeToComplexTypeAction);
                         manager.add(changeToSimpleTypeAction);
