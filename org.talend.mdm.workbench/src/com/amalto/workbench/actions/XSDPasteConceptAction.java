@@ -422,6 +422,15 @@ public class XSDPasteConceptAction extends UndoAction {
             XSDComplexTypeDefinition complexType = (XSDComplexTypeDefinition) ((XSDModelGroup) selection.getFirstElement())
                     .getContainer().getContainer();
             content = complexType.getContent();
+        } else {
+            if (selection.getFirstElement() instanceof XSDParticle) {
+                XSDParticle particle = (XSDParticle) selection.getFirstElement();
+                XSDElementDeclaration declar = (XSDElementDeclaration) particle.getTerm();
+                if (declar.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                    XSDComplexTypeDefinition typeDefinition = (XSDComplexTypeDefinition) declar.getTypeDefinition();
+                    content = typeDefinition.getContent();
+                }
+            }
         }
 
         if (content instanceof XSDParticle) {
