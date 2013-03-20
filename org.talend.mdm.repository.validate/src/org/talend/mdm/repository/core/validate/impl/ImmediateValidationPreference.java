@@ -39,7 +39,7 @@ public class ImmediateValidationPreference implements IValidationPreference, IVa
     }
 
     @Override
-    public void updateLastSelectedBun(int selectedBun) {
+    public void updateLastSelectedBun(int selectedBun, ValidationResultSummary resultSummary) {
         // do nothing
     }
 
@@ -49,7 +49,7 @@ public class ImmediateValidationPreference implements IValidationPreference, IVa
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#setShowResults(java.lang.Boolean)
      */
     @Override
-    public void setShowResults(Boolean showing) {
+    public void setShowResults(Boolean showing, ValidationResultSummary resultSummary) {
         service.setShowDlgAfterImmediateChecking(showing);
     }
 

@@ -22,9 +22,9 @@ public interface IValidationPreference {
 
     public boolean shouldShowResults(ValidationResultSummary result);
 
-    public void setShowResults(Boolean showing);
+    public void setShowResults(Boolean showing, ValidationResultSummary resultSummary);
 
-    public void updateLastSelectedBun(int selectedBun);
+    public void updateLastSelectedBun(int selectedBun, ValidationResultSummary resultSummary);
 
     /**
      * 

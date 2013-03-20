@@ -223,7 +223,7 @@ public class MDMValidationRunner extends WorkspaceJob {
         } else {
             setValidateResult(validateResult);
             if (validateResult.hasErrOrWarning()) {
-                int code = ValidationPreferenceService.getInstance().getDeployWayWhenValidateFail();
+                int code = ValidationPreferenceService.getInstance().getDeployActionWhenValidateFail();
                 validateResult.setSelectedButton(code);
             } else {
                 validateResult.setSelectedButton(IModelValidationService.BUTTON_OK);

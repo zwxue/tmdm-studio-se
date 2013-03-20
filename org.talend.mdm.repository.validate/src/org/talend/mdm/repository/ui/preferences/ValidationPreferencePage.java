@@ -128,7 +128,7 @@ public class ValidationPreferencePage extends PreferencePage implements IWorkben
         showDialogAfterSavedButton.setSelection(ValidationPreferenceService.getInstance().isShowDlgAfterSaving());
         showDialogBeforeDeployButton.setSelection(ValidationPreferenceService.getInstance().isShowDlgBeforeDeploying());
 
-        int value = ValidationPreferenceService.getInstance().getDeployWayWhenValidateFail();
+        int value = ValidationPreferenceService.getInstance().getDeployActionWhenValidateFail();
         switch (value) {
         case IModelValidationService.BUTTON_CANCEL:
             cancelButton.setSelection(true);
@@ -156,7 +156,7 @@ public class ValidationPreferencePage extends PreferencePage implements IWorkben
                 showDialogAfterImmediateButton.getSelection());
         ValidationPreferenceService.getInstance().setShowDlgAfterSaving(showDialogAfterSavedButton.getSelection());
         ValidationPreferenceService.getInstance().setShowDlgBeforeDeploying(showDialogBeforeDeployButton.getSelection());
-        ValidationPreferenceService.getInstance().setDeployWayWhenValidateFail(getDeployWayValue());
+        ValidationPreferenceService.getInstance().setDeployActionWhenValidateFail(getDeployWayValue());
         return super.performOk();
     }
 

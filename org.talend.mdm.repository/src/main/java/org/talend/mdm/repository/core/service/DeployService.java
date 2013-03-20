@@ -162,7 +162,7 @@ public class DeployService {
             ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
             cancelCmd.updateViewObject(viewObj);
             DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd,
-                    Messages.bind(Messages.Deploy_cancel_text, "", viewObj.getLabel())); //$NON-NLS-1$
+                    Messages.bind(Messages.Deploy_cancel_text, viewObj.getLabel()));
             ((MultiStatus) mainStatus).add(cancelStatus);
         }
 

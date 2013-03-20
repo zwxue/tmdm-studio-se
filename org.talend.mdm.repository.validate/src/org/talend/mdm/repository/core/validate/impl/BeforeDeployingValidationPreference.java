@@ -52,7 +52,7 @@ public class BeforeDeployingValidationPreference implements IValidationPreferenc
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#setShowResults(java.lang.Boolean)
      */
     @Override
-    public void setShowResults(Boolean showing) {
+    public void setShowResults(Boolean showing, ValidationResultSummary resultSummary) {
         service.setShowDlgBeforeDeploying(showing);
     }
 
@@ -62,8 +62,8 @@ public class BeforeDeployingValidationPreference implements IValidationPreferenc
      * @see org.talend.mdm.repository.core.validate.IValidationPreference#updateLastSelectedBun(int)
      */
     @Override
-    public void updateLastSelectedBun(int selectedBun) {
-        service.setDeployWayWhenValidateFail(selectedBun);
+    public void updateLastSelectedBun(int selectedBun, ValidationResultSummary resultSummary) {
+        service.setDeployActionWhenValidateFail(selectedBun);
     }
 
     /*

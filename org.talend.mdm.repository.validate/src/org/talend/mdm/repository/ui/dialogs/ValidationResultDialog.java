@@ -238,6 +238,12 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
     private List<MarkerEntry> markerEntries;
 
+    private Button skipErrBun;
+
+    private Button skipErrWarningBun;
+
+    private Button cancelAllBun;
+
     public ValidationResultDialog(Shell parentShell, ValidationResultSummary result, IValidationPreference validationPref,
             Set<IResource> resources) {
         super(parentShell);
@@ -281,8 +287,50 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         ((GridData) dialogAreaComposite.getLayoutData()).horizontalSpan = 2;
 
         createMessageArea(dialogAreaComposite);
+        createRadioButtons(dialogAreaComposite);
         createCheckboxBun(dialogAreaComposite);
         return dialogAreaComposite;
+    }
+
+    /**
+     * DOC HHB Comment method "createRadioButtons".
+     * 
+     * @param dialogAreaComposite
+     */
+    private void createRadioButtons(Composite dialogAreaComposite) {
+        int condition = validationPref.getValidationCondition();
+        if (condition == IModelValidationService.VALIDATE_BEFORE_DEPLOY) {
+            skipErrBun = createRadioButton(dialogAreaComposite, Messages.ValidationPreferencePage_SkipErrorsButton_Text,
+                    IModelValidationService.BUTTON_SKIP_ERROR);
+            skipErrWarningBun = createRadioButton(dialogAreaComposite,
+                    Messages.ValidationPreferencePage_SkipErrorsAndWarningsButton_Text,
+                    IModelValidationService.BUTTON_SKIP_ERROR_WARNING);
+
+            cancelAllBun = createRadioButton(dialogAreaComposite, Messages.ValidationPreferencePage_CancelButton_Text,
+                    IModelValidationService.BUTTON_CANCEL);
+            skipErrBun.setSelection(true);
+        }
+
+    }
+
+    private int getSelectedRadioBun() {
+        Button bun;
+        if (skipErrBun.getSelection()) {
+            bun = skipErrBun;
+        } else if (skipErrWarningBun.getSelection()) {
+            bun = skipErrWarningBun;
+        } else {
+            bun = cancelAllBun;
+        }
+        return (Integer) bun.getData();
+    }
+
+    private Button createRadioButton(Composite parent, String text, int id) {
+        Button bun = new Button(parent, SWT.RADIO);
+        bun.setText(text);
+        bun.setData(new Integer(id));
+        GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.BEGINNING).applyTo(bun);
+        return bun;
     }
 
     private void createCheckboxBun(Composite parent) {
@@ -293,7 +341,7 @@ public class ValidationResultDialog extends IconAndMessageDialog {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                validationPref.setShowResults(!button.getSelection());
+                validationPref.setShowResults(!button.getSelection(), result);
             }
 
         });
@@ -304,7 +352,9 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         Composite composite = new Composite(parent, SWT.NONE);
         GridLayoutFactory.fillDefaults().numColumns(2).equalWidth(false).applyTo(composite);
         GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(composite);
-        return super.createMessageArea(composite);
+
+        Control control = super.createMessageArea(composite);
+        return control;
     }
 
     @Override
@@ -327,43 +377,25 @@ public class ValidationResultDialog extends IconAndMessageDialog {
         GridLayoutFactory.fillDefaults().numColumns(0).equalWidth(true).applyTo(rightArea);
         GridDataFactory.fillDefaults().align(SWT.END, SWT.CENTER).grab(true, false).applyTo(rightArea);
 
-        createRightAreaButtons(rightArea);
-    }
-
-    private void createRightAreaButtons(Composite parent) {
-        int condition = validationPref.getValidationCondition();
-        switch (condition) {
-        case IModelValidationService.VALIDATE_IMMEDIATE:
-        case IModelValidationService.VALIDATE_AFTER_SAVE: {
-            createButton(parent, IModelValidationService.BUTTON_OK, IDialogConstants.OK_LABEL, true);
-            break;
-        }
-        case IModelValidationService.VALIDATE_BEFORE_DEPLOY: {
-            createButton(parent, IModelValidationService.BUTTON_SKIP_ERROR_WARNING,
-                    Messages.ValidationResultDialog_skipAllErrWarnings, false);
-            createButton(parent, IModelValidationService.BUTTON_SKIP_ERROR, Messages.ValidationResultDialog_skipAllErrs, false);
-            createButton(parent, IModelValidationService.BUTTON_CANCEL, IDialogConstants.CANCEL_LABEL, true);
-
-            break;
-        }
-        }
+        createButton(parent, IModelValidationService.BUTTON_OK, IDialogConstants.OK_LABEL, true);
     }
 
     @Override
     protected void buttonPressed(int buttonId) {
         if (IDialogConstants.DETAILS_ID == buttonId) {
             toggleDetailsArea();
+            return;
         }
-        switch (buttonId) {
-        case IModelValidationService.BUTTON_SKIP_ERROR:
-        case IModelValidationService.BUTTON_SKIP_ERROR_WARNING:
-            setReturnCode(buttonId);
+        int condition = validationPref.getValidationCondition();
+        if (condition == IModelValidationService.VALIDATE_BEFORE_DEPLOY) {
+            int returnCode = getSelectedRadioBun();
+            setReturnCode(returnCode);
+            if (!validationPref.shouldShowResults(result)) {
+                validationPref.updateLastSelectedBun(returnCode, result);
+            }
             close();
-            break;
-
-        default:
+        } else {
             super.buttonPressed(buttonId);
-            break;
         }
 
     }
