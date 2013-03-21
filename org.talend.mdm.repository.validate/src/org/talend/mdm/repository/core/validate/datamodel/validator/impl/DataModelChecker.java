@@ -13,11 +13,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections.map.MultiKeyMap;
 import org.talend.mdm.commmon.metadata.*;
 import org.talend.mdm.repository.core.validate.datamodel.IChecker;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
@@ -67,9 +67,9 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
         public static final String ANONYMOUS_TYPE_NAME = "<Anonymous>"; //$NON-NLS-1$
 
-        private final List<ModelValidationMessage> messages = new LinkedList<ModelValidationMessage>();
-
         private final String dataModelName;
+
+        private final Map<ValidationError, MultiKeyMap> errors = new HashMap<ValidationError, MultiKeyMap>();
 
         private int errorCount;
 
@@ -108,12 +108,12 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         }
 
         @Override
-        public void fatal(TypeMetadata type, String message, int lineNumber, int columnNumber) {
-            error(type, message, lineNumber, columnNumber);
+        public void fatal(TypeMetadata type, String message, int lineNumber, int columnNumber, ValidationError error) {
+            error(type, message, lineNumber, columnNumber, error);
         }
 
         @Override
-        public void error(TypeMetadata type, String message, int lineNumber, int columnNumber) {
+        public void error(TypeMetadata type, String message, int lineNumber, int columnNumber, ValidationError error) {
             int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY : IComponentValidationRule.MSG_GROUP_TYPE;
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                     message,
@@ -126,12 +126,21 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     getTypeName(type),
                     getTypeName(type),
                     getTypeName(type));
-            messages.add(validationMessage);
+            addMessage(lineNumber, columnNumber, error, validationMessage);
             errorCount++;
         }
 
+        private void addMessage(int lineNumber, int columnNumber, ValidationError error, ModelValidationMessage validationMessage) {
+            MultiKeyMap errorsByType = errors.get(error);
+            if (errorsByType == null) {
+                errorsByType = new MultiKeyMap();
+                errors.put(error, errorsByType);
+            }
+            errorsByType.put(lineNumber, columnNumber, validationMessage);
+        }
+
         @Override
-        public void warning(TypeMetadata type, String message, int lineNumber, int columnNumber) {
+        public void warning(TypeMetadata type, String message, int lineNumber, int columnNumber, ValidationError error) {
             int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY : IComponentValidationRule.MSG_GROUP_TYPE;
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING, message,
                     "key", // TODO
@@ -143,16 +152,16 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     getTypeName(type),
                     getTypeName(type),
                     getTypeName(type));
-            messages.add(validationMessage);
+            addMessage(lineNumber, columnNumber, error, validationMessage);
         }
 
         @Override
-        public void fatal(FieldMetadata field, String message, int lineNumber, int columnNumber) {
-            error(field, message, lineNumber, columnNumber);
+        public void fatal(FieldMetadata field, String message, int lineNumber, int columnNumber, ValidationError error) {
+            error(field, message, lineNumber, columnNumber, error);
         }
 
         @Override
-        public void error(FieldMetadata field, String message, int lineNumber, int columnNumber) {
+        public void error(FieldMetadata field, String message, int lineNumber, int columnNumber, ValidationError error) {
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                     message,
                     "key", // TODO
@@ -164,7 +173,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     getEntityName(field),
                     null,
                     getPath(field));
-            messages.add(validationMessage);
+            addMessage(lineNumber, columnNumber, error, validationMessage);
             errorCount++;
         }
 
@@ -186,7 +195,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         }
 
         @Override
-        public void warning(FieldMetadata field, String message, int lineNumber, int columnNumber) {
+        public void warning(FieldMetadata field, String message, int lineNumber, int columnNumber, ValidationError error) {
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
                     message,
                     "key", // TODO
@@ -198,10 +207,14 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     getEntityName(field),
                     null,
                     getPath(field));
-            messages.add(validationMessage);
+            addMessage(lineNumber, columnNumber, error, validationMessage);
         }
 
         public List<ModelValidationMessage> getMessages() {
+            List<ModelValidationMessage> messages = new LinkedList<ModelValidationMessage>();
+            for (Map.Entry<ValidationError, MultiKeyMap> error : errors.entrySet()) {
+                messages.addAll(error.getValue().values());
+            }
             return messages;
         }
 
