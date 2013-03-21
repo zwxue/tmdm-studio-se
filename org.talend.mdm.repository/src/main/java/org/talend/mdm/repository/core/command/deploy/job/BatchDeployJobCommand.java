@@ -91,12 +91,13 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
         if (status.isOK()) {
             runDeleteCmds(params, monitor, ms);
         }
-        collectSuccessStatus(status, ms, typeLabel);
+
+        collectDeployStatus(status, ms, typeLabel);
         return ms;
 
     }
 
-    private void collectSuccessStatus(IStatus dialogStatus, MultiStatus ms, String typeLabel) {
+    private void collectDeployStatus(IStatus dialogStatus, MultiStatus ms, String typeLabel) {
         for (ICommand cmd : subCmds) {
             String objectName = cmd.getObjLastName();
             int severity = dialogStatus.getSeverity();
@@ -110,8 +111,9 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
             } else if (severity == IStatus.INFO) {
                 ms.add(DeployStatus.getInfoStatus(null,
                         Messages.bind(Messages.JobInteractiveHandler_skipToDeploy, getLabel(), objectName)));
+            } else if (severity == IStatus.ERROR) {
+                ms.add(dialogStatus);
             }
-
         }
     }
 
@@ -132,7 +134,7 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.command.AbstractCommand#getCommandType()
      */
     @Override
