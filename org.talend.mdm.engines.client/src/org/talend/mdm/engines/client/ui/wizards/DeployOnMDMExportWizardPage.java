@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -59,7 +60,6 @@ import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.proxy.ProxyUtil;
-import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
@@ -75,9 +75,9 @@ import com.amalto.workbench.utils.MDMServerDef;
 
 /**
  * Page of the Job Scripts Export Wizard. <br/>
- * 
+ *
  * $Id: DeployOnMDMExportWizardPage.java 1 2007-04-26 11:29:00 cantoine
- * 
+ *
  */
 public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResourceExportPage1 {
 
@@ -104,11 +104,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private SpagoBiServer mdmServer = null;
 
+    private RuntimeException deployException;
+
     protected List<JobDeploymentInfo> jobInfoList = new ArrayList<JobDeploymentInfo>();
 
     /**
      * Create an instance of this class.
-     * 
+     *
      * @param name java.lang.String
      */
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
@@ -174,7 +176,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create an instance of this class.
-     * 
+     *
      * @param selection the selection
      */
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
@@ -221,7 +223,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the export options specification widgets.
-     * 
+     *
      */
     @Override
     protected void createOptionsGroupButtons(Group optionsGroup) {
@@ -238,7 +240,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the buttons for the group that determine if the entire or selected directory structure should be created.
-     * 
+     *
      * @param optionsGroup
      * @param font
      */
@@ -357,7 +359,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * The Finish button was pressed. Try to do the required work now and answer a boolean indicating success. If false
      * is returned then the wizard will not close.
-     * 
+     *
      * @returns boolean
      */
     @Override
@@ -471,21 +473,23 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 MessageDialog.openError(getContainer().getShell(),
                         Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
                         e.getLocalizedMessage());
+                recordDeployException(new RuntimeException(new RemoteException(e.getMessage(), e)));
                 return false;
             }
 
         }
-        
-        mdmServer = toSpagoBiServer(server);
 
         MessageDialog.openInformation(getContainer().getShell(), Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
                 Messages.getString("DeployOnMDMExportWizardPage.publishJobSuccess")); //$NON-NLS-1$
+
+        mdmServer = toSpagoBiServer(server);
+
         return ok;
     }
-    
+
 
     /**
-     * 
+     *
      * DOC aiming Comment method "reBuildJobZipFile".
      */
     private void reBuildJobZipFile() {
@@ -547,7 +551,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
                 for (JobDeploymentInfo jobInfo : jobInfoList) {
                     File sourFile = new File(tmpFolder + File.separator + jobLabelName
-                            + "_" + jobVersion + File.separator + jobInfo.getJobLabelName()); //$NON-NLS-1$ 
+                            + "_" + jobVersion + File.separator + jobInfo.getJobLabelName()); //$NON-NLS-1$
                     File sourLibFile = new File(tmpFolder + File.separator + jobLabelName
                             + "_" + jobVersion + File.separator + "lib"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -618,7 +622,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Get the export operation.
-     * 
+     *
      * @param resourcesToExport
      * @return
      */
@@ -637,7 +641,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns the root folder name.
-     * 
+     *
      * @return
      */
     private String getRootFolderName() {
@@ -667,7 +671,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Answer the string to display in self as the destination type.
-     * 
+     *
      * @return java.lang.String
      */
     @Override
@@ -677,7 +681,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns resources to be exported. This returns file - for just the files use getSelectedResources.
-     * 
+     *
      * @return a collection of resources currently selected for export (element type: <code>IResource</code>)
      * @throws ProcessorException
      */
@@ -780,7 +784,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Answer the suffix that files exported from this wizard should have. If this suffix is a file extension (which is
      * typically the case) then it must include the leading period character.
-     * 
+     *
      */
     protected String getOutputSuffix() {
         if (exportTypeCombo.getSelectionIndex() == 0)
@@ -827,7 +831,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.wizards.datatransfer.WizardFileSystemResourceExportPage1#destinationEmptyMessage()
      */
     @Override
@@ -855,13 +859,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         spagoBiServer.setPort(serverDef.getPort());
         spagoBiServer.setLogin(serverDef.getUser());
         spagoBiServer.setPassword(serverDef.getPasswd());
-        
+
         return spagoBiServer;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1#validateDestinationGroup()
      */
     @Override
@@ -875,6 +879,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     public void setMdmServer(SpagoBiServer mdmServer) {
         this.mdmServer = mdmServer;
+    }
+
+    public RuntimeException getDeployException() {
+        return deployException;
+    }
+
+    private void recordDeployException(RuntimeException e) {
+        this.deployException = e;
     }
 
 }

@@ -30,9 +30,9 @@ import org.talend.mdm.engines.client.i18n.Messages;
 
 /**
  * Publish SpagoBI export wizard. <br/>
- * 
+ *
  * $Id: DeployOnMDMExportWizard.java 1 2007-04-27 11:30:00 cantoine
- * 
+ *
  */
 public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
 
@@ -65,6 +65,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
     /*
      * (non-Javadoc) Method declared on IWizard.
      */
+    @Override
     public void addPages() {
         super.addPages();
 
@@ -90,6 +91,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
     /*
      * (non-Javadoc) Method declared on IWizard.
      */
+    @Override
     public boolean performFinish() {
         boolean finish = mainPage.finish();
         setMdmServer(mainPage.getMdmServer());
@@ -103,5 +105,9 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
 
     public void setMdmServer(SpagoBiServer mdmServer) {
         this.mdmServer = mdmServer;
+    }
+
+    public RuntimeException getDeployException() {
+        return mainPage.getDeployException();
     }
 }
