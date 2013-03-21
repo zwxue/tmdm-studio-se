@@ -26,6 +26,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.editors.XObjectBrowser2;
 import org.talend.mdm.repository.ui.editors.XObjectBrowserInput2;
@@ -41,6 +42,8 @@ public class MDMEventManagerAction extends AbstractRepositoryAction  implements 
 
     private IWorkbenchPage page = null;
 
+    private MDMServerDef mdmServerDef;
+
     private static final ImageDescriptor EM_IMG = EclipseResourceManager.getImageDescriptor(RepositoryPlugin.PLUGIN_ID,
             "/icons/sub_engine.png"); //$NON-NLS-1$
 
@@ -51,15 +54,13 @@ public class MDMEventManagerAction extends AbstractRepositoryAction  implements 
 
     @Override
     protected void doRun() {
-        SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
-        dlg.create();
-        if (dlg.open() == IDialogConstants.OK_ID) {
-
+        MDMServerDef serverDef = getServerDef();
+        if (serverDef != null) {
             IRepositoryViewObject eventViewObj = getEventMangerViewObject();
             TreeObject treeObj = createModel();
 
             XObjectBrowserInput2 input = new XObjectBrowserInput2(eventViewObj, treeObj, Messages.EventManager_text);
-            input.setServerDef(dlg.getSelectedServerDef());
+            input.setServerDef(serverDef);
             if (page == null) {
                 this.page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
             }
@@ -68,7 +69,22 @@ public class MDMEventManagerAction extends AbstractRepositoryAction  implements 
             } catch (PartInitException e) {
                 log.error(e.getMessage(), e);
             }
+
+            setServerDef(null);
         }
+    }
+
+    private MDMServerDef getServerDef() {
+        if (mdmServerDef != null)
+            return mdmServerDef;
+
+        SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
+        dlg.create();
+        if (dlg.open() == IDialogConstants.OK_ID) {
+            return dlg.getSelectedServerDef();
+        }
+
+        return null;
     }
 
     private IRepositoryViewObject getEventMangerViewObject() {
@@ -87,6 +103,15 @@ public class MDMEventManagerAction extends AbstractRepositoryAction  implements 
     private TreeObject createModel() {
         TreeObject treeObj = new TreeObject("treeObject", null, TreeObject.SUBSCRIPTION_ENGINE, null, null); //$NON-NLS-1$
         return treeObj;
+    }
+
+    public void run(MDMServerDef serverDef) {
+        setServerDef(serverDef);
+        run();
+    }
+
+    private void setServerDef(MDMServerDef serverDef) {
+        this.mdmServerDef = serverDef;
     }
 
     @Override

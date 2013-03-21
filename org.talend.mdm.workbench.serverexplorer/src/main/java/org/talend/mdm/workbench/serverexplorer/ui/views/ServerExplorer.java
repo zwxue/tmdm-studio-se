@@ -372,7 +372,10 @@ public class ServerExplorer extends ViewPart {
             IService service = GlobalServiceRegister.getDefault().getService(IEventMgrService.class);
             if (service != null) {
                 IEventMgrService mgr = (IEventMgrService) service;
-                mgr.run();
+                IRepositoryViewObject curSelectedViewObject = getCurSelectedViewObject();
+                MDMServerDefItem item = (MDMServerDefItem) curSelectedViewObject.getProperty().getItem();
+
+                mgr.run(item.getServerDef().getDecryptedServerDef());
             }
         }
     }

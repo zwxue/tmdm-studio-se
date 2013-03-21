@@ -13,8 +13,12 @@
 package org.talend.mdm.workbench.serverexplorer.ui.actions;
 
 import org.talend.core.IService;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 
 public interface IEventMgrService extends IService {
+
+    void run(MDMServerDef serverDef);
+
     void run();
 }
