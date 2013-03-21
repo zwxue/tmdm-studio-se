@@ -65,7 +65,8 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
     private static class ValidationHandlerAdapter implements ValidationHandler {
 
-        public static final String ANONYMOUS_TYPE_NAME = "<Anonymous>";
+        public static final String ANONYMOUS_TYPE_NAME = "<Anonymous>"; //$NON-NLS-1$
+
         private final List<ModelValidationMessage> messages = new LinkedList<ModelValidationMessage>();
 
         private final String dataModelName;
@@ -160,11 +161,19 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     columnNumber,
                     IComponentValidationRule.MSG_GROUP_ELEMENT,
                     field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
-                    getFieldName(field),
+                    getEntityName(field),
                     null,
                     getPath(field));
             messages.add(validationMessage);
             errorCount++;
+        }
+
+        private static String getEntityName(FieldMetadata field) {
+            try {
+                return field.getContainingType().getName();
+            } catch (Exception e) {
+                return ""; //$NON-NLS-1$
+            }
         }
 
         private static String getFieldName(FieldMetadata field) {
@@ -186,7 +195,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     columnNumber,
                     IComponentValidationRule.MSG_GROUP_ELEMENT,
                     field.<Element> getData(MetadataRepository.XSD_DOM_ELEMENT),
-                    getFieldName(field),
+                    getEntityName(field),
                     null,
                     getPath(field));
             messages.add(validationMessage);
