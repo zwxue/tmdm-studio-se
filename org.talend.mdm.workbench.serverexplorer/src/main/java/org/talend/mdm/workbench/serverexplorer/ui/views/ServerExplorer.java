@@ -508,7 +508,7 @@ public class ServerExplorer extends ViewPart {
         @Override
         public void run() {
             MDMServerDef selectedServerDef = getSelectedServerDef(getStructuredSelection());
-            MDMServerConsoleFactory.showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
+            new MDMServerConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
         }
     }
 }

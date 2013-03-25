@@ -104,4 +104,19 @@
             </instanceof></enablement>
       </consolePageParticipant>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
+            class="org.talend.mdm.workbench.serverexplorer.console.MDMServerConsolePreferencePage"
+            id="org.talend.mdm.workbench.serverexplorer.page"
+            name="Server Console">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.talend.mdm.workbench.serverexplorer.console.MDMServerPreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>
