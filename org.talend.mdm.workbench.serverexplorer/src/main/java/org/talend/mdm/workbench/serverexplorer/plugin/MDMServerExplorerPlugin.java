@@ -15,7 +15,6 @@ package org.talend.mdm.workbench.serverexplorer.plugin;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.talend.mdm.workbench.serverexplorer.console.MDMServerMessageConsole;
@@ -33,8 +32,6 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
 
     private Map<String, MDMServerMessageConsole> serverToConsole = null;
 
-    private Map<String, IConsoleView> serverToView = null;
-
     /**
      * The constructor
      */
@@ -46,7 +43,6 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
         serverToConsole = new HashMap<String, MDMServerMessageConsole>();
-        serverToView = new HashMap<String, IConsoleView>();
     }
 
     @Override
@@ -54,10 +50,6 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         if (serverToConsole != null) {
             serverToConsole.clear();
             serverToConsole = null;
-        }
-        if (serverToView != null) {
-            serverToView.clear();
-            serverToView = null;
         }
         plugin = null;
         super.stop(context);
@@ -74,9 +66,5 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
 
     public Map<String, MDMServerMessageConsole> getServerToConsole() {
         return this.serverToConsole;
-    }
-
-    public Map<String, IConsoleView> getServerToView() {
-        return this.serverToView;
     }
 }

@@ -17,7 +17,7 @@ public class MDMServerConsolePageParticipant implements IConsolePageParticipant 
         MDMServerMessageConsole mdmConsole = (MDMServerMessageConsole) console;
         IToolBarManager toolBar = page.getSite().getActionBars().getToolBarManager();
         toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getReloadAction());
-        toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getResumeAction());
+        toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getMonitorAction());
         toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getDownloadAction());
     }
 

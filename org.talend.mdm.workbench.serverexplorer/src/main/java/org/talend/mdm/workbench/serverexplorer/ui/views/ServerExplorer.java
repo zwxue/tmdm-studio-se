@@ -481,7 +481,7 @@ public class ServerExplorer extends ViewPart {
     private class ShowConsoleAction extends BaseSelectionListenerAction {
 
         public ShowConsoleAction() {
-            super("Show Server Log");
+            super(Messages.ServerExplorer_ViewLogAction_Text);
             setEnabled(false);
         }
 

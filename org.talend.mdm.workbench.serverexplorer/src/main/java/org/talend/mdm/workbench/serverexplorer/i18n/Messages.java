@@ -29,6 +29,30 @@ public class Messages extends NLS {
         return NLS.bind(message, bindings);
     }
 
+    public static String DownloadLogDialog_BroswerButton_Text;
+
+    public static String DownloadLogDialog_InputError_Message;
+
+    public static String DownloadLogDialog_Message;
+
+    public static String DownloadLogDialog_OpenButton_Text;
+
+    public static String DownloadLogDialog_PathLabel_Text;
+
+    public static String DownloadLogDialog_Title;
+
+    public static String MDMServerConsolePrefsPage_Display_Buffer_Text;
+
+    public static String MDMServerConsolePrefsPage_Error_Message;
+
+    public static String MDMServerConsolePrefsPage_RefreshLabel_1;
+
+    public static String MDMServerConsolePrefsPage_RefreshLabel_2;
+
+    public static String MDMServerMessageConsole_DownloadFailed_Message;
+
+    public static String MDMServerMessageConsole_DownloadTask_Name;
+
     public static String SelectServerDefDialog_selectServerLocation;
 
     public static String ServerDefDialog_AddServer;
@@ -81,6 +105,8 @@ public class Messages extends NLS {
 
     public static String ServerExplorer_RemoveServer;
 
+    public static String ServerExplorer_ViewLogAction_Text;
+
     public static String ServerExplorer_EventManager;
 
     public static String ServerExplorer_WarningText;
@@ -88,6 +114,10 @@ public class Messages extends NLS {
     public static String Reinput_Password;
 
     public static String SharePassword;
+
+    public static String ShowMDMServerConsole_InfoDialog_Message;
+
+    public static String ShowMDMServerConsole_InfoDialog_Title;
 
     public static String OnlyApplicableShared;
 
