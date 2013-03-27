@@ -672,7 +672,7 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="menu:help?before=group help">
+            locationURI="menu:help?after=helpContents">
          <command
                commandId="org.talend.mdm.repository.show.welcomeEditor.command"
                id="org.talend.mdm.repository.show.welcomeEditor.menus.command"
