@@ -117,7 +117,7 @@ public class DownloadLogDialog extends TitleAreaDialog {
             }
         });
         if (listFiles.length == 0) {
-            return path;
+            return path + File.separator;
         }
         return listFiles[0].getAbsolutePath() + File.separator;
     }

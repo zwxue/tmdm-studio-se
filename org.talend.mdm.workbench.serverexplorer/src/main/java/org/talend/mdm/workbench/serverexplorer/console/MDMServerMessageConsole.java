@@ -18,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,9 +30,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -47,8 +43,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
@@ -57,7 +51,6 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.internal.console.IOConsolePage;
 import org.eclipse.ui.part.IPageBookViewPage;
-import org.eclipse.ui.progress.WorkbenchJob;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
@@ -152,48 +145,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         }
     }
 
-    private class ShowConsoleViewJob extends WorkbenchJob {
-
-        public ShowConsoleViewJob() {
-            super("Show Console View");
-            setSystem(true);
-            setPriority(Job.SHORT);
-        }
-
-        @Override
-        public IStatus runInUIThread(IProgressMonitor monitor) {
-            IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-            if (window != null) {
-                IWorkbenchPage page = window.getActivePage();
-                if (page != null) {
-                    Map<String, IConsoleView> serverToView = MDMServerExplorerPlugin.getDefault().getServerToView();
-                    synchronized (serverToView) {
-                        for (IConsoleView consoleView : serverToView.values()) {
-                            if (consoleView.getSite().getPage().equals(page)) {
-                                boolean bringToTop = shouldBringToTop(consoleView);
-                                if (bringToTop) {
-                                    page.bringToTop(consoleView);
-                                }
-                                consoleView.display(MDMServerMessageConsole.this);
-                                // boolean consoleVisible = page.isPartVisible(consoleView);
-                                // if (consoleVisible) {
-                                // }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return Status.OK_STATUS;
-        }
-
-        private boolean shouldBringToTop(IConsoleView consoleView) {
-            Map<String, IConsoleView> serverToView = MDMServerExplorerPlugin.getDefault().getServerToView();
-            IConsoleView view = serverToView.get(serverDef.getName());
-            return view.equals(consoleView);
-        }
-    }
-
     private MonitorAction monitorAction = null;
 
     private DownloadAction downloadAction = null;
@@ -205,8 +156,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     private Timer timer = null;
 
     private int position = 0;
-
-    private ShowConsoleViewJob showJob = new ShowConsoleViewJob();
 
     public MDMServerMessageConsole(MDMServerDef serverDef) {
         this(Messages.MDMServerMessageConsole_Name, null);
@@ -227,16 +176,10 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     private void initMessageConsole() {
         String name = Messages.MDMServerMessageConsole_Name + " (" + serverDef.getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         setName(name);
-        initWaterMarks();
 
         reloadAction = new ReloadAction();
         monitorAction = new MonitorAction();
         downloadAction = new DownloadAction();
-    }
-
-    private void initWaterMarks() {
-        int buffer = MDMServerPreferenceService.getDisplayedBuffer();
-        setWaterMarks(buffer, buffer + 8000);
     }
 
     @Override
@@ -268,11 +211,11 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     @Override
     public void activate() {
-        showJob.schedule(100);
+        super.activate();
         display();
     }
 
-    public void display() {
+    private void display() {
         position = 0;
         clearConsole();
 
@@ -304,6 +247,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 if (isEndOfChunk(response)) {
                     return;
                 }
+                clearConsole();
                 InputStream is = response.getEntity().getContent();
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 IOUtils.copy(is, os);
@@ -325,13 +269,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             newErrorMessageStream().println(e.getMessage());
             disposeTimer();
         }
-    }
-
-    @Override
-    public MessageConsoleStream newMessageStream() {
-        MessageConsoleStream msgStream = super.newMessageStream();
-        // msgStream.setActivateOnWrite(true);
-        return msgStream;
     }
 
     private int getRefrehFrequency() {
@@ -369,7 +306,8 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());
         sb.append("/datamanager/logviewer/log?position=" + pos); //$NON-NLS-1$
-        sb.append("&maxLines=10"); //$NON-NLS-1$
+        //        sb.append("&maxLines=10"); //$NON-NLS-1$
+        sb.append("&maxLines=" + MDMServerPreferenceService.getMaxDisplayedLines()); //$NON-NLS-1$
         return sb.toString();
     }
 
@@ -469,8 +407,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         if (event.getProperty().equals(MDMServerPreferenceService.REFRESH_FREQ)) {
             disposeTimer();
             monitor();
-        } else if (event.getProperty().equals(MDMServerPreferenceService.DISPLAY_MAX_BUFFER)) {
-            initWaterMarks();
         }
     }
 
@@ -488,11 +424,5 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private ImageDescriptor createImageDesc(String path) {
         return MDMServerExplorerPlugin.imageDescriptorFromPlugin(MDMServerExplorerPlugin.PLUGIN_ID, path);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        // return false;
-        return super.equals(obj);
     }
 }

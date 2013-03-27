@@ -63,9 +63,6 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
             mdmServerConsole = new MDMServerMessageConsole(serverDef);
             serverToConsole.put(serverDef.getName(), mdmServerConsole);
         }
-        // IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
-        // IConsole[] consoles = serverToConsole.values().toArray(new IConsole[0]);
-        // consoleManager.addConsoles(consoles);
 
         if (!containedMDMServerMessageConsole(mdmServerConsole)) {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();

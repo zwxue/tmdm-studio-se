@@ -16,13 +16,13 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * created by Karelun Huang on Mar 25, 2013 Detailled comment
- * 
+ *
  */
 public class MDMServerPreferenceService {
 
     public static final String REFRESH_FREQ = "_mdm_refresh_frequency"; //$NON-NLS-1$
 
-    public static final String DISPLAY_MAX_BUFFER = "_mdm_max_buffer_displayed"; //$NON-NLS-1$
+    public static final String DISPLAY_MAX_LINES = "_mdm_max_lines_displayed"; //$NON-NLS-1$
 
     public static int getRefrehFrequency() {
         PlatformUI.getPreferenceStore().setDefault(REFRESH_FREQ, 2);
@@ -37,16 +37,16 @@ public class MDMServerPreferenceService {
         PlatformUI.getPreferenceStore().setValue(REFRESH_FREQ, value);
     }
 
-    public static int getDisplayedBuffer() {
-        PlatformUI.getPreferenceStore().setDefault(DISPLAY_MAX_BUFFER, 8000);
-        return PlatformUI.getPreferenceStore().getInt(DISPLAY_MAX_BUFFER);
+    public static int getMaxDisplayedLines() {
+        PlatformUI.getPreferenceStore().setDefault(DISPLAY_MAX_LINES, 100);
+        return PlatformUI.getPreferenceStore().getInt(DISPLAY_MAX_LINES);
     }
 
-    public static int getDefaultDisplayedBuffer() {
-        return PlatformUI.getPreferenceStore().getDefaultInt(DISPLAY_MAX_BUFFER);
+    public static int getDefaultMaxDisplayedLines() {
+        return PlatformUI.getPreferenceStore().getDefaultInt(DISPLAY_MAX_LINES);
     }
 
-    public static void setDisplayedBuffer(int value) {
-        PlatformUI.getPreferenceStore().setValue(DISPLAY_MAX_BUFFER, value);
+    public static void setMaxDisplayedLines(int value) {
+        PlatformUI.getPreferenceStore().setValue(DISPLAY_MAX_LINES, value);
     }
 }
