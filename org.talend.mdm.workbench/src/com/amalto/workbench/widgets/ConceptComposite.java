@@ -12,8 +12,9 @@
 // ============================================================================
 package com.amalto.workbench.widgets;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -43,7 +44,7 @@ import com.amalto.workbench.i18n.Messages;
  */
 public class ConceptComposite {
 
-    private CCombo typeNameText = null;
+    private CCombo typeNameCombo = null;
 
     private Button sequenceButton = null;
 
@@ -59,7 +60,9 @@ public class ConceptComposite {
 
     private Button btnAbstract;
 
-    private CCombo superTypeNameText;
+    private CCombo superTypeNameCombo;
+
+    private Map<String, XSDComplexTypeDefinition> typeMap;
 
     public ConceptComposite(Composite parent, boolean encloseTextField, final List<XSDComplexTypeDefinition> types,
             final boolean newComplex) {
@@ -70,51 +73,28 @@ public class ConceptComposite {
         typeNameLabel = new Label(parent, SWT.NONE);
         typeNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         typeNameLabel.setText(newComplex == false ? Messages.ConceptComposite_TypeName1 : Messages.ConceptComposite_TypeName2);
+        // init types
+        initInputTypes(types);
 
-        int readOnlyStyle = newComplex ? SWT.NONE : SWT.READ_ONLY;
-        typeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER | readOnlyStyle);
-        typeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
-        for (XSDComplexTypeDefinition type : types) {
-            String typeName = type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : "");//$NON-NLS-1$//$NON-NLS-2$;
-            typeNameText.add(typeName);
-            typeNameText.setData(typeName, type);
-        }
-        typeNameText.addSelectionListener(new SelectionAdapter() {
+        typeNameCombo = new CCombo(parent, SWT.SINGLE | SWT.BORDER);
+        typeNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
+        typeNameCombo.setItems(getInitExistedTypes());
+        typeNameCombo.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Object data = typeNameText.getData(typeNameText.getText());
-                if (data != null) {
-                    XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) data;
-                    setAbstract(type.isAbstract());
-                    XSDParticleImpl partCnt = (XSDParticleImpl) type.getContent();
-                    if (partCnt != null) {
-                        XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-                        XSDCompositor typeComposite = mdlGrp.getCompositor();
-                        if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL)) {
-                            setSequence();
-                        } else if (typeComposite.equals(XSDCompositor.ALL_LITERAL)) {
-                            setAll();
-                        } else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL)) {
-                            setChoice();
-                        }
-                    }
-                    if (newComplex) {
-                        fillSuperTypeNameText();
-                    } else {
-                        setSuperName(getSuperTypeName(type));
-                    }
-                }
+                updateComponents();
             };
         });
 
-        typeNameText.addModifyListener(new ModifyListener() {
+        typeNameCombo.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                String text = typeNameText.getText();
+                String text = typeNameCombo.getText().trim();
                 if (text.isEmpty()) {
                     setAll();
                 }
+                updateComponents();
             }
         });
 
@@ -126,17 +106,14 @@ public class ConceptComposite {
 
         allButton = new Button(radioGroup, SWT.RADIO);
         allButton.setText("All");//$NON-NLS-1$
-        allButton.setEnabled(newComplex);
         allButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         sequenceButton = new Button(radioGroup, SWT.RADIO);
         sequenceButton.setText("Sequence");//$NON-NLS-1$
-        sequenceButton.setEnabled(newComplex);
         sequenceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         choiceButton = new Button(radioGroup, SWT.RADIO);
         choiceButton.setText("Choice");//$NON-NLS-1$
-        choiceButton.setEnabled(newComplex);
         choiceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         allButton.setSelection(true);
@@ -147,67 +124,128 @@ public class ConceptComposite {
         label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         label.setText(Messages.ConceptComposite_Label);
 
-        superTypeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY);
-        superTypeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
-        superTypeNameText.setEnabled(newComplex);
+        superTypeNameCombo = new CCombo(parent, SWT.SINGLE | SWT.BORDER | SWT.READ_ONLY);
+        superTypeNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
         fillSuperTypeNameText();
 
-        superTypeNameText.addSelectionListener(new SelectionAdapter() {
+        superTypeNameCombo.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                Object data = typeNameText.getData(superTypeNameText.getText());
-                if (data != null) {
-                    XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) data;
-                    XSDParticleImpl partCnt = (XSDParticleImpl) type.getContent();
-                    if (partCnt != null) {
-                        XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-                        XSDCompositor typeComposite = mdlGrp.getCompositor();
-                        if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL)) {
-                            setSequence();
-                        } else if (typeComposite.equals(XSDCompositor.ALL_LITERAL)) {
-                            setAll();
-                        } else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL)) {
-                            setChoice();
-                        }
-                    }
-                }
-                boolean flag = superTypeNameText.getText().trim().length() == 0;
-                choiceButton.setEnabled(flag);
-                allButton.setEnabled(flag);
-                sequenceButton.setEnabled(flag);
-
+                updateComponents();
             };
         });
         btnAbstract = new Button(parent, SWT.CHECK);
-        btnAbstract.setEnabled(newComplex);
         btnAbstract.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
         btnAbstract.setText(Messages.ConceptComposite_Abstract);
         container = parent;
         if (encloseTextField) {
             typeNameLabel.setParent(radioGroup);
-            typeNameText.setParent(radioGroup);
+            typeNameCombo.setParent(radioGroup);
             label.setParent(radioGroup);
-            superTypeNameText.setParent(radioGroup);
+            superTypeNameCombo.setParent(radioGroup);
             btnAbstract.setParent(radioGroup);
+        }
+        updateComponents();
+    }
+
+    private void updateComponents() {
+        String typeName = typeNameCombo.getText().trim();
+        XSDComplexTypeDefinition type = getTypeByName(typeName);
+        if (type != null) {
+            setAbstract(type.isAbstract());
+            XSDParticleImpl partCnt = (XSDParticleImpl) type.getContent();
+            updateElementGroup(type);
+            setSuperName(getSuperTypeName(type));
+            btnAbstract.setEnabled(false);
+        } else {
+
+            // for anonymous type
+            if (typeName.length() == 0) {
+                enableRadioButtons(false);
+                superTypeNameCombo.select(0);
+                setAbstract(false);
+                btnAbstract.setEnabled(false);
+                superTypeNameCombo.setEnabled(false);
+            } else {
+                superTypeNameCombo.setEnabled(true);
+                // new custom type
+                String superTypeName = superTypeNameCombo.getText().trim();
+                XSDComplexTypeDefinition superType = getTypeByName(superTypeName);
+                if (superType != null) {
+                    updateElementGroup(superType);
+                    btnAbstract.setEnabled(true);
+                } else if (superTypeName.length() == 0) {
+                    enableRadioButtons(true);
+                    btnAbstract.setEnabled(true);
+                }
+            }
         }
     }
 
-    private void fillSuperTypeNameText() {
-        superTypeNameText.removeAll();
-
-        String[] items = typeNameText.getItems();
-        List<String> itemList = new ArrayList<String>();
-        for (String item : items) {
-            if (typeNameText.getText().trim().equals(item)) {
-                continue;
+    private void initInputTypes(List<XSDComplexTypeDefinition> types) {
+        typeMap = new LinkedHashMap<String, XSDComplexTypeDefinition>();
+        for (XSDComplexTypeDefinition type : types) {
+            if (type.getTargetNamespace() == null) {
+                String typeName = type.getName();
+                typeMap.put(typeName, type);
             }
-            itemList.add(item);
         }
-        if (!itemList.contains("")) {//$NON-NLS-1$
-            itemList.add(0, "");//$NON-NLS-1$
+    }
+
+    private XSDComplexTypeDefinition getTypeByName(String name) {
+        if (typeMap != null && name != null) {
+            for (String typeName : typeMap.keySet()) {
+                if (typeName.equalsIgnoreCase(name)) {
+                    return typeMap.get(typeName);
+                }
+            }
         }
-        superTypeNameText.setItems(itemList.toArray(new String[0]));
+        return null;
+    }
+
+    private void enableRadioButtons(boolean enable) {
+        choiceButton.setEnabled(enable);
+        allButton.setEnabled(enable);
+        sequenceButton.setEnabled(enable);
+    }
+
+    private String[] getExistedTypes() {
+        if (typeMap != null) {
+            return typeMap.keySet().toArray(new String[0]);
+        }
+        return new String[0];
+    }
+
+    private String[] getInitExistedTypes() {
+        String[] existedTypes = getExistedTypes();
+        String[] initTypes = new String[existedTypes.length + 1];
+        initTypes[0] = ""; //$NON-NLS-1$
+        System.arraycopy(existedTypes, 0, initTypes, 1, existedTypes.length);
+        return initTypes;
+    }
+
+    private void fillSuperTypeNameText() {
+        superTypeNameCombo.removeAll();
+        superTypeNameCombo.setItems(getInitExistedTypes());
+    }
+
+    private void updateElementGroup(XSDComplexTypeDefinition type) {
+        if (type != null) {
+            XSDParticleImpl partCnt = (XSDParticleImpl) type.getContent();
+            if (partCnt != null) {
+                XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
+                XSDCompositor typeComposite = mdlGrp.getCompositor();
+                if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL)) {
+                    setSequence();
+                } else if (typeComposite.equals(XSDCompositor.ALL_LITERAL)) {
+                    setAll();
+                } else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL)) {
+                    setChoice();
+                }
+                enableRadioButtons(false);
+            }
+        }
     }
 
     private String getSuperTypeName(XSDComplexTypeDefinition type) {
@@ -223,23 +261,24 @@ public class ConceptComposite {
     }
 
     public String getSuperName() {
-        return superTypeNameText.getText();
+        return superTypeNameCombo.getText();
     }
 
     public void setSuperName(String superName) {
-        superTypeNameText.setText(superName);
+        superTypeNameCombo.setText(superName);
+        superTypeNameCombo.setEnabled(false);
     }
 
     public String getText() {
-        return typeNameText.getText();
+        return typeNameCombo.getText();
     }
 
     public void setText(String text) {
-        typeNameText.setText(text);
+        typeNameCombo.setText(text);
     }
 
     public void setFocus() {
-        typeNameText.setFocus();
+        typeNameCombo.setFocus();
     }
 
     public void setMessage(String msg) {
@@ -289,16 +328,18 @@ public class ConceptComposite {
     }
 
     public CCombo getTypeCombo() {
-        return typeNameText;
+        return typeNameCombo;
     }
 
     public void setSelectAllWidgets(boolean selected) {
-        typeNameText.setEnabled(selected);
-        sequenceButton.setEnabled(selected);
-        choiceButton.setEnabled(selected);
-        allButton.setEnabled(selected);
         typeNameLabel.setEnabled(selected);
+        typeNameCombo.setEnabled(selected);
         btnAbstract.setEnabled(selected);
-        superTypeNameText.setEnabled(selected);
+        superTypeNameCombo.setEnabled(selected);
+        enableRadioButtons(selected);
+        if (selected) {
+            updateComponents();
+        }
+
     }
 }
