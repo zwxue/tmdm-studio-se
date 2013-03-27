@@ -53,6 +53,22 @@ public class Messages extends NLS {
 
     public static String MDMServerMessageConsole_DownloadTask_Name;
 
+    public static String MDMServerMessageConsole_DownloadAction_Text;
+
+    public static String MDMServerMessageConsole_Forbidden_Message;
+
+    public static String MDMServerMessageConsole_MonitorAction_PauseText;
+
+    public static String MDMServerMessageConsole_MonitorAction_ResumeText;
+
+    public static String MDMServerMessageConsole_Name;
+
+    public static String MDMServerMessageConsole_No_Acess_Message;
+
+    public static String MDMServerMessageConsole_NotConnected_Message;
+
+    public static String MDMServerMessageConsole_ReloadAction_Text;
+
     public static String SelectServerDefDialog_selectServerLocation;
 
     public static String ServerDefDialog_AddServer;

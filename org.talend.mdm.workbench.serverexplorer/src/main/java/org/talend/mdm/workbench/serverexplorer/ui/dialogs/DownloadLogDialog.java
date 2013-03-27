@@ -42,7 +42,7 @@ public class DownloadLogDialog extends TitleAreaDialog {
 
     private Text pathText = null;
 
-    private Button browserButton = null;
+    private Button browseButton = null;
 
     private Button openButton = null;
 
@@ -77,9 +77,9 @@ public class DownloadLogDialog extends TitleAreaDialog {
                 dirPath = path;
             }
         });
-        browserButton = new Button(composite, SWT.NONE);
-        browserButton.setText(Messages.DownloadLogDialog_BroswerButton_Text);
-        browserButton.addSelectionListener(new SelectionAdapter() {
+        browseButton = new Button(composite, SWT.NONE);
+        browseButton.setText(Messages.DownloadLogDialog_BroswerButton_Text);
+        browseButton.addSelectionListener(new SelectionAdapter() {
 
             @Override
             public void widgetSelected(SelectionEvent e) {

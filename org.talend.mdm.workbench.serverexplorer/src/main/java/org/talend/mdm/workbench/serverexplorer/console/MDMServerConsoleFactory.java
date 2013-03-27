@@ -3,16 +3,20 @@ package org.talend.mdm.workbench.serverexplorer.console;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleFactory;
 import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.IConsoleView;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
@@ -45,7 +49,6 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
     }
 
     public void showMDMServerConsole(MDMServerDef serverDef) {
-        String serverDefId = getMDMServerDefId(serverDef);
         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         if (window == null) {
             return;
@@ -55,16 +58,45 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
             return;
         }
         Map<String, MDMServerMessageConsole> serverToConsole = MDMServerExplorerPlugin.getDefault().getServerToConsole();
-        MDMServerMessageConsole mdmServerConsole = serverToConsole.get(serverDefId);
+        MDMServerMessageConsole mdmServerConsole = serverToConsole.get(serverDef.getName());
         if (mdmServerConsole == null) {
             mdmServerConsole = new MDMServerMessageConsole(serverDef);
-            serverToConsole.put(serverDefId, mdmServerConsole);
+            serverToConsole.put(serverDef.getName(), mdmServerConsole);
         }
+        // IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
+        // IConsole[] consoles = serverToConsole.values().toArray(new IConsole[0]);
+        // consoleManager.addConsoles(consoles);
+
         if (!containedMDMServerMessageConsole(mdmServerConsole)) {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
             consoleManager.addConsoles(new IConsole[] { mdmServerConsole });
         }
+        Map<String, IConsoleView> serverToView = MDMServerExplorerPlugin.getDefault().getServerToView();
+        IConsoleView consoleView = serverToView.get(serverDef.getName());
+        if (consoleView == null) {
+            consoleView = showConsoleView(serverDef);
+            Assert.isNotNull(consoleView);
+            serverToView.put(serverDef.getName(), consoleView);
+        }
         mdmServerConsole.activate();
+    }
+
+    private IConsoleView showConsoleView(MDMServerDef serverDef) {
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        if (window == null) {
+            return null;
+        }
+        IWorkbenchPage page = window.getActivePage();
+        if (page == null) {
+            return null;
+        }
+        try {
+            return (IConsoleView) page.showView(IConsoleConstants.ID_CONSOLE_VIEW, serverDef.getName(),
+                    IWorkbenchPage.VIEW_ACTIVATE);
+        } catch (PartInitException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private boolean containedMDMServerMessageConsole(IConsole mdmServerConsole) {
@@ -78,9 +110,5 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
             }
         }
         return false;
-    }
-
-    public static String getMDMServerDefId(MDMServerDef serverDef) {
-        return serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$
     }
 }
