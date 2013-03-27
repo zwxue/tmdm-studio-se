@@ -3,7 +3,6 @@ package org.talend.mdm.workbench.serverexplorer.console;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -16,7 +15,6 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleFactory;
 import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.IConsoleView;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
@@ -68,32 +66,24 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
             consoleManager.addConsoles(new IConsole[] { mdmServerConsole });
         }
-        Map<String, IConsoleView> serverToView = MDMServerExplorerPlugin.getDefault().getServerToView();
-        IConsoleView consoleView = serverToView.get(serverDef.getName());
-        if (consoleView == null) {
-            consoleView = showConsoleView(serverDef);
-            Assert.isNotNull(consoleView);
-            serverToView.put(serverDef.getName(), consoleView);
-        }
+        showConsoleView(serverDef.getName());
         mdmServerConsole.activate();
     }
 
-    private IConsoleView showConsoleView(MDMServerDef serverDef) {
+    private void showConsoleView(String serverName) {
         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         if (window == null) {
-            return null;
+            return;
         }
         IWorkbenchPage page = window.getActivePage();
         if (page == null) {
-            return null;
+            return;
         }
         try {
-            return (IConsoleView) page.showView(IConsoleConstants.ID_CONSOLE_VIEW, serverDef.getName(),
-                    IWorkbenchPage.VIEW_ACTIVATE);
+            page.showView(IConsoleConstants.ID_CONSOLE_VIEW, serverName, IWorkbenchPage.VIEW_ACTIVATE);
         } catch (PartInitException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     private boolean containedMDMServerMessageConsole(IConsole mdmServerConsole) {

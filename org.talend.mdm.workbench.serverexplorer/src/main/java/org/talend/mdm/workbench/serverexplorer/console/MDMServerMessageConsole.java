@@ -200,7 +200,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 disposeTimer();
                 PlatformUI.getPreferenceStore().removePropertyChangeListener(MDMServerMessageConsole.this);
                 MDMServerExplorerPlugin.getDefault().getServerToConsole().remove(serverDef.getName());
-                MDMServerExplorerPlugin.getDefault().getServerToView().remove(serverDef.getName());
                 ConsolePlugin.getDefault().getConsoleManager().removeConsoles(new IConsole[] { MDMServerMessageConsole.this });
                 super.dispose();
             }
