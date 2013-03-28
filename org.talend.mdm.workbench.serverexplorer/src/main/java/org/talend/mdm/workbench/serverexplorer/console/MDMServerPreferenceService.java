@@ -22,7 +22,7 @@ public class MDMServerPreferenceService {
 
     public static final String REFRESH_FREQ = "_mdm_refresh_frequency"; //$NON-NLS-1$
 
-    public static final String DISPLAY_MAX_LINES = "_mdm_max_lines_displayed"; //$NON-NLS-1$
+    public static final String DISPLAY_BUFFER_SIZE = "_mdm_buffer_size_displayed"; //$NON-NLS-1$
 
     public static int getRefrehFrequency() {
         PlatformUI.getPreferenceStore().setDefault(REFRESH_FREQ, 2);
@@ -37,16 +37,16 @@ public class MDMServerPreferenceService {
         PlatformUI.getPreferenceStore().setValue(REFRESH_FREQ, value);
     }
 
-    public static int getMaxDisplayedLines() {
-        PlatformUI.getPreferenceStore().setDefault(DISPLAY_MAX_LINES, 100);
-        return PlatformUI.getPreferenceStore().getInt(DISPLAY_MAX_LINES);
+    public static int getDisplayedBuffer() {
+        PlatformUI.getPreferenceStore().setDefault(DISPLAY_BUFFER_SIZE, 2000);
+        return PlatformUI.getPreferenceStore().getInt(DISPLAY_BUFFER_SIZE);
     }
 
-    public static int getDefaultMaxDisplayedLines() {
-        return PlatformUI.getPreferenceStore().getDefaultInt(DISPLAY_MAX_LINES);
+    public static int getDefaultDisplayedBuffer() {
+        return PlatformUI.getPreferenceStore().getDefaultInt(DISPLAY_BUFFER_SIZE);
     }
 
-    public static void setMaxDisplayedLines(int value) {
-        PlatformUI.getPreferenceStore().setValue(DISPLAY_MAX_LINES, value);
+    public static void setDisplayedBuffer(int value) {
+        PlatformUI.getPreferenceStore().setValue(DISPLAY_BUFFER_SIZE, value);
     }
 }

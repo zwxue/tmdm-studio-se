@@ -3,6 +3,7 @@ package org.talend.mdm.workbench.serverexplorer.console;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -24,6 +25,8 @@ import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
  *
  */
 public class MDMServerConsolePreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+
+    private static final int MIN_BUFFER_SIZE = 1000;
 
     private Spinner freqSpinner = null;
 
@@ -69,9 +72,12 @@ public class MDMServerConsolePreferencePage extends PreferencePage implements IW
             public void modifyText(ModifyEvent e) {
                 String text = bufferText.getText().trim();
                 try {
-                    Integer.parseInt(text);
-                    setErrorMessage(null);
-                    setValid(true);
+                    int value = Integer.parseInt(text);
+                    boolean isValid = value >= MIN_BUFFER_SIZE;
+                    String errorMsg = isValid ? null : NLS.bind(Messages.MDMServerConsolePrefsPage_Error_Message1,
+                            MIN_BUFFER_SIZE);
+                    setErrorMessage(errorMsg);
+                    setValid(isValid);
                 } catch (NumberFormatException ex) {
                     setErrorMessage(Messages.MDMServerConsolePrefsPage_Error_Message);
                     setValid(false);
@@ -84,7 +90,7 @@ public class MDMServerConsolePreferencePage extends PreferencePage implements IW
         int frequency = MDMServerPreferenceService.getRefrehFrequency();
         freqSpinner.setSelection(frequency);
 
-        int bufferSize = MDMServerPreferenceService.getMaxDisplayedLines();
+        int bufferSize = MDMServerPreferenceService.getDisplayedBuffer();
         bufferText.setText(String.valueOf(bufferSize));
     }
 
@@ -92,7 +98,7 @@ public class MDMServerConsolePreferencePage extends PreferencePage implements IW
     public boolean performOk() {
         MDMServerPreferenceService.setRefreshFrequency(freqSpinner.getSelection());
         String value = bufferText.getText().trim();
-        MDMServerPreferenceService.setMaxDisplayedLines(Integer.parseInt(value));
+        MDMServerPreferenceService.setDisplayedBuffer(Integer.parseInt(value));
         return super.performOk();
     }
 
@@ -101,7 +107,7 @@ public class MDMServerConsolePreferencePage extends PreferencePage implements IW
         int frequency = MDMServerPreferenceService.getDefaultRefreshFrequency();
         freqSpinner.setSelection(frequency);
 
-        int bufferSize = MDMServerPreferenceService.getDefaultMaxDisplayedLines();
+        int bufferSize = MDMServerPreferenceService.getDefaultDisplayedBuffer();
         bufferText.setText(String.valueOf(bufferSize));
         super.performDefaults();
     }

@@ -45,6 +45,8 @@ public class Messages extends NLS {
 
     public static String MDMServerConsolePrefsPage_Error_Message;
 
+    public static String MDMServerConsolePrefsPage_Error_Message1;
+
     public static String MDMServerConsolePrefsPage_RefreshLabel_1;
 
     public static String MDMServerConsolePrefsPage_RefreshLabel_2;

@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.console;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,6 +60,8 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.DownloadLogDialog;
  *
  */
 public class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
+
+    private static final int START_FROM_TAIL = -1;
 
     private static final int HTTP_STATUS_OK = 200;
 
@@ -121,6 +122,11 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             update();
         }
 
+        public void initStatus() {
+            isPaused = false;
+            update();
+        }
+
         private void update() {
             if (isPaused) {
                 setText(Messages.MDMServerMessageConsole_MonitorAction_ResumeText);
@@ -142,6 +148,9 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         @Override
         public void run() {
             reload();
+            if (monitorAction != null) {
+                monitorAction.initStatus();
+            }
         }
     }
 
@@ -155,7 +164,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private Timer timer = null;
 
-    private int position = 0;
+    private int position = START_FROM_TAIL;
 
     public MDMServerMessageConsole(MDMServerDef serverDef) {
         this(Messages.MDMServerMessageConsole_Name, null);
@@ -176,10 +185,16 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     private void initMessageConsole() {
         String name = Messages.MDMServerMessageConsole_Name + " (" + serverDef.getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         setName(name);
+        initWaterMarks();
 
         reloadAction = new ReloadAction();
         monitorAction = new MonitorAction();
         downloadAction = new DownloadAction();
+    }
+
+    private void initWaterMarks() {
+        int buffer = MDMServerPreferenceService.getDisplayedBuffer();
+        setWaterMarks(buffer, buffer + 100);
     }
 
     @Override
@@ -215,7 +230,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     }
 
     private void display() {
-        position = 0;
+        position = START_FROM_TAIL;
         clearConsole();
 
         monitor();
@@ -238,6 +253,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         DefaultHttpClient httpClient = createHttpClient();
         String monitorURL = buildMonitorURL(position);
         HttpGet httpGet = new HttpGet(monitorURL);
+        MessageConsoleStream errorMsgStream = newErrorMessageStream();
         try {
             HttpResponse response = httpClient.execute(httpGet);
             int code = response.getStatusLine().getStatusCode();
@@ -246,26 +262,27 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 if (isEndOfChunk(response)) {
                     return;
                 }
-                clearConsole();
                 InputStream is = response.getEntity().getContent();
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                IOUtils.copy(is, os);
-                String content = os.toString().trim();
-                newMessageStream().println(content);
+                MessageConsoleStream msgStream = newMessageStream();
+                byte[] buffer = new byte[1024 * 4];
+                int n = 0;
+                while ((n = is.read(buffer)) != -1) {
+                    msgStream.write(buffer, 0, n);
+                }
+                msgStream.close();
                 is.close();
-                os.close();
             } else if (HTTP_STATUS_NO_ACCESS == code) {
-                newErrorMessageStream().println(Messages.MDMServerMessageConsole_No_Acess_Message);
+                errorMsgStream.println(Messages.MDMServerMessageConsole_No_Acess_Message);
                 disposeTimer();
             } else if (HTTP_STSTUS_FORBIDDEN == code) {
-                newErrorMessageStream().println(Messages.MDMServerMessageConsole_Forbidden_Message);
+                errorMsgStream.println(Messages.MDMServerMessageConsole_Forbidden_Message);
                 disposeTimer();
             } else if (HTTP_STATUS_NOT_FOUND == code) {
-                newErrorMessageStream().println(Messages.MDMServerMessageConsole_NotConnected_Message);
+                errorMsgStream.println(Messages.MDMServerMessageConsole_NotConnected_Message);
                 disposeTimer();
             }
         } catch (IOException e) {
-            newErrorMessageStream().println(e.getMessage());
+            errorMsgStream.println(e.getMessage());
             disposeTimer();
         }
     }
@@ -305,8 +322,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());
         sb.append("/datamanager/logviewer/log?position=" + pos); //$NON-NLS-1$
-        //        sb.append("&maxLines=10"); //$NON-NLS-1$
-        sb.append("&maxLines=" + MDMServerPreferenceService.getMaxDisplayedLines()); //$NON-NLS-1$
         return sb.toString();
     }
 
@@ -406,6 +421,8 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         if (event.getProperty().equals(MDMServerPreferenceService.REFRESH_FREQ)) {
             disposeTimer();
             monitor();
+        } else if (event.getProperty().equals(MDMServerPreferenceService.DISPLAY_BUFFER_SIZE)) {
+            initWaterMarks();
         }
     }
 
