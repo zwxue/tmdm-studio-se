@@ -112,7 +112,7 @@ public class BatchDeployJobCommand extends DefaultDeployCommand {
                 ms.add(DeployStatus.getInfoStatus(null,
                         Messages.bind(Messages.JobInteractiveHandler_skipToDeploy, getLabel(), objectName)));
             } else if (severity == IStatus.ERROR) {
-                ms.add(dialogStatus);
+                ms.add(DeployStatus.getErrorStatus(this, Messages.bind(Messages.Deploy_fail_text, typeLabel, objectName)));
             }
         }
     }
