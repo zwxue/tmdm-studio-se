@@ -47,6 +47,7 @@ import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.commons.ui.swt.formtools.LabelledCombo;
 import org.talend.core.CorePlugin;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.language.ECodeLanguage;
 import org.talend.core.language.LanguageManager;
 import org.talend.core.model.properties.Item;
@@ -71,6 +72,7 @@ import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobJavaScriptsW
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager;
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager.ExportChoice;
 
+import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.MDMServerDef;
 
 /**
@@ -460,6 +462,15 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         String host = server.getHost();
         String port = server.getPort();
 
+        // check connection before sending data
+        boolean success = checkConnection(host, user, password, port);
+        if (!success) {
+            String msg = Messages.getString("DeployOnMDMExportWizardPage.UnableConnect"); //$NON-NLS-1$
+            MessageDialog.openError(getContainer().getShell(),
+                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), msg); //$NON-NLS-1$
+            return false;
+        }
+
         // modified by xie to fix bug 20084 ,do the multi jobs deployment in one time.
         for (JobDeploymentInfo jobInfo : jobInfoList) {
 
@@ -472,7 +483,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 log.error(e.getMessage(), e);
                 MessageDialog.openError(getContainer().getShell(),
                         Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
-                        e.getLocalizedMessage());
+                        Messages.getString("DeployOnMDMExportWizardPage.ErrorDeployMsg")); //$NON-NLS-1$
                 recordDeployException(new RuntimeException(new RemoteException(e.getMessage(), e)));
                 return false;
             }
@@ -487,6 +498,18 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return ok;
     }
 
+    private boolean checkConnection(String endpointaddress, String username, String password, String universe) {
+        try {
+            ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
+                    ILegendServerDefService.class);
+            if (serverDefService != null)
+                return serverDefService.checkServerDefConnection(endpointaddress, username, password, universe);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return true;
+    }
 
     /**
      *
