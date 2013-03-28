@@ -21,6 +21,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -61,6 +63,8 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.DownloadLogDialog;
  */
 public class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
 
+    private static final Log log = LogFactory.getLog(MDMServerMessageConsole.class);
+
     private static final int START_FROM_TAIL = -1;
 
     private static final int HTTP_STATUS_OK = 200;
@@ -71,11 +75,23 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private static final int HTTP_STATUS_NOT_FOUND = 404;
 
+    private static final ImageDescriptor DOWNLOAD_IMG = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
+            MDMServerExplorerPlugin.PLUGIN_ID, "icons/download.png"); //$NON-NLS-1$;
+
+    private static final ImageDescriptor PAUSED_IMG = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
+            MDMServerExplorerPlugin.PLUGIN_ID, "icons/pause.gif"); //$NON-NLS-1$;
+
+    private static final ImageDescriptor RESUMED_IMG = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
+            MDMServerExplorerPlugin.PLUGIN_ID, "icons/resume.gif"); //$NON-NLS-1$;
+
+    private static final ImageDescriptor RELOAD_IMG = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
+            MDMServerExplorerPlugin.PLUGIN_ID, "icons/refresh.gif"); //$NON-NLS-1$;
+
     public class DownloadAction extends Action {
 
         public DownloadAction() {
             super(Messages.MDMServerMessageConsole_DownloadAction_Text);
-            setImageDescriptor(createImageDesc("icons/download.png"));//$NON-NLS-1$
+            setImageDescriptor(DOWNLOAD_IMG);
         }
 
         @Override
@@ -97,9 +113,9 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                     }
                 });
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
     }
@@ -130,10 +146,10 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         private void update() {
             if (isPaused) {
                 setText(Messages.MDMServerMessageConsole_MonitorAction_ResumeText);
-                setImageDescriptor(createImageDesc("icons/resume.gif")); //$NON-NLS-1$
+                setImageDescriptor(RESUMED_IMG);
             } else {
                 setText(Messages.MDMServerMessageConsole_MonitorAction_PauseText);
-                setImageDescriptor(createImageDesc("icons/pause.gif")); //$NON-NLS-1$
+                setImageDescriptor(PAUSED_IMG);
             }
         }
     }
@@ -142,7 +158,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
         public ReloadAction() {
             super(Messages.MDMServerMessageConsole_ReloadAction_Text);
-            setImageDescriptor(createImageDesc("icons/refresh.gif")); //$NON-NLS-1$
+            setImageDescriptor(RELOAD_IMG);
         }
 
         @Override
@@ -282,6 +298,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 disposeTimer();
             }
         } catch (IOException e) {
+            log.error(e.getMessage(), e);
             errorMsgStream.println(e.getMessage());
             disposeTimer();
         }
@@ -374,6 +391,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 monitor.worked(90);
             }
         } catch (IOException e) {
+            log.error(e.getMessage(), e);
             newErrorMessageStream().println(Messages.MDMServerMessageConsole_DownloadFailed_Message);
             newErrorMessageStream().println(e.getMessage());
             monitor.worked(90);
@@ -436,9 +454,5 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     public DownloadAction getDownloadAction() {
         return this.downloadAction;
-    }
-
-    private ImageDescriptor createImageDesc(String path) {
-        return MDMServerExplorerPlugin.imageDescriptorFromPlugin(MDMServerExplorerPlugin.PLUGIN_ID, path);
     }
 }

@@ -3,6 +3,8 @@ package org.talend.mdm.workbench.serverexplorer.console;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -27,6 +29,8 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
  *
  */
 public class MDMServerConsoleFactory implements IConsoleFactory {
+
+    private static final Log log = LogFactory.getLog(MDMServerConsoleFactory.class);
 
     public void openConsole() {
         List<MDMServerDef> allServerDefs = ServerDefService.getAllServerDefs();
@@ -85,7 +89,7 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
             page.showView(IConsoleConstants.ID_CONSOLE_VIEW, serverName, IWorkbenchPage.VIEW_ACTIVATE);
             return true;
         } catch (PartInitException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return false;
     }
