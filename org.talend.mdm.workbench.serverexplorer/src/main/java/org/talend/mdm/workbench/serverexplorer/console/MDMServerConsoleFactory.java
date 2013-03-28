@@ -66,24 +66,28 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
             consoleManager.addConsoles(new IConsole[] { mdmServerConsole });
         }
-        showConsoleView(serverDef.getName());
-        mdmServerConsole.activate();
+        boolean showed = showConsoleView(serverDef.getName());
+        if (showed) {
+            mdmServerConsole.activate();
+        }
     }
 
-    private void showConsoleView(String serverName) {
+    private boolean showConsoleView(String serverName) {
         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         if (window == null) {
-            return;
+            return false;
         }
         IWorkbenchPage page = window.getActivePage();
         if (page == null) {
-            return;
+            return false;
         }
         try {
             page.showView(IConsoleConstants.ID_CONSOLE_VIEW, serverName, IWorkbenchPage.VIEW_ACTIVATE);
+            return true;
         } catch (PartInitException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     private boolean containedMDMServerMessageConsole(IConsole mdmServerConsole) {
