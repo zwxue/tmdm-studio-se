@@ -77,9 +77,9 @@ import com.amalto.workbench.utils.MDMServerDef;
 
 /**
  * Page of the Job Scripts Export Wizard. <br/>
- *
+ * 
  * $Id: DeployOnMDMExportWizardPage.java 1 2007-04-26 11:29:00 cantoine
- *
+ * 
  */
 public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResourceExportPage1 {
 
@@ -112,7 +112,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create an instance of this class.
-     *
+     * 
      * @param name java.lang.String
      */
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
@@ -124,8 +124,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         RepositoryNode[] nodes = (RepositoryNode[]) selection.toList().toArray(new RepositoryNode[selection.size()]);
 
         List<ExportFileResource> list = new ArrayList<ExportFileResource>();
-        for (int i = 0; i < nodes.length; i++) {
-            RepositoryNode node = nodes[i];
+        for (RepositoryNode node : nodes) {
             if (node.getType() == ENodeType.SYSTEM_FOLDER || node.getType() == ENodeType.SIMPLE_FOLDER) {
                 addTreeNode(node, node.getProperties(EProperties.LABEL).toString(), list);
             }
@@ -134,8 +133,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 if (repositoryObject.getProperty().getItem() instanceof ProcessItem) {
                     ProcessItem processItem = (ProcessItem) repositoryObject.getProperty().getItem();
                     ExportFileResource resource = new ExportFileResource(processItem, processItem.getProperty().getLabel());
-                    if (mdmserver == null)
+                    if (mdmserver == null) {
                         resource.setNode(node);
+                    }
                     jobLabelName = processItem.getProperty().getLabel();
                     jobVersion = processItem.getProperty().getVersion();
                     jobPurposeDescription = processItem.getProperty().getPurpose();
@@ -170,15 +170,15 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         if (nodes.length <= 0) {
             return;
         }
-        for (int i = 0; i < nodes.length; i++) {
-            addTreeNode((RepositoryNode) nodes[i], path + "/" //$NON-NLS-1$
-                    + ((RepositoryNode) nodes[i]).getProperties(EProperties.LABEL).toString(), list);
+        for (Object node2 : nodes) {
+            addTreeNode((RepositoryNode) node2, path + "/" //$NON-NLS-1$
+                    + ((RepositoryNode) node2).getProperties(EProperties.LABEL).toString(), list);
         }
     }
 
     /**
      * Create an instance of this class.
-     *
+     * 
      * @param selection the selection
      */
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
@@ -225,7 +225,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the export options specification widgets.
-     *
+     * 
      */
     @Override
     protected void createOptionsGroupButtons(Group optionsGroup) {
@@ -242,7 +242,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the buttons for the group that determine if the entire or selected directory structure should be created.
-     *
+     * 
      * @param optionsGroup
      * @param font
      */
@@ -361,7 +361,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * The Finish button was pressed. Try to do the required work now and answer a boolean indicating success. If false
      * is returned then the wizard will not close.
-     *
+     * 
      * @returns boolean
      */
     @Override
@@ -420,8 +420,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         ProcessorUtilities.resetExportConfig();
 
-        for (int i = 0; i < process.length; i++) {
-            ProcessItem processItem = (ProcessItem) process[i].getItem();
+        for (ExportFileResource proces : process) {
+            ProcessItem processItem = (ProcessItem) proces.getItem();
             try {
                 ProcessorUtilities.generateCode(processItem, processItem.getProcess().getDefaultContext(), false, false);
             } catch (ProcessorException e) {
@@ -463,7 +463,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         String port = server.getPort();
 
         // check connection before sending data
-        boolean success = checkConnection(host, user, password, port);
+        boolean success = checkConnection(server.getUrl(), user, password, port);
         if (!success) {
             String msg = Messages.getString("DeployOnMDMExportWizardPage.UnableConnect"); //$NON-NLS-1$
             MessageDialog.openError(getContainer().getShell(),
@@ -502,8 +502,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         try {
             ILegendServerDefService serverDefService = (ILegendServerDefService) GlobalServiceRegister.getDefault().getService(
                     ILegendServerDefService.class);
-            if (serverDefService != null)
+            if (serverDefService != null) {
                 return serverDefService.checkServerDefConnection(endpointaddress, username, password, universe);
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -512,7 +513,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     }
 
     /**
-     *
+     * 
      * DOC aiming Comment method "reBuildJobZipFile".
      */
     private void reBuildJobZipFile() {
@@ -530,9 +531,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 rpcfile.delete();
             }
             // build new jar
-            for (int i = 0; i < process.length; i++) {
-                if (process[i] != null) {
-                    String jobFolderName = process[i].getDirectoryName();
+            for (ExportFileResource proces : process) {
+                if (proces != null) {
+                    String jobFolderName = proces.getDirectoryName();
                     int pos = jobFolderName.indexOf("/"); //$NON-NLS-1$
                     if (pos != -1) {
                         jobFolderName = jobFolderName.substring(pos + 1);
@@ -582,21 +583,25 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                             + "_" + jobInfo.getJobVersion() + "job"; //$NON-NLS-1$ //$NON-NLS-2$
 
                     File jobDescDir = new File(jobDescPath);
-                    if (!jobDescDir.exists())
+                    if (!jobDescDir.exists()) {
                         jobDescDir.mkdir();
+                    }
                     File jobDescDir_in = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
                             + "_" + jobInfo.getJobVersion()); //$NON-NLS-1$
-                    if (!jobDescDir_in.exists())
+                    if (!jobDescDir_in.exists()) {
                         jobDescDir_in.mkdir();
+                    }
                     File jobDescDir_main = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
                             + "_" + jobInfo.getJobVersion() + File.separator + jobInfo.getJobLabelName()); //$NON-NLS-1$
-                    if (!jobDescDir_main.exists())
+                    if (!jobDescDir_main.exists()) {
                         jobDescDir_main.mkdir();
+                    }
 
                     File jobDescDirLib = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
                             + "_" + jobInfo.getJobVersion() + File.separator + "lib"); //$NON-NLS-1$ //$NON-NLS-2$
-                    if (!jobDescDirLib.exists())
+                    if (!jobDescDirLib.exists()) {
                         jobDescDirLib.mkdir();
+                    }
 
                     copy(sourFile.listFiles(), jobDescDir_main);
                     copy(sourLibFile.listFiles(), jobDescDirLib);
@@ -617,13 +622,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
 
     private void copy(File[] s, File d) {
-        if (!d.exists())
+        if (!d.exists()) {
             d.mkdir();
-        for (int i = 0; i < s.length; i++) {
-            if (s[i].isFile()) {
+        }
+        for (File element : s) {
+            if (element.isFile()) {
                 try {
-                    FileInputStream fis = new FileInputStream(s[i]);
-                    FileOutputStream out = new FileOutputStream(new File(d.getPath() + File.separator + s[i].getName()));
+                    FileInputStream fis = new FileInputStream(element);
+                    FileOutputStream out = new FileOutputStream(new File(d.getPath() + File.separator + element.getName()));
                     int count = fis.available();
                     byte[] data = new byte[count];
                     if ((fis.read(data)) != -1) {
@@ -635,17 +641,17 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     e.printStackTrace();
                 }
             }
-            if (s[i].isDirectory()) {
-                File des = new File(d.getPath() + File.separator + s[i].getName());
+            if (element.isDirectory()) {
+                File des = new File(d.getPath() + File.separator + element.getName());
                 des.mkdir();
-                copy(s[i].listFiles(), des);
+                copy(element.listFiles(), des);
             }
         }
     }
 
     /**
      * Get the export operation.
-     *
+     * 
      * @param resourcesToExport
      * @return
      */
@@ -664,7 +670,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns the root folder name.
-     *
+     * 
      * @return
      */
     private String getRootFolderName() {
@@ -682,9 +688,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private void setTopFolder(List<ExportFileResource> resourcesToExport, String topFolder) {
         // is war do nothing
-        if (exportTypeCombo.getSelectionIndex() == 0)
+        if (exportTypeCombo.getSelectionIndex() == 0) {
             return;
-        else if (resourcesToExport != null) {
+        } else if (resourcesToExport != null) {
             for (ExportFileResource fileResource : resourcesToExport) {
                 String directory = fileResource.getDirectoryName();
                 fileResource.setDirectoryName(topFolder + "/" + directory); //$NON-NLS-1$
@@ -694,7 +700,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Answer the string to display in self as the destination type.
-     *
+     * 
      * @return java.lang.String
      */
     @Override
@@ -704,7 +710,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns resources to be exported. This returns file - for just the files use getSelectedResources.
-     *
+     * 
      * @return a collection of resources currently selected for export (element type: <code>IResource</code>)
      * @throws ProcessorException
      */
@@ -735,6 +741,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         }
     }
+
     private Map<ExportChoice, Object> getExportChoiceMap() {
         return getExportChoiceMap(exportTypeCombo.getSelectionIndex());
     }
@@ -807,13 +814,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Answer the suffix that files exported from this wizard should have. If this suffix is a file extension (which is
      * typically the case) then it must include the leading period character.
-     *
+     * 
      */
     protected String getOutputSuffix() {
-        if (exportTypeCombo.getSelectionIndex() == 0)
+        if (exportTypeCombo.getSelectionIndex() == 0) {
             return ".war"; //$NON-NLS-1$
-        else
+        } else {
             return ".zip"; //$NON-NLS-1$
+        }
     }
 
     /**
@@ -854,7 +862,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.wizards.datatransfer.WizardFileSystemResourceExportPage1#destinationEmptyMessage()
      */
     @Override
@@ -888,7 +896,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1#validateDestinationGroup()
      */
     @Override
