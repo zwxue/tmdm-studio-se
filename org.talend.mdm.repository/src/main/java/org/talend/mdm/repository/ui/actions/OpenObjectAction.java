@@ -105,8 +105,10 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             if (object instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
                 ERepositoryStatus status = factory.getStatus(viewObj);
-                if (status == ERepositoryStatus.LOCK_BY_USER || status == ERepositoryStatus.LOCK_BY_OTHER) {
+                if (status == ERepositoryStatus.LOCK_BY_USER) {
                     return !status.isEditable();
+                } else if (status == ERepositoryStatus.LOCK_BY_OTHER) {
+                    return false;
                 }
 
             }
