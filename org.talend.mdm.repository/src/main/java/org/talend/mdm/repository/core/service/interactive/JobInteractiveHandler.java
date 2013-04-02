@@ -16,7 +16,6 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -81,7 +80,9 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
                 public void run() {
                     Shell activeShell = display.getActiveShell();
                     WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-                    setResult(dialog.open() == IDialogConstants.OK_ID);
+                    dialog.open();
+
+                    setResult(publishWizard.isDeploySucceed());
                     RuntimeException e = publishWizard.getDeployException();
                     if(e != null) {
                         setException(e);
