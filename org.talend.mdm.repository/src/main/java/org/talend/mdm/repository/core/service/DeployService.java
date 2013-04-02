@@ -46,6 +46,7 @@ import org.talend.mdm.repository.core.service.IModelValidationService.IModelVali
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.dialogs.deploy.DeployStatusDialog;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -269,15 +270,7 @@ public class DeployService {
     }
 
     private void showDeployStatus(Shell shell, IStatus status) {
-        String prompt;
-
-        if (status.getSeverity() < IStatus.ERROR) {
-            prompt = Messages.bind(Messages.AbstractDeployAction_deployMessage, status.getChildren().length);
-        } else {
-            prompt = Messages.bind(Messages.AbstractDeployAction_deployFailure, status.getChildren().length);
-
-        }
-        MultiStatusDialog dialog = new MultiStatusDialog(shell, prompt, status);
+        MultiStatusDialog dialog = new DeployStatusDialog(shell, status);
         dialog.open();
     }
 

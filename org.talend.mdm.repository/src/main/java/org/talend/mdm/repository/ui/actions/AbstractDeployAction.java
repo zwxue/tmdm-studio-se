@@ -28,9 +28,9 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.DeployService;
-import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.dialogs.deploy.DeployStatusDialog;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -54,7 +54,6 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     protected void showDeployStatus(IStatus status) {
-        String prompt;
         int count = 0;
         if (status.isMultiStatus()) {
             for (IStatus child : status.getChildren()) {
@@ -65,17 +64,13 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
                 }
             }
         }
-        if (status.getSeverity() < IStatus.ERROR) {
-            prompt = Messages.bind(Messages.AbstractDeployAction_deployMessage, count);
-        } else {
-            prompt = Messages.bind(Messages.AbstractDeployAction_deployFailure, count);
 
-        }
-        MultiStatusDialog dialog = new MultiStatusDialog(getShell(), prompt, status);
+        MultiStatusDialog dialog = new DeployStatusDialog(getShell(), status);
         dialog.open();
 
     }
 
+    @Override
     public String getGroupName() {
         return GROUP_DEPLOY;
     }
@@ -101,8 +96,9 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     protected List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : getSelectedObject()) {
-            if (obj instanceof IRepositoryViewObject)
+            if (obj instanceof IRepositoryViewObject) {
                 viewObjs.add((IRepositoryViewObject) obj);
+            }
         }
         reorderRepositoryViewObjects(viewObjs);
         return viewObjs;
@@ -124,20 +120,20 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
 
     protected void doSaveEditorsThing() {
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        
+
         boolean isEditing = false;
-        
+
         IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         try {
             for (IEditorReference editorReference : activePage.getEditorReferences()) {
-                IRepositoryViewObject viewObject = ((IRepositoryViewEditorInput) editorReference.getEditorInput()).getViewObject();
-                if (viewObjs.contains(viewObject))
-                {
+                IRepositoryViewObject viewObject = ((IRepositoryViewEditorInput) editorReference.getEditorInput())
+                        .getViewObject();
+                if (viewObjs.contains(viewObject)) {
                     isEditing = true;
                     break;
                 }
             }
-            
+
             if (isEditing) {
                 activePage.saveAllEditors(true);
             }
