@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.engines.client.ui.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -55,19 +56,19 @@ import com.amalto.workbench.utils.MDMServerHelper;
 
 /**
  * Action used to export job scripts. <br/>
- * 
+ *
  * $Id: PublishOnSpagoAction.java 1 2007-04-26 11:25:00 cantoine
- * 
+ *
  */
 public final class DeployOnMDMAction extends AContextualAction {
     private static Logger log = Logger.getLogger(DeployOnMDMAction.class);
-    
+
     private static final String EXPORTJOBSCRIPTS = Messages.DeployOnMDMAction_DeployToMDM;
     private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.repository.ui.actions.ITreeContextualAction#init(org.eclipse.jface.viewers.TreeViewer,
      * org.eclipse.jface.viewers.IStructuredSelection)
      */
@@ -95,6 +96,7 @@ public final class DeployOnMDMAction extends AContextualAction {
         setEnabled(canWork);
     }
 
+    @Override
     public boolean isVisible() {
         // return isEnabled() &&
         // Activator.getDefault().getPreferenceStore().getBoolean(MDMPreferenceInitializer.MDM_STATUS);
@@ -103,62 +105,69 @@ public final class DeployOnMDMAction extends AContextualAction {
 
     public DeployOnMDMAction() {
         super();
-        
+
         this.setText(EXPORTJOBSCRIPTS);
         this.setToolTipText(EXPORTJOBSCRIPTS);
         this.setImageDescriptor(ImageProvider.getImageDesc(EImage.EXPORT_ICON));
     }
 
+    @Override
     protected void doRun() {
-        IRepositoryViewObject viewObj = getSelectedViewObject();
-        
+        List<IRepositoryViewObject> viewObjs = getSelectedViewObject();
+
         DeployOnMDMExportWizard publishWizard = new DeployOnMDMExportWizard();
-        publishWizard.setWindowTitle(EXPORTJOBSCRIPTS); //$NON-NLS-1$
+        publishWizard.setWindowTitle(EXPORTJOBSCRIPTS);
         publishWizard.init(getWorkbench(), (IStructuredSelection) this.getSelection());
 
         Shell activeShell = Display.getCurrent().getActiveShell();
         WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
         int returnCode = dialog.open();
-        
+
         if(returnCode == IDialogConstants.OK_ID) {
-            
+
             SpagoBiServer spagoBiServer = publishWizard.getMdmServer();
             MDMServerDef mdmServer = getMdmServer(spagoBiServer);
-            
-            Item item = viewObj.getProperty().getItem();
-            Property property = item.getProperty();
-            
-            if (property != null) {
-                property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, mdmServer.getName());
-            }
-            
+
+
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
-                factory.save(item);
+                for (IRepositoryViewObject viewObj : viewObjs) {
+                    Item item = viewObj.getProperty().getItem();
+                    Property property = item.getProperty();
+
+                    if (property != null) {
+                        property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, mdmServer.getName());
+                    }
+                    factory.save(item);
+                    IRemoveCommandService service = (IRemoveCommandService) GlobalServiceRegister.getDefault().getService(
+                            IRemoveCommandService.class);
+                    service.removeDeployPhaseCommandOf(ERepositoryObjectType.PROCESS, item);
+                }
+
                 refreshMdmRepositoryViewTree();
-                
-                IRemoveCommandService service = (IRemoveCommandService) GlobalServiceRegister.getDefault().getService(IRemoveCommandService.class);
-                service.removeDeployPhaseCommandOf(ERepositoryObjectType.PROCESS, item);
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
             }
         }
     }
-    
-    private IRepositoryViewObject getSelectedViewObject() {
+
+    private List<IRepositoryViewObject> getSelectedViewObject() {
         IStructuredSelection sel = (IStructuredSelection) getSelection();
-        IRepositoryViewObject viewObj = null;
-        if(sel.getFirstElement() instanceof IRepositoryNode) {
-            IRepositoryNode node = (IRepositoryNode) sel.getFirstElement();
-            viewObj = node.getObject();
+        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+        for (Object obj : sel.toList()) {
+
+            if (obj instanceof IRepositoryNode) {
+                IRepositoryNode node = (IRepositoryNode) obj;
+                viewObjs.add(node.getObject());
+            }
         }
-        
-        return viewObj;
+
+        return viewObjs;
     }
 
     private MDMServerDef getMdmServer(SpagoBiServer spagoBiServer) {
         MDMServerDef mdmServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
-        
+
         mdmServerDef.setName(spagoBiServer.getShortDescription());
         mdmServerDef.setHost(spagoBiServer.getHost());
         mdmServerDef.setPort(spagoBiServer.getPort());
@@ -167,7 +176,7 @@ public final class DeployOnMDMAction extends AContextualAction {
 
         return mdmServerDef;
     }
-    
+
 
     /**
      * If the MDM Repository View is showing,refresh the navigator tree in it.
