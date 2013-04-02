@@ -110,4 +110,8 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
     public RuntimeException getDeployException() {
         return mainPage.getDeployException();
     }
+
+    public boolean isDeploySucceed() {
+        return mainPage.isDeploySucceed();
+    }
 }

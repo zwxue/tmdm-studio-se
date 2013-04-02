@@ -108,6 +108,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private RuntimeException deployException;
 
+    private boolean isDeploySucceed = false;
+
     protected List<JobDeploymentInfo> jobInfoList = new ArrayList<JobDeploymentInfo>();
 
     /**
@@ -380,11 +382,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             MessageDialog.openInformation(getContainer().getShell(),
                     Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
                     Messages.getString("DeployOnMDMExportWizardPage.chooseResource")); //$NON-NLS-1$
-            return false;
+
+            setDeploySucceed(false);
+            return true;
         }
 
         if (!ensureTargetIsValid()) {
-            return false;
+            setDeploySucceed(false);
+            return true;
         }
 
         String topFolder = getRootFolderName();
@@ -403,7 +408,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             resourcesToExport = getExportResources();
         } catch (ProcessorException e) {
             MessageBoxExceptionHandler.process(e);
-            return false;
+
+            setDeploySucceed(false);
+            return true;
         }
         setTopFolder(resourcesToExport, topFolder);
 
@@ -426,7 +433,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 ProcessorUtilities.generateCode(processItem, processItem.getProcess().getDefaultContext(), false, false);
             } catch (ProcessorException e) {
                 MessageBoxExceptionHandler.process(e);
-                return false;
+
+                setDeploySucceed(false);
+                return true;
             }
 
         }
@@ -463,12 +472,16 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         String port = server.getPort();
 
         // check connection before sending data
-        boolean success = checkConnection(server.getUrl(), user, password, port);
+
+        boolean success = checkConnection(server.getUrl(), user, password, server.getUniverse());
+
         if (!success) {
             String msg = Messages.getString("DeployOnMDMExportWizardPage.UnableConnect"); //$NON-NLS-1$
             MessageDialog.openError(getContainer().getShell(),
                     Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), msg); //$NON-NLS-1$
-            return false;
+
+            setDeploySucceed(false);
+            return true;
         }
 
         // modified by xie to fix bug 20084 ,do the multi jobs deployment in one time.
@@ -485,7 +498,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                         Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
                         Messages.getString("DeployOnMDMExportWizardPage.ErrorDeployMsg")); //$NON-NLS-1$
                 recordDeployException(new RuntimeException(new RemoteException(e.getMessage(), e)));
-                return false;
+
+                setDeploySucceed(false);
+                return true;
             }
 
         }
@@ -495,7 +510,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         mdmServer = toSpagoBiServer(server);
 
-        return ok;
+        setDeploySucceed(true);
+        return true;
     }
 
     private boolean checkConnection(String endpointaddress, String username, String password, String universe) {
@@ -918,6 +934,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private void recordDeployException(RuntimeException e) {
         this.deployException = e;
+    }
+
+    private void setDeploySucceed(boolean succeed) {
+        this.isDeploySucceed = succeed;
+    }
+
+    public boolean isDeploySucceed() {
+        return isDeploySucceed;
     }
 
 }
