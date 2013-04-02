@@ -59,7 +59,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.DownloadLogDialog;
 
 /**
  * created by Karelun Huang on Mar 19, 2013 Detailled comment
- *
+ * 
  */
 public class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
 
@@ -177,6 +177,15 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     private ReloadAction reloadAction = null;
 
     private MDMServerDef serverDef = null;
+
+    /**
+     * Getter for serverDef.
+     * 
+     * @return the serverDef
+     */
+    public MDMServerDef getServerDef() {
+        return this.serverDef;
+    }
 
     private Timer timer = null;
 
@@ -455,4 +464,22 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     public DownloadAction getDownloadAction() {
         return this.downloadAction;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof MDMServerMessageConsole)) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        MDMServerMessageConsole otherConsole = (MDMServerMessageConsole) obj;
+        return serverDef == otherConsole.getServerDef();
+    }
+
 }

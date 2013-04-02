@@ -10,11 +10,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
-import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleFactory;
 import org.eclipse.ui.console.IConsoleManager;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -70,29 +68,29 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
             consoleManager.addConsoles(new IConsole[] { mdmServerConsole });
         }
-        boolean showed = showConsoleView(serverDef.getName());
-        if (showed) {
-            mdmServerConsole.activate();
-        }
+        mdmServerConsole.activate();
+        // boolean showed = showConsoleView(serverDef.getName());
+        // if (showed) {
+        // }
     }
 
-    private boolean showConsoleView(String serverName) {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-        if (window == null) {
-            return false;
-        }
-        IWorkbenchPage page = window.getActivePage();
-        if (page == null) {
-            return false;
-        }
-        try {
-            page.showView(IConsoleConstants.ID_CONSOLE_VIEW, serverName, IWorkbenchPage.VIEW_ACTIVATE);
-            return true;
-        } catch (PartInitException e) {
-            log.error(e.getMessage(), e);
-        }
-        return false;
-    }
+    // private boolean showConsoleView(String serverName) {
+    // IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+    // if (window == null) {
+    // return false;
+    // }
+    // IWorkbenchPage page = window.getActivePage();
+    // if (page == null) {
+    // return false;
+    // }
+    // try {
+    // page.showView(IConsoleConstants.ID_CONSOLE_VIEW, "mdm_server_console", IWorkbenchPage.VIEW_ACTIVATE);
+    // return true;
+    // } catch (PartInitException e) {
+    // log.error(e.getMessage(), e);
+    // }
+    // return false;
+    // }
 
     private boolean containedMDMServerMessageConsole(IConsole mdmServerConsole) {
         IConsole[] consoles = ConsolePlugin.getDefault().getConsoleManager().getConsoles();

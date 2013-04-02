@@ -38,7 +38,7 @@ public class MDMServerPreferenceService {
     }
 
     public static int getDisplayedBuffer() {
-        PlatformUI.getPreferenceStore().setDefault(DISPLAY_BUFFER_SIZE, 2000);
+        PlatformUI.getPreferenceStore().setDefault(DISPLAY_BUFFER_SIZE, 8000);
         return PlatformUI.getPreferenceStore().getInt(DISPLAY_BUFFER_SIZE);
     }
 
