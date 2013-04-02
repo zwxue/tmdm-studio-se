@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
@@ -48,7 +49,7 @@ import org.talend.repository.RepositoryWorkUnit;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public abstract class AbstractRepositoryAction extends BaseSelectionListenerAction {
 
@@ -68,7 +69,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
 
     /**
      * DOC hbhong AbstractRepositoryAction constructor comment.
-     *
+     * 
      * @param text
      */
     protected AbstractRepositoryAction(String text) {
@@ -97,7 +98,7 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     }
 
     protected Shell getShell() {
-        if(commonViewer!=null) {
+        if (commonViewer != null) {
             return commonViewer.getControl().getShell();
         } else {
             return MDMRepositoryView.show().getCommonViewer().getControl().getShell();
@@ -111,9 +112,14 @@ public abstract class AbstractRepositoryAction extends BaseSelectionListenerActi
     @Override
     public final void run() {
         if (needValidateLockedObject()) {
-            isLocked();
+            if (isLocked()) {
+                MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertLockedMsg());
+            } else {
+                runRWU();
+            }
+        } else {
+            runRWU();
         }
-        runRWU();
     }
 
     protected boolean isLocked() {
