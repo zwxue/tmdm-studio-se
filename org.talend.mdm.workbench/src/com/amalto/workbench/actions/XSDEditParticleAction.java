@@ -13,6 +13,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -222,8 +223,8 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
         String newXpath = decl.getName();
         newXpath = originalXpath.substring(0, lastIndex + 1) + newXpath;
         IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
-        Object[] allForeignKeyRelatedInfos = Util.getAllForeignKeyRelatedInfos(page.getSite(), new ArrayList<Object>(),
-                provider);
+        Object[] allForeignKeyRelatedInfos = Util.getAllForeignKeyRelatedInfos(page.getSite(), new ArrayList<Object>(), provider,
+                new HashSet<Object>());
         Util.updateForeignKeyRelatedInfo(originalXpath, newXpath, allForeignKeyRelatedInfos);
     }
 

@@ -13,6 +13,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
@@ -90,7 +91,7 @@ public class XSDEditConceptAction extends UndoAction {
 
             Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
             Object[] allForeignKeyRelatedInfos = Util.getAllForeignKeyRelatedInfos(page.getSite(), new ArrayList<Object>(),
-                    provider);
+                    provider, new HashSet<Object>());
 
             decl.setName(id.getValue().trim());
             decl.updateElement();

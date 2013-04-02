@@ -1617,24 +1617,35 @@ public class Util {
     /**
      * return {fk,fk info,fk filter} element
      */
-    public static Object[] getAllForeignKeyRelatedInfos(Object elem, List<Object> objList, IStructuredContentProvider provider) {
+    public static Object[] getAllForeignKeyRelatedInfos(Object elem, List<Object> objList, IStructuredContentProvider provider,
+            final Set<Object> visited) {
+        if (elem == null || objList == null || visited == null || provider == null)
+            return null;
+
+        visited.add(elem);
+
         Object[] elems = provider.getElements(elem);
-        for (Object obj : elems) {
-            if (obj == null) {
-                continue;
-            }
-            if (obj instanceof Element) {
-                Element e = (Element) obj;
-                if (e.getLocalName().equals("appinfo")) {//$NON-NLS-1$
-                    String source = e.getAttribute("source");//$NON-NLS-1$
-                    if (source != null && !objList.contains(e)) {
-                        if (source.equals("X_ForeignKey") || source.equals("X_ForeignKeyInfo") || source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                            objList.add(e);
+        if (elems != null && elems.length > 0) {
+            for (Object obj : elems) {
+                if (obj == null) {
+                    continue;
+                }
+
+                if (obj instanceof Element) {
+                    Element e = (Element) obj;
+                    if (e.getLocalName().equals("appinfo")) {//$NON-NLS-1$
+                        String source = e.getAttribute("source");//$NON-NLS-1$
+                        if (source != null && !objList.contains(e)) {
+                            if (source.equals("X_ForeignKey") || source.equals("X_ForeignKeyInfo") || source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                                objList.add(e);
+                            }
                         }
                     }
+                } else {
+                    if (!visited.contains(obj)) {
+                        getAllForeignKeyRelatedInfos(obj, objList, provider, visited);
+                    }
                 }
-            } else {
-                getAllForeignKeyRelatedInfos(obj, objList, provider);
             }
         }
 

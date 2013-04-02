@@ -113,7 +113,8 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
         SchemaTreeContentProvider contentProvider = new SchemaTreeContentProvider(site, getCommitedObj().getSchema());
         Object[] objs = Util.getAllObject(site, new ArrayList<Object>(), contentProvider);
-        Object[] allForeignKeyAndInfos = Util.getAllForeignKeyRelatedInfos(site, new ArrayList<Object>(), contentProvider);
+        Object[] allForeignKeyAndInfos = Util.getAllForeignKeyRelatedInfos(site, new ArrayList<Object>(), contentProvider,
+                new HashSet<Object>());
 
         Util.updateReference(xsdElementDeclaration, objs, allForeignKeyAndInfos, oldName, getCommitedObj().getName());
     }
