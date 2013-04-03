@@ -13,12 +13,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.map.MultiKeyMap;
-import org.talend.mdm.commmon.metadata.*;
+import org.talend.mdm.commmon.metadata.ComplexTypeMetadata;
+import org.talend.mdm.commmon.metadata.ContainedComplexTypeMetadata;
+import org.talend.mdm.commmon.metadata.FieldMetadata;
+import org.talend.mdm.commmon.metadata.MetadataRepository;
+import org.talend.mdm.commmon.metadata.TypeMetadata;
+import org.talend.mdm.commmon.metadata.ValidationError;
+import org.talend.mdm.commmon.metadata.ValidationHandler;
 import org.talend.mdm.repository.core.validate.datamodel.IChecker;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
@@ -54,7 +63,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         }
     }
 
-    private String getDataModelName(String fileName) {
+    public static String getDataModelName(String fileName) {
         Pattern pattern = Pattern.compile("(\\w*?)_(\\d*?)\\.(\\d*?)\\.xsd"); //$NON-NLS-1$
         Matcher matcher = pattern.matcher(fileName);
         if (matcher.find()) {
@@ -108,23 +117,20 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         }
 
         @Override
-        public void fatal(TypeMetadata type, String message, Element element, int lineNumber, int columnNumber, ValidationError error) {
+        public void fatal(TypeMetadata type, String message, Element element, int lineNumber, int columnNumber,
+                ValidationError error) {
             error(type, message, element, lineNumber, columnNumber, error);
         }
 
         @Override
-        public void error(TypeMetadata type, String message, Element element, int lineNumber, int columnNumber, ValidationError error) {
-            int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY : IComponentValidationRule.MSG_GROUP_TYPE;
+        public void error(TypeMetadata type, String message, Element element, int lineNumber, int columnNumber,
+                ValidationError error) {
+            int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
+                    : IComponentValidationRule.MSG_GROUP_TYPE;
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                     message,
                     "key", // TODO
-                    dataModelName,
-                    lineNumber,
-                    columnNumber,
-                    group,
-                    element,
-                    getTypeName(type),
-                    getTypeName(type),
+                    dataModelName, lineNumber, columnNumber, group, element, getTypeName(type), getTypeName(type),
                     getTypeName(type));
             addMessage(lineNumber, columnNumber, error, validationMessage);
             errorCount++;
@@ -140,39 +146,32 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         }
 
         @Override
-        public void warning(TypeMetadata type, String message, Element element, int lineNumber, int columnNumber, ValidationError error) {
-            int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY : IComponentValidationRule.MSG_GROUP_TYPE;
-            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING, message,
+        public void warning(TypeMetadata type, String message, Element element, int lineNumber, int columnNumber,
+                ValidationError error) {
+            int group = type.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
+                    : IComponentValidationRule.MSG_GROUP_TYPE;
+            ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
+                    message,
                     "key", // TODO
-                    dataModelName,
-                    lineNumber,
-                    columnNumber,
-                    group,
-                    element,
-                    getTypeName(type),
-                    getTypeName(type),
+                    dataModelName, lineNumber, columnNumber, group, element, getTypeName(type), getTypeName(type),
                     getTypeName(type));
             addMessage(lineNumber, columnNumber, error, validationMessage);
         }
 
         @Override
-        public void fatal(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber, ValidationError error) {
+        public void fatal(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber,
+                ValidationError error) {
             error(field, message, element, lineNumber, columnNumber, error);
         }
 
         @Override
-        public void error(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber, ValidationError error) {
+        public void error(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber,
+                ValidationError error) {
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                     message,
                     "key", // TODO
-                    dataModelName,
-                    lineNumber,
-                    columnNumber,
-                    IComponentValidationRule.MSG_GROUP_ELEMENT,
-                    element,
-                    getEntityName(field),
-                    null,
-                    getPath(field));
+                    dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ELEMENT, element,
+                    getEntityName(field), null, getPath(field));
             addMessage(lineNumber, columnNumber, error, validationMessage);
             errorCount++;
         }
@@ -195,18 +194,13 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         }
 
         @Override
-        public void warning(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber, ValidationError error) {
+        public void warning(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber,
+                ValidationError error) {
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
                     message,
                     "key", // TODO
-                    dataModelName,
-                    lineNumber,
-                    columnNumber,
-                    IComponentValidationRule.MSG_GROUP_ELEMENT,
-                    element,
-                    getEntityName(field),
-                    null,
-                    getPath(field));
+                    dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ELEMENT, element,
+                    getEntityName(field), null, getPath(field));
             addMessage(lineNumber, columnNumber, error, validationMessage);
         }
 

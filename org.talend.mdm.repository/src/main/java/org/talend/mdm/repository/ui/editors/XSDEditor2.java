@@ -166,7 +166,9 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
      */
     @Override
     public Object getAdapter(Class type) {
+
         if (type == IGotoMarker.class) {
+
             return dMainPage;
         }
         return super.getAdapter(type);

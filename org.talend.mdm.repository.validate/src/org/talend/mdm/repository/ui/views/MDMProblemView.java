@@ -46,9 +46,9 @@ import org.eclipse.ui.views.markers.MarkerSupportView;
 import org.eclipse.ui.views.markers.internal.ContentGeneratorDescriptor;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.core.service.IModelValidationService;
-import org.talend.mdm.repository.core.validate.IModelMarkerConst;
+import org.talend.mdm.repository.core.marker.IValidationMarker;
 import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
+import org.talend.mdm.repository.core.validate.datamodel.validator.impl.DataModelChecker;
 import org.talend.mdm.repository.ui.actions.OpenObjectAction;
 import org.talend.mdm.repository.ui.markers.datamodel.ModelNameMarkerGroup;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -57,7 +57,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
  * created by HHB on 2013-1-5 Detailled comment
  * 
  */
-public class MDMProblemView extends MarkerSupportView {
+public class MDMProblemView extends MarkerSupportView implements IValidationMarker {
 
     static Logger log = Logger.getLogger(MDMProblemView.class);
 
@@ -244,23 +244,24 @@ public class MDMProblemView extends MarkerSupportView {
         IMarker[] markers = getSelectedMarkers();
         for (IMarker marker : markers) {
             IWorkbenchPage page = getSite().getPage();
-            int modelType = -1;
             try {
-                modelType = (Integer) marker.getAttribute(IModelMarkerConst.MODEL_TYPE);
+                IResource resource = marker.getResource();
+                String type = marker.getType();
+                if (type.equals(XSD_ERR)) {
+                    if (resource != null) {
+                        String dataModelName = DataModelChecker.getDataModelName(resource.getName());
+                        openDataModel(dataModelName, marker);
+                    }
+                } else if (type.equals(DATA_MODEL)) {
 
-                switch (modelType) {
-                case IModelValidationService.MODEL_TYPE_DATAMODEL:
-                    IResource resource = marker.getResource();
                     String modelName = (String) marker.getAttribute(IDataModelMarkerConst.DATA_MODEL);
                     if (modelName != null && resource != null) {
                         openDataModel(modelName, marker);
                     }
-                    break;
-
-                default:
+                } else {
                     openMarkerInEditor(marker, page);
-                    break;
                 }
+
             } catch (CoreException e) {
                 log.error(e.getMessage(), e);
             }

@@ -97,7 +97,9 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.operations.UndoRedoActionGroup;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
+import org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
@@ -145,6 +147,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 
 import com.amalto.workbench.actions.XSDAddComplexTypeElementAction;
 import com.amalto.workbench.actions.XSDAnnotationLookupFieldsAction;
@@ -722,7 +725,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         public boolean equals(Object a, Object b) {
@@ -736,7 +739,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         public int hashCode(Object element) {
@@ -1621,7 +1624,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     *
+     * 
      * @param obj
      * @return
      */
@@ -1765,7 +1768,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * Returns and XSDSchema Object from an xsd
-     *
+     * 
      * @param schema
      * @return
      * @throws Exception
@@ -1776,12 +1779,17 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         documentBuilderFactory.setValidating(false);
         InputSource source = new InputSource(new StringReader(schema));
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(source);
+        try {
+            Document document = documentBuilder.parse(source);
 
-        if (xsdSchema == null) {
-            xsdSchema = Util.createXsdSchema(schema, xobject);
-        } else {
-            xsdSchema.setDocument(document);
+            if (xsdSchema == null) {
+                xsdSchema = Util.createXsdSchema(schema, xobject);
+            } else {
+                xsdSchema.setDocument(document);
+            }
+        } catch (SAXParseException e) {
+            // log.error(e.getMessage(), e);
+            return null;
         }
 
         return xsdSchema;
@@ -3012,11 +3020,20 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
     public void gotoMarker(IMarker marker) {
+        MultiPageEditorSite site = (MultiPageEditorSite) getEditorSite();
+        MultiPageEditorPart part = site.getMultiPageEditor();
+        int activePage = part.getActivePage();
+
         try {
+            String type = marker.getType();
+            if (type.equals("org.eclipse.xsd.diagnostic") || activePage == 1) {
+                ((CommonMultiPageEditor) part).gotoMarker(marker);
+                return;
+            }
             Object domElement = marker.getAttribute(DOM_ELEMENT);
             Integer msgGroup = (Integer) marker.getAttribute(MSG_GROUP);
 

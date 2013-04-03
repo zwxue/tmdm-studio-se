@@ -29,11 +29,6 @@ import org.talend.mdm.repository.core.validate.datamodel.validator.impl.DataMode
 
 public class DataModelValidator extends AbstractNestedValidator implements IDataModelMarkerConst {
 
-    /**
-     * 
-     */
-    private static final String EDITOR_ID = "org.talend.mdm.repository.ui.editors.XSDEditor2"; //$NON-NLS-1$
-
     public DataModelValidator() {
         modelChecker = new DataModelChecker();
     }

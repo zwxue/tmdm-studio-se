@@ -21,7 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.views.markers.MarkerViewHandler;
 import org.talend.core.model.general.Project;
-import org.talend.mdm.repository.core.marker.IValidationMarker;
+import org.talend.mdm.repository.core.marker.ValidateMarkerUtil;
 import org.talend.repository.ProjectManager;
 
 /**
@@ -43,7 +43,9 @@ public class ClearAllMarkersHandler extends MarkerViewHandler {
         if (talendProject != null) {
             IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(talendProject.getTechnicalLabel());
             try {
-                project.deleteMarkers(IValidationMarker.DATA_MODEL, false, IResource.DEPTH_INFINITE);
+                for (String marker : ValidateMarkerUtil.getAllMarkers()) {
+                    project.deleteMarkers(marker, false, IResource.DEPTH_INFINITE);
+                }
             } catch (CoreException e) {
                 log.error(e.getMessage(), e);
             }

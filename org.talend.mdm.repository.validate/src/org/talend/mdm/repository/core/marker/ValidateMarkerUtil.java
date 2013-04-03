@@ -13,6 +13,8 @@
 package org.talend.mdm.repository.core.marker;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.talend.core.model.repository.ERepositoryObjectType;
@@ -31,10 +33,25 @@ public class ValidateMarkerUtil implements IValidationMarker {
 
     private static void initMarkerMap() {
         // DATA Model
-        viewTypeMarkerMap.put(IServerObjectRepositoryType.TYPE_DATAMODEL, new String[] { DATA_MODEL });
+        viewTypeMarkerMap.put(IServerObjectRepositoryType.TYPE_DATAMODEL, new String[] { DATA_MODEL, XSD_ERR });
     }
+
+    private static String[] allMarkers = null;
 
     public static String[] getMarkerTypeByViewType(ERepositoryObjectType type) {
         return viewTypeMarkerMap.get(type);
+    }
+
+    public static String[] getAllMarkers() {
+        if (allMarkers == null) {
+            List<String> markers = new LinkedList<String>();
+            for (String[] values : viewTypeMarkerMap.values()) {
+                for (String marker : values) {
+                    markers.add(marker);
+                }
+            }
+            allMarkers = markers.toArray(new String[0]);
+        }
+        return allMarkers;
     }
 }

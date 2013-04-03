@@ -25,7 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -69,6 +68,7 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXParseException;
 
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -232,6 +232,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     initializeGraphicalViewer();
                 }
             }
+        } catch (SAXParseException ex) {
+            // do nothing
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -410,6 +412,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 return new IllegalAccessException(error);
             }
             return null;
+        } catch (SAXParseException e) {
+            return e;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return e;

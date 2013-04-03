@@ -21,6 +21,7 @@
          </include>
       </validator>
    </extension>
+  
    <extension
          point="org.eclipse.wst.validation.validatorDelegates">
       <delegate
@@ -60,7 +61,7 @@
                id="org.talend.mdm.error.datamodel.model">
          </markerTypeReference>
          <markerTypeReference
-               id="org.talend.mdm.error.datamodel.xsdparse">
+               id="org.eclipse.xsd.diagnostic">
          </markerTypeReference>
       </markerTypeCategory>
       <markerContentGenerator
@@ -70,7 +71,7 @@
                id="org.talend.mdm.error.datamodel.model">
          </markerTypeReference>
          <markerTypeReference
-               id="org.talend.mdm.error.datamodel.xsdparse">
+               id="org.eclipse.xsd.diagnostic">
          </markerTypeReference>
          <markerFieldReference
                id="org.eclipse.ui.ide.severityAndDescriptionField"
