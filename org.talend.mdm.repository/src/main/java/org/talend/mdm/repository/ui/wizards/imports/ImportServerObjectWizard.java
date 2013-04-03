@@ -152,7 +152,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.wizard.Wizard#performFinish()
      */
     @Override
@@ -206,7 +206,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getFileInfo".
-     * 
+     *
      * @param input
      * @return // dirName result[0] // fileQName result[1] // fileExtension result[2] // fileName result[3] // version
      * result[4]
@@ -355,7 +355,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "handlePictureResourceObject".
-     * 
+     *
      * @param treeObj
      * @throws IOException
      */
@@ -508,7 +508,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC jsxie Comment method "caculatePath". if it is process or trigger ,cut the path prefix.
-     * 
+     *
      * @param treeObj
      * @return the tree object path.
      */
@@ -608,8 +608,10 @@ public class ImportServerObjectWizard extends Wizard {
                 String path = treeObj.getPath();
                 if (path.length() > 8) {
                     path = path.substring(8);
+                } else if (!path.isEmpty()) {
+                    path = IPath.SEPARATOR + path;
                 }
-                return IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + IPath.SEPARATOR + path;
+                return IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER + path;
             }
         }
 
@@ -618,7 +620,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getVersion".
-     * 
+     *
      * @param treeObj
      * @return
      */
@@ -639,7 +641,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getUniqueName".
-     * 
+     *
      * @param treeObj
      * @return
      */
@@ -664,7 +666,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "handlePath".
-     * 
+     *
      * @param itemState
      * @param type
      */
@@ -679,7 +681,7 @@ public class ImportServerObjectWizard extends Wizard {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
@@ -740,7 +742,7 @@ public class ImportServerObjectWizard extends Wizard {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
@@ -842,7 +844,7 @@ public class ImportServerObjectWizard extends Wizard {
 
                 /*
                  * (non-Javadoc)
-                 * 
+                 *
                  * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
                  */
                 @Override
