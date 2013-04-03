@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -66,6 +65,8 @@ public final class DeployOnMDMAction extends AContextualAction {
     private static final String EXPORTJOBSCRIPTS = Messages.DeployOnMDMAction_DeployToMDM;
     private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
+    private IRemoveCommandService service;
+
     /*
      * (non-Javadoc)
      *
@@ -84,7 +85,7 @@ public final class DeployOnMDMAction extends AContextualAction {
             setEnabled(false);
             return;
         }
-        List<RepositoryNode> nodes = (List<RepositoryNode>) selection.toList();
+        List<RepositoryNode> nodes = selection.toList();
         for (RepositoryNode node : nodes) {
             if (node.getType() == ENodeType.REPOSITORY_ELEMENT
                     && node.getProperties(EProperties.CONTENT_TYPE) == ERepositoryObjectType.PROCESS) {
@@ -109,6 +110,8 @@ public final class DeployOnMDMAction extends AContextualAction {
         this.setText(EXPORTJOBSCRIPTS);
         this.setToolTipText(EXPORTJOBSCRIPTS);
         this.setImageDescriptor(ImageProvider.getImageDesc(EImage.EXPORT_ICON));
+
+        initService();
     }
 
     @Override
@@ -121,9 +124,11 @@ public final class DeployOnMDMAction extends AContextualAction {
 
         Shell activeShell = Display.getCurrent().getActiveShell();
         WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-        int returnCode = dialog.open();
+        dialog.open();
 
-        if(returnCode == IDialogConstants.OK_ID) {
+        boolean deploySucceed = publishWizard.isDeploySucceed();
+
+        if (deploySucceed) {
 
             SpagoBiServer spagoBiServer = publishWizard.getMdmServer();
             MDMServerDef mdmServer = getMdmServer(spagoBiServer);
@@ -137,10 +142,9 @@ public final class DeployOnMDMAction extends AContextualAction {
 
                     if (property != null) {
                         property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, mdmServer.getName());
+                        factory.save(item);
                     }
-                    factory.save(item);
-                    IRemoveCommandService service = (IRemoveCommandService) GlobalServiceRegister.getDefault().getService(
-                            IRemoveCommandService.class);
+
                     service.removeDeployPhaseCommandOf(ERepositoryObjectType.PROCESS, item);
                 }
 
@@ -149,6 +153,10 @@ public final class DeployOnMDMAction extends AContextualAction {
                 log.error(e.getMessage(), e);
             }
         }
+    }
+
+    private void initService() {
+        service = (IRemoveCommandService) GlobalServiceRegister.getDefault().getService(IRemoveCommandService.class);
     }
 
     private List<IRepositoryViewObject> getSelectedViewObject() {
