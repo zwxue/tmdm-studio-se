@@ -54,6 +54,16 @@ public class TOMBundleBrandingService extends AbstractTalendBrandingService {
         return url;
     }
 
+    @Override
+    public String getJobLicenseHeader(String version) {
+        return Messages.getString("TosBrandingService_license_header_content", this.getFullProductName(), version);
+    }
+
+    @Override
+    public String getRoutineLicenseHeader(String version) {
+        return Messages.getString("TosBrandingService_license_header_content", this.getFullProductName(), version);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -78,6 +88,7 @@ public class TOMBundleBrandingService extends AbstractTalendBrandingService {
         return "for MDM"; //$NON-NLS-1$
     }
 
+    @Override
     public String getUserManuals() {
         return "MDM"; //$NON-NLS-1$
     }
