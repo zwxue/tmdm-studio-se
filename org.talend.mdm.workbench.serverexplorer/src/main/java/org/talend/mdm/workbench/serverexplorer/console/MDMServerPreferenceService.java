@@ -16,7 +16,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * created by Karelun Huang on Mar 25, 2013 Detailled comment
- *
+ * 
  */
 public class MDMServerPreferenceService {
 
@@ -38,7 +38,7 @@ public class MDMServerPreferenceService {
     }
 
     public static int getDisplayedBuffer() {
-        PlatformUI.getPreferenceStore().setDefault(DISPLAY_BUFFER_SIZE, 8000);
+        PlatformUI.getPreferenceStore().setDefault(DISPLAY_BUFFER_SIZE, 80000);
         return PlatformUI.getPreferenceStore().getInt(DISPLAY_BUFFER_SIZE);
     }
 

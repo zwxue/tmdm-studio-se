@@ -79,10 +79,6 @@ public class Messages extends NLS {
 
     public static String ServerDefDialog_CheckConnection;
 
-    public static String ServerDefDialog_ConnectFailed;
-
-    public static String ServerDefDialog_ConnectSuccessful;
-
     public static String ServerDefDialog_Name;
 
     public static String ServerDefDialog_NameCanNotBeEmpty;
