@@ -65,8 +65,6 @@ public final class DeployOnMDMAction extends AContextualAction {
     private static final String EXPORTJOBSCRIPTS = Messages.DeployOnMDMAction_DeployToMDM;
     private static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
-    private IRemoveCommandService service;
-
     /*
      * (non-Javadoc)
      *
@@ -110,8 +108,6 @@ public final class DeployOnMDMAction extends AContextualAction {
         this.setText(EXPORTJOBSCRIPTS);
         this.setToolTipText(EXPORTJOBSCRIPTS);
         this.setImageDescriptor(ImageProvider.getImageDesc(EImage.EXPORT_ICON));
-
-        initService();
     }
 
     @Override
@@ -129,6 +125,8 @@ public final class DeployOnMDMAction extends AContextualAction {
         boolean deploySucceed = publishWizard.isDeploySucceed();
 
         if (deploySucceed) {
+            IRemoveCommandService service = (IRemoveCommandService) GlobalServiceRegister.getDefault().getService(
+                    IRemoveCommandService.class);
 
             SpagoBiServer spagoBiServer = publishWizard.getMdmServer();
             MDMServerDef mdmServer = getMdmServer(spagoBiServer);
@@ -153,10 +151,6 @@ public final class DeployOnMDMAction extends AContextualAction {
                 log.error(e.getMessage(), e);
             }
         }
-    }
-
-    private void initService() {
-        service = (IRemoveCommandService) GlobalServiceRegister.getDefault().getService(IRemoveCommandService.class);
     }
 
     private List<IRepositoryViewObject> getSelectedViewObject() {
