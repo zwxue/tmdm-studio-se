@@ -12,9 +12,14 @@
 // ============================================================================
 package com.amalto.workbench.detailtabs.sections.handlers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
@@ -23,9 +28,12 @@ import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.actions.XSDGetXPathAction;
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.element.ElementWrapper;
+import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -49,6 +57,8 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
     protected boolean doSubmit() throws CommitException {
 
         try {
+            String originalName = getCommitedObj().getSourceName();
+
             XSDElementDeclaration decl = getCommitedObj().getSourceXSDContent();
 
             XSDElementDeclaration ref = null;
@@ -59,7 +69,7 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
             //remove first
             //struct.setAutoExpand(null);
             struct.setAutoExpand(String.valueOf(getCommitedObj().isAutoExpand()));
-            
+
             XSDElementDeclaration newRef = Util.findReference(getCommitedObj().getNewReference(), getCommitedObj().getSchema());
 
             XSDIdentityConstraintDefinition identify = null;
@@ -129,11 +139,50 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
 			}
 
 			getCommitedObj().getSourceElement().updateElement();
+
+            updateReference(originalName);
 		} catch (Exception e) {
 			throw new CommitException(e.getMessage(), e);
 		}
 
 		return true;
+    }
+
+    private DataModelMainPage getPage() {
+        IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+        if (activeEditor instanceof XSDEditor) {
+            XSDEditor xsdEditor = (XSDEditor) activeEditor;
+            DataModelMainPage page = xsdEditor.getdMainPage();
+
+            return page;
+        }
+        return null;
+    }
+
+    private String getModifiedXpath(DataModelMainPage page) {
+        if (page != null) {
+            XSDGetXPathAction getXpathAction = new XSDGetXPathAction(page);
+            getXpathAction.doAction();
+            String originalXpath = getXpathAction.getCopiedXpath();
+            return originalXpath;
+        }
+
+        return null;
+    }
+
+    private void updateReference(String originalName) {
+        DataModelMainPage page = getPage();
+        String modifiedXpath = getModifiedXpath(page);
+        if (modifiedXpath != null && !modifiedXpath.isEmpty()) {
+            int lastIndex = modifiedXpath.lastIndexOf("/"); //$NON-NLS-1$
+
+            String originalXpath = originalName;
+            originalXpath = modifiedXpath.substring(0, lastIndex + 1) + originalXpath;
+            IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
+            Object[] allForeignKeyRelatedInfos = Util.getAllForeignKeyRelatedInfos(page.getSite(), new ArrayList<Object>(),
+                    provider, new HashSet<Object>());
+            Util.updateForeignKeyRelatedInfo(originalXpath, modifiedXpath, allForeignKeyRelatedInfos);
+        }
     }
 
 	private void validateCardinality() throws CommitValidationException {
