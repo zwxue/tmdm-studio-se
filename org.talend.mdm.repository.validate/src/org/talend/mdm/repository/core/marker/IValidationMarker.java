@@ -18,7 +18,7 @@ package org.talend.mdm.repository.core.marker;
  */
 public interface IValidationMarker {
 
-    public static final String DATA_MODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
+    public static final String MARKER_DATA_MODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
 
-    public static final String XSD_ERR = "org.eclipse.xsd.diagnostic"; //$NON-NLS-1$
+    public static final String MAKER_XSD_ERR = "org.eclipse.xsd.diagnostic"; //$NON-NLS-1$
 }

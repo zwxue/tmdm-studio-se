@@ -14,8 +14,9 @@ package org.talend.mdm.repository.ui.dialogs;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -54,7 +55,9 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.views.markers.MarkerField;
 import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 import org.eclipse.wst.validation.internal.ValidationResultSummary;
-import org.talend.mdm.repository.core.marker.IValidationMarker;
+import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.marker.ValidateMarkerUtil;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.validate.IValidationPreference;
 import org.talend.mdm.repository.core.validate.datamodel.MarkerEntry;
@@ -245,25 +248,37 @@ public class ValidationResultDialog extends IconAndMessageDialog {
     private Button cancelAllBun;
 
     public ValidationResultDialog(Shell parentShell, ValidationResultSummary result, IValidationPreference validationPref,
-            Set<IResource> resources) {
+            Map<IRepositoryViewObject, IFile> viewFileMap) {
         super(parentShell);
         this.result = result;
         this.validationPref = validationPref;
-        this.markerEntries = createMarkerEntries(resources);
-        initMessage(resources.size());
+        this.markerEntries = createMarkerEntries(viewFileMap);
+        initMessage(viewFileMap.size());
         setShellStyle(getShellStyle() | SWT.RESIZE);
     }
 
-    private List<MarkerEntry> createMarkerEntries(Set<IResource> resources) {
+    private List<MarkerEntry> createMarkerEntries(Map<IRepositoryViewObject, IFile> viewFileMap) {
         List<MarkerEntry> ret = new ArrayList<MarkerEntry>();
-        for (IResource resource : resources) {
-            try {
-                IMarker[] markers = resource.findMarkers(IValidationMarker.DATA_MODEL, true, IResource.DEPTH_ONE);
-                for (IMarker marker : markers) {
-                    ret.add(new MarkerEntry(marker));
+
+        for (IRepositoryViewObject viewObj : viewFileMap.keySet()) {
+            IFile file = viewFileMap.get(viewObj);
+            if (file != null) {
+                ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+                if (type != null) {
+                    try {
+                        String[] types = ValidateMarkerUtil.getMarkerTypeByViewType(type);
+                        if (types != null) {
+                            for (String markerId : types) {
+                                IMarker[] markers = file.findMarkers(markerId, false, IResource.DEPTH_ONE);
+                                for (IMarker marker : markers) {
+                                    ret.add(new MarkerEntry(marker));
+                                }
+                            }
+                        }
+                    } catch (CoreException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (CoreException e) {
-                e.printStackTrace();
             }
         }
         return ret;

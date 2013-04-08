@@ -81,6 +81,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -401,9 +402,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         dataModelName = modelName;
     }
 
-    public void setDirty(boolean dirty) {
+    public void setDirty(final boolean dirty) {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                doSetDirty(dirty);
+                firePropertyChange(PROP_DIRTY);
+            }
+        });
+
+    }
+
+    private void doSetDirty(boolean dirty) {
         this.dirty = dirty;
-        firePropertyChange(PROP_DIRTY);
     }
 
     public boolean isSchemaSelected() {

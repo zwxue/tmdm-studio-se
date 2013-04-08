@@ -214,7 +214,7 @@ public class MDMValidationRunner extends WorkspaceJob {
                 @Override
                 public void run() {
 
-                    ValidationResultDialog d = new ValidationResultDialog(new Shell(), result, validationPref, resources);
+                    ValidationResultDialog d = new ValidationResultDialog(new Shell(), result, validationPref, viewObjMap);
                     int code = d.open();
                     validateResult.setSelectedButton(code);
                     setValidateResult(validateResult);

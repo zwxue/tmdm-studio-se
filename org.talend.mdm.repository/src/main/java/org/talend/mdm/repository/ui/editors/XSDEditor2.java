@@ -18,10 +18,16 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
+import org.eclipse.wst.xsd.ui.internal.adapters.XSDSchemaAdapter;
+import org.eclipse.xsd.XSDDiagnostic;
+import org.eclipse.xsd.XSDSchema;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -97,7 +103,43 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         folder.getItem(0).setText(Messages.XSDEditor2_schemaDesign);
         folder.getItem(1).setText(Messages.XSDEditor2_schemaSource);
         // default use
-        setActiveEditor(dMainPage);
+        activePage(xsdFile);
+        this.addPropertyListener(new IPropertyListener() {
+
+            private boolean needValidate = false;
+
+            public void propertyChanged(Object source, int propId) {
+                if (propId == PROP_DIRTY) {
+                    if (isDirty()) {
+                        needValidate = true;
+
+                    } else if (needValidate) {
+                        needValidate = false;
+                        XSDEditorInput2 editorInput = (XSDEditorInput2) getEditorInput();
+                        IRepositoryViewObject viewObject = editorInput.getViewObject();
+                        validateModel(viewObject);
+
+                    }
+                }
+
+            }
+        });
+    }
+
+    private void activePage(IFile xsdFile) {
+        if (model != null) {
+            Notifier target = ((XSDSchemaAdapter) model).getTarget();
+            XSDSchema xs = (XSDSchema) target;
+            xs.validate();
+            EList<XSDDiagnostic> diagnostics = xs.getAllDiagnostics();
+            if (!diagnostics.isEmpty()) {
+                setActivePage(SOURCE_PAGE_INDEX);
+                preActivePageIndex = SOURCE_PAGE_INDEX;
+                return;
+            }
+        }
+        setActivePage(2);
+        preActivePageIndex = 2;
     }
 
     @Override
@@ -139,7 +181,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         } else if (serverObject.getLastServerDef() != null) {
             CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
         }
-        validateModel(viewObject);
+
     }
 
     private int validateModel(IRepositoryViewObject viewObject) {

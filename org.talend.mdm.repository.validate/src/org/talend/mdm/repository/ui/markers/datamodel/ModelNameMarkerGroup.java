@@ -23,7 +23,6 @@ import org.eclipse.ui.views.markers.internal.FieldCategory;
 import org.eclipse.ui.views.markers.internal.MarkerGroup;
 import org.eclipse.ui.views.markers.internal.MarkerGroupingEntry;
 import org.eclipse.ui.views.markers.internal.MarkerMessages;
-import org.talend.mdm.repository.core.validate.datamodel.model.IDataModelMarkerConst;
 
 /**
  * created by HHB on 2013-1-25 Detailled comment
@@ -54,7 +53,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
                 if (marker == null || !marker.exists()) {
                     return MarkerMessages.FieldCategory_Uncategorized;
                 }
-                String groupName = getModelName(marker);
+                String groupName = ModelMarkerHelper.getModelName(marker);
                 if (groupName == null) {
 
                     return BLANK;
@@ -100,7 +99,7 @@ public class ModelNameMarkerGroup extends MarkerGroup {
 
     @Override
     public MarkerGroupingEntry findGroupValue(String typeId, IMarker marker) {
-        String groupName = getModelName(marker);
+        String groupName = ModelMarkerHelper.getModelName(marker);
         ModelNameMarkerGroupingEntry entry = (ModelNameMarkerGroupingEntry) entries.get(groupName);
         if (entry == null) {
             entry = new ModelNameMarkerGroupingEntry(groupName);
@@ -108,15 +107,6 @@ public class ModelNameMarkerGroup extends MarkerGroup {
             entries.put(groupName, entry);
         }
         return entry;
-    }
-
-    private String getModelName(IMarker marker) {
-
-        if (marker == null) {
-            return BLANK;
-        }
-        String msg = marker.getAttribute(IDataModelMarkerConst.DATA_MODEL, BLANK);
-        return msg;
     }
 
     /*

@@ -247,12 +247,12 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
             try {
                 IResource resource = marker.getResource();
                 String type = marker.getType();
-                if (type.equals(XSD_ERR)) {
+                if (type.equals(MAKER_XSD_ERR)) {
                     if (resource != null) {
                         String dataModelName = DataModelChecker.getDataModelName(resource.getName());
                         openDataModel(dataModelName, marker);
                     }
-                } else if (type.equals(DATA_MODEL)) {
+                } else if (type.equals(MARKER_DATA_MODEL)) {
 
                     String modelName = (String) marker.getAttribute(IDataModelMarkerConst.DATA_MODEL);
                     if (modelName != null && resource != null) {

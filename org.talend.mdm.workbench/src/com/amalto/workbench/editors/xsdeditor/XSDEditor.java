@@ -29,7 +29,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -86,7 +85,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public static final String CONTRUIBUTIONID_DATAMODELPAGE = "org.talend.mdm.workbench.propertyContributor.datamodel";//$NON-NLS-1$
 
-    private int preActivePageIndex = -1;
+    protected int preActivePageIndex = -1;
 
     IEditorInput xsdInput;
 
@@ -137,41 +136,32 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     @Override
     public void doSave(IProgressMonitor monitor) {
-        boolean savedSuccess = true;
         InputStreamReader reader = null;
         try {
+            IFile file = getXSDFile(xobject);
             if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
                 DataModelMainPage mainPage = (DataModelMainPage) getSelectedPage();
                 String xsd = mainPage.getXSDSchemaString();
                 WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                 wsDataModel.setXsdSchema(xsd);
-                IFile file = getXSDFile(xobject);
+                //
                 file.setCharset("utf-8", null);//$NON-NLS-1$
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(xsd.getBytes("utf-8"));//$NON-NLS-1$
                 file.setContents(inputStream, IFile.FORCE, null);
 
-            } // save the file's contents to DataModelMainPage
-
-            IDocument doc = getTextEditor().getTextViewer().getDocument();
-            String xsd = doc.get();
-            // DataModelMainPage
-            DataModelMainPage mainPage = getDataModelEditorPage();
-            if (mainPage != null) {
-                savedSuccess = mainPage.save(xsd) == 0;
-            }
-            if (savedSuccess) {
+                if (mainPage != null) {
+                    mainPage.save(xsd);
+                }
                 fileContents = xsd.getBytes("utf-8"); //$NON-NLS-1$
-            } else {
-                IFile file = getXSDFile(xobject);
-                reader = new InputStreamReader(file.getContents());
-                fileContents = IOUtils.toByteArray(reader, "utf-8"); //$NON-NLS-1$
+
             }
+
+            getDataModelEditorPage().setDirty(false);
+
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
-            if (savedSuccess) {
-                super.doSave(monitor);
-            }
+            super.doSave(monitor);
             if (reader != null) {
                 IOUtils.closeQuietly(reader);
             }
@@ -591,4 +581,5 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     public DataModelMainPage getdMainPage() {
         return null;
     }
+
 }
