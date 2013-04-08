@@ -25,6 +25,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -473,5 +476,22 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     public String getContributorId() {
         return CONTRIBUTER_ID;
+    }
+
+    public void refreshRootNode(ERepositoryObjectType... types) {
+        if (types != null) {
+            List<ERepositoryObjectType> typeList = new ArrayList<ERepositoryObjectType>(types.length);
+            typeList.addAll(Arrays.asList(types));
+
+            IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
+            if (categoryViewObjects != null) {
+                for (IRepositoryViewObject viewObj : categoryViewObjects) {
+                    if (typeList.contains(viewObj.getRepositoryObjectType())) {
+                        getCommonViewer().refresh(viewObj);
+                    }
+                }
+            }
+        }
+
     }
 }
