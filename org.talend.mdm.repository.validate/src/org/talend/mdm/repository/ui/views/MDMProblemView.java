@@ -63,6 +63,8 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
 
     private static final String GENERATOR_ID = "org.talend.mdm.problemsGenerator"; //$NON-NLS-1$
 
+    public static final String VIEW_ID = "org.talend.mdm.repository.ui.views.MDMProblemView"; //$NON-NLS-1$
+
     /**
      * DOC HHB MDMProblemView constructor comment.
      * 

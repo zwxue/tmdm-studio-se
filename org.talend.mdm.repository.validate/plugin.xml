@@ -281,22 +281,6 @@
             name="Jump to Source Line">
       </command>
    </extension>
-   <!--
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.talend.mdm.perspective">
-         <view
-               closeable="true"
-               id="org.talend.mdm.repository.ui.views.MDMProblemView"
-               minimized="false"
-               moveable="true"
-               relationship="stack"
-               relative="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
-               showTitle="true"
-               visible="false">
-         </view>
-      </perspectiveExtension>
-   </extension>
-   -->
+ 
+  
 </plugin>

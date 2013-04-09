@@ -60,6 +60,15 @@
                showTitle="true"
                visible="false">
          </view>
+         <view
+               closeable="true"
+               id="org.talend.mdm.repository.ui.views.MDMProblemView"
+               minimized="false"
+               relationship="stack"
+               relative="org.talend.mdm.workbench.serverexplorer.ui.views.ServerExplorer"
+               showTitle="true"
+               visible="true">
+         </view>
       </perspectiveExtension>
    </extension>
    <extension

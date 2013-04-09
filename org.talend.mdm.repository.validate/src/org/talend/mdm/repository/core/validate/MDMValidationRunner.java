@@ -34,6 +34,9 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.validation.internal.ValOperation;
 import org.eclipse.wst.validation.internal.ValType;
 import org.eclipse.wst.validation.internal.ValidationResultSummary;
@@ -48,6 +51,7 @@ import org.talend.mdm.repository.core.service.IModelValidationService.IModelVali
 import org.talend.mdm.repository.core.validate.i18n.Messages;
 import org.talend.mdm.repository.ui.dialogs.ValidationResultDialog;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
+import org.talend.mdm.repository.ui.views.MDMProblemView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
 
@@ -229,7 +233,27 @@ public class MDMValidationRunner extends WorkspaceJob {
                 validateResult.setSelectedButton(IModelValidationService.BUTTON_OK);
             }
         }
-
+        activeProblemView(result);
         return Status.OK_STATUS;
+    }
+
+    private void activeProblemView(ValidationResultSummary result) {
+        if (result.getSeverityError() > 0 || result.getSeverityWarning() > 0 || result.getSeverityInfo() > 0) {
+            Display.getDefault().asyncExec(new Runnable() {
+
+                @Override
+                public void run() {
+                    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                    if (page != null) {
+                        try {
+                            page.showView(MDMProblemView.VIEW_ID);
+                        } catch (PartInitException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+
+                }
+            });
+        }
     }
 }
