@@ -12,10 +12,12 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.console;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -278,7 +280,11 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         DefaultHttpClient httpClient = createHttpClient();
         String monitorURL = buildMonitorURL(position);
         HttpGet httpGet = new HttpGet(monitorURL);
-        MessageConsoleStream errorMsgStream = newErrorMessageStream();
+        MessageConsoleStream errorMsgStream = null;
+        InputStream is = null;
+        BufferedReader br = null;
+        MessageConsoleStream msgStream = null;
+        InputStreamReader isr = null;
         try {
             HttpResponse response = httpClient.execute(httpGet);
             int code = response.getStatusLine().getStatusCode();
@@ -287,29 +293,68 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 if (isEndOfChunk(response)) {
                     return;
                 }
-                InputStream is = response.getEntity().getContent();
-                MessageConsoleStream msgStream = newMessageStream();
-                byte[] buffer = new byte[1024 * 4];
-                int n = 0;
-                while ((n = is.read(buffer)) != -1) {
-                    msgStream.write(buffer, 0, n);
+                is = response.getEntity().getContent();
+                msgStream = newMessageStream();
+
+                isr = new InputStreamReader(is);
+                br = new BufferedReader(isr);
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    msgStream.println(line);
                 }
-                msgStream.close();
-                is.close();
-            } else if (HTTP_STATUS_NO_ACCESS == code) {
-                errorMsgStream.println(Messages.MDMServerMessageConsole_No_Acess_Message);
-                disposeTimer();
-            } else if (HTTP_STSTUS_FORBIDDEN == code) {
-                errorMsgStream.println(Messages.MDMServerMessageConsole_Forbidden_Message);
-                disposeTimer();
-            } else if (HTTP_STATUS_NOT_FOUND == code) {
-                errorMsgStream.println(Messages.MDMServerMessageConsole_NotConnected_Message);
-                disposeTimer();
+            } else {
+                errorMsgStream = newErrorMessageStream();
+                if (HTTP_STATUS_NO_ACCESS == code) {
+                    errorMsgStream.println(Messages.MDMServerMessageConsole_No_Acess_Message);
+                    disposeTimer();
+                } else if (HTTP_STSTUS_FORBIDDEN == code) {
+                    errorMsgStream.println(Messages.MDMServerMessageConsole_Forbidden_Message);
+                    disposeTimer();
+                } else if (HTTP_STATUS_NOT_FOUND == code) {
+                    errorMsgStream.println(Messages.MDMServerMessageConsole_NotConnected_Message);
+                    disposeTimer();
+                }
             }
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             errorMsgStream.println(e.getMessage());
             disposeTimer();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (isr != null) {
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (msgStream != null) {
+                try {
+                    msgStream.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (errorMsgStream != null) {
+                try {
+                    errorMsgStream.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
     }
 
