@@ -37,7 +37,7 @@ public class ModelMarkerHelper {
         IResource resource = marker.getResource();
         try {
             String type = marker.getType();
-            if (type.equals(IValidationMarker.MAKER_XSD_ERR)) {
+            if (type.equals(IValidationMarker.MARKER_XSD_ERR)) {
                 if (resource != null) {
                     String dataModelName = DataModelChecker.getDataModelName(resource.getName());
                     return dataModelName;

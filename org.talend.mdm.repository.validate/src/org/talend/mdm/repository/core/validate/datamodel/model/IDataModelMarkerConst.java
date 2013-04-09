@@ -30,6 +30,8 @@ public interface IDataModelMarkerConst extends IModelMarkerConst {
 
     public static final String ELEMENT_TYPE = "elementType"; //$NON-NLS-1$
 
+    public static final String OPEN_IN_SOURCE = "openInSource"; //$NON-NLS-1$
+
     /**
      * the value come from IComponentValidateVisitor's MSG_GROUP_XXX
      */

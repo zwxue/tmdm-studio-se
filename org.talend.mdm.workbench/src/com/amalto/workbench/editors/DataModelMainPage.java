@@ -239,6 +239,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     private static Log log = LogFactory.getLog(DataModelMainPage.class);
 
+    private static final String MARKER_DATA_MODEL = "org.talend.mdm.error.datamodel.model"; //$NON-NLS-1$
+
+    private static final String MARKER_XSD_ERR = "org.eclipse.xsd.diagnostic"; //$NON-NLS-1$
+
     private final String ADDELEMENT_MENU_ID = "AddAfterID"; //$NON-NLS-1$
 
     protected Text descriptionText;
@@ -3017,6 +3021,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     private static final String MSG_GROUP = "messageGroup"; //$NON-NLS-1$
 
+    private static final String OPEN_IN_SOURCE = "openInSource"; //$NON-NLS-1$
+
     // to mark the error is caused by UNKNOW
     private static final int MSG_GROUP_UNKNOW = 0;
 
@@ -3041,26 +3047,35 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         try {
             String type = marker.getType();
-            if (type.equals("org.eclipse.xsd.diagnostic") || activePage == 1) {
+
+            if (type.equals(MARKER_XSD_ERR) || activePage == 1) {
                 ((CommonMultiPageEditor) part).gotoMarker(marker);
                 return;
-            }
-            Object domElement = marker.getAttribute(DOM_ELEMENT);
-            Integer msgGroup = (Integer) marker.getAttribute(MSG_GROUP);
-
-            if (domElement != null && msgGroup != null) {
-                switch (msgGroup) {
-                case MSG_GROUP_TYPE:
-                    activeMarkerItem(typesViewer, (Element) domElement);
-                    break;
-                case MSG_GROUP_ELEMENT:
-                case MSG_GROUP_ENTITY:
-                    activeMarkerItem(viewer, (Element) domElement);
-                    break;
-                default:
-                    break;
+            } else if (type.equals(MARKER_DATA_MODEL)) {
+                boolean openInSource = marker.getAttribute(OPEN_IN_SOURCE, false);
+                if (openInSource) {
+                    marker.setAttribute(OPEN_IN_SOURCE, false);
+                    ((CommonMultiPageEditor) part).gotoMarker(marker);
+                    return;
                 }
 
+                Object domElement = marker.getAttribute(DOM_ELEMENT);
+                Integer msgGroup = (Integer) marker.getAttribute(MSG_GROUP);
+
+                if (domElement != null && msgGroup != null) {
+                    switch (msgGroup) {
+                    case MSG_GROUP_TYPE:
+                        activeMarkerItem(typesViewer, (Element) domElement);
+                        break;
+                    case MSG_GROUP_ELEMENT:
+                    case MSG_GROUP_ENTITY:
+                        activeMarkerItem(viewer, (Element) domElement);
+                        break;
+                    default:
+                        break;
+                    }
+
+                }
             }
 
         } catch (CoreException e) {

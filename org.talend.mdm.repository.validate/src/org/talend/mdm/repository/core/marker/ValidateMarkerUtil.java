@@ -33,7 +33,7 @@ public class ValidateMarkerUtil implements IValidationMarker {
 
     private static void initMarkerMap() {
         // DATA Model
-        viewTypeMarkerMap.put(IServerObjectRepositoryType.TYPE_DATAMODEL, new String[] { MARKER_DATA_MODEL, MAKER_XSD_ERR });
+        viewTypeMarkerMap.put(IServerObjectRepositoryType.TYPE_DATAMODEL, new String[] { MARKER_DATA_MODEL, MARKER_XSD_ERR });
     }
 
     private static String[] allMarkers = null;

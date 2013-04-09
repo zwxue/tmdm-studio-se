@@ -212,7 +212,7 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
                 final int currentMode = OpenStrategy.getOpenMethod();
                 try {
                     OpenStrategy.setOpenMethod(OpenStrategy.DOUBLE_CLICK);
-                    openSelectedMarkers();
+                    openSelectedMarkers(false);
                 } finally {
                     OpenStrategy.setOpenMethod(currentMode);
                 }
@@ -235,19 +235,19 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
              */
             @Override
             protected void open(ISelection selection, boolean activate) {
-                openSelectedMarkers();
+                openSelectedMarkers(false);
             }
         };
     }
 
-    private void openSelectedMarkers() {
+    public void openSelectedMarkers(boolean openInSrc) {
         IMarker[] markers = getSelectedMarkers();
         for (IMarker marker : markers) {
             IWorkbenchPage page = getSite().getPage();
             try {
                 IResource resource = marker.getResource();
                 String type = marker.getType();
-                if (type.equals(MAKER_XSD_ERR)) {
+                if (type.equals(MARKER_XSD_ERR)) {
                     if (resource != null) {
                         String dataModelName = DataModelChecker.getDataModelName(resource.getName());
                         openDataModel(dataModelName, marker);
@@ -256,6 +256,9 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
 
                     String modelName = (String) marker.getAttribute(IDataModelMarkerConst.DATA_MODEL);
                     if (modelName != null && resource != null) {
+                        if (openInSrc) {
+                            marker.setAttribute(IDataModelMarkerConst.OPEN_IN_SOURCE, true);
+                        }
                         openDataModel(modelName, marker);
                     }
                 } else {
