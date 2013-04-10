@@ -16,6 +16,8 @@ import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -58,6 +60,8 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     @Override
     public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         result = false;
+        deployCancelled = false;
+
         if (cmd instanceof BatchDeployJobCommand) {
             BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) cmd;
             List<IRepositoryViewObject> viewObjects = deployJobCommand.getViewObjects();
@@ -80,16 +84,24 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
                 public void run() {
                     Shell activeShell = display.getActiveShell();
                     WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
-                    dialog.open();
+                    int open = dialog.open();
 
-                    setResult(publishWizard.isDeploySucceed());
-                    RuntimeException e = publishWizard.getDeployException();
-                    if(e != null) {
-                        setException(e);
+                    if (open == IDialogConstants.CANCEL_ID) {
+                        setDeployCancelled(true);
+                    } else {
+                        setResult(publishWizard.isDeploySucceed());
+                        RuntimeException e = publishWizard.getDeployException();
+                        if (e != null) {
+                            setException(e);
+                        }
                     }
                 }
             });
         }
+
+        if (deployCancelled)
+            throw new OperationCanceledException();
+
         return result;
     }
 
@@ -99,8 +111,14 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
 
     private boolean result = false;
 
+    private boolean deployCancelled = false;
+
     public void setResult(boolean result) {
         this.result = result;
+    }
+
+    public void setDeployCancelled(boolean cancelled) {
+        this.deployCancelled = cancelled;
     }
 
     private IStructuredSelection getSelection(List<IRepositoryViewObject> viewObjs) {
@@ -123,7 +141,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         spagoBiServer.setPassword(serverDef.getPasswd());
         return spagoBiServer;
     }
-    
+
     @Override
     public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         MDMServerDef serverDef = cmd.getServerDef();
