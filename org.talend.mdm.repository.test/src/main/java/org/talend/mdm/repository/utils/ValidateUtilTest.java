@@ -25,15 +25,15 @@ public class ValidateUtilTest {
         // single char is all right
         assertTrue(ValidateUtil.matchCommonRegex("a")); //$NON-NLS-1$
 
-        // this four char in this middle or front will be all right
-        String ss[] = { "#", "-", "." };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        // this char - in this middle or front will be all right
+        String ss[] = { "-" };//$NON-NLS-1$
         for (String s : ss) {
             String validStr1 = str + s + "a";//$NON-NLS-1$
             String validStr2 = s + "a";//$NON-NLS-1$
             boolean match1 = ValidateUtil.matchCommonRegex(validStr1);
             boolean match2 = ValidateUtil.matchCommonRegex(validStr2);
-            assertFalse(match1);
-            assertFalse(match2);
+            assertTrue(match1);
+            assertTrue(match2);
         }
 
         String validStr3 = str + "a";
@@ -53,12 +53,8 @@ public class ValidateUtilTest {
 
         // "#", "-", "." in the back
         boolean match1 = ValidateUtil.matchCommonRegex(str + ss[0]);
-        boolean match2 = ValidateUtil.matchCommonRegex(str + ss[1]);
-        boolean match3 = ValidateUtil.matchCommonRegex(str + ss[2]);
 
         assertFalse(match1);
-        assertFalse(match2);
-        assertFalse(match3);
 
     }
 
