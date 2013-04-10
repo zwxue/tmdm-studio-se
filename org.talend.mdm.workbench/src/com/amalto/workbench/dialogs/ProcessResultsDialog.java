@@ -13,7 +13,6 @@
 package com.amalto.workbench.dialogs;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
@@ -43,7 +42,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
+import org.eclipse.ui.internal.browser.WebBrowserPreference;
 
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.i18n.Messages;
@@ -117,13 +119,18 @@ public class ProcessResultsDialog extends Dialog {
                     IFile file = FileProvider.createdTempFile(htmlContent, Messages.ProcessResultsDialog_temphtml, null);
 
                     File htmlFile = file.getLocation().toFile();
+                    String SHARED_ID = "org.eclipse.ui.browser"; //$NON-NLS-1$
                     try {
-                        if (java.awt.Desktop.isDesktopSupported()) {
-                            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-                            desktop.browse(htmlFile.toURI());
-                        }
+                        IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
 
-                    } catch (IOException e1) {
+                        if (WebBrowserPreference.getBrowserChoice() == WebBrowserPreference.INTERNAL) {
+                            support.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR, file.getLocation().toPortableString(),
+                                    null, null).openURL(htmlFile.toURL());
+                        } else {
+                            support.createBrowser(IWorkbenchBrowserSupport.AS_EXTERNAL, SHARED_ID, null, null).openURL(
+                                    htmlFile.toURL());
+                        }
+                    } catch (Exception e1) {
                         log.error(e1.getMessage(), e1);
                     }
                 }

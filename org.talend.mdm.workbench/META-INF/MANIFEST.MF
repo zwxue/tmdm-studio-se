@@ -31,9 +31,10 @@ Require-Bundle: org.eclipse.ui,
  org.apache.commons.discovery,
  org.talend.core.runtime,
  org.talend.mdm.commmon,
- org.eclipse.wst.xsl.ui;bundle-version="1.1.1",
- org.talend.core.repository;bundle-version="1.0.0",
- org.talend.commons.runtime;bundle-version="2.2.0"
+ org.eclipse.wst.xsl.ui,
+ org.talend.core.repository,
+ org.talend.commons.runtime,
+ org.eclipse.ui.browser
 Eclipse-AutoStart: true
 Eclipse-RegisterBuddy: org.talend.testutils
 Bundle-ClassPath: com.amalto.workbench.jar,
