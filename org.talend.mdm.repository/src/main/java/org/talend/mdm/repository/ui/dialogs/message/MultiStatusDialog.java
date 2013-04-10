@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.DeployService.DeployCategoryStatus;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
@@ -99,9 +100,9 @@ public class MultiStatusDialog extends Dialog {
                 } else if (severity == IStatus.ERROR) {
                     return IMG_ERR;
                 }
-            } else if (element instanceof MultiStatus) {
+            } else if (element instanceof DeployCategoryStatus) {
                 return null;
-            } else if (element instanceof Status) {
+            } else if (element instanceof Status || element instanceof MultiStatus) {
                 Status status = (Status) element;
                 int severity = status.getSeverity();
                 if (severity == IStatus.OK) {

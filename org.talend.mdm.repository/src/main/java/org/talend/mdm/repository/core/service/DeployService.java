@@ -58,6 +58,14 @@ public class DeployService {
 
     private static Logger log = Logger.getLogger(DeployService.class);
 
+    public static class DeployCategoryStatus extends MultiStatus {
+
+        public DeployCategoryStatus(String pluginId, int code, String message, Throwable exception) {
+            super(pluginId, code, message, exception);
+        }
+
+    }
+
     public static class DeployStatus extends Status {
 
         ICommand command;

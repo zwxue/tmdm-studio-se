@@ -27,6 +27,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
+import org.talend.mdm.repository.core.service.DeployService.DeployCategoryStatus;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -75,9 +76,12 @@ public class DeployStatusDialog extends MultiStatusDialog {
      */
     @Override
     public String getStatusLabel(IStatus status) {
-        int[] summary = getSummary(status);
-        return Messages.bind(Messages.DeployStatusDialog_typeSummaryMessage, status.getMessage(), String.valueOf(summary[0]),
-                String.valueOf(summary[1]), String.valueOf(summary[2]));
+        if (status instanceof DeployCategoryStatus) {
+            int[] summary = getSummary(status);
+            return Messages.bind(Messages.DeployStatusDialog_typeSummaryMessage, status.getMessage(), String.valueOf(summary[0]),
+                    String.valueOf(summary[1]), String.valueOf(summary[2]));
+        }
+        return status.getMessage();
     }
 
     /**
@@ -90,18 +94,16 @@ public class DeployStatusDialog extends MultiStatusDialog {
         int oks = 0, errors = 0, cancels = 0;
         if (status != null && status.isMultiStatus()) {
             for (IStatus childStatus : status.getChildren()) {
-                if (!childStatus.isMultiStatus()) {
-                    switch (childStatus.getSeverity()) {
-                    case IStatus.OK:
-                        oks++;
-                        continue;
-                    case IStatus.ERROR:
-                        errors++;
-                        continue;
-                    case IStatus.INFO:
-                        cancels++;
-                        continue;
-                    }
+                switch (childStatus.getSeverity()) {
+                case IStatus.OK:
+                    oks++;
+                    continue;
+                case IStatus.ERROR:
+                    errors++;
+                    continue;
+                case IStatus.INFO:
+                    cancels++;
+                    continue;
                 }
             }
         }
@@ -109,20 +111,30 @@ public class DeployStatusDialog extends MultiStatusDialog {
     }
 
     private ERepositoryObjectType getType(IStatus status) {
-        ICommand command = ((DeployStatus) status).getCommand();
-        IRepositoryViewObject viewObject = null;
-        if (command != null) {
-            if (command instanceof BatchDeployJobCommand) {
-                return ERepositoryObjectType.PROCESS;
-            } else {
-                viewObject = command.getViewObject();
+        IStatus queryStatus = status;
+        if (status.isMultiStatus()) {
+            IStatus[] childrenStatus = status.getChildren();
+            if (childrenStatus != null && childrenStatus.length > 0) {
+                queryStatus = childrenStatus[0];
             }
         }
+        if (queryStatus != null && queryStatus instanceof DeployStatus) {
+            ICommand command = ((DeployStatus) queryStatus).getCommand();
+            IRepositoryViewObject viewObject = null;
+            if (command != null) {
+                if (command instanceof BatchDeployJobCommand) {
+                    return ERepositoryObjectType.PROCESS;
+                } else {
+                    viewObject = command.getViewObject();
+                }
+            }
 
-        if (viewObject == null) {
-            return null;
+            if (viewObject == null) {
+                return null;
+            }
+            return viewObject.getRepositoryObjectType();
         }
-        return viewObject.getRepositoryObjectType();
+        return null;
     }
 
     private boolean collectTypeStatus(Map<ERepositoryObjectType, List<IStatus>> map, IStatus status) {
@@ -134,13 +146,12 @@ public class DeployStatusDialog extends MultiStatusDialog {
             list = new ArrayList<IStatus>();
             map.put(type, list);
         }
-        // ICommand command = ((DeployStatus) status).getCommand();
-        // if (command instanceof BatchDeployJobCommand) {
-        // List<ICommand> subCmds = ((BatchDeployJobCommand) command).getSubCmds();
-        // for (ICommand cmd : subCmds) {
-        //
-        // }
-        // }
+        if (type == ERepositoryObjectType.PROCESS && status.isMultiStatus()) {
+            for (IStatus childStatus : status.getChildren()) {
+                collectTypeStatus(map, childStatus);
+            }
+            return true;
+        }
         if (list.isEmpty() || !list.contains(status)) {
             list.add(status);
         }
@@ -149,25 +160,17 @@ public class DeployStatusDialog extends MultiStatusDialog {
 
     @Override
     protected IStatus initMultiStatus(IStatus multiStatus) {
+
         IStatus[] children = multiStatus.getChildren();
 
         Map<ERepositoryObjectType, List<IStatus>> map = new HashMap<ERepositoryObjectType, List<IStatus>>();
         for (IStatus status : children) {
-            if (status.isMultiStatus()) {
-                for (IStatus childStatus : status.getChildren()) {
-                    if (!collectTypeStatus(map, childStatus)) {
-                        break;
-                    }
-                }
-            } else {
-                collectTypeStatus(map, status);
-            }
-
+            collectTypeStatus(map, status);
         }
         MultiStatus retStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, "", null); //$NON-NLS-1$
         for (Entry<ERepositoryObjectType, List<IStatus>> entry : map.entrySet()) {
             ERepositoryObjectType key = entry.getKey();
-            MultiStatus submultiStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, Messages.bind(
+            MultiStatus submultiStatus = new DeployCategoryStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, Messages.bind(
                     Messages.MultiStatusDialog_MultiStatus_Messages, key.getKey()), null);
             for (IStatus status : entry.getValue()) {
                 submultiStatus.add(status);

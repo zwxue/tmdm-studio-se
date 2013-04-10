@@ -60,6 +60,7 @@ public class MDMValidationService implements IModelValidationService {
         public ModelValidateResult(Map<IRepositoryViewObject, IFile> viewObjMap) {
             initSeverityMap();
             collectChectResult(viewObjMap);
+            filterCheckResult();
             this.selectedButton = IDialogConstants.CANCEL_ID;
         }
 
@@ -109,9 +110,11 @@ public class MDMValidationService implements IModelValidationService {
                         try {
                             for (String markerType : markerTypes) {
                                 int severity = file.findMaxProblemSeverity(markerType, false, IResource.DEPTH_ZERO);
+
                                 List<IRepositoryViewObject> objs = severityMap.get(severity);
-                                if (objs != null) {
+                                if (objs != null && !objs.contains(viewObj)) {
                                     objs.add(viewObj);
+
                                 }
                             }
                         } catch (CoreException e) {
@@ -120,6 +123,27 @@ public class MDMValidationService implements IModelValidationService {
                     }
                 }
             }
+        }
+
+        private void filterCheckResult() {
+            List<IRepositoryViewObject> okObjs = severityMap.get(OK);
+            List<IRepositoryViewObject> errorObjs = severityMap.get(ERROR);
+            List<IRepositoryViewObject> warningObjs = severityMap.get(WARNING);
+            for (IRepositoryViewObject obj : errorObjs) {
+                if (warningObjs.contains(obj)) {
+                    warningObjs.remove(obj);
+                }
+                if (okObjs.contains(obj)) {
+                    okObjs.remove(obj);
+                }
+            }
+
+            for (IRepositoryViewObject obj : warningObjs) {
+                if (okObjs.contains(obj)) {
+                    okObjs.remove(obj);
+                }
+            }
+
         }
 
         @Override
