@@ -64,6 +64,11 @@ public class RenameProcessAction extends AbstractRepositoryAction implements ITr
     }
 
     @Override
+    protected boolean needValidateLockedObject() {
+        return true;
+    }
+
+    @Override
     protected void doRun() {
         Object selectObj = getSelectedObject().get(0);
         if (selectObj instanceof IRepositoryViewObject) {
