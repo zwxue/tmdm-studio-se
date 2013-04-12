@@ -26,11 +26,14 @@ import org.eclipse.ui.PlatformUI;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
+import org.talend.core.model.properties.Property;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.AbstractCommand;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -100,7 +103,16 @@ public class UpdateLastServerCommand extends AbstractCommand {
     }
 
     private void saveLastServer(Item item, MDMServerDef serverDef) {
-
+        if (item.eResource() == null) {
+            try {
+                IRepositoryViewObject viewObj = factory.getLastVersion(item.getProperty().getId());
+                Property property = viewObj.getProperty();
+                item = property.getItem();
+                ContainerCacheService.put(property, viewObj);
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
         RepositoryResourceUtil.setLastServerDef(item, serverDef);
         if (!(item instanceof ProcessItem)) {
             // for common object except job
@@ -122,6 +134,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
                             return;
                         }
                     }
+
                     factory.save(item);
 
                 } catch (PersistenceException e) {
