@@ -15,13 +15,21 @@ package org.talend.mdm.repository.ui.editors;
 import java.rmi.RemoteException;
 import java.util.LinkedList;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.core.model.properties.Item;
+import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryExternalInfoHolder;
 
 import com.amalto.workbench.editors.TransformerMainPage;
@@ -43,7 +51,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     MDMServerDef lastServerDef;
     /**
      * DOC hbhong TransformerMainPage2 constructor comment.
-     * 
+     *
      * @param editor
      */
     public TransformerMainPage2(FormEditor editor) {
@@ -69,6 +77,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     }
 
+    @Override
     protected void initTransformer() throws XtentisException {
         TreeObject xObject = getXObject();
         transformer = (WSTransformerV2) xObject.getWsObject();
@@ -99,6 +108,42 @@ public class TransformerMainPage2 extends TransformerMainPage {
     }
 
     @Override
+    protected void executeProcess(FormToolkit toolkit) {
+        // if it is deployed before its execution
+        if (lastServerDef == null) {
+            MessageDialog.openWarning(null, Messages.Warning_text, Messages.RepositoryWebServiceAdapter_DeployFirst);
+            return;
+        }
+
+        super.executeProcess(toolkit);
+    }
+
+    @Override
+    protected void performSave() {
+        if (editor2.isDirty()) {
+            boolean isConfirmed = MessageDialog.openConfirm(getSite().getShell(), Messages.TransformerMainPage_ConfirmTitle,
+                    Messages.TransformerMainPage_ConfirmContent);
+
+            if (isConfirmed) {
+                editor2.doSave(new NullProgressMonitor());
+
+                DeployService deployService = DeployService.getInstance();
+                if (!deployService.isAutoDeploy()) {
+                    editor2.autoDeployProcess(deployService);
+
+                    // refresh after deploy
+                    IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+                            .findView(MDMRepositoryView.VIEW_ID);
+                    if (part != null) {
+                        MDMRepositoryView view = (MDMRepositoryView) part;
+                        view.getCommonViewer().refresh();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     protected XtentisPort getPort() {
         return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell(), lastServerDef);
     }
@@ -108,6 +153,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
         return RepositoryWebServiceAdapter.findTransformerPluginV2Detail(jndi);
     }
 
+    @Override
     protected void openTransformerDialog() {
         if (lastServerDef == null)
         setLastServerDef();

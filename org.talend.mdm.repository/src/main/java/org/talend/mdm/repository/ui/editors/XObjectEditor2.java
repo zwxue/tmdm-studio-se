@@ -17,18 +17,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
-import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
@@ -36,7 +31,6 @@ import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.ui.contributor.SvnHistorySelectionProvider;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -115,13 +109,7 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
 
                 DeployService deployService = DeployService.getInstance();
                 if (deployService.isAutoDeploy()) {
-                    IEditorInput input = getEditorInput();
-                    XObjectEditorInput2 theInput = null;
-                    if (input instanceof XObjectEditorInput2) {
-                        theInput = (XObjectEditorInput2) input;
-                    }
-                    IRepositoryViewObject viewObj = theInput.getViewObject();
-                    deployService.autoDeploy(getSite().getShell(), viewObj);
+                    autoDeployProcess(deployService);
                 } else if (serverObject.getLastServerDef() != null) {
                     CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, editorInput.getViewObject());
                 }
@@ -131,6 +119,19 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
             }
         }
         return false;
+    }
+
+    public void autoDeployProcess(DeployService deployService) {
+        if (deployService == null)
+            return;
+
+        IEditorInput input = getEditorInput();
+        XObjectEditorInput2 theInput = null;
+        if (input instanceof XObjectEditorInput2) {
+            theInput = (XObjectEditorInput2) input;
+        }
+        IRepositoryViewObject viewObj = theInput.getViewObject();
+        deployService.autoDeploy(getSite().getShell(), viewObj);
     }
 
     private void refreshDirtyCue() {
@@ -145,6 +146,7 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
 
     }
 
+    @Override
     protected void addPageForXObject(TreeObject xobject) {
         try {
             switch (xobject.getType()) {
@@ -215,7 +217,7 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.editors.XObjectEditor#addPages()
      */
     @Override
@@ -241,5 +243,5 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
         page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
     }
 
- 
+
 }

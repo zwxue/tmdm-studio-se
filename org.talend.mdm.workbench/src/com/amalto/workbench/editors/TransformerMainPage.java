@@ -231,7 +231,8 @@ public class TransformerMainPage extends AMainPageV2 {
     private Composite sequenceGroup;
 
     public TransformerMainPage(FormEditor editor) {
-        super(editor, TransformerMainPage.class.getName(), Messages.TransformerMainPage_Process + ((XObjectEditorInput) editor.getEditorInput()).getName()
+        super(editor, TransformerMainPage.class.getName(), Messages.TransformerMainPage_Process
+                + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
 
         initExternalInfoHolder();
@@ -333,7 +334,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
                                 public void run() {
                                     MessageDialog.openError(TransformerMainPage.this.getEditor().getSite().getShell(),
-                                            Messages.bind(Messages.TransformerMainPage_ErrorMsg, transformer.getName()), job.getMessage());
+                                            Messages.bind(Messages.TransformerMainPage_ErrorMsg, transformer.getName()),
+                                            job.getMessage());
 
                                 }
                             });
@@ -365,8 +367,9 @@ public class TransformerMainPage extends AMainPageV2 {
                                      * parent.editor.getEditorSite().getShell()
                                      */
                                     // Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
-                                    ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), Messages.bind(Messages.TransformerMainPage_DailogTitle
-                                            , sdf.format(new Date(System.currentTimeMillis()))), pipeline);
+                                    ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell(), Messages.bind(
+                                            Messages.TransformerMainPage_DailogTitle,
+                                            sdf.format(new Date(System.currentTimeMillis()))), pipeline);
                                     dialog.setBlockOnOpen(false);
                                     dialog.open();
                                 } catch (Exception e) {
@@ -417,7 +420,8 @@ public class TransformerMainPage extends AMainPageV2 {
              * //((WSTransformerV2)getXObject().getWsObject()) transformer.setDescription(descriptionText.getText());
              * TransformerMainPage.this.comitting= false; //markDirtyWithoutCommit(); markDirtyWithoutCommit(); } });
              */
-            desAntionComposite = new DescAnnotationComposite(Messages.TransformerMainPage_Description, " ...", toolkit, descriptionComposite, //$NON-NLS-1$
+            desAntionComposite = new DescAnnotationComposite(Messages.TransformerMainPage_Description,
+                    " ...", toolkit, descriptionComposite, //$NON-NLS-1$
                     this, false);
             desAntionComposite.getTextWidget().addModifyListener(new ModifyListener() {
 
@@ -442,34 +446,9 @@ public class TransformerMainPage extends AMainPageV2 {
                 };
 
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    try {
-                        // check if we have a step to perfom
-                        WSTransformerProcessStep[] steps = // ((WSTransformerV2)getXObject().getWsObject())
-                        transformer.getProcessSteps();
-                        if ((steps == null) || (steps.length == 0)) {
-                            MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ErrorTitle1,
-                                    Messages.TransformerMainPage_ErrorMsg1);
-                            return;
-                        }
-                        // perform save
-                        if (TransformerMainPage.this.getEditor().isDirty()) {
-                            if (MessageDialog
-                                    .openConfirm(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ConfirmTitle,
-                                            Messages.TransformerMainPage_ConfirmContent))
-                                TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
-                        }
-                        // Open form Dialog
-                        if (transformerDialog == null) {
-                            transformerDialog = new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite()
-                                    .getShell(), toolkit, getXObject(), TransformerMainPage.this);
-                            transformerDialog.create();
-                            transformerDialog.getShell().setText(Messages.TransformerMainPage_DialogTitle);
-                        }
-                        openTransformerDialog();
-                    } catch (Exception ex) {
-                        log.error(ex.getMessage(), ex);
-                    }
-                };
+                    executeProcess(toolkit);
+                }
+
             });
 
             // make the Page window a DropTarget - we need to dispose it
@@ -643,7 +622,8 @@ public class TransformerMainPage extends AMainPageV2 {
             section.setVisible(false);
 
             sequenceGroup.setLayout(new GridLayout(4, false));
-            disabledButton = toolkit.createButton((Composite) section.getClient(), Messages.TransformerMainPage_Disabled, SWT.CHECK);
+            disabledButton = toolkit.createButton((Composite) section.getClient(), Messages.TransformerMainPage_Disabled,
+                    SWT.CHECK);
             disabledButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 4, 1));
 
             specsComposite = toolkit.createComposite((Composite) section.getClient(), SWT.NULL);
@@ -731,6 +711,40 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
+    protected void executeProcess(final FormToolkit toolkit) {
+        try {
+            // check if we have a step to perfom
+            WSTransformerProcessStep[] steps = // ((WSTransformerV2)getXObject().getWsObject())
+            transformer.getProcessSteps();
+            if ((steps == null) || (steps.length == 0)) {
+                MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), Messages.TransformerMainPage_ErrorTitle1,
+                        Messages.TransformerMainPage_ErrorMsg1);
+                return;
+            }
+            // perform save
+            performSave();
+            // Open form Dialog
+            if (transformerDialog == null) {
+                transformerDialog = new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),
+                        toolkit, getXObject(), TransformerMainPage.this);
+                transformerDialog.create();
+                transformerDialog.getShell().setText(Messages.TransformerMainPage_DialogTitle);
+            }
+            openTransformerDialog();
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+    }
+
+    protected void performSave() {
+        if (getEditor().isDirty()) {
+            if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(),
+                    Messages.TransformerMainPage_ConfirmTitle, Messages.TransformerMainPage_ConfirmContent)) {
+                TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
+            }
+        }
+    }
+
     private String getXSLTFileName() {
         String xslfileExtension = ".xsl"; //$NON-NLS-1$
         String[] invalidStr = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
@@ -765,8 +779,8 @@ public class TransformerMainPage extends AMainPageV2 {
     private void setParameterEditorPageGroup(String pagegroup) {
 
         parameterEditor.setPageGroup(pagegroup);
-        parameterEditor.addPage(new ExtensibleContentEditorPageDescription(Messages.TransformerMainPage_Source, Integer.MAX_VALUE,
-                new ExtensibleTextContentEditorPageCreator(), false));
+        parameterEditor.addPage(new ExtensibleContentEditorPageDescription(Messages.TransformerMainPage_Source,
+                Integer.MAX_VALUE, new ExtensibleTextContentEditorPageCreator(), false));
 
     }
 
@@ -938,8 +952,8 @@ public class TransformerMainPage extends AMainPageV2 {
         if (arg != null && (arg == stepsList || arg == stepWidget.inputViewer || arg == stepWidget.outputViewer)) {
             int index = stepsList.getSelectionIndices()[0];
             String stepName = stepsList.getItem(index);
-            InputDialog id = new InputDialog(this.getSite().getShell(), Messages.TransformerMainPage_Rename, Messages.TransformerMainPage_InputDialogTitle, stepName,
-                    new IInputValidator() {
+            InputDialog id = new InputDialog(this.getSite().getShell(), Messages.TransformerMainPage_Rename,
+                    Messages.TransformerMainPage_InputDialogTitle, stepName, new IInputValidator() {
 
                         public String isValid(String newText) {
                             if ((newText == null) || newText.length() == 0)
@@ -1069,7 +1083,7 @@ public class TransformerMainPage extends AMainPageV2 {
     public boolean beforeDoSave() {
         String processName = getXObject().getName();
 
-        if(processName.startsWith("beforeSaving_")) {//$NON-NLS-1$
+        if (processName.startsWith("beforeSaving_")) {//$NON-NLS-1$
             boolean has = false;
 
             WSTransformerProcessStep processStep = stepWidget.getProcessStep();
@@ -1272,7 +1286,8 @@ public class TransformerMainPage extends AMainPageV2 {
         private boolean isExist(java.util.List<WSTransformerVariablesMapping> list, String parameterName) {
             for (WSTransformerVariablesMapping map : list) {
                 if (map.getPluginVariable().equals(parameterName)) {
-                    MessageDialog.openInformation(null, "", Messages.bind(Messages.TransformerMainPage_InfoContent, parameterName)); //$NON-NLS-1$
+                    MessageDialog.openInformation(null,
+                            "", Messages.bind(Messages.TransformerMainPage_InfoContent, parameterName)); //$NON-NLS-1$
                     return true;
                 }
             }
@@ -1284,7 +1299,8 @@ public class TransformerMainPage extends AMainPageV2 {
             inputComposite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 1, 1));
             inputComposite.setLayout(new GridLayout(3, false));
 
-            LabelCombo inputV = new LabelCombo(toolkit, inputComposite, Messages.TransformerMainPage_InputVariables, SWT.BORDER, 1);
+            LabelCombo inputV = new LabelCombo(toolkit, inputComposite, Messages.TransformerMainPage_InputVariables, SWT.BORDER,
+                    1);
             inputVariables = inputV.getCombo();
             inputVariables.addKeyListener(variableListener);
             inputVariables.getTabList()[0].addMouseTrackListener(mouseListener);
@@ -1322,7 +1338,8 @@ public class TransformerMainPage extends AMainPageV2 {
                     markDirtyWithoutCommit();
                 }
             });
-            LabelCombo inputP = new LabelCombo(toolkit, inputComposite, Messages.TransformerMainPage_InputParameters, SWT.BORDER | SWT.READ_ONLY, 1);
+            LabelCombo inputP = new LabelCombo(toolkit, inputComposite, Messages.TransformerMainPage_InputParameters, SWT.BORDER
+                    | SWT.READ_ONLY, 1);
             inputParams = inputP.getCombo();
 
             // create table
@@ -1338,7 +1355,8 @@ public class TransformerMainPage extends AMainPageV2 {
             outputComposite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 1, 1));
             outputComposite.setLayout(new GridLayout(3, false));
 
-            LabelCombo outputP = new LabelCombo(toolkit, outputComposite, Messages.TransformerMainPage_OutputParameters, SWT.BORDER | SWT.READ_ONLY, 1);
+            LabelCombo outputP = new LabelCombo(toolkit, outputComposite, Messages.TransformerMainPage_OutputParameters,
+                    SWT.BORDER | SWT.READ_ONLY, 1);
             outputParams = outputP.getCombo();
 
             outputLinkButton = toolkit.createButton(outputComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
@@ -1374,7 +1392,8 @@ public class TransformerMainPage extends AMainPageV2 {
                     markDirtyWithoutCommit();
                 }
             });
-            LabelCombo outputV = new LabelCombo(toolkit, outputComposite, Messages.TransformerMainPage_OutputVariables, SWT.BORDER, 1);
+            LabelCombo outputV = new LabelCombo(toolkit, outputComposite, Messages.TransformerMainPage_OutputVariables,
+                    SWT.BORDER, 1);
             outputVariables = outputV.getCombo();
             outputVariables.addKeyListener(variableListener);
             outputVariables.addMouseTrackListener(mouseListener);
@@ -1472,8 +1491,6 @@ public class TransformerMainPage extends AMainPageV2 {
 
         }
 
-
-
         public void create() throws Exception {
             mainComposite = toolkit.createComposite(parent, SWT.BORDER);
             mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 4, 1));
@@ -1554,6 +1571,7 @@ public class TransformerMainPage extends AMainPageV2 {
                 : TRANSFORMER_PLUGIN + jndi, "en")); //$NON-NLS-1$
         return details;
     }
+
     protected void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
 
         ArrayList<ExternalInfoHolder<?>> externalInfoHolders = new ArrayList<ExternalInfoHolder<?>>();

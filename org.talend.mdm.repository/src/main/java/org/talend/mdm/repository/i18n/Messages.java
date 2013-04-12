@@ -22,6 +22,10 @@ public class Messages extends NLS {
 
     public static final String KEY_NOT_FOUND_SUFFIX = "!!!"; //$NON-NLS-1$
 
+    public static String TransformerMainPage_ConfirmTitle;
+
+    public static String TransformerMainPage_ConfirmContent;
+
     public static String Warning;
 
     public static String _CamelProcessItem;
