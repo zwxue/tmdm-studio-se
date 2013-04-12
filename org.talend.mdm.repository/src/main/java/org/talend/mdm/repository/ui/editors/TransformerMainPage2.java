@@ -110,6 +110,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     @Override
     protected void executeProcess(FormToolkit toolkit) {
         // if it is deployed before its execution
+        setLastServerDef();
         if (lastServerDef == null) {
             MessageDialog.openWarning(null, Messages.Warning_text, Messages.RepositoryWebServiceAdapter_DeployFirst);
             return;
@@ -145,19 +146,13 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     @Override
     protected XtentisPort getPort() {
+        setLastServerDef();
         return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell(), lastServerDef);
     }
 
     @Override
     protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) throws RemoteException {
         return RepositoryWebServiceAdapter.findTransformerPluginV2Detail(jndi);
-    }
-
-    @Override
-    protected void openTransformerDialog() {
-        if (lastServerDef == null)
-        setLastServerDef();
-        super.openTransformerDialog();
     }
 
     private void setLastServerDef() {
