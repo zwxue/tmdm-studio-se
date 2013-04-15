@@ -195,7 +195,7 @@
             class="org.talend.mdm.repository.ui.views.MDMProblemView"
             icon="icons/problems_view.gif"
             id="org.talend.mdm.repository.ui.views.MDMProblemView"
-            name="MDM Problem"
+            name="MDM Problems"
             restorable="true">
       </view>
    </extension>
