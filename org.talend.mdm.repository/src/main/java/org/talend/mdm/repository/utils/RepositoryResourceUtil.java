@@ -649,6 +649,25 @@ public class RepositoryResourceUtil {
         return null;
     }
 
+    public static IRepositoryViewObject findViewObjectByReferenceResource(ERepositoryObjectType type, IFile file) {
+        String name = file.getName();
+        String ext = file.getFileExtension();
+        List<IRepositoryViewObject> viewObjects = findAllViewObjectsWithDeleted(type);
+        if (viewObjects != null) {
+            for (IRepositoryViewObject viewObj : viewObjects) {
+                Property property = viewObj.getProperty();
+                if (property != null) {
+                    String fileName = ResourceFilenameHelper.getExpectedFileName(property.getLabel(), property.getVersion())
+                            + DOT + ext;
+                    if (fileName != null && fileName.equals(name)) {
+                        return viewObj;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem) {
         return findViewObjects(type, parentItem, true);
     }
