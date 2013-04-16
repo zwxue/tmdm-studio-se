@@ -171,7 +171,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
         for (Entry<ERepositoryObjectType, List<IStatus>> entry : map.entrySet()) {
             ERepositoryObjectType key = entry.getKey();
             MultiStatus submultiStatus = new DeployCategoryStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, Messages.bind(
-                    Messages.MultiStatusDialog_MultiStatus_Messages, key.getKey()), null);
+                    Messages.MultiStatusDialog_MultiStatus_Messages, key.getLabel()), null);
             for (IStatus status : entry.getValue()) {
                 submultiStatus.add(status);
             }
