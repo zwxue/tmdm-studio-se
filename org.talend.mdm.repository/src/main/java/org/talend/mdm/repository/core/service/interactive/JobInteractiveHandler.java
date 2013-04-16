@@ -46,6 +46,8 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class JobInteractiveHandler extends AbstractInteractiveHandler {
 
+    private RuntimeException deployException;
+
     public ERepositoryObjectType getRepositoryObjectType() {
         return ERepositoryObjectType.PROCESS;
     }
@@ -59,8 +61,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
 
     @Override
     public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
-        result = false;
-        deployCancelled = false;
+        setToDefaultValue();
 
         if (cmd instanceof BatchDeployJobCommand) {
             BatchDeployJobCommand deployJobCommand = (BatchDeployJobCommand) cmd;
@@ -102,11 +103,14 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         if (deployCancelled)
             throw new OperationCanceledException();
 
+        if (deployException != null)
+            throw deployException;
+
         return result;
     }
 
     private void setException(RuntimeException re) {
-        throw re;
+        this.deployException = re;
     }
 
     private boolean result = false;
@@ -161,5 +165,11 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         Util.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());
 
         return true;
+    }
+    
+    private void setToDefaultValue() {
+        result = false;
+        deployCancelled = false;
+        deployException = null;
     }
 }

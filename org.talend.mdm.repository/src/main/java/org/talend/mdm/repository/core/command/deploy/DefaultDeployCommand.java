@@ -17,7 +17,6 @@ import java.rmi.RemoteException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.swt.SWTException;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
@@ -60,8 +59,7 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
             } catch (XtentisException e) {
                 return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, e);
             } catch (RuntimeException e) {
-                SWTException cause = (SWTException) e.getCause();
-                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, (Exception) cause.getCause());
+                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, (Exception) e.getCause());
             }
         } else {
             return DeployStatus.getErrorStatus(this, Messages.bind(Messages.Deploy_notSupport_text, objectName));
