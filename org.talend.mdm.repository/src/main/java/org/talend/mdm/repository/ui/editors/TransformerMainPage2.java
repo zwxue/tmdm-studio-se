@@ -17,11 +17,15 @@ import java.util.LinkedList;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.command.CommandStack;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
@@ -48,7 +52,6 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     XObjectEditor2 editor2;
 
-    MDMServerDef lastServerDef;
     /**
      * DOC hbhong TransformerMainPage2 constructor comment.
      *
@@ -57,7 +60,6 @@ public class TransformerMainPage2 extends TransformerMainPage {
     public TransformerMainPage2(FormEditor editor) {
         super(editor);
         this.editor2 = (XObjectEditor2) editor;
-        setLastServerDef();
     }
 
     @Override
@@ -110,8 +112,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     @Override
     protected void executeProcess(FormToolkit toolkit) {
         // if it is deployed before its execution
-        setLastServerDef();
-        if (lastServerDef == null) {
+        if (getLastServerDef() == null) {
             MessageDialog.openWarning(null, Messages.Warning_text, Messages.RepositoryWebServiceAdapter_DeployFirst);
             return;
         }
@@ -121,11 +122,10 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     @Override
     protected void performSave() {
-        if (editor2.isDirty()) {
-            boolean isConfirmed = MessageDialog.openConfirm(getSite().getShell(), Messages.TransformerMainPage_ConfirmTitle,
-                    Messages.TransformerMainPage_ConfirmContent);
+        if (editor2.isDirty() || isReferedViewObjModified()) {
 
-            if (isConfirmed) {
+            boolean isConfirmedToDeploy = openConfirmDialog();
+            if (isConfirmedToDeploy) {
                 editor2.doSave(new NullProgressMonitor());
 
                 DeployService deployService = DeployService.getInstance();
@@ -133,21 +133,28 @@ public class TransformerMainPage2 extends TransformerMainPage {
                     editor2.autoDeployProcess(deployService);
 
                     // refresh after deploy
-                    IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-                            .findView(MDMRepositoryView.VIEW_ID);
-                    if (part != null) {
-                        MDMRepositoryView view = (MDMRepositoryView) part;
-                        view.getCommonViewer().refresh();
+                    MDMRepositoryView view = MDMRepositoryView.show();
+                    if (view != null) {
+                        view.refreshRootNode(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
                     }
                 }
             }
         }
     }
 
+    private boolean openConfirmDialog() {
+        String msg = null;
+        if (editor2.isDirty())
+            msg = Messages.TransformerMainPage_ConfirmContent;
+        else
+            msg = Messages.TransformerMainPage_ConfirmContent1;
+
+        return MessageDialog.openConfirm(getSite().getShell(), Messages.TransformerMainPage_ConfirmTitle, msg);
+    }
+
     @Override
     protected XtentisPort getPort() {
-        setLastServerDef();
-        return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell(), lastServerDef);
+        return RepositoryWebServiceAdapter.getXtentisPort(getSite().getShell(), getLastServerDef());
     }
 
     @Override
@@ -155,11 +162,27 @@ public class TransformerMainPage2 extends TransformerMainPage {
         return RepositoryWebServiceAdapter.findTransformerPluginV2Detail(jndi);
     }
 
-    private void setLastServerDef() {
+    private MDMServerDef getLastServerDef() {
         XObjectEditorInput2 input = (XObjectEditorInput2) editor2.getEditorInput();
         Item item = input.getInputItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-        lastServerDef = serverObject.getLastServerDef();
+        MDMServerDef lastServerDef = serverObject.getLastServerDef();
+
+        return lastServerDef;
     }
 
+    private boolean isReferedViewObjModified() {
+        IEditorInput editorInput = editor2.getEditorInput();
+        IRepositoryViewObject viewObj = (IRepositoryViewObject) editorInput.getAdapter(IRepositoryViewObject.class);
+        CommandStack stack = CommandManager.getInstance().findCommandStack(viewObj.getId());
+        if (stack != null) {
+            ICommand command = stack.getValidDeployCommand();
+            switch (command.getCommandType()) {
+            case ICommand.CMD_MODIFY:
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -61,6 +61,7 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
         version = viewObject.getVersion();
     }
 
+    @Override
     public String getToolTipText() {
         TreeObject xobject = (TreeObject) getModel();
         return TreeObject.getTypeName(xobject.getType()) + " - "//$NON-NLS-1$
@@ -94,7 +95,7 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.providers.XObjectEditorInput#getAdapter(java.lang.Class)
      */
     @Override
@@ -102,6 +103,11 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
         if (Boolean.class == adapter) {
             return new Boolean(isReadOnly());
         }
+
+        if (adapter == IRepositoryViewObject.class) {
+            return viewObject;
+        }
+
         return super.getAdapter(adapter);
     }
 
