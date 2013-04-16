@@ -36,7 +36,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -48,13 +47,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.IService;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
@@ -75,7 +72,7 @@ import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class ServerExplorer extends ViewPart {
 
@@ -117,7 +114,7 @@ public class ServerExplorer extends ViewPart {
 
     /**
      * Create contents of the view part.
-     *
+     * 
      * @param parent
      */
     @Override
@@ -147,7 +144,6 @@ public class ServerExplorer extends ViewPart {
         treeViewer.setContentProvider(new TreeContentProvider());
         treeViewer.setLabelProvider(new ViewerLabelProvider());
 
-        createActions();
         initializeToolBar();
         initializeMenu();
 
@@ -175,16 +171,7 @@ public class ServerExplorer extends ViewPart {
     @Override
     public void dispose() {
         toolkit.dispose();
-        treeViewer.removeSelectionChangedListener(showConsoleAction);
         super.dispose();
-    }
-
-    /**
-     * Create the actions.
-     */
-    private void createActions() {
-        showConsoleAction = new ShowConsoleAction();
-        treeViewer.addSelectionChangedListener(showConsoleAction);
     }
 
     /**
@@ -209,8 +196,7 @@ public class ServerExplorer extends ViewPart {
         eventManagerAction = new EventManageAction();
         menuManager.add(eventManagerAction);
         menuManager.add(new RefreshServerCacheAction());
-        menuManager.add(showConsoleAction);
-
+        menuManager.add(new ShowConsoleAction());
         // Context
         Menu contextMenu = menuManager.createContextMenu(tree);
 
@@ -222,8 +208,9 @@ public class ServerExplorer extends ViewPart {
 
     @Override
     public void setFocus() {
-        if (treeViewer != null)
+        if (treeViewer != null) {
             treeViewer.getTree().setFocus();
+        }
 
         refreshServerDefs();
     }
@@ -240,8 +227,9 @@ public class ServerExplorer extends ViewPart {
         IWorkbenchPage page = getViewSite().getPage();
         ServerView serverView = (ServerView) page.findView(ServerView.VIEW_ID);
 
-        if (serverView == null)
+        if (serverView == null) {
             return;
+        }
         if (serverView != null) {
             serverView.initView();
             serverView.getViewer().collapseAll();
@@ -478,37 +466,39 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
-    private class ShowConsoleAction extends BaseSelectionListenerAction {
+    private class ShowConsoleAction extends Action {
 
         public ShowConsoleAction() {
             super(Messages.ServerExplorer_ViewLogAction_Text);
-            setEnabled(false);
+
         }
 
-        @Override
-        protected boolean updateSelection(IStructuredSelection selection) {
-            return getSelectedServerDef(selection) != null;
-        }
-
-        private MDMServerDef getSelectedServerDef(IStructuredSelection selection) {
-            if (selection.isEmpty()) {
-                return null;
-            }
-            Object ele = selection.getFirstElement();
-            if (!(ele instanceof IRepositoryViewObject)) {
-                return null;
-            }
-            Item item = ((IRepositoryViewObject) ele).getProperty().getItem();
-            if (!(item instanceof MDMServerDefItem)) {
-                return null;
-            }
-            return ((MDMServerDefItem) item).getServerDef();
-        }
+        //
+        // private MDMServerDef getSelectedServerDef(IStructuredSelection selection) {
+        // if (selection.isEmpty()) {
+        // return null;
+        // }
+        // Object ele = selection.getFirstElement();
+        // if (!(ele instanceof IRepositoryViewObject)) {
+        // return null;
+        // }
+        // Item item = ((IRepositoryViewObject) ele).getProperty().getItem();
+        // if (!(item instanceof MDMServerDefItem)) {
+        // return null;
+        // }
+        // return ((MDMServerDefItem) item).getServerDef();
+        // }
 
         @Override
         public void run() {
-            MDMServerDef selectedServerDef = getSelectedServerDef(getStructuredSelection());
-            new MDMServerConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
+            IRepositoryViewObject viewObject = getCurSelectedViewObject();
+            if (viewObject != null) {
+                MDMServerDefItem serverDefItem = getMDMItem(viewObject);
+                MDMServerDef selectedServerDef = serverDefItem.getServerDef();
+                if (selectedServerDef != null) {
+                    new MDMServerConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
+                }
+            }
         }
     }
 }
