@@ -122,22 +122,31 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     @Override
     protected void performSave() {
-        if (editor2.isDirty() || isReferedViewObjModified()) {
-
+        if (editor2.isDirty()) {
             boolean isConfirmedToDeploy = openConfirmDialog();
+
             if (isConfirmedToDeploy) {
                 editor2.doSave(new NullProgressMonitor());
 
-                DeployService deployService = DeployService.getInstance();
-                if (!deployService.isAutoDeploy()) {
-                    editor2.autoDeployProcess(deployService);
+                deployAndRefresh();
+            }
+        } else if (isReferedViewObjModified()) {
+            boolean isConfirmedToDeploy = openConfirmDialog();
+            if (isConfirmedToDeploy) {
+                deployAndRefresh();
+            }
+        }
+    }
 
-                    // refresh after deploy
-                    MDMRepositoryView view = MDMRepositoryView.show();
-                    if (view != null) {
-                        view.refreshRootNode(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
-                    }
-                }
+    private void deployAndRefresh() {
+        DeployService deployService = DeployService.getInstance();
+        if (!deployService.isAutoDeploy()) {
+            editor2.autoDeployProcess(deployService);
+
+            // refresh after deploy
+            MDMRepositoryView view = MDMRepositoryView.show();
+            if (view != null) {
+                view.refreshRootNode(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
             }
         }
     }
@@ -173,13 +182,15 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     private boolean isReferedViewObjModified() {
         IEditorInput editorInput = editor2.getEditorInput();
-        IRepositoryViewObject viewObj = (IRepositoryViewObject) editorInput.getAdapter(IRepositoryViewObject.class);
-        CommandStack stack = CommandManager.getInstance().findCommandStack(viewObj.getId());
-        if (stack != null) {
-            ICommand command = stack.getValidDeployCommand();
-            switch (command.getCommandType()) {
-            case ICommand.CMD_MODIFY:
-                return true;
+        if (editorInput instanceof XObjectEditorInput2) {
+            XObjectEditorInput2 editorInput2 = (XObjectEditorInput2) editorInput;
+            IRepositoryViewObject viewObj = editorInput2.getViewObject();
+            CommandStack stack = CommandManager.getInstance().findCommandStack(viewObj.getId());
+            if (stack != null) {
+                ICommand command = stack.getValidDeployCommand();
+                if (command.getCommandType() == ICommand.CMD_MODIFY) {
+                    return true;
+                }
             }
         }
 

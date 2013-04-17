@@ -104,10 +104,6 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
             return new Boolean(isReadOnly());
         }
 
-        if (adapter == IRepositoryViewObject.class) {
-            return viewObject;
-        }
-
         return super.getAdapter(adapter);
     }
 
