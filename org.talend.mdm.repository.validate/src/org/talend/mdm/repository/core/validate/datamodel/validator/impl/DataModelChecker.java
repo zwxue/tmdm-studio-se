@@ -176,7 +176,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                         message,
                         "key", // TODO
                         dataModelName, lineNumber, columnNumber, group, element,
-                        getEntityName(field), null, getPath(field));
+                        getEntityName(field), getEntityName(field), getPath(field));
                 addMessage(lineNumber, columnNumber, error, validationMessage);
                 errorCount++;
             }
@@ -208,7 +208,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                     message,
                     "key", // TODO
                     dataModelName, lineNumber, columnNumber, group, element,
-                    getEntityName(field), null, getPath(field));
+                    getEntityName(field), getEntityName(field), getPath(field));
             addMessage(lineNumber, columnNumber, error, validationMessage);
         }
 
