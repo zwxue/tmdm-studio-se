@@ -170,10 +170,12 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         public void error(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber,
                 ValidationError error) {
             if (error != ValidationError.XML_SCHEMA) {
+                int group = field.getContainingType().isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
+                        : IComponentValidationRule.MSG_GROUP_TYPE;
                 ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                         message,
                         "key", // TODO
-                        dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ELEMENT, element,
+                        dataModelName, lineNumber, columnNumber, group, element,
                         getEntityName(field), null, getPath(field));
                 addMessage(lineNumber, columnNumber, error, validationMessage);
                 errorCount++;
@@ -200,10 +202,12 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         @Override
         public void warning(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber,
                 ValidationError error) {
+            int group = field.getContainingType().isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
+                                    : IComponentValidationRule.MSG_GROUP_TYPE;
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
                     message,
                     "key", // TODO
-                    dataModelName, lineNumber, columnNumber, IComponentValidationRule.MSG_GROUP_ELEMENT, element,
+                    dataModelName, lineNumber, columnNumber, group, element,
                     getEntityName(field), null, getPath(field));
             addMessage(lineNumber, columnNumber, error, validationMessage);
         }
