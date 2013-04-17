@@ -473,22 +473,6 @@ public class ServerExplorer extends ViewPart {
 
         }
 
-        //
-        // private MDMServerDef getSelectedServerDef(IStructuredSelection selection) {
-        // if (selection.isEmpty()) {
-        // return null;
-        // }
-        // Object ele = selection.getFirstElement();
-        // if (!(ele instanceof IRepositoryViewObject)) {
-        // return null;
-        // }
-        // Item item = ((IRepositoryViewObject) ele).getProperty().getItem();
-        // if (!(item instanceof MDMServerDefItem)) {
-        // return null;
-        // }
-        // return ((MDMServerDefItem) item).getServerDef();
-        // }
-
         @Override
         public void run() {
             IRepositoryViewObject viewObject = getCurSelectedViewObject();
