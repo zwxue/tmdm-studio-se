@@ -35,6 +35,15 @@ public abstract class AbstractBridgeRepositoryAction extends AbstractRepositoryA
 
     private ISelectionProvider selectionProvider;
 
+    /**
+     * Getter for selectionProvider.
+     * 
+     * @return the selectionProvider
+     */
+    public ISelectionProvider getSelectionProvider() {
+        return this.selectionProvider;
+    }
+
     public AbstractBridgeRepositoryAction(String name) {
         super(name);
         selectionProvider = new RepositoryViewSelectionProvider(this);
@@ -49,6 +58,7 @@ public abstract class AbstractBridgeRepositoryAction extends AbstractRepositoryA
 
     }
 
+    @Override
     protected void doRun() {
         contextAction.run();
     }

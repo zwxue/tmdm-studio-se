@@ -902,7 +902,7 @@ public class RepositoryResourceUtil {
         ERepositoryObjectType repObjType = viewObj.getRepositoryObjectType();
         RepositoryNode node = new MDMRepositoryNode(viewObj, null, type);
 
-        node.setProperties(EProperties.LABEL, repObjType);
+        node.setProperties(EProperties.LABEL, viewObj.getLabel());
         node.setProperties(EProperties.CONTENT_TYPE, repObjType);
 
         addChildrenToNode(viewObj, node);

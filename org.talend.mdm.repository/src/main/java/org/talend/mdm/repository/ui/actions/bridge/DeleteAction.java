@@ -12,15 +12,23 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.bridge;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.utils.RepositoryNodeDeleteManager;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.repository.model.ERepositoryStatus;
+import org.talend.repository.model.IRepositoryNode;
+import org.talend.repository.model.ItemReferenceBean;
+import org.talend.repository.ui.actions.DeleteActionCache;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -39,20 +47,42 @@ public class DeleteAction extends AbstractBridgeRepositoryAction {
 
     @Override
     protected void doRun() {
+
         super.doRun();
         commonViewer.refresh();
-
-        List<Object> selectedObject = getSelectedObject();
-        for (Object obj : selectedObject) {
-            if (obj instanceof IRepositoryViewObject) {
-                IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+        List<IRepositoryNode> remainNodes = getRemainNodes();
+        if (!remainNodes.isEmpty()) {
+            for (IRepositoryNode node : remainNodes) {
+                IRepositoryViewObject viewObj = node.getObject();
                 if (viewObj instanceof FolderRepositoryObject) {
                     removeFolderObject(viewObj);
                 } else {
                     removeServerObject(viewObj);
                 }
+
             }
         }
+    }
+
+    private List<IRepositoryNode> getRemainNodes() {
+        ISelection selection = getSelectionProvider().getSelection();
+        List<IRepositoryNode> nodes = new LinkedList<IRepositoryNode>();
+        if (!selection.isEmpty()) {
+
+            for (Iterator il = ((IStructuredSelection) selection).iterator(); il.hasNext();) {
+                IRepositoryNode node = (IRepositoryNode) il.next();
+                nodes.add(node);
+            }
+
+            final DeleteActionCache deleteActionCache = DeleteActionCache.getInstance();
+            deleteActionCache.setGetAlways(false);
+            deleteActionCache.setDocRefresh(false);
+            deleteActionCache.createRecords();
+            final List<ItemReferenceBean> unDeleteItems = RepositoryNodeDeleteManager.getInstance().getUnDeleteItems(nodes,
+                    deleteActionCache);
+
+        }
+        return nodes;
     }
 
     private void removeFolderObject(IRepositoryViewObject viewObj) {
