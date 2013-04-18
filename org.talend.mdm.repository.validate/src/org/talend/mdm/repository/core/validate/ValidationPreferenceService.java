@@ -54,7 +54,7 @@ public class ValidationPreferenceService implements IValidationPerferenceConstan
     }
 
     public int getDeployActionWhenValidateFail() {
-        getPreferenceStore().setDefault(DEPLOY_WAY_WHEN_VALIDATE_FAIL, IModelValidationService.BUTTON_CANCEL);
+        getPreferenceStore().setDefault(DEPLOY_WAY_WHEN_VALIDATE_FAIL, IModelValidationService.BUTTON_SKIP_ERROR);
         return getPreferenceStore().getInt(DEPLOY_WAY_WHEN_VALIDATE_FAIL);
     }
 

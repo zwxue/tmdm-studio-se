@@ -53,6 +53,7 @@ import org.talend.mdm.repository.ui.dialogs.ValidationResultDialog;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.ui.views.MDMProblemView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.UIUtil;
 import org.talend.repository.ProjectManager;
 
 /**
@@ -173,8 +174,9 @@ public class MDMValidationRunner extends WorkspaceJob {
             }
 
             toValidate.put(project, files);
-            lockDirtyDialog = new LockedDirtyObjectDialog(null, Messages.MDMValidationRunner_promptToSaveEditors, viewObjs);
-
+            if (UIUtil.isWorkInUI()) {
+                lockDirtyDialog = new LockedDirtyObjectDialog(null, Messages.MDMValidationRunner_promptToSaveEditors, viewObjs);
+            }
         }
     }
 
@@ -185,7 +187,7 @@ public class MDMValidationRunner extends WorkspaceJob {
      */
     @Override
     public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-        if (lockDirtyDialog.needShowDialog()) {
+        if (UIUtil.isWorkInUI() && lockDirtyDialog.needShowDialog()) {
             Display.getDefault().syncExec(new Runnable() {
 
                 @Override
@@ -238,22 +240,24 @@ public class MDMValidationRunner extends WorkspaceJob {
     }
 
     private void activeProblemView(ValidationResultSummary result) {
-        if (result.getSeverityError() > 0 || result.getSeverityWarning() > 0 || result.getSeverityInfo() > 0) {
-            Display.getDefault().asyncExec(new Runnable() {
+        if (UIUtil.isWorkInUI()) {
+            if (result.getSeverityError() > 0 || result.getSeverityWarning() > 0 || result.getSeverityInfo() > 0) {
+                Display.getDefault().asyncExec(new Runnable() {
 
-                @Override
-                public void run() {
-                    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                    if (page != null) {
-                        try {
-                            page.showView(MDMProblemView.VIEW_ID);
-                        } catch (PartInitException e) {
-                            log.error(e.getMessage(), e);
+                    @Override
+                    public void run() {
+                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                        if (page != null) {
+                            try {
+                                page.showView(MDMProblemView.VIEW_ID);
+                            } catch (PartInitException e) {
+                                log.error(e.getMessage(), e);
+                            }
                         }
-                    }
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 }
