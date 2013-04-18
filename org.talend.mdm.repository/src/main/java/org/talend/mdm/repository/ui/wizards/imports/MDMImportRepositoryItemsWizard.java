@@ -79,6 +79,7 @@ import org.talend.repository.imports.ResourcesManagerFactory;
 
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
 import com.amalto.workbench.export.ImportItemsWizard;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 /**
@@ -273,11 +274,13 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                 MDMRepositoryView.show().getCommonViewer().refresh();
             }
         });
-        // sync workflow object to bonita
-        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
-                ISyncWorkflowService.class);
-        if (syncService != null) {
-            syncService.startSyncWorkflowTask();
+        if (Util.IsEnterPrise()) {
+            // sync workflow object to bonita
+            ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
+                    ISyncWorkflowService.class);
+            if (syncService != null) {
+                syncService.startSyncWorkflowTask();
+            }
         }
     }
 

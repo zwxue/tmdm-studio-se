@@ -152,7 +152,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.jface.wizard.Wizard#performFinish()
      */
     @Override
@@ -206,7 +206,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getFileInfo".
-     *
+     * 
      * @param input
      * @return // dirName result[0] // fileQName result[1] // fileExtension result[2] // fileName result[3] // version
      * result[4]
@@ -355,7 +355,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "handlePictureResourceObject".
-     *
+     * 
      * @param treeObj
      * @throws IOException
      */
@@ -508,7 +508,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC jsxie Comment method "caculatePath". if it is process or trigger ,cut the path prefix.
-     *
+     * 
      * @param treeObj
      * @return the tree object path.
      */
@@ -620,7 +620,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getVersion".
-     *
+     * 
      * @param treeObj
      * @return
      */
@@ -641,7 +641,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getUniqueName".
-     *
+     * 
      * @param treeObj
      * @return
      */
@@ -666,7 +666,7 @@ public class ImportServerObjectWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "handlePath".
-     *
+     * 
      * @param itemState
      * @param type
      */
@@ -681,7 +681,7 @@ public class ImportServerObjectWizard extends Wizard {
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
@@ -692,11 +692,13 @@ public class ImportServerObjectWizard extends Wizard {
                     // isOverrideAll = btnOverwrite.getSelection();
                     doImport(selectedObjects, monitor);
                     commonViewer.refresh();
-                    // sync workflow object to bonita
-                    ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
-                            ISyncWorkflowService.class);
-                    if (syncService != null) {
-                        syncService.startSyncWorkflowTask();
+                    if (Util.IsEnterPrise()) {
+                        // sync workflow object to bonita
+                        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
+                                ISyncWorkflowService.class);
+                        if (syncService != null) {
+                            syncService.startSyncWorkflowTask();
+                        }
                     }
                     return Status.OK_STATUS;
                 }
@@ -742,7 +744,7 @@ public class ImportServerObjectWizard extends Wizard {
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         public void run(IProgressMonitor m) throws InvocationTargetException, InterruptedException {
@@ -844,7 +846,7 @@ public class ImportServerObjectWizard extends Wizard {
 
                 /*
                  * (non-Javadoc)
-                 *
+                 * 
                  * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
                  */
                 @Override

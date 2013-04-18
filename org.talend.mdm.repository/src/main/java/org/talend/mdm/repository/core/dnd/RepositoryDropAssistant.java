@@ -71,6 +71,8 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import com.amalto.workbench.utils.Util;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -327,14 +329,14 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                                 file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
                             }
                             file.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
-
-                            ISyncWorkflowService service = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
-                                    ISyncWorkflowService.class);
-                            newName = newName.replace("#", "$"); //$NON-NLS-1$//$NON-NLS-2$
-                            if (service != null) {
-                                service.updateWorkflowContent(name, newName, file);
+                            if (Util.IsEnterPrise()) {
+                                ISyncWorkflowService service = (ISyncWorkflowService) GlobalServiceRegister.getDefault()
+                                        .getService(ISyncWorkflowService.class);
+                                newName = newName.replace("#", "$"); //$NON-NLS-1$//$NON-NLS-2$
+                                if (service != null) {
+                                    service.updateWorkflowContent(name, newName, file);
+                                }
                             }
-
                             return true;
                         } catch (CoreException e) {
                             log.error(e.getMessage(), e);
