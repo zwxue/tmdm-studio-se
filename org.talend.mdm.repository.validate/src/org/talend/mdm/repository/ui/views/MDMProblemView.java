@@ -276,7 +276,6 @@ public class MDMProblemView extends MarkerSupportView implements IValidationMark
     private void openDataModel(String modelName, IMarker marker) {
         IRepositoryViewObject viewObj = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL,
                 modelName);
-        viewObj.getProperty().getItem().getReferenceResources();
         OpenObjectAction openAction = new OpenObjectAction();
 
         openAction.openMarker(viewObj, marker);
