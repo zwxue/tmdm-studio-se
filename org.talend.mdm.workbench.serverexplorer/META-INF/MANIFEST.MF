@@ -26,9 +26,9 @@ Export-Package: org.talend.mdm.workbench.serverexplorer.core,
  org.talend.mdm.workbench.serverexplorer.ui.actions,
  org.talend.mdm.workbench.serverexplorer.ui.dialogs,
  org.talend.mdm.workbench.serverexplorer.ui.views
-Import-Package: org.apache.http,
- org.apache.http.auth,
- org.apache.http.client,
- org.apache.http.client.methods,
- org.apache.http.impl,
- org.apache.http.impl.client
+Import-Package: org.apache.http;version="[4.0.0,4.0.0]",
+ org.apache.http.auth;version="4.0.0",
+ org.apache.http.client;version="4.0.0",
+ org.apache.http.client.methods;version="4.0.0",
+ org.apache.http.impl;version="[4.0.0,4.0.0]",
+ org.apache.http.impl.client;version="4.0.0"
