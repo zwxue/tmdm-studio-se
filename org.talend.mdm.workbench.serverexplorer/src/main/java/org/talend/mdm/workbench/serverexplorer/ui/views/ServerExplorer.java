@@ -21,7 +21,10 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.ui.views;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +39,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -72,7 +77,7 @@ import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class ServerExplorer extends ViewPart {
 
@@ -97,16 +102,10 @@ public class ServerExplorer extends ViewPart {
 
     private AddServerDefAction addServerDefAction;
 
-    private ShowConsoleAction showConsoleAction;
+    private List<Action> allActions = new LinkedList<Action>();
 
     public AddServerDefAction getAddServerDefAction() {
         return this.addServerDefAction;
-    }
-
-    private EventManageAction eventManagerAction;
-
-    public EventManageAction getEventManageAction() {
-        return this.eventManagerAction;
     }
 
     public ServerExplorer() {
@@ -114,7 +113,7 @@ public class ServerExplorer extends ViewPart {
 
     /**
      * Create contents of the view part.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -185,18 +184,12 @@ public class ServerExplorer extends ViewPart {
      * Initialize the menu.
      */
     private void initializeMenu() {
+        initActions();
 
         // Adds root context menu
-        MenuManager menuManager = new MenuManager();
-        addServerDefAction = new AddServerDefAction();
-        menuManager.add(addServerDefAction);
-        menuManager.add(new DeleteServerDefAction());
-        menuManager.add(new EditServerDefAction());
-        menuManager.add(new CheckConnectionAction());
-        eventManagerAction = new EventManageAction();
-        menuManager.add(eventManagerAction);
-        menuManager.add(new RefreshServerCacheAction());
-        menuManager.add(new ShowConsoleAction());
+        final MenuManager menuManager = new MenuManager();
+        addAllActions(menuManager);
+
         // Context
         Menu contextMenu = menuManager.createContextMenu(tree);
 
@@ -204,6 +197,36 @@ public class ServerExplorer extends ViewPart {
         tree.setMenu(contextMenu);
         getSite().registerContextMenu(menuManager, treeViewer);
 
+        treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            public void selectionChanged(SelectionChangedEvent event) {
+                boolean empty = event.getSelection().isEmpty();
+
+                ListIterator<Action> listIterator = allActions.listIterator(1);
+                while (listIterator.hasNext()) {
+                    listIterator.next().setEnabled(!empty);
+                }
+                menuManager.update();
+            }
+        });
+    }
+
+    private void initActions() {
+        addServerDefAction = new AddServerDefAction();
+        allActions.add(addServerDefAction);
+        allActions.add(new DeleteServerDefAction());
+        allActions.add(new EditServerDefAction());
+        allActions.add(new CheckConnectionAction());
+        allActions.add(new EventManageAction());
+        allActions.add(new RefreshServerCacheAction());
+        allActions.add(new ShowConsoleAction());
+    }
+
+    private void addAllActions(MenuManager menuManager) {
+        Iterator<Action> iterator = allActions.iterator();
+        while (iterator.hasNext()) {
+            menuManager.add(iterator.next());
+        }
     }
 
     @Override
