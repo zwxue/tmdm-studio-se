@@ -30,5 +30,6 @@ Import-Package: org.apache.http;version="[4.0.0,4.0.0]",
  org.apache.http.auth;version="4.0.0",
  org.apache.http.client;version="4.0.0",
  org.apache.http.client.methods;version="4.0.0",
+ org.apache.http.conn;version="4.0.0",
  org.apache.http.impl;version="[4.0.0,4.0.0]",
  org.apache.http.impl.client;version="4.0.0"

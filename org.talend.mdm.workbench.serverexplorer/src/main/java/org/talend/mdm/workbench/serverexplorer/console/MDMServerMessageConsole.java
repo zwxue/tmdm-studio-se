@@ -30,6 +30,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -280,7 +281,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         DefaultHttpClient httpClient = createHttpClient();
         String monitorURL = buildMonitorURL(position);
         HttpGet httpGet = new HttpGet(monitorURL);
-        MessageConsoleStream errorMsgStream = null;
+        MessageConsoleStream errorMsgStream = newErrorMessageStream();
         InputStream is = null;
         BufferedReader br = null;
         MessageConsoleStream msgStream = null;
@@ -303,7 +304,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                     msgStream.println(line);
                 }
             } else {
-                errorMsgStream = newErrorMessageStream();
+
                 if (HTTP_STATUS_NO_ACCESS == code) {
                     errorMsgStream.println(Messages.MDMServerMessageConsole_No_Acess_Message);
                     disposeTimer();
@@ -315,6 +316,9 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                     disposeTimer();
                 }
             }
+        } catch (HttpHostConnectException ex) {
+            errorMsgStream.println(ex.getMessage());
+            disposeTimer();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             errorMsgStream.println(e.getMessage());
