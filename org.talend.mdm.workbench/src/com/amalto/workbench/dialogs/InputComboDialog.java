@@ -41,6 +41,7 @@ public class InputComboDialog extends Dialog {
     public int getType() {
         return type;
     }
+
     private Button okButton;
 
     private Combo inputCombo;
@@ -48,10 +49,18 @@ public class InputComboDialog extends Dialog {
     private Text errorMessageText;
 
     private String[] values;
-    
+
     private String txtValue;
+
+    private final boolean isAppendBlankItem;
+
     public InputComboDialog(Shell parentShell, String dialogTitle, String dialogMessage, String[] dialogValues,
             String initialValue, String txtValue) {
+        this(parentShell, dialogTitle, dialogMessage, dialogValues, initialValue, txtValue, true);
+    }
+
+    public InputComboDialog(Shell parentShell, String dialogTitle, String dialogMessage, String[] dialogValues,
+            String initialValue, String txtValue, boolean isAppendBlankItem) {
         super(parentShell);
         // TODO Auto-generated constructor stub
         this.message = dialogMessage;
@@ -59,9 +68,11 @@ public class InputComboDialog extends Dialog {
         this.message = dialogMessage;
         this.values = dialogValues;
         this.value = initialValue;
-        this.txtValue=txtValue;
+        this.txtValue = txtValue;
+        this.isAppendBlankItem = isAppendBlankItem;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         // create composite
         Composite composite = (Composite) super.createDialogArea(parent);
@@ -79,25 +90,28 @@ public class InputComboDialog extends Dialog {
         inputCombo = new Combo(composite, SWT.READ_ONLY);
         inputCombo.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
         inputCombo.setItems(values);
-        inputCombo.add("");//$NON-NLS-1$
+        if (isAppendBlankItem) {
+            inputCombo.add("");//$NON-NLS-1$
+        }
         for (String pro : values) {
             if (pro.equals(value)) {
                 inputCombo.setText(pro);
                 break;
             }
-        }        
-        if(txtValue!=null){
-	        errorMessageText = new Text(composite, SWT.BORDER);
-	        errorMessageText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-	        errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-	        errorMessageText.setText(txtValue);
-	        errorMessageText.setEditable(false);
         }
-        
-        //applyDialogFont(composite);
+        if (txtValue != null) {
+            errorMessageText = new Text(composite, SWT.BORDER);
+            errorMessageText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+            errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+            errorMessageText.setText(txtValue);
+            errorMessageText.setEditable(false);
+        }
+
+        // applyDialogFont(composite);
         return composite;
     }
 
+    @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
             value = inputCombo.getText();
@@ -109,6 +123,7 @@ public class InputComboDialog extends Dialog {
         super.buttonPressed(buttonId);
     }
 
+    @Override
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         if (title != null) {
@@ -116,13 +131,15 @@ public class InputComboDialog extends Dialog {
         }
     }
 
-    public Combo getCombo(){
-    	return inputCombo;
+    public Combo getCombo() {
+        return inputCombo;
     }
-    
-    public Text getText(){
-    	return errorMessageText;
+
+    public Text getText() {
+        return errorMessageText;
     }
+
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         // create OK and Cancel buttons by default
         okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
