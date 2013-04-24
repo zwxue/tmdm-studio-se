@@ -33,14 +33,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -188,6 +188,8 @@ public class ServerExplorer extends ViewPart {
 
         // Adds root context menu
         final MenuManager menuManager = new MenuManager();
+        menuManager.addMenuListener(getMenuListener());
+
         addAllActions(menuManager);
 
         // Context
@@ -196,19 +198,6 @@ public class ServerExplorer extends ViewPart {
         // Publish it
         tree.setMenu(contextMenu);
         getSite().registerContextMenu(menuManager, treeViewer);
-
-        treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-            public void selectionChanged(SelectionChangedEvent event) {
-                boolean empty = event.getSelection().isEmpty();
-
-                ListIterator<Action> listIterator = allActions.listIterator(1);
-                while (listIterator.hasNext()) {
-                    listIterator.next().setEnabled(!empty);
-                }
-                menuManager.update();
-            }
-        });
     }
 
     private void initActions() {
@@ -222,7 +211,22 @@ public class ServerExplorer extends ViewPart {
         allActions.add(new ShowConsoleAction());
     }
 
-    private void addAllActions(MenuManager menuManager) {
+    private IMenuListener getMenuListener() {
+        return new IMenuListener() {
+            public void menuAboutToShow(IMenuManager manager) {
+                ISelection selection = treeViewer.getSelection();
+                boolean isEmpty = selection.isEmpty();
+                ListIterator<Action> listIterator = allActions.listIterator(1);
+                while (listIterator.hasNext()) {
+                    listIterator.next().setEnabled(!isEmpty);
+                }
+
+                manager.update();
+            }
+        };
+    }
+
+    private void addAllActions(IMenuManager menuManager) {
         Iterator<Action> iterator = allActions.iterator();
         while (iterator.hasNext()) {
             menuManager.add(iterator.next());
