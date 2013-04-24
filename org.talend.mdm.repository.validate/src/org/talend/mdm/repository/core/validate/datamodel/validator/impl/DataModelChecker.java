@@ -131,7 +131,9 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
                 ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                         message,
                         "key", // TODO
-                        dataModelName, lineNumber, columnNumber, group, element, getTypeName(type), getTypeName(type),
+                        dataModelName, lineNumber, columnNumber, group, element,
+                        getTypeName(type),
+                        getTypeName(type),
                         getTypeName(type));
                 addMessage(lineNumber, columnNumber, error, validationMessage);
                 errorCount++;
@@ -155,7 +157,9 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
             ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_WARNING,
                     message,
                     "key", // TODO
-                    dataModelName, lineNumber, columnNumber, group, element, getTypeName(type), getTypeName(type),
+                    dataModelName, lineNumber, columnNumber, group, element,
+                    getTypeName(type),
+                    getTypeName(type),
                     getTypeName(type));
             addMessage(lineNumber, columnNumber, error, validationMessage);
         }
@@ -170,13 +174,19 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         public void error(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber,
                 ValidationError error) {
             if (error != ValidationError.XML_SCHEMA) {
-                int group = field.getContainingType().isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
+                ComplexTypeMetadata containingType = field.getContainingType();
+                while (containingType instanceof ContainedComplexTypeMetadata) {
+                    containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
+                }
+                int group = containingType.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
                         : IComponentValidationRule.MSG_GROUP_TYPE;
                 ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                         message,
                         "key", // TODO
                         dataModelName, lineNumber, columnNumber, group, element,
-                        getEntityName(field), getEntityName(field), getPath(field));
+                        getEntityName(field),
+                        getEntityName(field),
+                        getPath(field));
                 addMessage(lineNumber, columnNumber, error, validationMessage);
                 errorCount++;
             }
@@ -184,7 +194,15 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 
         private static String getEntityName(FieldMetadata field) {
             try {
-                return field.getContainingType().getName();
+                ComplexTypeMetadata containingType = field.getContainingType();
+                while (containingType instanceof ContainedComplexTypeMetadata) {
+                    containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
+                }
+                String name = containingType.getName();
+                if (name.startsWith(MetadataRepository.ANONYMOUS_PREFIX)) {
+                    name = ANONYMOUS_TYPE_NAME;
+                }
+                return name;
             } catch (Exception e) {
                 return ""; //$NON-NLS-1$
             }
