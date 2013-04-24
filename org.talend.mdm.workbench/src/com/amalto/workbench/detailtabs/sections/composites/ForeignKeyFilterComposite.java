@@ -21,10 +21,16 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
@@ -35,9 +41,8 @@ import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfoDefUnit;
 import com.amalto.workbench.detailtabs.sections.providers.ForeignKeyFilterCellModifier;
-import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.ColumnTextExtractor;
 import com.amalto.workbench.providers.CommonTableLabelProvider;
@@ -47,14 +52,16 @@ import com.amalto.workbench.widgets.composites.ComplexAnnotaionInfoComposite;
 
 public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<ForeignKeyFilterAnnoInfoDefUnit> {
     private final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
-    
+
+    private Image warnImage = ImageCache.getCreatedImage("icons/showwarn_tsk.gif"); //$NON-NLS-1$
+
     private Text txtCustomFilter;
 
     private IAllDataModelHolder dataModelHolder;
 
     public ForeignKeyFilterComposite(Composite parent, int style, IAllDataModelHolder dataModelHolder,BasePropertySection section) {
     	super(parent,style,new Object[] { dataModelHolder },section);
-    	
+
     }
     public ForeignKeyFilterComposite(Composite parent, int style, IAllDataModelHolder dataModelHolder) {
         super(parent, style, new Object[] { dataModelHolder },null);
@@ -72,8 +79,18 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     @Override
     protected void createExtentArea() {
+        Composite comp = new Composite(this, SWT.NONE);
+        comp.setLayout(new GridLayout(2, false));
+        defineCF = new Button(comp, SWT.CHECK);
+        defineCF.setText(Messages.ForeignKeyFilterComposite_defineCustomeFilter);
+        warnLabel = new CLabel(comp, SWT.LEFT | SWT.WRAP);
 
-        Group gpCustomFilter = new Group(this, SWT.NORMAL);
+        warnLabel.setImage(warnImage);
+        warnLabel.setText(Messages.ForeignKeyFilterComposite_defineWarningMsg);
+        warnLabel.setVisible(false);
+        defineCF.addSelectionListener(getWarnSelectionListener());
+
+        gpCustomFilter = new Group(this, SWT.NORMAL);
         gpCustomFilter.setText(Messages.ForeignKeyFilterComposite_CustomFilters);
         gpCustomFilter.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         gpCustomFilter.setLayout(new GridLayout());
@@ -84,8 +101,28 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         txtCustomFilter.setLayoutData(gdTxtCustomFilter);
         txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
     }
-    
+
+    private SelectionListener getWarnSelectionListener() {
+        SelectionListener listener = new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                boolean selected = defineCF.getSelection();
+                warnLabel.setVisible(selected);
+                gpCustomFilter.setVisible(selected);
+            }
+        };
+
+        return listener;
+    }
+
     private ModifyListener modifyListener;
+
+    private Button defineCF;
+
+    private CLabel warnLabel;
+
+    private Group gpCustomFilter;
     private ModifyListener getCustomFilterModifyListener() {
         if(modifyListener == null) {
             modifyListener = new ModifyListener() {
@@ -95,7 +132,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
                 }
             };
         }
-        
+
         return modifyListener;
     }
 
@@ -189,18 +226,27 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     public void setFilter(String filterExpression) {
     	String filter=ForeignKeyFilterAnnoInfo.getCustomFilterInfo(filterExpression);
-    	if (filter.startsWith(CUSTOM_FILTERS_PREFIX)) {
+
+        boolean isCustomFilter = filter.startsWith(CUSTOM_FILTERS_PREFIX);
+
+        defineCF.setSelection(isCustomFilter);
+        warnLabel.setVisible(isCustomFilter);
+        gpCustomFilter.setVisible(isCustomFilter);
+
+        if (isCustomFilter) {
             filter = StringEscapeUtils.unescapeXml(filter).substring(6);
         }
-        
+
         txtCustomFilter.removeModifyListener(getCustomFilterModifyListener());
-        
-        if(!filter.equals(txtCustomFilter.getText()))
+
+
+        if (!filter.equals(txtCustomFilter.getText())) {
             txtCustomFilter.setText(filter);
-        
+        }
+
         txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
         setInfos(ForeignKeyFilterAnnoInfo.getFKFilterCfgInfos(filterExpression));
-        
+
     }
 
     @Override

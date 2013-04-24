@@ -2371,6 +2371,10 @@ public class Messages extends NLS {
 
     public static String ForeignKeyFilterComposite_CustomFilters;
 
+    public static String ForeignKeyFilterComposite_defineCustomeFilter;
+
+    public static String ForeignKeyFilterComposite_defineWarningMsg;
+
     public static String ForeignKeyFilterComposite_Operator;
 
     public static String ForeignKeyFilterComposite_Predicate;
