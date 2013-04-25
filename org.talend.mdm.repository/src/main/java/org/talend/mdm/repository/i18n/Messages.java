@@ -158,6 +158,8 @@ public class Messages extends NLS {
 
     public static String DeployService_processTitle;
 
+    public static String DeployStatusDialog_dataModelWarning;
+
     public static String DeployStatusDialog_deploySummary;
 
     public static String DeployStatusDialog_typeSummaryMessage;
@@ -715,6 +717,8 @@ public class Messages extends NLS {
     public static String MdmPropertiesWizard_imageCatalog;
 
     public static String MultiStatusDialog_MultiStatus_Messages;
+
+    public static String MultiStatusDialog_note;
 
     public static String Server_cannot_connected;
 

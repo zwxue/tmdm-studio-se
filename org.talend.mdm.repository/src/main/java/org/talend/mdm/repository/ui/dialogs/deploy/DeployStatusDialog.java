@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployCategoryStatus;
@@ -38,6 +39,8 @@ import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
  * 
  */
 public class DeployStatusDialog extends MultiStatusDialog {
+
+    private boolean isContainDataModel;
 
     /**
      * DOC HHB DeployStatusDialog constructor comment.
@@ -55,6 +58,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
      * 
      * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#getMessage()
      */
+
     @Override
     protected String getMessage() {
         int oks = 0, errors = 0, cancels = 0;
@@ -177,7 +181,29 @@ public class DeployStatusDialog extends MultiStatusDialog {
             }
             retStatus.add(submultiStatus);
         }
+        isContainDataModel = map.containsKey(IServerObjectRepositoryType.TYPE_DATAMODEL);
         map.clear();
         return retStatus;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#needShowBottomMessage()
+     */
+    @Override
+    protected boolean needShowBottomMessage() {
+        return isContainDataModel;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#getBottomMessage()
+     */
+    @Override
+    protected String getBottomMessage() {
+        return Messages.DeployStatusDialog_dataModelWarning;
+    }
+
 }
