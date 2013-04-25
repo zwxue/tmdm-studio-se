@@ -24,8 +24,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -38,7 +36,6 @@ import org.eclipse.swt.widgets.Tree;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployCategoryStatus;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
-import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
@@ -155,12 +152,6 @@ public class MultiStatusDialog extends Dialog {
 
     private TreeViewer treeViewer;
 
-    private Label bottomLabel;
-
-    private Composite bottomComposite;
-
-    private Font warningFont;
-
     /**
      * Create the dialog.
      * 
@@ -237,36 +228,8 @@ public class MultiStatusDialog extends Dialog {
         return container;
     }
 
-    private void buildBottomArea(Composite container) {
-        if (needShowBottomMessage()) {
-            bottomComposite = new Composite(container, SWT.NONE);
-            bottomComposite.setLayout(new GridLayout(2, false));
-            bottomComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-
-            Label noteLabel = new Label(bottomComposite, SWT.NONE);
-            noteLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
-            this.warningFont = new Font(this.getShell().getDisplay(), new FontData("Arial", 9, SWT.BOLD)); //$NON-NLS-1$
-
-            noteLabel.setText(Messages.MultiStatusDialog_note);
-            noteLabel.setFont(warningFont);
-
-            bottomLabel = new Label(bottomComposite, SWT.WRAP);
-
-            bottomLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.jface.dialogs.Dialog#close()
-     */
-    @Override
-    public boolean close() {
-        if (warningFont != null) {
-            warningFont.dispose();
-        }
-        return super.close();
+    protected void buildBottomArea(Composite container) {
+        // do nothing
     }
 
     /**
@@ -274,9 +237,6 @@ public class MultiStatusDialog extends Dialog {
      */
     @Override
     protected Point getInitialSize() {
-        if (needShowBottomMessage()) {
-            return new Point(450, 450);
-        }
         return new Point(450, 300);
     }
 
@@ -290,18 +250,11 @@ public class MultiStatusDialog extends Dialog {
     /**
      * DOC hbhong Comment method "initInput".
      */
-    private void initInput() {
+    protected void initInput() {
         msgLabel.setText(getMessage());
         //
         if (multiStatus != null && multiStatus.isMultiStatus()) {
             treeViewer.setInput(multiStatus.getChildren());
-        }
-        // update bottom message
-        if (needShowBottomMessage()) {
-            String bottomMessage = getBottomMessage();
-            if (bottomMessage != null) {
-                bottomLabel.setText(bottomMessage);
-            }
         }
 
     }

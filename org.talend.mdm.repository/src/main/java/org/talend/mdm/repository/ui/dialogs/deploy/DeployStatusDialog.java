@@ -22,6 +22,13 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -34,13 +41,16 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
+
 /**
  * created by HHB on 2013-4-1 Detailled comment
  * 
  */
 public class DeployStatusDialog extends MultiStatusDialog {
 
-    private boolean isContainDataModel;
+    private boolean isShowWarningMsg;
 
     /**
      * DOC HHB DeployStatusDialog constructor comment.
@@ -86,6 +96,52 @@ public class DeployStatusDialog extends MultiStatusDialog {
                     String.valueOf(summary[1]), String.valueOf(summary[2]));
         }
         return status.getMessage();
+    }
+
+    private Label bottomLabel;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog#initInput()
+     */
+    @Override
+    protected void initInput() {
+        super.initInput();
+        // update bottom message
+        if (needShowBottomMessage()) {
+            String bottomMessage = getBottomMessage();
+            if (bottomMessage != null) {
+                bottomLabel.setText(bottomMessage);
+            }
+        }
+    }
+
+    @Override
+    protected Point getInitialSize() {
+        if (needShowBottomMessage()) {
+            return new Point(450, 450);
+        } else {
+            return super.getInitialSize();
+        }
+    }
+
+    @Override
+    protected void buildBottomArea(Composite container) {
+        if (needShowBottomMessage()) {
+            Composite bottomComposite = new Composite(container, SWT.NONE);
+            bottomComposite.setLayout(new GridLayout(2, false));
+            bottomComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+            Label noteLabel = new Label(bottomComposite, SWT.NONE);
+            Image warnImg = ImageCache.getCreatedImage(EImage.WARN_TSK.getPath());
+            noteLabel.setImage(warnImg);
+            noteLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+
+            bottomLabel = new Label(bottomComposite, SWT.WRAP);
+
+            bottomLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+        }
     }
 
     /**
@@ -181,7 +237,8 @@ public class DeployStatusDialog extends MultiStatusDialog {
             }
             retStatus.add(submultiStatus);
         }
-        isContainDataModel = map.containsKey(IServerObjectRepositoryType.TYPE_DATAMODEL);
+        isShowWarningMsg = map.containsKey(IServerObjectRepositoryType.TYPE_VIEW)
+                && (!map.containsKey(IServerObjectRepositoryType.TYPE_DATAMODEL));
         map.clear();
         return retStatus;
     }
@@ -193,7 +250,7 @@ public class DeployStatusDialog extends MultiStatusDialog {
      */
     @Override
     protected boolean needShowBottomMessage() {
-        return isContainDataModel;
+        return isShowWarningMsg;
     }
 
     /*

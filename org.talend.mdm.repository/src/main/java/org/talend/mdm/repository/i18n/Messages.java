@@ -718,8 +718,6 @@ public class Messages extends NLS {
 
     public static String MultiStatusDialog_MultiStatus_Messages;
 
-    public static String MultiStatusDialog_note;
-
     public static String Server_cannot_connected;
 
     public static String SmtpGetDocument_Desc0;
