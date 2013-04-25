@@ -64,6 +64,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
@@ -400,8 +401,14 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         public void partClosed(IWorkbenchPart part) {
             if (part instanceof IEditorPart) {
                 IEditorInput input = ((IEditorPart) part).getEditorInput();
-                if (input != null && input instanceof IRepositoryViewEditorInput) {
-                    Item item = ((IRepositoryViewEditorInput) input).getInputItem();
+                if (input != null) {
+                    Item item = null;
+                    if (input instanceof IRepositoryViewEditorInput) {
+                        item = ((IRepositoryViewEditorInput) input).getInputItem();
+                    } else if (input instanceof ProcessEditorInput) {
+                        item = ((ProcessEditorInput) input).getItem();
+                    }
+
                     if (item != null) {
                         try {
                             factory.unlock(item);
