@@ -30,9 +30,9 @@ import org.talend.mdm.engines.client.i18n.Messages;
 
 /**
  * Publish SpagoBI export wizard. <br/>
- *
+ * 
  * $Id: DeployOnMDMExportWizard.java 1 2007-04-27 11:30:00 cantoine
- *
+ * 
  */
 public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
 
@@ -83,7 +83,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
             this.selection = new StructuredSelection(selectedResources);
         }
 
-        setWindowTitle(Messages.getString("DeployOnMDMExportWizard.publishJob")); //$NON-NLS-1$
+        setWindowTitle(Messages.DeployOnMDMExportWizard_publishJob);
         setDefaultPageImageDescriptor(IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/exportzip_wiz.png"));//$NON-NLS-1$
         setNeedsProgressMonitor(true);
     }
@@ -95,7 +95,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
     public boolean performFinish() {
         boolean finish = mainPage.finish();
         setMdmServer(mainPage.getMdmServer());
-        
+
         return finish;
     }
 

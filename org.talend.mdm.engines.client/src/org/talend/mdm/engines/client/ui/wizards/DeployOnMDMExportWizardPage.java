@@ -27,11 +27,13 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -40,8 +42,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
@@ -85,6 +89,25 @@ import com.amalto.workbench.utils.MDMServerDef;
  */
 public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResourceExportPage1 {
 
+    /**
+     * 
+     */
+    private static final String UNDERLINE = "_"; //$NON-NLS-1$
+
+    /**
+     * 
+     */
+    private static final String SEPERATOR = "/"; //$NON-NLS-1$
+
+    /**
+     * 
+     */
+    private static final String BLANK = ""; //$NON-NLS-1$
+
+    private static final String EXT_ZIP = ".zip"; //$NON-NLS-1$
+
+    private static final String EXT_WAR = ".war"; //$NON-NLS-1$
+
     private static final Log log = LogFactory.getLog(DeployOnMDMExportWizardPage.class);
 
     // widgets
@@ -122,9 +145,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
         super(name, null);
         this.mdmServer = mdmserver;
-        manager = new JobJavaScriptsWSManager(getExportChoiceMap(0),
-                "", JobScriptsManager.ALL_ENVIRONMENTS, IProcessor.NO_STATISTICS, //$NON-NLS-1$
-                IProcessor.NO_TRACES, ".war");
+        manager = new JobJavaScriptsWSManager(getExportChoiceMap(0, needContextScript()), BLANK,
+                JobScriptsManager.ALL_ENVIRONMENTS, IProcessor.NO_STATISTICS, IProcessor.NO_TRACES, EXT_WAR);
         RepositoryNode[] nodes = (RepositoryNode[]) selection.toList().toArray(new RepositoryNode[selection.size()]);
 
         List<ExportFileResource> list = new ArrayList<ExportFileResource>();
@@ -180,7 +202,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             return;
         }
         for (Object node2 : nodes) {
-            addTreeNode((RepositoryNode) node2, path + "/" //$NON-NLS-1$
+            addTreeNode((RepositoryNode) node2, path + SEPERATOR
                     + ((RepositoryNode) node2).getProperties(EProperties.LABEL).toString(), list);
         }
     }
@@ -192,7 +214,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
         this("publishOnSpagoExportPage1", selection, null); //$NON-NLS-1$
-        setDescription(Messages.getString("DeployOnMDMExportWizardPage.publishJob")); //$NON-NLS-1$
+        setDescription(Messages.DeployOnMDMExportWizard_publishJob);
         setTitle(DataTransferMessages.ArchiveExport_exportTitle);
     }
 
@@ -209,8 +231,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         composite.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL));
         composite.setFont(parent.getFont());
 
-        // createDestinationGroup(composite);
-
         createOptionsGroup(composite);
 
         restoreResourceSpecificationWidgetValues(); // ie.- local
@@ -221,7 +241,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         setErrorMessage(null); // should not initially have error message
 
         setControl(composite);
-        // giveFocusToDestination();
     }
 
     /*
@@ -265,20 +284,20 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             for (MDMServerDef serv : listServerSapgo) {
                 listEngine.add(serv.getName());
             }
-            serverSpagoBi = new LabelledCombo(
-                    optionsGroup,
-                    Messages.getString("DeployOnMDMExportWizardPage.SpagoBI.Server"), Messages.getString("DeployOnMDMExportWizardPage.SpecifyServer.PublishJob"), listEngine); //$NON-NLS-1$ //$NON-NLS-2$
+            serverSpagoBi = new LabelledCombo(optionsGroup, Messages.DeployOnMDMExportWizardPage_SpagoBI_Server,
+                    Messages.DeployOnMDMExportWizardPage_SpecifyServer_PublishJob, listEngine);
             serverSpagoBi.select(0);
         }
 
         List<String> types = new ArrayList<String>();
-        types.add("Distributed (War)");
-        types.add("Hosted (Zip)");
-        exportTypeCombo = new LabelledCombo(optionsGroup, "Export type:", "Export type", types); //$NON-NLS-1$ //$NON-NLS-2$
+        types.add(Messages.DeployOnMDMExportWizardPage_distributedWar);
+        types.add(Messages.DeployOnMDMExportWizardPage_hostedZip);
+        exportTypeCombo = new LabelledCombo(optionsGroup, Messages.DeployOnMDMExportWizardPage_ExportType,
+                Messages.DeployOnMDMExportWizardPage_exportType, types);
         exportTypeCombo.select(1);
 
         contextButton = new Button(optionsGroup, SWT.CHECK | SWT.LEFT);
-        contextButton.setText(Messages.getString("JobScriptsExportWizardPage.contextPerlScripts")); //$NON-NLS-1$
+        contextButton.setText(Messages.JobScriptsExportWizardPage_contextPerlScripts);
         contextButton.setSelection(true);
         contextButton.setFont(font);
 
@@ -323,9 +342,11 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Ensures that the target output file and its containing directory are both valid and able to be used. Answer a
      * boolean indicating validity.
+     * 
+     * @param type
      */
-    protected boolean ensureTargetIsValid() {
-        String targetPath = getDestinationValue();
+    protected boolean ensureTargetIsValid(int type) {
+        String targetPath = getDestinationValue(type);
 
         if (!ensureTargetDirectoryIsValid(targetPath)) {
             return false;
@@ -342,40 +363,96 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * Export the passed resource and recursively export all of its child resources (iff it's a container). Answer a
      * boolean indicating success.
      */
-    protected boolean executeExportOperation(ArchiveFileExportOperationFullPath op) {
+    protected boolean executeExportOperation(final ArchiveFileExportOperationFullPath op) {
         op.setCreateLeadupStructure(true);
         op.setUseCompression(true);
 
-        try {
-            getContainer().run(true, true, op);
-        } catch (InterruptedException e) {
-            return false;
-        } catch (InvocationTargetException e) {
-            displayErrorDialog(e.getTargetException());
-            return false;
-        }
+        Display.getDefault().syncExec(new Runnable() {
+
+            public void run() {
+                try {
+
+                    PlatformUI.getWorkbench().getProgressService().run(true, true, op);
+
+                } catch (InterruptedException e) {
+
+                } catch (InvocationTargetException e) {
+                    displayErrorDialog(e.getTargetException());
+                }
+                IStatus status = op.getStatus();
+                if (!status.isOK()) {
+                    ErrorDialog.openError(getContainer().getShell(), BLANK, null, // no
+                            // special
+                            // message
+                            status);
+
+                }
+            }
+        });
 
         IStatus status = op.getStatus();
         if (!status.isOK()) {
-            ErrorDialog.openError(getContainer().getShell(), "", null, // no //$NON-NLS-1$
-                    // special
-                    // message
-                    status);
             return false;
         }
 
         return true;
     }
 
-    /**
-     * The Finish button was pressed. Try to do the required work now and answer a boolean indicating success. If false
-     * is returned then the wizard will not close.
-     * 
-     * @returns boolean
-     */
-    @Override
-    public boolean finish() {
-        Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap();
+    final int W_PREPARE_PROCESS = 10;
+
+    final int W_GENERATE_PROCESS = 10;
+
+    final int W_PACKAGE_PROCESS = 10;
+
+    final int W_DEPLOY_PROCESS = 10;
+
+    class DeployJobProcess implements IRunnableWithProgress {
+
+        private final int type;
+
+        private final boolean needContextScript;
+
+        private final String context;
+
+        public DeployJobProcess(int type, boolean needContextScript, String context) {
+            this.type = type;
+            this.needContextScript = needContextScript;
+            this.context = context;
+        }
+
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+            int size = process.length;
+            int total = W_PREPARE_PROCESS + W_PREPARE_PROCESS + W_GENERATE_PROCESS * size + W_PACKAGE_PROCESS + W_DEPLOY_PROCESS
+                    * size;
+            monitor.beginTask(Messages.DeployOnMDMExportWizardPage_DeployingJobObjects, total);
+
+            if (prepareProcess(type, needContextScript, context, monitor)) {
+                if (generateProcess(monitor)) {
+                    if (packageProcess(type, monitor)) {
+                        if (deployJobProcess(context, monitor)) {
+                            Display.getDefault().asyncExec(new Runnable() {
+
+                                public void run() {
+                                    MessageDialog.openInformation(getContainer().getShell(),
+                                            Messages.DeployOnMDMExportWizardPage_publishJob,
+                                            Messages.DeployOnMDMExportWizardPage_publishJobSuccess);
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+
+            monitor.done();
+
+        }
+    };
+
+    private boolean prepareProcess(int type, boolean needContextScript, String context, IProgressMonitor monitor) {
+        monitor.setTaskName(Messages.DeployOnMDMExportWizardPage_prepareDeployJob);
+        monitor.worked(W_PREPARE_PROCESS);
+        Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap(type, needContextScript);
         boolean canExport = false;
         for (ExportChoice choice : ExportChoice.values()) {
 
@@ -386,46 +463,50 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             }
         }
         if (!canExport) {
-            MessageDialog.openInformation(getContainer().getShell(),
-                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
-                    Messages.getString("DeployOnMDMExportWizardPage.chooseResource")); //$NON-NLS-1$
+            Display.getDefault().asyncExec(new Runnable() {
 
+                public void run() {
+                    MessageDialog.openInformation(getContainer().getShell(),
+                            Messages.DeployOnMDMExportWizardPage_publishResourceError,
+                            Messages.DeployOnMDMExportWizardPage_chooseResource);
+                }
+            });
             setDeploySucceed(false);
-            return true;
+            return false;
         }
 
-        if (!ensureTargetIsValid()) {
+        if (!ensureTargetIsValid(type)) {
             setDeploySucceed(false);
-            return true;
+            return false;
         }
 
-        String topFolder = getRootFolderName();
+        String topFolder = getRootFolderName(type);
         // reset the manager
-        if (exportTypeCombo.getSelectionIndex() == 0) {// war
-            manager = new JobJavaScriptsWSManager(exportChoiceMap, contextCombo.getText(), JobScriptsManager.ALL_ENVIRONMENTS,
-                    IProcessor.NO_STATISTICS, IProcessor.NO_TRACES, ".war"); //$NON-NLS-1$
+        if (type == 0) {// war
+            manager = new JobJavaScriptsWSManager(exportChoiceMap, context, JobScriptsManager.ALL_ENVIRONMENTS,
+                    IProcessor.NO_STATISTICS, IProcessor.NO_TRACES, EXT_WAR);
         }
-        if (exportTypeCombo.getSelectionIndex() == 1) {// zip
-            manager = new JobJavaScriptsManager(exportChoiceMap, contextCombo.getText(), JobScriptsManager.ALL_ENVIRONMENTS,
+        if (type == 1) {// zip
+            manager = new JobJavaScriptsManager(exportChoiceMap, context, JobScriptsManager.ALL_ENVIRONMENTS,
                     IProcessor.NO_STATISTICS, IProcessor.NO_TRACES);
         }
 
         List<ExportFileResource> resourcesToExport = null;
         try {
-            resourcesToExport = getExportResources();
+            resourcesToExport = getExportResources(type, needContextScript);
         } catch (ProcessorException e) {
             MessageBoxExceptionHandler.process(e);
 
             setDeploySucceed(false);
-            return true;
+            return false;
         }
-        setTopFolder(resourcesToExport, topFolder);
+        setTopFolder(type, resourcesToExport, topFolder);
 
         // Save dirty editors if possible but do not stop if not all are saved
         saveDirtyEditors();
         // about to invoke the operation so save our state
-        saveWidgetValues();
-        ArchiveFileExportOperationFullPath exporterOperation = getExporterOperation(resourcesToExport);
+        doSaveWidgetValues();
+        ArchiveFileExportOperationFullPath exporterOperation = getExporterOperation(type, resourcesToExport);
         boolean ok = executeExportOperation(exporterOperation);
         // TODO What if not ok ????
 
@@ -433,29 +514,53 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         manager.deleteTempFiles();
 
         ProcessorUtilities.resetExportConfig();
+        monitor.worked(W_PREPARE_PROCESS);
+        return true;
+    }
 
+    protected void doSaveWidgetValues() {
+        Display.getDefault().syncExec(new Runnable() {
+
+            public void run() {
+                saveWidgetValues();
+            }
+        });
+
+    }
+
+    private boolean generateProcess(IProgressMonitor monitor) {
         for (ExportFileResource proces : process) {
+
             ProcessItem processItem = (ProcessItem) proces.getItem();
+            String label = processItem.getProperty().getLabel();
+            monitor.setTaskName(Messages.bind(Messages.DeployOnMDMExportWizardPage_Generating, label));
             try {
                 ProcessorUtilities.generateCode(processItem, processItem.getProcess().getDefaultContext(), false, false);
+                monitor.worked(W_GENERATE_PROCESS);
             } catch (ProcessorException e) {
                 MessageBoxExceptionHandler.process(e);
 
                 setDeploySucceed(false);
-                return true;
+                return false;
             }
 
         }
-        // achen modify to fix bug 0006108
-        // rearchieve the jobscript zip file
+        return true;
+    }
+
+    private boolean packageProcess(int type, IProgressMonitor monitor) {
+        monitor.setTaskName(Messages.DeployOnMDMExportWizardPage_Pacakging);
         ECodeLanguage curLanguage = LanguageManager.getCurrentLanguage();
         if (curLanguage == ECodeLanguage.JAVA) {
-            reBuildJobZipFile();
+            reBuildJobZipFile(type);
         }
-        // added by xie to fix bug 20084
-        setDesValueForJob();
-        processForEachJob();
+        setDesValueForJob(type);
+        processForEachJob(type);
+        monitor.worked(W_PACKAGE_PROCESS);
+        return true;
+    }
 
+    private boolean deployJobProcess(String context, IProgressMonitor monitor) {
         // retrieve user, password, host, port from selected server
         MDMServerDef server = null;
         if (mdmServer == null) {
@@ -470,7 +575,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             }
         } else {
             server = new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(),
-                    MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), ""); //$NON-NLS-1$
+                    MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), BLANK);
         }
 
         String user = server.getUser();
@@ -479,45 +584,81 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         String port = server.getPort();
 
         // check connection before sending data
-
+        monitor.setTaskName(Messages.DeployOnMDMExportWizardPage_checkConnection);
         boolean success = checkConnection(server.getUrl(), user, password, server.getUniverse());
 
         if (!success) {
-            String msg = Messages.getString("DeployOnMDMExportWizardPage.UnableConnect"); //$NON-NLS-1$
-            MessageDialog.openError(getContainer().getShell(),
-                    Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), msg); //$NON-NLS-1$
+            Display.getDefault().syncExec(new Runnable() {
+
+                public void run() {
+                    String msg = Messages.DeployOnMDMExportWizardPage_UnableConnect;
+                    MessageDialog.openError(getContainer().getShell(), Messages.DeployOnMDMExportWizardPage_publishResourceError,
+                            msg);
+                }
+            });
 
             setDeploySucceed(false);
-            return true;
+            return false;
         }
 
         // modified by xie to fix bug 20084 ,do the multi jobs deployment in one time.
         for (JobDeploymentInfo jobInfo : jobInfoList) {
-
+            monitor.setTaskName(Messages.bind(Messages.DeployOnMDMExportWizardPage_DeployJobOnServer, jobInfo.getJobLabelName(),
+                    server.getName()));
             String filename = jobInfo.getDescValue();
             String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                    + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath() + "&contextStr=" + contextCombo.getText();; //$NON-NLS-1$//$NON-NLS-2$
+                    + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath() + "&contextStr=" + context;//$NON-NLS-1$//$NON-NLS-2$
             try {
                 ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
+                monitor.worked(W_DEPLOY_PROCESS);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(getContainer().getShell(),
-                        Messages.getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
-                        Messages.getString("DeployOnMDMExportWizardPage.ErrorDeployMsg")); //$NON-NLS-1$
+                Display.getDefault().syncExec(new Runnable() {
+
+                    public void run() {
+                        MessageDialog.openError(getContainer().getShell(),
+                                Messages.DeployOnMDMExportWizardPage_publishResourceError,
+                                Messages.DeployOnMDMExportWizardPage_ErrorDeployMsg);
+                    }
+                });
+
                 recordDeployException(new RuntimeException(new RemoteException(e.getMessage(), e)));
 
                 setDeploySucceed(false);
-                return true;
+                return false;
             }
 
         }
 
-        MessageDialog.openInformation(getContainer().getShell(), Messages.getString("DeployOnMDMExportWizardPage.publishJob"), //$NON-NLS-1$
-                Messages.getString("DeployOnMDMExportWizardPage.publishJobSuccess")); //$NON-NLS-1$
-
         mdmServer = toSpagoBiServer(server);
-
         setDeploySucceed(true);
+        return true;
+    }
+
+    private boolean needContextScript() {
+        return (contextButton != null) ? contextButton.getSelection() : true;
+    }
+
+    /**
+     * The Finish button was pressed. Try to do the required work now and answer a boolean indicating success. If false
+     * is returned then the wizard will not close.
+     * 
+     * @returns boolean
+     */
+    @Override
+    public boolean finish() {
+        try {
+            int type = getExportType();
+            boolean needContextScript = needContextScript();
+            String context = contextCombo.getText();
+            DeployJobProcess deployJobProcess = new DeployJobProcess(type, needContextScript, context);
+            getContainer().run(true, false, deployJobProcess);
+        } catch (InvocationTargetException ex) {
+            log.error(ex.getMessage(), ex);
+        } catch (InterruptedException ex) {
+            log.error(ex.getMessage(), ex);
+        }
+
         return true;
     }
 
@@ -538,10 +679,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * 
      * DOC aiming Comment method "reBuildJobZipFile".
+     * 
+     * @param type
      */
-    private void reBuildJobZipFile() {
+    private void reBuildJobZipFile(int type) {
         JavaJobExportReArchieveCreator creator = null;
-        String zipFile = getDestinationValue();
+        String zipFile = getDestinationValue(type);
 
         String tmpFolder = JavaJobExportReArchieveCreator.getTmpFolder();
         try {
@@ -557,7 +700,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             for (ExportFileResource proces : process) {
                 if (proces != null) {
                     String jobFolderName = proces.getDirectoryName();
-                    int pos = jobFolderName.indexOf("/"); //$NON-NLS-1$
+                    int pos = jobFolderName.indexOf(SEPERATOR);
                     if (pos != -1) {
                         jobFolderName = jobFolderName.substring(pos + 1);
                     }
@@ -581,10 +724,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * process each job,unzip to a temp folder , copy the necessary folder for each job , and zip to the MDM temp folder
      * for uploading.
+     * 
+     * @param type
      */
-    protected void processForEachJob() {
+    protected void processForEachJob(int type) {
 
-        String zipFile = getDestinationValue();
+        String zipFile = getDestinationValue(type);
 
         String tmpFolder = JavaJobExportReArchieveCreator.getTmpFolder() + File.separator + "forJob"; //$NON-NLS-1$
 
@@ -592,36 +737,36 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             // unzip to tmpFolder
             ZipToFile.unZipFile(zipFile, tmpFolder);
 
-            File desFile = new File(tmpFolder + File.separator + jobLabelName + "_" + jobVersion);//$NON-NLS-1$
+            File desFile = new File(tmpFolder + File.separator + jobLabelName + UNDERLINE + jobVersion);
 
             if (desFile.isDirectory()) {
 
                 for (JobDeploymentInfo jobInfo : jobInfoList) {
-                    File sourFile = new File(tmpFolder + File.separator + jobLabelName
-                            + "_" + jobVersion + File.separator + jobInfo.getJobLabelName()); //$NON-NLS-1$
-                    File sourLibFile = new File(tmpFolder + File.separator + jobLabelName
-                            + "_" + jobVersion + File.separator + "lib"); //$NON-NLS-1$ //$NON-NLS-2$
+                    File sourFile = new File(tmpFolder + File.separator + jobLabelName + UNDERLINE + jobVersion + File.separator
+                            + jobInfo.getJobLabelName());
+                    File sourLibFile = new File(tmpFolder + File.separator + jobLabelName + UNDERLINE + jobVersion
+                            + File.separator + "lib"); //$NON-NLS-1$  
 
-                    String jobDescPath = tmpFolder + File.separator + jobInfo.getJobLabelName()
-                            + "_" + jobInfo.getJobVersion() + "job"; //$NON-NLS-1$ //$NON-NLS-2$
+                    String jobDescPath = tmpFolder + File.separator + jobInfo.getJobLabelName() + UNDERLINE
+                            + jobInfo.getJobVersion() + "job"; //$NON-NLS-1$  
 
                     File jobDescDir = new File(jobDescPath);
                     if (!jobDescDir.exists()) {
                         jobDescDir.mkdir();
                     }
-                    File jobDescDir_in = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
-                            + "_" + jobInfo.getJobVersion()); //$NON-NLS-1$
+                    File jobDescDir_in = new File(jobDescPath + File.separator + jobInfo.getJobLabelName() + UNDERLINE
+                            + jobInfo.getJobVersion());
                     if (!jobDescDir_in.exists()) {
                         jobDescDir_in.mkdir();
                     }
-                    File jobDescDir_main = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
-                            + "_" + jobInfo.getJobVersion() + File.separator + jobInfo.getJobLabelName()); //$NON-NLS-1$
+                    File jobDescDir_main = new File(jobDescPath + File.separator + jobInfo.getJobLabelName() + UNDERLINE
+                            + jobInfo.getJobVersion() + File.separator + jobInfo.getJobLabelName());
                     if (!jobDescDir_main.exists()) {
                         jobDescDir_main.mkdir();
                     }
 
-                    File jobDescDirLib = new File(jobDescPath + File.separator + jobInfo.getJobLabelName()
-                            + "_" + jobInfo.getJobVersion() + File.separator + "lib"); //$NON-NLS-1$ //$NON-NLS-2$
+                    File jobDescDirLib = new File(jobDescPath + File.separator + jobInfo.getJobLabelName() + UNDERLINE
+                            + jobInfo.getJobVersion() + File.separator + "lib"); //$NON-NLS-1$ 
                     if (!jobDescDirLib.exists()) {
                         jobDescDirLib.mkdir();
                     }
@@ -678,13 +823,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * @param resourcesToExport
      * @return
      */
-    protected ArchiveFileExportOperationFullPath getExporterOperation(List<ExportFileResource> resourcesToExport) {
+    private ArchiveFileExportOperationFullPath getExporterOperation(int type, List<ExportFileResource> resourcesToExport) {
         ArchiveFileExportOperationFullPath exporterOperation = new ArchiveFileExportOperationFullPath(resourcesToExport,
-                getDestinationValue());
+                getDestinationValue(type));
         return exporterOperation;
     }
 
-    protected ArchiveFileExportOperationFullPath getExporterOperationForOneJob(List<ExportFileResource> resourcesToExport,
+    private ArchiveFileExportOperationFullPath getExporterOperationForOneJob(List<ExportFileResource> resourcesToExport,
             String descValue) {
         ArchiveFileExportOperationFullPath exporterOperation = new ArchiveFileExportOperationFullPath(resourcesToExport,
                 descValue);
@@ -694,10 +839,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Returns the root folder name.
      * 
+     * @param type
+     * 
      * @return
      */
-    private String getRootFolderName() {
-        IPath path = new Path(this.getDestinationValue());
+    private String getRootFolderName(int type) {
+        IPath path = new Path(this.getDestinationValue(type));
         String subjectString = path.lastSegment();
         Pattern regex = Pattern.compile("(.*)(?=(\\.(tar|zip))\\b)", Pattern.CANON_EQ | Pattern.CASE_INSENSITIVE //$NON-NLS-1$
                 | Pattern.UNICODE_CASE);
@@ -709,14 +856,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return subjectString.trim();
     }
 
-    private void setTopFolder(List<ExportFileResource> resourcesToExport, String topFolder) {
+    private void setTopFolder(int type, List<ExportFileResource> resourcesToExport, String topFolder) {
         // is war do nothing
-        if (exportTypeCombo.getSelectionIndex() == 0) {
+        if (type == 0) {
             return;
         } else if (resourcesToExport != null) {
             for (ExportFileResource fileResource : resourcesToExport) {
                 String directory = fileResource.getDirectoryName();
-                fileResource.setDirectoryName(topFolder + "/" + directory); //$NON-NLS-1$
+                fileResource.setDirectoryName(topFolder + SEPERATOR + directory);
             }
         }
     }
@@ -737,16 +884,24 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * @return a collection of resources currently selected for export (element type: <code>IResource</code>)
      * @throws ProcessorException
      */
-    protected List<ExportFileResource> getExportResources() throws ProcessorException {
-        Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap();
+    protected List<ExportFileResource> getExportResources(int type, boolean needContextScript) throws ProcessorException {
+        Map<ExportChoice, Object> exportChoiceMap = getExportChoiceMap(type, needContextScript);
         return manager.getExportResources(process);
+    }
+
+    protected List<ExportFileResource> getExportResources() throws ProcessorException {
+        return getExportResources(getExportType(), needContextScript());
+    }
+
+    private int getExportType() {
+        return exportTypeCombo.getSelectionIndex();
     }
 
     /**
      * set the destinationValue for each job
      */
 
-    protected void setDesValueForJob() {
+    protected void setDesValueForJob(int type) {
 
         for (ExportFileResource each : process) {
 
@@ -755,7 +910,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 if (item instanceof ProcessItem) {
                     String name = ((ProcessItem) each.getItem()).getProperty().getLabel();
                     if (jobInfo.getJobLabelName().equals(name)) {
-                        setDestinationValueForJob(jobInfo);
+                        setDestinationValueForJob(type, jobInfo);
                     }
 
                 }
@@ -765,11 +920,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         }
     }
 
-    private Map<ExportChoice, Object> getExportChoiceMap() {
-        return getExportChoiceMap(exportTypeCombo.getSelectionIndex());
-    }
-
-    private Map<ExportChoice, Object> getExportChoiceMap(int index) {
+    private Map<ExportChoice, Object> getExportChoiceMap(int index, boolean needContextScript) {
         Map<ExportChoice, Object> exportChoiceMap = new EnumMap<ExportChoice, Object>(ExportChoice.class);
         if (index == 0) {// war
             exportChoiceMap.put(ExportChoice.needMetaInfo, true);
@@ -800,7 +951,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             exportChoiceMap.put(ExportChoice.applyToChildren, true);
             exportChoiceMap.put(ExportChoice.needDependencies, true);
         }
-        exportChoiceMap.put(ExportChoice.needContext, (contextButton != null) ? contextButton.getSelection() : true);
+        exportChoiceMap.put(ExportChoice.needContext, needContextScript);
 
         return exportChoiceMap;
     }
@@ -811,9 +962,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     @Override
     protected String getDestinationValue() {
-        String idealSuffix = getOutputSuffix();
+        return getDestinationValue(getExportType());
 
-        String filename = jobLabelName + "_" + jobVersion + idealSuffix; //$NON-NLS-1$
+    }
+
+    protected String getDestinationValue(int type) {
+        String idealSuffix = getOutputSuffix(type);
+
+        String filename = jobLabelName + UNDERLINE + jobVersion + idealSuffix;
         IPath tempPath;
         tempPath = Path.fromOSString(CorePlugin.getDefault().getPreferenceStore()
                 .getString(ITalendCorePrefConstants.FILE_PATH_TEMP));
@@ -824,9 +980,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * set the destinationValue for each job
      */
-    protected void setDestinationValueForJob(JobDeploymentInfo jobInfo) {
-        String idealSuffix = getOutputSuffix();
-        String filename = jobInfo.getJobLabelName() + "_" + jobInfo.getJobVersion() + idealSuffix; //$NON-NLS-1$
+    protected void setDestinationValueForJob(int type, JobDeploymentInfo jobInfo) {
+        String idealSuffix = getOutputSuffix(type);
+        String filename = jobInfo.getJobLabelName() + UNDERLINE + jobInfo.getJobVersion() + idealSuffix;
         IPath tempPath;
         tempPath = Path.fromOSString(CorePlugin.getDefault().getPreferenceStore()
                 .getString(ITalendCorePrefConstants.FILE_PATH_TEMP));
@@ -839,11 +995,11 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * typically the case) then it must include the leading period character.
      * 
      */
-    protected String getOutputSuffix() {
-        if (exportTypeCombo.getSelectionIndex() == 0) {
-            return ".war"; //$NON-NLS-1$
+    protected String getOutputSuffix(int type) {
+        if (type == 0) {
+            return EXT_WAR;
         } else {
-            return ".zip"; //$NON-NLS-1$
+            return EXT_ZIP;
         }
     }
 
@@ -854,7 +1010,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected void handleDestinationBrowseButtonPressed() {
         FileDialog dialog = new FileDialog(getContainer().getShell(), SWT.SAVE);
         dialog.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
-        dialog.setText(""); //$NON-NLS-1$
+        dialog.setText(BLANK);
         String currentSourceString = getDestinationValue();
         int lastSeparatorIndex = currentSourceString.lastIndexOf(File.separator);
         if (lastSeparatorIndex != -1) {
@@ -871,6 +1027,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Hook method for saving widget values for restoration by the next instance of this class.
      */
+
     @Override
     protected void internalSaveWidgetValues() {
     }
@@ -890,7 +1047,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     @Override
     protected String destinationEmptyMessage() {
-        return ""; //$NON-NLS-1$
+        return BLANK;
     }
 
     @Override
@@ -900,7 +1057,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         GridLayout layout = new GridLayout();
         optionsGroup.setLayout(layout);
         optionsGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-        optionsGroup.setText(Messages.getString("DeployOnMDMExportWizardPage.Settings")); //$NON-NLS-1$
+        optionsGroup.setText(Messages.DeployOnMDMExportWizardPage_Settings);
         optionsGroup.setFont(parent.getFont());
         createOptionsGroupButtons(optionsGroup);
 
@@ -929,10 +1086,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     public SpagoBiServer getMdmServer() {
         return this.mdmServer;
-    }
-
-    public void setMdmServer(SpagoBiServer mdmServer) {
-        this.mdmServer = mdmServer;
     }
 
     public RuntimeException getDeployException() {

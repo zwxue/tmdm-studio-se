@@ -31,12 +31,13 @@ import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.ui.wizards.MDMServerHelper;
 
-/**@deprecated
- * DOC cantoine class global comment. Detailled comment <br/>
+/**
+ * @deprecated DOC cantoine class global comment. Detailled comment <br/>
  * 
  * $Id: MDMServerEditor.java 2738 2007-04-27 13:12:27Z cantoine $
  * 
  */
+@Deprecated
 public class MDMServerEditor extends TableEditor {
 
     /**
@@ -58,15 +59,15 @@ public class MDMServerEditor extends TableEditor {
         contextTable.setHeaderVisible(true);
 
         TableColumn shortDescription = new TableColumn(contextTable, SWT.NONE);
-        shortDescription.setText(Messages.getString("MDMServerEditor.descriptionColumnTitle")); //$NON-NLS-1$
+        shortDescription.setText(Messages.MDMServerEditor_descriptionColumnTitle);
         shortDescription.setWidth(150);
 
         TableColumn host = new TableColumn(contextTable, SWT.NONE);
-        host.setText(Messages.getString("MDMServerEditor.hostColumnTitle")); //$NON-NLS-1$
+        host.setText(Messages.MDMServerEditor_hostColumnTitle);
         host.setWidth(150);
 
         TableColumn engineName = new TableColumn(contextTable, SWT.NONE);
-        engineName.setText(Messages.getString("MDMServerDialog.port")); //$NON-NLS-1$
+        engineName.setText(Messages.MDMServerDialog_port);
         engineName.setWidth(150);
 
         return contextTable;
@@ -153,8 +154,8 @@ public class MDMServerEditor extends TableEditor {
         // MDMServerHelper.getLogin(obj), MDMServerHelper.getPassword(obj), MDMServerHelper
         // .getApplicationContext(obj));
         MDMServerDialog dialog = new MDMServerDialog(shell, computeCodeList(), MDMServerHelper.getShortDescription(obj),
-                MDMServerHelper.getHost(obj), MDMServerHelper.getPort(obj), MDMServerHelper.getLogin(obj), MDMServerHelper
-                        .getPassword(obj));
+                MDMServerHelper.getHost(obj), MDMServerHelper.getPort(obj), MDMServerHelper.getLogin(obj),
+                MDMServerHelper.getPassword(obj));
 
         if (dialog.open() == Window.OK) {
             return MDMServerHelper.getString(dialog.getShortDescription(), dialog.getHost(), dialog.getPort(), dialog.getLogin(),

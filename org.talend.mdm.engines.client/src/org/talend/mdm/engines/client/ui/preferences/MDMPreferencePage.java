@@ -22,12 +22,13 @@ import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 
-/**@deprecated
- * Preference for the MDMServer values.
+/**
+ * @deprecated Preference for the MDMServer values.
  * 
  * $Id: MDMPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $
  * 
  */
+@Deprecated
 public class MDMPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
     protected static Logger log = Logger.getLogger(MDMPreferencePage.class);
@@ -66,8 +67,7 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
 
         // spagoBiCheckButton = new CheckBoxFieldEditor(MDMPreferenceInitializer.MDM_STATUS, Messages
         //                .getString("MDMPreferencePage.spagoBiCheckButton"), parent); //$NON-NLS-1$
-        editor = new MDMServerEditor(MDMPreferenceInitializer.MDM_SERVER,
-                Messages.getString("MDMPreferencePage.technicalStatusLabel"), parent); //$NON-NLS-1$
+        editor = new MDMServerEditor(MDMPreferenceInitializer.MDM_SERVER, Messages.MDMPreferencePage_technicalStatusLabel, parent);
         addField(editor);
 
         updateEnableStateFromPreferences();

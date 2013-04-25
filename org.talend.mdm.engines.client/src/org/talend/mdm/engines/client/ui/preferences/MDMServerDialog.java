@@ -30,12 +30,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.talend.mdm.engines.client.i18n.Messages;
 
-/**@deprecated
- * DOC cantoine class global comment. Detailled comment <br/>
+/**
+ * @deprecated DOC cantoine class global comment. Detailled comment <br/>
  * 
  * $Id: MDMServerDialog.java 2738 2007-03-28 13:12:27Z cantoine $
  * 
  */
+@Deprecated
 public class MDMServerDialog extends Dialog {
 
     private String shortDescription = ""; //$NON-NLS-1$
@@ -120,9 +121,9 @@ public class MDMServerDialog extends Dialog {
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         if (creation) {
-            shell.setText(Messages.getString("MDMServerDialog.shellText.createNewServer")); //$NON-NLS-1$
+            shell.setText(Messages.MDMServerDialog_shellText_createNewServer);
         } else {
-            shell.setText(Messages.getString("MDMServerDialog.shellText.editServer")); //$NON-NLS-1$
+            shell.setText(Messages.MDMServerDialog_shellText_editServer);
         }
     }
 
@@ -190,7 +191,7 @@ public class MDMServerDialog extends Dialog {
         // shortDescriptionLabel.setLayoutData(data);
 
         shortDescriptionLabel = new Label(composite, SWT.WRAP);
-        shortDescriptionLabel.setText(Messages.getString("MDMServerDialog.shortDescription")); //$NON-NLS-1$
+        shortDescriptionLabel.setText(Messages.MDMServerDialog_shellText_createNewServer);
         shortDescriptionLabel.setFont(parent.getFont());
         shortDescriptionText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         shortDescriptionText.setLayoutData(data1);
@@ -200,13 +201,13 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-        
+
         Label hostLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // hostLabel.setLayoutData(data);
 
         hostLabel = new Label(composite, SWT.WRAP);
-        hostLabel.setText(Messages.getString("MDMServerDialog.host")); //$NON-NLS-1$
+        hostLabel.setText(Messages.MDMServerDialog_host);
         hostLabel.setFont(parent.getFont());
         hostText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         hostText.setLayoutData(data1);
@@ -216,13 +217,13 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-        
+
         Label portLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // portLabel.setLayoutData(data);
 
         portLabel = new Label(composite, SWT.WRAP);
-        portLabel.setText(Messages.getString("MDMServerDialog.port")); //$NON-NLS-1$
+        portLabel.setText(Messages.MDMServerDialog_port);
         portLabel.setFont(parent.getFont());
         portText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         portText.setLayoutData(data1);
@@ -232,13 +233,13 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-        
+
         Label loginLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // loginLabel.setLayoutData(data);
 
         loginLabel = new Label(composite, SWT.WRAP);
-        loginLabel.setText(Messages.getString("MDMServerDialog.login")); //$NON-NLS-1$
+        loginLabel.setText(Messages.MDMServerDialog_login);
         loginLabel.setFont(parent.getFont());
         loginText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         loginText.setLayoutData(data1);
@@ -248,13 +249,13 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-        
+
         Label passwordLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // passwordLabel.setLayoutData(data);
 
         passwordLabel = new Label(composite, SWT.WRAP);
-        passwordLabel.setText(Messages.getString("MDMServerDialog.password")); //$NON-NLS-1$
+        passwordLabel.setText(Messages.MDMServerDialog_password);
         passwordLabel.setFont(parent.getFont());
         passwordText = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD);
         passwordText.setLayoutData(data1);
@@ -264,7 +265,7 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-       
+
         // Label applicationContextLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // applicationContextLabel.setLayoutData(data);
@@ -285,13 +286,13 @@ public class MDMServerDialog extends Dialog {
         // errorMessageText.setLayoutData(data);
         // errorMessageText.setLayoutData(data);
         errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-        
+
         shortDescriptionText.setText(shortDescription);
         hostText.setText(host);
         portText.setText(port);
         loginText.setText(login);
         passwordText.setText(password);
-        
+
         applyDialogFont(composite);
         return composite;
     }

@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.mdm.engines.client.i18n;
 
-import java.util.ResourceBundle;
-
-import org.talend.commons.i18n.MessagesCore;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * Default implementation of MessageCore from org.talend.commons plug-in.<br/>
@@ -22,34 +20,116 @@ import org.talend.commons.i18n.MessagesCore;
  * $Id: Messages.java 3351 2007-05-04 12:14:00Z plegall $
  * 
  */
-public class Messages extends MessagesCore {
+public class Messages extends NLS {
 
-    private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.talend.mdm.engines.client.i18n.messages"; //$NON-NLS-1$
 
-    private static final String PLUGIN_ID = "org.talend.mdm.engines.client"; //$NON-NLS-1$
-
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
-
-    /**
-     * Returns the i18n formatted message for <i>key</i> in the class bundle.
-     * 
-     * @param key - the key for the desired string
-     * @return the string for the given key in the class resource bundle
-     * @see MessagesCore#getString(String, ResourceBundle)
-     */
-    public static String getString(final String key) {
-        return getString(key, PLUGIN_ID, resourceBundle);
+    // //////////////////////////////////////////////////////////////////////////
+    //
+    // Constructor
+    //
+    // //////////////////////////////////////////////////////////////////////////
+    private Messages() {
+        // do not instantiate
     }
 
-    /**
-     * Returns the i18n formatted message for <i>key</i> and <i>args</i> in the specified bundle.
-     * 
-     * @param key - the key for the desired string
-     * @param args - arg to include in the string
-     * @return the string for the given key in the given resource bundle
-     * @see MessagesCore#getString(String, ResourceBundle, Object[])
-     */
-    public static String getString(final String key, final Object... args) {
-        return MessagesCore.getString(key, PLUGIN_ID, resourceBundle, args);
+    public static String bind(String message, String... bindings) {
+        return NLS.bind(message, bindings);
     }
+
+    // //////////////////////////////////////////////////////////////////////////
+    //
+    // Class initialization
+    //
+    // //////////////////////////////////////////////////////////////////////////
+    static {
+        // load message values from bundle file
+        NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+    }
+
+    public static String DeployOnMDMExportWizard_publishJob;
+
+    public static String DeployOnMDMExportWizardPage_prepareDeployJob;
+
+    public static String DeployOnMDMExportWizardPage_publishJob;
+
+    public static String DeployOnMDMExportWizardPage_publishResourceError;
+
+    public static String DeployOnMDMExportWizardPage_SpecifyServer_PublishJob;
+
+    public static String DeployOnMDMExportWizardPage_checkConnection;
+
+    public static String DeployOnMDMExportWizardPage_chooseResource;
+
+    public static String DeployOnMDMExportWizardPage_DeployingJobObjects;
+
+    public static String DeployOnMDMExportWizardPage_DeployJobOnServer;
+
+    public static String DeployOnMDMExportWizardPage_distributedWar;
+
+    public static String DeployOnMDMExportWizardPage_jobLabel;
+
+    public static String DeployOnMDMExportWizardPage_jobName;
+
+    public static String DeployOnMDMExportWizardPage_jobDescription;
+
+    public static String DeployOnMDMExportWizardPage_SpagoBI_Server;
+
+    public static String DeployOnMDMExportWizardPage_spagoVisible;
+
+    public static String DeployOnMDMExportWizardPage_publishJobSuccess;
+
+    public static String DeployOnMDMExportWizardPage_UnableConnect;
+
+    public static String DeployOnMDMExportWizardPage_ErrorDeployMsg;
+
+    public static String DeployOnMDMExportWizardPage_exportType;
+
+    public static String DeployOnMDMExportWizardPage_ExportType;
+
+    public static String DeployOnMDMExportWizardPage_Generating;
+
+    public static String DeployOnMDMExportWizardPage_hostedZip;
+
+    public static String DeployOnMDMExportWizardPage_Pacakging;
+
+    public static String MDMPreferencePage_technicalStatusLabel;
+
+    public static String MDMServerEditor_engineColumnTitle;
+
+    public static String MDMServerEditor_descriptionColumnTitle;
+
+    public static String MDMServerEditor_hostColumnTitle;
+
+    public static String MDMServerDialog_shellText_createNewServer;
+
+    public static String MDMServerDialog_shellText_editServer;
+
+    public static String MDMServerDialog_engineNameText;
+
+    public static String MDMServerDialog_shortDescription;
+
+    public static String MDMServerDialog_host;
+
+    public static String MDMServerDialog_port;
+
+    public static String MDMServerDialog_login;
+
+    public static String MDMServerDialog_password;
+
+    public static String MDMServerDialog_applicationContext;
+
+    public static String MDMServerDialog_errorMessage_engineNameLetters;
+
+    public static String MDMServerDialog_errorMessage_engineNameUsed;
+
+    public static String JobScriptsExportWizardPage_contextPerlScripts;
+
+    public static String MDMPreferencePage_spagoBiCheckButton;
+
+    public static String DeployOnMDMExportWizardPage_Settings;
+
+    public static String ZipExport_alreadyExistsError;
+
+    public static String ZipExport_mustBeFile;
 }
