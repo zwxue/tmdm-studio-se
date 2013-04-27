@@ -114,7 +114,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
         simpleTypeBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 2, 1));
         simpleTypeBtn.addSelectionListener(this);
 
-        elemPanel = new ElementComposite(conceptPanel.getComposite(), customTypes, builtInTypes, true);
+        elemPanel = new ElementComposite(conceptPanel.getComposite(), customTypes, builtInTypes, null, true);
         composite = elemPanel.getComposite();
         elemPanel.addModifyListener(this);
 

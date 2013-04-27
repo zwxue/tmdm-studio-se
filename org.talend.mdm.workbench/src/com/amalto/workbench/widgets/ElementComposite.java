@@ -34,9 +34,9 @@ import com.amalto.workbench.i18n.Messages;
 
 /**
  * this class is meant to encapsulate all widgets rendering element it can output composite to populate element form
- * 
+ *
  * @author Developer
- * 
+ *
  */
 public class ElementComposite {
 
@@ -52,7 +52,8 @@ public class ElementComposite {
 
     private Composite container = null;
 
-    public ElementComposite(Composite parent, final List customTypes, final List builtInTypes, boolean encloseTextField) {
+    public ElementComposite(Composite parent, final List customTypes, final List builtInTypes, String defaultTypeName,
+            boolean encloseTextField) {
         GridLayout layout = (GridLayout) parent.getLayout();
         layout.numColumns = 2;
         layout.makeColumnsEqualWidth = false;
@@ -95,25 +96,16 @@ public class ElementComposite {
             typeCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         }
 
-        builtInButton.setSelection(true);
         typeCombo.setEditable(false);
 
         customButton.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent event) {
                 if (customButton.getSelection()) {
                     typeCombo.removeAll();
-                    Set<String> alltypes = new HashSet<String>();
-                    // add uuid type aiming
-                    Set<String> uuidtypes = EUUIDCustomType.allTypes();
-                    alltypes.addAll(uuidtypes);
-                    typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
-                    for (Iterator iter = customTypes.iterator(); iter.hasNext();) {
-                        String name = (String) iter.next();
-                        if (!uuidtypes.contains(name))
-                            typeCombo.add(name);
-                    }
-                    typeCombo.indexOf("");//$NON-NLS-1$
+                    addCustomTypes(customTypes);
+
                     typeCombo.setEditable(true);
                     tipLabel.setText(Messages.ElementComposite_LeaveBlankForAnonymous);
                 }
@@ -122,13 +114,12 @@ public class ElementComposite {
 
         builtInButton.addSelectionListener(new SelectionAdapter() {
 
+            @Override
             public void widgetSelected(SelectionEvent event) {
                 if (builtInButton.getSelection()) {
                     typeCombo.removeAll();
-                    for (Iterator iter = builtInTypes.iterator(); iter.hasNext();) {
-                        String name = (String) iter.next();
-                        typeCombo.add(name);
-                    }
+
+                    addBuildinTypes(builtInTypes);
                     typeCombo.select(0);
                     typeCombo.setEditable(false);
                     tipLabel.setText("");//$NON-NLS-1$
@@ -136,13 +127,51 @@ public class ElementComposite {
             }
         });
 
+        addTypes(customTypes, builtInTypes, defaultTypeName);
+
+        container = parent;
+    }
+
+    private void addTypes(final List customTypes, final List builtInTypes, String defaultTypeName) {
+        if (customTypes == null || builtInTypes == null)
+            throw new IllegalArgumentException();
+
+        boolean isCustomType = customTypes.indexOf(defaultTypeName) != -1;
+
+        if (isCustomType) {
+            addCustomTypes(customTypes);
+        } else {
+            addBuildinTypes(builtInTypes);
+        }
+        customButton.setSelection(isCustomType);
+        builtInButton.setSelection(!isCustomType);
+        typeCombo.setEditable(isCustomType);
+
+        if (defaultTypeName == null || defaultTypeName.trim().isEmpty()) {
+            typeCombo.select(0);
+        } else {
+            typeCombo.setText(defaultTypeName);
+        }
+    }
+
+    private void addCustomTypes(final List customTypes) {
+        Set<String> alltypes = new HashSet<String>();
+        // add uuid type aiming
+        Set<String> uuidtypes = EUUIDCustomType.allTypes();
+        alltypes.addAll(uuidtypes);
+        typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
+        for (Iterator iter = customTypes.iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            if (!uuidtypes.contains(name))
+                typeCombo.add(name);
+        }
+    }
+
+    private void addBuildinTypes(final List builtInTypes) {
         for (Iterator iter = builtInTypes.iterator(); iter.hasNext();) {
             String name = (String) iter.next();
             typeCombo.add(name);
         }
-        typeCombo.select(0);
-
-        container = parent;
     }
 
     public void addModifyListener(ModifyListener listener) {

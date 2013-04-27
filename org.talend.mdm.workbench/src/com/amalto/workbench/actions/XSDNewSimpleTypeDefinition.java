@@ -54,6 +54,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
         setDescription(getToolTipText());
     }
 
+    @Override
     public IStatus doAction() {
 
         List<String> customTypes = new ArrayList<String>();
@@ -71,7 +72,8 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
                 builtInTypes.add(type.getName());
         }
 
-        dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDNewSimpleTypeDefinition_NewSimpleType, customTypes, builtInTypes);
+        dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema,
+                Messages.XSDNewSimpleTypeDefinition_NewSimpleType, customTypes, builtInTypes, null);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
         if (ret == Dialog.CANCEL) {

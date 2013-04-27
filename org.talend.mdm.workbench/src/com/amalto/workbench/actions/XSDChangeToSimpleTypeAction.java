@@ -14,6 +14,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -82,6 +83,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
         declNew = dec;
     }
 
+    @Override
     public IStatus doAction() {
         try {
             XSDElementDeclaration decl = null;
@@ -103,9 +105,9 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
             }
 
             // build list of custom types and built in types
-            ArrayList customTypes = new ArrayList();
-            for (Iterator iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+            List<String> customTypes = new ArrayList<String>();
+            for (Iterator<XSDTypeDefinition> iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
+                XSDTypeDefinition type = iter.next();
                 if (type instanceof XSDSimpleTypeDefinition) {
                     if (type.getTargetNamespace() != null
                             && !type.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)
@@ -113,18 +115,19 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                         customTypes.add(type.getName());
                 }
             }
-            ArrayList<String> builtInTypes = new ArrayList<String>();
-            initBuiltInTypesWithSelectedTypes(builtInTypes); 
-            
+            List<String> builtInTypes = new ArrayList<String>();
+            initBuiltInTypesWithSelectedTypes(builtInTypes);
+
             if (showDlg) {
                 if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
                     boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning, Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
                     if(!confirm)
                         return Status.CANCEL_STATUS;
                 }
-                
-                dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeToXX_DialogTitle, customTypes,
-                        builtInTypes);
+
+                String name = decl.getTypeDefinition().getName();
+                dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeToXX_DialogTitle,
+                        customTypes, builtInTypes, name);
 
                 dialog.setBlockOnOpen(true);
                 int ret = dialog.open();
@@ -194,7 +197,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                             f.setLexicalValue("(\\[\\w+\\:[^\\[\\]]*\\]){0,}");//$NON-NLS-1$
                             std.getFacetContents().add(f);
                         }
-                        
+
                         schema.getContents().add(std);
                     }
 
@@ -233,8 +236,8 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
         return Status.OK_STATUS;
     }
 
-    private void initBuiltInTypesWithSelectedTypes(ArrayList<String> builtInTypes) {
-    	
+    private void initBuiltInTypesWithSelectedTypes(List<String> builtInTypes) {
+
     	builtInTypes.add("anyURI");              //$NON-NLS-1$
     	builtInTypes.add("base64Binary");              //$NON-NLS-1$
     	builtInTypes.add("boolean");              //$NON-NLS-1$
@@ -285,9 +288,10 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 
 	}
 
- 
 
-	public void runWithEvent(Event event) {
+
+	@Override
+    public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
 

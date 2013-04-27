@@ -56,16 +56,20 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
     private Label infoLabel = null;
 
+    private String defaultTypeName;
+
     /**
      * @param parentShell
+     * @param defaultTypeName
      */
     public SimpleTypeInputDialog(SelectionListener caller, Shell parentShell, XSDSchema schema, String title, List customTypes,
-            List builtInTypes) {
+            List builtInTypes, String defaultTypeName) {
         super(parentShell);
         this.caller = caller;
         this.title = title;
         this.customTypes = customTypes;
         this.builtInTypes = builtInTypes;
+        this.defaultTypeName = defaultTypeName;
         xsdSchema = schema;
     }
 
@@ -76,7 +80,7 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
         final Composite composite = (Composite) super.createDialogArea(parent);
         // encapsulate all widgets into the ElementComposite which can be applied to several cases
-        elemPanel = new ElementComposite(composite, customTypes, builtInTypes, false);
+        elemPanel = new ElementComposite(composite, customTypes, builtInTypes, defaultTypeName, false);
         elemPanel.getTypeCombo().addModifyListener(this);
 
         infoLabel = new Label(composite, SWT.NONE);

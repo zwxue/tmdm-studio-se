@@ -57,6 +57,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
         setDescription(getToolTipText());
     }
 
+    @Override
     public IStatus doAction() {
         try {
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
@@ -88,8 +89,9 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
             if(builtInTypes.contains(typedef.getName())){
             	return Status.CANCEL_STATUS;
             }
-            dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeBaseTypeAction_DialogTitle, customTypes,
-                    builtInTypes);
+            dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema,
+                    Messages.XSDChangeBaseTypeAction_DialogTitle, customTypes, builtInTypes, typedef.getBaseTypeDefinition()
+                            .getName());
 
             dialog.setBlockOnOpen(true);
             int ret = dialog.open();
@@ -151,6 +153,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
         return Status.OK_STATUS;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
