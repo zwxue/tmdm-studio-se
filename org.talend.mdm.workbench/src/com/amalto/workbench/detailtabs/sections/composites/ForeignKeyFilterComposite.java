@@ -33,6 +33,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -42,6 +43,7 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationshi
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfoDefUnit;
 import com.amalto.workbench.detailtabs.sections.providers.ForeignKeyFilterCellModifier;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.ColumnTextExtractor;
@@ -52,8 +54,6 @@ import com.amalto.workbench.widgets.composites.ComplexAnnotaionInfoComposite;
 
 public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<ForeignKeyFilterAnnoInfoDefUnit> {
     private final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
-
-    private Image warnImage = ImageCache.getCreatedImage("icons/showwarn_tsk.gif"); //$NON-NLS-1$
 
     private Text txtCustomFilter;
 
@@ -85,6 +85,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         defineCF.setText(Messages.ForeignKeyFilterComposite_defineCustomeFilter);
         warnLabel = new CLabel(comp, SWT.LEFT | SWT.WRAP);
 
+        Image warnImage = ImageCache.getCreatedImage(EImage.WARN_TSK.getPath());
         warnLabel.setImage(warnImage);
         warnLabel.setText(Messages.ForeignKeyFilterComposite_defineWarningMsg);
         warnLabel.setVisible(false);
@@ -92,7 +93,9 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
         gpCustomFilter = new Group(this, SWT.NORMAL);
         gpCustomFilter.setText(Messages.ForeignKeyFilterComposite_CustomFilters);
-        gpCustomFilter.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        layoutData.minimumHeight = 80;
+        gpCustomFilter.setLayoutData(layoutData);
         gpCustomFilter.setLayout(new GridLayout());
 
         txtCustomFilter = new Text(gpCustomFilter, SWT.MULTI | SWT.V_SCROLL);
@@ -107,9 +110,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                boolean selected = defineCF.getSelection();
-                warnLabel.setVisible(selected);
-                gpCustomFilter.setVisible(selected);
+                showCustomFilterText(defineCF.getSelection());
             }
         };
 
@@ -228,10 +229,9 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
     	String filter=ForeignKeyFilterAnnoInfo.getCustomFilterInfo(filterExpression);
 
         boolean isCustomFilter = filter.startsWith(CUSTOM_FILTERS_PREFIX);
-
         defineCF.setSelection(isCustomFilter);
-        warnLabel.setVisible(isCustomFilter);
-        gpCustomFilter.setVisible(isCustomFilter);
+
+        showCustomFilterText(isCustomFilter);
 
         if (isCustomFilter) {
             filter = StringEscapeUtils.unescapeXml(filter).substring(6);
@@ -247,6 +247,17 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         txtCustomFilter.addModifyListener(getCustomFilterModifyListener());
         setInfos(ForeignKeyFilterAnnoInfo.getFKFilterCfgInfos(filterExpression));
 
+    }
+
+    private void showCustomFilterText(boolean show) {
+        warnLabel.setVisible(show);
+        gpCustomFilter.setVisible(show);
+        if (show) {
+            gpCustomFilter.setParent(this);
+        } else {
+            gpCustomFilter.setParent(new Shell());
+        }
+        this.layout();
     }
 
     @Override
