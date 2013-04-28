@@ -24,7 +24,6 @@ package org.talend.mdm.workbench.serverexplorer.ui.views;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -188,9 +187,10 @@ public class ServerExplorer extends ViewPart {
 
         // Adds root context menu
         final MenuManager menuManager = new MenuManager();
+        menuManager.setRemoveAllWhenShown(true);
         menuManager.addMenuListener(getMenuListener());
 
-        addAllActions(menuManager);
+        // addAllActions(menuManager);
 
         // Context
         Menu contextMenu = menuManager.createContextMenu(tree);
@@ -216,12 +216,11 @@ public class ServerExplorer extends ViewPart {
             public void menuAboutToShow(IMenuManager manager) {
                 ISelection selection = treeViewer.getSelection();
                 boolean isEmpty = selection.isEmpty();
-                ListIterator<Action> listIterator = allActions.listIterator(1);
-                while (listIterator.hasNext()) {
-                    listIterator.next().setEnabled(!isEmpty);
+                if (isEmpty) {
+                    manager.add(addServerDefAction);
+                } else {
+                    addAllActions(manager);
                 }
-
-                manager.update();
             }
         };
     }
