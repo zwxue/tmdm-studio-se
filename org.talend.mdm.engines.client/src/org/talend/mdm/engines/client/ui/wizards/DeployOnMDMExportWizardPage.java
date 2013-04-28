@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -61,7 +60,6 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.prefs.ITalendCorePrefConstants;
-import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
@@ -158,11 +156,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 IRepositoryViewObject repositoryObject = node.getObject();
                 if (repositoryObject.getProperty().getItem() instanceof ProcessItem) {
                     ProcessItem processItem = (ProcessItem) repositoryObject.getProperty().getItem();
-                    ProcessType processType = processItem.getProcess();
-                    if (processType.eIsProxy()) {
-                        processType = (ProcessType) EcoreUtil.resolve(processType, processItem);
-                        processType.getParameters();
-                    }
                     ExportFileResource resource = new ExportFileResource(processItem, processItem.getProperty().getLabel());
                     if (mdmserver == null) {
                         resource.setNode(node);
