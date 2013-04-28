@@ -84,7 +84,8 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
         tree.setLinesVisible(true);
         tree.setHeaderVisible(true);
         final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true);
-        gd_tree.heightHint = 80;
+        gd_tree.heightHint = 120;
+        gd_tree.minimumHeight = 80;
         tree.setLayoutData(gd_tree);
         tvInfos.setContentProvider(new ListContentProvider());
         tvInfos.setLabelProvider(getLabelProviderForViewer());

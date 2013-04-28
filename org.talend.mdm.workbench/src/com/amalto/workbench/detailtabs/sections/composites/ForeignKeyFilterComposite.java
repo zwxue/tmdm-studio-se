@@ -33,7 +33,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -91,11 +90,11 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         warnLabel.setVisible(false);
         defineCF.addSelectionListener(getWarnSelectionListener());
 
-        gpCustomFilter = new Group(this, SWT.NORMAL);
+        Group gpCustomFilter = new Group(this, SWT.NORMAL);
         gpCustomFilter.setText(Messages.ForeignKeyFilterComposite_CustomFilters);
-        GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-        layoutData.minimumHeight = 80;
-        gpCustomFilter.setLayoutData(layoutData);
+        groupLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+        groupLayoutData.minimumHeight = 60;
+        gpCustomFilter.setLayoutData(groupLayoutData);
         gpCustomFilter.setLayout(new GridLayout());
 
         txtCustomFilter = new Text(gpCustomFilter, SWT.MULTI | SWT.V_SCROLL);
@@ -123,7 +122,8 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     private CLabel warnLabel;
 
-    private Group gpCustomFilter;
+    private GridData groupLayoutData;
+
     private ModifyListener getCustomFilterModifyListener() {
         if(modifyListener == null) {
             modifyListener = new ModifyListener() {
@@ -251,13 +251,9 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     private void showCustomFilterText(boolean show) {
         warnLabel.setVisible(show);
-        gpCustomFilter.setVisible(show);
-        if (show) {
-            gpCustomFilter.setParent(this);
-        } else {
-            gpCustomFilter.setParent(new Shell());
-        }
-        this.layout();
+        txtCustomFilter.setVisible(show);
+        groupLayoutData.exclude = !show;
+        layout();
     }
 
     @Override
