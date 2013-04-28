@@ -57,8 +57,6 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.JobInteractiveHandler_label;
     }
 
-
-
     @Override
     public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         setToDefaultValue();
@@ -100,11 +98,13 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
             });
         }
 
-        if (deployCancelled)
+        if (deployCancelled) {
             throw new OperationCanceledException();
+        }
 
-        if (deployException != null)
+        if (deployException != null) {
             throw deployException;
+        }
 
         return result;
     }
@@ -128,13 +128,13 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     private IStructuredSelection getSelection(List<IRepositoryViewObject> viewObjs) {
         List<RepositoryNode> nodes = new LinkedList<RepositoryNode>();
         for (IRepositoryViewObject viewObj : viewObjs) {
-            RepositoryNode node = RepositoryResourceUtil.convertToNode(viewObj);
+            IRepositoryViewObject refreshViewObj = RepositoryResourceUtil.assertViewObject(viewObj);
+            RepositoryNode node = RepositoryResourceUtil.convertToNode(refreshViewObj);
             nodes.add(node);
         }
         return new StructuredSelection(nodes);
 
     }
-
 
     private SpagoBiServer getServer(MDMServerDef serverDef) {
         SpagoBiServer spagoBiServer = PropertiesFactory.eINSTANCE.createSpagoBiServer();
@@ -152,7 +152,6 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         String name = cmd.getObjName();
         String version = cmd.getViewObject().getVersion();
 
-
         // delete server bar file
         String filename = name + "_" + version + ".zip"; //$NON-NLS-1$ //$NON-NLS-2$
         String uploadURL = "http://" + serverDef.getHost() + ":"//$NON-NLS-1$//$NON-NLS-2$
@@ -166,7 +165,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
 
         return true;
     }
-    
+
     private void setToDefaultValue() {
         result = false;
         deployCancelled = false;
