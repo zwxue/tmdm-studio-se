@@ -60,6 +60,7 @@ import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.prefs.ITalendCorePrefConstants;
+import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
@@ -156,6 +157,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 IRepositoryViewObject repositoryObject = node.getObject();
                 if (repositoryObject.getProperty().getItem() instanceof ProcessItem) {
                     ProcessItem processItem = (ProcessItem) repositoryObject.getProperty().getItem();
+                    ProcessType processType = processItem.getProcess();
                     ExportFileResource resource = new ExportFileResource(processItem, processItem.getProperty().getLabel());
                     if (mdmserver == null) {
                         resource.setNode(node);
