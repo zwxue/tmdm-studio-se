@@ -56,9 +56,9 @@ import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
 
 /**
- * 
+ *
  * @author achen
- * 
+ *
  */
 public class TisTableViewer extends ComplexTableViewer {
 
@@ -103,7 +103,7 @@ public class TisTableViewer extends ComplexTableViewer {
         gd.heightHint = 80;
         // Up Down Delete button group
         Composite stepUpDownComposite = toolkit.createComposite(mainComposite, SWT.NONE);
-        stepUpDownComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+        stepUpDownComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         GridLayout layout = new GridLayout(8, false);
         layout.marginTop = 0;
         layout.marginBottom = 0;
@@ -361,7 +361,7 @@ public class TisTableViewer extends ComplexTableViewer {
             if (columns.get(i).isText()) {
                 editors[i] = new TextCellEditor(table);
             } else if (columns.get(i).isCombo()) {
-                editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn) columns.get(i)).getComboValues(),
+                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(),
                         SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
                 editors[i] = new XpathCellEditor(table);
@@ -587,6 +587,6 @@ public class TisTableViewer extends ComplexTableViewer {
 
     public void setDataModelMainPage(DataModelMainPage page) {
         this.page = page;
-        
+
     }
 }

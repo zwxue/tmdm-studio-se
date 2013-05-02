@@ -20,10 +20,17 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -34,6 +41,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.FKFilterParser;
@@ -61,6 +70,14 @@ public class FKFilterDialog extends Dialog {
 
     protected String dataModelName;
 
+    private Button defineCF;
+
+    private CLabel warnLabel;
+
+    private GridData groupLayoutData;
+
+    private Composite dialogAreaComposite;
+
     public FKFilterDialog(Shell parentShell, String title, String filter, DataModelMainPage page, String conceptName) {
         super(parentShell);
         this.filter = filter;
@@ -72,8 +89,8 @@ public class FKFilterDialog extends Dialog {
     @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
-        Composite composite = (Composite) super.createDialogArea(parent);
-        composite.setLayout(new GridLayout(2, false));
+        dialogAreaComposite = (Composite) super.createDialogArea(parent);
+        dialogAreaComposite.setLayout(new GridLayout(2, false));
 
         columns = new ComplexTableViewerColumn[] {
                 new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
@@ -87,7 +104,7 @@ public class FKFilterDialog extends Dialog {
         columns[1].setColumnWidth(140);
         columns[2].setColumnWidth(200);
         columns[3].setColumnWidth(140);
-        viewer = getNewTisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
+        viewer = getNewTisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), dialogAreaComposite);
         viewer.setXpath(true);
         viewer.setDatamodelName(dataModelName);
         // viewer.setMainPage(page);//TODO
@@ -103,11 +120,26 @@ public class FKFilterDialog extends Dialog {
         viewer.setWidth(680);
         viewer.getMainComposite().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 3));
 
+        Composite comp = new Composite(dialogAreaComposite, SWT.NONE);
+        comp.setLayout(new GridLayout(2, false));
+        defineCF = new Button(comp, SWT.CHECK);
+        defineCF.setText(Messages.ForeignKeyFilterComposite_defineCustomeFilter);
+        warnLabel = new CLabel(comp, SWT.LEFT | SWT.WRAP);
+
+        Image warnImage = ImageCache.getCreatedImage(EImage.WARN_TSK.getPath());
+        warnLabel.setImage(warnImage);
+        warnLabel.setText(Messages.ForeignKeyFilterComposite_defineWarningMsg);
+        warnLabel.setVisible(false);
+        defineCF.addSelectionListener(getWarnSelectionListener());
+
         // the text box of the custom filters
-        Group customFiltersGroup = new Group(composite, SWT.NONE);
+        Group customFiltersGroup = new Group(dialogAreaComposite, SWT.NONE);
         customFiltersGroup.setVisible(true);
         customFiltersGroup.setText(Messages.FKFilterDialog_CustomFilters);
-        customFiltersGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+        groupLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1);
+        groupLayoutData.heightHint = 60;
+        groupLayoutData.widthHint = 300;
+        customFiltersGroup.setLayoutData(groupLayoutData);
         customFiltersGroup.setLayout(new GridLayout(1, false));
 
         customFiltersText = new Text(customFiltersGroup, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
@@ -126,7 +158,7 @@ public class FKFilterDialog extends Dialog {
         // init data
         parseRules();
 
-        return composite;
+        return dialogAreaComposite;
     }
 
     protected TisTableViewer getNewTisTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit, Composite parent) {
@@ -144,7 +176,10 @@ public class FKFilterDialog extends Dialog {
         String[] keyNames = getKeyNames();
         String parsedFilter = FKFilterParser.parseFilter(filter, lines, keyNames);
 
-        if (!parsedFilter.isEmpty()) {
+        boolean isEmpty = parsedFilter.isEmpty();
+        defineCF.setSelection(!isEmpty);
+        showCustomFilterText(!isEmpty);
+        if (!isEmpty) {
             filter = parsedFilter;
             customFiltersText.setText(filter.substring(6));
         }
@@ -208,6 +243,30 @@ public class FKFilterDialog extends Dialog {
         filter = FKFilterParser.getDeParseredFilter(lines);
 
         return filter;
+    }
+
+    private SelectionListener getWarnSelectionListener() {
+        SelectionListener listener = new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                showCustomFilterText(defineCF.getSelection());
+            }
+        };
+
+        return listener;
+    }
+
+    @Override
+    protected Point getInitialSize() {
+        return new Point(700, 400);
+    }
+
+    private void showCustomFilterText(boolean show) {
+        warnLabel.setVisible(show);
+        customFiltersText.setVisible(show);
+        groupLayoutData.exclude = !show;
+        dialogAreaComposite.layout();
     }
 
     public String getFilter() {
