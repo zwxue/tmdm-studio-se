@@ -23,12 +23,18 @@ public class EditJobPropertiesAction extends AbstractBridgeRepositoryAction {
 
     /**
      * DOC hbhong EditJobPropertiesAction constructor comment.
-     * 
+     *
      * @param cAction
      */
     public EditJobPropertiesAction() {
         super(new EditPropertiesAction());
 
+    }
+
+    @Override
+    protected void doRun() {
+        super.doRun();
+        refreshCurrentObject();
     }
 
     /* (non-Javadoc)
