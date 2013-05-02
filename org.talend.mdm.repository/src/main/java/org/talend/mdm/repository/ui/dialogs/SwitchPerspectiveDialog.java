@@ -55,8 +55,8 @@ public class SwitchPerspectiveDialog extends MessageDialog {
      */
     public SwitchPerspectiveDialog(Shell parentShell, String perspectiveName, String perspectiveId, String prefSwitchId,
             String prefWarnUserSwitchId) {
-        super(parentShell, Messages.SwitchPerspectiveDialog_title, null, getDialogMessage(perspectiveName), MessageDialog.QUESTION,
-                new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL }, 0);
+        super(parentShell, Messages.SwitchPerspectiveDialog_title, null, getDialogMessage(perspectiveName),
+                MessageDialog.QUESTION, new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL }, 0);
         this.perspectiveId = perspectiveId;
         this.prefSwitchId = prefSwitchId;
         this.prefWarnUserSwitchId = prefWarnUserSwitchId;
@@ -81,6 +81,7 @@ public class SwitchPerspectiveDialog extends MessageDialog {
         }
     }
 
+    @Override
     protected Control createCustomArea(Composite parent) {
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout());
@@ -95,6 +96,7 @@ public class SwitchPerspectiveDialog extends MessageDialog {
 
     private SelectionListener selectionListener = new SelectionAdapter() {
 
+        @Override
         public void widgetSelected(SelectionEvent e) {
             Button button = (Button) e.widget;
             askUser = !button.getSelection();

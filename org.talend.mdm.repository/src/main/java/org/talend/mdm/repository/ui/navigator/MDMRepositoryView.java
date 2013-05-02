@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,6 +70,7 @@ import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.ExportObjectAction;
@@ -85,7 +88,7 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
@@ -305,30 +308,41 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         }
 
         public void partClosed(IWorkbenchPartReference partRef) {
+            if (activedJobEditorRefs.contains(partRef)) {
+                activedJobEditorRefs.remove(partRef);
+            }
 
         }
 
         public void partBroughtToTop(IWorkbenchPartReference partRef) {
+        }
+
+        private Set<IWorkbenchPartReference> activedJobEditorRefs = new HashSet<IWorkbenchPartReference>();
+
+        private boolean needConfirm(String curPerspectiveId, IWorkbenchPartReference partRef) {
+            String curPartId = partRef.getId();
+            return MDM_PERSPECTIVE_ID.equals(curPerspectiveId) && JOB_EDITOR_ID.equals(curPartId)
+                    && !activedJobEditorRefs.contains(partRef);
 
         }
 
         public void partActivated(IWorkbenchPartReference partRef) {
-            SwitchPerspectiveDialog dialog = null;
-            String curPerspectiveId = (currentPerspective == null) ? null : currentPerspective.getId();
-            String curPartId = partRef.getId();
-            // if (!BONITA_PERSPECTIVE_ID.equals(curPerspectiveId) && WorkflowEditorInput.EDITOR_ID.equals(curPartId)) {
-            //                dialog = new SwitchPerspectiveDialog(getSite().getShell(), "BPM", BONITA_PERSPECTIVE_ID, //$NON-NLS-1$
-            // PreferenceConstants.P_AUTO_SWITCH_TO_BONITA, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_BONITA);
-            //
-            // }
-            // if editor is talend job editor, switch to org.talend.rcp.perspective
-            if (MDM_PERSPECTIVE_ID.equals(curPerspectiveId) && JOB_EDITOR_ID.equals(curPartId)) {
-                dialog = new SwitchPerspectiveDialog(getSite().getShell(), "Integration", DI_PERSPECTIVE_ID, //$NON-NLS-1$
-                        PreferenceConstants.P_AUTO_SWITCH_TO_DI, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI);
 
-            }
-            if (dialog != null) {
-                dialog.run();
+            String curPerspectiveId = (currentPerspective == null) ? null : currentPerspective.getId();
+
+            // if editor is talend job editor, switch to org.talend.rcp.perspective
+            if (needConfirm(curPerspectiveId, partRef)) {
+                activedJobEditorRefs.add(partRef);
+                Display.getDefault().asyncExec(new Runnable() {
+
+                    public void run() {
+                        SwitchPerspectiveDialog dialog = new SwitchPerspectiveDialog(getSite().getShell(),
+                                Messages.MDMRepositoryView_integration, DI_PERSPECTIVE_ID,
+                                PreferenceConstants.P_AUTO_SWITCH_TO_DI, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI);
+
+                        dialog.run();
+                    }
+                });
             }
         }
 
