@@ -37,8 +37,9 @@ public class ValidateService implements IValidateService {
      * @see com.amalto.workbench.service.IValidateService#validateObjectExistence(int, java.lang.String)
      */
     public int validateObjectExistence(int type, String name) {
-        if (name == null)
+        if (name == null) {
             throw new IllegalArgumentException();
+        }
         ERepositoryObjectType objectType = RepositoryQueryService.getRepositoryObjectType(type);
         return validateObjectExistence(objectType, name);
     }
@@ -95,12 +96,12 @@ public class ValidateService implements IValidateService {
     }
 
     private boolean doValidateAndAlertObjectExistence(int result, String name, ERepositoryObjectType objectType, String typeName) {
-        if (result == STATUS_OK)
+        if (result == STATUS_OK) {
             return true;
-        else {
+        } else {
             String message = null;
             if (typeName == null) {
-                typeName = objectType.getKey();
+                typeName = objectType.getLabel();
             }
             if (result == STATUS_EXISTED) {
                 message = Messages.bind(Messages.ValidateService_ObjectExist, name, typeName);
