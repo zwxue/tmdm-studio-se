@@ -15,9 +15,8 @@ package org.talend.mdm.repository.ui.actions.job;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 import org.talend.repository.ui.actions.EditPropertiesAction;
 
-
 /**
- * DOC hbhong  class global comment. Detailled comment
+ * DOC hbhong class global comment. Detailled comment
  */
 public class EditJobPropertiesAction extends AbstractBridgeRepositoryAction {
 
@@ -31,7 +30,15 @@ public class EditJobPropertiesAction extends AbstractBridgeRepositoryAction {
 
     }
 
-    /* (non-Javadoc)
+    @Override
+    protected void doRun() {
+        super.doRun();
+        refreshCurrentObject();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
      */
     @Override

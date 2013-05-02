@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.bridge;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
@@ -70,6 +72,15 @@ public abstract class AbstractBridgeRepositoryAction extends AbstractRepositoryA
             commonViewer.refresh(object);
             commonViewer.expandToLevel(object, 1);
 
+        }
+    }
+
+    protected void refreshCurrentObject() {
+        List<Object> selectedObjects = getSelectedObject();
+        if (selectedObjects != null) {
+            for (Object obj : selectedObjects) {
+                commonViewer.refresh(obj);
+            }
         }
     }
 }
