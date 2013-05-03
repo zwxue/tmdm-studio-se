@@ -14,13 +14,13 @@ package com.amalto.workbench.editors;
 
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,8 +47,10 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
@@ -101,7 +103,12 @@ import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjectModelListener,IPagingListener {
+public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjectModelListener, IPagingListener {
+
+    /**
+     * 
+     */
+    private static final String BLANK = ""; //$NON-NLS-1$
 
     private static Log log = LogFactory.getLog(RoutingEngineV2BrowserMainPage.class);
 
@@ -133,6 +140,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     protected boolean[] ascending = { true, false, false, false };
 
+    private Button stopButton;
+
+    private Button startButton;
+
     public RoutingEngineV2BrowserMainPage(FormEditor editor) {
         super(editor, RoutingEngineV2BrowserMainPage.class.getName(), ((XObjectBrowserInput) editor.getEditorInput()).getName());
         // listen to events
@@ -160,47 +171,45 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusComposite.setLayout(new GridLayout(5, false));
 
             // status
-            Label descriptionLabel = toolkit.createLabel(statusComposite, Messages.RoutingEngineV2BrowserMainPage_EventManagerStatus, SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(statusComposite,
+                    Messages.RoutingEngineV2BrowserMainPage_EventManagerStatus, SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             statusLabel = toolkit.createLabel(statusComposite, "                                           ", SWT.NULL);//$NON-NLS-1$
             statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-            // start/stop/suspend/resume
-            Button startButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
+            startButton = toolkit.createButton(statusComposite, BLANK, SWT.PUSH);
             startButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
             startButton.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Start);
             startButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-            startButton.addListener(SWT.Selection, new Listener() {
+            startButton.addSelectionListener(new SelectionAdapter() {
 
-                public void handleEvent(Event event) {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
                     startSubscriptionEngine();
+                    updateButtons();
                 };
             });
-            Button stopButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
+            stopButton = toolkit.createButton(statusComposite, BLANK, SWT.PUSH);
             stopButton.setImage(ImageCache.getCreatedImage(EImage.STOP.getPath()));
             stopButton.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Stop);
             stopButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-            stopButton.addListener(SWT.Selection, new Listener() {
+            stopButton.addSelectionListener(new SelectionAdapter() {
 
-                public void handleEvent(Event event) {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
                     stopSubscriptionEngine();
+                    updateButtons();
                 };
             });
-            suspendButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
+            suspendButton = toolkit.createButton(statusComposite, BLANK, SWT.PUSH);
             suspendButton.setImage(ImageCache.getCreatedImage(EImage.SUSPEND.getPath()));
             suspendButton.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Suspend);
             suspendButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-            suspendButton.addListener(SWT.Selection, new Listener() {
+            suspendButton.addSelectionListener(new SelectionAdapter() {
 
-                public void handleEvent(Event event) {
-                    if (suspendButton.getSelection()) {
-                        suspendSubscriptionEngine();
-                        // suspendButton.setText("Resume");
-                        // suspendButton.redraw();
-                    } else {
-                        resumeSubscriptionEngine();
-                        // suspendButton.setText("Suspend");
-                        // suspendButton.redraw();
-                    }
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    suspendSubscriptionEngine();
+                    updateButtons();
                 };
             });
 
@@ -214,7 +223,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             firstLineComposite.setLayout(new GridLayout(9, false));
 
             // Routing Orders Label
-            Label routingOrdersLabel = toolkit.createLabel(firstLineComposite, Messages.RoutingEngineV2BrowserMainPage_RoutingOrders, SWT.NULL);
+            Label routingOrdersLabel = toolkit.createLabel(firstLineComposite,
+                    Messages.RoutingEngineV2BrowserMainPage_RoutingOrders, SWT.NULL);
             routingOrdersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 9, 1));
 
             // from
@@ -229,15 +239,13 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             CalendarSelectWidget toCalendar = new CalendarSelectWidget(toolkit, firstLineComposite, false);
             toText = toCalendar.getText();
 
-            Label statusLabel = toolkit.createLabel(firstLineComposite, Messages.RoutingEngineV2BrowserMainPage_Status, SWT.NULL);
-            statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+            Label statusLab = toolkit.createLabel(firstLineComposite, Messages.RoutingEngineV2BrowserMainPage_Status, SWT.NULL);
+            statusLab.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             statusCombo = new Combo(firstLineComposite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.MULTI);
             statusCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            statusCombo.addKeyListener(new KeyListener() {
+            statusCombo.addKeyListener(new KeyAdapter() {
 
-                public void keyPressed(KeyEvent e) {
-                }
-
+                @Override
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                         doSearch();
@@ -251,7 +259,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusCombo.select(0);
 
             // to
-            Button bSearch = toolkit.createButton(firstLineComposite, "", SWT.CENTER); //$NON-NLS-1$
+            Button bSearch = toolkit.createButton(firstLineComposite, BLANK, SWT.CENTER);
             bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
             bSearch.setToolTipText(Messages.RoutingEngineV2BrowserMainPage_Search);
             bSearch.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -269,17 +277,16 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             searchLineComposite.setLayout(new GridLayout(4, false));
 
             // document type
-            Label documentTypeLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_DocumentType, SWT.NULL);
+            Label documentTypeLabel = toolkit.createLabel(searchLineComposite,
+                    Messages.RoutingEngineV2BrowserMainPage_DocumentType, SWT.NULL);
             documentTypeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // DocumentType
-            documentTypeText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
+            documentTypeText = toolkit.createText(searchLineComposite, BLANK, SWT.BORDER);
             documentTypeText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             ((GridData) documentTypeText.getLayoutData()).widthHint = 120;
-            documentTypeText.addKeyListener(new KeyListener() {
+            documentTypeText.addKeyListener(new KeyAdapter() {
 
-                public void keyPressed(KeyEvent e) {
-                }
-
+                @Override
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                         doSearch();
@@ -291,13 +298,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label idLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_ItemIDs, SWT.NULL);
             idLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // ID
-            idText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
+            idText = toolkit.createText(searchLineComposite, BLANK, SWT.BORDER);
             idText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-            idText.addKeyListener(new KeyListener() {
+            idText.addKeyListener(new KeyAdapter() {
 
-                public void keyPressed(KeyEvent e) {
-                }
-
+                @Override
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                         doSearch();
@@ -307,16 +312,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             );
 
             // service
-            Label serviceLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_Service, SWT.NULL);
+            Label serviceLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_Service,
+                    SWT.NULL);
             serviceLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // service
             serviceCombo = new Combo(searchLineComposite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.MULTI);
             serviceCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            serviceCombo.addKeyListener(new KeyListener() {
+            serviceCombo.addKeyListener(new KeyAdapter() {
 
-                public void keyPressed(KeyEvent e) {
-                }
-
+                @Override
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                         doSearch();
@@ -324,7 +328,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }// keyReleased
             }// keyListener
                     );
-            serviceCombo.add(""); //$NON-NLS-1$
+            serviceCombo.add(BLANK);
             // WSServicesListItem[] servicesList = Util.getPort(getXObject()).getServicesList(new
             // WSGetServicesList("en")).getItem();
             WSServicesListItem[] servicesList = getPort().getServicesList(new WSGetServicesList("en")).getItem(); //$NON-NLS-1$
@@ -332,26 +336,25 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             if ((servicesList != null) && (servicesList.length > 0)) {
                 String[] services = new String[servicesList.length];
                 for (int i = 0; i < servicesList.length; i++) {
-                    services[i] = servicesList[i].getJndiName().replaceFirst("amalto/local/service/", "");//$NON-NLS-1$ //$NON-NLS-2$
+                    services[i] = servicesList[i].getJndiName().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$ 
                 }
                 Arrays.sort(services);
-                for (int i = 0; i < services.length; i++) {
-                    serviceCombo.add(services[i]);
+                for (String service : services) {
+                    serviceCombo.add(service);
                 }
             }
             serviceCombo.select(0);
 
             // any Field
-            Label anyFieldLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_AnyField, SWT.NULL);
+            Label anyFieldLabel = toolkit.createLabel(searchLineComposite, Messages.RoutingEngineV2BrowserMainPage_AnyField,
+                    SWT.NULL);
             anyFieldLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // anyField
-            anyFieldText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
+            anyFieldText = toolkit.createText(searchLineComposite, BLANK, SWT.BORDER);
             anyFieldText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-            anyFieldText.addKeyListener(new KeyListener() {
+            anyFieldText.addKeyListener(new KeyAdapter() {
 
-                public void keyPressed(KeyEvent e) {
-                }
-
+                @Override
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                         doSearch();
@@ -360,7 +363,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }// keyListener
                     );
 
-            //pageToolBar
+            // pageToolBar
             pageToolBar = new PageingToolBar(composite);
             pageToolBar.getComposite().setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 9, 1));
             pageToolBar.getComposite().setVisible(false);
@@ -384,7 +387,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                         MessageDialog.openError(
                                 RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
                                 Messages._Error,
-                                Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg, e.getClass().getName(), e.getLocalizedMessage()));
+                                Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg, e.getClass().getName(),
+                                        e.getLocalizedMessage()));
                     }
                 }
             });
@@ -396,7 +400,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             // adapt body add mouse/focus listener for child
             WidgetFactory factory = WidgetFactory.getWidgetFactory();
             factory.adapt(managedForm.getForm().getBody());
-
+            updateButtons();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -528,23 +532,39 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     @Override
     protected void refreshData() {
         try {
-
-            // if (! this.String xml =
-            // (String)((IStructuredSelection)event.getSelection()).getFirstElement();equals(getEditor().getActivePageInstance()))
-            // return;
-            // XtentisPort port = Util.getPort(getXObject());
-
-            XtentisPort port = getPort();
-            WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
-                    WSRoutingEngineV2ActionCode.STATUS));
+            WSRoutingEngineV2Status status = getServerRoutingStatus();
             statusLabel.setText(status.getValue());
 
             idText.setFocus();
 
         } catch (Exception e) {
+            updateButtons();
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
                     Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX, e.getLocalizedMessage()));
+        }
+    }
+
+    private WSRoutingEngineV2Status getServerRoutingStatus() throws RemoteException {
+        XtentisPort port = getPort();
+        WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
+                WSRoutingEngineV2ActionCode.STATUS));
+        return status;
+    }
+
+    private void updateButtons() {
+        try {
+            WSRoutingEngineV2Status status = getServerRoutingStatus();
+            startButton.setEnabled(status != WSRoutingEngineV2Status.RUNNING);
+            suspendButton.setEnabled(status != WSRoutingEngineV2Status.SUSPENDED);
+            stopButton.setEnabled(status != WSRoutingEngineV2Status.STOPPED);
+            statusLabel.setText(status.getValue());
+        } catch (RemoteException e) {
+            startButton.setEnabled(true);
+            suspendButton.setEnabled(false);
+            stopButton.setEnabled(false);
+            statusLabel.setText("FAILED"); //$NON-NLS-1$
+            log.debug(e.getMessage(), e);
         }
     }
 
@@ -570,7 +590,6 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         menuMgr.addMenuListener(new IMenuListener() {
 
             public void menuAboutToShow(IMenuManager manager) {
-                // ViewBrowserMainPage.this.fillContextMenu(manager);
                 manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(
                         RoutingEngineV2BrowserMainPage.this.getSite().getShell(),
@@ -620,8 +639,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
-    private void sort(int index, TableColumn column)
-    {
+    private void sort(int index, TableColumn column) {
         resultsViewer.setSorter(new TableSorter(index, ascending[index]));
         Table table = resultsViewer.getTable();
         if (ascending[index]) {
@@ -642,20 +660,17 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Display display = getEditor().getSite().getPage().getWorkbenchWindow().getWorkbench().getDisplay();
             waitCursor = new Cursor(display, SWT.CURSOR_WAIT);
             this.getSite().getShell().setCursor(waitCursor);
-
-            // XtentisPort port = Util.getPort(getXObject());
             XtentisPort port = getPort();
             long from = -1;
             long to = -1;
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
             Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");//$NON-NLS-1$
 
-            if (!"".equals(fromText.getText())) { //$NON-NLS-1$
+            if (!BLANK.equals(fromText.getText())) {
                 String dateTimeText = fromText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
+                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning,
+                            Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
                     return new WSRoutingOrderV2[0];
                 }
                 try {
@@ -665,11 +680,12 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }
             }
 
-            if (!"".equals(toText.getText())) { //$NON-NLS-1$
+            if (!BLANK.equals(toText.getText())) {
                 String dateTimeText = toText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
                 if (!matcher.matches()) {
-                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning, Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
+                    MessageDialog.openWarning(this.getSite().getShell(), Messages.Warning,
+                            Messages.RoutingEngineV2BrowserMainPage_FormatIllegal);
                     return new WSRoutingOrderV2[0];
                 }
                 try {
@@ -703,46 +719,47 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 timeLastRunCompletedMax = to;
                 status = WSRoutingOrderV2Status.FAILED;
             } else {
-                throw new XtentisException(Messages.RoutingEngineV2BrowserMainPage_ExceptionInfo + statusText + Messages.RoutingEngineV2BrowserMainPage_ExceptionInfoA);
+                throw new XtentisException(Messages.RoutingEngineV2BrowserMainPage_ExceptionInfo + statusText
+                        + Messages.RoutingEngineV2BrowserMainPage_ExceptionInfoA);
             }
 
             String serviceJNDI = serviceCombo.getItem(serviceCombo.getSelectionIndex());
-            if ("".equals(serviceJNDI)) {
+            if (BLANK.equals(serviceJNDI)) {
                 serviceJNDI = null;
             }
 
             int start = pageToolBar.getStart();
             int limit = pageToolBar.getLimit();
             WSRoutingOrderV2[] wsRoutingOrder = port
-                    .getRoutingOrderV2ByCriteriaWithPaging(new WSGetRoutingOrderV2ByCriteriaWithPaging(
-                            new WSRoutingOrderV2SearchCriteriaWithPaging(
-                                    status,
-                                    "*".equals(anyFieldText.getText()) || "".equals(anyFieldText.getText()) ? null : anyFieldText.getText(), null,//$NON-NLS-1$//$NON-NLS-2$
-                                    timeCreatedMin,
-                                    timeCreatedMax,
-                                    timeScheduledMin,
-                                    timeScheduledMax,
-                                    timeLastRunStartedMin,
-                                    timeLastRunStartedMax,
-                                    timeLastRunCompletedMin,
-                                    timeLastRunCompletedMax,
-                                    "*".equals(documentTypeText.getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$ //$NON-NLS-2$
-                                    "*".equals(idText.getText()) || "".equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$//$NON-NLS-2$
-                                    serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
-
+                    .getRoutingOrderV2ByCriteriaWithPaging(
+                            new WSGetRoutingOrderV2ByCriteriaWithPaging(
+                                    new WSRoutingOrderV2SearchCriteriaWithPaging(
+                                            status,
+                                            "*".equals(anyFieldText.getText()) || BLANK.equals(anyFieldText.getText()) ? null : anyFieldText.getText(), null,//$NON-NLS-1$
+                                            timeCreatedMin,
+                                            timeCreatedMax,
+                                            timeScheduledMin,
+                                            timeScheduledMax,
+                                            timeLastRunStartedMin,
+                                            timeLastRunStartedMax,
+                                            timeLastRunCompletedMin,
+                                            timeLastRunCompletedMax,
+                                            "*".equals(documentTypeText.getText()) || BLANK.equals(documentTypeText.getText()) ? null : documentTypeText.getText(), //$NON-NLS-1$ 
+                                            "*".equals(idText.getText()) || BLANK.equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$
+                                            serviceJNDI, null, null, start, limit, true))).getWsRoutingOrder();
 
             if (wsRoutingOrder.length == 1) {
-                MessageDialog.openInformation(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_Info, Messages.RoutingEngineV2BrowserMainPage_SorryNoResult);
+                MessageDialog.openInformation(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_Info,
+                        Messages.RoutingEngineV2BrowserMainPage_SorryNoResult);
                 return new WSRoutingOrderV2[0];
             }
-
 
             int totalSize = Integer.parseInt(wsRoutingOrder[0].getName());
 
             pageToolBar.setTotalsize(totalSize);
             pageToolBar.refreshUI();
 
-            WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.length-1];
+            WSRoutingOrderV2[] resultOrderV2s = new WSRoutingOrderV2[wsRoutingOrder.length - 1];
             System.arraycopy(wsRoutingOrder, 1, resultOrderV2s, 0, resultOrderV2s.length);
 
             return resultOrderV2s;
@@ -758,8 +775,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         } finally {
             try {
                 this.getSite().getShell().setCursor(null);
-                waitCursor.dispose();
+                if (waitCursor != null) {
+                    waitCursor.dispose();
+                }
             } catch (Exception e) {
+                // do nothing
             }
         }
 
@@ -774,9 +794,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Edit Item Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class EditItemAction extends Action {
 
@@ -800,8 +820,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
 
-                if (selection.isEmpty())
+                if (selection.isEmpty()) {
                     return;
+                }
 
                 WSRoutingOrderV2 routingOrder = (WSRoutingOrderV2) selection.getFirstElement();
 
@@ -836,9 +857,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Delete Items Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class DeleteItemsAction extends Action {
 
@@ -857,7 +878,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             } else {
                 setText(Messages.bind(Messages.RoutingEngineV2BrowserMainPage_DeleteThese, selection.size()));
             }
-            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : TEXT));//$NON-NLS-1$//$NON-NLS-2$ 
         }
 
         @Override
@@ -873,8 +894,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     return;
                 }
 
-                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmDeletion, Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg2
-                        , lineItems.size()))) {
+                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmDeletion,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg2, lineItems.size()))) {
                     return;
                 }
 
@@ -918,20 +939,18 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
                 try {
                     monitor.beginTask(Messages.RoutingEngineV2BrowserMainPage_DeletingItems, lineItems.size());
-
-                    // XtentisPort port = Util.getPort(getXObject());
                     XtentisPort port = getPort();
 
                     int i = 0;
-                    for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext();) {
+                    for (WSRoutingOrderV2 lineItem : lineItems) {
                         monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ProcessingItem + (i++));
                         if (monitor.isCanceled()) {
                             MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_UserCancelDel,
-                                    Messages.RoutingEngineV2BrowserMainPage_WarningMsg + i + Messages.RoutingEngineV2BrowserMainPage_WarningMsgA
+                                    Messages.RoutingEngineV2BrowserMainPage_WarningMsg + i
+                                            + Messages.RoutingEngineV2BrowserMainPage_WarningMsgA
                                             + Messages.RoutingEngineV2BrowserMainPage_WarningMsgB);
                             return;
                         }
-                        WSRoutingOrderV2 lineItem = iter.next();
                         port.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new WSRoutingOrderV2PK(lineItem.getName(), lineItem
                                 .getStatus())));
                         monitor.worked(1);
@@ -951,9 +970,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Execute Routing Orders
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class ExecuteRoutingOrdersAction extends Action {
 
@@ -971,13 +990,19 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             setImageDescriptor(ImageCache.getImage("icons/execute.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1) {
-                setText(Messages.RoutingEngineV2BrowserMainPage_Text + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_TextA);
+                setText(Messages.RoutingEngineV2BrowserMainPage_Text
+                        + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
+                                : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_TextA);
             } else {
-                setText(Messages.RoutingEngineV2BrowserMainPage_Text1 + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_Text1A + selection.size()
-                        + Messages.RoutingEngineV2BrowserMainPage_Text1B);
+                setText(Messages.RoutingEngineV2BrowserMainPage_Text1
+                        + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
+                                : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_Text1A
+                        + selection.size() + Messages.RoutingEngineV2BrowserMainPage_Text1B);
             }
-            setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ActionTip + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ActionTipA
-                    + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
+            setToolTipText(Messages.RoutingEngineV2BrowserMainPage_ActionTip
+                    + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
+                            : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ActionTipA
+                    + (selection.size() > 1 ? "s" : TEXT));//$NON-NLS-1$
         }
 
         @Override
@@ -993,9 +1018,12 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     return;
                 }
 
-                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmTitle, Messages.RoutingEngineV2BrowserMainPage_ConfirmContent
-                        + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2 : Messages.RoutingEngineV2BrowserMainPage_Text3) + Messages.RoutingEngineV2BrowserMainPage_ConfirmContentA + lineItems.size()
-                        + Messages.RoutingEngineV2BrowserMainPage_B)) {
+                if (!MessageDialog.openConfirm(this.shell, Messages.RoutingEngineV2BrowserMainPage_ConfirmTitle,
+                        Messages.RoutingEngineV2BrowserMainPage_ConfirmContent
+                                + (synchronously ? Messages.RoutingEngineV2BrowserMainPage_Text2
+                                        : Messages.RoutingEngineV2BrowserMainPage_Text3)
+                                + Messages.RoutingEngineV2BrowserMainPage_ConfirmContentA + lineItems.size()
+                                + Messages.RoutingEngineV2BrowserMainPage_B)) {
                     return;
                 }
 
@@ -1042,7 +1070,6 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 XtentisPort port = null;
 
                 try {
-                    // port = Util.getPort(getXObject());
                     port = getPort();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
@@ -1050,15 +1077,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                             Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg5, e.getLocalizedMessage()));
                 }// try
 
-                String results = "";//$NON-NLS-1$
-                for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext();) {
+                String results = TEXT;
+                for (WSRoutingOrderV2 lineItem : lineItems) {
 
-                    WSRoutingOrderV2 lineItem = iter.next();
                     monitor.subTask(Messages.RoutingEngineV2BrowserMainPage_ExecutingRoutingOrder + lineItem.getName());
 
                     if (monitor.isCanceled()) {
                         MessageDialog.openWarning(this.parentShell, Messages.RoutingEngineV2BrowserMainPage_WarningTitle,
-                                Messages.RoutingEngineV2BrowserMainPage_WraningMsg + lineItem.getName() + Messages.RoutingEngineV2BrowserMainPage_WraningMsgA
+                                Messages.RoutingEngineV2BrowserMainPage_WraningMsg + lineItem.getName()
+                                        + Messages.RoutingEngineV2BrowserMainPage_WraningMsgA
                                         + Messages.RoutingEngineV2BrowserMainPage_WraningMsgB);
                         return;
                     }
@@ -1067,8 +1094,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                         if (synchronously) {
                             WSString wsResult = port.executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(
                                     new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
-                            if (wsResult.getValue() != null)
-                             {
+                            if (wsResult.getValue() != null) {
                                 results += lineItem.getName() + ": " + wsResult.getValue(); //$NON-NLS-1$
                             }
                         } else {
@@ -1085,8 +1111,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }// for
 
                 monitor.done();
-                MessageDialog.openInformation(shell, Messages.RoutingEngineV2BrowserMainPage_InfoTitle, lineItems.size() + Messages.RoutingEngineV2BrowserMainPage_InfoContent
-                        + ("".equals(results) ? "" : "\n" + results));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                MessageDialog.openInformation(shell, Messages.RoutingEngineV2BrowserMainPage_InfoTitle, lineItems.size()
+                        + Messages.RoutingEngineV2BrowserMainPage_InfoContent + (TEXT.equals(results) ? TEXT : "\n" + results));//$NON-NLS-1$
 
             }// run
         }// class DeleteItemsWithProgress
@@ -1095,9 +1121,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Table Label Provider
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -1119,7 +1145,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }
                 return sdf.format(cal.getTime());
             case 2:
-                return ro.getServiceJNDI().replaceFirst("amalto/local/service/", "");//$NON-NLS-1$//$NON-NLS-2$
+                return ro.getServiceJNDI().replaceFirst("amalto/local/service/", BLANK);//$NON-NLS-1$
             case 3:
                 return ro.getMessage();
             default:
@@ -1144,9 +1170,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     /***************************************************************
      * Table Sorter
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
@@ -1198,13 +1224,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     }
 
-    public void startSubscriptionEngine() {
+    private void startSubscriptionEngine() {
         try {
-            // XtentisPort port = Util.getPort(getXObject());
+            WSRoutingEngineV2Status status = getServerRoutingStatus();
             XtentisPort port = getPort();
-            WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
-                    WSRoutingEngineV2ActionCode.START));
-            statusLabel.setText(status.getValue());
+            if (status == WSRoutingEngineV2Status.STOPPED) {
+                port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.START));
+            } else if (status == WSRoutingEngineV2Status.SUSPENDED) {
+                port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.RESUME));
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages._Error,
@@ -1212,13 +1240,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
-    public void stopSubscriptionEngine() {
+    private void stopSubscriptionEngine() {
         try {
-            // XtentisPort port = Util.getPort(getXObject());
             XtentisPort port = getPort();
-            WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
-                    WSRoutingEngineV2ActionCode.STOP));
-            statusLabel.setText(status.getValue());
+            port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.STOP));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages._Error,
@@ -1226,31 +1251,14 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
-    public void suspendSubscriptionEngine() {
+    private void suspendSubscriptionEngine() {
         try {
-            // XtentisPort port = Util.getPort(getXObject());
             XtentisPort port = getPort();
-            WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
-                    WSRoutingEngineV2ActionCode.SUSPEND));
-            statusLabel.setText(status.getValue());
+            port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.SUSPEND));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages._Error,
                     Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg9, e.getLocalizedMessage()));
-        }
-    }
-
-    public void resumeSubscriptionEngine() {
-        try {
-            // XtentisPort port = Util.getPort(getXObject());
-            XtentisPort port = getPort();
-            WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
-                    WSRoutingEngineV2ActionCode.RESUME));
-            statusLabel.setText(status.getValue());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
-                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg10, e.getLocalizedMessage()));
         }
     }
 
