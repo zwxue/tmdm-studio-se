@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.draw2d.CheckBox;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -93,7 +92,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
     protected Label resultsLabel;
 
     protected Button matchAllWords;
-    
+
     public ViewBrowserMainPage(FormEditor editor) {
         super(editor, ViewBrowserMainPage.class.getName(), Messages.ViewBrowserMainPage_ViewBrowser
                 + ((XObjectBrowserInput) editor.getEditorInput()).getName());
@@ -155,7 +154,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL))
                         text += ">=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.JOIN))
-                        text += "Contains Text Of";//$NON-NLS-1$
+                        text += "Joins With";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN))
                         text += "<";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL))
@@ -243,11 +242,11 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             matchAllWords = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_MatchWholeSentence, SWT.CHECK);
             matchAllWords.setSelection(true);
-            
+
             resultsLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
             resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
             resultsLabel.setText("                                          ");//$NON-NLS-1$
-            
+
             resultsViewer = new TableViewer(resultsGroup);
             resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
             ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = 500;
@@ -263,11 +262,12 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                         MessageDialog.openError(
                                 ViewBrowserMainPage.this.getSite().getShell(),
                                 Messages._Error,
-                                Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg, e.getClass().getName(), e.getLocalizedMessage()));
+                                Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg, e.getClass().getName(),
+                                        e.getLocalizedMessage()));
                     }
                 }
             });
-            
+
             hookContextMenu();
 
         } catch (Exception e) {
@@ -312,8 +312,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             dataClusterCombo.removeAll();
             WSDataClusterPK[] dataClusterPKs = getDataClusterPKs();
             if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)) {
-                MessageDialog
-                        .openError(this.getSite().getShell(), Messages._Error, Messages.ViewBrowserMainPage_ErrorMsg1);
+                MessageDialog.openError(this.getSite().getShell(), Messages._Error, Messages.ViewBrowserMainPage_ErrorMsg1);
                 return;
             }
             for (int i = 0; i < dataClusterPKs.length; i++) {
@@ -387,13 +386,12 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             XtentisPort port = getPort();
 
             boolean matchAllWords = this.matchAllWords.getSelection();
-			String[] results = port.quickSearch(
+            String[] results = port.quickSearch(
                     new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), getViewPK(), (""//$NON-NLS-1$
                             .equals(searchText.getText()) ? "*" : searchText.getText()), 10, // max Items//$NON-NLS-1$
                             0, // skip
                             Integer.MAX_VALUE, // spell threshold
-                            matchAllWords,
-                            null, null)).getStrings();
+                            matchAllWords, null, null)).getStrings();
 
             resultsLabel.setText(Messages.bind(Messages.ViewBrowserMainPage_Results, results.length));
             return results;
@@ -403,7 +401,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle4,
                         Messages.ViewBrowserMainPage_ErrorMsg4);
             else
-                MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle5, e.getLocalizedMessage());
+                MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle5,
+                        e.getLocalizedMessage());
             return null;
         } finally {
             try {
