@@ -90,6 +90,28 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     private static final ImageDescriptor RELOAD_IMG = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
             MDMServerExplorerPlugin.PLUGIN_ID, "icons/refresh.gif"); //$NON-NLS-1$;
 
+    private static final ImageDescriptor CLOSE_IMG = MDMServerExplorerPlugin.imageDescriptorFromPlugin(
+            MDMServerExplorerPlugin.PLUGIN_ID, "icons/rem_co.gif"); //$NON-NLS-1$;
+
+    public class TerminateConsoleAction extends Action {
+
+        public TerminateConsoleAction() {
+            super(Messages.MDMServerMessageConsole_closeActionLabel);
+            setImageDescriptor(CLOSE_IMG);
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.action.Action#run()
+         */
+        @Override
+        public void run() {
+            ConsolePlugin.getDefault().getConsoleManager().removeConsoles(new IConsole[] { MDMServerMessageConsole.this });
+        }
+
+    }
+
     public class DownloadAction extends Action {
 
         public DownloadAction() {
@@ -194,6 +216,17 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private int position = START_FROM_TAIL;
 
+    private TerminateConsoleAction terminateConsoleAction;
+
+    /**
+     * Getter for terminateConsoleAction.
+     * 
+     * @return the terminateConsoleAction
+     */
+    public TerminateConsoleAction getTerminateConsoleAction() {
+        return this.terminateConsoleAction;
+    }
+
     public MDMServerMessageConsole(MDMServerDef serverDef) {
         this(Messages.MDMServerMessageConsole_Name, null);
         this.serverDef = serverDef;
@@ -218,6 +251,8 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         reloadAction = new ReloadAction();
         monitorAction = new MonitorAction();
         downloadAction = new DownloadAction();
+        terminateConsoleAction = new TerminateConsoleAction();
+
     }
 
     private void initWaterMarks() {
@@ -236,6 +271,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 menuManager.add(reloadAction);
                 menuManager.add(monitorAction);
                 menuManager.add(downloadAction);
+                menuManager.add(terminateConsoleAction);
             }
 
             @Override

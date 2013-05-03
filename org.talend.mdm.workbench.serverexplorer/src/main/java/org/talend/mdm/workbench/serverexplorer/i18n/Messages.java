@@ -4,7 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 
-    private static final String BUNDLE_NAME = "org.talend.mdm.workbench.serverexplorer.i18n.messages_en"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.talend.mdm.workbench.serverexplorer.i18n.messages"; //$NON-NLS-1$
 
     // //////////////////////////////////////////////////////////////////////////
     //
@@ -50,6 +50,8 @@ public class Messages extends NLS {
     public static String MDMServerConsolePrefsPage_RefreshLabel_1;
 
     public static String MDMServerConsolePrefsPage_RefreshLabel_2;
+
+    public static String MDMServerMessageConsole_closeActionLabel;
 
     public static String MDMServerMessageConsole_DownloadFailed_Message;
 

@@ -7,9 +7,9 @@ import org.eclipse.ui.console.IConsolePageParticipant;
 import org.eclipse.ui.part.IPageBookViewPage;
 
 /**
- *
+ * 
  * created by Karelun Huang on Mar 20, 2013 Detailled comment
- *
+ * 
  */
 public class MDMServerConsolePageParticipant implements IConsolePageParticipant {
 
@@ -19,6 +19,7 @@ public class MDMServerConsolePageParticipant implements IConsolePageParticipant 
         toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getReloadAction());
         toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getMonitorAction());
         toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getDownloadAction());
+        toolBar.appendToGroup(IConsoleConstants.LAUNCH_GROUP, mdmConsole.getTerminateConsoleAction());
     }
 
     public void dispose() {
