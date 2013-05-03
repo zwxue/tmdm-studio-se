@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.draw2d.CheckBox;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -154,7 +153,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL))
                         text += ">=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.JOIN))
-                        text += "Contains Text Of";//$NON-NLS-1$
+                        text += "Joins With";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN))
                         text += "<";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL))
