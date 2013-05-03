@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.draw2d.CheckBox;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -93,7 +92,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
     protected Label resultsLabel;
 
     protected Button matchAllWords;
-    
+
     public ViewBrowserMainPage(FormEditor editor) {
         super(editor, ViewBrowserMainPage.class.getName(), Messages.ViewBrowserMainPage_ViewBrowser
                 + ((XObjectBrowserInput) editor.getEditorInput()).getName());
@@ -101,6 +100,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
@@ -155,7 +155,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL))
                         text += ">=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.JOIN))
-                        text += "Contains Text Of";//$NON-NLS-1$
+                        text += "Joins With";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN))
                         text += "<";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL))
@@ -243,11 +243,11 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             matchAllWords = toolkit.createButton(resultsGroup, Messages.ViewBrowserMainPage_MatchWholeSentence, SWT.CHECK);
             matchAllWords.setSelection(true);
-            
+
             resultsLabel = toolkit.createLabel(resultsGroup, Messages.ViewBrowserMainPage_Search, SWT.NULL);
             resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
             resultsLabel.setText("                                          ");//$NON-NLS-1$
-            
+
             resultsViewer = new TableViewer(resultsGroup);
             resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
             ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = 500;
@@ -267,7 +267,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     }
                 }
             });
-            
+
             hookContextMenu();
 
         } catch (Exception e) {
@@ -276,6 +276,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
     }// createCharacteristicsContent
 
+    @Override
     protected void refreshData() {
         try {
 
@@ -337,6 +338,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 .getUsername(), getXObject().getPassword());
     }
 
+    @Override
     protected void commit() {
         try {
 
@@ -347,6 +349,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         }
     }
 
+    @Override
     protected void createActions() {
 
     }
@@ -430,6 +433,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             setToolTipText(Messages.ViewBrowserMainPage_ViewAsDOMTree);
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -459,6 +463,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
