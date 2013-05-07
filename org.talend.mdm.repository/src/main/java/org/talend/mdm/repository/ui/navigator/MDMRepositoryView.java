@@ -61,10 +61,13 @@ import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributo
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.repository.model.IRepositoryFactory;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -82,6 +85,7 @@ import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.ProjectManager;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.views.MDMPerspective;
@@ -481,6 +485,19 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     @Override
     public void saveState(IMemento aMemento) {
         super.saveState(aMemento);
+        Project currentProject = ProjectManager.getInstance().getCurrentProject();
+        org.talend.core.model.properties.Project emfProject = currentProject.getEmfProject();
+        if (emfProject != null && emfProject.eResource() == null) {
+
+            IRepositoryFactory rfactory = ProxyRepositoryFactory.getInstance().getRepositoryFactoryFromProvider();
+            if (rfactory != null) {
+                try {
+                    rfactory.reloadProject(currentProject);
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
         CommandManager.getInstance().saveState(aMemento);
     }
 
