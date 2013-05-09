@@ -146,6 +146,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     String text = wc.getLeftPath() + " ";//$NON-NLS-1$
                     if (wc.getOperator().equals(WSWhereOperator.CONTAINS))
                         text += "Contains";//$NON-NLS-1$
+                    else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF))
+                        text += "Contains Text Of";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.EQUALS))
                         text += "=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN))
