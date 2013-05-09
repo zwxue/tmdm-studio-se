@@ -79,8 +79,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -783,9 +781,6 @@ public class Util {
                     filename = url.substring(pos + 1);
                 }
             }
-            HttpClient client = new HttpClient();
-            HttpGet get = new HttpGet(url);
-            HttpResponse response = null;
             InputStream input = urlFile.openStream();
             byte[] bytes = IOUtils.toByteArray(input);
             FileOutputStream output = new FileOutputStream(new File(downloadFolder + "/" + filename)); //$NON-NLS-1$
