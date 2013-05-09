@@ -68,6 +68,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
@@ -78,6 +79,8 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -780,6 +783,9 @@ public class Util {
                     filename = url.substring(pos + 1);
                 }
             }
+            HttpClient client = new HttpClient();
+            HttpGet get = new HttpGet(url);
+            HttpResponse response = null;
             InputStream input = urlFile.openStream();
             byte[] bytes = IOUtils.toByteArray(input);
             FileOutputStream output = new FileOutputStream(new File(downloadFolder + "/" + filename)); //$NON-NLS-1$
@@ -793,8 +799,7 @@ public class Util {
         return null;
     }
 
-    public static byte[] downloadFile(String url) throws IOException {
-        InputStream is = null;
+    public static byte[] downloadFile(String url, String userName, String password) throws IOException {
         try {
             URL urlFile = new URL(url);
             String filename = urlFile.getFile();
@@ -809,18 +814,16 @@ public class Util {
                     filename = url.substring(pos + 1);
                 }
             }
-            is = urlFile.openStream();
-            byte[] bytes = IOUtils.toByteArray(is);
-            return bytes;
+            HttpClient client = new HttpClient();
+            GetMethod get = new GetMethod(url);
+            client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
+            int state = client.executeMethod(get);
+            if (state == HttpStatus.SC_OK) {
+                byte[] bytes = get.getResponseBody();
+                return bytes;
+            }
         } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
-            }
         }
         return null;
     }
@@ -1620,8 +1623,9 @@ public class Util {
      */
     public static Object[] getAllForeignKeyRelatedInfos(Object elem, List<Object> objList, IStructuredContentProvider provider,
             final Set<Object> visited) {
-        if (elem == null || objList == null || visited == null || provider == null)
+        if (elem == null || objList == null || visited == null || provider == null) {
             return null;
+        }
 
         visited.add(elem);
 
