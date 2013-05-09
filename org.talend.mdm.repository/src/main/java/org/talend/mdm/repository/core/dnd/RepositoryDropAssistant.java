@@ -386,8 +386,13 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
     }
 
     private String rebuildPath(IRepositoryViewObject dragViewObj, String name, String newName, String pathStr) {
+        String newPath = null;
+
         ERepositoryObjectType objType = dragViewObj.getRepositoryObjectType();
-        String newPath = new MDMEditViewProcessPropertyAction().getNewPath(objType, newName, name);
+        if (objType == IServerObjectRepositoryType.TYPE_VIEW || objType == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
+            newPath = new MDMEditViewProcessPropertyAction().getNewPath(objType, newName, name);
+        }
+
         if (newPath == null)
             newPath = pathStr;
 
