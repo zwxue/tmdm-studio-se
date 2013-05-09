@@ -363,7 +363,7 @@ public class ImportServerObjectWizard extends Wizard {
             strBuf.append("http://").append(serverDef.getHost()).append(":").append(serverDef.getPort()) //$NON-NLS-1$ //$NON-NLS-2$
                     .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             String url = strBuf.toString();
-            byte[] bytes = Util.downloadFile(url);
+            byte[] bytes = Util.downloadFile(url, serverDef.getUser(), serverDef.getPasswd());
             resource.setFileContent(bytes);
             //add imageCatalog
             resource.setImageCatalog(dirName);
