@@ -58,32 +58,31 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
     }
 
     private void moveViewOrProcess() {
-        String path = getNewPath();
+        Item item = viewObject.getProperty().getItem();
+        String label = item.getProperty().getLabel();
+        ERepositoryObjectType type = viewObject.getRepositoryObjectType();
+
+        String path = getNewPath(type, label, oldProcessName);
 
         if (path != null) {
             moveToOtherTypeNode(viewObject, path);
         }
     }
 
-    private String getNewPath() {
+    public String getNewPath(ERepositoryObjectType type, String newName, String oldName) {
         String path = null;
 
-        Item item = viewObject.getProperty().getItem();
-        String label = item.getProperty().getLabel();
-
-        ERepositoryObjectType type = viewObject.getRepositoryObjectType();
-
         if (type == IServerObjectRepositoryType.TYPE_VIEW) {
-            int labelType = RepositoryTransformUtil.getInstance().getViewType(label);
-            int oldProcessType = RepositoryTransformUtil.getInstance().getViewType(oldProcessName);
+            int labelType = RepositoryTransformUtil.getInstance().getViewType(newName);
+            int oldProcessType = RepositoryTransformUtil.getInstance().getViewType(oldName);
             if (labelType == IViewNodeConstDef.TYPE_WEBFILTER && oldProcessType != IViewNodeConstDef.TYPE_WEBFILTER) {
                 path = IPath.SEPARATOR + IViewNodeConstDef.PATH_WEBFILTER;
             } else if (labelType != IViewNodeConstDef.TYPE_WEBFILTER && oldProcessType == IViewNodeConstDef.TYPE_WEBFILTER) {
                 path = IPath.SEPARATOR + IViewNodeConstDef.PATH_SEARCHFILTER;
             }
         } else if (type == IServerObjectRepositoryType.TYPE_TRANSFORMERV2) {
-            int labelType = RepositoryTransformUtil.getInstance().getProcessType(label);
-            int oldProcessType = RepositoryTransformUtil.getInstance().getProcessType(oldProcessName);
+            int labelType = RepositoryTransformUtil.getInstance().getProcessType(newName);
+            int oldProcessType = RepositoryTransformUtil.getInstance().getProcessType(oldName);
             if (labelType == ITransformerV2NodeConsDef.TYPE_BEFORESAVE) {
                 if (oldProcessType != ITransformerV2NodeConsDef.TYPE_BEFORESAVE) {
                     path = IPath.SEPARATOR + ITransformerV2NodeConsDef.PATH_BEFORESAVE;

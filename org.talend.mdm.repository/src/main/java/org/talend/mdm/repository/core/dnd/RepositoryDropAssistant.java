@@ -67,6 +67,8 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.actions.view.MDMEditViewProcessPropertyAction;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -257,7 +259,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
 
     /**
      * DOC hbhong Comment method "moveViewObj".
-     * 
+     *
      * @param dragViewObj
      * @param dropViewObj
      * @return
@@ -305,6 +307,7 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
             String newName = showPasteDlg(dragParentItem.getRepObjType(), dragParentItem, "Copy_" + name); //$NON-NLS-1$
             if (newName != null) {
                 String pathStr = dropProp.getItem().getState().getPath();
+                pathStr = rebuildPath(dragViewObj, name, newName, pathStr);
                 IPath path = new Path(pathStr);
                 ERepositoryObjectType type = dropViewObj.getRepositoryObjectType();
                 if (type == IServerObjectRepositoryType.TYPE_WORKFLOW) {
@@ -355,8 +358,11 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
                                 CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, copy.getProperty().getId(), newName);
                             }
                             copy.getProperty().setLabel(newName);
+                            copy.getProperty().setDisplayName(newName);
                             RepositoryResourceUtil.setLastServerDef(copy, null);
                             factory.save(copy);
+
+                            MDMRepositoryView.show().refreshRootNode(type);
                             return true;
                         }
                     } catch (PersistenceException e) {
@@ -377,6 +383,15 @@ public class RepositoryDropAssistant extends CommonDropAdapterAssistant {
             }
         }
         return false;
+    }
+
+    private String rebuildPath(IRepositoryViewObject dragViewObj, String name, String newName, String pathStr) {
+        ERepositoryObjectType objType = dragViewObj.getRepositoryObjectType();
+        String newPath = new MDMEditViewProcessPropertyAction().getNewPath(objType, newName, name);
+        if (newPath == null)
+            newPath = pathStr;
+
+        return newPath;
     }
 
     private String showPasteDlg(final ERepositoryObjectType type, final ContainerItem parentItem, String initLabel) {

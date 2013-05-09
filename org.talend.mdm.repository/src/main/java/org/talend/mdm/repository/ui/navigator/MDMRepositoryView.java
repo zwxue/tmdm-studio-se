@@ -92,7 +92,7 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
@@ -514,6 +514,17 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     }
 
     public void refreshRootNode(ERepositoryObjectType type) {
+        String rootPath = ""; //$NON-NLS-1$
+        if (type.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
+            IRepositoryViewObject processCategoryObject = ContainerCacheService.get(
+                    IServerObjectRepositoryType.TYPE_TRANSFORMERV2, rootPath);
+            getCommonViewer().refresh(processCategoryObject);
+        } else if (type.equals(IServerObjectRepositoryType.TYPE_ROUTINGRULE)) {
+            IRepositoryViewObject triggerCategoryObject = ContainerCacheService.get(IServerObjectRepositoryType.TYPE_ROUTINGRULE,
+                    rootPath);
+            getCommonViewer().refresh(triggerCategoryObject);
+        }
+
         IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
         for (IRepositoryViewObject viewObj : categoryViewObjects) {
             if (viewObj.getRepositoryObjectType().equals(type)) {
