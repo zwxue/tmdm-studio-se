@@ -42,9 +42,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
@@ -68,6 +68,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
@@ -658,8 +659,8 @@ public class Util {
             return d;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            String err = Messages.Util_14 + Messages.Util_15 + e.getClass().getName() + Messages.Util_16 + e.getLocalizedMessage() + Messages.Util_17
-                    + xmlString;
+            String err = Messages.Util_14 + Messages.Util_15 + e.getClass().getName() + Messages.Util_16
+                    + e.getLocalizedMessage() + Messages.Util_17 + xmlString;
             throw new Exception(err);
         }
     }
@@ -779,6 +780,7 @@ public class Util {
                     filename = url.substring(pos + 1);
                 }
             }
+
             InputStream input = urlFile.openStream();
             byte[] bytes = IOUtils.toByteArray(input);
             FileOutputStream output = new FileOutputStream(new File(downloadFolder + "/" + filename)); //$NON-NLS-1$
@@ -792,8 +794,7 @@ public class Util {
         return null;
     }
 
-    public static byte[] downloadFile(String url) throws IOException {
-        InputStream is = null;
+    public static byte[] downloadFile(String url, String userName, String password) throws IOException {
         try {
             URL urlFile = new URL(url);
             String filename = urlFile.getFile();
@@ -808,18 +809,16 @@ public class Util {
                     filename = url.substring(pos + 1);
                 }
             }
-            is = urlFile.openStream();
-            byte[] bytes = IOUtils.toByteArray(is);
-            return bytes;
+            HttpClient client = new HttpClient();
+            GetMethod get = new GetMethod(url);
+            client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
+            int state = client.executeMethod(get);
+            if (state == HttpStatus.SC_OK) {
+                byte[] bytes = get.getResponseBody();
+                return bytes;
+            }
         } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
-            }
         }
         return null;
     }
@@ -1906,8 +1905,7 @@ public class Util {
         XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
         if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
             // change the parent element to xsd:sequence
-            if (!MessageDialog.openConfirm(null, Messages.Util_32,
-                    Messages.Util_33)) {
+            if (!MessageDialog.openConfirm(null, Messages.Util_32, Messages.Util_33)) {
                 return Status.CANCEL_STATUS;
             }
 
@@ -2903,19 +2901,19 @@ public class Util {
         list.add(xsdComplexTypeContent);
         return list;
     }
-    
+
     public static List<Object> getSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition simpleTypeDefinition) {
         List<Object> result = new ArrayList<Object>();
-        
+
         // Annotations
-        if(!isBuildInType(simpleTypeDefinition)) {
+        if (!isBuildInType(simpleTypeDefinition)) {
             if (simpleTypeDefinition.getAnnotations() != null) {
                 result.addAll(simpleTypeDefinition.getAnnotations());
             }
         }
-        
+
         result.add(simpleTypeDefinition);
-        
+
         return result;
     }
 
