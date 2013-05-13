@@ -101,7 +101,7 @@ public class ValidateService implements IValidateService {
         } else {
             String message = null;
             if (typeName == null) {
-                typeName = objectType.getLabel();
+                typeName = objectType.toString();
             }
             if (result == STATUS_EXISTED) {
                 message = Messages.bind(Messages.ValidateService_ObjectExist, name, typeName);
