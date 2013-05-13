@@ -21,7 +21,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTerm;
 
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -62,25 +61,15 @@ public class XSDSelectionListener implements ISelectionChangedListener {
                 XSDElementDeclaration element = getElement(((StructuredSelection) selection).getFirstElement());
                 if (element == null)
                     return;
-                // find the element in Design page' xsdSchema according to DataModelMainPage's selection element
-                XSDElementDeclaration sel = null;
-                XSDSchema xsdSchema = dataModelMainPage.getXSDSchema();
 
-                for (XSDElementDeclaration el : xsdSchema.getElementDeclarations()) {
-                    if (el.getName().equals(element.getName())) {
-                        sel = el;
-                        break;
-                    }
-                }
-                if (sel != null)
-                    editor.getSelectionManager().setSelection(new StructuredSelection(sel));
+                editor.getSelectionManager().setSelection(new StructuredSelection(element));
             }
         }
     }
 
     /**
      * get the selection element in the datamodelmainpage's TreeViewer
-     * 
+     *
      * @param object
      * @return
      */

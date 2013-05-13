@@ -15,6 +15,7 @@ package com.amalto.workbench.editors.xsdeditor;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -57,13 +58,17 @@ import org.eclipse.wst.xsd.ui.internal.adapters.RedefineCategoryAdapter;
 import org.eclipse.wst.xsd.ui.internal.adapters.XSDBaseAdapter;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDDiagnosticSeverity;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.w3c.dom.Node;
@@ -74,6 +79,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.IServerObjectEditorState;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.MDMPerspective;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -241,7 +247,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
         /**
          * Determines DOM node based on object (xsd node)
-         * 
+         *
          * @param object
          * @return
          */
@@ -252,9 +258,17 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             } else if (object instanceof XSDComponent) {
                 if (object instanceof XSDElementDeclaration) {
                     String name = ((XSDElementDeclaration) object).getName();
-                    for (XSDElementDeclaration elem : getXSDSchema().getElementDeclarations()) {
+
+                    EList<XSDElementDeclaration> elementDeclarations = getXSDSchema().getElementDeclarations();
+                    XSDElementDeclaration[] xsdDeclarations = getAllMarkableDeclarationOfParticle();
+                    if (xsdDeclarations != null) {
+                        elementDeclarations.addAll(Arrays.asList(xsdDeclarations));
+                    }
+
+                    for (XSDElementDeclaration elem : elementDeclarations) {
                         if (elem.getName().equals(name)) {
                             node = elem.getElement();
+                            break;
                         }
                     }
                 } else {
@@ -291,6 +305,65 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 node = null;
             }
             return node;
+        }
+
+        private XSDElementDeclaration[] getAllMarkableDeclarationOfParticle() {
+            // find all entities and record their name
+            List<String> concepts = new ArrayList<String>();
+            SchemaTreeContentProvider schemaContentProvider = (SchemaTreeContentProvider) getDataModelEditorPage()
+                    .getSchemaContentProvider();
+            Object[] elementDeclarations = schemaContentProvider.getElements(getDataModelEditorPage().getXSDSchema());
+            for (Object dec : elementDeclarations) {
+                if (dec instanceof XSDElementDeclaration) {
+                    concepts.add(((XSDElementDeclaration) dec).getName());
+                }
+            }
+
+
+            Set<XSDTypeDefinition> visited = new HashSet<XSDTypeDefinition>();
+
+            // add from entity
+            List<XSDElementDeclaration> particles = new ArrayList<XSDElementDeclaration>();
+            EList<XSDElementDeclaration> declarations = getXSDSchema().getElementDeclarations();
+            for (XSDElementDeclaration dec : declarations) {
+                if (concepts.contains(dec.getName())) {
+                    XSDTypeDefinition typeDefinition = dec.getTypeDefinition();
+                    addChildParticles(particles, typeDefinition, visited);
+                }
+            }
+
+            // add from complex type
+            EList<XSDTypeDefinition> typeDefinitions = getXSDSchema().getTypeDefinitions();
+            for (XSDTypeDefinition definition : typeDefinitions) {
+                if ((definition instanceof XSDComplexTypeDefinition) && !visited.contains(definition)) {
+                    addChildParticles(particles, definition, visited);
+                }
+            }
+
+            return particles.toArray(new XSDElementDeclaration[0]);
+        }
+
+        private void addChildParticles(List<XSDElementDeclaration> particles, XSDTypeDefinition typeDefinition,
+                Set<XSDTypeDefinition> visited) {
+            if (typeDefinition instanceof XSDComplexTypeDefinition && !visited.contains(typeDefinition)) {
+                visited.add(typeDefinition);
+
+                XSDComplexTypeDefinition complexDefinition = (XSDComplexTypeDefinition) typeDefinition;
+
+                XSDParticle particle = (XSDParticle) complexDefinition.getContent();
+                if (particle != null) {
+                    XSDModelGroup content = (XSDModelGroup) particle.getTerm();
+                    EList<XSDParticle> contents = content.getContents();
+
+                    for (XSDParticle xsdParticle : contents) {
+                        if (xsdParticle.getTerm() instanceof XSDElementDeclaration) {
+                            particles.add((XSDElementDeclaration)xsdParticle.getTerm());
+                            addChildParticles(particles, ((XSDElementDeclaration) xsdParticle.getTerm()).getTypeDefinition(),
+                                    visited);
+                        }
+                    }
+                }
+            }
         }
 
         public void selectionChanged(SelectionChangedEvent event) {
@@ -412,7 +485,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     /**
      * DOC talend-mdm Comment method "validateDiagnoses".
-     * 
+     *
      * @param xsdSchema
      * @return
      */
@@ -540,7 +613,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.editors.IServerObjectEditorState#isLocalInput()
      */
     public boolean isLocalInput() {
