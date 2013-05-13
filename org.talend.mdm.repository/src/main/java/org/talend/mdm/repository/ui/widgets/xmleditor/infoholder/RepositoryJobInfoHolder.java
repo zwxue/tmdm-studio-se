@@ -16,9 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.utils.JobInfo;
@@ -38,8 +40,17 @@ public class RepositoryJobInfoHolder extends RepositoryExternalInfoHolder<JobInf
 
         for (IRepositoryViewObject viewObj : viewObjs) {
             Property prop = viewObj.getProperty();
+            String path = null;
+            if (prop != null) {
+                Item item = prop.getItem();
+                if (item != null) {
+                    path = item.getState().getPath();
+                }
+            }
+            MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObj);
+            String lastServerName = (serverDef != null) ? serverDef.getName() : null;
             // the suffix should be "war" or "zip", now use "" to replace
-            JobInfo jobInfo = new JobInfo(prop.getLabel(), prop.getVersion(), ""); //$NON-NLS-1$
+            JobInfo jobInfo = new JobInfo(prop.getLabel(), prop.getVersion(), "", path, lastServerName); //$NON-NLS-1$
             results.add(jobInfo);
         }
 

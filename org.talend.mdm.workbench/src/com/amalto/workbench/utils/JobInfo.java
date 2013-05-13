@@ -20,10 +20,40 @@ public class JobInfo {
 
     String suffix;
 
+    String lastServerName;
+
+    String path;
+
+ 
+    public String getPath() {
+        return this.path;
+    }
+
+ 
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+  
+    public String getLastServerName() {
+        return this.lastServerName;
+    }
+
+ 
+    public void setLastServerName(String lastServerName) {
+        this.lastServerName = lastServerName;
+    }
+
     public JobInfo(String jobname, String jobversion, String suffix) {
+        this(jobname, jobversion, suffix, null, null);
+    }
+
+    public JobInfo(String jobname, String jobversion, String suffix, String path, String lastServerName) {
         this.jobname = jobname;
         this.jobversion = jobversion;
         this.suffix = suffix;
+        this.path = path;
+        this.lastServerName = lastServerName;
     }
 
     public String getJobname() {
