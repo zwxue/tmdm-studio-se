@@ -263,6 +263,8 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
         op = addEOperation(mdmServerDefEClass, this.getMDMServerDef(), "parse", 0, 1, IS_UNIQUE, IS_ORDERED);
         addEParameter(op, ecorePackage.getEString(), "url", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+        addEOperation(mdmServerDefEClass, ecorePackage.getEString(), "getProtocol", 0, 1, IS_UNIQUE, IS_ORDERED);
+
         // Create resource
         createResource(eNS_URI);
     }

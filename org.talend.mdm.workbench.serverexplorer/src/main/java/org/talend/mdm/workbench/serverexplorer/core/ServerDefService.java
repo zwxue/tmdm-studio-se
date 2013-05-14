@@ -296,8 +296,8 @@ public class ServerDefService implements ILegendServerDefService {
         if (servers != null) {
             for (MDMServerDef serverDef : servers) {
                 com.amalto.workbench.utils.MDMServerDef legendDef = com.amalto.workbench.utils.MDMServerDef.parse(
-                        serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse(),
-                        serverDef.getName());
+                        serverDef.getProtocol(), serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(),
+                        serverDef.getUniverse(), serverDef.getName());
                 legendDefs.add(legendDef);
             }
 

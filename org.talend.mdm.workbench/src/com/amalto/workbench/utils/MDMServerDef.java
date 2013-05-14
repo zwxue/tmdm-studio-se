@@ -16,7 +16,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MDMServerDef {
-    
+
+    /**
+     * 
+     */
+    private static final String DEFAULT_PROTOCOL = "http://";
+
     public static final String DEFAULT_PATH = "/talend/TalendPort";//$NON-NLS-1$
 
     private String name = "";//$NON-NLS-1$
@@ -31,11 +36,30 @@ public class MDMServerDef {
 
     private String universe = ""; //$NON-NLS-1$
 
+    private String protocol = DEFAULT_PROTOCOL;
+
+    /**
+     * Getter for protocol.
+     * 
+     * @return the protocol
+     */
+    public String getProtocol() {
+        return this.protocol;
+    }
+
+    /**
+     * Sets the protocol.
+     * 
+     * @param protocol the protocol to set
+     */
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
     private String path = DEFAULT_PATH;
 
-    public static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
-    
-    public MDMServerDef(String name, String host, String port, String path, String user, String passwd, String universe) {
+    public MDMServerDef(String name, String protocol, String host, String port, String path, String user, String passwd,
+            String universe) {
         this.name = name;
         this.host = host;
         this.port = port;
@@ -43,6 +67,9 @@ public class MDMServerDef {
         this.user = user;
         this.passwd = passwd;
         this.universe = universe;
+        if (protocol == null) {
+            this.protocol = DEFAULT_PROTOCOL;
+        }
     }
 
     public MDMServerDef() {
@@ -105,7 +132,7 @@ public class MDMServerDef {
     }
 
     public String getUrl() {
-        StringBuilder sb = new StringBuilder("http://");//$NON-NLS-1$
+        StringBuilder sb = new StringBuilder(DEFAULT_PROTOCOL);
 
         sb.append(host);
         sb.append(":");//$NON-NLS-1$
@@ -115,17 +142,22 @@ public class MDMServerDef {
         return sb.toString();
     }
 
-    public static MDMServerDef parse(String url, String user, String passwd, String universe, String name) {
+    public static MDMServerDef parse(String protocol, String url, String user, String passwd, String universe, String name) {
+        String patternUrl = "^" + protocol + "(.+):(\\d+)(/.*)";//$NON-NLS-1$ //$NON-NLS-2$
+        Matcher m = Pattern.compile(patternUrl).matcher(url);
 
-        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
-
-        if (!m.find())
+        if (!m.find()) {
             return null;
+        }
 
         String host = m.group(1);
         String port = m.group(2);
         String path = m.group(3);
 
-        return new MDMServerDef(name, host, port, path, user, passwd, universe);
+        return new MDMServerDef(name, protocol, host, port, path, user, passwd, universe);
+    }
+
+    public static MDMServerDef parse(String url, String user, String passwd, String universe, String name) {
+        return parse(DEFAULT_PROTOCOL, url, user, passwd, universe, name);
     }
 }

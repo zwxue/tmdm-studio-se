@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.core.service.interactive;
 
 import java.rmi.RemoteException;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -62,33 +61,33 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
     public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
         return processImage(cmd, true);
     }
-    
-    private boolean processImage(AbstractDeployCommand cmd, boolean deleteFile){
+
+    private boolean processImage(AbstractDeployCommand cmd, boolean deleteFile) {
         IRepositoryViewObject viewObj = cmd.getViewObject();
         MDMServerDef serverDef = cmd.getServerDef();
-        String uripre = "http://" + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$ //$NON-NLS-2$
+        String uripre = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$ 
         Item item = viewObj.getProperty().getItem();
-        WSResourceE rs=((WSResourceItem) item).getResource();
+        WSResourceE rs = ((WSResourceItem) item).getResource();
         String fileExtension = rs.getFileExtension();
-        String imageCatalog=rs.getImageCatalog();
-        String name=rs.getUniqueName();
+        String imageCatalog = rs.getImageCatalog();
+        String name = rs.getUniqueName();
         IFile referenceFile = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, fileExtension);
         String path = referenceFile.getLocation().toOSString();
         try {
-            String url="/imageserver/secure/ImageUploadServlet";//$NON-NLS-1$
-            if(deleteFile){
-                if(imageCatalog!=null){
-                    String uri="upload/"+imageCatalog+'/'+name;//$NON-NLS-1$
-                    url="/imageserver/secure/ImageDeleteServlet?uri="+uri;//$NON-NLS-1$
-                }else{
+            String url = "/imageserver/secure/ImageUploadServlet";//$NON-NLS-1$
+            if (deleteFile) {
+                if (imageCatalog != null) {
+                    String uri = "upload/" + imageCatalog + '/' + name;//$NON-NLS-1$
+                    url = "/imageserver/secure/ImageDeleteServlet?uri=" + uri;//$NON-NLS-1$
+                } else {
                     return false;
                 }
             }
-            String imageUri=Util.uploadImageFile(uripre + url, path, name, imageCatalog
-                    , serverDef.getUser(), serverDef.getPasswd(), null);
-            if(imageUri!=null && imageUri.length()>0){
-                String[] strs=imageUri.split("/");//$NON-NLS-1$
-                if(strs.length==3){//the second one is imagecatalog
+            String imageUri = Util.uploadImageFile(uripre + url, path, name, imageCatalog, serverDef.getUser(),
+                    serverDef.getPasswd(), null);
+            if (imageUri != null && imageUri.length() > 0) {
+                String[] strs = imageUri.split("/");//$NON-NLS-1$
+                if (strs.length == 3) {// the second one is imagecatalog
                     rs.setImageCatalog(strs[1]);
                 }
             }

@@ -258,6 +258,14 @@ public interface MDMServerDef extends AbstractMetadataObject {
     MDMServerDef parse(String url);
     
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model kind="operation"
+     * @generated
+     */
+    String getProtocol();
+
+    /**
      * 
      * get the decrypted ServerDef
      * @return

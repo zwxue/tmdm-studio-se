@@ -428,7 +428,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private String buildMonitorURL(int pos) {
         StringBuilder sb = new StringBuilder();
-        sb.append("http://"); //$NON-NLS-1$
+        sb.append(serverDef.getProtocol());
         sb.append(serverDef.getHost());
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());
@@ -494,7 +494,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private String buildDownloadURL() {
         StringBuilder sb = new StringBuilder();
-        sb.append("http://"); //$NON-NLS-1$
+        sb.append(serverDef.getProtocol());
         sb.append(serverDef.getHost());
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());

@@ -225,6 +225,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public String getHost() {
         return host;
     }
@@ -234,11 +235,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setHost(String newHost) {
         String oldHost = host;
         host = newHost;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__HOST, oldHost, host));
+        }
     }
 
     /**
@@ -246,6 +249,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public String getPasswd() {
         return passwd;
     }
@@ -255,11 +259,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setPasswd(String newPasswd) {
         String oldPasswd = passwd;
         passwd = newPasswd;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__PASSWD, oldPasswd, passwd));
+        }
     }
 
     /**
@@ -267,6 +273,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public String getTempPasswd() {
         return tempPasswd;
     }
@@ -276,12 +283,14 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setTempPasswd(String newTempPasswd) {
         String oldTempPasswd = tempPasswd;
         tempPasswd = newTempPasswd;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__TEMP_PASSWD, oldTempPasswd,
                     tempPasswd));
+        }
     }
 
     /**
@@ -289,6 +298,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public String getPath() {
         return path;
     }
@@ -298,11 +308,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setPath(String newPath) {
         String oldPath = path;
         path = newPath;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__PATH, oldPath, path));
+        }
     }
 
     /**
@@ -310,6 +322,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public String getPort() {
         return port;
     }
@@ -319,11 +332,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setPort(String newPort) {
         String oldPort = port;
         port = newPort;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__PORT, oldPort, port));
+        }
     }
 
     /**
@@ -331,6 +346,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public String getUniverse() {
         return universe;
     }
@@ -340,12 +356,14 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setUniverse(String newUniverse) {
         String oldUniverse = universe;
         universe = newUniverse;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__UNIVERSE, oldUniverse,
                     universe));
+        }
     }
 
     private static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
@@ -355,6 +373,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated NOT
      */
+    @Override
     public String getUrl() {
         if (url == null) {
             StringBuffer sb = new StringBuffer();
@@ -373,11 +392,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setUrl(String newUrl) {
         String oldUrl = url;
         url = newUrl;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__URL, oldUrl, url));
+        }
     }
 
     /**
@@ -385,6 +406,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public String getUser() {
         return user;
     }
@@ -394,11 +416,13 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated
      */
+    @Override
     public void setUser(String newUser) {
         String oldUser = user;
         user = newUser;
-        if (eNotificationRequired())
+        if (eNotificationRequired()) {
             eNotify(new ENotificationImpl(this, Notification.SET, MdmmetadataPackage.MDM_SERVER_DEF__USER, oldUser, user));
+        }
     }
 
     /**
@@ -406,9 +430,11 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated NOT
      */
+    @Override
     public boolean validate(String url) {
-        if (url == null || url.length() == 0)
+        if (url == null || url.length() == 0) {
             return false;
+        }
         Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
         return m.find();
     }
@@ -418,16 +444,29 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @generated NOT
      */
+    @Override
     public MDMServerDef parse(String url) {
         Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
 
-        if (!m.find())
+        if (!m.find()) {
             return null;
+        }
 
         setHost(m.group(1));
         setPort(m.group(2));
         setPath(m.group(3));
         return this;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated not
+     */
+    @Override
+    public String getProtocol() {
+        // TODO we will add more protocol in the future, like https....,then a protocol property will be created
+        return "http://"; //$NON-NLS-1$
     }
 
     /**
@@ -575,8 +614,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      */
     @Override
     public String toString() {
-        if (eIsProxy())
+        if (eIsProxy()) {
             return super.toString();
+        }
 
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (host: ");
@@ -604,6 +644,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      * 
      * @see org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getDecryptedServerDef()
      */
+    @Override
     public MDMServerDef getDecryptedServerDef() {
         MDMServerDef clone = EcoreUtil.copy(this);
 
@@ -616,6 +657,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         return clone;
     }
 
+    @Override
     public MDMServerDef getEncryptedServerDef() {
         MDMServerDef clone = EcoreUtil.copy(this);
 

@@ -6,7 +6,7 @@
     editPluginClass="org.talend.mdm.repository.model.mdmmetadata.provider.MDMMetadataEditPlugin"
     editorPluginClass="org.talend.mdm.repository.model.mdmmetadata.presentation.MDMMetadataEditorPlugin"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
-    usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg ../../org.talend.model/model/metadata.genmodel#//connection">
+    runtimeVersion="2.6" usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg ../../org.talend.model/model/metadata.genmodel#//connection">
   <foreignModel>MDMMetadata.ecore</foreignModel>
   <genPackages prefix="Mdmmetadata" basePackage="org.talend.mdm.repository.model"
       disposableProviderFactory="true" ecorePackage="MDMMetadata.ecore#/">
@@ -25,6 +25,7 @@
       <genOperations ecoreOperation="MDMMetadata.ecore#//MDMServerDef/parse">
         <genParameters ecoreParameter="MDMMetadata.ecore#//MDMServerDef/parse/url"/>
       </genOperations>
+      <genOperations ecoreOperation="MDMMetadata.ecore#//MDMServerDef/getProtocol"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
