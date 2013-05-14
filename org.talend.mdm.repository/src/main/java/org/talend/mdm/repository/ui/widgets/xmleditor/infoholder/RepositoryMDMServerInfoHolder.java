@@ -31,6 +31,7 @@ public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<
     public RepositoryMDMServerInfoHolder(XtentisPort port) {
     }
 
+    @Override
     public WSMDMConfig[] getExternalInfo() {
         List<MDMServerDef> allServerDefs = ServerDefService.getAllServerDefs();
         WSMDMConfig[] configs = new WSMDMConfig[allServerDefs.size()];
@@ -41,11 +42,13 @@ public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<
             configs[i].setServerPort(def.getPort());
             configs[i].setUserName(def.getUser());
             configs[i].setPassword(def.getPasswd());
+            configs[i].setXdbID(def.getName());
             i++;
         }
         return configs;
     }
 
+    @Override
     public String getId() {
         return INFOID_ALLMDMSERVERINFO;
     }
