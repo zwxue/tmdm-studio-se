@@ -569,7 +569,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 }
             }
         } else {
-            server = new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(),
+            server = new MDMServerDef(mdmServer.getShortDescription(), null, mdmServer.getHost(), mdmServer.getPort(),
                     MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), BLANK);
         }
 
@@ -601,7 +601,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             monitor.setTaskName(Messages.bind(Messages.DeployOnMDMExportWizardPage_DeployJobOnServer, jobInfo.getJobLabelName(),
                     server.getName()));
             String filename = jobInfo.getDescValue();
-            String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            String mdmServerUploadURL = server.getProtocol() + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ 
                     + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath() + "&contextStr=" + context;//$NON-NLS-1$//$NON-NLS-2$
             try {
                 ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
