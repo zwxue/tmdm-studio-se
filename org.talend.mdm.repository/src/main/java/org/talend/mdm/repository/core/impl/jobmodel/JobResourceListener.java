@@ -103,11 +103,13 @@ public class JobResourceListener implements PropertyChangeListener {
             return;
         }
 
-        if (event.getPropertyName().equals(ERepositoryActionName.SAVE.getName())) {
+        String propertyName = event.getPropertyName();
+        if (propertyName.equals(ERepositoryActionName.SAVE.getName())) {
             jobSaved = true;
         }
 
-        if (event.getPropertyName().equals(ERepositoryActionName.CREATE.getName())) {
+        if (propertyName.equals(ERepositoryActionName.CREATE.getName())
+                || propertyName.equals(ERepositoryActionName.IMPORT.getName())) {
             jobCreated = true;
         }
         if (!jobSaved && !jobCreated) {
