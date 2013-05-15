@@ -35,6 +35,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -135,6 +137,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     private boolean isDeploySucceed = false;
 
     protected List<JobDeploymentInfo> jobInfoList = new ArrayList<JobDeploymentInfo>();
+
+    protected String selectedServer;
 
     /**
      * Create an instance of this class.
@@ -281,6 +285,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             }
             serverSpagoBi = new LabelledCombo(optionsGroup, Messages.DeployOnMDMExportWizardPage_SpagoBI_Server,
                     Messages.DeployOnMDMExportWizardPage_SpecifyServer_PublishJob, listEngine);
+            serverSpagoBi.addModifyListener(new ModifyListener() {
+
+                public void modifyText(ModifyEvent e) {
+                    updateSelectedServer();
+
+                }
+            });
             serverSpagoBi.select(0);
         }
 
@@ -298,6 +309,13 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         contextCombo = new Combo(optionsGroup, SWT.PUSH);
 
+    }
+
+    /**
+     * DOC HHB Comment method "updateSelectedServer".
+     */
+    protected void updateSelectedServer() {
+        selectedServer = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
     }
 
     /**
@@ -559,7 +577,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // retrieve user, password, host, port from selected server
         MDMServerDef server = null;
         if (mdmServer == null) {
-            String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
+            String selectedSpagoBiEngineName = selectedServer;
 
             List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
             for (MDMServerDef serv : listServerSapgo) {
