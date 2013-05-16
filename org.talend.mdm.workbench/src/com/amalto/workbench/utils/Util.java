@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -498,7 +499,7 @@ public class Util {
 
     /**
      * Join an array of strings into a single string using a separator
-     * 
+     *
      * @param strings
      * @param separator
      * @return a single string or null
@@ -517,7 +518,7 @@ public class Util {
 
     /**
      * Returns the first part - eg. the concept - from the path
-     * 
+     *
      * @param path
      * @return the concept Name
      */
@@ -535,7 +536,7 @@ public class Util {
 
     /**
      * get the concept name from the child elment
-     * 
+     *
      * @param child
      * @return
      */
@@ -552,7 +553,7 @@ public class Util {
 
     /**
      * Generates an xml string from a node (not pretty formatted)
-     * 
+     *
      * @param n the node
      * @return the xml string
      * @throws Exception
@@ -568,7 +569,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     * 
+     *
      * @throws Exception
      */
     public static NodeList getNodeList(Document d, String xPath) throws Exception {
@@ -577,7 +578,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     * 
+     *
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath) throws Exception {
@@ -586,7 +587,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     * 
+     *
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
@@ -600,7 +601,7 @@ public class Util {
 
     /**
      * Returns a namespaced root element of a document Useful to create a namespace holder element
-     * 
+     *
      * @param namespace
      * @return the root Element
      */
@@ -722,7 +723,7 @@ public class Util {
 
     /*********************************************************************
      * FILE UPLOAD
-     * 
+     *
      * Multi-Part Form Post
      *********************************************************************/
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
@@ -910,12 +911,12 @@ public class Util {
 
     /**
      * Find elementDeclarations that use any types derived from a named type.
-     * 
+     *
      * <p>
      * This shows one way to query the schema for elementDeclarations and then how to find specific kinds of
      * typeDefinitions.
      * </p>
-     * 
+     *
      * @param objList collection set to search for elemDecls
      * @param localName for the type used
      * @return Boolean indicate any XSDElementDeclarations is found or not
@@ -1048,7 +1049,7 @@ public class Util {
 
     /**
      * set the list with foreign concept name of in the element
-     * 
+     *
      * @author ymli
      * @param list
      * @param element
@@ -1125,7 +1126,7 @@ public class Util {
 
     /**
      * set the list with all the foreign concepty name in the parent
-     * 
+     *
      * @author ymli
      * @param list
      * @param parent
@@ -1146,7 +1147,7 @@ public class Util {
 
     /**
      * set the list with foreign concept names in the schema
-     * 
+     *
      * @author ymli
      * @param list
      * @param schema
@@ -1165,7 +1166,7 @@ public class Util {
 
     /**
      * the all the typeDefinition in the schema
-     * 
+     *
      * @author ymli
      * @param schema
      * @return
@@ -1483,7 +1484,7 @@ public class Util {
 
     /**
      * update reference to newType
-     * 
+     *
      * @param elem
      * @param newType
      * @param provider
@@ -1690,7 +1691,7 @@ public class Util {
 
     /**
      * Clipboard support
-     * 
+     *
      * @return the Clipboard
      */
     public static Clipboard getClipboard() {
@@ -1856,8 +1857,76 @@ public class Util {
         return objs;
     }
 
-    private static List<String> getComplexChilds(String parentxpath, XSDComplexTypeDefinition ctype) throws Exception {
+    public static List<String> getChildElementNames(String parentxpath, XSDElementDeclaration decl) throws Exception {
         List<String> childNames = new ArrayList<String>();
+
+        Map<String, XSDParticle> childElements = getChildElements(parentxpath, decl, false, new HashSet<Object>());
+        Iterator<String> iterator = childElements.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            XSDParticle next = childElements.get(key);
+            if (next.getMinOccurs() == 1 && next.getMaxOccurs() == 1 && key.indexOf("//") == -1) { //$NON-NLS-1$
+                childNames.add(key);
+            }
+        }
+
+        return childNames;
+    }
+
+    /**
+     * onlyTopLevel indicates whether return decl's direct subelements(true) or all the subelements(false).
+     */
+    public static Map<String, XSDParticle> getChildElements(String parentxpath, XSDElementDeclaration decl,
+            boolean onlyTopLevel, final Set<Object> visited) throws Exception {
+        Map<String, XSDParticle> childElements = new HashMap<String, XSDParticle>();
+
+        XSDTypeDefinition baseType = decl.getTypeDefinition();
+
+        if (baseType instanceof XSDComplexTypeDefinition) {
+            XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) baseType;
+            Map<String, XSDParticle> childs = getChildElements(parentxpath, cmpType, onlyTopLevel, visited);
+            for (String xsdDecl : childs.keySet()) {
+                if (!childElements.containsKey(xsdDecl)) {
+                    childElements.put(xsdDecl, childs.get(xsdDecl));
+                }
+            }
+        }
+
+        return childElements;
+    }
+
+    public static Map<String, XSDParticle> getChildElements(String parentxpath, XSDComplexTypeDefinition ctype,
+            boolean onlyTopLevel, final Set<Object> visited) throws Exception {
+        if (visited == null || ctype == null)
+            throw new IllegalArgumentException();
+
+        if (parentxpath == null)
+            parentxpath = ""; //$NON-NLS-1$
+
+        Map<String, XSDParticle> childElements = new HashMap<String, XSDParticle>();
+
+        XSDTypeDefinition baseType = ctype.getBaseType();
+        if (!visited.contains(ctype)) {
+            visited.add(ctype);
+
+            if (baseType instanceof XSDComplexTypeDefinition && baseType != ctype) {
+                XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) baseType;
+                childElements.putAll(getChildElements(parentxpath, cmpType, onlyTopLevel, visited));
+            }
+
+            childElements.putAll(getComplexChilds(parentxpath, ctype, onlyTopLevel, visited));
+        }
+
+
+        return childElements;
+    }
+
+    /**
+     * use the map from path to XSDParticle,path is separated by '/' or '//'
+     */
+    private static Map<String, XSDParticle> getComplexChilds(String parentxpath, XSDComplexTypeDefinition ctype,
+            boolean onlyTopLevel, final Set<Object> visited) throws Exception {
+        Map<String, XSDParticle> childDecls = new HashMap<String, XSDParticle>();
 
         if (ctype.getContent() instanceof XSDParticle) {
             XSDParticleImpl particle = (XSDParticleImpl) ctype.getContent();
@@ -1869,45 +1938,22 @@ public class Util {
                         XSDElementDeclaration el = (XSDElementDeclaration) part.getTerm();
                         if (el.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
                             String child = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
-                            childNames.add(child);
+                            childDecls.put(child, part);
                         } else {
-                            String parent = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
-                            childNames.addAll(getChildElementNames(parent, el));
+                            String complexTypeChildPath = parentxpath.length() == 0 ? "//" + el.getName() : parentxpath //$NON-NLS-1$
+                                    + "//" + el.getName();//$NON-NLS-1$
+                            childDecls.put(complexTypeChildPath, part);
+                            if (!onlyTopLevel && el.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                                String child = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
+                                childDecls.putAll(getChildElements(child, (XSDComplexTypeDefinition) el.getTypeDefinition(),
+                                        onlyTopLevel, visited));
+                            }
                         }
                     }
                 }
             }
         }
-        return childNames;
-    }
-
-    public static List<String> getChildElementNames(String parentxpath, XSDComplexTypeDefinition ctype) throws Exception {
-        List<String> childNames = new ArrayList<String>();
-        XSDTypeDefinition baseType = ctype.getBaseType();
-        if (baseType instanceof XSDComplexTypeDefinition && baseType != ctype) {
-            XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) baseType;
-            childNames.addAll(getChildElementNames(parentxpath, cmpType));
-        }
-
-        childNames.addAll(getComplexChilds(parentxpath, ctype));
-
-        return childNames;
-    }
-
-    public static List<String> getChildElementNames(String parentxpath, XSDElementDeclaration decl) throws Exception {
-        List<String> childNames = new ArrayList<String>();
-
-        XSDTypeDefinition type = decl.getTypeDefinition();
-        if (type instanceof XSDComplexTypeDefinition) {
-            XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition) type;
-            List<String> childElementNames = getChildElementNames(parentxpath, cmpType);
-            for (String name : childElementNames) {
-                if (!childNames.contains(name)) {
-                    childNames.add(name);
-                }
-            }
-        }
-        return childNames;
+        return childDecls;
     }
 
     public static List<String> getChildElementNames(XSDSchema schema, String concept) throws Exception {
@@ -2848,7 +2894,7 @@ public class Util {
 
     /**
      * get all complex types's complextype children
-     * 
+     *
      * @param complexTypeDefinition
      * @return
      */
@@ -3014,7 +3060,7 @@ public class Util {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     * 
+     *
      * @param schema
      * @return
      * @throws Exception
@@ -3278,7 +3324,7 @@ public class Util {
 
     /**
      * Replace the source string by the parameters
-     * 
+     *
      * @param sourceString the source string with parameters,like : "This is {0} examples for {1}"
      * @param parameters the parameters used to do the replacement, the key is the index of the parameter, the value is
      * the content;
@@ -3538,7 +3584,7 @@ public class Util {
     /**
      * DOC hbhong Comment method "unZipFile". same with unZipFile(String zipfile, String unzipdir) method except having
      * a progressMonitor
-     * 
+     *
      * @param zipfile
      * @param unzipdir
      * @param totalProgress

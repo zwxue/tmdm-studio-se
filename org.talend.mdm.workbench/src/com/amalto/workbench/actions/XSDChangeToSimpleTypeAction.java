@@ -119,13 +119,15 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
             initBuiltInTypesWithSelectedTypes(builtInTypes);
 
             if (showDlg) {
+                String name = decl.getTypeDefinition().getName();
+
                 if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                    name = null;
                     boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning, Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
                     if(!confirm)
                         return Status.CANCEL_STATUS;
                 }
 
-                String name = decl.getTypeDefinition().getName();
                 dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeToXX_DialogTitle,
                         customTypes, builtInTypes, name);
 
