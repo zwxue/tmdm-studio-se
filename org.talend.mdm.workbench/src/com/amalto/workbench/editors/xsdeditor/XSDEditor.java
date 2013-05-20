@@ -58,6 +58,7 @@ import org.eclipse.wst.xsd.ui.internal.adapters.RedefineCategoryAdapter;
 import org.eclipse.wst.xsd.ui.internal.adapters.XSDBaseAdapter;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
 import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
+import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
@@ -257,7 +258,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 node = (Node) object;
             } else if (object instanceof XSDComponent) {
                 if (object instanceof XSDElementDeclaration) {
-                    String name = ((XSDElementDeclaration) object).getName();
+                    XSDElementDeclaration selected = (XSDElementDeclaration) object;
+                    String name = selected.getName();
 
                     EList<XSDElementDeclaration> elementDeclarations = getXSDSchema().getElementDeclarations();
                     XSDElementDeclaration[] xsdDeclarations = getAllMarkableDeclarationOfParticle();
@@ -267,8 +269,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
                     for (XSDElementDeclaration elem : elementDeclarations) {
                         if (elem.getName().equals(name)) {
-                            node = elem.getElement();
-                            break;
+                            if (isUnderSameComplexType(selected, elem)) {
+                                node = elem.getElement();
+                                break;
+                            }
                         }
                     }
                 } else {
@@ -364,6 +368,30 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     }
                 }
             }
+        }
+
+        private boolean isUnderSameComplexType(XSDElementDeclaration elemOnTree, XSDElementDeclaration elemInSource) {
+            try {
+                XSDComplexTypeDefinition selContainer = (XSDComplexTypeDefinition) elemOnTree.getContainer().getContainer()
+                        .getContainer().getContainer();
+                XSDComplexTypeDefinition tarContainer = (XSDComplexTypeDefinition) elemInSource.getContainer().getContainer()
+                        .getContainer().getContainer();
+                if (selContainer.getContainer().getClass().equals(tarContainer.getContainer().getClass())) {
+                    if (selContainer.getContainer() instanceof XSDSchema) {
+                        if (selContainer.getName().equals(tarContainer.getName()))
+                            return true;
+                    } else if (selContainer.getContainer() instanceof XSDElementDeclaration) {
+                        XSDElementDeclaration selDec = (XSDElementDeclaration) selContainer.getContainer();
+                        XSDElementDeclaration tarDec = (XSDElementDeclaration) tarContainer.getContainer();
+                        if (selDec.getName().equals(tarDec.getName()))
+                            return true;
+                    }
+                }
+            } catch (Exception e) {
+                return false;
+            }
+
+            return false;
         }
 
         public void selectionChanged(SelectionChangedEvent event) {
@@ -595,6 +623,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                 } else if ((firstElement instanceof XSDXPathDefinition)) {
                     XSDXPathDefinition pathdef = (XSDXPathDefinition) firstElement;
                     XSDConcreteComponent container = pathdef.getContainer().getContainer();
+                    treeViewer.setSelection(new StructuredSelection(container));
+                } else if (firstElement instanceof XSDAnnotation) {
+                    XSDAnnotation annotation = (XSDAnnotation) firstElement;
+                    XSDConcreteComponent container = annotation.getContainer();
                     treeViewer.setSelection(new StructuredSelection(container));
                 }
             }
