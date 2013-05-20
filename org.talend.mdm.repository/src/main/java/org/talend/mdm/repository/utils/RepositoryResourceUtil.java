@@ -788,16 +788,30 @@ public class RepositoryResourceUtil {
     }
 
     public static IRepositoryViewObject assertViewObject(IRepositoryViewObject viewObj) {
-        Item item = viewObj.getProperty().getItem();
-        Resource eResource = item.eResource();
-        if (eResource == null) {
-            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-            try {
-                IRepositoryViewObject newViewObj = factory.getLastVersion(viewObj.getId());
-                ContainerCacheService.put(newViewObj);
-                return newViewObj;
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
+        if (viewObj == null) {
+            throw new IllegalArgumentException();
+        }
+        if (viewObj instanceof RepositoryViewObject) {
+
+            boolean reload = false;
+
+            Property property = viewObj.getProperty();
+            if (property != null) {
+                Item item = property.getItem();
+                Resource eResource = item.eResource();
+                reload = eResource == null;
+            } else {
+                reload = true;
+            }
+            if (reload) {
+                IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+                try {
+                    IRepositoryViewObject newViewObj = factory.getLastVersion(viewObj.getId());
+                    ContainerCacheService.put(newViewObj);
+                    return newViewObj;
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                }
             }
         }
         return viewObj;
