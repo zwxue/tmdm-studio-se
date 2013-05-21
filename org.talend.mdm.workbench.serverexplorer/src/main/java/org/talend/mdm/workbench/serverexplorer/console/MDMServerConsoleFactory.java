@@ -67,8 +67,13 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
         if (!containedMDMServerMessageConsole(mdmServerConsole)) {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
             consoleManager.addConsoles(new IConsole[] { mdmServerConsole });
+
+            mdmServerConsole.activate();
+        } else {
+            mdmServerConsole.setServerDef(serverDef);
+            mdmServerConsole.reload();
+            ConsolePlugin.getDefault().getConsoleManager().showConsoleView(mdmServerConsole);
         }
-        mdmServerConsole.activate();
         // boolean showed = showConsoleView(serverDef.getName());
         // if (showed) {
         // }

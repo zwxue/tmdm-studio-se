@@ -56,13 +56,14 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.ui.internal.console.IOConsolePage;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.DownloadLogDialog;
 
 /**
  * created by Karelun Huang on Mar 19, 2013 Detailled comment
- * 
+ *
  */
 public class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
 
@@ -100,11 +101,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             setImageDescriptor(CLOSE_IMG);
         }
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.action.Action#run()
-         */
         @Override
         public void run() {
             ConsolePlugin.getDefault().getConsoleManager().removeConsoles(new IConsole[] { MDMServerMessageConsole.this });
@@ -193,6 +189,17 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
                 monitorAction.initStatus();
             }
         }
+
+        private void reload() {
+            refreshServerDef();
+            disposeTimer();
+            display();
+        }
+
+        private void refreshServerDef() {
+            MDMServerDef newServerDef = ServerDefService.findServerDefByName(getServerDef().getName());
+            setServerDef(newServerDef);
+        }
     }
 
     private MonitorAction monitorAction = null;
@@ -205,7 +212,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     /**
      * Getter for serverDef.
-     * 
+     *
      * @return the serverDef
      */
     public MDMServerDef getServerDef() {
@@ -220,7 +227,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     /**
      * Getter for terminateConsoleAction.
-     * 
+     *
      * @return the terminateConsoleAction
      */
     public TerminateConsoleAction getTerminateConsoleAction() {
@@ -231,6 +238,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         this(Messages.MDMServerMessageConsole_Name, null);
         this.serverDef = serverDef;
         initMessageConsole();
+        initActions();
         PlatformUI.getPreferenceStore().addPropertyChangeListener(this);
     }
 
@@ -247,12 +255,13 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         String name = Messages.MDMServerMessageConsole_Name + " (" + serverDef.getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         setName(name);
         initWaterMarks();
+    }
 
+    private void initActions() {
         reloadAction = new ReloadAction();
         monitorAction = new MonitorAction();
         downloadAction = new DownloadAction();
         terminateConsoleAction = new TerminateConsoleAction();
-
     }
 
     private void initWaterMarks() {
@@ -285,6 +294,12 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         };
         consolePage.setReadOnly();
         return consolePage;
+    }
+
+    public void reload() {
+        if (reloadAction != null) {
+            reloadAction.run();
+        }
     }
 
     @Override
@@ -444,11 +459,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         }
     }
 
-    private void reload() {
-        disposeTimer();
-        display();
-    }
-
     private void download(String dirPath, boolean needOpen, IProgressMonitor monitor) {
         try {
             monitor.beginTask(Messages.MDMServerMessageConsole_DownloadTask_Name, 100);
@@ -552,7 +562,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
