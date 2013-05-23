@@ -22,12 +22,12 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * created by liusongbo on 2012-10-17
- * 
+ *
  */
 public class UserExceptionStackFilter {
 
     /**
-     * 
+     *
      */
     private static final String ENTER = "\n"; //$NON-NLS-1$
 
@@ -75,6 +75,7 @@ public class UserExceptionStackFilter {
         }
         result = result.replaceAll(SUFFIX, BLANK);
         result = result.replaceAll(ENTER, BLANK);
+        result = result.replaceAll("  ", " "); //$NON-NLS-1$ //$NON-NLS-2$
         return result.trim();
     }
 
