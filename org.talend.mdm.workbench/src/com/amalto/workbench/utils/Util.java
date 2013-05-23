@@ -1864,8 +1864,7 @@ public class Util {
         Iterator<String> iterator = childElements.keySet().iterator();
         while (iterator.hasNext()) {
             String key = iterator.next();
-            XSDParticle next = childElements.get(key);
-            if (next.getMinOccurs() == 1 && next.getMaxOccurs() == 1 && key.indexOf("//") == -1) { //$NON-NLS-1$
+            if (key.indexOf("//") == -1) { //$NON-NLS-1$
                 childNames.add(key);
             }
         }

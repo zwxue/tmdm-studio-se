@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.axis.utils.IOUtils;
@@ -218,8 +219,42 @@ public class UtilTest {
     @Test
     public void testGetChildElementNames() throws Exception {
         List<String> list = Util.getChildElementNames(schema, "Entity"); //$NON-NLS-1$
-        assertEquals(list.size(), 7);
-        assertEquals(list.get(0), "Entity/id"); //$NON-NLS-1$
+        assertEquals(7, list.size());
+    }
+
+    @Test
+    public void testGetChildElements() throws Exception {
+        EList<XSDElementDeclaration> xsdElementDeclarations = schema.getElementDeclarations();
+        XSDElementDeclaration conceptEl = null;
+        for (XSDElementDeclaration el : xsdElementDeclarations) {
+            if (el.getName().equals("Entity")) { //$NON-NLS-1$
+                conceptEl = el;
+                break;
+            }
+        }
+
+        Map<String, XSDParticle> childElements = Util.getChildElements("", conceptEl, false, new HashSet<Object>()); //$NON-NLS-1$
+        assertNotNull(childElements);
+        assertEquals(7, childElements.size());
+    }
+
+    @Test
+    public void testGetChildElements4TypeArg() throws Exception {
+        EList<XSDElementDeclaration> xsdElementDeclarations = schema.getElementDeclarations();
+        XSDElementDeclaration conceptEl = null;
+        for (XSDElementDeclaration el : xsdElementDeclarations) {
+            if (el.getName().equals("Entity")) { //$NON-NLS-1$
+                conceptEl = el;
+                break;
+            }
+        }
+
+        assertNotNull(conceptEl);
+
+        Map<String, XSDParticle> childElements = Util.getChildElements(
+                "", (XSDComplexTypeDefinition) conceptEl.getTypeDefinition(), false, new HashSet<Object>()); //$NON-NLS-1$
+        assertNotNull(childElements);
+        assertEquals(7, childElements.size());
     }
 
     @Test
@@ -487,7 +522,7 @@ public class UtilTest {
     @Test
     public void testGetAllSuperComplexTypes() throws Exception {
         XSDSchema xsdSchema = createSchema();
-        
+
         XSDComplexTypeDefinition childType = null;
         EList<XSDElementDeclaration> declarations = xsdSchema.getElementDeclarations();
         for (XSDElementDeclaration xed : declarations) {
@@ -496,7 +531,7 @@ public class UtilTest {
                 break;
             }
         }
-        
+
         if (childType != null) {
             List<XSDComplexTypeDefinition> superComplexTypes = Util.getAllSuperComplexTypes(childType);
             assertNotNull(superComplexTypes);
@@ -519,7 +554,7 @@ public class UtilTest {
                 break;
             }
         }
-        
+
         if (elementDeclaration != null) {
             XSDComplexTypeDefinition childType = (XSDComplexTypeDefinition) elementDeclaration.getType();
             childType = (XSDComplexTypeDefinition) childType.getBaseTypeDefinition();
@@ -565,5 +600,5 @@ public class UtilTest {
 
         return Util.getXSDSchema(xsdContent);
     }
-    
+
 }

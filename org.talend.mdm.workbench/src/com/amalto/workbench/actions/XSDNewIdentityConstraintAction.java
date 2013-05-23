@@ -43,7 +43,7 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDNewIdentityConstraintAction extends UndoAction { // implements SelectionListener{
+public class XSDNewIdentityConstraintAction extends XSDAbstractNewXPathAction { // implements SelectionListener{
 
     private static Log log = LogFactory.getLog(XSDNewIdentityConstraintAction.class);
 
@@ -64,6 +64,7 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
         setToolTipText(Messages.XSDNewIdentityConstraintAction_AddANewKey);
     }
 
+    @Override
     public IStatus doAction() {
         try {
 
@@ -145,8 +146,8 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
                         if (((XSDParticle) ctc).getTerm() instanceof XSDModelGroup) {
                             XSDModelGroup mg = (XSDModelGroup) ((XSDParticle) ctc).getTerm();
                             if (mg.getContents().size() > 0)
-                                if (((XSDParticle) mg.getContents().get(0)).getTerm() instanceof XSDElementDeclaration)
-                                    field.setValue(((XSDElementDeclaration) (((XSDParticle) mg.getContents().get(0)).getTerm()))
+                                if (mg.getContents().get(0).getTerm() instanceof XSDElementDeclaration)
+                                    field.setValue(((XSDElementDeclaration) (mg.getContents().get(0).getTerm()))
                                             .getName());
                         }
                     }
@@ -158,6 +159,8 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
 
             decl.getIdentityConstraintDefinitions().add(index + 1, icd);
             decl.updateElement();
+
+            updateElementForAddedfield(icd, fieldName);
 
             page.refresh();
             page.getTreeViewer().setSelection(new StructuredSelection(icd), true);
@@ -173,6 +176,7 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
         return Status.OK_STATUS;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

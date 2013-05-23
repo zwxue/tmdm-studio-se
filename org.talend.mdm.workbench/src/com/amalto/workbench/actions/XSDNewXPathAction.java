@@ -25,16 +25,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
-import org.eclipse.xsd.XSDModelGroup;
-import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
-import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SelectFieldDialog;
@@ -44,7 +39,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDNewXPathAction extends UndoAction {
+public class XSDNewXPathAction extends XSDAbstractNewXPathAction {
 
     private static Log log = LogFactory.getLog(XSDNewXPathAction.class);
 
@@ -125,7 +120,7 @@ public class XSDNewXPathAction extends UndoAction {
             icd.getFields().add(index, xpath);
             icd.updateElement();
 
-            updateElementForAddedfield(field);
+            updateElementForAddedfield(icd, field);
 
             page.refresh();
             page.getTreeViewer().setSelection(new StructuredSelection(xpath), true);
@@ -139,33 +134,6 @@ public class XSDNewXPathAction extends UndoAction {
         }
 
         return Status.OK_STATUS;
-    }
-
-    private void updateElementForAddedfield(String fieldName) {
-        XSDElementDeclaration entity = (XSDElementDeclaration) icd.getContainer();
-
-        XSDComplexTypeDefinition ctype = (XSDComplexTypeDefinition) entity.getTypeDefinition();
-        if (ctype.getContent() instanceof XSDParticle) {
-            XSDParticleImpl particle = (XSDParticleImpl) ctype.getContent();
-            if (particle.getTerm() instanceof XSDModelGroup) {
-                XSDModelGroup group = (XSDModelGroup) particle.getTerm();
-                EList<XSDParticle> particles = group.getParticles();
-                for (XSDParticle part : particles) {
-                    if (part.getTerm() instanceof XSDElementDeclaration) {
-                        XSDElementDeclaration el = (XSDElementDeclaration) part.getTerm();
-                        if (el.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
-                            if (fieldName.equals(el.getName())) {
-                                part.setMinOccurs(1);
-                                part.setMaxOccurs(1);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        entity.updateElement();
     }
 
     @Override
