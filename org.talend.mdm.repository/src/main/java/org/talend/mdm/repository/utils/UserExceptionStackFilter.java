@@ -58,7 +58,9 @@ public class UserExceptionStackFilter {
                 results.add(result);
             }
         }
-
+        if (results.isEmpty()) {
+            return new String[] { msg };
+        }
         return results.toArray(new String[0]);
     }
 
