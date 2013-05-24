@@ -17,7 +17,6 @@ import static org.mockito.Mockito.*;
 import static org.powermock.api.support.membermodification.MemberMatcher.*;
 import static org.powermock.api.support.membermodification.MemberModifier.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +48,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.User;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.RepositoryNodeProviderRegistryReader;
 import org.talend.core.repository.model.IRepositoryFactory;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.repository.utils.XmiResourceManager;
@@ -75,7 +75,8 @@ import com.amalto.workbench.image.ImageCache;
 @PrepareForTest({ RemoveFromRepositoryAction.class, ImageDescriptor.class, JFaceResources.class, DefaultMessagesImpl.class,
         ImageCache.class, ItemState.class, CoreRuntimePlugin.class, ProjectManager.class,
         RepositoryNodeConfigurationManager.class, IProxyRepositoryFactory.class, ProxyRepositoryFactory.class,
-        MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class })
+        MessageDialog.class, RepositoryResourceUtil.class, ContainerCacheService.class,
+        RepositoryNodeProviderRegistryReader.class })
 public class RemoveFromRepositoryActionTest {
 
     @Rule
@@ -165,8 +166,11 @@ public class RemoveFromRepositoryActionTest {
         ItemState itemState = mock(ItemState.class);
         when(containerItem.getState()).thenReturn(itemState);
         when(itemState.getPath()).thenReturn(""); //$NON-NLS-1$
-        Method initMethod = Whitebox.getMethod(ERepositoryObjectType.class, "initDynamicNodes", Class.class); //$NON-NLS-1$
-        PowerMockito.suppress(initMethod);
+
+        PowerMockito.mockStatic(RepositoryNodeProviderRegistryReader.class);
+        RepositoryNodeProviderRegistryReader reader = mock(RepositoryNodeProviderRegistryReader.class);
+        PowerMockito.when(RepositoryNodeProviderRegistryReader.getInstance()).thenReturn(reader);
+
         ERepositoryObjectType typeM = ERepositoryObjectType.PROCESS;
         when(containerItem.getRepObjType()).thenReturn(typeM);
 
