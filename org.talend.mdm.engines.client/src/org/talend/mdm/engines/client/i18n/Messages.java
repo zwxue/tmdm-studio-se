@@ -83,6 +83,8 @@ public class Messages extends NLS {
 
     public static String DeployOnMDMExportWizardPage_ErrorDeployMsg;
 
+    public static String DeployOnMDMExportWizardPage_exporting;
+
     public static String DeployOnMDMExportWizardPage_exportType;
 
     public static String DeployOnMDMExportWizardPage_ExportType;
