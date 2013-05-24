@@ -47,6 +47,7 @@ import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.User;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.RepositoryNodeProviderRegistryReader;
 import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
@@ -73,7 +74,7 @@ import com.amalto.workbench.image.ImageCache;
 @PrepareForTest({ RepositoryResourceUtil.class, ImageDescriptor.class, JFaceResources.class, DefaultMessagesImpl.class,
         ImageCache.class, ItemState.class, ProjectManager.class, CoreRuntimePlugin.class, InteractiveService.class,
         ResourceModelUtils.class, FolderType.class, RepositoryNodeConfigurationManager.class, ResourceUtils.class,
-        ContainerCacheService.class, RepositoryQueryService.class })
+        ContainerCacheService.class, RepositoryQueryService.class, RepositoryNodeProviderRegistryReader.class })
 public class RepositoryResourceUtilTest {
 
     @Rule
@@ -398,6 +399,10 @@ public class RepositoryResourceUtilTest {
         when(mockItem.getState()).thenReturn(mockState);
         when(mockState.getPath()).thenReturn("mockStatePath");
 
+        PowerMockito.mockStatic(RepositoryNodeProviderRegistryReader.class);
+        RepositoryNodeProviderRegistryReader reader = mock(RepositoryNodeProviderRegistryReader.class);
+        PowerMockito.when(RepositoryNodeProviderRegistryReader.getInstance()).thenReturn(reader);
+
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         PowerMockito.mockStatic(ERepositoryObjectType.class);
         when(ERepositoryObjectType.getFolderName(mockType)).thenReturn("mockPath");
@@ -459,9 +464,14 @@ public class RepositoryResourceUtilTest {
 
         PowerMockito.mockStatic(ResourceUtils.class);
         IFolder mockFolder = mock(IFolder.class);
-        when(ResourceUtils.getFolder(mockIProject, ERepositoryObjectType.PROCESS.getFolder(), true)).thenReturn(mockFolder);
+        String processFolder = "process";
+        when(ResourceUtils.getFolder(mockIProject, processFolder, true)).thenReturn(mockFolder);
 
-        IFolder folder = RepositoryResourceUtil.getFolder(ERepositoryObjectType.PROCESS);
+        ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
+        PowerMockito.mockStatic(ERepositoryObjectType.class);
+        when(ERepositoryObjectType.getFolderName(mockType)).thenReturn(processFolder);
+
+        IFolder folder = RepositoryResourceUtil.getFolder(mockType);
         assertEquals(mockFolder, folder);
     }
 
@@ -510,9 +520,17 @@ public class RepositoryResourceUtilTest {
         ItemState mockItemState = mock(ItemState.class);
         when(mockItemState.getPath()).thenReturn("mocked_path");
 
+        PowerMockito.mockStatic(RepositoryNodeProviderRegistryReader.class);
+        RepositoryNodeProviderRegistryReader reader = mock(RepositoryNodeProviderRegistryReader.class);
+        PowerMockito.when(RepositoryNodeProviderRegistryReader.getInstance()).thenReturn(reader);
         Item mockParentItem = mock(Item.class);
         when(mockParentItem.getState()).thenReturn(mockItemState);
-        IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(ERepositoryObjectType.PROCESS,
+        String processFolder = "process";
+        ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
+        when(mockType.getType()).thenReturn("mockType");
+        PowerMockito.mockStatic(ERepositoryObjectType.class);
+        when(ERepositoryObjectType.getFolderName(mockType)).thenReturn(processFolder);
+        IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(mockType,
                 folderName, mockParentItem, isSystem);
 
         assertNotNull(folderViewObject);
@@ -554,7 +572,7 @@ public class RepositoryResourceUtilTest {
         when(mockConfiguration.getResourceProvider()).thenReturn(mockResourceProvider);
 
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
-        when(mockConfiguration.getResourceProvider().getRepositoryObjectType((Item) Mockito.any(Item.class)))
+        when(mockConfiguration.getResourceProvider().getRepositoryObjectType(Mockito.any(Item.class)))
                 .thenReturn(mockType);
 
         IRepositoryNodeLabelProvider mockLabelProvider = mock(IRepositoryNodeLabelProvider.class);
@@ -563,7 +581,7 @@ public class RepositoryResourceUtilTest {
 
         PowerMockito.mockStatic(ContainerCacheService.class);
         PowerMockito.doNothing().when(ContainerCacheService.class, "putContainer",
-                (IRepositoryViewObject) Mockito.any(IRepositoryViewObject.class));
+                Mockito.any(IRepositoryViewObject.class));
 
         IRepositoryViewObject categoryViewObject = RepositoryResourceUtil.getCategoryViewObject(mockConfiguration);
         assertNotNull(categoryViewObject);
@@ -848,6 +866,7 @@ public class RepositoryResourceUtilTest {
         Property mockProperty = mock(Property.class);
         ContainerItem mockContainerItem = mock(ContainerItem.class);
         when(mockViewObject.getProperty()).thenReturn(mockProperty);
+        when(mockViewObject.getLabel()).thenReturn("mockViewObjectLabel");
         when(mockProperty.getItem()).thenReturn(mockContainerItem);
 
         int[] folderType = { FolderType.SYSTEM_FOLDER, FolderType.STABLE_SYSTEM_FOLDER, FolderType.FOLDER };
@@ -865,7 +884,7 @@ public class RepositoryResourceUtilTest {
         RepositoryNode node = RepositoryResourceUtil.convertToNode(mockViewObject);
         assertNotNull(node);
         assertEquals(enodeType[randomInt], node.getType());
-        assertEquals(mockType, node.getProperties(EProperties.LABEL));
+        assertEquals("mockViewObjectLabel", node.getProperties(EProperties.LABEL));
         assertEquals(mockType, node.getProperties(EProperties.CONTENT_TYPE));
     }
 
