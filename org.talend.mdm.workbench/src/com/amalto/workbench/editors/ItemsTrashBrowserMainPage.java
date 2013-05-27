@@ -95,6 +95,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
         ((XObjectBrowserInput) editor.getEditorInput()).addListener(this);
     }
 
+    @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
         // Everything is implemented in createFormContent
     }
@@ -130,6 +131,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 public void keyReleased(KeyEvent e) {
                     if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                         ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+                        ItemsTrashBrowserMainPage.this.resultsViewer.getTable().setFocus();
                     }
                 }// keyReleased
             }// keyListener
@@ -165,11 +167,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                     try {
                         new DisplayDroppedItemAction(ItemsTrashBrowserMainPage.this.getSite().getShell(), resultsViewer).run();
                     } catch (Exception e) {
-                        MessageDialog.openError(
-                                ItemsTrashBrowserMainPage.this.getSite().getShell(),
-                                Messages._Error,
-                                Messages.ItemsTrashBrowserMainPage_4 + e.getClass().getName() + Messages.ItemsTrashBrowserMainPage_5
-                                        + e.getLocalizedMessage());
+                        MessageDialog.openError(ItemsTrashBrowserMainPage.this.getSite().getShell(), Messages._Error,
+                                Messages.ItemsTrashBrowserMainPage_4 + e.getClass().getName()
+                                        + Messages.ItemsTrashBrowserMainPage_5 + e.getLocalizedMessage());
                     }
                 }
             });
@@ -343,6 +343,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
         refreshData();
     }
 
+    @Override
     protected void refreshData() {
         try {
 
@@ -355,6 +356,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
         }
     }
 
+    @Override
     protected void commit() {
         try {
 
@@ -429,7 +431,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             if ((results == null) || (results.length == 0)) {
                 if (showResultInfo) {
-                    MessageDialog.openInformation(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_15, Messages.ItemsTrashBrowserMainPage_16);
+                    MessageDialog.openInformation(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_15,
+                            Messages.ItemsTrashBrowserMainPage_16);
                     return new LineItem[0];
                 }
             } else {
@@ -450,11 +453,13 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             return new LineItem[0];
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_17,
                         Messages.ItemsTrashBrowserMainPage_18);
-            else
-                MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_19, e.getLocalizedMessage());
+            } else {
+                MessageDialog
+                        .openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_19, e.getLocalizedMessage());
+            }
             return null;
         } finally {
             try {
@@ -485,6 +490,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             setToolTipText(Messages.ItemsTrashBrowserMainPage_21);
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -514,7 +520,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                         .getInsertionUserName();
                 String droppedTime = wsDroppedItem.getInsertionTime() == null ? "undefine" : sdf.format(wsDroppedItem//$NON-NLS-1$
                         .getInsertionTime());
-                String desc = Messages.ItemsTrashBrowserMainPage_22 + userName + Messages.ItemsTrashBrowserMainPage_23 + droppedTime;
+                String desc = Messages.ItemsTrashBrowserMainPage_22 + userName + Messages.ItemsTrashBrowserMainPage_23
+                        + droppedTime;
 
                 final DOMViewDialog d = new DOMViewDialog(ItemsTrashBrowserMainPage.this.getSite().getShell(),
                         Util.parse(projection), false, null, DOMViewDialog.TREE_VIEWER, null, desc);
@@ -534,11 +541,11 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error,
-                        Messages.ItemsTrashBrowserMainPage_25 + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_25 + e.getLocalizedMessage());
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -564,6 +571,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             setToolTipText(Messages.ItemsTrashBrowserMainPage_26);
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -571,8 +579,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 LineItem li = (LineItem) selection.getFirstElement();
 
-                if (li == null)
+                if (li == null) {
                     return;
+                }
 
                 WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()),
                         li.getConcept(), li.getIds()), li.getPartPath(), li.getRevision());
@@ -585,11 +594,11 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-                MessageDialog.openError(shell, Messages._Error,
-                        Messages.ItemsTrashBrowserMainPage_29 + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_29 + e.getLocalizedMessage());
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -616,6 +625,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             setToolTipText(Messages.ItemsTrashBrowserMainPage_30);
         }
 
+        @Override
         public void run() {
             try {
                 super.run();
@@ -623,12 +633,14 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 // retrieve the item
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 LineItem li = (LineItem) selection.getFirstElement();
-                if (li == null)
+                if (li == null) {
                     return;
+                }
 
                 if (!MessageDialog.openConfirm(this.shell, Messages.ItemsTrashBrowserMainPage_32,
-                        Messages.ItemsTrashBrowserMainPage_33))
+                        Messages.ItemsTrashBrowserMainPage_33)) {
                     return;
+                }
 
                 WSDroppedItemPK wsDroppedItemPK = new WSDroppedItemPK(new WSItemPK(new WSDataClusterPK(li.getDataCluster()),
                         li.getConcept(), li.getIds()), li.getPartPath(), li.getRevision());
@@ -639,11 +651,11 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error,
-                        Messages.ItemsTrashBrowserMainPage_35 + e.getLocalizedMessage());
+                MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_35 + e.getLocalizedMessage());
             }
         }
 
+        @Override
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
         }
@@ -736,10 +748,11 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             default:
                 res = 0;
             }
-            if (asc)
+            if (asc) {
                 return res;
-            else
+            } else {
                 return -res;
+            }
         }
 
     }

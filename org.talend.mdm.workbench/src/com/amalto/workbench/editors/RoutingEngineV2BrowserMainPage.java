@@ -619,6 +619,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
     public void doSearch() {
         resultsViewer.setInput(getResults());
+        resultsViewer.getTable().setFocus();
         pageToolBar.getComposite().setVisible(true);
         pageToolBar.getComposite().layout(true);
         pageToolBar.getComposite().getParent().layout(true);

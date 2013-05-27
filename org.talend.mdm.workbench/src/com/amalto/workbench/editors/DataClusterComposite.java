@@ -93,7 +93,6 @@ import com.amalto.workbench.widgets.IPagingListener;
 import com.amalto.workbench.widgets.PageingToolBar;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-
 /**
  * created by liusongbo on 2013-1-24
  */
@@ -130,7 +129,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     private IWorkbenchPartSite site;
 
-    private Map<MDMServerDef,TreeParent> serverMap = new HashMap<MDMServerDef,TreeParent>();
+    private Map<MDMServerDef, TreeParent> serverMap = new HashMap<MDMServerDef, TreeParent>();
 
     public DataClusterComposite(Composite parent, int style, TreeObject model, IWorkbenchPartSite site) {
         super(parent, style);
@@ -249,10 +248,12 @@ public class DataClusterComposite extends Composite implements IPagingListener {
     }
 
     private KeyListener keylistener = new KeyAdapter() {
+
         @Override
         public void keyReleased(KeyEvent e) {
             if ((e.stateMask == 0) && (e.character == SWT.CR)) {
                 resultsViewer.setInput(getResults(true));
+                resultsViewer.getTable().setFocus();
                 pageToolBar.getComposite().setVisible(true);
                 pageToolBar.getComposite().layout(true);
                 pageToolBar.getComposite().getParent().layout(true);
@@ -279,6 +280,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
         }
 
         resultsViewer.setInput(getResults(true));
+        resultsViewer.getTable().setFocus();
         pageToolBar.getComposite().setVisible(true);
         pageToolBar.getComposite().layout(true);
         pageToolBar.getComposite().getParent().layout(true);
@@ -311,6 +313,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             table.setSortDirection(SWT.UP);
         }
     }
+
     protected LineItem[] getResults(boolean showResultInfo) {
 
         Cursor waitCursor = null;
@@ -444,6 +447,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
     private TreeObject getXObject() {
         return model;
     }
+
     /**
      * Create the Table
      */
@@ -708,8 +712,9 @@ public class DataClusterComposite extends Composite implements IPagingListener {
     }
 
     private Object getAdapter(Class<?> adapter) {
-        if (page != null)
+        if (page != null) {
             return page.getAdapter(adapter);
+        }
 
         TreeParent treeParent = Util.getServerTreeParent(getXObject());
 
@@ -752,15 +757,16 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
         return treeParent;
     }
+
     public TableViewer getResultsViewer() {
         return resultsViewer;
     }
 
     /***************************************************************
      * Table Label Provider
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -801,9 +807,9 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 
     /***************************************************************
      * Table Sorter
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
@@ -877,8 +883,9 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             return null;
         }
 
-        if(serverMap.containsKey(serverDef))
+        if (serverMap.containsKey(serverDef)) {
             return serverMap.get(serverDef);
+        }
 
         String serverName = serverDef.getName();
         String universe = serverDef.getUniverse();
