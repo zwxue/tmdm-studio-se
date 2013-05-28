@@ -69,7 +69,7 @@ public class ConnectToWebUIAction implements IIntroAction {
         SelectServerDefDialog selServerDlg = getSelectServerDefDialog();
         if (selServerDlg.open() == IDialogConstants.OK_ID) {
             MDMServerDef serverDef = selServerDlg.getSelectedServerDef();
-            return serverDef.getProtocol() + "://" + serverDef.getHost() + ":" + serverDef.getPort() + path; //$NON-NLS-1$ //$NON-NLS-2$
+            return serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort() + path; //$NON-NLS-1$ 
         }
         return null;
     }

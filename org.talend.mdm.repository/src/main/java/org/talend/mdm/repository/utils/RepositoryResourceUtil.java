@@ -815,6 +815,29 @@ public class RepositoryResourceUtil {
             }
         }
         return viewObj;
+    }
+
+    public static Item assertItem(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException();
+        }
+        Property property = item.getProperty();
+        if (property != null) {
+
+            Resource eResource = item.eResource();
+            if (eResource == null) {
+                IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+                try {
+                    IRepositoryViewObject newViewObj = factory.getLastVersion(property.getId());
+                    ContainerCacheService.put(newViewObj);
+                    return newViewObj.getProperty().getItem();
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+
+        return item;
 
     }
 

@@ -128,8 +128,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     private IStructuredSelection getSelection(List<IRepositoryViewObject> viewObjs) {
         List<RepositoryNode> nodes = new LinkedList<RepositoryNode>();
         for (IRepositoryViewObject viewObj : viewObjs) {
-            IRepositoryViewObject refreshViewObj = RepositoryResourceUtil.assertViewObject(viewObj);
-            RepositoryNode node = RepositoryResourceUtil.convertToNode(refreshViewObj);
+            RepositoryNode node = RepositoryResourceUtil.convertToNode(viewObj);
             nodes.add(node);
         }
         return new StructuredSelection(nodes);
