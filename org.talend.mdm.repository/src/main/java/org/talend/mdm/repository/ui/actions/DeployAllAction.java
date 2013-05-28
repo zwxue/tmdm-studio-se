@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -22,7 +20,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
@@ -97,7 +94,6 @@ public class DeployAllAction extends AbstractDeployAction {
                 lockDirtyDialog.saveDirtyObjects();
 
                 MDMServerDef serverDef = dialog.getServerDef();
-                reorderCommandObjects(selectededCommands);
 
                 IStatus status = deployService.runCommands(selectededCommands, serverDef);
                 // add canceled object to status
@@ -109,21 +105,6 @@ public class DeployAllAction extends AbstractDeployAction {
                 }
                 updateLastServer(status, new NullProgressMonitor());
             }
-        }
-    }
-
-    protected void reorderCommandObjects(List<AbstractDeployCommand> commands) {
-        List<AbstractDeployCommand> dataModelCommands = new LinkedList<AbstractDeployCommand>();
-        for (Iterator<AbstractDeployCommand> il = commands.iterator(); il.hasNext();) {
-            AbstractDeployCommand command = il.next();
-            IRepositoryViewObject viewObj = command.getViewObject();
-            if (viewObj != null && viewObj.getRepositoryObjectType() == IServerObjectRepositoryType.TYPE_DATAMODEL) {
-                dataModelCommands.add(command);
-                il.remove();
-            }
-        }
-        if (!dataModelCommands.isEmpty()) {
-            commands.addAll(0, dataModelCommands);
         }
     }
 

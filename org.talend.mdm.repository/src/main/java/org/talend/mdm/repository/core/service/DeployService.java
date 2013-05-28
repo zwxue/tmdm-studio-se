@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,7 @@ import org.eclipse.ui.progress.IProgressService;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CompoundCommand;
 import org.talend.mdm.repository.core.command.ICommand;
@@ -76,7 +78,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         * 
+         *
          * @param severity
          * @param pluginId
          * @param message
@@ -283,6 +285,8 @@ public class DeployService {
     }
 
     public IStatus runCommands(List<AbstractDeployCommand> commands, MDMServerDef serverDef) {
+        reorderCommandObjects(commands);
+
         CommandManager manager = CommandManager.getInstance();
         List<ICommand> compundCommands = manager.convertToDeployCompundCommands(commands, serverDef);
         manager.arrangeForJobCommands(compundCommands);
@@ -303,6 +307,21 @@ public class DeployService {
 
         }
         return Status.CANCEL_STATUS;
+    }
+
+    private void reorderCommandObjects(List<AbstractDeployCommand> commands) {
+        List<AbstractDeployCommand> dataModelCommands = new LinkedList<AbstractDeployCommand>();
+        for (Iterator<AbstractDeployCommand> il = commands.iterator(); il.hasNext();) {
+            AbstractDeployCommand command = il.next();
+            IRepositoryViewObject viewObj = command.getViewObject();
+            if (viewObj != null && viewObj.getRepositoryObjectType() == IServerObjectRepositoryType.TYPE_DATAMODEL) {
+                dataModelCommands.add(command);
+                il.remove();
+            }
+        }
+        if (!dataModelCommands.isEmpty()) {
+            commands.addAll(0, dataModelCommands);
+        }
     }
 
     private void pushRestoreCommand(CommandManager manager, List<ICommand> subCmds, MDMServerDef serverDef) {

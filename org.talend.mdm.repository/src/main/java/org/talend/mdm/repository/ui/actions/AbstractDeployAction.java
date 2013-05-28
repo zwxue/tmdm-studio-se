@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -100,22 +98,7 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
                 viewObjs.add((IRepositoryViewObject) obj);
             }
         }
-        reorderRepositoryViewObjects(viewObjs);
         return viewObjs;
-    }
-
-    protected void reorderRepositoryViewObjects(List<IRepositoryViewObject> viewObjs) {
-        List<IRepositoryViewObject> dataModelObjs = new LinkedList<IRepositoryViewObject>();
-        for (Iterator<IRepositoryViewObject> il = viewObjs.iterator(); il.hasNext();) {
-            IRepositoryViewObject viewObj = il.next();
-            if (viewObj.getRepositoryObjectType() == IServerObjectRepositoryType.TYPE_DATAMODEL) {
-                dataModelObjs.add(viewObj);
-                il.remove();
-            }
-        }
-        if (!dataModelObjs.isEmpty()) {
-            viewObjs.addAll(0, dataModelObjs);
-        }
     }
 
     protected void doSaveEditorsThing() {
