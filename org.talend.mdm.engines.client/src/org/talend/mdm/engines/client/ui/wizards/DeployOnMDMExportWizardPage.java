@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -49,6 +50,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.commons.ui.swt.formtools.LabelledCombo;
@@ -59,9 +61,11 @@ import org.talend.core.language.LanguageManager;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.PropertiesFactory;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.prefs.ITalendCorePrefConstants;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.ProcessorException;
@@ -70,6 +74,7 @@ import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.proxy.ProxyUtil;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
+import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
@@ -921,6 +926,21 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * @throws ProcessorException
      */
     protected List<ExportFileResource> getExportResources(ExportFileResource p) throws ProcessorException {
+        Item item = p.getItem();
+        Resource eResource = item.eResource();
+        Property property = item.getProperty();
+        if (eResource == null && property != null) {
+            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+            try {
+                IRepositoryViewObject newViewObj = factory.getLastVersion(property.getId());
+                Item newItem = newViewObj.getProperty().getItem();
+                p.setProcess((ProcessItem) newItem);
+
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
         return manager.getExportResources(new ExportFileResource[] { p });
     }
 
