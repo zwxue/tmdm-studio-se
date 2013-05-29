@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -86,8 +86,9 @@ public class RepositoryNodeConfigurationManager {
     public static IRepositoryNodeConfiguration getConfiguration(Item item) {
         EClass eClass = item.eClass();
         IRepositoryNodeConfiguration configuration = itemConfMap.get(eClass);
-        if (configuration != null)
+        if (configuration != null) {
             return configuration;
+        }
         for (IRepositoryNodeConfiguration conf : getConfigurations()) {
             IRepositoryNodeResourceProvider resourceProvider = conf.getResourceProvider();
             if (resourceProvider != null) {
@@ -107,6 +108,9 @@ public class RepositoryNodeConfigurationManager {
 
     public static IRepositoryNodeConfiguration getConfiguration(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
+        if (item != null && !(item instanceof ContainerItem)) {
+            item = RepositoryResourceUtil.assertItem(item);
+        }
         if (item != null) {
             if (RepositoryResourceUtil.isDeletedFolder(item, viewObj.getRepositoryObjectType())) {
                 return getRecycleBinNodeConfiguration();
@@ -120,8 +124,9 @@ public class RepositoryNodeConfigurationManager {
     public static IRepositoryNodeConfiguration getConfiguration(ERepositoryObjectType type) {
 
         IRepositoryNodeConfiguration configuration = typeConfMap.get(type);
-        if (configuration != null)
+        if (configuration != null) {
             return configuration;
+        }
         for (IRepositoryNodeConfiguration conf : configurations) {
             IRepositoryNodeResourceProvider resourceProvider = conf.getResourceProvider();
             if (resourceProvider != null) {
@@ -165,7 +170,7 @@ public class RepositoryNodeConfigurationManager {
     }
 
     private static void initBeanMap() {
-        if (!initedBean)
+        if (!initedBean) {
             for (IRepositoryNodeConfiguration conf : configurations) {
                 // init class structure
                 Class wsObjectClass = conf.getContentProvider().getWSObjectClass();
@@ -173,6 +178,7 @@ public class RepositoryNodeConfigurationManager {
                     Bean2EObjUtil.getInstance().registerClassMap(wsObjectClass);
                 }
             }
+        }
         initedBean = true;
     }
 

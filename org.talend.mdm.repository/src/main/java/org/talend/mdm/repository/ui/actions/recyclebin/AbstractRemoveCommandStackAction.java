@@ -28,6 +28,7 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
@@ -56,8 +57,9 @@ public abstract class AbstractRemoveCommandStackAction extends AbstractRepositor
 
     protected boolean canRemove(List<IRepositoryViewObject> viewObjs) {
         WaitToDeployDialog dialog = new WaitToDeployDialog(getShell(), viewObjs);
-        if (dialog.needShowDialog())
+        if (dialog.needShowDialog()) {
             return dialog.open() == IDialogConstants.OK_ID;
+        }
         return true;
     }
 
@@ -93,6 +95,7 @@ public abstract class AbstractRemoveCommandStackAction extends AbstractRepositor
             List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
             viewObjs.add(viewObj);
 
+            ContainerCacheService.remove(id);
             factory.deleteObjectPhysical(viewObj);
             CommandManager.getInstance().removeCommandStack(id);
 

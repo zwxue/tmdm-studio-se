@@ -58,6 +58,7 @@ import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
 import org.talend.mdm.repository.core.impl.view.IViewNodeConstDef;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
@@ -253,6 +254,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
                                             CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, itemRec.getItemId(), name);
                                         }
                                     }
+                                    ContainerCacheService.put(object);
                                 } catch (Exception e) {
                                     log.error(e.getMessage(), e);
                                 }
