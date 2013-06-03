@@ -379,8 +379,6 @@
       <import plugin="org.eclipse.core.runtime.compatibility" version="3.2.0" match="greaterOrEqual"/>
       <import plugin="java_cup.runtime" version="0.10.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.update.configurator" version="3.1.100" match="compatible"/>
-      <import plugin="org.apache.httpcomponents.httpclient"/>
-      <import plugin="org.apache.httpcomponents.httpcore"/>
    </requires>
 
    <plugin
