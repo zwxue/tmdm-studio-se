@@ -13,16 +13,15 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.emf.common.ui.URIEditorInput;
+import org.eclipse.emf.common.util.URI;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class WorkflowEditorInput extends FileEditorInput implements IRepositoryViewEditorInput {
-
-    private IFile procFile;
+public class WorkflowEditorInput extends URIEditorInput implements IRepositoryViewEditorInput {
 
     public static String EDITOR_ID = "org.bonitasoft.studio.model.process.diagram.part.ProcessDiagramEditorID"; //$NON-NLS-1$
 
@@ -44,7 +43,7 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
      * @param file
      */
     public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
-        super(file);
+        super(URI.createPlatformResourceURI(file.getFullPath().toString(), false));
         this.viewObject = viewObject;
         version = viewObject.getVersion();
     }
@@ -80,7 +79,6 @@ public class WorkflowEditorInput extends FileEditorInput implements IRepositoryV
     public String getName() {
         if (getVersion() != null) {
             return viewObject.getLabel() + "_" + getVersion() + ".proc"; //$NON-NLS-1$ //$NON-NLS-2$
-
         }
         return super.getName();
     }
