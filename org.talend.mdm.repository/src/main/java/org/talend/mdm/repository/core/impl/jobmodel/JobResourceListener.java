@@ -16,13 +16,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
@@ -88,7 +91,7 @@ public class JobResourceListener implements PropertyChangeListener {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
      */
     public void propertyChange(PropertyChangeEvent event) {
@@ -122,6 +125,8 @@ public class JobResourceListener implements PropertyChangeListener {
         if (jobCreated) {
             CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, item.getProperty().getId(),
                     item.getProperty().getDisplayName());
+
+            removeLastServerInfo(item);
         }
 
         if (jobSaved) {
@@ -135,6 +140,20 @@ public class JobResourceListener implements PropertyChangeListener {
                     viewObject = cacheViewObject;
                 }
                 MDMRepositoryView.show().getCommonViewer().refresh(viewObject);
+            }
+        }
+    }
+
+    private void removeLastServerInfo(final Item item) {
+        Property property = item.getProperty();
+        EMap additionalProperties = property.getAdditionalProperties();
+        if (additionalProperties != null) {
+            RepositoryResourceUtil.setLastServerDef(item, null);
+            ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+            try {
+                factory.save(item);
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
             }
         }
     }
