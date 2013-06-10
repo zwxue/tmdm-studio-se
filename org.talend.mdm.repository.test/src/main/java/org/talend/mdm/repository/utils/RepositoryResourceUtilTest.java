@@ -99,15 +99,14 @@ public class RepositoryResourceUtilTest {
         CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
         when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
 
+        PowerMockito.mockStatic(RepositoryNodeProviderRegistryReader.class);
+        RepositoryNodeProviderRegistryReader reader = mock(RepositoryNodeProviderRegistryReader.class);
+        PowerMockito.when(RepositoryNodeProviderRegistryReader.getInstance()).thenReturn(reader);
     }
 
     @Test
     public void testIsLockedViewObject() {
         IRepositoryViewObject mockViewObject = mock(IRepositoryViewObject.class);
-
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
 
         IProxyRepositoryFactory repositoryFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
@@ -135,10 +134,6 @@ public class RepositoryResourceUtilTest {
     @Test
     public void testIsLockedAndEdited() throws Exception {
         IRepositoryViewObject mockViewObject = mock(IRepositoryViewObject.class);
-
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
 
         IProxyRepositoryFactory repositoryFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
@@ -175,10 +170,6 @@ public class RepositoryResourceUtilTest {
     @Test
     public void testIsLockedItem() {
         Item mockItem = mock(Item.class);
-
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
 
         IProxyRepositoryFactory repositoryFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
@@ -217,9 +208,6 @@ public class RepositoryResourceUtilTest {
         when(mockConf.getResourceProvider()).thenReturn(mockResourceProvider);
         when(mockResourceProvider.needSaveReferenceFile()).thenReturn(true);
 
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
         IProxyRepositoryFactory repositoryFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
 
@@ -237,10 +225,6 @@ public class RepositoryResourceUtilTest {
         ItemState mockItemState = mock(ItemState.class);
         when(mockItem.getState()).thenReturn(mockItemState);
         when(mockItem.getState().getPath()).thenReturn("");
-
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin coreRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(coreRuntimePlugin);
 
         IProxyRepositoryFactory repositoryFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(repositoryFactory);
@@ -399,10 +383,6 @@ public class RepositoryResourceUtilTest {
         when(mockItem.getState()).thenReturn(mockState);
         when(mockState.getPath()).thenReturn("mockStatePath");
 
-        PowerMockito.mockStatic(RepositoryNodeProviderRegistryReader.class);
-        RepositoryNodeProviderRegistryReader reader = mock(RepositoryNodeProviderRegistryReader.class);
-        PowerMockito.when(RepositoryNodeProviderRegistryReader.getInstance()).thenReturn(reader);
-
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         PowerMockito.mockStatic(ERepositoryObjectType.class);
         when(ERepositoryObjectType.getFolderName(mockType)).thenReturn("mockPath");
@@ -467,8 +447,8 @@ public class RepositoryResourceUtilTest {
         String processFolder = "process";
         when(ResourceUtils.getFolder(mockIProject, processFolder, true)).thenReturn(mockFolder);
 
-        ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         PowerMockito.mockStatic(ERepositoryObjectType.class);
+        ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         when(ERepositoryObjectType.getFolderName(mockType)).thenReturn(processFolder);
 
         IFolder folder = RepositoryResourceUtil.getFolder(mockType);
@@ -520,15 +500,12 @@ public class RepositoryResourceUtilTest {
         ItemState mockItemState = mock(ItemState.class);
         when(mockItemState.getPath()).thenReturn("mocked_path");
 
-        PowerMockito.mockStatic(RepositoryNodeProviderRegistryReader.class);
-        RepositoryNodeProviderRegistryReader reader = mock(RepositoryNodeProviderRegistryReader.class);
-        PowerMockito.when(RepositoryNodeProviderRegistryReader.getInstance()).thenReturn(reader);
         Item mockParentItem = mock(Item.class);
         when(mockParentItem.getState()).thenReturn(mockItemState);
         String processFolder = "process";
+        PowerMockito.mockStatic(ERepositoryObjectType.class);
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
         when(mockType.getType()).thenReturn("mockType");
-        PowerMockito.mockStatic(ERepositoryObjectType.class);
         when(ERepositoryObjectType.getFolderName(mockType)).thenReturn(processFolder);
         IRepositoryViewObject folderViewObject = RepositoryResourceUtil.createFolderViewObject(mockType,
                 folderName, mockParentItem, isSystem);
@@ -616,9 +593,6 @@ public class RepositoryResourceUtilTest {
         }
 
         // test method function
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin mockCoreRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(mockCoreRuntimePlugin);
         IProxyRepositoryFactory mockFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(mockFactory);
 
@@ -660,10 +634,6 @@ public class RepositoryResourceUtilTest {
         boolean useRepositoryViewObject = true;
 
         ERepositoryObjectType mockType = mock(ERepositoryObjectType.class);
-
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin mockRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(mockRuntimePlugin);
 
         IProxyRepositoryFactory mockFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(mockFactory);
@@ -827,9 +797,6 @@ public class RepositoryResourceUtilTest {
         when(mockParentItem.getState()).thenReturn(mockItemState);
         when(mockItemState.getPath()).thenReturn(path);
 
-        PowerMockito.mockStatic(CoreRuntimePlugin.class);
-        CoreRuntimePlugin mockRuntimePlugin = mock(CoreRuntimePlugin.class);
-        when(CoreRuntimePlugin.getInstance()).thenReturn(mockRuntimePlugin);
         IProxyRepositoryFactory mockFactory = mock(IProxyRepositoryFactory.class);
         when(CoreRuntimePlugin.getInstance().getProxyRepositoryFactory()).thenReturn(mockFactory);
 
