@@ -174,12 +174,17 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         public void error(FieldMetadata field, String message, Element element, int lineNumber, int columnNumber,
                 ValidationError error) {
             if (error != ValidationError.XML_SCHEMA) {
-                ComplexTypeMetadata containingType = field.getContainingType();
-                while (containingType instanceof ContainedComplexTypeMetadata) {
-                    containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
+                int group;
+                try {
+                    ComplexTypeMetadata containingType = field.getContainingType();
+                    while (containingType instanceof ContainedComplexTypeMetadata) {
+                        containingType = ((ContainedComplexTypeMetadata) containingType).getContainerType();
+                    }
+                    group = containingType.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
+                                            : IComponentValidationRule.MSG_GROUP_TYPE;
+                } catch (Exception e) {
+                    group = IComponentValidationRule.MSG_GROUP_ENTITY;
                 }
-                int group = containingType.isInstantiable() ? IComponentValidationRule.MSG_GROUP_ENTITY
-                        : IComponentValidationRule.MSG_GROUP_TYPE;
                 ModelValidationMessage validationMessage = new ModelValidationMessage(IComponentValidationRule.SEV_ERROR,
                         message,
                         "key", // TODO
