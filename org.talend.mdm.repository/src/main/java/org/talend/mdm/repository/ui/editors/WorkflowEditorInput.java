@@ -43,7 +43,7 @@ public class WorkflowEditorInput extends URIEditorInput implements IRepositoryVi
      * @param file
      */
     public WorkflowEditorInput(IRepositoryViewObject viewObject, IFile file) {
-        super(URI.createPlatformResourceURI(file.getFullPath().toString(), false));
+        super(URI.createPlatformResourceURI(file.getFullPath().toString(), true));
         this.viewObject = viewObject;
         version = viewObject.getVersion();
     }
