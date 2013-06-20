@@ -331,11 +331,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                     }
                                 }
                             } catch (Exception e) {
-                                MessageDialog.openError(
-                                        shell,
-                                        Messages.DataClusterBrowserMainPage_33,
-                                        Messages.bind(Messages.DataClusterBrowserMainPage_34,
-                                                Util.formatErrorMessage(e.getLocalizedMessage())));
+                                log.error(e.getMessage(), e);
+                                MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
+                                        Messages.bind(Messages.DataClusterBrowserMainPage_34, e.getLocalizedMessage()));
                                 return;
                             }
                         }// if
@@ -403,6 +401,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     viewer.refresh();
                 }
             } catch (Exception e) {
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
                         Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
                 return;
@@ -545,9 +544,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Delete Items Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
 
     class LogicalDeleteItemsAction extends Action {
@@ -675,6 +674,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                     monitor.done();
                 } catch (Exception e) {
+                    log.error(e.getMessage(), e);
                     MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_78,
                             Messages.bind(Messages.DataClusterBrowserMainPage_79, e.getLocalizedMessage()));
                 }// try
@@ -857,9 +857,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * New Item Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class NewItemAction extends Action {
 
@@ -914,6 +914,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 }
                                 doSearch();
                             } catch (Exception e) {
+                                log.error(e.getMessage(), e);
                                 MessageDialog.openError(
                                         shell,
                                         Messages.DataClusterBrowserMainPage_100,
@@ -945,9 +946,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * SubmitItems Action
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class SubmitItemsAction extends Action {
 
@@ -1065,9 +1066,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Table Label Provider
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class ClusterTableLabelProvider implements ITableLabelProvider {
 
@@ -1108,9 +1109,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
     /***************************************************************
      * Table Sorter
-     *
+     * 
      * @author bgrieder
-     *
+     * 
      ***************************************************************/
     class TableSorter extends ViewerSorter {
 
