@@ -253,6 +253,7 @@ public abstract class ListStringContentsComposite extends Composite {
         infos.remove(info);
         infos.add(newIndex, info);
         tvInfos.refresh();
+        setContentChanged(true);
         if (section != null)
             section.autoCommit();
     }
@@ -280,7 +281,7 @@ public abstract class ListStringContentsComposite extends Composite {
     }
 
     public void setContentChanged(boolean changed) {
-        this.treeContentChanged = false;
+        this.treeContentChanged = changed;
     }
 
     protected abstract String getInfoColTitle();
