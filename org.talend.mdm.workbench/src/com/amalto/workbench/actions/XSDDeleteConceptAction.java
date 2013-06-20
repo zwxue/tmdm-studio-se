@@ -14,6 +14,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -50,6 +51,7 @@ public class XSDDeleteConceptAction extends UndoAction {
         setToolTipText(Messages.XSDDeleteConceptAction_ActionTip);
     }
 
+    @Override
     public void run(Object toDel) {
         if (!(toDel instanceof XSDElementDeclaration)) {
             return;
@@ -58,6 +60,7 @@ public class XSDDeleteConceptAction extends UndoAction {
         super.run();
     }
 
+    @Override
     public IStatus doAction() {
         try {
             // xsdElem is to support the multiple delete action on key press,
@@ -69,6 +72,7 @@ public class XSDDeleteConceptAction extends UndoAction {
                 decl = (XSDElementDeclaration) ((IStructuredSelection) selection).getFirstElement();
             }
 
+            // check if contains fk
             if (checkContainFK(decl.getName())) {
                 boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), Messages.XSDDeleteConceptAction_ConfirmDel,
                         Messages.bind(Messages.XSDDeleteConceptAction_ConfirmInfo, decl.getName()));
@@ -76,10 +80,21 @@ public class XSDDeleteConceptAction extends UndoAction {
                     return Status.CANCEL_STATUS;
                 }
             }
-            ArrayList<Object> objList = new ArrayList<Object>();
+
+            // check if refered by
+            List<Object> objList = new ArrayList<Object>();
             IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
             Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
-            Util.deleteReference(decl, objs);
+            if (Util.isReferencedBy(decl, objs)) {
+                boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(),
+                        Messages.XSDDeleteConceptAction_ConfirmDel,
+                        Messages.bind(Messages.XSDDeleteConceptAction_ConfirmReferInfo, decl.getName()));
+                if (!confirmed) {
+                    return Status.CANCEL_STATUS;
+                }
+
+                Util.deleteReference(decl, objs);
+            }
             if (schema == null)
                 schema = ((ISchemaContentProvider) page.getTreeViewer().getContentProvider()).getXsdSchema();
             schema.getContents().remove(decl);

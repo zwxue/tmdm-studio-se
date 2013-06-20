@@ -1653,6 +1653,23 @@ public class Util {
         return objList.toArray();
     }
 
+    public static boolean isReferencedBy(Object decl, Object[] objs) {
+        for (Object obj : objs) {
+            if (obj instanceof XSDParticle) {
+                XSDTerm term = ((XSDParticle) obj).getTerm();
+
+                if (term instanceof XSDElementDeclaration) {
+                    XSDElementDeclaration xsdElem = (XSDElementDeclaration) term;
+                    if (xsdElem == decl) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static void deleteReference(Object decl, Object[] objs) {
         for (Object obj : objs) {
             if (obj instanceof XSDParticle) {
