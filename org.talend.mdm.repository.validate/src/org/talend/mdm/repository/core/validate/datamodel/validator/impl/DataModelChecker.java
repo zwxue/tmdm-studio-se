@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.map.MultiKeyMap;
+import org.apache.log4j.Logger;
 import org.talend.mdm.commmon.metadata.ComplexTypeMetadata;
 import org.talend.mdm.commmon.metadata.ContainedComplexTypeMetadata;
 import org.talend.mdm.commmon.metadata.FieldMetadata;
@@ -36,6 +37,8 @@ import org.talend.mdm.repository.core.validate.datamodel.validator.rule.ICompone
 import org.w3c.dom.Element;
 
 public class DataModelChecker implements IChecker<ModelValidationMessage> {
+
+    static Logger log = Logger.getLogger(DataModelChecker.class);
 
     @Override
     public List<ModelValidationMessage> toCheck(File file) {
@@ -54,14 +57,14 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Could not open file '" + file + "'.", e);
         } catch (RuntimeException e) {
-            validationHandler.error(new TypeMetadataAdapter(), e.getMessage(), null, -1, -1, ValidationError.UNCAUGHT_ERROR);
+            validationHandler.error(TypeMetadataAdapter.INSTANCE, e.getMessage(), null, -1, -1, ValidationError.UNCAUGHT_ERROR);
         } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                // TODO Log
+                log.error(e.getMessage(), e);
             }
 
         }
@@ -254,6 +257,17 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
 }
 
 class TypeMetadataAdapter implements TypeMetadata {
+
+    final static TypeMetadataAdapter INSTANCE = new TypeMetadataAdapter();
+
+//    public static TypeMetadataAdapter getInstace() {
+//        return INSTANCE;
+//    }
+
+    private TypeMetadataAdapter() {
+
+    }
+
     @Override
     public <T> T accept(MetadataVisitor<T> visitor) {
         return null;
@@ -262,10 +276,12 @@ class TypeMetadataAdapter implements TypeMetadata {
     @Override
     public void setData(String key, Object data) {
     }
+
     @Override
     public <X> X getData(String key) {
         return null;
     }
+
     @Override
     public Collection<TypeMetadata> getSuperTypes() {
         return null;
@@ -274,45 +290,56 @@ class TypeMetadataAdapter implements TypeMetadata {
     @Override
     public void addSuperType(TypeMetadata superType, MetadataRepository repository) {
     }
+
     @Override
     public String getName() {
         return ""; //$NON-NLS-1$
     }
+
     @Override
     public void setName(String name) {
     }
+
     @Override
     public String getNamespace() {
         return null;
     }
+
     @Override
     public boolean isAssignableFrom(TypeMetadata type) {
         return false;
     }
+
     @Override
     public TypeMetadata copy(MetadataRepository repository) {
         return null;
     }
+
     @Override
     public TypeMetadata copyShallow() {
         return null;
     }
+
     @Override
     public TypeMetadata freeze(ValidationHandler handler) {
         return null;
     }
+
     @Override
     public boolean isInstantiable() {
         return true;
     }
+
     @Override
     public void setInstantiable(boolean isInstantiable) {
     }
+
     @Override
     public boolean isFrozen() {
-       
+
         return false;
     }
+
     @Override
     public void validate(ValidationHandler handler) {
     }
