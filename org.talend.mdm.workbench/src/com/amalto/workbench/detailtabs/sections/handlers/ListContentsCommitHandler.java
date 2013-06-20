@@ -14,7 +14,10 @@ package com.amalto.workbench.detailtabs.sections.handlers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.lang.NullArgumentException;
 
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.ListContentsAnnotationInfo;
@@ -38,6 +41,7 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
 
     }
 
+    @Override
     protected XSDAnnotationsStructure getXSDAnnotationStruct() {
         return new XSDAnnotationsStructure(getCommitedObj().getSourceXSDComponent());
     }
@@ -91,6 +95,19 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
 
     @Override
     protected void doAddEachObj(XSDAnnotationsStructure xsdAnnoStruct, Object eachNeedAddedObj) {
+    }
+
+    protected void doUpdateFKAnnotationStructure(XSDAnnotationsStructure xsdAnnoStruct) {
+        if (xsdAnnoStruct == null)
+            throw new NullArgumentException(null);
+
+        String fk = xsdAnnoStruct.getForeignKey();
+        if (fk == null || fk.trim().isEmpty()) {
+            xsdAnnoStruct.setForeignKeyNotSep(null);
+            xsdAnnoStruct.setFKFilter(null);
+            xsdAnnoStruct.setForeignKeyInfos(Collections.EMPTY_LIST);
+            xsdAnnoStruct.setRetrieveFKinfos(null);
+        }
     }
 
     protected abstract String getMsgHeader();
