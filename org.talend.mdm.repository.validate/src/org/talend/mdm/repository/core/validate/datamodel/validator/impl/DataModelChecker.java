@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.talend.mdm.commmon.metadata.ComplexTypeMetadata;
 import org.talend.mdm.commmon.metadata.ContainedComplexTypeMetadata;
 import org.talend.mdm.commmon.metadata.FieldMetadata;
 import org.talend.mdm.commmon.metadata.MetadataRepository;
+import org.talend.mdm.commmon.metadata.MetadataVisitor;
 import org.talend.mdm.commmon.metadata.TypeMetadata;
 import org.talend.mdm.commmon.metadata.ValidationError;
 import org.talend.mdm.commmon.metadata.ValidationHandler;
@@ -52,8 +54,7 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Could not open file '" + file + "'.", e);
         } catch (RuntimeException e) {
-            validationHandler.error((TypeMetadata) null, e.getMessage(), null, -1, -1,
-                    ValidationError.XML_SCHEMA);
+            validationHandler.error(new TypeMetadataAdapter(), e.getMessage(), null, -1, -1, ValidationError.UNCAUGHT_ERROR);
         } finally {
             try {
                 if (inputStream != null) {
@@ -250,4 +251,70 @@ public class DataModelChecker implements IChecker<ModelValidationMessage> {
             return errorCount;
         }
     }
+}
+
+class TypeMetadataAdapter implements TypeMetadata {
+    @Override
+    public <T> T accept(MetadataVisitor<T> visitor) {
+        return null;
+    }
+
+    @Override
+    public void setData(String key, Object data) {
+    }
+    @Override
+    public <X> X getData(String key) {
+        return null;
+    }
+    @Override
+    public Collection<TypeMetadata> getSuperTypes() {
+        return null;
+    }
+
+    @Override
+    public void addSuperType(TypeMetadata superType, MetadataRepository repository) {
+    }
+    @Override
+    public String getName() {
+        return ""; //$NON-NLS-1$
+    }
+    @Override
+    public void setName(String name) {
+    }
+    @Override
+    public String getNamespace() {
+        return null;
+    }
+    @Override
+    public boolean isAssignableFrom(TypeMetadata type) {
+        return false;
+    }
+    @Override
+    public TypeMetadata copy(MetadataRepository repository) {
+        return null;
+    }
+    @Override
+    public TypeMetadata copyShallow() {
+        return null;
+    }
+    @Override
+    public TypeMetadata freeze(ValidationHandler handler) {
+        return null;
+    }
+    @Override
+    public boolean isInstantiable() {
+        return true;
+    }
+    @Override
+    public void setInstantiable(boolean isInstantiable) {
+    }
+    @Override
+    public boolean isFrozen() {
+       
+        return false;
+    }
+    @Override
+    public void validate(ValidationHandler handler) {
+    }
+
 }
