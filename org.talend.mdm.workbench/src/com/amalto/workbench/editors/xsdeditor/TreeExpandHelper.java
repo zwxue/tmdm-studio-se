@@ -15,9 +15,11 @@ package com.amalto.workbench.editors.xsdeditor;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -109,63 +111,45 @@ public class TreeExpandHelper {
         return expanded;
     }
 
-    /**
-     * <b>Re-order the inputed TreePath array and filter out the invlaid TreePaths.</b><br>
-     * <br>
-     * the ordered TreePath sequence is under such validation state:<br>
-     * * the first TreePath's segement count of the TreePath sequence must be one, otherwise the whole sequence is
-     * invlaid.<br>
-     * * the neighbouring TreePah's segment count must be same(it means same layer of the tree), or the prior one's
-     * segment count add 1 will equal to the next TreePath's segment count, otherwise the sequence from the next
-     * TreePath is invalid.
-     */
     private TreePath[] removeInvalidTreePaths(TreePath[] expandedElementPaths) {
-        List<TreePath> paths = new ArrayList<TreePath>();
-        Map<Object, List<TreePath>> map = new HashMap<Object, List<TreePath>>();
+        Map<Integer, Set<TreePath>> pathMaps = new HashMap<Integer, Set<TreePath>>();
+        int maxSegmentCount = -1;
         for (TreePath path : expandedElementPaths) {
-            List<TreePath> pathList = null;
-            if (!map.keySet().contains(path.getSegment(0))) {
-                pathList = new ArrayList<TreePath>();
-                pathList.add(path);
-                map.put(path.getSegment(0), pathList);
-            } else {
-                pathList = map.get(path.getSegment(0));
-                int index = -1;
-                for (int i = 0; i < pathList.size(); i++) {
-                    if (pathList.get(i).getSegmentCount() < path.getSegmentCount())
-                        continue;
+            int segmentCount = path.getSegmentCount();
 
-                    index = i;
-                    break;
-                }
-
-                if (index == -1)
-                    pathList.add(path);
-                else
-                    pathList.add(index, path);
+            Set<TreePath> pathSet = pathMaps.get(segmentCount);
+            if (pathSet == null) {
+                pathSet = new HashSet<TreePath>();
+                pathMaps.put(segmentCount, pathSet);
             }
+
+            pathSet.add(path);
+
+            //
+            if (maxSegmentCount < segmentCount)
+                maxSegmentCount = segmentCount;
         }
 
-        for (List<TreePath> pathList : map.values()) {
-            // ensure the first is the root node's tree path
-            if (pathList.get(0).getSegmentCount() == 1) {
-                for (int i = 0; i < pathList.size() - 1; i++) {
+        Set<TreePath> roots = pathMaps.get(1);
+        if (roots == null || roots.size() == 0) {
+            return new TreePath[0];
+        }
 
-                    TreePath pathI = pathList.get(i);
-                    TreePath pathJ = pathList.get(i + 1);
-                    if (pathI.getSegmentCount() == pathJ.getSegmentCount())
-                        continue;
-                    else if (pathI.getSegmentCount() + 1 == pathJ.getSegmentCount()
-                            && pathI.getLastSegment().equals(pathJ.getSegment(pathI.getSegmentCount() - 1))) {
-                        continue;
-                    }
-                    else {
-                        pathList = pathList.subList(0, i + 1);
-                        break;
-                    }
-                }
+        // record TreePath by tree level
+        List<TreePath> paths = new ArrayList<TreePath>();
+        paths.addAll(roots);
 
-                paths.addAll(pathList);
+        for (int i = 2; i < maxSegmentCount + 1; i++) {
+            Set<TreePath> set = pathMaps.get(i);
+            if (set == null || set.size() == 0)
+                break;
+
+            Set<TreePath> parents = pathMaps.get(i - 1);
+            for (TreePath path : set) {
+                if (parents.contains(path.getParentPath()))
+                    paths.add(path);
+                else
+                    set.remove(path);
             }
         }
 
