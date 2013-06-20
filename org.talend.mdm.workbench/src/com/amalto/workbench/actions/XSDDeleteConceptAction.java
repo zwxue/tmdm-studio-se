@@ -92,8 +92,6 @@ public class XSDDeleteConceptAction extends UndoAction {
                 if (!confirmed) {
                     return Status.CANCEL_STATUS;
                 }
-
-                Util.deleteReference(decl, objs);
             }
             if (schema == null)
                 schema = ((ISchemaContentProvider) page.getTreeViewer().getContentProvider()).getXsdSchema();
