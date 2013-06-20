@@ -211,6 +211,8 @@ public class Messages extends NLS {
 
     public static String XSDDeleteConceptAction_ConfirmInfo;
 
+    public static String XSDDeleteConceptAction_ConfirmReferInfo;
+
     public static String XSDDeleteConceptAction_ErrorMsg;
 
     public static String XSDDeleteConceptAction_Text;
