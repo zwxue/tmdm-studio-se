@@ -46,6 +46,7 @@ public class ElementForeignKeyFilterCommitHandler extends ListContentsCommitHand
 
         try {
             xsdAnnoStruct.setFKFilter(getCommitedObj().getValue());
+            doUpdateFKAnnotationStructure(xsdAnnoStruct);
         } catch (Exception e) {
             throw new CommitException(e.getMessage(), e);
         }
