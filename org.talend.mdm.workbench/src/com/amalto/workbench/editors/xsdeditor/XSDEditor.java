@@ -92,6 +92,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     public static final String CONTRUIBUTIONID_DATAMODELPAGE = "org.talend.mdm.workbench.propertyContributor.datamodel";//$NON-NLS-1$
 
+    private TreeExpandHelper expandHelper = new TreeExpandHelper();
+
     protected int preActivePageIndex = -1;
 
     IEditorInput xsdInput;
@@ -212,11 +214,15 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     mainPage.getTypeContentProvider().setXsdSchema(schema);
                     mainPage.getSchemaContentProvider().setXsdSchema(schema);
                     mainPage.refresh();
+
+                    //
+                    expandHelper.recoverExpandState(mainPage);
                 }
             } else {
                 // save DataModelMainPage's contents to file
                 getEditorSite().setSelectionProvider(getSelectionManager());
                 DataModelMainPage mainPage = getDataModelEditorPage();
+                expandHelper.recordExpandState(mainPage);
                 if (mainPage != null && mainPage.isDirty()) {
                     String xsd = mainPage.getXSDSchemaString();
                     xsd = Util.formatXsdSource(xsd);

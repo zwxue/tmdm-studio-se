@@ -58,11 +58,12 @@ public class XSDSelectionListener implements ISelectionChangedListener {
             ISelection selection = event.getSelection();
             if (selection instanceof StructuredSelection) {
 
-                XSDElementDeclaration element = getElement(((StructuredSelection) selection).getFirstElement());
+                Object selectedElement = ((StructuredSelection) selection).getFirstElement();
+                XSDElementDeclaration element = getElement(selectedElement);
                 if (element == null)
                     return;
 
-                editor.getSelectionManager().setSelection(new StructuredSelection(element));
+                editor.getSelectionManager().setSelection(new StructuredSelection(selectedElement));
             }
         }
     }
