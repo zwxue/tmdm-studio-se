@@ -54,6 +54,9 @@ public class ElementForeighKeyCommitHandler extends ListContentsCommitHandler<Fo
         if (values.length > 1) {
             xsdAnnoStruct.setForeignKeyNotSep(Boolean.valueOf(values[1]));
         }
-        return xsdAnnoStruct.setForeignKey(values[0]);
+        boolean setForeignKey = xsdAnnoStruct.setForeignKey(values[0]);
+        doUpdateFKAnnotationStructure(xsdAnnoStruct);
+
+        return setForeignKey;
     }
 }
