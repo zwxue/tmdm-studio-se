@@ -15,10 +15,11 @@ package com.amalto.workbench.editors.xsdeditor;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -69,6 +70,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.talend.mdm.commmon.util.core.CommonUtil;
@@ -252,6 +254,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
     private class XSDSelectionManagerSelectionListener implements ISelectionChangedListener {
 
+        private Map<XSDElementDeclaration, XSDElementDeclaration> declarMap = new HashMap<XSDElementDeclaration, XSDElementDeclaration>();
         /**
          * Determines DOM node based on object (xsd node)
          *
@@ -268,16 +271,33 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
                     String name = selected.getName();
 
                     EList<XSDElementDeclaration> elementDeclarations = getXSDSchema().getElementDeclarations();
-                    XSDElementDeclaration[] xsdDeclarations = getAllMarkableDeclarationOfParticle();
-                    if (xsdDeclarations != null) {
-                        elementDeclarations.addAll(Arrays.asList(xsdDeclarations));
-                    }
 
                     for (XSDElementDeclaration elem : elementDeclarations) {
                         if (elem.getName().equals(name)) {
-                            if (isUnderSameComplexType(selected, elem)) {
-                                node = elem.getElement();
-                                break;
+                            node = elem.getElement();
+                            break;
+                        }
+                    }
+                } else if (object instanceof XSDParticle) {
+                    XSDTerm term = ((XSDParticle) object).getTerm();
+                    if (term instanceof XSDElementDeclaration) {
+                        XSDElementDeclaration declar = (XSDElementDeclaration) term;
+                        XSDElementDeclaration[] xsdDeclarations = getAllMarkableDeclarationOfParticle();
+                        if (xsdDeclarations != null) {
+                            XSDElementDeclaration content = (XSDElementDeclaration) ((XSDParticle) object).getContent();
+                            boolean isReference = content.isElementDeclarationReference();
+                            String name = declar.getName();
+                            for (XSDElementDeclaration elem : xsdDeclarations) {
+                                if (name.equals(elem.getName())) {
+                                    if (isUnderSameComplexType(declar, isReference, elem)) {
+                                        if (isReference)
+                                            node = declarMap.get(elem).getElement();
+                                        else
+                                            node = elem.getElement();
+
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -318,6 +338,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         }
 
         private XSDElementDeclaration[] getAllMarkableDeclarationOfParticle() {
+            declarMap.clear();
             // find all entities and record their name
             List<String> concepts = new ArrayList<String>();
             SchemaTreeContentProvider schemaContentProvider = (SchemaTreeContentProvider) getDataModelEditorPage()
@@ -367,7 +388,13 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
 
                     for (XSDParticle xsdParticle : contents) {
                         if (xsdParticle.getTerm() instanceof XSDElementDeclaration) {
-                            particles.add((XSDElementDeclaration)xsdParticle.getTerm());
+                            XSDElementDeclaration contt = (XSDElementDeclaration) xsdParticle.getContent();
+                            boolean isDeclarRef = contt.isElementDeclarationReference();
+                            if (isDeclarRef) {
+                                declarMap.put((XSDElementDeclaration) xsdParticle.getTerm(), contt);
+                            }
+
+                            particles.add((XSDElementDeclaration) xsdParticle.getTerm());
                             addChildParticles(particles, ((XSDElementDeclaration) xsdParticle.getTerm()).getTypeDefinition(),
                                     visited);
                         }
@@ -376,25 +403,35 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
             }
         }
 
-        private boolean isUnderSameComplexType(XSDElementDeclaration elemOnTree, XSDElementDeclaration elemInSource) {
+        private boolean isUnderSameComplexType(XSDElementDeclaration elemOnTree, boolean isElemOnTreeBeReferenceType,
+                XSDElementDeclaration elemInSource) {
             try {
-                XSDComplexTypeDefinition selContainer = (XSDComplexTypeDefinition) elemOnTree.getContainer().getContainer()
-                        .getContainer().getContainer();
-                XSDComplexTypeDefinition tarContainer = (XSDComplexTypeDefinition) elemInSource.getContainer().getContainer()
-                        .getContainer().getContainer();
-                if (selContainer.getContainer().getClass().equals(tarContainer.getContainer().getClass())) {
-                    if (selContainer.getContainer() instanceof XSDSchema) {
-                        if (selContainer.getName().equals(tarContainer.getName()))
-                            return true;
-                    } else if (selContainer.getContainer() instanceof XSDElementDeclaration) {
-                        XSDElementDeclaration selDec = (XSDElementDeclaration) selContainer.getContainer();
-                        XSDElementDeclaration tarDec = (XSDElementDeclaration) tarContainer.getContainer();
-                        if (selDec.getName().equals(tarDec.getName()))
-                            return true;
+                if (isElemOnTreeBeReferenceType) {
+                    boolean isDeclarationReference = declarMap.get(elemInSource).isElementDeclarationReference();
+                    if (isDeclarationReference && (elemOnTree.getContainer() instanceof XSDSchema)
+                            && (elemInSource.getContainer() instanceof XSDSchema))
+                        return true;
+
+                    return false;
+                } else {
+                    XSDComplexTypeDefinition selContainer = (XSDComplexTypeDefinition) elemOnTree.getContainer().getContainer()
+                            .getContainer().getContainer();
+                    XSDComplexTypeDefinition tarContainer = (XSDComplexTypeDefinition) elemInSource.getContainer().getContainer()
+                            .getContainer().getContainer();
+                    if (selContainer.getContainer().getClass().equals(tarContainer.getContainer().getClass())) {
+                        if (selContainer.getContainer() instanceof XSDSchema) {
+                            if (selContainer.getName().equals(tarContainer.getName()))
+                                return true;
+                        } else if (selContainer.getContainer() instanceof XSDElementDeclaration) {
+                            XSDElementDeclaration selDec = (XSDElementDeclaration) selContainer.getContainer();
+                            XSDElementDeclaration tarDec = (XSDElementDeclaration) tarContainer.getContainer();
+                            if (selDec.getName().equals(tarDec.getName()))
+                                return true;
+                        }
                     }
                 }
             } catch (Exception e) {
-                return false;
+                log.error(e.getMessage(), e);
             }
 
             return false;
@@ -692,5 +729,4 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
     public DataModelMainPage getdMainPage() {
         return null;
     }
-
 }
