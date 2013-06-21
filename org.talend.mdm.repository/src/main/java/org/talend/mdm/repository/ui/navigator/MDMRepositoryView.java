@@ -86,6 +86,7 @@ import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.ProjectManager;
+import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.views.MDMPerspective;
@@ -426,9 +427,12 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     } else if (input instanceof ProcessEditorInput) {
                         item = ((ProcessEditorInput) input).getItem();
                     }
-
+                    
                     if (item != null) {
-                        try {
+                        try {       
+                            if(ERepositoryStatus.LOCK_BY_USER != factory.getStatus(item)){
+                                return; 
+                             }
                             factory.unlock(item);
                             Property property = item.getProperty();
                             final String id = property.getId();
