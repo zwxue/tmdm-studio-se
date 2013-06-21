@@ -82,10 +82,8 @@ public class XSDDeleteConceptAction extends UndoAction {
             }
 
             // check if refered by
-            List<Object> objList = new ArrayList<Object>();
-            IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
-            Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
-            if (Util.isReferencedBy(decl, objs)) {
+            boolean isReferenced = isCommonReferedBy(decl);
+            if (isReferenced) {
                 boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(),
                         Messages.XSDDeleteConceptAction_ConfirmDel,
                         Messages.bind(Messages.XSDDeleteConceptAction_ConfirmReferInfo, decl.getName()));
@@ -110,6 +108,21 @@ public class XSDDeleteConceptAction extends UndoAction {
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
+    }
+
+    private boolean isCommonReferedBy(XSDElementDeclaration decl) {
+        List<Object> objList = new ArrayList<Object>();
+        IStructuredContentProvider elementContentProvider = (IStructuredContentProvider) page.getTreeViewer()
+                .getContentProvider();
+        Object[] objs = Util.getAllObject(page.getSite(), objList, elementContentProvider);
+
+        objList.clear();
+        IStructuredContentProvider typeContentProvider = (IStructuredContentProvider) page.getTypesViewer().getContentProvider();
+        Object[] typeElems = Util.getAllObject(page.getSite(), objList, typeContentProvider);
+
+        boolean referencedBy = Util.isReferencedBy(decl, objs) || Util.isReferencedBy(decl, typeElems);
+
+        return referencedBy;
     }
 
     protected boolean checkContainFK(String fkName) throws Exception {
