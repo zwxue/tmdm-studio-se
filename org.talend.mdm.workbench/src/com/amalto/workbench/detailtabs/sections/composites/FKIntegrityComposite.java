@@ -40,7 +40,7 @@ public class FKIntegrityComposite extends Composite {
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 * @param elementFKSection
@@ -68,7 +68,7 @@ public class FKIntegrityComposite extends Composite {
 					// Disable allow fk override once fk integrity is disabled.
 					btnAllowFkIntegrity.setSelection(false);
 				}
-				updateModel();
+                updateModel();
 			}
 		});
 		btnEnforceFkIntegrity.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
@@ -107,7 +107,6 @@ public class FKIntegrityComposite extends Composite {
 		XSDAnnotation annotation = xsdComponent.getAnnotation();
 		if (annotation == null) {
 			annotation = XSDFactory.eINSTANCE.createXSDAnnotation();
-			xsdComponent.setAnnotation(annotation);
 		}
 
 		Element fkIntegrityElement = null;
@@ -140,6 +139,15 @@ public class FKIntegrityComposite extends Composite {
 		} else {
 			btnAllowFkIntegrity.setSelection(false); // default is false for override
 		}
+
+        // refresh buttion enabled
+        if (xsdComponent.getAnnotation() == null) {
+            btnEnforceFkIntegrity.setEnabled(false);
+            btnAllowFkIntegrity.setEnabled(false);
+        } else {
+            btnEnforceFkIntegrity.setEnabled(true);
+            btnAllowFkIntegrity.setEnabled(btnEnforceFkIntegrity.getSelection());
+        }
 	}
 
 	private void updateModel() {

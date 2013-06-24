@@ -107,6 +107,13 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
             xsdAnnoStruct.setFKFilter(null);
             xsdAnnoStruct.setForeignKeyInfos(Collections.EMPTY_LIST);
             xsdAnnoStruct.setRetrieveFKinfos(null);
+            xsdAnnoStruct.setFKIntegrity(null);
+            xsdAnnoStruct.setFKIntegrityOverride(null);
+
+            if (xsdAnnoStruct.getAnnotation().getApplicationInformation().isEmpty()
+                    && xsdAnnoStruct.getAnnotation().getUserInformation().isEmpty()) {
+                xsdAnnoStruct.getDeclaration().setAnnotation(null);
+            }
         }
     }
 
