@@ -137,6 +137,8 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             struc.setFKFilter(null);
             struc.setForeignKeyInfos(Collections.EMPTY_LIST);
             struc.setRetrieveFKinfos(null);
+            struc.setFKIntegrity(null);
+            struc.setFKIntegrityOverride(null);
         }
     }
 
