@@ -868,6 +868,23 @@ public class XSDAnnotationsStructure {
     }
 
     /****************************************************************************
+     * FKIntegerity and FKIntegrity_Override
+     ****************************************************************************/
+
+    public boolean setFKIntegrity(Boolean integrity) {
+        boolean somethingChanged = setAppInfo("X_FKIntegrity", integrity == null ? null : integrity.toString(), true);//$NON-NLS-1$
+        hasChanged = hasChanged | somethingChanged;
+        return somethingChanged;
+    }
+
+    public boolean setFKIntegrityOverride(Boolean integrityOverride) {
+        boolean somethingChanged = setAppInfo(
+                "X_FKIntegrity_Override", integrityOverride == null ? null : integrityOverride.toString(), true);//$NON-NLS-1$
+        hasChanged = hasChanged | somethingChanged;
+        return somethingChanged;
+    }
+
+    /****************************************************************************
      * APPINFO UTILITIES
      ****************************************************************************/
 
