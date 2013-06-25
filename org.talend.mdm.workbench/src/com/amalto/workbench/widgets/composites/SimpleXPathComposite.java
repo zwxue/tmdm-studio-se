@@ -14,8 +14,8 @@ package com.amalto.workbench.widgets.composites;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -82,17 +82,13 @@ public class SimpleXPathComposite extends Composite {
         txtXPath = new Text(composite, SWT.BORDER);
         final GridData gd_txtXPath = new GridData(SWT.FILL, SWT.CENTER, true, false);
         txtXPath.setLayoutData(gd_txtXPath);
-     
-        txtXPath.addKeyListener(new KeyListener() {
-            public void keyPressed(KeyEvent e) {
-              if( e.character =='\r'){ 
-                  if(section!=null ){
-                      section.autoCommit();
-                  }
-              }
-            }
 
-            public void keyReleased(KeyEvent e) {
+        txtXPath.addModifyListener(new ModifyListener() {
+
+            public void modifyText(ModifyEvent e) {
+                if (section != null) {
+                    section.autoCommit();
+                }
             }
         });
         btnSelectXPath = new Button(composite, SWT.NONE);
@@ -104,6 +100,7 @@ public class SimpleXPathComposite extends Composite {
             btnSep.setText(Messages.SimpleXpathInputDialog_sepFkTabPanel);
             btnSep.addSelectionListener(new SelectionAdapter() {
 
+                @Override
                 public void widgetSelected(SelectionEvent e) {
                     sepFk = btnSep.getSelection();
                     section.autoCommit();
