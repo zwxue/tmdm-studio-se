@@ -35,6 +35,10 @@ import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
 public class SimpleXPathComposite extends Composite {
 
+    private int caretOffset;
+
+    private ModifyListener xpathModifyListener;
+
     private Text txtXPath;
 
     private Button btnSelectXPath;
@@ -80,17 +84,10 @@ public class SimpleXPathComposite extends Composite {
         composite.setLayout(gridLayout_1);
 
         txtXPath = new Text(composite, SWT.BORDER);
+        txtXPath.addModifyListener(getXpathModifyListener());
         final GridData gd_txtXPath = new GridData(SWT.FILL, SWT.CENTER, true, false);
         txtXPath.setLayoutData(gd_txtXPath);
 
-        txtXPath.addModifyListener(new ModifyListener() {
-
-            public void modifyText(ModifyEvent e) {
-                if (section != null) {
-                    section.autoCommit();
-                }
-            }
-        });
         btnSelectXPath = new Button(composite, SWT.NONE);
         btnSelectXPath.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
         btnSelectXPath.setToolTipText(Messages.SchematronExpressBuilder_selectXPath);
@@ -109,6 +106,31 @@ public class SimpleXPathComposite extends Composite {
         }
         initUIListeners();
     }
+
+    private ModifyListener getXpathModifyListener() {
+        if (xpathModifyListener == null) {
+            xpathModifyListener = new ModifyListener() {
+
+                public void modifyText(ModifyEvent e) {
+                    caretOffset = txtXPath.getCaretPosition();
+                    if (section != null) {
+                        section.autoCommit();
+                    }
+                }
+            };
+        }
+
+        return xpathModifyListener;
+    }
+
+    private void addXPathModifyListener() {
+        txtXPath.addModifyListener(getXpathModifyListener());
+    }
+
+    private void removeXPathModifyListener() {
+        txtXPath.removeModifyListener(getXpathModifyListener());
+    }
+
     public String getXPath() {
         return txtXPath.getText().trim().replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
     }
@@ -123,8 +145,20 @@ public class SimpleXPathComposite extends Composite {
             btnSep.setSelection(sepFk);
         }
     }
+
     public void setXPath(String xpath) {
+        removeXPathModifyListener();
         txtXPath.setText(xpath);
+        addXPathModifyListener();
+
+        if (xpath != null) {
+            int length = xpath.length();
+            if (length >= caretOffset) {
+                txtXPath.setSelection(caretOffset, caretOffset);
+            } else {
+                txtXPath.setSelection(length, length);
+            }
+        }
     }
 
     public void setDefaultDataModelForSelect(String defaultDataModelForSelect) {
