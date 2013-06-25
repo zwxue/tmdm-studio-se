@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +42,13 @@ import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
  */
 public class TreeExpandHelper {
 
-    private List<XSDNode> expandedElements;
+    private List<ExpandInfoNode> expandedElements;
 
-    private List<XSDNode> expandedTypes;
+    private List<ExpandInfoNode> expandedTypes;
 
     public TreeExpandHelper() {
-        expandedElements = new ArrayList<TreeExpandHelper.XSDNode>();
-        expandedTypes = new ArrayList<TreeExpandHelper.XSDNode>();
+        expandedElements = new ArrayList<TreeExpandHelper.ExpandInfoNode>();
+        expandedTypes = new ArrayList<TreeExpandHelper.ExpandInfoNode>();
     }
 
     public void recordExpandState(DataModelMainPage mainPage) {
@@ -76,15 +77,16 @@ public class TreeExpandHelper {
         cleanCache();
     }
 
-    private List<XSDNode> getExpandedNodes(TreePath[] expandedElementPaths) {
+    private List<ExpandInfoNode> getExpandedNodes(TreePath[] expandedElementPaths) {
         TreePath[] expandedPaths = removeInvalidTreePaths(expandedElementPaths);
 
-        List<XSDNode> expanded = new ArrayList<XSDNode>();
-        XSDNode rootNode = null;
+        List<ExpandInfoNode> expanded = new ArrayList<ExpandInfoNode>();
+        ExpandInfoNode rootNode = null;
         for (TreePath path : expandedPaths) {
             int segmentCount = path.getSegmentCount();
 
-            rootNode = XSDNode.newNode(path.getFirstSegment());
+            Object firstSegment = path.getFirstSegment();
+            rootNode = ExpandInfoNode.create(getName(firstSegment), firstSegment.getClass().getName());
             if (expanded.contains(rootNode)) {
                 rootNode = expanded.get(expanded.indexOf(rootNode));
             } else {
@@ -93,7 +95,7 @@ public class TreeExpandHelper {
 
             for (int i = 1; i < segmentCount; i++) {
                 Object segment = path.getSegment(i);
-                XSDNode newNode = XSDNode.newNode(segment);
+                ExpandInfoNode newNode = ExpandInfoNode.create(getName(segment), segment.getClass().getName());
                 if (rootNode.childs == null)
                     rootNode.addChild(newNode);
                 else {
@@ -145,11 +147,13 @@ public class TreeExpandHelper {
                 break;
 
             Set<TreePath> parents = pathMaps.get(i - 1);
-            for (TreePath path : set) {
+            Iterator<TreePath> iterator = set.iterator();
+            while (iterator.hasNext()) {
+                TreePath path = iterator.next();
                 if (parents.contains(path.getParentPath()))
                     paths.add(path);
                 else
-                    set.remove(path);
+                    iterator.remove();
             }
         }
 
@@ -164,16 +168,16 @@ public class TreeExpandHelper {
 
 
         List<Object> result = new ArrayList<Object>();//
-        Deque<XSDNode> nodeStack = new LinkedList<XSDNode>();//
+        Deque<ExpandInfoNode> nodeStack = new LinkedList<ExpandInfoNode>();//
         Deque<Object> elementStack = new LinkedList<Object>();//
 
         // record entities
-        Map<XSDNode, XSDElementDeclaration> expandedRoots = new HashMap<XSDNode, XSDElementDeclaration>();
+        Map<ExpandInfoNode, XSDElementDeclaration> expandedRoots = new HashMap<ExpandInfoNode, XSDElementDeclaration>();
         for (Object obj : xsdDeclarations) {
             XSDElementDeclaration decl = (XSDElementDeclaration) obj;
             String name = decl.getName();
-            for (XSDNode node : expandedElements) {
-                if (name.equals(((XSDElementDeclaration) node.data).getName())) {
+            for (ExpandInfoNode node : expandedElements) {
+                if (name.equals(node.name)) {
                     expandedRoots.put(node, decl);
 
                     result.add(decl);
@@ -185,15 +189,15 @@ public class TreeExpandHelper {
         }
 
         while (!nodeStack.isEmpty() && !elementStack.isEmpty()) {
-            XSDNode node = nodeStack.pollFirst();
+            ExpandInfoNode node = nodeStack.pollFirst();
             Object element = elementStack.pollFirst();
 
-            List<XSDNode> nodes = node.childs;
+            List<ExpandInfoNode> nodes = node.childs;
             Object[] elementChildren = getChildren(element, contentProvider);
 
             if (nodes != null && nodes.size() > 0 && elementChildren != null) {
-                Map<XSDNode, Object> nodeElementPairs = getNodeElementPairs(elementChildren, nodes);
-                for (XSDNode node2 : nodeElementPairs.keySet()) {
+                Map<ExpandInfoNode, Object> nodeElementPairs = getNodeElementPairs(elementChildren, nodes);
+                for (ExpandInfoNode node2 : nodeElementPairs.keySet()) {
                     nodeStack.add(node2);
                     elementStack.add(nodeElementPairs.get(node2));
                     result.add(nodeElementPairs.get(node2));
@@ -210,16 +214,16 @@ public class TreeExpandHelper {
         Object[] xsdDeclarations = getChildren(contentProvider.getXsdSchema(), contentProvider);
 
         List<Object> result = new ArrayList<Object>();//
-        Deque<XSDNode> nodeStack = new LinkedList<XSDNode>();//
+        Deque<ExpandInfoNode> nodeStack = new LinkedList<ExpandInfoNode>();//
         Deque<Object> elementStack = new LinkedList<Object>();//
 
         // record entities
-        Map<XSDNode, XSDTypeDefinition> expandedRoots = new HashMap<XSDNode, XSDTypeDefinition>();
+        Map<ExpandInfoNode, XSDTypeDefinition> expandedRoots = new HashMap<ExpandInfoNode, XSDTypeDefinition>();
         for (Object obj : xsdDeclarations) {
             XSDTypeDefinition type = (XSDTypeDefinition) obj;
             String name = type.getName();
-            for (XSDNode node : expandedTypes) {
-                if (name.equals(((XSDTypeDefinition) node.data).getName())) {
+            for (ExpandInfoNode node : expandedTypes) {
+                if (name.equals(node.name)) {
                     expandedRoots.put(node, type);
 
                     result.add(type);
@@ -231,15 +235,15 @@ public class TreeExpandHelper {
         }
 
         while (!nodeStack.isEmpty() && !elementStack.isEmpty()) {
-            XSDNode node = nodeStack.pollFirst();
+            ExpandInfoNode node = nodeStack.pollFirst();
             Object element = elementStack.pollFirst();
 
-            List<XSDNode> nodes = node.childs;
+            List<ExpandInfoNode> nodes = node.childs;
             Object[] elementChildren = getChildren(element, contentProvider);
 
             if (nodes != null && nodes.size() > 0 && elementChildren != null) {
-                Map<XSDNode, Object> nodeElementPairs = getNodeElementPairs(elementChildren, nodes);
-                for (XSDNode node2 : nodeElementPairs.keySet()) {
+                Map<ExpandInfoNode, Object> nodeElementPairs = getNodeElementPairs(elementChildren, nodes);
+                for (ExpandInfoNode node2 : nodeElementPairs.keySet()) {
                     nodeStack.add(node2);
                     elementStack.add(nodeElementPairs.get(node2));
                     result.add(nodeElementPairs.get(node2));
@@ -255,12 +259,12 @@ public class TreeExpandHelper {
         return children;
     }
 
-    private Map<XSDNode, Object> getNodeElementPairs(Object[] elementChildrens, List<XSDNode> nodes) {
-        Map<XSDNode, Object> pairs = new HashMap<XSDNode, Object>();
+    private Map<ExpandInfoNode, Object> getNodeElementPairs(Object[] elementChildrens, List<ExpandInfoNode> nodes) {
+        Map<ExpandInfoNode, Object> pairs = new HashMap<ExpandInfoNode, Object>();
 
         for (Object child : elementChildrens) {
-            for (XSDNode node : nodes)
-                if (isSameXSDElement(child, node.data)) {
+            for (ExpandInfoNode node : nodes)
+                if (isSameXSDElement(child, node)) {
                     pairs.put(node, child);
                 }
         }
@@ -268,20 +272,18 @@ public class TreeExpandHelper {
         return pairs;
     }
 
-    private boolean isSameXSDElement(Object objA, Object objB) {
+    private boolean isSameXSDElement(Object objA, ExpandInfoNode objB) {
         if (objA != null && objB != null) {
-            if (objA.getClass().getName().equals(objB.getClass().getName())) {// same type
+            if (objA.getClass().getName().equals(objB.type)) {// same type
                 if (objA instanceof XSDElementDeclaration) {
                     XSDElementDeclaration declA = (XSDElementDeclaration) objA;
-                    XSDElementDeclaration declB = (XSDElementDeclaration) objB;
-                    if (declA.getName().equals(declB.getName()))
+                    if (declA.getName().equals(objB.name))
                         return true;
                 } else if (objA instanceof XSDModelGroup) {
                     XSDModelGroup goupA = (XSDModelGroup) objA;
-                    XSDModelGroup goupB = (XSDModelGroup) objB;
 
-                    String nameA = getModelGroupName(goupA);
-                    String nameB = getModelGroupName(goupB);
+                    String nameA = getName(goupA);
+                    String nameB = objB.name;
                     if (nameA == null && nameB == null)
                         return true;
 
@@ -289,33 +291,37 @@ public class TreeExpandHelper {
                         return true;
                 } else if (objA instanceof XSDModelGroupDefinition) {
                     XSDModelGroupDefinition goupA = (XSDModelGroupDefinition) objA;
-                    XSDModelGroupDefinition goupB = (XSDModelGroupDefinition) objB;
-                    if (goupA.getName() == null && goupB.getName() == null)
+                    if (goupA.getName() == null && objB.name == null)
                         return true;
-                    if (goupA.getName().equals(goupB.getName()))
+                    if (goupA.getName().equals(objB.name))
                         return true;
                 } else if (objA instanceof XSDParticle) {
                     XSDParticle particleA = (XSDParticle) objA;
-                    XSDParticle particleB = (XSDParticle) objB;
-                    if (particleA.getTerm() instanceof XSDElementDeclaration
-                            && particleB.getTerm() instanceof XSDElementDeclaration) {
+                    if (particleA.getTerm() instanceof XSDElementDeclaration) {
                         XSDElementDeclaration declA = (XSDElementDeclaration) particleA.getTerm();
-                        XSDElementDeclaration declB = (XSDElementDeclaration) particleB.getTerm();
-                        if (declA.getName().equals(declB.getName()))
+                        if (declA.getName().equals(objB.name))
                             return true;
                     }
                 } else if (objA instanceof XSDAnnotation) {
                     return true;
                 } else if (objA instanceof XSDIdentityConstraintDefinition) {
                     XSDIdentityConstraintDefinition constraintA = (XSDIdentityConstraintDefinition) objA;
-                    XSDIdentityConstraintDefinition constraintB = (XSDIdentityConstraintDefinition) objA;
-                    if (constraintA.getName().equals(constraintB.getName()))
+                    if (constraintA.getName().equals(objB.name))
                         return true;
                 } else if (objA instanceof XSDSimpleTypeDefinition) {
                     XSDSimpleTypeDefinition simpleDefineA = (XSDSimpleTypeDefinition) objA;
-                    XSDSimpleTypeDefinition simpleDefineB = (XSDSimpleTypeDefinition) objB;
 
-                    if (simpleDefineA.getName().equals(simpleDefineB.getName()))
+                    if (simpleDefineA.getName() == null && objB.name == null)
+                        return true;
+
+                    if (simpleDefineA.getName().equals(objB.name))
+                        return true;
+                } else if (objA instanceof XSDComplexTypeDefinition) {
+                    XSDComplexTypeDefinition complexDefineA = (XSDComplexTypeDefinition) objA;
+                    if (complexDefineA.getName() == null && objB.name == null)
+                        return true;
+
+                    if (complexDefineA.getName().equals(objB.name))
                         return true;
                 }
             }
@@ -324,12 +330,53 @@ public class TreeExpandHelper {
         return false;
     }
 
-    private String getModelGroupName(XSDModelGroup goupA) {
-        XSDParticle particle = (XSDParticle) goupA.getContainer();
-        XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) particle.getContainer();
-        String name = complexTypeDefinition.getName();
+    private String getName(Object objA) {
+        if (objA instanceof XSDElementDeclaration) {
+            XSDElementDeclaration decl = (XSDElementDeclaration) objA;
+            return decl.getName();
+        }
 
-        return name;
+        if (objA instanceof XSDModelGroup) {
+            XSDModelGroup goup = (XSDModelGroup) objA;
+            XSDParticle particle = (XSDParticle) goup.getContainer();
+            XSDComplexTypeDefinition complexTypeDefinition = (XSDComplexTypeDefinition) particle.getContainer();
+            String name = complexTypeDefinition.getName();
+
+            return name;
+        }
+
+        if (objA instanceof XSDModelGroupDefinition) {
+            XSDModelGroupDefinition goupDef = (XSDModelGroupDefinition) objA;
+            return goupDef.getName();
+        }
+
+        if (objA instanceof XSDParticle) {
+            XSDParticle particle = (XSDParticle) objA;
+            if (particle.getTerm() instanceof XSDElementDeclaration) {
+                XSDElementDeclaration decl = (XSDElementDeclaration) particle.getTerm();
+                return decl.getName();
+            }
+        }
+
+        if (objA instanceof XSDAnnotation)
+            return null;
+
+        if (objA instanceof XSDIdentityConstraintDefinition) {
+            XSDIdentityConstraintDefinition constraint = (XSDIdentityConstraintDefinition) objA;
+            return constraint.getName();
+        }
+
+        if (objA instanceof XSDSimpleTypeDefinition) {
+            XSDSimpleTypeDefinition simpleDefine = (XSDSimpleTypeDefinition) objA;
+            return simpleDefine.getName();
+        }
+
+        if (objA instanceof XSDComplexTypeDefinition) {
+            XSDComplexTypeDefinition complexDefine = (XSDComplexTypeDefinition) objA;
+            return complexDefine.getName();
+        }
+
+        return null;
     }
 
     public void cleanCache() {
@@ -339,23 +386,26 @@ public class TreeExpandHelper {
 
     // /////////////////
 
-    static class XSDNode {
+    static class ExpandInfoNode {
 
-        public Object data;
+        public String name;
 
-        public List<XSDNode> childs;
+        public String type;
 
-        public static XSDNode newNode(Object data) {
-            return new XSDNode(data);
+        public List<ExpandInfoNode> childs;
+
+        public static ExpandInfoNode create(String name, String type) {
+            return new ExpandInfoNode(name, type);
         }
 
-        public XSDNode(Object data) {
-            this.data = data;
+        public ExpandInfoNode(String name, String type) {
+            this.name = name;
+            this.type = type;
         }
 
-        public void addChild(XSDNode obj) {
+        public void addChild(ExpandInfoNode obj) {
             if (childs == null) {
-                childs = new ArrayList<XSDNode>();
+                childs = new ArrayList<ExpandInfoNode>();
             }
 
             childs.add(obj);
@@ -373,9 +423,12 @@ public class TreeExpandHelper {
             if (obj == null)
                 return false;
 
-            if (obj instanceof XSDNode) {
-                XSDNode node = (XSDNode) obj;
-                return node.data == data;
+            if (obj instanceof ExpandInfoNode) {
+                ExpandInfoNode node = (ExpandInfoNode) obj;
+                if (name != null)
+                    return name.equals(node.name) && type.equals(node.type);
+                else
+                    return type.equals(node.type);
             }
 
             return false;
@@ -383,10 +436,10 @@ public class TreeExpandHelper {
 
         @Override
         public int hashCode() {
-            if (data != null)
-                return data.hashCode();
-
-            return super.hashCode();
+            if (name != null)
+                return (name + ":" + type).hashCode(); //$NON-NLS-1$
+            else
+                return type.hashCode();
         }
     }
 }
