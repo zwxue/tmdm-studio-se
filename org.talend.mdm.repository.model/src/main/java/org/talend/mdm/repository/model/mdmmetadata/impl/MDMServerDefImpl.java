@@ -366,7 +366,9 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         }
     }
 
-    private static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
+    private String getURLPattern() {
+        return "^" + getProtocol() + "(.+):(\\d+)(/.*)";//$NON-NLS-1$ //$NON-NLS-2$
+    }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -377,7 +379,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
     public String getUrl() {
         if (url == null) {
             StringBuffer sb = new StringBuffer();
-            sb.append("http://");
+            sb.append(getProtocol());
             sb.append(host);
             sb.append(":");//$NON-NLS-1$
             sb.append(port);
@@ -435,7 +437,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         if (url == null || url.length() == 0) {
             return false;
         }
-        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
+        Matcher m = Pattern.compile(getURLPattern()).matcher(url);
         return m.find();
     }
 
@@ -446,7 +448,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      */
     @Override
     public MDMServerDef parse(String url) {
-        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
+        Matcher m = Pattern.compile(getURLPattern()).matcher(url);
 
         if (!m.find()) {
             return null;
