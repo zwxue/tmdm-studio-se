@@ -39,6 +39,13 @@ import com.amalto.workbench.utils.PasswordUtil;
 public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMServerDef {
 
     /**
+     * 
+     */
+    private static final String HTTP_PREFIX = "http://"; //$NON-NLS-1$
+
+    private static final String HTTPS_PREFIX = "https://"; //$NON-NLS-1$
+
+    /**
      * The default value of the '{@link #getHost() <em>Host</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
      * -->
      * 
@@ -366,8 +373,11 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         }
     }
 
-    private String getURLPattern() {
-        return "^" + getProtocol() + "(.+):(\\d+)(/.*)";//$NON-NLS-1$ //$NON-NLS-2$
+    private String getURLPattern(String protocol, String inputUrl) {
+        if (protocol == null) {
+            throw new IllegalArgumentException();
+        }
+        return "^" + protocol + "(.+):(\\d+)(/.*)";//$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -437,7 +447,11 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         if (url == null || url.length() == 0) {
             return false;
         }
-        Matcher m = Pattern.compile(getURLPattern()).matcher(url);
+        String protocol = getProtocol(url);
+        if (protocol == null) {
+            return false;
+        }
+        Matcher m = Pattern.compile(getURLPattern(protocol, url)).matcher(url);
         return m.find();
     }
 
@@ -448,7 +462,11 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      */
     @Override
     public MDMServerDef parse(String url) {
-        Matcher m = Pattern.compile(getURLPattern()).matcher(url);
+        String protocol = getProtocol(url);
+        if (protocol == null) {
+            return null;
+        }
+        Matcher m = Pattern.compile(getURLPattern(protocol, url)).matcher(url);
 
         if (!m.find()) {
             return null;
@@ -467,8 +485,37 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
      */
     @Override
     public String getProtocol() {
-        // TODO we will add more protocol in the future, like https....,then a protocol property will be created
-        return "http://"; //$NON-NLS-1$
+        if (url != null) {
+            return getProtocol(url);
+        }
+        return HTTP_PREFIX;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated not
+     */
+    @Override
+    public boolean isEnableSSL() {
+        String protocol = getProtocol();
+        if (protocol != null) {
+            return protocol.equalsIgnoreCase(HTTPS_PREFIX);
+        }
+        return false;
+    }
+
+    private String getProtocol(String input) {
+        if (input != null) {
+            String tmp = input.toLowerCase().trim();
+            if (tmp.startsWith(HTTP_PREFIX)) {
+                return HTTP_PREFIX;
+            }
+            if (tmp.startsWith(HTTPS_PREFIX)) {
+                return HTTPS_PREFIX;
+            }
+        }
+        return null;
     }
 
     /**

@@ -265,6 +265,8 @@ public class MdmmetadataPackageImpl extends EPackageImpl implements MdmmetadataP
 
         addEOperation(mdmServerDefEClass, ecorePackage.getEString(), "getProtocol", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+        addEOperation(mdmServerDefEClass, ecorePackage.getEBoolean(), "isEnableSSL", 0, 1, IS_UNIQUE, IS_ORDERED);
+
         // Create resource
         createResource(eNS_URI);
     }

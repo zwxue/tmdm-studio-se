@@ -48,6 +48,10 @@
         <element xmi:type="ecore:EOperation" href="MDMMetadata.ecore#//MDMServerDef/getProtocol"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_52vzArw7EeKVtICLtCMeIw"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_bYCrId44EeK8p4Y_M04q6A" type="2002">
+        <element xmi:type="ecore:EOperation" href="MDMMetadata.ecore#//MDMServerDef/isEnableSSL"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_bYCrIt44EeK8p4Y_M04q6A"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_B1tUWZMfEeCcksxzfvS-Pw"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_B1tUWpMfEeCcksxzfvS-Pw"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_B1tUW5MfEeCcksxzfvS-Pw"/>
