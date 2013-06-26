@@ -38,9 +38,9 @@ import com.amalto.workbench.utils.PasswordUtil;
  */
 public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMServerDef {
 
-    /**
-     * 
-     */
+ 
+    private static final String PATTERN_URL = "[http|https]+://(.+):(\\d+)(/.*)";
+ 
     private static final String HTTP_PREFIX = "http://"; //$NON-NLS-1$
 
     private static final String HTTPS_PREFIX = "https://"; //$NON-NLS-1$
@@ -373,13 +373,6 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         }
     }
 
-    private String getURLPattern(String protocol, String inputUrl) {
-        if (protocol == null) {
-            throw new IllegalArgumentException();
-        }
-        return "^" + protocol + "(.+):(\\d+)(/.*)";//$NON-NLS-1$ //$NON-NLS-2$
-    }
-
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * 
@@ -451,7 +444,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         if (protocol == null) {
             return false;
         }
-        Matcher m = Pattern.compile(getURLPattern(protocol, url)).matcher(url);
+        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
         return m.find();
     }
 
@@ -466,7 +459,7 @@ public class MDMServerDefImpl extends AbstractMetadataObjectImpl implements MDMS
         if (protocol == null) {
             return null;
         }
-        Matcher m = Pattern.compile(getURLPattern(protocol, url)).matcher(url);
+        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
 
         if (!m.find()) {
             return null;
