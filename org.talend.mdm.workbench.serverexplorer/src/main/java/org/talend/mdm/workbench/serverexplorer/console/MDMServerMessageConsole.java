@@ -18,9 +18,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -30,7 +37,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -63,7 +74,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.DownloadLogDialog;
 
 /**
  * created by Karelun Huang on Mar 19, 2013 Detailled comment
- *
+ * 
  */
 public class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
 
@@ -212,7 +223,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     /**
      * Getter for serverDef.
-     *
+     * 
      * @return the serverDef
      */
     public MDMServerDef getServerDef() {
@@ -227,7 +238,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     /**
      * Getter for terminateConsoleAction.
-     *
+     * 
      * @return the terminateConsoleAction
      */
     public TerminateConsoleAction getTerminateConsoleAction() {
@@ -435,10 +446,40 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private DefaultHttpClient createHttpClient() {
         DefaultHttpClient httpclient = new DefaultHttpClient();
+        if (serverDef.isEnableSSL()) {
+            int port = Integer.parseInt(serverDef.getPort());
+            httpclient = enableSSL(httpclient, port);
+        }
         AuthScope authScope = new AuthScope(serverDef.getHost(), Integer.parseInt(serverDef.getPort()));
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(serverDef.getUser(), serverDef.getPasswd());
         httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
         return httpclient;
+    }
+
+    private DefaultHttpClient enableSSL(DefaultHttpClient client, int port) {
+        try {
+            SSLContext ctx = SSLContext.getInstance("TLS"); //$NON-NLS-1$
+            X509TrustManager tm = new X509TrustManager() {
+
+                public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                }
+
+                public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                }
+
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            };
+            ctx.init(null, new TrustManager[] { tm }, null);
+            SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            ClientConnectionManager ccm = client.getConnectionManager();
+            SchemeRegistry sr = ccm.getSchemeRegistry();
+            sr.register(new Scheme("https", port, ssf)); //$NON-NLS-1$
+            return new DefaultHttpClient(ccm, client.getParams());
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     private String buildMonitorURL(int pos) {
@@ -460,8 +501,11 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     }
 
     private void download(String dirPath, boolean needOpen, IProgressMonitor monitor) {
+        monitor.beginTask(Messages.MDMServerMessageConsole_DownloadTask_Name, 100);
+        InputStream is = null;
+        OutputStream os = null;
         try {
-            monitor.beginTask(Messages.MDMServerMessageConsole_DownloadTask_Name, 100);
+
             DefaultHttpClient httpClient = createHttpClient();
             String monitorURL = buildDownloadURL();
             HttpGet httpGet = new HttpGet(monitorURL);
@@ -469,16 +513,17 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             HttpResponse response = httpClient.execute(httpGet);
             monitor.worked(40);
             int code = response.getStatusLine().getStatusCode();
+
             if (HTTP_STATUS_OK == code) {
+
                 String fileName = getFileName(response);
-                InputStream is = response.getEntity().getContent();
+                is = response.getEntity().getContent();
                 monitor.worked(60);
                 File file = new File(dirPath + File.separator + fileName);
-                FileOutputStream os = new FileOutputStream(file);
+                os = new FileOutputStream(file);
                 IOUtils.copy(is, os);
                 monitor.worked(85);
-                is.close();
-                os.close();
+
                 if (needOpen) {
                     Program.launch(file.getAbsolutePath());
                 }
@@ -499,6 +544,21 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             newErrorMessageStream().println(Messages.MDMServerMessageConsole_DownloadFailed_Message);
             newErrorMessageStream().println(e.getMessage());
             monitor.worked(90);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
     }
 
@@ -562,7 +622,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
