@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -35,6 +36,7 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -68,6 +70,7 @@ import org.talend.core.prefs.ITalendCorePrefConstants;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.designer.core.model.utils.emf.talendfile.ProcessType;
 import org.talend.designer.runprocess.IProcessor;
+import org.talend.designer.runprocess.JobErrorsChecker;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.mdm.engines.client.i18n.Messages;
@@ -139,6 +142,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     protected List<JobDeploymentInfo> jobInfoList = new ArrayList<JobDeploymentInfo>();
 
+    protected Map<ExportFileResource, RepositoryNode> processMap = new HashMap<ExportFileResource, RepositoryNode>();
+
     protected String selectedServer;
 
     /**
@@ -169,7 +174,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     }
                     jobPurposeDescription = processItem.getProperty().getPurpose();
                     list.add(resource);
-
+                    processMap.put(resource, node);
+                    // processNodeList.add(node);
                     JobDeploymentInfo jobInfo = new JobDeploymentInfo();
                     jobInfo.setJobLabelName(processItem.getProperty().getLabel());
                     jobInfo.setJobPath(processItem.getState().getPath());
@@ -192,6 +198,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 ExportFileResource resource = new ExportFileResource(processItem, path);
                 resource.setNode(node);
                 list.add(resource);
+                processMap.put(resource, node);
             }
         }
         Object[] nodes = node.getChildren().toArray();
@@ -443,6 +450,10 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 boolean isOK = true;
                 for (ExportFileResource p : process) {
                     if (exportJob(p, type, needContextScript, monitor)) {
+                        if (checkError(p)) {
+                            isOK = false;
+                            break;
+                        }
                         if (generateProcess(p, monitor)) {
                             if (!packageProcess(p, type, monitor)) {
                                 isOK = false;
@@ -469,6 +480,18 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         }
     };
+
+    private boolean checkError(ExportFileResource resource) {
+        RepositoryNode node = processMap.get(resource);
+        IStructuredSelection selection = new StructuredSelection(node);
+        boolean hasError = JobErrorsChecker.checkExportErrors(selection, true);
+        if (hasError) {
+            recordDeployException(new RuntimeException(" job \"" + resource.getItem().getProperty().getLabel()
+                    + "\" has compile  errors"));
+            setDeploySucceed(false);
+        }
+        return hasError;
+    }
 
     private boolean prepareProcess(int type, boolean needContextScript, String context, IProgressMonitor monitor) {
         monitor.setTaskName(Messages.DeployOnMDMExportWizardPage_prepareDeployJob);
