@@ -20,14 +20,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -37,11 +31,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -71,6 +61,8 @@ import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.DownloadLogDialog;
+
+import com.amalto.workbench.utils.HttpClientUtil;
 
 /**
  * created by Karelun Huang on Mar 19, 2013 Detailled comment
@@ -341,6 +333,9 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private void doMonitor() {
         DefaultHttpClient httpClient = createHttpClient();
+        if (httpClient == null) {
+            return;
+        }
         String monitorURL = buildMonitorURL(position);
         HttpGet httpGet = new HttpGet(monitorURL);
         MessageConsoleStream errorMsgStream = newErrorMessageStream();
@@ -448,38 +443,15 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         DefaultHttpClient httpclient = new DefaultHttpClient();
         if (serverDef.isEnableSSL()) {
             int port = Integer.parseInt(serverDef.getPort());
-            httpclient = enableSSL(httpclient, port);
+            httpclient = HttpClientUtil.enableSSL(httpclient, port);
         }
+
         AuthScope authScope = new AuthScope(serverDef.getHost(), Integer.parseInt(serverDef.getPort()));
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(serverDef.getUser(), serverDef.getPasswd());
-        httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
-        return httpclient;
-    }
-
-    private DefaultHttpClient enableSSL(DefaultHttpClient client, int port) {
-        try {
-            SSLContext ctx = SSLContext.getInstance("TLS"); //$NON-NLS-1$
-            X509TrustManager tm = new X509TrustManager() {
-
-                public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-                }
-
-                public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-                }
-
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-            };
-            ctx.init(null, new TrustManager[] { tm }, null);
-            SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            ClientConnectionManager ccm = client.getConnectionManager();
-            SchemeRegistry sr = ccm.getSchemeRegistry();
-            sr.register(new Scheme("https", port, ssf)); //$NON-NLS-1$
-            return new DefaultHttpClient(ccm, client.getParams());
-        } catch (Exception ex) {
-            return null;
+        if (httpclient != null) {
+            httpclient.getCredentialsProvider().setCredentials(authScope, credentials);
         }
+        return httpclient;
     }
 
     private String buildMonitorURL(int pos) {
