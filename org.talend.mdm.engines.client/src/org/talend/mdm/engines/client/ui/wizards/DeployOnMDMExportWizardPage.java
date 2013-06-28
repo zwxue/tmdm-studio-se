@@ -74,7 +74,6 @@ import org.talend.designer.runprocess.JobErrorsChecker;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.mdm.engines.client.i18n.Messages;
-import org.talend.mdm.engines.client.proxy.ProxyUtil;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -88,6 +87,7 @@ import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManag
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager.ExportChoice;
 
 import com.amalto.workbench.service.ILegendServerDefService;
+import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.MDMServerDef;
 
 /**
@@ -175,7 +175,6 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     jobPurposeDescription = processItem.getProperty().getPurpose();
                     list.add(resource);
                     processMap.put(resource, node);
-                    // processNodeList.add(node);
                     JobDeploymentInfo jobInfo = new JobDeploymentInfo();
                     jobInfo.setJobLabelName(processItem.getProperty().getLabel());
                     jobInfo.setJobPath(processItem.getState().getPath());
@@ -486,8 +485,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         IStructuredSelection selection = new StructuredSelection(node);
         boolean hasError = JobErrorsChecker.checkExportErrors(selection, true);
         if (hasError) {
-            recordDeployException(new RuntimeException(" job \"" + resource.getItem().getProperty().getLabel()
-                    + "\" has compile  errors"));
+            recordDeployException(new RuntimeException(Messages.bind(Messages.DeployOnMDMExportWizardPage_jobCompileError,
+                    resource.getItem().getProperty().getLabel())));
             setDeploySucceed(false);
         }
         return hasError;
@@ -622,6 +621,19 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         return true;
     }
 
+    public MDMServerDef getServerDefFromList(String desc) {
+        List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
+        if (null != listServerSapgo) {
+            for (MDMServerDef def : listServerSapgo) {
+                if (desc.equals(def.getName())) {
+                    return def;
+                }
+            }
+        }
+        return null;
+
+    }
+
     private boolean deployJobProcess(String context, IProgressMonitor monitor) {
         // retrieve user, password, host, port from selected server
         MDMServerDef server = null;
@@ -636,10 +648,12 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 }
             }
         } else {
-            server = new MDMServerDef(mdmServer.getShortDescription(), null, mdmServer.getHost(), mdmServer.getPort(),
-                    MDMServerDef.DEFAULT_PATH, mdmServer.getLogin(), mdmServer.getPassword(), BLANK);
+            server = getServerDefFromList(mdmServer.getShortDescription());
         }
-
+        if (null == server) {
+            setDeploySucceed(false);
+            return false;
+        }
         String user = server.getUser();
         String password = server.getPasswd();
         String host = server.getHost();
@@ -671,7 +685,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
             String mdmServerUploadURL = server.getProtocol() + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$ 
                     + new File(filename).getName() + "&jobpath=" + jobInfo.getJobPath() + "&contextStr=" + context;//$NON-NLS-1$//$NON-NLS-2$
             try {
-                ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
+                HttpClientUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
                 monitor.worked(W_DEPLOY_PROCESS);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
