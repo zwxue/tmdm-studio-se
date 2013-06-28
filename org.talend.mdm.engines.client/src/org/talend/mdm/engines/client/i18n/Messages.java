@@ -95,6 +95,8 @@ public class Messages extends NLS {
 
     public static String DeployOnMDMExportWizardPage_Pacakging;
 
+    public static String DeployOnMDMExportWizardPage_jobCompileError;
+
     public static String MDMPreferencePage_technicalStatusLabel;
 
     public static String MDMServerEditor_engineColumnTitle;
