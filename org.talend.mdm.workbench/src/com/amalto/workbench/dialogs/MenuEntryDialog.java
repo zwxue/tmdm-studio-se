@@ -55,6 +55,7 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
@@ -391,6 +392,7 @@ public class MenuEntryDialog extends Dialog {
         return composite;
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
@@ -407,18 +409,21 @@ public class MenuEntryDialog extends Dialog {
                 // if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
                 if (wsMenuEntry.getIcon() != null) {
                     if (!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())) {
-                        Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",null,null,//$NON-NLS-1$//$NON-NLS-2$
+                        HttpClientUtil.uploadImageFile(
+                                uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "", null, null,//$NON-NLS-1$//$NON-NLS-2$
                                 treeObject.getUsername(), treeObject.getPassword(), null);
-                        if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
-                            icon = Util.uploadImageFile(
-                                    uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText()//$NON-NLS-1$
-                                            .getText(),null, null, treeObject.getUsername(), treeObject.getPassword(), null);
+                        if (!"".equalsIgnoreCase(getIconPathText().getText())) {
+                            icon = HttpClientUtil.uploadImageFile(uripre
+                                    + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText()//$NON-NLS-1$
+                                    .getText(), null, null, treeObject.getUsername(), treeObject.getPassword(), null);
+                        }
                         getIconPathText().setText(icon);
                     }
-                } else if (!"".equalsIgnoreCase(getIconPathText().getText())){//$NON-NLS-1$
-                    icon = Util.uploadImageFile(
-                            uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText().getText(),null,null,//$NON-NLS-1$
-                            treeObject.getUsername(), treeObject.getPassword(), null);
+                } else if (!"".equalsIgnoreCase(getIconPathText().getText())) {//$NON-NLS-1$
+                    icon = HttpClientUtil
+                            .uploadImageFile(
+                                    uripre + "/imageserver/secure/ImageUploadServlet?changeFileName=false", getIconPathText().getText(), null, null,//$NON-NLS-1$
+                                    treeObject.getUsername(), treeObject.getPassword(), null);
                     getIconPathText().setText(icon);
                 }
                 // ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);

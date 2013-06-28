@@ -37,7 +37,7 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.RepositoryNode;
 
-import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -155,12 +155,12 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
         String filename = name + "_" + version + ".zip"; //$NON-NLS-1$ //$NON-NLS-2$
         String uploadURL = serverDef.getProtocol() + serverDef.getHost() + ":"//$NON-NLS-1$
                 + serverDef.getPort() + "/datamanager/uploadFile?deletefile=" + filename;//$NON-NLS-1$
-        Util.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());
+        HttpClientUtil.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());
 
         filename = name + "_" + version + ".war"; //$NON-NLS-1$ //$NON-NLS-2$
         uploadURL = serverDef.getProtocol() + serverDef.getHost() + ":"//$NON-NLS-1$
                 + serverDef.getPort() + "/datamanager/uploadFile?deletefile=" + filename;//$NON-NLS-1$
-        Util.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());
+        HttpClientUtil.uploadFileToAppServer(uploadURL, filename, serverDef.getUser(), serverDef.getPasswd());
 
         return true;
     }

@@ -69,7 +69,10 @@ public class MDMServerDef {
         this.universe = universe;
         if (protocol == null) {
             this.protocol = DEFAULT_PROTOCOL;
+        } else {
+            this.protocol = protocol;
         }
+
     }
 
     public MDMServerDef() {
@@ -132,7 +135,7 @@ public class MDMServerDef {
     }
 
     public String getUrl() {
-        StringBuilder sb = new StringBuilder(DEFAULT_PROTOCOL);
+        StringBuilder sb = new StringBuilder(protocol);
 
         sb.append(host);
         sb.append(":");//$NON-NLS-1$

@@ -28,7 +28,7 @@ import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.WSResourceE;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.XtentisException;
 
 /**
@@ -83,7 +83,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
                     return false;
                 }
             }
-            String imageUri = Util.uploadImageFile(uripre + url, path, name, imageCatalog, serverDef.getUser(),
+            String imageUri = HttpClientUtil.uploadImageFile(uripre + url, path, name, imageCatalog, serverDef.getUser(),
                     serverDef.getPasswd(), null);
             if (imageUri != null && imageUri.length() > 0) {
                 String[] strs = imageUri.split("/");//$NON-NLS-1$

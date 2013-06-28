@@ -80,6 +80,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XmlUtil;
@@ -207,6 +208,7 @@ public class ImportItemsWizard extends Wizard {
     protected Object[] getCheckedObjects() {
         return treeViewer.getCheckNodes();
     }
+
     @Override
     public boolean performFinish() {
         closeOpenEditors();
@@ -273,23 +275,24 @@ public class ImportItemsWizard extends Wizard {
             if (part instanceof XObjectBrowser) {
                 TreeObject obj = (TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel();
                 if (obj != null) {
-                version = obj.getUniverse();
-                tabEndpointAddress = obj.getEndpointAddress();
-                unserName = obj.getUsername();
+                    version = obj.getUniverse();
+                    tabEndpointAddress = obj.getEndpointAddress();
+                    unserName = obj.getUsername();
                 }
             } else if (part instanceof XObjectEditor) {
                 TreeObject obj = (TreeObject) ((XObjectEditorInput) part.getEditorInput()).getModel();
                 if (obj != null) {
-                version = obj.getUniverse();
-                tabEndpointAddress = obj.getEndpointAddress();
-                unserName = obj.getUsername();
+                    version = obj.getUniverse();
+                    tabEndpointAddress = obj.getEndpointAddress();
+                    unserName = obj.getUsername();
                 }
             }
             if (serverRoot != null) {
                 if (serverRoot.getUniverse().equals(version) && serverRoot.getEndpointAddress().equals(tabEndpointAddress)
                         && serverRoot.getUsername().equals(unserName)) {
-                    if (part.isDirty() && isSaveModifiedEditor(part.getTitle()))
+                    if (part.isDirty() && isSaveModifiedEditor(part.getTitle())) {
                         part.doSave(new NullProgressMonitor());
+                    }
                     page.closeEditor(part, false);
                     j++;
                 }
@@ -299,15 +302,17 @@ public class ImportItemsWizard extends Wizard {
     }
 
     private boolean isSaveModifiedEditor(String editorName) {
-        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.ImportItemsWizard_4, null, Messages.ImportItemsWizard_5 + editorName
-                + Messages.ImportItemsWizard_6, MessageDialog.QUESTION, new String[] { IDialogConstants.YES_LABEL,
-                IDialogConstants.NO_LABEL }, 0);
+        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.ImportItemsWizard_4, null,
+                Messages.ImportItemsWizard_5 + editorName + Messages.ImportItemsWizard_6, MessageDialog.QUESTION, new String[] {
+                        IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL }, 0);
         dialog.open();
-        if (dialog.getReturnCode() == 0)
+        if (dialog.getReturnCode() == 0) {
             return true;
+        }
         return false;
     }
 
+    @Override
     public boolean performCancel() {
         LocalTreeObjectRepository.getInstance().cancelMergeImportCategory(serverRoot);
         return super.performCancel();
@@ -320,8 +325,9 @@ public class ImportItemsWizard extends Wizard {
                 importFolder = zipFileRepository.toString().substring(0, pos);
             }
         } else {
-            if (zipFileRepository.length() > 0)
+            if (zipFileRepository.length() > 0) {
                 zipFileRepository.delete(0, zipFileRepository.length());
+            }
         }
 
     }
@@ -509,8 +515,9 @@ public class ImportItemsWizard extends Wizard {
                 default:
                     if (obj.getItems() != null && obj.getItems().length > 0) {
                         for (int i = 0; i < obj.getItems().length; i++) {
-                            if (obj.getItems()[i].split(Messages.ImportItemsWizard_10)[1] != null)
+                            if (obj.getItems()[i].split(Messages.ImportItemsWizard_10)[1] != null) {
                                 dataClusterContent.put(obj.getItems()[i].split(Messages.ImportItemsWizard_11)[1], obj.getItems());
+                            }
                         }
                     }
                 }
@@ -550,8 +557,9 @@ public class ImportItemsWizard extends Wizard {
             log.error(e.getMessage(), e);
         } finally {
             try {
-                if (reader != null)
+                if (reader != null) {
                     reader.close();
+                }
             } catch (Exception e) {
             }
             monitor.done();
@@ -561,11 +569,13 @@ public class ImportItemsWizard extends Wizard {
 
     private int isOveride(String name, String obTypeName) {
 
-        final MessageDialog dialog = new MessageDialog(view.getSite().getShell(), Messages.ImportItemsWizard_12, null,
-                Messages.ImportItemsWizard_13 + obTypeName + Messages.ImportItemsWizard_14 + name
-                        + Messages.ImportItemsWizard_15, MessageDialog.QUESTION,
-                new String[] { IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL, IDialogConstants.NO_LABEL,
-                        IDialogConstants.CANCEL_LABEL }, 0);
+        final MessageDialog dialog = new MessageDialog(
+                view.getSite().getShell(),
+                Messages.ImportItemsWizard_12,
+                null,
+                Messages.ImportItemsWizard_13 + obTypeName + Messages.ImportItemsWizard_14 + name + Messages.ImportItemsWizard_15,
+                MessageDialog.QUESTION, new String[] { IDialogConstants.YES_LABEL, IDialogConstants.YES_TO_ALL_LABEL,
+                        IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
         dialog.open();
         int result = dialog.getReturnCode();
         if (result == 0) {
@@ -609,8 +619,10 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        Util.uploadImageFile(serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",//$NON-NLS-1$
-                                importFolder + "/" + subItem, subItem,null,serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);//$NON-NLS-1$
+                        HttpClientUtil
+                                .uploadImageFile(
+                                        serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",//$NON-NLS-1$
+                                        importFolder + "/" + subItem, subItem, null, serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);//$NON-NLS-1$
                     } catch (Exception e2) {
                         log.error(e2.getMessage(), e2);
                     }
@@ -651,8 +663,9 @@ public class ImportItemsWizard extends Wizard {
                         log.error(e1.getMessage(), e1);
                     } finally {
                         try {
-                            if (reader != null)
+                            if (reader != null) {
                                 reader.close();
+                            }
                         } catch (Exception e) {
                         }
                     }
@@ -694,8 +707,9 @@ public class ImportItemsWizard extends Wizard {
                         log.error(e2.getMessage(), e2);
                     } finally {
                         try {
-                            if (reader != null)
+                            if (reader != null) {
                                 reader.close();
+                            }
                         } catch (Exception e) {
                         }
                     }
@@ -732,8 +746,9 @@ public class ImportItemsWizard extends Wizard {
                         log.error(e2.getMessage(), e2);
                     } finally {
                         try {
-                            if (reader != null)
+                            if (reader != null) {
                                 reader.close();
+                            }
                         } catch (Exception e) {
                         }
                     }
@@ -771,8 +786,9 @@ public class ImportItemsWizard extends Wizard {
                             log.error(e2.getMessage(), e2);
                         } finally {
                             try {
-                                if (reader != null)
+                                if (reader != null) {
                                     reader.close();
+                                }
                             } catch (Exception e) {
                             }
                         }
@@ -793,8 +809,9 @@ public class ImportItemsWizard extends Wizard {
 
                         if (routingRule.getWsRoutingRuleExpressions() != null) {
                             for (WSRoutingRuleExpression rule : routingRule.getWsRoutingRuleExpressions()) {
-                                if (rule.getWsOperator() == null)
+                                if (rule.getWsOperator() == null) {
                                     rule.setWsOperator(WSRoutingRuleOperator.CONTAINS);
+                                }
                             }
                         }
                         if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK(routingRule.getName()))).is_true()) {
@@ -817,8 +834,9 @@ public class ImportItemsWizard extends Wizard {
                         log.error(e2.getMessage(), e2);
                     } finally {
                         try {
-                            if (reader != null)
+                            if (reader != null) {
                                 reader.close();
+                            }
                         } catch (Exception e) {
                         }
                     }
@@ -835,8 +853,9 @@ public class ImportItemsWizard extends Wizard {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSStoredProcedure model = new WSStoredProcedure();
                         model = (WSStoredProcedure) Unmarshaller.unmarshal(WSStoredProcedure.class, reader);
-                        if (model.getRefreshCache() == null)
+                        if (model.getRefreshCache() == null) {
                             model.setRefreshCache(false);
+                        }
                         if (port.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK(model.getName())))
                                 .is_true()) {
                             if (!isOverrideAll) {
@@ -859,8 +878,9 @@ public class ImportItemsWizard extends Wizard {
                         log.error(e2.getMessage(), e2);
                     } finally {
                         try {
-                            if (reader != null)
+                            if (reader != null) {
                                 reader.close();
+                            }
                         } catch (Exception e) {
                         }
                     }
@@ -899,8 +919,9 @@ public class ImportItemsWizard extends Wizard {
                             log.error(e2.getMessage(), e2);
                         } finally {
                             try {
-                                if (reader != null)
+                                if (reader != null) {
                                     reader.close();
+                                }
                             } catch (Exception e) {
                             }
                         }
@@ -979,8 +1000,9 @@ public class ImportItemsWizard extends Wizard {
                         log.error(e2.getMessage(), e2);
                     } finally {
                         try {
-                            if (reader != null)
+                            if (reader != null) {
                                 reader.close();
+                            }
                         } catch (Exception e) {
                         }
                     }
@@ -1018,8 +1040,9 @@ public class ImportItemsWizard extends Wizard {
                             log.error(e2.getMessage(), e2);
                         } finally {
                             try {
-                                if (reader != null)
+                                if (reader != null) {
                                     reader.close();
+                                }
                             } catch (Exception e) {
                             }
                         }
@@ -1037,10 +1060,12 @@ public class ImportItemsWizard extends Wizard {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSView model = new WSView();
                         model = (WSView) Unmarshaller.unmarshal(WSView.class, reader);
-                        if (model.getIsTransformerActive() == null)
+                        if (model.getIsTransformerActive() == null) {
                             model.setIsTransformerActive(new WSBoolean(false));
-                        if (model.getTransformerPK() == null)
+                        }
+                        if (model.getTransformerPK() == null) {
                             model.setTransformerPK("");//$NON-NLS-1$
+                        }
                         // TODO: because the operator and stringPredicate can not be export,so if there is any where
                         // condition
                         // now it will add the default operator and string predicate for all the where conditions
@@ -1078,8 +1103,9 @@ public class ImportItemsWizard extends Wizard {
                         log.error(e2.getMessage(), e2);
                     } finally {
                         try {
-                            if (reader != null)
+                            if (reader != null) {
                                 reader.close();
+                            }
                         } catch (Exception e) {
                         }
                     }
@@ -1112,9 +1138,8 @@ public class ImportItemsWizard extends Wizard {
             Reader reader = null;
             String[] paths = dataClusterContent.get(item.getDisplayName());
             Map<String, List<String>> conceptMap = new HashMap<String, List<String>>();
-            for (int i = 0; i < paths.length; i++) {
+            for (String path : paths) {
                 try {
-                    String path = paths[i];
                     reader = new InputStreamReader(new FileInputStream(importFolder + "/" + path), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                     WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
                     String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
@@ -1147,8 +1172,9 @@ public class ImportItemsWizard extends Wizard {
                     log.error(e1.getMessage(), e1);
                 } finally {
                     try {
-                        if (reader != null)
+                        if (reader != null) {
                             reader.close();
+                        }
                     } catch (Exception e) {
                     }
                 }
@@ -1177,8 +1203,8 @@ public class ImportItemsWizard extends Wizard {
                 } catch (Exception e) {
                     // MessageDialog.openWarning(null, "Warning", "Importing  Entity: "+ concept+
                     // " in Data Container: "+cluster + " Error --> "+e.getLocalizedMessage());
-                    throw new Exception(Messages.ImportItemsWizard_30 + concept + Messages.ImportItemsWizard_31 + cluster + Messages.ImportItemsWizard_32
-                            + e.getLocalizedMessage());
+                    throw new Exception(Messages.ImportItemsWizard_30 + concept + Messages.ImportItemsWizard_31 + cluster
+                            + Messages.ImportItemsWizard_32 + e.getLocalizedMessage());
                 }
             }
         }

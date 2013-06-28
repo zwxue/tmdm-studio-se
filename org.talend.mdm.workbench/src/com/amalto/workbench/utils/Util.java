@@ -499,7 +499,7 @@ public class Util {
 
     /**
      * Join an array of strings into a single string using a separator
-     *
+     * 
      * @param strings
      * @param separator
      * @return a single string or null
@@ -518,7 +518,7 @@ public class Util {
 
     /**
      * Returns the first part - eg. the concept - from the path
-     *
+     * 
      * @param path
      * @return the concept Name
      */
@@ -536,7 +536,7 @@ public class Util {
 
     /**
      * get the concept name from the child elment
-     *
+     * 
      * @param child
      * @return
      */
@@ -553,7 +553,7 @@ public class Util {
 
     /**
      * Generates an xml string from a node (not pretty formatted)
-     *
+     * 
      * @param n the node
      * @return the xml string
      * @throws Exception
@@ -569,7 +569,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Document d, String xPath) throws Exception {
@@ -578,7 +578,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath) throws Exception {
@@ -587,7 +587,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
@@ -601,7 +601,7 @@ public class Util {
 
     /**
      * Returns a namespaced root element of a document Useful to create a namespace holder element
-     *
+     * 
      * @param namespace
      * @return the root Element
      */
@@ -722,166 +722,6 @@ public class Util {
     }
 
     /*********************************************************************
-     * FILE UPLOAD
-     *
-     * Multi-Part Form Post
-     *********************************************************************/
-    public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
-            throws XtentisException {
-        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");//$NON-NLS-1$//$NON-NLS-2$
-        /*
-         * System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
-         * System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
-         * System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.content", "debug");
-         */
-
-        HttpClient client = new HttpClient();
-        PostMethod mppost = new PostMethod(URL);
-        String response = null;
-        String fileName = localFilename;
-        try {
-            client.getHttpConnectionManager().getParams().setConnectionTimeout(60000);
-            client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-            // if delete a job, mppost will not addParameter, otherwise there is an exception.
-            if (URL.indexOf("deletefile") == -1) {//$NON-NLS-1$
-                if (URL.indexOf("deployjob") != -1) {//$NON-NLS-1$
-                    fileName = URL.substring(URL.indexOf("=") + 1);//$NON-NLS-1$
-                }
-                Part[] parts = { new FilePart(fileName, new File(localFilename)) };
-                mppost.setRequestEntity(new MultipartRequestEntity(parts, mppost.getParams()));
-            }
-            // mppost.addParameter(info.getJobname()+"_"+info.getJobversion()+".war",new File(localFilename));
-
-            client.executeMethod(mppost);
-            if (mppost.getStatusCode() != HttpStatus.SC_OK) {
-                throw new XtentisException(Messages.Util_21 + mppost.getStatusCode() + Messages.Util_22 + mppost.getStatusText());
-            }
-            response = mppost.getResponseBodyAsString();
-            mppost.releaseConnection();
-            return response;
-        } catch (Exception e) {
-            mppost.releaseConnection();
-            log.error(e.getMessage(), e);
-            throw new XtentisException(e.getClass().getName() + Messages.Util_23 + e.getLocalizedMessage());
-        }
-    }
-
-    public static OutputStream downloadFile(String url, String downloadFolder) {
-        try {
-            URL urlFile = new URL(url);
-            String filename = urlFile.getFile();
-            if (filename != null) {
-                int pos = filename.lastIndexOf('/');
-                if (pos != -1) {
-                    filename = filename.substring(pos + 1);
-                }
-            } else {
-                int pos = url.lastIndexOf('/');
-                if (pos != -1) {
-                    filename = url.substring(pos + 1);
-                }
-            }
-            InputStream input = urlFile.openStream();
-            byte[] bytes = IOUtils.toByteArray(input);
-            FileOutputStream output = new FileOutputStream(new File(downloadFolder + "/" + filename)); //$NON-NLS-1$
-            IOUtils.write(bytes, output);
-            return output;
-        } catch (MalformedURLException e) {
-            log.error(e.getMessage(), e);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
-    }
-
-    public static byte[] downloadFile(String url, String userName, String password) throws IOException {
-        try {
-            URL urlFile = new URL(url);
-            String filename = urlFile.getFile();
-            if (filename != null) {
-                int pos = filename.lastIndexOf('/');
-                if (pos != -1) {
-                    filename = filename.substring(pos + 1);
-                }
-            } else {
-                int pos = url.lastIndexOf('/');
-                if (pos != -1) {
-                    filename = url.substring(pos + 1);
-                }
-            }
-            HttpClient client = new HttpClient();
-            GetMethod get = new GetMethod(url);
-            client.getState().setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
-            int state = client.executeMethod(get);
-            if (state == HttpStatus.SC_OK) {
-                byte[] bytes = get.getResponseBody();
-                return bytes;
-            }
-        } catch (MalformedURLException e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
-    }
-
-    public static String uploadImageFile(String URL, String localFilename, String filename, String imageCatalog, String username,
-            String password, HashMap<String, String> picturePathMap) throws XtentisException {
-        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");//$NON-NLS-1$//$NON-NLS-2$
-        /*
-         * System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
-         * System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
-         * System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.content", "debug");
-         */
-
-        HttpClient client = new HttpClient();
-        MultipartPostMethod mppost = new MultipartPostMethod(URL);
-        String response = null;
-        try {
-
-            client.setConnectionTimeout(60000);
-            client.getState().setAuthenticationPreemptive(true);
-            client.getState().setCredentials(null, null, new UsernamePasswordCredentials(username, password));
-            File file = new File(localFilename);
-            if (!Messages.Util_24.equalsIgnoreCase(localFilename)) {
-                mppost.addParameter("imageFile", file);//$NON-NLS-1$
-            }
-            if (imageCatalog != null) {
-                mppost.addParameter("catalogName", imageCatalog);//$NON-NLS-1$
-            }
-            // fileName can't has suffix and version
-            if (filename != null) {
-                int pos = filename.lastIndexOf('.');
-                if (pos != -1) {
-                    filename = filename.substring(0, pos);
-                }
-                mppost.addParameter("fileName", filename);//$NON-NLS-1$
-            }
-
-            client.executeMethod(mppost);
-            if (mppost.getStatusCode() != HttpStatus.SC_OK) {
-                throw new XtentisException(Messages.Util_25 + mppost.getStatusCode() + Messages.Util_26 + mppost.getStatusText());
-            }
-            response = mppost.getResponseBodyAsString();
-            mppost.releaseConnection();
-            if (response.contains("upload")) {//$NON-NLS-1$
-                String returnValue = response.substring(response.indexOf("upload"), response.indexOf("}") - 1);//$NON-NLS-1$//$NON-NLS-2$
-                if (picturePathMap != null) {
-                    String fileName1 = file.getName();
-                    picturePathMap.put(fileName1, returnValue);
-                }
-                return returnValue;
-            } else {
-                return "";//$NON-NLS-1$
-            }
-        } catch (Exception e) {
-            mppost.releaseConnection();
-            log.error(e.getMessage(), e);
-            throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());//$NON-NLS-1$
-        }
-    }
-
-    /*********************************************************************
      * XSD Utils
      *********************************************************************/
 
@@ -911,12 +751,12 @@ public class Util {
 
     /**
      * Find elementDeclarations that use any types derived from a named type.
-     *
+     * 
      * <p>
      * This shows one way to query the schema for elementDeclarations and then how to find specific kinds of
      * typeDefinitions.
      * </p>
-     *
+     * 
      * @param objList collection set to search for elemDecls
      * @param localName for the type used
      * @return Boolean indicate any XSDElementDeclarations is found or not
@@ -1049,7 +889,7 @@ public class Util {
 
     /**
      * set the list with foreign concept name of in the element
-     *
+     * 
      * @author ymli
      * @param list
      * @param element
@@ -1126,7 +966,7 @@ public class Util {
 
     /**
      * set the list with all the foreign concepty name in the parent
-     *
+     * 
      * @author ymli
      * @param list
      * @param parent
@@ -1147,7 +987,7 @@ public class Util {
 
     /**
      * set the list with foreign concept names in the schema
-     *
+     * 
      * @author ymli
      * @param list
      * @param schema
@@ -1166,7 +1006,7 @@ public class Util {
 
     /**
      * the all the typeDefinition in the schema
-     *
+     * 
      * @author ymli
      * @param schema
      * @return
@@ -1484,7 +1324,7 @@ public class Util {
 
     /**
      * update reference to newType
-     *
+     * 
      * @param elem
      * @param newType
      * @param provider
@@ -1708,7 +1548,7 @@ public class Util {
 
     /**
      * Clipboard support
-     *
+     * 
      * @return the Clipboard
      */
     public static Clipboard getClipboard() {
@@ -1892,8 +1732,8 @@ public class Util {
     /**
      * onlyTopLevel indicates whether return decl's direct subelements(true) or all the subelements(false).
      */
-    public static Map<String, XSDParticle> getChildElements(String parentxpath, XSDElementDeclaration decl,
-            boolean onlyTopLevel, final Set<Object> visited) throws Exception {
+    public static Map<String, XSDParticle> getChildElements(String parentxpath, XSDElementDeclaration decl, boolean onlyTopLevel,
+            final Set<Object> visited) throws Exception {
         Map<String, XSDParticle> childElements = new HashMap<String, XSDParticle>();
 
         XSDTypeDefinition baseType = decl.getTypeDefinition();
@@ -1913,11 +1753,13 @@ public class Util {
 
     public static Map<String, XSDParticle> getChildElements(String parentxpath, XSDComplexTypeDefinition ctype,
             boolean onlyTopLevel, final Set<Object> visited) throws Exception {
-        if (visited == null || ctype == null)
+        if (visited == null || ctype == null) {
             throw new IllegalArgumentException();
+        }
 
-        if (parentxpath == null)
+        if (parentxpath == null) {
             parentxpath = ""; //$NON-NLS-1$
+        }
 
         Map<String, XSDParticle> childElements = new HashMap<String, XSDParticle>();
 
@@ -1932,7 +1774,6 @@ public class Util {
 
             childElements.putAll(getComplexChilds(parentxpath, ctype, onlyTopLevel, visited));
         }
-
 
         return childElements;
     }
@@ -2910,7 +2751,7 @@ public class Util {
 
     /**
      * get all complex types's complextype children
-     *
+     * 
      * @param complexTypeDefinition
      * @return
      */
@@ -3076,7 +2917,7 @@ public class Util {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     *
+     * 
      * @param schema
      * @return
      * @throws Exception
@@ -3340,7 +3181,7 @@ public class Util {
 
     /**
      * Replace the source string by the parameters
-     *
+     * 
      * @param sourceString the source string with parameters,like : "This is {0} examples for {1}"
      * @param parameters the parameters used to do the replacement, the key is the index of the parameter, the value is
      * the content;
@@ -3600,7 +3441,7 @@ public class Util {
     /**
      * DOC hbhong Comment method "unZipFile". same with unZipFile(String zipfile, String unzipdir) method except having
      * a progressMonitor
-     *
+     * 
      * @param zipfile
      * @param unzipdir
      * @param totalProgress
