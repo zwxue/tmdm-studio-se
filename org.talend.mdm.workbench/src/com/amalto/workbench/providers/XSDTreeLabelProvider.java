@@ -60,6 +60,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     private static Log log = LogFactory.getLog(XSDTreeLabelProvider.class);
 
+    @Override
     public String getText(Object obj) {
 
         // log.info("getText   "+obj.getClass().getName());
@@ -268,6 +269,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     }
 
+    @Override
     public Image getImage(Object obj) {
 
         if (obj instanceof XSDElementDeclaration) {
@@ -308,7 +310,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
                 if (XSDUtil.hasFKInfo((XSDElementDeclaration) xsdTerm)) {
                     return ImageCache.getCreatedImage(EImage.FK_OBJ.getPath());
                 }
-                
+
                 XSDConcreteComponent xsdConcreteComponent = xsdParticle.getContainer();
                 if (xsdConcreteComponent instanceof XSDModelGroup) {
                         return ImageCache.getCreatedImage(EImage.SCHEMAELEMENT.getPath());
@@ -487,7 +489,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     /**
      * Print a simple type definition for the document.
-     * 
+     *
      * @param xsdSimpleTypeDefinition a simple type definition in the schema for schema.
      */
     public String getSimpleTypeDefinition(XSDSimpleTypeDefinition xsdSimpleTypeDefinition) {
@@ -499,7 +501,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
              * s+= "("; } for (Iterator enumerators = value.iterator(); enumerators.hasNext();) { String enumerator =
              * enumerators.next().toString(); s+= enumerator; if (enumerators.hasNext()) { s+= " | ;"; } } if
              * (value.size() > 1) { s+= ")";
-             * 
+             *
              * }
              */
             s += xsdSimpleTypeDefinition.getName() != null ? xsdSimpleTypeDefinition.getName() : xsdSimpleTypeDefinition
@@ -543,7 +545,9 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     private XSDElementDeclaration entity;
     public void updateLabel(ViewerLabel label, TreePath elementPath) {
-        entity = (XSDElementDeclaration) elementPath.getFirstSegment();
+        if (elementPath.getFirstSegment() instanceof XSDElementDeclaration) {
+            entity = (XSDElementDeclaration) elementPath.getFirstSegment();
+        }
 
         Object lastSegment = elementPath.getLastSegment();
         label.setText(getText(lastSegment));
