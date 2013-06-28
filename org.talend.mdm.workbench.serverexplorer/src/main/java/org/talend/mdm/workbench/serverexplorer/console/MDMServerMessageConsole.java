@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.security.GeneralSecurityException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -380,8 +379,8 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             log.error(e.getMessage(), e);
             errorMsgStream.println(e.getMessage());
             disposeTimer();
-        } catch (GeneralSecurityException e) {
-            errorMsgStream.println(Messages.MDMServerMessageConsole_authorizationFail);
+        } catch (SecurityException e) {
+            errorMsgStream.println(e.getMessage());
         } finally {
             if (br != null) {
                 try {
@@ -441,7 +440,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         return "0".equals(value); //$NON-NLS-1$
     }
 
-    private DefaultHttpClient createHttpClient() throws GeneralSecurityException {
+    private DefaultHttpClient createHttpClient() {
         DefaultHttpClient httpclient = new DefaultHttpClient();
         if (serverDef.isEnableSSL()) {
             int port = Integer.parseInt(serverDef.getPort());
@@ -522,9 +521,8 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             newErrorMessageStream().println(Messages.MDMServerMessageConsole_DownloadFailed_Message);
             newErrorMessageStream().println(e.getMessage());
             monitor.worked(90);
-        } catch (GeneralSecurityException e) {
-            MessageDialog.openError(getShell(), Messages.MDMServerMessageConsole_error,
-                    Messages.MDMServerMessageConsole_authorizationFail);
+        } catch (SecurityException e) {
+            MessageDialog.openError(getShell(), Messages.MDMServerMessageConsole_error, e.getMessage());
         } finally {
             if (is != null) {
                 try {

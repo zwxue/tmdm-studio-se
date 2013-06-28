@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -2006,9 +2005,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                                 customTypeList.add(customTypesMap.get(key));
                             }
                             doImportSchema(customTypeList, new ArrayList<String>());
-                        } catch (GeneralSecurityException e) {
-                            MessageDialog.openError(sash.getShell(), Messages._Error,
-                                    Messages.DataModelMainPage_authorizationFail);
+                        } catch (SecurityException e) {
+                            MessageDialog.openError(sash.getShell(), Messages._Error, e.getMessage());
                         }
                     }
                 }

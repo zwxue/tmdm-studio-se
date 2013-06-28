@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -120,7 +119,7 @@ public class ResourcesUtil {
         return null;
     }
 
-    private static String getXMLString(String uri, TreeObject treeObject) throws GeneralSecurityException {
+    private static String getXMLString(String uri, TreeObject treeObject) {
         DefaultHttpClient httpclient = new DefaultHttpClient();
         httpclient = HttpClientUtil.enableSSL(httpclient, uri);
         httpclient.getCredentialsProvider().setCredentials(
@@ -146,8 +145,7 @@ public class ResourcesUtil {
 
     }
 
-    public static HashMap<String, String> getResourcesMapFromURI(String uri, TreeObject treeObject)
-            throws GeneralSecurityException {
+    public static HashMap<String, String> getResourcesMapFromURI(String uri, TreeObject treeObject) {
         HashMap<String, String> contentMap = new HashMap<String, String>();
         String responseBody = getXMLString(uri, treeObject);
         Document document = parsXMLString(responseBody);

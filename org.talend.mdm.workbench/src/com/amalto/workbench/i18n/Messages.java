@@ -1543,7 +1543,7 @@ public class Messages extends NLS {
 
     public static String DataModelFilterDialog_WriteAccess;
 
-    public static String DataModelMainPage_authorizationFail;
+    public static String HttpClientUtil_authorizationFail;
 
     public static String DataModelSelectDialog_Ok;
 

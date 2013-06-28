@@ -12,7 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
-import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -31,6 +31,8 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.amalto.workbench.i18n.Messages;
+
 /**
  * created by HHB on 2013-6-27 This tool class wrap DefaultHttpClient to provide some methods for other class,for
  * example uploading,downloading,wrap ssl, and so on.
@@ -40,11 +42,11 @@ public class HttpClientUtil {
 
     private static Log log = LogFactory.getLog(HttpClientUtil.class);
 
-    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws GeneralSecurityException {
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws SecurityException {
         if (client == null) {
             throw new IllegalArgumentException();
         }
- 
+
         try {
             SSLContext ctx = SSLContext.getInstance("TLS"); //$NON-NLS-1$
             X509TrustManager tm = new X509TrustManager() {
@@ -68,6 +70,9 @@ public class HttpClientUtil {
         } catch (NoSuchAlgorithmException e) {
             log.error(e.getMessage(), e);
             return client;
+        } catch (KeyManagementException e) {
+            log.error(e.getMessage(), e);
+            throw new SecurityException(Messages.HttpClientUtil_authorizationFail, e);
         }
 
     }
@@ -87,7 +92,7 @@ public class HttpClientUtil {
         }
     }
 
-    public static DefaultHttpClient enableSSL(DefaultHttpClient client, String url) throws GeneralSecurityException {
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, String url) {
         int port = getPortFromUrl(url);
         return enableSSL(client, port);
     }
