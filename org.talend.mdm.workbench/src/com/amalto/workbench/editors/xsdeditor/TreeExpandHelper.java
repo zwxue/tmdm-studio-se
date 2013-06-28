@@ -275,54 +275,11 @@ public class TreeExpandHelper {
     private boolean isSameXSDElement(Object objA, ExpandInfoNode objB) {
         if (objA != null && objB != null) {
             if (objA.getClass().getName().equals(objB.type)) {// same type
-                if (objA instanceof XSDElementDeclaration) {
-                    XSDElementDeclaration declA = (XSDElementDeclaration) objA;
-                    if (declA.getName().equals(objB.name))
-                        return true;
-                } else if (objA instanceof XSDModelGroup) {
-                    XSDModelGroup goupA = (XSDModelGroup) objA;
-
-                    String nameA = getName(goupA);
-                    String nameB = objB.name;
-                    if (nameA == null && nameB == null)
-                        return true;
-
-                    if (nameA != null && nameB != null && nameA.equals(nameB))
-                        return true;
-                } else if (objA instanceof XSDModelGroupDefinition) {
-                    XSDModelGroupDefinition goupA = (XSDModelGroupDefinition) objA;
-                    if (goupA.getName() == null && objB.name == null)
-                        return true;
-                    if (goupA.getName().equals(objB.name))
-                        return true;
-                } else if (objA instanceof XSDParticle) {
-                    XSDParticle particleA = (XSDParticle) objA;
-                    if (particleA.getTerm() instanceof XSDElementDeclaration) {
-                        XSDElementDeclaration declA = (XSDElementDeclaration) particleA.getTerm();
-                        if (declA.getName().equals(objB.name))
-                            return true;
+                if (objA != null && objB != null) {
+                    if (objA.getClass().getName().equals(objB.type)) {// same type
+                        objA = ExpandInfoNode.create(getName(objA), objA.getClass().getName());
+                        return objB.equals(objA);
                     }
-                } else if (objA instanceof XSDAnnotation) {
-                    return true;
-                } else if (objA instanceof XSDIdentityConstraintDefinition) {
-                    XSDIdentityConstraintDefinition constraintA = (XSDIdentityConstraintDefinition) objA;
-                    if (constraintA.getName().equals(objB.name))
-                        return true;
-                } else if (objA instanceof XSDSimpleTypeDefinition) {
-                    XSDSimpleTypeDefinition simpleDefineA = (XSDSimpleTypeDefinition) objA;
-
-                    if (simpleDefineA.getName() == null && objB.name == null)
-                        return true;
-
-                    if (simpleDefineA.getName().equals(objB.name))
-                        return true;
-                } else if (objA instanceof XSDComplexTypeDefinition) {
-                    XSDComplexTypeDefinition complexDefineA = (XSDComplexTypeDefinition) objA;
-                    if (complexDefineA.getName() == null && objB.name == null)
-                        return true;
-
-                    if (complexDefineA.getName().equals(objB.name))
-                        return true;
                 }
             }
         }
@@ -432,14 +389,6 @@ public class TreeExpandHelper {
             }
 
             return false;
-        }
-
-        @Override
-        public int hashCode() {
-            if (name != null)
-                return (name + ":" + type).hashCode(); //$NON-NLS-1$
-            else
-                return type.hashCode();
         }
     }
 }
