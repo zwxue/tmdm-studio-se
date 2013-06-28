@@ -42,7 +42,7 @@ public class DeleteCommand extends AbstractDeployCommand {
             monitor.subTask(Messages.bind(Messages._SubTaskTitle, typeLabel));
             try {
                 handler.remove(this);
-                return DeployStatus.getOKStatus(this, Messages.bind(Messages._OkStatusMsg, typeLabel, objectName));
+                return DeployStatus.getOKStatus(this, Messages.bind(Messages._OkDeleteStatusMsg, typeLabel, objectName));
 
             } catch (Exception e) {
                 return getDetailErrorMsg(Messages._ErrorStatusMsg1, typeLabel, objectName, e);

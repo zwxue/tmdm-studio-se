@@ -17,7 +17,7 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 
     private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
-    
+
     public static final String KEY_NOT_FOUND_PREFIX = "!!!"; //$NON-NLS-1$
 
     public static final String KEY_NOT_FOUND_SUFFIX = "!!!"; //$NON-NLS-1$
@@ -40,10 +40,12 @@ public class Messages extends NLS {
 
     public static String _OkStatusMsg;
 
+    public static String _OkDeleteStatusMsg;
+
     public static String _Resource;
 
     public static String _SubTaskTitle;
-    
+
     public static String ValidateService_DeletedObjectExist;
 
     public static String ValidateService_ObjectExist;
@@ -80,18 +82,18 @@ public class Messages extends NLS {
 
     public static String AddBrowseItemsWizardR_duplicatedView;
 
-	public static String AddBrowseItemsWizardR_warning;
+    public static String AddBrowseItemsWizardR_warning;
 
     public static String AddDataModelLinkAction_authorityMessage;
 
     public static String AddServerDefLinkAction_authorityMessage;
 
     public static String AnnotationXXDialogR_SelectXPath;
-	
-	public static String CodeProjectXX_PluginUsedText;
+
+    public static String CodeProjectXX_PluginUsedText;
 
     public static String Common_inputName;
-    
+
     public static String Common_rename;
 
     public static String Common_nameCanNotBeEmpty;
@@ -153,9 +155,9 @@ public class Messages extends NLS {
     public static String DeployToAction_deployTo;
 
     public static String DeployAnotherVersionAction_deployAnother;
-    
+
     public static String DeployAnotherVersionAction_selectAnother;
-    
+
     public static String DeployToLastServerAction_deployToLastServer;
 
     public static String DumpAndGoPluginDetail_PlugDesc;
@@ -269,8 +271,8 @@ public class Messages extends NLS {
     public static String RepositoryWebServiceAdapter_InvalidEndpointAddress;
 
     public static String RepositoryWebServiceAdapter_DeployFirst;
-    
-    public static String RepositoryViewImportRepositoryItem_nothingImport;   
+
+    public static String RepositoryViewImportRepositoryItem_nothingImport;
 
     public static String RestoreAction_title;
 
@@ -379,6 +381,7 @@ public class Messages extends NLS {
     public static String NewCustomFormDialog_selectEntity;
 
     public static String NewCustomFormDialog_selectEntityFromDataModel;
+
     public static String NewRoleAction_adminDescription;
 
     public static String NewRoleAction_normalDescription;
@@ -428,6 +431,7 @@ public class Messages extends NLS {
     public static String XSDSetAnnotationRoles;
 
     public static String XSDVisibleXXR_BuildvalidationExpress;
+
     public static String ExportObjectAction_exportRepositoryItems;
 
     public static String ExportObjectAction_hasError;
@@ -533,11 +537,17 @@ public class Messages extends NLS {
     public static String Deploy_fail_cause_text;
 
     public static String NeverDeploy_text;
+
     public static String RepositoryViewFilterDialog_groupNamePattern;
+
     public static String RepositoryViewFilterDialog_groupServerObject;
+
     public static String RepositoryViewFilterDialog_groupLastServer;
+
     public static String RepositoryViewFilterDialog_enableLastServerFilter;
+
     public static String RepositoryViewFilterDialog_lblLastServer;
+
     public static String RepositoryViewFilterDialog_btnSelectServer;
 
     public static String RepositoryViewObjectCheckedWidget_lock;
@@ -547,7 +557,7 @@ public class Messages extends NLS {
     public static String RunnableTypeComposite_createStandaloneProcess;
 
     public static String EventManager_text;
-    
+
     public static String MDMOpenExistVersionProcessWizard_NewObject;
 
     public static String MDMOpenExistVersionProcessPage_ChooseVersion;
@@ -559,13 +569,13 @@ public class Messages extends NLS {
     public static String MDMRepositoryViewServiceExt_openJob;
 
     public static String Deploy_text;
-    
+
     public static String Deploy_successfully_text;
 
     public static String Create_successfully_text;
 
     public static String Deploy_fail_text;
-    
+
     public static String Deploy_cancel_text;
 
     public static String Deploy_notSupport_text;
@@ -579,6 +589,7 @@ public class Messages extends NLS {
     public static String CustomFormElement_ToString;
 
     public static String SchematronExpressBuilder_selectXPath;
+
     public static String AutoDeployPreferencePage_btnCheckButton_text;
 
     public static String ImportXSDSchema;
@@ -588,7 +599,7 @@ public class Messages extends NLS {
     public static String InputProcessNamePage_enterName;
 
     public static String InputProcessNamePage_entityName;
-    
+
     public static String InputProcessNamePage_inputName;
 
     public static String InputProcessNamePage_OptionalName;
@@ -688,9 +699,9 @@ public class Messages extends NLS {
     public static String Property_creationdate_main;
 
     public static String Property_modifydate_main;
-    
+
     public static String MdmPropertiesWizard_lockedByOther;
-    
+
     public static String MdmPropertiesWizard_imageCatalog;
 
     public static String Server_cannot_connected;
@@ -726,7 +737,7 @@ public class Messages extends NLS {
     public static String SVNGetDocument_SVNGetDocumentA;
 
     public static String SVNGetDocument_SVNGetDocumentB;
-    
+
     public static String SwitchPerspectiveDialog_message;
 
     public static String SwitchPerspectiveDialog_notAskAgain;
@@ -734,13 +745,13 @@ public class Messages extends NLS {
     public static String SwitchPerspectiveDialog_title;
 
     public static String NewProcessWizard_TemplateProcess;
-    
+
     public static String GenerateJobXX_GenTJobTrigger;
-    
+
     public static String GenerateJobXX_GenTJobProcess;
-    
+
     public static String GenerateJobXX_UNSupportedType;
-    
+
     public static String GenerateJobXX_ProcessCallJob;
 
     public static String GroovyPluginDetail_PluginCallScript;
@@ -752,12 +763,10 @@ public class Messages extends NLS {
     public static String ViewInputDialog_lblNewLabel_text1;
 
     public static String ViewInputDialog_lblNewLabel_text2;
-    
 
     public static String ViewLabelProvider_SearchfilterNodeName;
 
     public static String ViewLabelProvider_WebfilterNodeName;
-
 
     // //////////////////////////////////////////////////////////////////////////
     //
@@ -771,7 +780,7 @@ public class Messages extends NLS {
     public static String bind(String message, String... bindings) {
         return NLS.bind(message, bindings);
     }
-    
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Class initialization
