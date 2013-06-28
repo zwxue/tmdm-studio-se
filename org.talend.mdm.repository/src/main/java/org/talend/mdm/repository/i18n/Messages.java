@@ -46,6 +46,8 @@ public class Messages extends NLS {
 
     public static String _OkStatusMsg;
 
+    public static String _OkDeleteStatusMsg;
+
     public static String _Resource;
 
     public static String _SubTaskTitle;
