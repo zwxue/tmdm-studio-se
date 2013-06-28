@@ -51,6 +51,8 @@ public class Messages extends NLS {
 
     public static String MDMServerConsolePrefsPage_RefreshLabel_2;
 
+    public static String MDMServerMessageConsole_authorizationFail;
+
     public static String MDMServerMessageConsole_closeActionLabel;
 
     public static String MDMServerMessageConsole_DownloadFailed_Message;
@@ -58,6 +60,8 @@ public class Messages extends NLS {
     public static String MDMServerMessageConsole_DownloadTask_Name;
 
     public static String MDMServerMessageConsole_DownloadAction_Text;
+
+    public static String MDMServerMessageConsole_error;
 
     public static String MDMServerMessageConsole_Forbidden_Message;
 

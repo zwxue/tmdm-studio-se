@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -119,12 +120,12 @@ public class ResourcesUtil {
         return null;
     }
 
-    private static String getXMLString(String uri, TreeObject treeObject) {
+    private static String getXMLString(String uri, TreeObject treeObject) throws GeneralSecurityException {
         DefaultHttpClient httpclient = new DefaultHttpClient();
-
+        httpclient = HttpClientUtil.enableSSL(httpclient, uri);
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(getEndpointHost(uri), Integer.valueOf(getEndpointPort(uri))),
-                new UsernamePasswordCredentials(treeObject.getUsername(), treeObject.getPassword()));//$NON-NLS-1$//$NON-NLS-2$
+                new UsernamePasswordCredentials(treeObject.getUsername(), treeObject.getPassword()));
 
         HttpGet httpget = new HttpGet(uri);
 
@@ -145,12 +146,14 @@ public class ResourcesUtil {
 
     }
 
-    public static HashMap<String, String> getResourcesMapFromURI(String uri, TreeObject treeObject) {
+    public static HashMap<String, String> getResourcesMapFromURI(String uri, TreeObject treeObject)
+            throws GeneralSecurityException {
         HashMap<String, String> contentMap = new HashMap<String, String>();
         String responseBody = getXMLString(uri, treeObject);
         Document document = parsXMLString(responseBody);
-        if (document == null)
+        if (document == null) {
             return contentMap;
+        }
         for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {//$NON-NLS-1$
             Element element = (Element) iterator.next();
             Element nameElement = element.element("name");//$NON-NLS-1$
@@ -169,12 +172,13 @@ public class ResourcesUtil {
         String responseBody = getXMLString(uri, treeObject);
         // nameList=getNameList(responseBody);
         Document document = parsXMLString(responseBody);
-        if (document == null)
+        if (document == null) {
             return nameList;
+        }
         for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {//$NON-NLS-1$
             Element element = (Element) iterator.next();
             Element nameElement = element.element("name");//$NON-NLS-1$
-            
+
             if (nameElement != null) {
                 nameList.add(nameElement.getStringValue());
             } else {
@@ -247,8 +251,9 @@ public class ResourcesUtil {
                 responseString = EntityUtils.toString(response.getEntity());
             }
         } finally {
-            if (entity != null)
+            if (entity != null) {
                 entity.consumeContent(); // release connection gracefully
+            }
         }
         if (entity != null) {
             entity.consumeContent();
@@ -275,8 +280,9 @@ public class ResourcesUtil {
         if (uri != null) {
             int startPos = uri.indexOf("//") + 2;//$NON-NLS-1$
             int endPos = uri.indexOf(":", startPos);//$NON-NLS-1$
-            if (endPos != -1 && startPos != -1)
+            if (endPos != -1 && startPos != -1) {
                 return uri.substring(startPos, endPos);
+            }
         }
 
         return uri;
@@ -286,8 +292,9 @@ public class ResourcesUtil {
 
         if (uri != null) {
             String[] splitString = uri.split(":", 3);//$NON-NLS-1$
-            if (splitString[splitString.length - 1] != null)
+            if (splitString[splitString.length - 1] != null) {
                 return splitString[2].substring(0, splitString[2].indexOf("/"));//$NON-NLS-1$
+            }
         }
 
         return uri;

@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.security.GeneralSecurityException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,6 +40,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -120,14 +122,14 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
         @Override
         public void run() {
-            DownloadLogDialog d = new DownloadLogDialog(new Shell());
+            DownloadLogDialog d = new DownloadLogDialog(getShell());
             int ret = d.open();
             if (ret != IDialogConstants.OK_ID) {
                 return;
             }
             final String filePath = d.getDirectoryPath();
             final boolean needOpen = d.needOpen();
-            ProgressMonitorDialog pmd = new ProgressMonitorDialog(new Shell());
+            ProgressMonitorDialog pmd = new ProgressMonitorDialog(getShell());
             try {
                 pmd.run(false, true, new IRunnableWithProgress() {
 
@@ -255,7 +257,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     }
 
     private void initMessageConsole() {
-        String name = Messages.MDMServerMessageConsole_Name + " (" + serverDef.getName() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+        String name = Messages.bind(Messages.MDMServerMessageConsole_Name, serverDef.getName());
         setName(name);
         initWaterMarks();
     }
@@ -332,10 +334,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     }
 
     private void doMonitor() {
-        DefaultHttpClient httpClient = createHttpClient();
-        if (httpClient == null) {
-            return;
-        }
+
         String monitorURL = buildMonitorURL(position);
         HttpGet httpGet = new HttpGet(monitorURL);
         MessageConsoleStream errorMsgStream = newErrorMessageStream();
@@ -344,6 +343,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         MessageConsoleStream msgStream = null;
         InputStreamReader isr = null;
         try {
+            DefaultHttpClient httpClient = createHttpClient();
             HttpResponse response = httpClient.execute(httpGet);
             int code = response.getStatusLine().getStatusCode();
             if (HTTP_STATUS_OK == code) {
@@ -380,6 +380,8 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             log.error(e.getMessage(), e);
             errorMsgStream.println(e.getMessage());
             disposeTimer();
+        } catch (GeneralSecurityException e) {
+            errorMsgStream.println(Messages.MDMServerMessageConsole_authorizationFail);
         } finally {
             if (br != null) {
                 try {
@@ -439,7 +441,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         return "0".equals(value); //$NON-NLS-1$
     }
 
-    private DefaultHttpClient createHttpClient() {
+    private DefaultHttpClient createHttpClient() throws GeneralSecurityException {
         DefaultHttpClient httpclient = new DefaultHttpClient();
         if (serverDef.isEnableSSL()) {
             int port = Integer.parseInt(serverDef.getPort());
@@ -470,6 +472,10 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         } else {
             monitor();
         }
+    }
+
+    private Shell getShell() {
+        return Display.getDefault().getActiveShell();
     }
 
     private void download(String dirPath, boolean needOpen, IProgressMonitor monitor) {
@@ -516,6 +522,9 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             newErrorMessageStream().println(Messages.MDMServerMessageConsole_DownloadFailed_Message);
             newErrorMessageStream().println(e.getMessage());
             monitor.worked(90);
+        } catch (GeneralSecurityException e) {
+            MessageDialog.openError(getShell(), Messages.MDMServerMessageConsole_error,
+                    Messages.MDMServerMessageConsole_authorizationFail);
         } finally {
             if (is != null) {
                 try {

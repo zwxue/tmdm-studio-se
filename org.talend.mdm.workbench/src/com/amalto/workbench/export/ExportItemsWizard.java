@@ -125,6 +125,7 @@ public class ExportItemsWizard extends Wizard {
     protected Object[] getCheckedObjects() {
         return treeViewer.getCheckNodes();
     }
+
     @Override
     public boolean performFinish() {
 
@@ -139,16 +140,18 @@ public class ExportItemsWizard extends Wizard {
             }
             exportFolder = tempFile.getAbsolutePath();
             zipfile = zip.getText().getText();
-            if(zipfile!=null && new File(zipfile).exists()){
-                if(!MessageDialog.openConfirm(null,Messages.Warning, Messages.bind(Messages.ExportItemsWizard_overridefile, zipfile))){
+            if (zipfile != null && new File(zipfile).exists()) {
+                if (!MessageDialog.openConfirm(null, Messages.Warning,
+                        Messages.bind(Messages.ExportItemsWizard_overridefile, zipfile))) {
                     return false;
                 }
             }
         }
         if (folderBtn.getSelection()) {
             exportFolder = folder.getText().getText();
-            if(exportFolder!=null && new File(exportFolder).list().length>0){
-                if(!MessageDialog.openConfirm(null,Messages.Warning, Messages.bind(Messages.ExportItemsWizard_overridefolder, exportFolder))){
+            if (exportFolder != null && new File(exportFolder).list().length > 0) {
+                if (!MessageDialog.openConfirm(null, Messages.Warning,
+                        Messages.bind(Messages.ExportItemsWizard_overridefolder, exportFolder))) {
                     return false;
                 }
             }
@@ -166,7 +169,7 @@ public class ExportItemsWizard extends Wizard {
                     log.error(e.getMessage(), e);
                     return Status.CANCEL_STATUS;
                 } finally {
-                    if (zipfile != null && zipfile.length()>0 && new File(exportFolder).exists()) {
+                    if (zipfile != null && zipfile.length() > 0 && new File(exportFolder).exists()) {
                         try {
                             ZipToFile.zipFile(exportFolder, zipfile);
                         } catch (Exception e) {
@@ -191,8 +194,9 @@ public class ExportItemsWizard extends Wizard {
         if (selectedObjs.length > 0 && selectedObjs[0] instanceof TreeObject) {
             objs = Arrays.asList(selectedObjs).toArray(new TreeObject[0]);
         }
-        if (objs == null || objs.length == 0)
+        if (objs == null || objs.length == 0) {
             return;
+        }
         monitor.beginTask(Messages.ExportItemsWizard_Export, IProgressMonitor.UNKNOWN);
         Exports eps = new Exports();
         List<TreeObject> exports = new ArrayList<TreeObject>();
@@ -289,8 +293,7 @@ public class ExportItemsWizard extends Wizard {
                     try {
                         String picUrl = obj.getEndpointIpAddress()
                                 + ResourcesUtil.getResourcesMapFromURI(obj.getEndpointIpAddress() + TreeObject.PICTURES_URI,
-                                        objs[0]).get(
-                                        obj.getDisplayName());
+                                        objs[0]).get(obj.getDisplayName());
                         HttpClient client = new HttpClient();
                         GetMethod get = new GetMethod(picUrl);
                         client.executeMethod(get);
@@ -304,6 +307,7 @@ public class ExportItemsWizard extends Wizard {
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
                     } catch (Exception e) {
+                        log.error(e.getMessage(), e);
                     }
                     monitor.worked(1);
                     break;
@@ -468,7 +472,7 @@ public class ExportItemsWizard extends Wizard {
                         DefaultHttpClient httpclient = new DefaultHttpClient();
                         httpclient.getCredentialsProvider().setCredentials(
                                 new AuthScope(obj.getEndpointHost(), Integer.valueOf(obj.getEndpointPort())),
-                                new UsernamePasswordCredentials(obj.getUsername(), obj.getPassword()));//$NON-NLS-1$//$NON-NLS-2$
+                                new UsernamePasswordCredentials(obj.getUsername(), obj.getPassword()));
                         HttpGet httpget = new HttpGet(workflowURL);
                         // System.out.println("executing request" + httpget.getRequestLine());
                         HttpResponse response = httpclient.execute(httpget);
@@ -659,11 +663,13 @@ public class ExportItemsWizard extends Wizard {
             List<String> items1 = new ArrayList<String>();
             WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
                     new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE)).getResults();
-            if (results == null)
+            if (results == null) {
                 return null;
+            }
             for (WSItemPKsByCriteriaResponseResults item : results) {
-                if (item.getWsItemPK().getIds() == null)
+                if (item.getWsItemPK().getIds() == null) {
                     continue;
+                }
                 WSItem wsitem = port.getItem(new WSGetItem(item.getWsItemPK()));
 
                 // Marshal
@@ -678,7 +684,7 @@ public class ExportItemsWizard extends Wizard {
                 writeString(sw1.toString(), TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
                 items1.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
             }
-            TreeObject obj1 = new TreeObject(pk.getPk(), null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);//$NON-NLS-1$
+            TreeObject obj1 = new TreeObject(pk.getPk(), null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);
             obj1.setItems(items1.toArray(new String[items1.size()]));
             exports.add(obj1);
             return obj1;

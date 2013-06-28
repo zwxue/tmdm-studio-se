@@ -12,8 +12,12 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -36,7 +40,11 @@ public class HttpClientUtil {
 
     private static Log log = LogFactory.getLog(HttpClientUtil.class);
 
-    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) {
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws GeneralSecurityException {
+        if (client == null) {
+            throw new IllegalArgumentException();
+        }
+ 
         try {
             SSLContext ctx = SSLContext.getInstance("TLS"); //$NON-NLS-1$
             X509TrustManager tm = new X509TrustManager() {
@@ -57,9 +65,30 @@ public class HttpClientUtil {
             SchemeRegistry sr = ccm.getSchemeRegistry();
             sr.register(new Scheme("https", port, ssf)); //$NON-NLS-1$
             return new DefaultHttpClient(ccm, client.getParams());
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            return null;
+        } catch (NoSuchAlgorithmException e) {
+            log.error(e.getMessage(), e);
+            return client;
         }
+
+    }
+
+    private static final String PATTERN_URL = "[http|https]+://.+:(\\d+)/.*"; //$NON-NLS-1$
+
+    public static int getPortFromUrl(String url) {
+        if (url == null) {
+            throw new IllegalArgumentException();
+        }
+        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
+        if (m.find()) {
+            String portStr = m.group(1);
+            return Integer.parseInt(portStr);
+        } else {
+            return 80;
+        }
+    }
+
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, String url) throws GeneralSecurityException {
+        int port = getPortFromUrl(url);
+        return enableSSL(client, port);
     }
 }

@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1997,13 +1998,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                 List<String> nameList = new ArrayList<String>();
                 if (dropTargetValidate(event, nameList)) {
                     if (MessageDialog.openConfirm(sash.getShell(), Messages.ConfirmText, Messages.DoIncludeImportSchema)) {
-                        HashMap<String, String> customTypesMap = ResourcesUtil.getResourcesMapFromURI(uriPre
-                                + TreeObject.CUSTOM_TYPES_URI, xobject);
-                        List<String> customTypeList = new ArrayList<String>();
-                        for (String key : nameList) {
-                            customTypeList.add(customTypesMap.get(key));
+                        try {
+                            HashMap<String, String> customTypesMap = ResourcesUtil.getResourcesMapFromURI(uriPre
+                                    + TreeObject.CUSTOM_TYPES_URI, xobject);
+                            List<String> customTypeList = new ArrayList<String>();
+                            for (String key : nameList) {
+                                customTypeList.add(customTypesMap.get(key));
+                            }
+                            doImportSchema(customTypeList, new ArrayList<String>());
+                        } catch (GeneralSecurityException e) {
+                            MessageDialog.openError(sash.getShell(), Messages._Error,
+                                    Messages.DataModelMainPage_authorizationFail);
                         }
-                        doImportSchema(customTypeList, new ArrayList<String>());
                     }
                 }
             }
