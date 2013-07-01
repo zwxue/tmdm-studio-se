@@ -20,7 +20,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -77,7 +76,7 @@ public class HttpClientUtil {
 
     private static final int SOCKET_TIMEOUT = 6000000;
 
-    public static DefaultHttpClient createClient(URI uri, String username, String password) throws GeneralSecurityException {
+    public static DefaultHttpClient createClient(URI uri, String username, String password) throws SecurityException {
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, CONNECT_TIMEOUT);
         params.setParameter(CoreConnectionPNames.SO_TIMEOUT, SOCKET_TIMEOUT);
@@ -95,8 +94,7 @@ public class HttpClientUtil {
         return client;
     }
 
-    private static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog,
-            HashMap<String, String> picturePathMap) {
+    private static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog) {
         HttpPost request = new HttpPost(URI.create(URL));
         MultipartEntity entity = new MultipartEntity();
         if (!Messages.Util_24.equalsIgnoreCase(localFilename)) {
@@ -153,7 +151,7 @@ public class HttpClientUtil {
         return request;
     }
 
-    public static byte[] downloadFile(String url, String userName, String password) throws IOException {
+    public static byte[] downloadFile(String url, String userName, String password) {
         HttpUriRequest request = createDownloadFileRequest(url);
 
         try {
@@ -184,7 +182,7 @@ public class HttpClientUtil {
     public static String uploadImageFile(String URL, String localFilename, String filename, String imageCatalog, String username,
             String password, HashMap<String, String> picturePathMap) throws XtentisException {
         // create request
-        HttpUriRequest request = createUploadRequest(URL, localFilename, filename, imageCatalog, picturePathMap);
+        HttpUriRequest request = createUploadRequest(URL, localFilename, filename, imageCatalog);
 
         try {
             DefaultHttpClient client = createClient(URI.create(URL), username, password);
@@ -219,7 +217,8 @@ public class HttpClientUtil {
         }
     }
 
-    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws SecurityException {
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws SecurityException,
+            IllegalArgumentException {
         if (client == null) {
             throw new IllegalArgumentException();
         }
@@ -229,9 +228,11 @@ public class HttpClientUtil {
             X509TrustManager tm = new X509TrustManager() {
 
                 public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                    // FIXME
                 }
 
                 public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                    // FIXME
                 }
 
                 public X509Certificate[] getAcceptedIssuers() {
@@ -256,7 +257,7 @@ public class HttpClientUtil {
 
     private static final String PATTERN_URL = "[http|https]+://.+:(\\d+)/.*"; //$NON-NLS-1$
 
-    public static int getPortFromUrl(String url) {
+    public static int getPortFromUrl(String url) throws IllegalArgumentException {
         if (url == null) {
             throw new IllegalArgumentException();
         }
@@ -269,7 +270,8 @@ public class HttpClientUtil {
         }
     }
 
-    public static DefaultHttpClient enableSSL(DefaultHttpClient client, String url) {
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, String url) throws SecurityException,
+            IllegalArgumentException {
         int port = getPortFromUrl(url);
         return enableSSL(client, port);
     }
