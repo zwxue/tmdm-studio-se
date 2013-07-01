@@ -274,14 +274,8 @@ public class TreeExpandHelper {
 
     private boolean isSameXSDElement(Object objA, ExpandInfoNode objB) {
         if (objA != null && objB != null) {
-            if (objA.getClass().getName().equals(objB.type)) {// same type
-                if (objA != null && objB != null) {
-                    if (objA.getClass().getName().equals(objB.type)) {// same type
-                        objA = ExpandInfoNode.create(getName(objA), objA.getClass().getName());
-                        return objB.equals(objA);
-                    }
-                }
-            }
+            objA = ExpandInfoNode.create(getName(objA), objA.getClass().getName());
+            return objB.equals(objA);
         }
 
         return false;
