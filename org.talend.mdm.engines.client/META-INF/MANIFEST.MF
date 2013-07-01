@@ -27,7 +27,6 @@ Bundle-Vendor: .Talend SA.
 Bundle-ClassPath: .
 Export-Package: org.talend.mdm.engines.client,
  org.talend.mdm.engines.client.i18n,
- org.talend.mdm.engines.client.proxy,
  org.talend.mdm.engines.client.ui.actions,
  org.talend.mdm.engines.client.ui.preferences,
  org.talend.mdm.engines.client.ui.wizards
