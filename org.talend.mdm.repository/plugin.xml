@@ -241,6 +241,21 @@
          </enablement>
       </decorator>
    </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="org.talend.mdm.repository.ui.navigator.MDMLockDecorator"
+            id="org.talend.mdm.repository.userlockdecorator"
+            label="MDM repositroy user Lock Decorator"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="org.talend.core.model.repository.IRepositoryViewObject">
+            </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
    
    <extension
          point="org.eclipse.ui.editors">
