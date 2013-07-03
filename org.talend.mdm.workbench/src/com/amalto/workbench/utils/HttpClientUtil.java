@@ -76,7 +76,8 @@ public class HttpClientUtil {
 
     private static final int SOCKET_TIMEOUT = 6000000;
 
-    public static DefaultHttpClient createClient(URI uri, String username, String password) throws SecurityException {
+    public static DefaultHttpClient createClient(String url, String username, String password) throws SecurityException {
+        URI uri = URI.create(url);
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, CONNECT_TIMEOUT);
         params.setParameter(CoreConnectionPNames.SO_TIMEOUT, SOCKET_TIMEOUT);
@@ -94,8 +95,9 @@ public class HttpClientUtil {
         return client;
     }
 
-    private static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog) {
-        HttpPost request = new HttpPost(URI.create(URL));
+    static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog,
+            HashMap<String, String> picturePathMap) {
+        HttpPost request = new HttpPost(URL);
         MultipartEntity entity = new MultipartEntity();
         if (!Messages.Util_24.equalsIgnoreCase(localFilename)) {
             File file = new File(localFilename);
@@ -120,25 +122,14 @@ public class HttpClientUtil {
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
             throws XtentisException {
         HttpUriRequest request = createUploadFileToServerRequest(URL, localFilename);
-        try {
-            DefaultHttpClient client = createClient(URI.create(URL), username, password);
-            HttpResponse response = client.execute(request);
-            if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
-                throw new XtentisException(Messages.Util_21 + response.getStatusLine().getStatusCode() + Messages.Util_22
-                        + response.getStatusLine().getReasonPhrase());
-            }
-            HttpEntity rentity = response.getEntity();
-            return EntityUtils.toString(rentity);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new XtentisException(e.getClass().getName() + Messages.Util_23 + e.getLocalizedMessage());
-        } finally {
-            request.abort();
-        }
+        DefaultHttpClient client = createClient(URL, username, password);
+        String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s";
+        byte[] data = getResponseEntityIfOk(client, request, errMessage);
+        return new String(data);
     }
 
-    private static HttpUriRequest createUploadFileToServerRequest(String URL, final String fileName) {
-        HttpPost request = new HttpPost(URI.create(URL));
+    static HttpUriRequest createUploadFileToServerRequest(String URL, final String fileName) {
+        HttpPost request = new HttpPost(URL);
         String path = fileName;
         if (URL.indexOf("deletefile") == -1) {//$NON-NLS-1$
             if (URL.indexOf("deployjob") != -1) {//$NON-NLS-1$
@@ -151,74 +142,72 @@ public class HttpClientUtil {
         return request;
     }
 
-    public static byte[] downloadFile(String url, String userName, String password) {
-        HttpUriRequest request = createDownloadFileRequest(url);
-
+    /**
+     * 
+     * get the response content if status code is 200 otherwise throw exception
+     * 
+     * @param client
+     * @param request
+     * @param message the exception message if response status code is not 200
+     * @return
+     * @throws XtentisException
+     */
+    public static byte[] getResponseEntityIfOk(DefaultHttpClient client, HttpUriRequest request, String message) throws XtentisException {
+        if (null == client || null == request) {
+            throw new IllegalArgumentException("null arguments");
+        }
         try {
-            DefaultHttpClient client = createClient(URI.create(url), userName, password);
             HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-            if (null != entity) {
-                return IOUtils.toByteArray(entity.getContent());
+            HttpEntity content = response.getEntity();
+            if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
+                if (null != message) {
+                    EntityUtils.consume(content);
+                    throw new XtentisException(String.format(message, response.getStatusLine().getStatusCode(), response
+                            .getStatusLine().getReasonPhrase()));
+                }
             }
+            return IOUtils.toByteArray(content.getContent());
+        } catch (XtentisException ex) {
+            throw ex;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-        } finally {
             request.abort();
+            throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());
         }
-        return null;
     }
 
-    /**
-     * DOC changguopiao Comment method "createDownloadFileRequest".
-     * 
-     * @param url
-     * @return
-     */
-    private static HttpUriRequest createDownloadFileRequest(String url) {
-        return new HttpGet(URI.create(url));
+    public static byte[] downloadFile(String url, String userName, String password) throws IOException {
+        HttpUriRequest request = new HttpGet(url);
+        try {
+            DefaultHttpClient client = createClient(url, userName, password);
+            return getResponseEntityIfOk(client, request, null);
+        } catch (XtentisException e) {
+            throw new IOException(e);
+        }
     }
 
     public static String uploadImageFile(String URL, String localFilename, String filename, String imageCatalog, String username,
             String password, HashMap<String, String> picturePathMap) throws XtentisException {
-        // create request
-        HttpUriRequest request = createUploadRequest(URL, localFilename, filename, imageCatalog);
-
-        try {
-            DefaultHttpClient client = createClient(URI.create(URL), username, password);
-            HttpResponse response = client.execute(request);
-
-            if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
-                throw new XtentisException(Messages.Util_25 + response.getStatusLine().getStatusCode() + Messages.Util_26
-                        + response.getStatusLine().getReasonPhrase());
+        HttpUriRequest request = createUploadRequest(URL, localFilename, filename, imageCatalog, picturePathMap);
+        DefaultHttpClient client = createClient(URL, username, password);
+        String errMessage = Messages.Util_25 + "%s" + Messages.Util_26 + "%s";
+        byte[] data = getResponseEntityIfOk(client, request, errMessage);
+        String content = new String(data);
+        if (content.contains("upload")) {//$NON-NLS-1$
+            String returnValue = content.substring(content.indexOf("upload"), content.indexOf("}") - 1);//$NON-NLS-1$//$NON-NLS-2$
+            if (picturePathMap != null) {
+                File file = new File(localFilename);
+                String fileName1 = file.getName();
+                picturePathMap.put(fileName1, returnValue);
             }
-
-            HttpEntity rentity = response.getEntity();
-            String content = EntityUtils.toString(rentity);
-
-            log.debug("update image response : " + content); //$NON-NLS-1$
-            if (content.contains("upload")) {//$NON-NLS-1$
-                String returnValue = content.substring(content.indexOf("upload"), content.indexOf("}") - 1);//$NON-NLS-1$//$NON-NLS-2$
-                if (picturePathMap != null) {
-                    File file = new File(localFilename);
-                    String fileName1 = file.getName();
-                    picturePathMap.put(fileName1, returnValue);
-                }
-                return returnValue;
-            } else {
-                log.warn("no update field in response content"); //$NON-NLS-1$
-                return "";//$NON-NLS-1$
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());//$NON-NLS-1$
-        } finally {
-            request.abort();
+            return returnValue;
+        } else {
+            log.warn("no update field in response content"); //$NON-NLS-1$
+            return "";//$NON-NLS-1$
         }
     }
 
-    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws SecurityException,
-            IllegalArgumentException {
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, int port) throws SecurityException {
         if (client == null) {
             throw new IllegalArgumentException();
         }
@@ -228,11 +217,9 @@ public class HttpClientUtil {
             X509TrustManager tm = new X509TrustManager() {
 
                 public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-                    // FIXME
                 }
 
                 public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-                    // FIXME
                 }
 
                 public X509Certificate[] getAcceptedIssuers() {
@@ -257,7 +244,7 @@ public class HttpClientUtil {
 
     private static final String PATTERN_URL = "[http|https]+://.+:(\\d+)/.*"; //$NON-NLS-1$
 
-    public static int getPortFromUrl(String url) throws IllegalArgumentException {
+    public static int getPortFromUrl(String url) {
         if (url == null) {
             throw new IllegalArgumentException();
         }
@@ -270,8 +257,7 @@ public class HttpClientUtil {
         }
     }
 
-    public static DefaultHttpClient enableSSL(DefaultHttpClient client, String url) throws SecurityException,
-            IllegalArgumentException {
+    public static DefaultHttpClient enableSSL(DefaultHttpClient client, String url) {
         int port = getPortFromUrl(url);
         return enableSSL(client, port);
     }
