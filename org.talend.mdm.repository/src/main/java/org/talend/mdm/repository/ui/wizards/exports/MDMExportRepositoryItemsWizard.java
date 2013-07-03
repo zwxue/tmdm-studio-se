@@ -32,9 +32,9 @@ import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.wizards.exports.viewers.ExportRepositoryObjectCheckTreeViewer;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -64,10 +64,10 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
     // do export is need to override ,use the system of TOS to export EMF files
     @Override
     protected void doexport(Object[] selectedNodes, IProgressMonitor monitor) {
-        List<RepositoryViewObject> objs = new LinkedList<RepositoryViewObject>();
+        List<IRepositoryViewObject> objs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : selectedNodes) {
-            if (obj instanceof RepositoryViewObject) {
-                objs.add((RepositoryViewObject) obj);
+            if (obj instanceof IRepositoryViewObject) {
+                objs.add((IRepositoryViewObject) obj);
             }
         }
         if (exportFolder != null) {
@@ -80,8 +80,6 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
 
             } catch (Exception e) {
                 MessageBoxExceptionHandler.process(e);
-            } finally {
-
             }
         }
     }
@@ -95,13 +93,15 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
      * DOC hywang Comment method "getItemsToExport".
      * 
      */
-    private Collection<Item> getItemsToExport(Collection<RepositoryViewObject> objs) {
+    private Collection<Item> getItemsToExport(Collection<IRepositoryViewObject> objs) {
         List<Item> toReturn = null;
         if (objs != null && objs.size() > 0) {
             toReturn = new ArrayList<Item>();
-            for (RepositoryViewObject obj : objs) {
+            for (IRepositoryViewObject obj : objs) {
                 Item item = obj.getProperty().getItem();
-                toReturn.add(item);
+                if (!(item instanceof ContainerItem)) {
+                    toReturn.add(item);
+                }
             }
         }
         return toReturn;
