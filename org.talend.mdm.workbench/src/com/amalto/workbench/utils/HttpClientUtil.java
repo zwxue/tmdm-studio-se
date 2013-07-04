@@ -16,10 +16,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -41,6 +45,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -76,16 +81,19 @@ public class HttpClientUtil {
 
     private static final int SOCKET_TIMEOUT = 6000000;
 
-    public static DefaultHttpClient createClient(String url, String username, String password) throws SecurityException {
-        URI uri = URI.create(url);
+    static DefaultHttpClient createClient() {
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, CONNECT_TIMEOUT);
         params.setParameter(CoreConnectionPNames.SO_TIMEOUT, SOCKET_TIMEOUT);
         params.setParameter(CoreConnectionPNames.TCP_NODELAY, false);
-
         ClientConnectionManager cm = new ThreadSafeClientConnManager();
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-        DefaultHttpClient client = new DefaultHttpClient(cm, params);
+        return new DefaultHttpClient(cm, params);
+    }
+
+    static DefaultHttpClient wrapAuthClient(String url, String username, String password) throws SecurityException {
+        DefaultHttpClient client = createClient();
+        URI uri = URI.create(url);
         if ("https".equals(uri.getScheme())) { //$NON-NLS-1$
             client = enableSSL(client, uri.getPort());
         }
@@ -93,6 +101,28 @@ public class HttpClientUtil {
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
         client.getCredentialsProvider().setCredentials(authScope, credentials);
         return client;
+    }
+
+    public static String getStringContentByHttpget(String url) throws XtentisException {
+        return commonGetRequest(url, "", String.class);
+    }
+
+    public static byte[] getByteArrayContentByHttpget(String url) throws XtentisException {
+        return commonGetRequest(url, "", byte[].class);
+    }
+
+    public static InputStream getInstreamContentByHttpget(String url) throws XtentisException {
+        return commonGetRequest(url, "", InputStream.class);
+    }
+
+    static <T> T commonGetRequest(String url, Class<T> t) throws XtentisException {
+        return commonGetRequest(url, "", t); //$NON-NLS-1$
+    }
+
+    static <T> T commonGetRequest(String url, String message, Class<T> t) throws XtentisException {
+        DefaultHttpClient client = createClient();
+        HttpGet get = new HttpGet(url);
+        return getResponseContent(client, get, message, t);
     }
 
     static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog,
@@ -122,10 +152,13 @@ public class HttpClientUtil {
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
             throws XtentisException {
         HttpUriRequest request = createUploadFileToServerRequest(URL, localFilename);
-        DefaultHttpClient client = createClient(URL, username, password);
-        String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s";
-        byte[] data = getResponseEntityIfOk(client, request, errMessage);
-        return new String(data);
+        DefaultHttpClient client = wrapAuthClient(URL, username, password);
+        String errMessage = Messages.Util_21 + "%s" + Messages.Util_22 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
+        String content = getTextContent(client, request, errMessage);
+        if (null == content) {
+            throw new XtentisException("no response content"); //$NON-NLS-1$
+        }
+        return content;
     }
 
     static HttpUriRequest createUploadFileToServerRequest(String URL, final String fileName) {
@@ -142,55 +175,113 @@ public class HttpClientUtil {
         return request;
     }
 
-    /**
-     * 
-     * get the response content if status code is 200 otherwise throw exception
-     * 
-     * @param client
-     * @param request
-     * @param message the exception message if response status code is not 200
-     * @return
-     * @throws XtentisException
-     */
-    public static byte[] getResponseEntityIfOk(DefaultHttpClient client, HttpUriRequest request, String message)
-            throws XtentisException {
-        if (null == client || null == request) {
-            throw new IllegalArgumentException("null arguments");
+    public static byte[] getResourceFile(String uri) throws XtentisException {
+        HttpUriRequest request = new HttpGet(uri);
+        DefaultHttpClient client = wrapAuthClient(uri, "admin", "talend"); //$NON-NLS-1$ //$NON-NLS-2$
+        byte[] data = getByteArrayStreamContent(client, request, "{}"); //$NON-NLS-1$
+        if (null == data) {
+            throw new XtentisException("no response data"); //$NON-NLS-1$
         }
-        try {
-            HttpResponse response = client.execute(request);
-            HttpEntity content = response.getEntity();
-            if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
-                if (null != message) {
-                    EntityUtils.consume(content);
-                    throw new XtentisException(String.format(message, response.getStatusLine().getStatusCode(), response
-                            .getStatusLine().getReasonPhrase()));
-                }
+        return data;
+    }
+
+    static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, ResponseHandler<T> handler)
+            throws Exception {
+        if (null == request) {
+            throw new IllegalArgumentException("null request"); //$NON-NLS-1$
+        }
+        if (null == client) {
+            client = createClient();
+        }
+        return client.execute(request, handler);
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T> T consumeResponse(HttpResponse response, String message, Class<T> clz) throws XtentisException,
+            IllegalStateException, IOException {
+        HttpEntity content = response.getEntity();
+        if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
+            if (null != message) {
+                EntityUtils.consume(content);
+                throw new XtentisException(String.format(message, response.getStatusLine().getStatusCode(), response
+                        .getStatusLine().getReasonPhrase()));
             }
-            if (content != null && content.isStreaming()) {
+        }
+        if (null != clz && content != null && content.isStreaming()) {
+            if (clz.equals(InputStream.class)) {
+                return (T) content.getContent();
+            }
+            if (clz.equals(byte[].class)) {
                 InputStream instream = content.getContent();
                 try {
-                    return IOUtils.toByteArray(instream);
+                    return (T) IOUtils.toByteArray(instream);
                 } finally {
                     IOUtils.closeQuietly(instream);
                 }
             }
-            return null;
+            if (clz.equals(Reader.class)) {
+                String charset = EntityUtils.getContentCharSet(content);
+                try {
+                    Charset set = Charset.forName(charset);
+                    return (T) new InputStreamReader(content.getContent(), set);
+                } catch (UnsupportedCharsetException e) {
+                    log.error(e.getMessage());
+                    return (T) new InputStreamReader(content.getContent());
+                }
+            }
+            if (clz.equals(String.class)) {
+                return (T) EntityUtils.toString(content);
+            }
+        }
+        EntityUtils.consume(content);
+        return null;
+    }
+
+    static String getTextContent(DefaultHttpClient client, HttpUriRequest request, String message) throws XtentisException {
+        return getResponseContent(client, request, message, String.class);
+    }
+
+    static byte[] getByteArrayStreamContent(DefaultHttpClient client, HttpUriRequest request, String message)
+            throws XtentisException {
+        return getResponseContent(client, request, message, byte[].class);
+    }
+
+    static InputStream getInputStreamContent(DefaultHttpClient client, HttpUriRequest request, String message)
+            throws XtentisException {
+        return getResponseContent(client, request, message, InputStream.class);
+    }
+
+    static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, String message, Class<T> clz)
+            throws XtentisException {
+        if (null == request) {
+            throw new IllegalArgumentException("null request"); //$NON-NLS-1$
+        }
+        if (null == client) {
+            client = createClient();
+        }
+        HttpResponse response = null;
+        try {
+            response = client.execute(request);
+            return consumeResponse(response, message, clz);
         } catch (XtentisException ex) {
             throw ex;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             request.abort();
-            throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());
+            throw new XtentisException(e.getMessage(), e);
         }
     }
 
     public static byte[] downloadFile(String url, String userName, String password) throws IOException {
         HttpUriRequest request = new HttpGet(url);
         try {
-            DefaultHttpClient client = createClient(url, userName, password);
-            return getResponseEntityIfOk(client, request, null);
-        } catch (XtentisException e) {
+            DefaultHttpClient client = wrapAuthClient(url, userName, password);
+            byte[] data = getByteArrayStreamContent(client, request, null);
+            if (null == data) {
+                throw new IOException("no response content"); //$NON-NLS-1$
+            }
+            return data;
+        } catch (Exception e) {
             throw new IOException(e);
         }
     }
@@ -198,11 +289,10 @@ public class HttpClientUtil {
     public static String uploadImageFile(String URL, String localFilename, String filename, String imageCatalog, String username,
             String password, HashMap<String, String> picturePathMap) throws XtentisException {
         HttpUriRequest request = createUploadRequest(URL, localFilename, filename, imageCatalog, picturePathMap);
-        DefaultHttpClient client = createClient(URL, username, password);
-        String errMessage = Messages.Util_25 + "%s" + Messages.Util_26 + "%s";
-        byte[] data = getResponseEntityIfOk(client, request, errMessage);
-        String content = new String(data);
-        if (content.contains("upload")) {//$NON-NLS-1$
+        DefaultHttpClient client = wrapAuthClient(URL, username, password);
+        String errMessage = Messages.Util_25 + "%s" + Messages.Util_26 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
+        String content = getTextContent(client, request, errMessage);
+        if (null != content && content.contains("upload")) {//$NON-NLS-1$
             String returnValue = content.substring(content.indexOf("upload"), content.indexOf("}") - 1);//$NON-NLS-1$//$NON-NLS-2$
             if (picturePathMap != null) {
                 File file = new File(localFilename);
@@ -211,8 +301,7 @@ public class HttpClientUtil {
             }
             return returnValue;
         } else {
-            log.warn("no update field in response content"); //$NON-NLS-1$
-            return "";//$NON-NLS-1$
+            throw new XtentisException("no response content"); //$NON-NLS-1$
         }
     }
 
