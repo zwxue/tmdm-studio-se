@@ -6,19 +6,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
@@ -69,54 +62,6 @@ public class ResourcesUtil {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-    }
-
-    public static byte[] getResourceFile(String uri) {
-
-        HttpClient httpClient = new HttpClient();
-
-        GetMethod getMethod = new GetMethod(uri);
-
-        getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
-        try {
-            httpClient.setConnectionTimeout(60000);
-            httpClient.getState().setAuthenticationPreemptive(true);
-            httpClient.getState().setCredentials(null, null,
-                    new org.apache.commons.httpclient.UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
-
-            int statusCode = httpClient.executeMethod(getMethod);
-            if (statusCode != HttpStatus.SC_OK) {
-                System.err.println("Method failed: " + getMethod.getStatusLine()); //$NON-NLS-1$
-            }
-
-            byte[] responseBody = getMethod.getResponseBody();
-            return responseBody;
-        } catch (HttpException e) {
-
-            // log.error("Please check your provided http address!");
-            log.error(e.getMessage(), e);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } finally {
-            getMethod.releaseConnection();
-        }
-        return null;
-    }
-
-    public static InputStream getFile(String uri) {
-        HttpClient client = new HttpClient();
-        GetMethod get = new GetMethod(uri);
-        try {
-            client.executeMethod(get);
-            return get.getResponseBodyAsStream();
-        } catch (HttpException e) {
-            // TODO Auto-generated catch block
-            log.error(e.getMessage(), e);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            log.error(e.getMessage(), e);
-        }
-        return null;
     }
 
     private static String getXMLString(String uri, TreeObject treeObject) {

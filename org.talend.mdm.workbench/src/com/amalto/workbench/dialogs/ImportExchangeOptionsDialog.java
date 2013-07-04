@@ -14,6 +14,7 @@ package com.amalto.workbench.dialogs;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,8 +22,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.axis.utils.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,6 +57,7 @@ import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.HttpClientUtil;
 
 public class ImportExchangeOptionsDialog extends Dialog implements SelectionListener {
 
@@ -96,6 +97,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         this.zipFileRepository = zipFileRepository;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(Messages.ImportExchangeOptionsDialog_DialogTitle);
 
@@ -150,11 +152,12 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         executeBtn.addSelectionListener(this);
         executeBtn.setImage(ImageCache.getCreatedImage(EImage.REFRESH.getPath()));
 
-        if (export)
+        if (export) {
             exchangeDwnTable = new Table(composite, SWT.VIRTUAL | SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-        else
+        } else {
             exchangeDwnTable = new Table(composite, SWT.VIRTUAL | SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL
                     | SWT.MULTI);
+        }
 
         exchangeDwnTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1));
         ((GridData) exchangeDwnTable.getLayoutData()).heightHint = 300;
@@ -233,8 +236,9 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
                                 valueB = jsonB.get(COLUMN_URL_NAME).toString();
                             }
 
-                            if (valueA.equals(valueB))
+                            if (valueA.equals(valueB)) {
                                 return 0;
+                            }
                             if (direction == SWT.UP) {
                                 return valueA.compareTo(valueB) < 0 ? -1 : 1;
                             }
@@ -262,14 +266,13 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
     }
 
     private HashMap<String, String> getRevisionMap() {
-        HttpClient client = new HttpClient();
-        String url = REVISION_LIST_URL;
-        GetMethod get = new GetMethod(url);
         HashMap<String, String> idRevisonMap = new HashMap<String, String>();
         try {
-            client.executeMethod(get);
-            String out = get.getResponseBodyAsString();
-            JSONArray jsonArray = new JSONArray(out);
+            String content = HttpClientUtil.getStringContentByHttpget(REVISION_LIST_URL);
+            if (StringUtils.isEmpty(content)) {
+                throw new Exception("no response content"); //$NON-NLS-1$
+            }
+            JSONArray jsonArray = new JSONArray(content);
             JSONObject[] dc = new JSONObject[jsonArray.length()];
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -278,7 +281,6 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
                 idRevisonMap.put(name, revision);
                 dc[i] = jsonObject;
             }
-
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -287,12 +289,12 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
     public void fillInTable() {
         clearTable();
-        HttpClient client = new HttpClient();
-        String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
-        GetMethod get = new GetMethod(url);
+        String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$        
         try {
-            client.executeMethod(get);
-            String out = get.getResponseBodyAsString();
+            String out = HttpClientUtil.getStringContentByHttpget(url);
+            if (StringUtils.isEmpty(out)) {
+                throw new Exception("no response content"); //$NON-NLS-1$
+            }
             JSONArray jsonArray = new JSONArray(out);
             dataContent = new JSONObject[jsonArray.length()];
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -310,6 +312,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         }
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).setEnabled(false);
@@ -334,11 +337,10 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
     }
 
     private void unzipDownloadRes(boolean export) {
-        HttpClient client = new HttpClient();
         JSONObject datum = dataContent[exchangeDwnTable.getSelectionIndex()];
         try {
-            GetMethod get = new GetMethod(datum.getString(COLUMN_URL_NAME));
-            client.executeMethod(get);
+            String url = datum.getString(COLUMN_URL_NAME);
+            InputStream stream = HttpClientUtil.getInstreamContentByHttpget(url);
             String downloadFolder = System.getProperty("user.dir") + File.separator + (export ? "temp" : "xsdTemp");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             String subFolderForTmp = downloadFolder + File.separator + "tmp" + System.currentTimeMillis();//$NON-NLS-1$
             File tempFile = new File(subFolderForTmp + File.separator + "tmp" + System.currentTimeMillis());//$NON-NLS-1$
@@ -351,9 +353,14 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             if (!subDir.exists()) {
                 subDir.mkdir();
             }
-            if (zipFileRepository.length() > 0)
+            if (zipFileRepository.length() > 0) {
                 zipFileRepository.delete(0, zipFileRepository.length());
-            IOUtils.write(get.getResponseBody(), new FileOutputStream(tempFile));
+            }
+            FileOutputStream out = new FileOutputStream(tempFile);
+            IOUtils.copy(stream, out);
+            out.flush();
+            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(stream);
             if (!export) {
                 ZipToFile.unZipFile(tempFile.getAbsolutePath(), subFolderForTmp);
                 boolean result = false;
@@ -368,12 +375,13 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             }
         } catch (Exception e1) {
 
-            final MessageDialog dialog = new MessageDialog(this.getParentShell().getShell(), Messages.ImportExchangeOptionsDialog_ParsingError, null,
-                    e1.getMessage(), MessageDialog.ERROR, new String[] { IDialogConstants.OK_LABEL }, 0);
+            final MessageDialog dialog = new MessageDialog(this.getParentShell().getShell(),
+                    Messages.ImportExchangeOptionsDialog_ParsingError, null, e1.getMessage(), MessageDialog.ERROR,
+                    new String[] { IDialogConstants.OK_LABEL }, 0);
             dialog.open();
         }
     }
- 
+
     protected void clearTable() {
         exchangeDwnTable.removeAll();
     }

@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.export;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -23,8 +24,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,6 +55,7 @@ import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
@@ -294,14 +294,12 @@ public class ExportItemsWizard extends Wizard {
                         String picUrl = obj.getEndpointIpAddress()
                                 + ResourcesUtil.getResourcesMapFromURI(obj.getEndpointIpAddress() + TreeObject.PICTURES_URI,
                                         objs[0]).get(obj.getDisplayName());
-                        HttpClient client = new HttpClient();
-                        GetMethod get = new GetMethod(picUrl);
-                        client.executeMethod(get);
                         // Marshal
                         sw = new StringWriter();
-                        Marshaller.marshal(get.getResponseBody(), sw);
+                        byte[] content = HttpClientUtil.getByteArrayContentByHttpget(picUrl);
+                        Marshaller.marshal(content, sw);
                         encodedID = URLEncoder.encode(obj.getDisplayName(), "UTF-8");//$NON-NLS-1$
-                        writeInputStream(get.getResponseBodyAsStream(), TreeObject.PICTURES_ + "/" + encodedID); //$NON-NLS-1$
+                        writeInputStream(new ByteArrayInputStream(content), TreeObject.PICTURES_ + "/" + encodedID); //$NON-NLS-1$
                         items.add(TreeObject.PICTURES_ + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));

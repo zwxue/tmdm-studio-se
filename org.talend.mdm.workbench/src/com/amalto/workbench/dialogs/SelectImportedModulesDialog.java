@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
@@ -216,7 +215,7 @@ public class SelectImportedModulesDialog extends Dialog {
                         log.error(es.getMessage(), es);
                         return;
                     }
-                    
+
                     dlg.setBlockOnOpen(true);
                     dlg.open();
                     if (dlg.getReturnCode() == Window.OK) {
@@ -246,7 +245,6 @@ public class SelectImportedModulesDialog extends Dialog {
             }
 
             public void widgetSelected(SelectionEvent e) {
-                HttpClient client = new HttpClient();
                 String importFolder = System.getProperty("user.dir");//$NON-NLS-1$
                 StringBuffer repository = new StringBuffer();
                 ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(shell.getShell(), null, false, repository);
@@ -278,8 +276,8 @@ public class SelectImportedModulesDialog extends Dialog {
             };
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                InputDialog id = new InputDialog(shell.getShell(), Messages.AddXsdFromOther,
-                        Messages.EnterTextUrl, "", new IInputValidator() {  //$NON-NLS-1$
+                InputDialog id = new InputDialog(shell.getShell(), Messages.AddXsdFromOther, Messages.EnterTextUrl,
+                        "", new IInputValidator() { //$NON-NLS-1$
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText)) {
@@ -424,8 +422,8 @@ public class SelectImportedModulesDialog extends Dialog {
         }
         WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
         if (xdmPKs != null) {
-            for (int i = 0; i < xdmPKs.length; i++) {
-                String name = xdmPKs[i].getPk();
+            for (WSDataModelPK xdmPK : xdmPKs) {
+                String name = xdmPK.getPk();
                 if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
                     schemaList.add(name);
                 }
@@ -436,7 +434,7 @@ public class SelectImportedModulesDialog extends Dialog {
     }
 
     protected XtentisPort getPort() throws XtentisException {
-            return Util.getPort(treeObject);
+        return Util.getPort(treeObject);
     }
 
     protected String getUrl() {

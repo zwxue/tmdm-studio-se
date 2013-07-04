@@ -12,8 +12,6 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -33,7 +31,9 @@ import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.HttpClientUtil;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 
 public class JobMainPage extends AMainPage implements IXObjectModelListener {
 
@@ -44,17 +44,19 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
     protected Label statusLabel;
 
     public JobMainPage(FormEditor editor) {
-        super(editor, JobMainPage.class.getName(), Messages.bind(Messages.JobMainPage_Job, ((XObjectEditorInput) editor.getEditorInput()).getName()
-                + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel())));
+        super(editor, JobMainPage.class.getName(), Messages.bind(
+                Messages.JobMainPage_Job,
+                ((XObjectEditorInput) editor.getEditorInput()).getName()
+                        + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel())));
         jobName = ((XObjectEditorInput) editor.getEditorInput()).getName();
     }
 
     @Override
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charSection) {
-        
 
     }
 
+    @Override
     protected void createFormContent(IManagedForm managedForm) {
 
         try {
@@ -81,12 +83,11 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
             checkButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(SelectionEvent e) {
-                    
 
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                    
+
                     checkServiceStatus();
                 }
 
@@ -112,17 +113,11 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
             String jobversion = this.jobName.substring(0, this.jobName.lastIndexOf("."));//$NON-NLS-1$
             String URLPath = "http://" + getXObject().getEndpointHost() + ":" + getXObject().getEndpointPort() + "/" + jobversion//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     + "/services/" + job;//$NON-NLS-1$
-            org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
-            HttpMethod method = new GetMethod(URLPath);
-
-            client.executeMethod(method);
-            // System.out.println(method.getStatusLine().toString());
-
-            if (method.getStatusLine().toString().indexOf(Messages.JobMainPage_OK) != -1)
-                statusLabel.setText(Messages.JobMainPage_Ready);
-            else
-                statusLabel.setText(Messages.JobMainPage_Fail);
-            method.releaseConnection();
+            HttpClientUtil.getStringContentByHttpget(URLPath);
+            statusLabel.setText(Messages.JobMainPage_Ready);
+        } catch (XtentisException ex) {
+            // if the http response status is not 200
+            statusLabel.setText(Messages.JobMainPage_Fail);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), Messages._Error,
@@ -132,13 +127,11 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
 
     @Override
     protected void commit() {
-        
 
     }
 
     @Override
     protected void createActions() {
-        
 
     }
 
@@ -148,7 +141,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
     }
 
     public void handleEvent(int type, TreeObject parent, TreeObject child) {
-        
+
         refreshData();
     }
 
