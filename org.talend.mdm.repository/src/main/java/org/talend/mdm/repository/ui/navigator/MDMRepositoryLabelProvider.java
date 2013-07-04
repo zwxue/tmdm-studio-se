@@ -34,14 +34,13 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
 public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionProvider, IColorProvider, IFontProvider {
-
-
 
     public void addListener(ILabelProviderListener listener) {
     }
@@ -83,7 +82,9 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
 
     protected IRepositoryNodeLabelProvider getLabelProvider(Object element) {
         if (element instanceof IRepositoryViewObject) {
-            Item item = ((IRepositoryViewObject) element).getProperty().getItem();
+            IRepositoryViewObject viewObject = (IRepositoryViewObject) element;
+            viewObject = RepositoryResourceUtil.assertViewObject(viewObject);
+            Item item = viewObject.getProperty().getItem();
             IRepositoryNodeConfiguration conf = RepositoryNodeConfigurationManager.getConfiguration(item);
             if (conf != null) {
                 return conf.getLabelProvider();

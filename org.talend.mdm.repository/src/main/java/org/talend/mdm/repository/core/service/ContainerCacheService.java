@@ -66,6 +66,13 @@ public class ContainerCacheService {
         viewObjMap.put(prop.getId(), viewObj);
     }
 
+    public static void put(IRepositoryViewObject viewObj) {
+        if (viewObj == null) {
+            throw new IllegalArgumentException();
+        }
+        viewObjMap.put(viewObj.getId(), viewObj);
+    }
+
     public static void remove(Property prop) {
         if (prop != null) {
             remove(prop.getId());

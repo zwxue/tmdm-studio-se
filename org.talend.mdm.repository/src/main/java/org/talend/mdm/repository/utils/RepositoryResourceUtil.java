@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IEditorInput;
@@ -765,6 +766,36 @@ public class RepositoryResourceUtil {
             }
         }
         return cacheViewObj;
+    }
+
+    public static IRepositoryViewObject assertViewObject(IRepositoryViewObject viewObj) {
+        if (viewObj == null) {
+            throw new IllegalArgumentException();
+        }
+        if (viewObj instanceof RepositoryViewObject) {
+
+            boolean reload = false;
+
+            Property property = viewObj.getProperty();
+            if (property != null) {
+                Item item = property.getItem();
+                Resource eResource = item.eResource();
+                reload = eResource == null;
+            } else {
+                reload = true;
+            }
+            if (reload) {
+                IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+                try {
+                    IRepositoryViewObject newViewObj = factory.getLastVersion(viewObj.getId());
+                    ContainerCacheService.put(newViewObj);
+                    return newViewObj;
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+        return viewObj;
     }
 
     public static List<IRepositoryViewObject> findViewObjectsInFolder(ERepositoryObjectType type, Item parentItem,
