@@ -690,11 +690,13 @@ public class ImportServerObjectWizard extends Wizard {
                     // isOverrideAll = btnOverwrite.getSelection();
                     doImport(selectedObjects, monitor);
                     commonViewer.refresh();
-                    // sync workflow object to bonita
-                    ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
-                            ISyncWorkflowService.class);
-                    if (syncService != null) {
-                        syncService.startSyncWorkflowTask();
+                    if (Util.IsEnterPrise()) {
+                        // sync workflow object to bonita
+                        ISyncWorkflowService syncService = (ISyncWorkflowService) GlobalServiceRegister.getDefault().getService(
+                                ISyncWorkflowService.class);
+                        if (syncService != null) {
+                            syncService.startSyncWorkflowTask();
+                        }
                     }
                     return Status.OK_STATUS;
                 }
