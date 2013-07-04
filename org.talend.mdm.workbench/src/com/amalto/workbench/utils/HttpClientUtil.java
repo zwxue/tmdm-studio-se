@@ -152,7 +152,8 @@ public class HttpClientUtil {
      * @return
      * @throws XtentisException
      */
-    public static byte[] getResponseEntityIfOk(DefaultHttpClient client, HttpUriRequest request, String message) throws XtentisException {
+    public static byte[] getResponseEntityIfOk(DefaultHttpClient client, HttpUriRequest request, String message)
+            throws XtentisException {
         if (null == client || null == request) {
             throw new IllegalArgumentException("null arguments");
         }
@@ -166,7 +167,15 @@ public class HttpClientUtil {
                             .getStatusLine().getReasonPhrase()));
                 }
             }
-            return IOUtils.toByteArray(content.getContent());
+            if (content != null && content.isStreaming()) {
+                InputStream instream = content.getContent();
+                try {
+                    return IOUtils.toByteArray(instream);
+                } finally {
+                    IOUtils.closeQuietly(instream);
+                }
+            }
+            return null;
         } catch (XtentisException ex) {
             throw ex;
         } catch (Exception e) {
@@ -217,9 +226,11 @@ public class HttpClientUtil {
             X509TrustManager tm = new X509TrustManager() {
 
                 public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                    // FIXME
                 }
 
                 public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
+                    // FIXME
                 }
 
                 public X509Certificate[] getAcceptedIssuers() {
