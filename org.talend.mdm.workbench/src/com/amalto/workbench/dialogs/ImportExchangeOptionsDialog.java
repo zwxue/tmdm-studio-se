@@ -15,6 +15,7 @@ package com.amalto.workbench.dialogs;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -338,9 +339,14 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
     private void unzipDownloadRes(boolean export) {
         JSONObject datum = dataContent[exchangeDwnTable.getSelectionIndex()];
+        InputStream stream = null;
+        OutputStream out = null;
         try {
             String url = datum.getString(COLUMN_URL_NAME);
-            InputStream stream = HttpClientUtil.getInstreamContentByHttpget(url);
+            stream = HttpClientUtil.getInstreamContentByHttpget(url);
+            if (null == stream) {
+                throw new RuntimeException("cannot get the content stream"); //$NON-NLS-1$
+            }
             String downloadFolder = System.getProperty("user.dir") + File.separator + (export ? "temp" : "xsdTemp");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             String subFolderForTmp = downloadFolder + File.separator + "tmp" + System.currentTimeMillis();//$NON-NLS-1$
             File tempFile = new File(subFolderForTmp + File.separator + "tmp" + System.currentTimeMillis());//$NON-NLS-1$
@@ -356,11 +362,9 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             if (zipFileRepository.length() > 0) {
                 zipFileRepository.delete(0, zipFileRepository.length());
             }
-            FileOutputStream out = new FileOutputStream(tempFile);
+            out = new FileOutputStream(tempFile);
             IOUtils.copy(stream, out);
             out.flush();
-            IOUtils.closeQuietly(out);
-            IOUtils.closeQuietly(stream);
             if (!export) {
                 ZipToFile.unZipFile(tempFile.getAbsolutePath(), subFolderForTmp);
                 boolean result = false;
@@ -374,11 +378,13 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
                 zipFileRepository.append(tempFile.getAbsolutePath());
             }
         } catch (Exception e1) {
-
             final MessageDialog dialog = new MessageDialog(this.getParentShell().getShell(),
                     Messages.ImportExchangeOptionsDialog_ParsingError, null, e1.getMessage(), MessageDialog.ERROR,
                     new String[] { IDialogConstants.OK_LABEL }, 0);
             dialog.open();
+        } finally {
+            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(stream);
         }
     }
 
