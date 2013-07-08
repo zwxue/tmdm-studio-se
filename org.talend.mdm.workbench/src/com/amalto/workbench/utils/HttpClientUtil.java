@@ -16,14 +16,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -81,12 +77,13 @@ public class HttpClientUtil {
 
     private static final int SOCKET_TIMEOUT = 6000000;
 
+    private static final ClientConnectionManager cm = new ThreadSafeClientConnManager();
+
     static DefaultHttpClient createClient() {
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, CONNECT_TIMEOUT);
         params.setParameter(CoreConnectionPNames.SO_TIMEOUT, SOCKET_TIMEOUT);
         params.setParameter(CoreConnectionPNames.TCP_NODELAY, false);
-        ClientConnectionManager cm = new ThreadSafeClientConnManager();
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
         return new DefaultHttpClient(cm, params);
     }
@@ -104,15 +101,17 @@ public class HttpClientUtil {
     }
 
     public static String getStringContentByHttpget(String url) throws XtentisException {
-        return commonGetRequest(url, "", String.class);
+        return commonGetRequest(url, String.class);
     }
 
     public static byte[] getByteArrayContentByHttpget(String url) throws XtentisException {
-        return commonGetRequest(url, "", byte[].class);
+        return commonGetRequest(url, byte[].class);
     }
 
     public static InputStream getInstreamContentByHttpget(String url) throws XtentisException {
-        return commonGetRequest(url, "", InputStream.class);
+        DefaultHttpClient client = createClient();
+        HttpGet get = new HttpGet(url);
+        return getResponseContentStream(client, get, ""); //$NON-NLS-1$
     }
 
     static <T> T commonGetRequest(String url, Class<T> t) throws XtentisException {
@@ -196,21 +195,16 @@ public class HttpClientUtil {
         return client.execute(request, handler);
     }
 
-    @SuppressWarnings("unchecked")
-    static <T> T consumeResponse(HttpResponse response, String message, Class<T> clz) throws XtentisException,
+    static <T> T wrapResponse(HttpResponse response, String message, Class<T> clz) throws XtentisException,
             IllegalStateException, IOException {
         HttpEntity content = response.getEntity();
         if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
             if (null != message) {
-                EntityUtils.consume(content);
                 throw new XtentisException(String.format(message, response.getStatusLine().getStatusCode(), response
                         .getStatusLine().getReasonPhrase()));
             }
         }
         if (null != clz && content != null && content.isStreaming()) {
-            if (clz.equals(InputStream.class)) {
-                return (T) content.getContent();
-            }
             if (clz.equals(byte[].class)) {
                 InputStream instream = content.getContent();
                 try {
@@ -219,21 +213,10 @@ public class HttpClientUtil {
                     IOUtils.closeQuietly(instream);
                 }
             }
-            if (clz.equals(Reader.class)) {
-                String charset = EntityUtils.getContentCharSet(content);
-                try {
-                    Charset set = Charset.forName(charset);
-                    return (T) new InputStreamReader(content.getContent(), set);
-                } catch (UnsupportedCharsetException e) {
-                    log.error(e.getMessage());
-                    return (T) new InputStreamReader(content.getContent());
-                }
-            }
             if (clz.equals(String.class)) {
                 return (T) EntityUtils.toString(content);
             }
         }
-        EntityUtils.consume(content);
         return null;
     }
 
@@ -246,9 +229,47 @@ public class HttpClientUtil {
         return getResponseContent(client, request, message, byte[].class);
     }
 
-    static InputStream getInputStreamContent(DefaultHttpClient client, HttpUriRequest request, String message)
+    static InputStream getResponseContentStream(DefaultHttpClient client, HttpUriRequest request, String message)
             throws XtentisException {
-        return getResponseContent(client, request, message, InputStream.class);
+        if (null == request) {
+            throw new IllegalArgumentException("null request"); //$NON-NLS-1$
+        }
+        if (null == client) {
+            client = createClient();
+        }
+        HttpResponse response = null;
+        try {
+            response = client.execute(request);
+            HttpEntity content = response.getEntity();
+            if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
+                if (null != message) {
+                    throw new XtentisException(String.format(message, response.getStatusLine().getStatusCode(), response
+                            .getStatusLine().getReasonPhrase()));
+                }
+            }
+            return content.getContent();
+        } catch (XtentisException ex) {
+            closeResponse(response);
+            throw ex;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            request.abort();
+            closeResponse(response);
+            throw new XtentisException(e.getMessage(), e);
+        }
+    }
+
+    static void closeResponse(HttpResponse response) {
+        if (response != null) {
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                try {
+                    EntityUtils.consume(entity);
+                } catch (final IOException ex) {
+                    log.error(ex.getMessage(), ex);
+                }
+            }
+        }
     }
 
     static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, String message, Class<T> clz)
@@ -262,13 +283,15 @@ public class HttpClientUtil {
         HttpResponse response = null;
         try {
             response = client.execute(request);
-            return consumeResponse(response, message, clz);
+            return wrapResponse(response, message, clz);
         } catch (XtentisException ex) {
             throw ex;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             request.abort();
             throw new XtentisException(e.getMessage(), e);
+        } finally {
+            closeResponse(response);
         }
     }
 
@@ -309,7 +332,6 @@ public class HttpClientUtil {
         if (client == null) {
             throw new IllegalArgumentException();
         }
-
         try {
             SSLContext ctx = SSLContext.getInstance("TLS"); //$NON-NLS-1$
             X509TrustManager tm = new X509TrustManager() {
@@ -363,6 +385,8 @@ public class HttpClientUtil {
     }
 
     public static OutputStream downloadFile(String url, String downloadFolder) {
+        InputStream input = null;
+        OutputStream output = null;
         try {
             URL urlFile = new URL(url);
             String filename = urlFile.getFile();
@@ -377,15 +401,18 @@ public class HttpClientUtil {
                     filename = url.substring(pos + 1);
                 }
             }
-            InputStream input = urlFile.openStream();
+            input = urlFile.openStream();
             byte[] bytes = IOUtils.toByteArray(input);
-            FileOutputStream output = new FileOutputStream(new File(downloadFolder + "/" + filename)); //$NON-NLS-1$
+            output = new FileOutputStream(new File(downloadFolder + "/" + filename)); //$NON-NLS-1$
             IOUtils.write(bytes, output);
             return output;
         } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
+        } finally {
+            IOUtils.closeQuietly(input);
+            IOUtils.closeQuietly(output);
         }
         return null;
     }
