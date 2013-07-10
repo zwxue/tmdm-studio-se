@@ -13,6 +13,7 @@
 package com.amalto.workbench.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,17 +21,13 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -49,6 +46,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -77,7 +75,17 @@ public class HttpClientUtil {
 
     private static final int SOCKET_TIMEOUT = 6000000;
 
+    static SSLContext sslcontext;
+
+    private static final String TAC_SSL_KEYSTORE = "AdminKeyStore.keystore"; //$NON-NLS-1$
+
+    private static final String TAC_SSL_SYSTEM_KEY = "tac.net.ssl.KeyStore"; //$NON-NLS-1$
+
+    private static final String TAC_SSL_SYSTEM_PASS = "tac.net.ssl.KeyStorePass"; //$NON-NLS-1$
+
     private static final ClientConnectionManager cm = new ThreadSafeClientConnManager();
+
+    private static X509HostnameVerifier verifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 
     static DefaultHttpClient createClient() {
         HttpParams params = new BasicHttpParams();
@@ -98,6 +106,12 @@ public class HttpClientUtil {
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
         client.getCredentialsProvider().setCredentials(authScope, credentials);
         return client;
+    }
+
+    public static void setHostnameVerifier(X509HostnameVerifier verifier) {
+        if (null != verifier) {
+            HttpClientUtil.verifier = verifier;
+        }
     }
 
     public static String getStringContentByHttpget(String url) throws XtentisException {
@@ -332,39 +346,57 @@ public class HttpClientUtil {
         if (client == null) {
             throw new IllegalArgumentException();
         }
-        try {
-            SSLContext ctx = SSLContext.getInstance("TLS"); //$NON-NLS-1$
-            X509TrustManager tm = new X509TrustManager() {
-
-                public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-                    // FIXME
-                }
-
-                public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {
-                    // FIXME
-                }
-
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-            };
-            ctx.init(null, new TrustManager[] { tm }, null);
-            SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            ClientConnectionManager ccm = client.getConnectionManager();
-            SchemeRegistry sr = ccm.getSchemeRegistry();
-            sr.register(new Scheme("https", port, ssf)); //$NON-NLS-1$
-            return new DefaultHttpClient(ccm, client.getParams());
-        } catch (NoSuchAlgorithmException e) {
-            log.error(e.getMessage(), e);
-            return client;
-        } catch (KeyManagementException e) {
-            log.error(e.getMessage(), e);
-            throw new SecurityException(Messages.HttpClientUtil_authorizationFail, e);
-        }
+        initSSLContext();
+        SSLSocketFactory ssf = new SSLSocketFactory(sslcontext, verifier);
+        ClientConnectionManager ccm = client.getConnectionManager();
+        SchemeRegistry sr = ccm.getSchemeRegistry();
+        sr.register(new Scheme("https", port, ssf)); //$NON-NLS-1$
+        return new DefaultHttpClient(ccm, client.getParams());
 
     }
 
     private static final String PATTERN_URL = "[http|https]+://.+:(\\d+)/.*"; //$NON-NLS-1$
+
+    static synchronized void initSSLContext() throws SecurityException {
+        if (null != sslcontext) {
+            return;
+        }
+        InputStream stream = null;
+        try {
+            String keystorePath = System.getProperty(TAC_SSL_SYSTEM_KEY);
+            String keyStorePass = System.getProperty(TAC_SSL_SYSTEM_PASS);
+            if (keystorePath == null) {
+                String userDir = System.getProperty("user.dir");
+                File keystorePathFile = new File(userDir + "/" + TAC_SSL_KEYSTORE);
+                keystorePath = keystorePathFile.getAbsolutePath();
+            }
+
+            if (keyStorePass == null) {
+                // since if user does not set the password in the talend.ini,we only can make it empty by
+                // default,but not sure the ssl can connect
+                keyStorePass = "";
+            }
+
+            File keystoreFile = new File(keystorePath);
+            if (!keystoreFile.canRead()) {
+                throw new RuntimeException("Can't find or read the SSL Keystore file at: '" + keystoreFile.getAbsolutePath() //$NON-NLS-1$
+                        + "'"); //$NON-NLS-1$
+            }
+            SSLContext context = SSLContext.getInstance("SSL");
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+            KeyStore tks = KeyStore.getInstance("JKS");
+            stream = new FileInputStream(keystorePath);
+            tks.load(stream, keyStorePass.toCharArray());
+            tmf.init(tks);
+            context.init(null, tmf.getTrustManagers(), null);
+            HttpClientUtil.sslcontext = context;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new SecurityException(Messages.HttpClientUtil_authorizationFail, e);
+        } finally {
+            IOUtils.closeQuietly(stream);
+        }
+    }
 
     public static int getPortFromUrl(String url) {
         if (url == null) {
