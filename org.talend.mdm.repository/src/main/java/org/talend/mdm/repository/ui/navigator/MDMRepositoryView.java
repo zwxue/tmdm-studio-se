@@ -85,6 +85,7 @@ import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.ui.starting.ShowWelcomeEditor;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.mdm.repository.utils.RepositoryWorkflowUtil;
 import org.talend.repository.ProjectManager;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -93,7 +94,7 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
@@ -357,6 +358,13 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     PerspectiveAdapter perspectiveListener = new PerspectiveAdapter() {
 
+        private String lastPerspectiveId;
+
+        @Override
+        public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
+            lastPerspectiveId = perspective.getId();
+        }
+
         @Override
         public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
             currentPerspective = perspective;
@@ -368,6 +376,10 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             }
 
             if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
+                if (lastPerspectiveId != null && lastPerspectiveId.equals("org.bonitasoft.studio.perspective.process")) { //$NON-NLS-1$
+                    lastPerspectiveId = null;
+                    RepositoryWorkflowUtil.updateWorkflowLockState();
+                }
                 getCommonViewer().refresh();
             }
         }
@@ -427,12 +439,19 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     } else if (input instanceof ProcessEditorInput) {
                         item = ((ProcessEditorInput) input).getItem();
                     }
-                    
+
+                    if (item == null) {
+                        if (part instanceof IEditorPart && RepositoryWorkflowUtil.isWorkflowEditor((IEditorPart) part)) {
+                            IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(input);
+                            item = workflowViewObject.getProperty().getItem();
+                        }
+                    }
+
                     if (item != null) {
-                        try {       
-                            if(ERepositoryStatus.LOCK_BY_USER != factory.getStatus(item)){
-                                return; 
-                             }
+                        try {
+                            if (ERepositoryStatus.LOCK_BY_USER != factory.getStatus(item)) {
+                                return;
+                            }
                             factory.unlock(item);
                             Property property = item.getProperty();
                             final String id = property.getId();
