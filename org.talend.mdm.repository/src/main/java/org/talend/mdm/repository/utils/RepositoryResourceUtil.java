@@ -1001,6 +1001,13 @@ public class RepositoryResourceUtil {
                             }
                         }
                     }
+
+                    if (RepositoryWorkflowUtil.isWorkflowEditor(ref.getEditor(false))) {
+                        IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(editorInput);
+                        if (viewObj != null && viewObj.equals(workflowViewObject)) {
+                            return ref;
+                        }
+                    }
                 } catch (PartInitException e) {
                     log.error(e.getMessage(), e);
                 }
