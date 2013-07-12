@@ -31,6 +31,8 @@ import org.talend.mdm.commmon.metadata.MetadataVisitor;
 import org.talend.mdm.commmon.metadata.TypeMetadata;
 import org.talend.mdm.commmon.metadata.ValidationError;
 import org.talend.mdm.commmon.metadata.ValidationHandler;
+import org.talend.mdm.commmon.metadata.validation.ValidationFactory;
+import org.talend.mdm.commmon.metadata.validation.ValidationRule;
 import org.talend.mdm.repository.core.validate.datamodel.IChecker;
 import org.talend.mdm.repository.core.validate.datamodel.validator.ModelValidationMessage;
 import org.talend.mdm.repository.core.validate.datamodel.validator.rule.IComponentValidationRule;
@@ -330,7 +332,7 @@ class TypeMetadataAdapter implements TypeMetadata {
     }
 
     @Override
-    public TypeMetadata freeze(ValidationHandler handler) {
+    public TypeMetadata freeze() {
         return null;
     }
 
@@ -350,6 +352,11 @@ class TypeMetadataAdapter implements TypeMetadata {
 
     @Override
     public void validate(ValidationHandler handler) {
+    }
+
+    @Override
+    public ValidationRule createValidationRule() {
+        return ValidationFactory.getRule(this);
     }
 
 }
