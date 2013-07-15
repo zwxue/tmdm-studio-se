@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.ui.dialogs;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.RemoteException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,6 +48,7 @@ import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -235,21 +238,22 @@ public class ServerDefDialog extends TitleAreaDialog {
             });
 
             FocusListener listener = new FocusAdapter() {
-                
+
                 @Override
                 public void focusGained(FocusEvent e) {
                     updateUniverseValues();
                 }
             };
-            
+
             universeCombo.addFocusListener(listener);
         }
-        
+
     }
 
     private void updateUniverseValues() {
-        if (newUserName.equals("") || newPassword.equals("")) //$NON-NLS-1$ //$NON-NLS-2$
+        if (newUserName.equals("") || newPassword.equals("")) {
             return;
+        }
 
         if (Util.IsEnterPrise()) {
 
@@ -259,16 +263,17 @@ public class ServerDefDialog extends TitleAreaDialog {
                 universeCombo.removeAll();
                 universeCombo.add(""); //$NON-NLS-1$
                 if (universePKs != null && universePKs.length > 0) {
-                    for (int i = 0; i < universePKs.length; i++) {
-                        String universe = universePKs[i].getPk();
+                    for (WSUniversePK universePK : universePKs) {
+                        String universe = universePK.getPk();
                         universeCombo.add(universe);
                     }
                 }
             } catch (Exception e) {
-                if (log.isDebugEnabled())
+                if (log.isDebugEnabled()) {
                     log.debug(e.getMessage(), e);
-                
-                nameText.setFocus();//transfer focus,preventing recursive handling in this method
+                }
+
+                nameText.setFocus();// transfer focus,preventing recursive handling in this method
                 universeCombo.removeAll();
             }
         }
@@ -326,26 +331,30 @@ public class ServerDefDialog extends TitleAreaDialog {
     @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
-            if (!validateInput())
+            if (!validateInput()) {
                 return;
+            }
             updateUI2Model(serverDef);
         }
         if (buttonId == CHECK_CONNECTION_ID) {
-            if (!validateInput())
+            if (!validateInput()) {
                 return;
+            }
             boolean check = false;
 
-            String msg = null;
+            // String msg = null;
             MDMServerDef tmpServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
             updateUI2Model(tmpServerDef);
 
-            check = ServerDefService.checkMDMConnection(tmpServerDef.getDecryptedServerDef());
-            msg = check ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
-
-            if (check) {
-                setMessage(msg);
-            } else {
-                setErrorMessage(msg);
+            try {
+                ServerDefService.checkMDMConnection(tmpServerDef.getDecryptedServerDef());
+                setMessage(Messages.ServerExplorer_ConnectSuccessful);
+            } catch (XtentisException e) {
+                setErrorMessage(Messages.ServerExplorer_ConnectSSLFailed);
+            } catch (MalformedURLException e) {
+                setErrorMessage(Messages.ServerExplorer_ConnectFailed);
+            } catch (RemoteException e) {
+                setErrorMessage(Messages.ServerExplorer_ConnectFailed);
             }
         }
         super.buttonPressed(buttonId);

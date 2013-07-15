@@ -16,14 +16,14 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * Default implementation of MessageCore from org.talend.commons plug-in.<br/>
- *
+ * 
  * Developpers can copy this class in their plug-in and change :
  * <ul>
  * <li>the BUNDLE_NAME constant</li>
  * </ul>
- *
+ * 
  * $Id: Messages.java 23594 2009-04-13 10:33:00Z nrousseau $
- *
+ * 
  */
 public class Messages extends NLS {
 
@@ -3106,7 +3106,64 @@ public class Messages extends NLS {
     public static String QueryParametersDialog_ErroMsg;
 
     public static String QueryParametersDialog_Ok;
+
     public static String ComplexTypeConfigComposite_btnCheckButton_text;
+
+    public static String fileBrowse;
+
+    public static String keystoreFileTile;
+
+    public static String securityTitle;
+
+    public static String sslAlgorithm;
+
+    public static String hostnameVerificationMode;
+
+    public static String truststoreConfiguration;
+
+    public static String truststorePath;
+
+    public static String truststorePassword;
+
+    public static String truststoreType;
+
+    public static String keystoreConfiguration;
+
+    public static String keystorePath;
+
+    public static String keystorePassword;
+
+    public static String keystoreMainPassword;
+
+    public static String keyststoreType;
+
+    public static String verify_ALLOW_ALL;
+
+    public static String verify_STRICT;
+
+    public static String verify_COMPATIBLE;
+
+    public static String keystore_column_type;
+
+    public static String keystore_column_path;
+
+    public static String keystore_action_add_key;
+
+    public static String keystore_action_add_trust;
+
+    public static String keystore_action_remove;
+
+    public static String keystore_error_emptypath;
+
+    public static String keystore_error_nofile;
+
+    public static String keystore_same_as_storepassword;
+
+    public static String httpclientError_certification;
+
+    public static String httpclientError_principal;
+
+    public static String httpclientError_url;
 
     // //////////////////////////////////////////////////////////////////////////
     //

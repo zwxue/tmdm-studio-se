@@ -17,7 +17,13 @@
 	<classpathentry exported="true" kind="lib" path="META-INF/lib/trang.jar"/>
 	<classpathentry exported="true" kind="lib" path="META-INF/lib/xercesSamples.jar"/>
 	<classpathentry exported="true" kind="lib" path="META-INF/lib/xml-apis.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="META-INF/lib/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="META-INF/lib/xstream-1.4.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<accessrules>
+			<accessrule kind="accessible" pattern="com/sun/xml/rpc/util/exception/*"/>
+		</accessrules>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jwsdp-shared"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jwsdp-endorsedlibs"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JAX-RPC"/>

@@ -113,6 +113,8 @@ public class Messages extends NLS {
 
     public static String ServerExplorer_ConnectFailed;
 
+    public static String ServerExplorer_ConnectSSLFailed;
+
     public static String ServerExplorer_ConnectSuccessful;
 
     public static String ServerExplorer_EditServer;

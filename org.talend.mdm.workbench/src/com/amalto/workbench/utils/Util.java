@@ -30,9 +30,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.rmi.RemoteException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -55,8 +52,6 @@ import java.util.zip.ZipFile;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.rpc.Stub;
@@ -64,6 +59,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
@@ -372,20 +368,7 @@ public class Util {
 
             // deactivate Certificate validation on all https connections by creating a non validating ssl socket
             // factory
-            SSLContext context = SSLContext.getInstance("TLS");//$NON-NLS-1$
-            X509TrustManager mgr = new X509TrustManager() {
-
-                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                }
-
-                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                }
-
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-            };
-            context.init(null, new TrustManager[] { mgr }, new SecureRandom());
+            SSLContext context = SSLContextProvider.getInstance().getContext();
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 
             // prepare the Web Services Stub

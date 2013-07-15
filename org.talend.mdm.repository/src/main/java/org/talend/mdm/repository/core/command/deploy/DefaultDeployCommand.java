@@ -30,8 +30,6 @@ import com.amalto.workbench.utils.XtentisException;
  */
 public abstract class DefaultDeployCommand extends AbstractDeployCommand {
 
-
-
     @Override
     public IStatus execute(Object params, IProgressMonitor monitor) {
         ERepositoryObjectType type = getViewObjectType();
@@ -55,7 +53,7 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
             } catch (OperationCanceledException e) {
                 return DeployStatus.getInfoStatus(this, Messages.bind(Messages.Deploy_cancel_text, typeLabel, objectName));
             } catch (RemoteException e) {
-                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, e);
+                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, (Exception) e.getCause());
             } catch (XtentisException e) {
                 return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, e);
             } catch (RuntimeException e) {
@@ -69,7 +67,7 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
 
     /**
      * DOC hbhong Comment method "getLabel".
-     *
+     * 
      * @return
      */
     protected String getLabel() {

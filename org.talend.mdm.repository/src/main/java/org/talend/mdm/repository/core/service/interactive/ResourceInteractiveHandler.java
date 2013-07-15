@@ -62,7 +62,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
         return processImage(cmd, true);
     }
 
-    private boolean processImage(AbstractDeployCommand cmd, boolean deleteFile) {
+    private boolean processImage(AbstractDeployCommand cmd, boolean deleteFile) throws XtentisException {
         IRepositoryViewObject viewObj = cmd.getViewObject();
         MDMServerDef serverDef = cmd.getServerDef();
         String uripre = serverDef.getProtocol() + serverDef.getHost() + ":" + serverDef.getPort(); //$NON-NLS-1$ 
@@ -73,28 +73,23 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
         String name = rs.getUniqueName();
         IFile referenceFile = RepositoryResourceUtil.findReferenceFile(getRepositoryObjectType(), item, fileExtension);
         String path = referenceFile.getLocation().toOSString();
-        try {
-            String url = "/imageserver/secure/ImageUploadServlet";//$NON-NLS-1$
-            if (deleteFile) {
-                if (imageCatalog != null) {
-                    String uri = "upload/" + imageCatalog + '/' + name;//$NON-NLS-1$
-                    url = "/imageserver/secure/ImageDeleteServlet?uri=" + uri;//$NON-NLS-1$
-                } else {
-                    return false;
-                }
+        String url = "/imageserver/secure/ImageUploadServlet";//$NON-NLS-1$
+        if (deleteFile) {
+            if (imageCatalog != null) {
+                String uri = "upload/" + imageCatalog + '/' + name;//$NON-NLS-1$
+                url = "/imageserver/secure/ImageDeleteServlet?uri=" + uri;//$NON-NLS-1$
+            } else {
+                return false;
             }
-            String imageUri = HttpClientUtil.uploadImageFile(uripre + url, path, name, imageCatalog, serverDef.getUser(),
-                    serverDef.getPasswd(), null);
-            if (imageUri != null && imageUri.length() > 0) {
-                String[] strs = imageUri.split("/");//$NON-NLS-1$
-                if (strs.length == 3) {// the second one is imagecatalog
-                    rs.setImageCatalog(strs[1]);
-                }
-            }
-            return true;
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
         }
-        return false;
+        String imageUri = HttpClientUtil.uploadImageFile(uripre + url, path, name, imageCatalog, serverDef.getUser(),
+                serverDef.getPasswd(), null);
+        if (imageUri != null && imageUri.length() > 0) {
+            String[] strs = imageUri.split("/");//$NON-NLS-1$
+            if (strs.length == 3) {// the second one is imagecatalog
+                rs.setImageCatalog(strs[1]);
+            }
+        }
+        return true;
     }
 }

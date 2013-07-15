@@ -13,7 +13,6 @@
 package com.amalto.workbench.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,13 +20,13 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -57,8 +56,12 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.jface.preference.IPreferenceStore;
 
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.i18n.Messages;
+import com.amalto.workbench.preferences.JSSEConstans.VERIFY_TYPE;
+import com.amalto.workbench.preferences.PreferenceConstants;
 
 /**
  * created by HHB on 2013-6-27 This tool class wrap DefaultHttpClient to provide some methods for other class,for
@@ -75,17 +78,7 @@ public class HttpClientUtil {
 
     private static final int SOCKET_TIMEOUT = 6000000;
 
-    static SSLContext sslcontext;
-
-    private static final String TAC_SSL_KEYSTORE = "AdminKeyStore.keystore"; //$NON-NLS-1$
-
-    private static final String TAC_SSL_SYSTEM_KEY = "tac.net.ssl.KeyStore"; //$NON-NLS-1$
-
-    private static final String TAC_SSL_SYSTEM_PASS = "tac.net.ssl.KeyStorePass"; //$NON-NLS-1$
-
     private static final ClientConnectionManager cm = new ThreadSafeClientConnManager();
-
-    private static X509HostnameVerifier verifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 
     static DefaultHttpClient createClient() {
         HttpParams params = new BasicHttpParams();
@@ -106,12 +99,6 @@ public class HttpClientUtil {
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
         client.getCredentialsProvider().setCredentials(authScope, credentials);
         return client;
-    }
-
-    public static void setHostnameVerifier(X509HostnameVerifier verifier) {
-        if (null != verifier) {
-            HttpClientUtil.verifier = verifier;
-        }
     }
 
     public static String getStringContentByHttpget(String url) throws XtentisException {
@@ -212,11 +199,16 @@ public class HttpClientUtil {
     static <T> T wrapResponse(HttpResponse response, String message, Class<T> clz) throws XtentisException,
             IllegalStateException, IOException {
         HttpEntity content = response.getEntity();
-        if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
-            if (null != message) {
-                throw new XtentisException(String.format(message, response.getStatusLine().getStatusCode(), response
-                        .getStatusLine().getReasonPhrase()));
-            }
+        switch (response.getStatusLine().getStatusCode()) {
+        case HttpStatus.SC_OK:
+            break;
+        case HttpStatus.SC_NOT_FOUND:
+            throw new XtentisException(Messages.httpclientError_url);
+        case HttpStatus.SC_UNAUTHORIZED:
+            throw new XtentisException(Messages.httpclientError_principal);
+        default:
+            throw new XtentisException(String.format(message, response.getStatusLine().getStatusCode(), response.getStatusLine()
+                    .getReasonPhrase()));
         }
         if (null != clz && content != null && content.isStreaming()) {
             if (clz.equals(byte[].class)) {
@@ -300,6 +292,15 @@ public class HttpClientUtil {
             return wrapResponse(response, message, clz);
         } catch (XtentisException ex) {
             throw ex;
+        } catch (SSLPeerUnverifiedException e) {
+            log.error(Messages.httpclientError_certification);
+            request.abort();
+            throw new XtentisException(Messages.httpclientError_certification, e);
+        } catch (SSLException e) {
+            // hostname unmatch
+            log.error(e.getMessage(), e);
+            request.abort();
+            throw new XtentisException(e.getMessage(), e);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             request.abort();
@@ -346,8 +347,20 @@ public class HttpClientUtil {
         if (client == null) {
             throw new IllegalArgumentException();
         }
-        initSSLContext();
-        SSLSocketFactory ssf = new SSLSocketFactory(sslcontext, verifier);
+        SSLContext context = SSLContextProvider.getInstance().getContext();
+        X509HostnameVerifier verifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+        IPreferenceStore store = MDMWorbenchPlugin.getDefault().getPreferenceStore();
+        VERIFY_TYPE vType = VERIFY_TYPE.valueOf(store.getString(PreferenceConstants.VERIFY_TYPE));
+        switch (vType) {
+        case COMPATIBLE:
+            verifier = SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
+            break;
+        case STRICT:
+            verifier = SSLSocketFactory.STRICT_HOSTNAME_VERIFIER;
+            break;
+        default:
+        }
+        SSLSocketFactory ssf = new SSLSocketFactory(context, verifier);
         ClientConnectionManager ccm = client.getConnectionManager();
         SchemeRegistry sr = ccm.getSchemeRegistry();
         sr.register(new Scheme("https", port, ssf)); //$NON-NLS-1$
@@ -356,47 +369,6 @@ public class HttpClientUtil {
     }
 
     private static final String PATTERN_URL = "[http|https]+://.+:(\\d+)/.*"; //$NON-NLS-1$
-
-    static synchronized void initSSLContext() throws SecurityException {
-        if (null != sslcontext) {
-            return;
-        }
-        InputStream stream = null;
-        try {
-            String keystorePath = System.getProperty(TAC_SSL_SYSTEM_KEY);
-            String keyStorePass = System.getProperty(TAC_SSL_SYSTEM_PASS);
-            if (keystorePath == null) {
-                String userDir = System.getProperty("user.dir");
-                File keystorePathFile = new File(userDir + "/" + TAC_SSL_KEYSTORE);
-                keystorePath = keystorePathFile.getAbsolutePath();
-            }
-
-            if (keyStorePass == null) {
-                // since if user does not set the password in the talend.ini,we only can make it empty by
-                // default,but not sure the ssl can connect
-                keyStorePass = "";
-            }
-
-            File keystoreFile = new File(keystorePath);
-            if (!keystoreFile.canRead()) {
-                throw new RuntimeException("Can't find or read the SSL Keystore file at: '" + keystoreFile.getAbsolutePath() //$NON-NLS-1$
-                        + "'"); //$NON-NLS-1$
-            }
-            SSLContext context = SSLContext.getInstance("SSL");
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-            KeyStore tks = KeyStore.getInstance("JKS");
-            stream = new FileInputStream(keystorePath);
-            tks.load(stream, keyStorePass.toCharArray());
-            tmf.init(tks);
-            context.init(null, tmf.getTrustManagers(), null);
-            HttpClientUtil.sslcontext = context;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new SecurityException(Messages.HttpClientUtil_authorizationFail, e);
-        } finally {
-            IOUtils.closeQuietly(stream);
-        }
-    }
 
     public static int getPortFromUrl(String url) {
         if (url == null) {

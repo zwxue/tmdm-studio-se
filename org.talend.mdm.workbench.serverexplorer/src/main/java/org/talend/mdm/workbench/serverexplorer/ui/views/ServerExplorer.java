@@ -21,6 +21,8 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.ui.views;
 
+import java.net.MalformedURLException;
+import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,11 +74,12 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class ServerExplorer extends ViewPart {
 
@@ -112,7 +115,7 @@ public class ServerExplorer extends ViewPart {
 
     /**
      * Create contents of the view part.
-     *
+     * 
      * @param parent
      */
     @Override
@@ -213,6 +216,7 @@ public class ServerExplorer extends ViewPart {
 
     private IMenuListener getMenuListener() {
         return new IMenuListener() {
+
             public void menuAboutToShow(IMenuManager manager) {
                 ISelection selection = treeViewer.getSelection();
                 boolean isEmpty = selection.isEmpty();
@@ -324,9 +328,14 @@ public class ServerExplorer extends ViewPart {
                             MDMServerDef serverDef = mdmItem.getServerDef();
                             serverDef = serverDef.getDecryptedServerDef();
                             String returnMsg = null;
-                            if (ServerDefService.checkMDMConnection(serverDef)) {
+                            try {
+                                ServerDefService.checkMDMConnection(serverDef);
                                 returnMsg = ServerDefService.refreshServerCache(serverDef);
-                            } else {
+                            } catch (XtentisException e) {
+                                returnMsg = Messages.ServerExplorer_ConnectSSLFailed;
+                            } catch (MalformedURLException e) {
+                                returnMsg = Messages.ServerExplorer_ConnectFailed;
+                            } catch (RemoteException e) {
                                 returnMsg = Messages.ServerExplorer_ConnectFailed;
                             }
                             MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_RefreshServerCache,
@@ -358,12 +367,19 @@ public class ServerExplorer extends ViewPart {
                 MDMServerDefItem mdmItem = getMDMItem(viewObject);
                 if (mdmItem != null) {
                     MDMServerDef serverDef = mdmItem.getServerDef().getDecryptedServerDef();
-                    boolean success = ServerDefService.checkMDMConnection(serverDef);
-                    String msg = success ? Messages.ServerExplorer_ConnectSuccessful : Messages.ServerExplorer_ConnectFailed;
-                    if (success) {
-                        MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
-                    } else {
-                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection, msg);
+                    try {
+                        ServerDefService.checkMDMConnection(serverDef);
+                        MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
+                                Messages.ServerExplorer_ConnectSuccessful);
+                    } catch (XtentisException e) {
+                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
+                                Messages.ServerExplorer_ConnectSSLFailed);
+                    } catch (MalformedURLException e) {
+                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
+                                Messages.ServerExplorer_ConnectFailed);
+                    } catch (RemoteException e) {
+                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
+                                Messages.ServerExplorer_ConnectFailed);
                     }
                 }
             }

@@ -38,6 +38,8 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
+import sun.security.validator.ValidatorException;
+
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -236,33 +238,36 @@ public class ServerDefService implements ILegendServerDefService {
      * 
      * @param serverDef need a decrypted serverDef
      * @return
+     * @throws Exception
      */
-    public static boolean checkMDMConnection(MDMServerDef serverDef) {
-        return checkMDMConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
+    public static void checkMDMConnection(MDMServerDef serverDef) throws MalformedURLException, XtentisException, RemoteException {
+        checkMDMConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
     }
 
-    public static boolean checkMDMConnection(String endpointaddress, String username, String password, String universe) {
-
+    public static void checkMDMConnection(String endpointaddress, String username, String password, String universe)
+            throws MalformedURLException, XtentisException, RemoteException {
         try {
             XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
             port.ping(new WSPing("ServerExplorer")); //$NON-NLS-1$
-            return true;
         } catch (RemoteException e) {
-            if (log.isDebugEnabled()) {
-                log.debug(e.getMessage(), e);
+            String msg = e.getCause().getMessage();
+            if (msg.contains(ValidatorException.class.getName())) {
+                throw new XtentisException(msg.substring(msg.indexOf(ValidatorException.class.getName())));
             } else {
-                log.info(e.getMessage());
+                throw e;
             }
-        } catch (MalformedURLException e) {
-            log.error(e.getMessage(), e);
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
         }
-        return false;
+
     }
 
     public boolean checkServerDefConnection(String endpointaddress, String username, String password, String universe) {
-        return checkMDMConnection(endpointaddress, username, password, universe);
+        try {
+            checkMDMConnection(endpointaddress, username, password, universe);
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return false;
+        }
     }
 
     public static String refreshServerCache(MDMServerDef serverDef) {
