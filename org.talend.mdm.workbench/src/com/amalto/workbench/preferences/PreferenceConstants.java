@@ -21,11 +21,24 @@ public interface PreferenceConstants {
     // aligorithm of create sslContext
     String SSL_Algorithm = "sslAlgorithm"; //$NON-NLS-1$
 
-    // default keystore type
-    String KEYSTORE_TYPE = "keystore_type"; //$NON-NLS-1$
+    // File of the keystore
+    String KEYSTORE_FILE = "keystoreFile"; //$NON-NLS-1$
+
+    // Password to unlock the keystore.
+    String KEYSTORE_PASSWORD = "keystorePassword"; //$NON-NLS-1$
+
+    // Type of file used for the keystore.
+    String KEYSTORE_TYPE = "keystoreType"; //$NON-NLS-1$
+
+    // File of the truststore
+    String TRUSTSTORE_FILE = "truststoreFile"; //$NON-NLS-1$
+
+    // Password to unlock the truststore.
+    String TRUSTSTORE_PASSWORD = "truststorePassword"; //$NON-NLS-1$
+
+    // Type of file used for the truststore.
+    String TRUSTSTORE_TYPE = "truststoreType"; //$NON-NLS-1$
 
     // verifyHostname:
-    String VERIFY_TYPE = "verifyHostname"; //$NON-NLS-1$
-
-    String MDM_KEYSTORE = "keystore"; //$NON-NLS-1$
+    String VERIFY_HOSTNAME = "verifyHostname"; //$NON-NLS-1$
 }

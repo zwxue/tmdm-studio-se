@@ -463,7 +463,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.talend.mdm.repository.ui.preferences.AutoDeployPreferencePage"
-            class="com.amalto.workbench.preferences.SSLPreperences"
+            class="com.amalto.workbench.preferences.SSLPreferences"
             id="org.talend.mdm.workbench.preferences.ssl"
             name="SSL">
       </page>
@@ -471,7 +471,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.amalto.workbench.preferences.WorkbenchProferenceInitializer">
+            class="com.amalto.workbench.preferences.WorkbenchPreferenceInitializer">
       </initializer>
    </extension>
    

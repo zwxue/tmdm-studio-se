@@ -368,7 +368,7 @@ public class Util {
 
             // deactivate Certificate validation on all https connections by creating a non validating ssl socket
             // factory
-            SSLContext context = SSLContextProvider.getInstance().getContext();
+            SSLContext context = SSLContextProvider.getContext();
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 
             // prepare the Web Services Stub

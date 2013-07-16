@@ -3133,31 +3133,11 @@ public class Messages extends NLS {
 
     public static String keystorePassword;
 
-    public static String keystoreMainPassword;
-
     public static String keyststoreType;
 
     public static String verify_ALLOW_ALL;
 
     public static String verify_STRICT;
-
-    public static String verify_COMPATIBLE;
-
-    public static String keystore_column_type;
-
-    public static String keystore_column_path;
-
-    public static String keystore_action_add_key;
-
-    public static String keystore_action_add_trust;
-
-    public static String keystore_action_remove;
-
-    public static String keystore_error_emptypath;
-
-    public static String keystore_error_nofile;
-
-    public static String keystore_same_as_storepassword;
 
     public static String httpclientError_certification;
 

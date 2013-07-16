@@ -60,7 +60,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.preferences.JSSEConstans.VERIFY_TYPE;
 import com.amalto.workbench.preferences.PreferenceConstants;
 
 /**
@@ -80,7 +79,7 @@ public class HttpClientUtil {
 
     private static final ClientConnectionManager cm = new ThreadSafeClientConnManager();
 
-    static DefaultHttpClient createClient() {
+    private static DefaultHttpClient createClient() {
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, CONNECT_TIMEOUT);
         params.setParameter(CoreConnectionPNames.SO_TIMEOUT, SOCKET_TIMEOUT);
@@ -89,7 +88,7 @@ public class HttpClientUtil {
         return new DefaultHttpClient(cm, params);
     }
 
-    static DefaultHttpClient wrapAuthClient(String url, String username, String password) throws SecurityException {
+    private static DefaultHttpClient wrapAuthClient(String url, String username, String password) throws SecurityException {
         DefaultHttpClient client = createClient();
         URI uri = URI.create(url);
         if ("https".equals(uri.getScheme())) { //$NON-NLS-1$
@@ -115,17 +114,17 @@ public class HttpClientUtil {
         return getResponseContentStream(client, get, ""); //$NON-NLS-1$
     }
 
-    static <T> T commonGetRequest(String url, Class<T> t) throws XtentisException {
+    private static <T> T commonGetRequest(String url, Class<T> t) throws XtentisException {
         return commonGetRequest(url, "", t); //$NON-NLS-1$
     }
 
-    static <T> T commonGetRequest(String url, String message, Class<T> t) throws XtentisException {
+    private static <T> T commonGetRequest(String url, String message, Class<T> t) throws XtentisException {
         DefaultHttpClient client = createClient();
         HttpGet get = new HttpGet(url);
         return getResponseContent(client, get, message, t);
     }
 
-    static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog,
+    private static HttpUriRequest createUploadRequest(String URL, String localFilename, String filename, String imageCatalog,
             HashMap<String, String> picturePathMap) {
         HttpPost request = new HttpPost(URL);
         MultipartEntity entity = new MultipartEntity();
@@ -161,7 +160,7 @@ public class HttpClientUtil {
         return content;
     }
 
-    static HttpUriRequest createUploadFileToServerRequest(String URL, final String fileName) {
+    private static HttpUriRequest createUploadFileToServerRequest(String URL, final String fileName) {
         HttpPost request = new HttpPost(URL);
         String path = fileName;
         if (URL.indexOf("deletefile") == -1) {//$NON-NLS-1$
@@ -185,18 +184,16 @@ public class HttpClientUtil {
         return data;
     }
 
-    static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, ResponseHandler<T> handler)
+    @SuppressWarnings("unused")
+    private static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, ResponseHandler<T> handler)
             throws Exception {
         if (null == request) {
             throw new IllegalArgumentException("null request"); //$NON-NLS-1$
         }
-        if (null == client) {
-            client = createClient();
-        }
         return client.execute(request, handler);
     }
 
-    static <T> T wrapResponse(HttpResponse response, String message, Class<T> clz) throws XtentisException,
+    private static <T> T wrapResponse(HttpResponse response, String message, Class<T> clz) throws XtentisException,
             IllegalStateException, IOException {
         HttpEntity content = response.getEntity();
         switch (response.getStatusLine().getStatusCode()) {
@@ -226,22 +223,20 @@ public class HttpClientUtil {
         return null;
     }
 
-    static String getTextContent(DefaultHttpClient client, HttpUriRequest request, String message) throws XtentisException {
+    private static String getTextContent(DefaultHttpClient client, HttpUriRequest request, String message)
+            throws XtentisException {
         return getResponseContent(client, request, message, String.class);
     }
 
-    static byte[] getByteArrayStreamContent(DefaultHttpClient client, HttpUriRequest request, String message)
+    private static byte[] getByteArrayStreamContent(DefaultHttpClient client, HttpUriRequest request, String message)
             throws XtentisException {
         return getResponseContent(client, request, message, byte[].class);
     }
 
-    static InputStream getResponseContentStream(DefaultHttpClient client, HttpUriRequest request, String message)
+    private static InputStream getResponseContentStream(DefaultHttpClient client, HttpUriRequest request, String message)
             throws XtentisException {
         if (null == request) {
             throw new IllegalArgumentException("null request"); //$NON-NLS-1$
-        }
-        if (null == client) {
-            client = createClient();
         }
         HttpResponse response = null;
         try {
@@ -265,7 +260,7 @@ public class HttpClientUtil {
         }
     }
 
-    static void closeResponse(HttpResponse response) {
+    private static void closeResponse(HttpResponse response) {
         if (response != null) {
             HttpEntity entity = response.getEntity();
             if (entity != null) {
@@ -278,13 +273,10 @@ public class HttpClientUtil {
         }
     }
 
-    static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, String message, Class<T> clz)
+    private static <T> T getResponseContent(DefaultHttpClient client, HttpUriRequest request, String message, Class<T> clz)
             throws XtentisException {
         if (null == request) {
             throw new IllegalArgumentException("null request"); //$NON-NLS-1$
-        }
-        if (null == client) {
-            client = createClient();
         }
         HttpResponse response = null;
         try {
@@ -347,18 +339,14 @@ public class HttpClientUtil {
         if (client == null) {
             throw new IllegalArgumentException();
         }
-        SSLContext context = SSLContextProvider.getInstance().getContext();
-        X509HostnameVerifier verifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+        SSLContext context = SSLContextProvider.getContext();
         IPreferenceStore store = MDMWorbenchPlugin.getDefault().getPreferenceStore();
-        VERIFY_TYPE vType = VERIFY_TYPE.valueOf(store.getString(PreferenceConstants.VERIFY_TYPE));
-        switch (vType) {
-        case COMPATIBLE:
-            verifier = SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
-            break;
-        case STRICT:
+        X509HostnameVerifier verifier;
+        boolean verify = store.getBoolean(PreferenceConstants.VERIFY_HOSTNAME);
+        if (verify) {
             verifier = SSLSocketFactory.STRICT_HOSTNAME_VERIFIER;
-            break;
-        default:
+        } else {
+            verifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
         }
         SSLSocketFactory ssf = new SSLSocketFactory(context, verifier);
         ClientConnectionManager ccm = client.getConnectionManager();
