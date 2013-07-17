@@ -44,7 +44,7 @@ public class Bean2EObjUtil {
 
     BeanClassUtil beanClassUtil = new BeanClassUtil(this);
 
-    EMFClassUtil emfClassUtil = new EMFClassUtil();
+    EMFClassUtil emfClassUtil = EMFClassUtil.getInstance();
 
     static Bean2EObjUtil instance = new Bean2EObjUtil();
 
@@ -59,8 +59,9 @@ public class Bean2EObjUtil {
     }
 
     public void registerClassMap(Class cls) {
-        if (cls == null)
+        if (cls == null) {
             return;
+        }
         EClass eCls;
         eCls = guessEClassByClassName(cls);
         if (eCls != null) {
@@ -114,11 +115,12 @@ public class Bean2EObjUtil {
         }
         if (eCls != null) {
             Map<Field, Method[]> beanFieldMap = beanClassUtil.findFieldMap(beanCls);
-            if (beanFieldMap == null)
+            if (beanFieldMap == null) {
                 return null;
+            }
             for (Field field : beanFieldMap.keySet()) {
                 try {
-                    EStructuralFeature feature = (EStructuralFeature) fieldMap.get(field);
+                    EStructuralFeature feature = fieldMap.get(field);
                     // System.out.println("Field>>\t" + field + "\n\tfeature>>" + feature);
                     if (feature == null) {
                         dumpMap();
@@ -179,11 +181,12 @@ public class Bean2EObjUtil {
             try {
                 Object bean = beanCls.newInstance();
                 Map<Field, Method[]> beanFieldMap = beanClassUtil.findFieldMap(beanCls);
-                if (beanFieldMap == null)
+                if (beanFieldMap == null) {
                     return null;
+                }
                 for (Field field : beanFieldMap.keySet()) {
                     try {
-                        EStructuralFeature feature = (EStructuralFeature) fieldMap.get(field);
+                        EStructuralFeature feature = fieldMap.get(field);
                         if (feature != null) {
                             Method setMethod = beanFieldMap.get(field)[1];
 

@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.talend.commons.CommonsPlugin;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
@@ -46,6 +47,7 @@ import org.talend.mdm.repository.model.mdmproperties.WorkspaceRootItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.actions.CopyUrlAction;
 import org.talend.mdm.repository.ui.actions.CreateFolderAction;
+import org.talend.mdm.repository.ui.actions.DebugDigestValueAction;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
 import org.talend.mdm.repository.ui.actions.DeployAnotherVersionAction;
 import org.talend.mdm.repository.ui.actions.DeployToAction;
@@ -71,6 +73,8 @@ import com.amalto.workbench.models.TreeObject;
  * 
  */
 public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActionProvider {
+
+    private static boolean enableDebug = CommonsPlugin.isDebugMode();
 
     public static AbstractRepositoryAction createFolderAction;
 
@@ -114,6 +118,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
 
     private AbstractRepositoryAction copyUrlAction;
 
+    protected AbstractRepositoryAction debugDigestValueAction;
+
     public void initCommonViewer(CommonViewer commonViewer) {
         importObjectAction = initRepositoryAction(new ImportObjectAction(), commonViewer);
 
@@ -130,6 +136,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         importServerObjectAction = initRepositoryAction(new ImportServerObjectAction(), commonViewer);
         mdmEditPropertyAction = initRepositoryAction(new MDMEditPropertyAction(), commonViewer);
         openVersionAction = initRepositoryAction(new MDMOpenExistVersionProcessAction(), commonViewer);
+        // for debug digestValue
+        debugDigestValueAction = initRepositoryAction(new DebugDigestValueAction(), commonViewer);
         //
         if (hasValidateService()) {
             validateAction = initRepositoryAction(new ValidateAction(), commonViewer);
@@ -154,7 +162,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     }
 
     private boolean hasValidateService() {
-        IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(IModelValidationService.class);
+        IModelValidationService service = (IModelValidationService) GlobalServiceRegister.getDefault().getService(
+                IModelValidationService.class);
         return service != null;
 
     }
@@ -205,7 +214,11 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
                 actions.add(importObjectAction);
             }
         }
-
+        if (enableDebug) {
+            // for debug digestValue
+            addAction(actions, debugDigestValueAction, viewObj);
+        }
+        //
         actions.add(refreshAction);
         actions.add(exportObjectAction);
         // action provider

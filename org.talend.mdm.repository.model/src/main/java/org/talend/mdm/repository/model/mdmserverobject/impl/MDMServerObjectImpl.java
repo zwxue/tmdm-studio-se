@@ -127,6 +127,26 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected int type = TYPE_EDEFAULT;
 
     /**
+     * The default value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTimestamp()
+     * @generated
+     * @ordered
+     */
+    protected static final long TIMESTAMP_EDEFAULT = 0L;
+
+    /**
+     * The cached value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTimestamp()
+     * @generated
+     * @ordered
+     */
+    protected long timestamp = TIMESTAMP_EDEFAULT;
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -268,6 +288,27 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setTimestamp(long newTimestamp) {
+        long oldTimestamp = timestamp;
+        timestamp = newTimestamp;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP, oldTimestamp, timestamp));
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * 
      * @generated NOT
@@ -306,6 +347,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return getLastServerDef();
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 return getType();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
+                return getTimestamp();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -331,6 +374,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 setType((Integer)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
+                setTimestamp((Long)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -358,6 +404,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 setType(TYPE_EDEFAULT);
                 return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
+                setTimestamp(TIMESTAMP_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -379,6 +428,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return lastServerDef != null;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TYPE:
                 return type != TYPE_EDEFAULT;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
+                return timestamp != TIMESTAMP_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
@@ -401,6 +452,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         result.append(system);
         result.append(", type: ");
         result.append(type);
+        result.append(", timestamp: ");
+        result.append(timestamp);
         result.append(')');
         return result.toString();
     }

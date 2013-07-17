@@ -116,13 +116,22 @@ public interface MdmserverobjectPackage extends EPackage {
     int MDM_SERVER_OBJECT__TYPE = 4;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MDM_SERVER_OBJECT__TIMESTAMP = 5;
+
+    /**
      * The number of structural features of the '<em>MDM Server Object</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int MDM_SERVER_OBJECT_FEATURE_COUNT = 5;
+    int MDM_SERVER_OBJECT_FEATURE_COUNT = 6;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
@@ -178,6 +187,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_MENU_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MENU_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Menu Entries</b></em>' containment reference list.
@@ -363,6 +381,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROLE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROLE_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The feature id for the '<em><b>Specification</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -526,6 +553,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_VIEW_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_VIEW_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Searchable Business Elements</b></em>' attribute list.
@@ -766,6 +802,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_DATA_MODEL_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_MODEL_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The feature id for the '<em><b>Xsd Schema</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -839,6 +884,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_DATA_CLUSTER_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_DATA_CLUSTER_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The feature id for the '<em><b>Vocabulary</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -910,6 +964,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_STORED_PROCEDURE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_STORED_PROCEDURE_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Procedure</b></em>' attribute.
@@ -992,6 +1055,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_UNIVERSE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_UNIVERSE_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Default Items Revision ID</b></em>' attribute.
@@ -1157,6 +1229,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_SYNCHRONIZATION_PLAN_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SYNCHRONIZATION_PLAN_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Remote System Name</b></em>' attribute.
@@ -1515,6 +1596,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_WORKFLOW_DEPLOY_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_DEPLOY_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The feature id for the '<em><b>Filename</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1586,6 +1676,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_TRANSFORMER_V2E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_TRANSFORMER_V2E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Process Steps</b></em>' containment reference list.
@@ -1854,6 +1953,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_ROUTING_RULE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_ROUTING_RULE_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The feature id for the '<em><b>Synchronous</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2064,6 +2172,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_JOB_MODEL_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_JOB_MODEL_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The number of structural features of the '<em>WS Job Model E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2128,6 +2245,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_EVENT_MANAGER_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_EVENT_MANAGER_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The number of structural features of the '<em>WS Event Manager E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2190,6 +2316,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_SERVICE_CONFIGURATION_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_SERVICE_CONFIGURATION_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Service Put Configurations</b></em>' containment reference list.
@@ -2302,6 +2437,15 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_WORKFLOW_E__TYPE = MDM_SERVER_OBJECT__TYPE;
 
     /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_WORKFLOW_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
      * The feature id for the '<em><b>File Content</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2373,6 +2517,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_RESOURCE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_RESOURCE_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>File Extension</b></em>' attribute.
@@ -2464,6 +2617,15 @@ public interface MdmserverobjectPackage extends EPackage {
      * @ordered
      */
     int WS_CUSTOM_FORM_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_CUSTOM_FORM_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
 
     /**
      * The feature id for the '<em><b>Filename</b></em>' attribute.
@@ -2583,6 +2745,17 @@ public interface MdmserverobjectPackage extends EPackage {
      * @generated
      */
     EAttribute getMDMServerObject_Type();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getTimestamp <em>Timestamp</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Timestamp</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getTimestamp()
+     * @see #getMDMServerObject()
+     * @generated
+     */
+    EAttribute getMDMServerObject_Timestamp();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMenuE <em>WS Menu E</em>}'.
@@ -4158,6 +4331,14 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute MDM_SERVER_OBJECT__TYPE = eINSTANCE.getMDMServerObject_Type();
+
+        /**
+         * The meta object literal for the '<em><b>Timestamp</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MDM_SERVER_OBJECT__TIMESTAMP = eINSTANCE.getMDMServerObject_Timestamp();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMenuEImpl <em>WS Menu E</em>}' class.
