@@ -34,7 +34,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
@@ -56,6 +59,7 @@ import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -358,13 +362,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     PerspectiveAdapter perspectiveListener = new PerspectiveAdapter() {
 
-        private String lastPerspectiveId;
-
-        @Override
-        public void perspectiveDeactivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
-            lastPerspectiveId = perspective.getId();
-        }
-
         @Override
         public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective) {
             currentPerspective = perspective;
@@ -376,10 +373,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             }
 
             if (MDMPerspective.PERPECTIVE_ID.equals(perspective.getId())) {
-                if (lastPerspectiveId != null && lastPerspectiveId.equals("org.bonitasoft.studio.perspective.process")) { //$NON-NLS-1$
-                    lastPerspectiveId = null;
-                    RepositoryWorkflowUtil.updateWorkflowLockState();
-                }
                 getCommonViewer().refresh();
             }
         }
@@ -404,25 +397,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
         public void partActivated(IWorkbenchPart part) {
             if (part instanceof IEditorPart) {
-                IEditorInput input = ((IEditorPart) part).getEditorInput();
-                if (input != null && input instanceof IRepositoryViewEditorInput) {
-
-                    IRepositoryViewEditorInput repositoryViewEditorInput = (IRepositoryViewEditorInput) input;
-                    final String id = repositoryViewEditorInput.getViewObject().getId();
-                    Display.getDefault().asyncExec(new Runnable() {
-
-                        public void run() {
-
-                            if (!getCommonViewer().getTree().isDisposed()) {
-                                final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
-                                if (viewObject != null) {
-                                    getCommonViewer().refresh(viewObject);
-                                }
-                            }
-                        }
-                    });
-
-                }
+                refreshOpenedViewObject((IEditorPart) part);
             }
         }
 
@@ -441,8 +416,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     }
 
                     if (item == null) {
-                        if (part instanceof IEditorPart && RepositoryWorkflowUtil.isWorkflowEditor((IEditorPart) part)) {
-                            IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(input);
+                        if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
+                            IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil
+                                    .getWorkflowViewObject((IEditorPart) part);
                             item = workflowViewObject.getProperty().getItem();
                         }
                     }
@@ -481,9 +457,78 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         public void partDeactivated(IWorkbenchPart part) {
         }
 
-        public void partOpened(IWorkbenchPart part) {
+        public void partOpened(final IWorkbenchPart part) {
+            if (part instanceof IEditorPart) {
+                if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
+                    UIJob job = new UIJob("") { //$NON-NLS-1$
+
+                        @Override
+                        public IStatus runInUIThread(IProgressMonitor monitor) {
+                            refreshLockState((IEditorPart) part);
+                            return Status.OK_STATUS;
+                        }
+                    };
+
+                    job.schedule(500);
+                }
+            }
         }
 
+        private void refreshLockState(IEditorPart workflowEditorPart) {
+            IRepositoryViewObject workflowViewObject = getWorkflowViewObject(workflowEditorPart);
+            if (workflowViewObject != null) {
+                lock(workflowViewObject);
+
+                refreshOpenedViewObject(workflowEditorPart);
+            }
+        }
+
+        private IRepositoryViewObject getWorkflowViewObject(IEditorPart workflowEditorPart) {
+            final int max = 5;
+            final long sleepTime = 200;
+
+            int count = 0;
+            IRepositoryViewObject workflowViewObject = null;
+            do {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (Exception e) {
+                }
+                workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(workflowEditorPart);
+            } while (workflowViewObject == null && count++ < max);
+
+            return workflowViewObject;
+        }
+
+        private void lock(IRepositoryViewObject workflowViewObject) {
+            try {
+                factory.lock(workflowViewObject);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        private void refreshOpenedViewObject(IEditorPart part) {
+            IEditorInput input = part.getEditorInput();
+            if (input != null && input instanceof IRepositoryViewEditorInput) {
+
+                IRepositoryViewEditorInput repositoryViewEditorInput = (IRepositoryViewEditorInput) input;
+                final String id = repositoryViewEditorInput.getViewObject().getId();
+                Display.getDefault().asyncExec(new Runnable() {
+
+                    public void run() {
+
+                        if (!getCommonViewer().getTree().isDisposed()) {
+                            final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
+                            if (viewObject != null) {
+                                getCommonViewer().refresh(viewObject);
+                            }
+                        }
+                    }
+                });
+
+            }
+        }
     };
 
     private DeployAllAction deployAll;
