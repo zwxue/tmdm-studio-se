@@ -12,18 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.utils;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.ui.URIEditorInput;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
-import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -71,26 +66,10 @@ public class RepositoryWorkflowUtil {
     public static IRepositoryViewObject getWorkflowViewObject(IEditorPart input) {
         String workflowName = getWorkflowProcessName(input);
 
-        return getWorkflowViewObject(workflowName);
-    }
+        IRepositoryViewObject workflowViewObject = RepositoryResourceUtil.findViewObjectByName(
+                IServerObjectRepositoryType.TYPE_WORKFLOW, workflowName);
 
-    public static IRepositoryViewObject getWorkflowViewObject(String workflowName) {
-        if (workflowName != null) {
-            IRepositoryViewObject[] categoryViewObjects = RepositoryResourceUtil.getCategoryViewObjects();
-            for (IRepositoryViewObject viewObj : categoryViewObjects) {
-                if (viewObj.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_WORKFLOW)) {
-                    List<IRepositoryViewObject> workflowObjs = viewObj.getChildren();
-
-                    for (IRepositoryViewObject workflowObj : workflowObjs) {
-                        if (workflowName.equals(getWorkflowObjectName(workflowObj))) {
-                            return workflowObj;
-                        }
-                    }
-                }
-            }
-        }
-
-        return null;
+        return workflowViewObject;
     }
 
     private static String getWorkflowProcessName(IEditorPart editorPart) {
@@ -110,31 +89,5 @@ public class RepositoryWorkflowUtil {
         }
 
         return fileName;
-    }
-
-    private static String getWorkflowObjectName(IRepositoryViewObject viewObj) {
-        if (viewObj == null || !viewObj.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_WORKFLOW)) {
-            return null;
-        }
-
-        String workflowName = null;
-
-        Item item = viewObj.getProperty().getItem();
-        if (item instanceof MDMServerObjectItem) {
-            MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-            if (serverObject != null) {
-                workflowName = serverObject.getName();
-            }
-        }
-
-        if (workflowName == null) {
-            workflowName = item.getProperty().getLabel();
-        }
-
-        if (workflowName != null) {
-            workflowName = workflowName.replace("$", "#"); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-
-        return workflowName;
     }
 }

@@ -34,10 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
@@ -59,7 +56,6 @@ import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.navigator.CommonNavigator;
-import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -459,45 +455,17 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
         public void partOpened(final IWorkbenchPart part) {
             if (part instanceof IEditorPart) {
-                if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
-                    UIJob job = new UIJob("") { //$NON-NLS-1$
-
-                        @Override
-                        public IStatus runInUIThread(IProgressMonitor monitor) {
-                            refreshLockState((IEditorPart) part);
-                            return Status.OK_STATUS;
-                        }
-                    };
-
-                    job.schedule(500);
-                }
+                refreshLockState((IEditorPart) part);
             }
         }
 
         private void refreshLockState(IEditorPart workflowEditorPart) {
-            IRepositoryViewObject workflowViewObject = getWorkflowViewObject(workflowEditorPart);
+            IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(workflowEditorPart);
             if (workflowViewObject != null) {
                 lock(workflowViewObject);
 
                 refreshOpenedViewObject(workflowEditorPart);
             }
-        }
-
-        private IRepositoryViewObject getWorkflowViewObject(IEditorPart workflowEditorPart) {
-            final int max = 5;
-            final long sleepTime = 200;
-
-            int count = 0;
-            IRepositoryViewObject workflowViewObject = null;
-            do {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (Exception e) {
-                }
-                workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(workflowEditorPart);
-            } while (workflowViewObject == null && count++ < max);
-
-            return workflowViewObject;
         }
 
         private void lock(IRepositoryViewObject workflowViewObject) {
