@@ -1,4 +1,4 @@
-//============================================================================
+// ============================================================================
 //
 // Copyright (C) 2006-2012 Talend Inc. - www.talend.com
 //
@@ -29,7 +29,7 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
  */
 public class MessagesE extends MessagesCoreE {
 
-    private static final String BUNDLE_NAME = "org.talend.mdm.repository.i18n.messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.talend.mdm.repository.ui.starting.messages"; //$NON-NLS-1$
 
     private static final String PLUGIN_ID = RepositoryPlugin.PLUGIN_ID;
 
