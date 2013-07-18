@@ -36,7 +36,6 @@ import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.preferences.JSSEConstants.KEYSTORE_TYPE;
 import com.amalto.workbench.preferences.JSSEConstants.SSL_Algorithm;
-import com.amalto.workbench.preferences.JSSEConstants.VERIFY_TYPE;
 import com.amalto.workbench.utils.SSLContextProvider;
 
 /**
@@ -68,14 +67,6 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
 
     public static String getDefaultAlgorithmType() {
         return SSL_ALGORITHMS[0];
-    }
-
-    private static String getMessageByField(String field) {
-        try {
-            return Messages.class.getField(field).get(null).toString();
-        } catch (Exception e) {
-            return field;
-        }
     }
 
     public synchronized void init(IWorkbench workbench) {
@@ -180,9 +171,9 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
         com.setLayout(new FillLayout());
         Button[] buttons = new Button[2];
         buttons[0] = new Button(com, SWT.RADIO);
-        buttons[0].setText(getMessageByField("verify_" + VERIFY_TYPE.ALLOW_ALL.name())); //$NON-NLS-1$
+        buttons[0].setText(Messages.verify_ALLOW_ALL);
         buttons[1] = new Button(com, SWT.RADIO);
-        buttons[1].setText(getMessageByField("verify_" + VERIFY_TYPE.STRICT.name())); //$NON-NLS-1$
+        buttons[1].setText(Messages.verify_STRICT);
         return buttons;
     }
 

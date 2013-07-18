@@ -23,6 +23,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -32,6 +33,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.apache.axis.utils.StringUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
@@ -65,6 +67,15 @@ public class SSLContextProvider {
             buildContext();
         }
         return context;
+    }
+
+    public static HostnameVerifier getHostnameVerifier() {
+        boolean verify = store.getBoolean(PreferenceConstants.VERIFY_HOSTNAME);
+        if (verify) {
+            return SSLSocketFactory.STRICT_HOSTNAME_VERIFIER;
+        } else {
+            return SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+        }
     }
 
     private static KeyManager[] buildKeyManagers() throws KeyStoreException, NoSuchAlgorithmException, CertificateException,

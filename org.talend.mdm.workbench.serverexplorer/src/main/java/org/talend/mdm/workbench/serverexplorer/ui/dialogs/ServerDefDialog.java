@@ -340,9 +340,7 @@ public class ServerDefDialog extends TitleAreaDialog {
             if (!validateInput()) {
                 return;
             }
-            boolean check = false;
 
-            // String msg = null;
             MDMServerDef tmpServerDef = MdmmetadataFactory.eINSTANCE.createMDMServerDef();
             updateUI2Model(tmpServerDef);
 

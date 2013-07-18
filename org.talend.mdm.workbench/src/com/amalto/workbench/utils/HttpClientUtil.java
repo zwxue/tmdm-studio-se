@@ -56,11 +56,8 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
-import org.eclipse.jface.preference.IPreferenceStore;
 
-import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.preferences.PreferenceConstants;
 
 /**
  * created by HHB on 2013-6-27 This tool class wrap DefaultHttpClient to provide some methods for other class,for
@@ -340,14 +337,7 @@ public class HttpClientUtil {
             throw new IllegalArgumentException();
         }
         SSLContext context = SSLContextProvider.getContext();
-        IPreferenceStore store = MDMWorbenchPlugin.getDefault().getPreferenceStore();
-        X509HostnameVerifier verifier;
-        boolean verify = store.getBoolean(PreferenceConstants.VERIFY_HOSTNAME);
-        if (verify) {
-            verifier = SSLSocketFactory.STRICT_HOSTNAME_VERIFIER;
-        } else {
-            verifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-        }
+        X509HostnameVerifier verifier = (X509HostnameVerifier) SSLContextProvider.getHostnameVerifier();
         SSLSocketFactory ssf = new SSLSocketFactory(context, verifier);
         ClientConnectionManager ccm = client.getConnectionManager();
         SchemeRegistry sr = ccm.getSchemeRegistry();

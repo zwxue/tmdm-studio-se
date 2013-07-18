@@ -169,6 +169,7 @@ import com.amalto.workbench.webservices.XtentisService;
 import com.amalto.workbench.webservices.XtentisService_Impl;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
+import com.sun.xml.rpc.client.dii.CallPropertyConstants;
 
 /**
  * @author bgrieder
@@ -366,11 +367,9 @@ public class Util {
 
         try {
 
-            // deactivate Certificate validation on all https connections by creating a non validating ssl socket
-            // factory
             SSLContext context = SSLContextProvider.getContext();
+            HttpsURLConnection.setDefaultHostnameVerifier(SSLContextProvider.getHostnameVerifier());
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-
             // prepare the Web Services Stub
             XtentisService service;
             Bundle bundle = Platform.getBundle(ENTERPRISE_ID);
@@ -382,6 +381,7 @@ public class Util {
             }
 
             Stub stub = (Stub) service.getXtentisPort();
+            stub._setProperty(CallPropertyConstants.HOSTNAME_VERIFICATION_PROPERTY, "true"); //$NON-NLS-1$
             stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, url.toString());
             if (username != null) {
                 if (universe != null) {
