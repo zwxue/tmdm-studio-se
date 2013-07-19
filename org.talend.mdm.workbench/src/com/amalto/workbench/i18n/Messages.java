@@ -3145,6 +3145,10 @@ public class Messages extends NLS {
 
     public static String httpclientError_url;
 
+    public static String noKeystoreFile_error;
+
+    public static String preferenceErrorTitle;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

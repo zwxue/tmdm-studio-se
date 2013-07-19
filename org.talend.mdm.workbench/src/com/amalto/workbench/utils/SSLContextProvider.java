@@ -37,6 +37,7 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
+import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.preferences.PreferenceConstants;
 
 /**
@@ -78,18 +79,19 @@ public class SSLContextProvider {
         }
     }
 
-    private static KeyManager[] buildKeyManagers() throws KeyStoreException, NoSuchAlgorithmException, CertificateException,
-            IOException, UnrecoverableKeyException {
+    private static KeyManager[] buildKeyManagers(String path, String storePass, String keytype) throws KeyStoreException,
+            NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableKeyException {
         InputStream stream = null;
         try {
-            String path = store.getString(PreferenceConstants.KEYSTORE_FILE);
-            if (StringUtils.isEmpty(path) || !new File(path).exists()) {
+            if (StringUtils.isEmpty(path)) {
                 return null;
             }
+            if (!new File(path).exists()) {
+                throw new KeyStoreException(Messages.bind(Messages.noKeystoreFile_error, path));
+            }
             stream = new FileInputStream(path);
-            String storePass = store.getString(PreferenceConstants.KEYSTORE_PASSWORD);
 
-            KeyStore tks = KeyStore.getInstance(store.getString(PreferenceConstants.KEYSTORE_TYPE));
+            KeyStore tks = KeyStore.getInstance(keytype);
             tks.load(stream, storePass.toCharArray());
 
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509"); //$NON-NLS-1$
@@ -101,18 +103,19 @@ public class SSLContextProvider {
         }
     }
 
-    private static TrustManager[] buildTrustManagers() throws KeyStoreException, NoSuchAlgorithmException, CertificateException,
-            IOException, UnrecoverableKeyException {
+    private static TrustManager[] buildTrustManagers(String path, String storePass, String trusttype) throws KeyStoreException,
+            NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableKeyException {
         InputStream stream = null;
         try {
-            String path = store.getString(PreferenceConstants.TRUSTSTORE_FILE);
-            if (StringUtils.isEmpty(path) || !new File(path).exists()) {
+            if (StringUtils.isEmpty(path)) {
                 return new TrustManager[] { TRUST_ALL };
             }
+            if (!new File(path).exists()) {
+                throw new KeyStoreException(Messages.bind(Messages.noKeystoreFile_error, path));
+            }
             stream = new FileInputStream(path);
-            String storePass = store.getString(PreferenceConstants.TRUSTSTORE_PASSWORD);
 
-            KeyStore tks = KeyStore.getInstance(store.getString(PreferenceConstants.TRUSTSTORE_TYPE));
+            KeyStore tks = KeyStore.getInstance(trusttype);
             tks.load(stream, storePass.toCharArray());
 
             TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509"); //$NON-NLS-1$
@@ -124,11 +127,22 @@ public class SSLContextProvider {
         }
     }
 
-    public synchronized static void buildContext() {
+    private synchronized static void buildContext() {
+        String algorithm = store.getString(PreferenceConstants.SSL_Algorithm);
+        String keypath = store.getString(PreferenceConstants.KEYSTORE_FILE);
+        String keypass = store.getString(PreferenceConstants.KEYSTORE_PASSWORD);
+        String keytype = store.getString(PreferenceConstants.KEYSTORE_TYPE);
+        String trustpath = store.getString(PreferenceConstants.TRUSTSTORE_FILE);
+        String trustpass = store.getString(PreferenceConstants.TRUSTSTORE_PASSWORD);
+        String trusttype = store.getString(PreferenceConstants.TRUSTSTORE_TYPE);
+        buildContext(algorithm, keypath, keypass, keytype, trustpath, trustpass, trusttype);
+    }
+
+    public synchronized static void buildContext(String algorithm, String keypath, String keypass, String keytype,
+            String trustpath, String trustpass, String trusttype) {
         try {
-            KeyManager[] kms = buildKeyManagers();
-            TrustManager[] tms = buildTrustManagers();
-            String algorithm = store.getString(PreferenceConstants.SSL_Algorithm);
+            KeyManager[] kms = buildKeyManagers(keypath, keypass, keytype);
+            TrustManager[] tms = buildTrustManagers(trustpath, trustpass, trusttype);
             SSLContext sslcontext = SSLContext.getInstance(algorithm);
             sslcontext.init(kms, tms, null);
             context = sslcontext;

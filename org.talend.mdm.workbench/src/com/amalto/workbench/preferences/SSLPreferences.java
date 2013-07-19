@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.preferences;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -269,15 +270,28 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
     @Override
     public boolean performOk() {
         IPreferenceStore store = getPreferenceStore();
-        store.setDefault(PreferenceConstants.SSL_Algorithm, sslAlgorithmCombo.getText());
-        store.setValue(PreferenceConstants.VERIFY_HOSTNAME, verificationType[1].getSelection());
-        store.setValue(PreferenceConstants.KEYSTORE_FILE, keyPath.getText());
-        store.setValue(PreferenceConstants.KEYSTORE_PASSWORD, keyPassword.getText());
-        store.setValue(PreferenceConstants.KEYSTORE_TYPE, keyType.getText());
-        store.setValue(PreferenceConstants.TRUSTSTORE_FILE, trustPath.getText());
-        store.setValue(PreferenceConstants.TRUSTSTORE_PASSWORD, trustPassword.getText());
-        store.setValue(PreferenceConstants.TRUSTSTORE_TYPE, trustType.getText());
-        SSLContextProvider.buildContext();
-        return super.performOk();
+        String algorithm = sslAlgorithmCombo.getText();
+        String keypath = keyPath.getText();
+        String keypass = keyPassword.getText();
+        String keytype = keyType.getText();
+        String trustpath = trustPath.getText();
+        String trustpass = trustPassword.getText();
+        String trusttype = trustType.getText();
+        try {
+            SSLContextProvider.buildContext(algorithm, keypath, keypass, keytype, trustpath, trustpass, trusttype);
+            store.setValue(PreferenceConstants.SSL_Algorithm, algorithm);
+            store.setValue(PreferenceConstants.VERIFY_HOSTNAME, verificationType[1].getSelection());
+            store.setValue(PreferenceConstants.KEYSTORE_FILE, keypath);
+            store.setValue(PreferenceConstants.KEYSTORE_PASSWORD, keypass);
+            store.setValue(PreferenceConstants.KEYSTORE_TYPE, keytype);
+            store.setValue(PreferenceConstants.TRUSTSTORE_FILE, trustpath);
+            store.setValue(PreferenceConstants.TRUSTSTORE_PASSWORD, trustpass);
+            store.setValue(PreferenceConstants.TRUSTSTORE_TYPE, trusttype);
+            return super.performOk();
+        } catch (Exception e) {
+            MessageDialog.openError(getShell(), Messages.preferenceErrorTitle, e.getMessage());
+            return false;
+        }
+
     }
 }
