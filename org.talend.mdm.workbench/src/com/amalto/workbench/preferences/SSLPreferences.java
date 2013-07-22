@@ -12,7 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.preferences;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -48,6 +49,8 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
     private static final String[] SSL_ALGORITHMS;
 
     private static final String[] KEYSTORE_TYPES;
+
+    private static Log log = LogFactory.getLog(SSLPreferences.class);
 
     static {
         SSL_Algorithm[] algorithms = SSL_Algorithm.values();
@@ -289,7 +292,8 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
             store.setValue(PreferenceConstants.TRUSTSTORE_TYPE, trusttype);
             return super.performOk();
         } catch (Exception e) {
-            MessageDialog.openError(getShell(), Messages.preferenceErrorTitle, e.getMessage());
+            setErrorMessage(e.getMessage());
+            log.error(e.getMessage(), e);
             return false;
         }
 

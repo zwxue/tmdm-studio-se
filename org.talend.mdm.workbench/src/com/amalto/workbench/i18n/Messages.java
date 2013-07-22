@@ -3147,8 +3147,6 @@ public class Messages extends NLS {
 
     public static String noKeystoreFile_error;
 
-    public static String preferenceErrorTitle;
-
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
