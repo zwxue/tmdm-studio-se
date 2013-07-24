@@ -17,12 +17,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
-import org.talend.core.model.properties.FolderItem;
-import org.talend.core.model.properties.FolderType;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.wizards.MdmPropertiesWizard;
 
@@ -74,21 +70,13 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
 
     @Override
     public boolean isVisible(IRepositoryViewObject viewObj) {
-        return getSelectedObject().size() == 1 && !isUnderSystemFolder(viewObj);
-    }
-
-    private boolean isUnderSystemFolder(IRepositoryViewObject viewObj) {
-        if (viewObj != null) {
-            Item parentItem = ContainerCacheService.getParent(viewObj).getProperty().getItem();
-            if (parentItem instanceof FolderItem) {
-                FolderItem citem = (FolderItem) parentItem;
-                FolderType type = citem.getType();
-                if (type.getValue() == FolderType.STABLE_SYSTEM_FOLDER) {
-                    return true;
-                }
+        if (getSelectedObject().size() == 1) {
+            String path = viewObj.getPath();
+            if (path != null && path.equalsIgnoreCase("system")) {//$NON-NLS-1$
+                return false;
             }
+            return true;
         }
-
         return false;
     }
 }

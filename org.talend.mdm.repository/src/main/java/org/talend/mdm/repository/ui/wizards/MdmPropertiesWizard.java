@@ -194,29 +194,28 @@ public class MdmPropertiesWizard extends PropertiesWizard {
                 if (newText.length() == 0) {
                     nameStatus = createStatus(IStatus.ERROR, Messages.Common_nameCanNotBeEmpty);
                 } else {
-                    ERepositoryObjectType objectType = object.getRepositoryObjectType();
-                    if (objectType.equals(IServerObjectRepositoryType.TYPE_VIEW)
-                            || objectType.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
-                        if (!ValidateUtil.matchViewProcessRegex(newText)) {
-                            errorMsg = Messages.Common_nameInvalid;
-                        }
-                    } else if (objectType.equals(IServerObjectRepositoryType.TYPE_CUSTOM_FORM)) {
-                        if (!ValidateUtil.matchCustomFormRegex(newText)) {
-                            errorMsg = Messages.Common_nameInvalid;
-                        }
-                        errorMsg = Messages.Common_nameInvalid;
-                    } else if (objectType.equals(IServerObjectRepositoryType.TYPE_ROLE)) {
-                        if (!ValidateUtil.matchRoleRegex(newText)) {
-                            errorMsg = Messages.Common_nameInvalid;
-                        }
-                    } else {
-                        if (!ValidateUtil.matchCommonRegex(newText)) {
-                            errorMsg = Messages.Common_nameInvalid;
-                        }
-                    }
-                    //
                     if (!isValid(newText)) {
                         errorMsg = Messages.Common_nameIsUsed;
+                    } else {
+                        ERepositoryObjectType objectType = object.getRepositoryObjectType();
+                        if (objectType.equals(IServerObjectRepositoryType.TYPE_VIEW)
+                                || objectType.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
+                            if (!ValidateUtil.matchViewProcessRegex(newText)) {
+                                errorMsg = Messages.Common_nameInvalid;
+                            }
+                        } else if (objectType.equals(IServerObjectRepositoryType.TYPE_CUSTOM_FORM)) {
+                            if (!ValidateUtil.matchCustomFormRegex(newText)) {
+                                errorMsg = Messages.Common_nameInvalid;
+                            }
+                        } else if (objectType.equals(IServerObjectRepositoryType.TYPE_ROLE)) {
+                            if (!ValidateUtil.matchRoleRegex(newText)) {
+                                errorMsg = Messages.Common_nameInvalid;
+                            }
+                        } else {
+                            if (!ValidateUtil.matchCommonRegex(newText)) {
+                                errorMsg = Messages.Common_nameInvalid;
+                            }
+                        }
                     }
 
                     if (errorMsg != null) {
