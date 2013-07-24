@@ -12,7 +12,10 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards;
 
+import java.util.Date;
+
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -30,12 +33,14 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryObject;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.ui.wizards.PropertiesWizard;
 import org.talend.repository.ui.wizards.PropertiesWizardPage;
@@ -174,6 +179,62 @@ public class MdmPropertiesWizard extends PropertiesWizard {
             }
 
             @Override
+            protected void evaluateTextField() {
+                if (isReadOnly()) {
+                    return;
+                }
+                if (nameText == null || nameText.isDisposed()) {
+                    return;
+                }
+
+                //
+                String errorMsg = null;
+
+                String newText = nameText.getText();
+                if (newText.length() == 0) {
+                    nameStatus = createStatus(IStatus.ERROR, Messages.Common_nameCanNotBeEmpty);
+                } else {
+                    ERepositoryObjectType objectType = object.getRepositoryObjectType();
+                    if (objectType.equals(IServerObjectRepositoryType.TYPE_VIEW)
+                            || objectType.equals(IServerObjectRepositoryType.TYPE_TRANSFORMERV2)) {
+                        if (!ValidateUtil.matchViewProcessRegex(newText)) {
+                            errorMsg = Messages.Common_nameInvalid;
+                        }
+                    } else if (objectType.equals(IServerObjectRepositoryType.TYPE_CUSTOM_FORM)) {
+                        if (!ValidateUtil.matchCustomFormRegex(newText)) {
+                            errorMsg = Messages.Common_nameInvalid;
+                        }
+                        errorMsg = Messages.Common_nameInvalid;
+                    } else if (objectType.equals(IServerObjectRepositoryType.TYPE_ROLE)) {
+                        if (!ValidateUtil.matchRoleRegex(newText)) {
+                            errorMsg = Messages.Common_nameInvalid;
+                        }
+                    } else {
+                        if (!ValidateUtil.matchCommonRegex(newText)) {
+                            errorMsg = Messages.Common_nameInvalid;
+                        }
+                    }
+                    //
+                    if (!isValid(newText)) {
+                        errorMsg = Messages.Common_nameIsUsed;
+                    }
+
+                    if (errorMsg != null) {
+                        nameStatus = createStatus(IStatus.ERROR, errorMsg);
+                    } else {
+                        nameStatus = createOkStatus();
+                    }
+                }
+
+                if (property != null && nameStatus.getSeverity() == IStatus.OK) {
+                    property.setLabel(getPropertyLabel(newText.trim().isEmpty() ? null : newText.trim()));
+                    property.setDisplayName(newText.trim().isEmpty() ? null : newText.trim());
+                    property.setModificationDate(new Date());
+                }
+                updatePageStatus();
+            }
+
+            @Override
             public ERepositoryObjectType getRepositoryObjectType() {
                 return object.getRepositoryObjectType();
             }
@@ -198,8 +259,9 @@ public class MdmPropertiesWizard extends PropertiesWizard {
         final Text nameText = new Text(container, SWT.BORDER);
         nameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         nameText.setEditable(!isReadOnly());
-        if (item.getResource().getImageCatalog() != null)
+        if (item.getResource().getImageCatalog() != null) {
             nameText.setText(item.getResource().getImageCatalog());
+        }
         return nameText;
     }
 }
