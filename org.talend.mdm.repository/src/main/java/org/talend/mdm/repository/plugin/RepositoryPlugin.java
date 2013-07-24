@@ -6,7 +6,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.impl.jobmodel.JobResourceListener;
-import org.talend.mdm.repository.core.impl.jobmodel.WorkflowChangeListener;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -20,8 +19,6 @@ public class RepositoryPlugin extends AbstractUIPlugin {
     private static RepositoryPlugin plugin;
 
     PropertyChangeListener jobListener = new JobResourceListener();
-
-    PropertyChangeListener workflowCreateListener = new WorkflowChangeListener();
 
     /**
      * The constructor
@@ -43,16 +40,11 @@ public class RepositoryPlugin extends AbstractUIPlugin {
 
     public void startupJobListener() {
         ProxyRepositoryFactory.getInstance().addPropertyChangeListener(jobListener);
-        ProxyRepositoryFactory.getInstance().addPropertyChangeListener(workflowCreateListener);
     }
 
     public void stopJobListener() {
         if (jobListener != null) {
             ProxyRepositoryFactory.getInstance().removePropertyChangeListener(jobListener);
-        }
-
-        if (workflowCreateListener != null) {
-            ProxyRepositoryFactory.getInstance().removePropertyChangeListener(workflowCreateListener);
         }
     }
 

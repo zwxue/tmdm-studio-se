@@ -393,7 +393,15 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
         public void partActivated(IWorkbenchPart part) {
             if (part instanceof IEditorPart) {
-                refreshOpenedViewObject((IEditorPart) part);
+                IEditorInput input = ((IEditorPart) part).getEditorInput();
+                if (input != null && input instanceof IRepositoryViewEditorInput) {
+
+                    IRepositoryViewEditorInput repositoryViewEditorInput = (IRepositoryViewEditorInput) input;
+                    final String id = repositoryViewEditorInput.getViewObject().getId();
+                    final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
+
+                    refreshViewObject(viewObject);
+                }
             }
         }
 
@@ -455,7 +463,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
         public void partOpened(final IWorkbenchPart part) {
             if (part instanceof IEditorPart) {
-                refreshLockState((IEditorPart) part);
+                if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
+                    refreshLockState((IEditorPart) part);
+                }
             }
         }
 
@@ -464,38 +474,29 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (workflowViewObject != null) {
                 lock(workflowViewObject);
 
-                refreshOpenedViewObject(workflowEditorPart);
+                refreshViewObject(workflowViewObject);
             }
         }
 
         private void lock(IRepositoryViewObject workflowViewObject) {
             try {
-                factory.lock(workflowViewObject);
+                factory.isEditableAndLockIfPossible(workflowViewObject);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
 
-        private void refreshOpenedViewObject(IEditorPart part) {
-            IEditorInput input = part.getEditorInput();
-            if (input != null && input instanceof IRepositoryViewEditorInput) {
+        private void refreshViewObject(final IRepositoryViewObject viewObject) {
+            Display.getDefault().asyncExec(new Runnable() {
 
-                IRepositoryViewEditorInput repositoryViewEditorInput = (IRepositoryViewEditorInput) input;
-                final String id = repositoryViewEditorInput.getViewObject().getId();
-                Display.getDefault().asyncExec(new Runnable() {
-
-                    public void run() {
-
-                        if (!getCommonViewer().getTree().isDisposed()) {
-                            final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
-                            if (viewObject != null) {
-                                getCommonViewer().refresh(viewObject);
-                            }
+                public void run() {
+                    if (!getCommonViewer().getTree().isDisposed()) {
+                        if (viewObject != null) {
+                            getCommonViewer().refresh(viewObject);
                         }
                     }
-                });
-
-            }
+                }
+            });
         }
     };
 
