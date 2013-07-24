@@ -43,11 +43,12 @@ import org.talend.mdm.repository.ui.actions.job.GenerateJobTriggerAction;
 import org.talend.mdm.repository.ui.actions.job.OpenExistVersionProcessAction;
 import org.talend.mdm.repository.ui.actions.job.ReadProcessAction;
 import org.talend.mdm.repository.ui.actions.job.RunProcessAction;
+import org.talend.mdm.repository.ui.actions.job.UndeployAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapter {
 
@@ -71,6 +72,8 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction editPropAction;
 
+    AbstractRepositoryAction undeployAction;
+
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
@@ -85,6 +88,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         generateTriggerAction = new GenerateJobTriggerAction();
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         editPropAction = new EditJobPropertiesAction();
+        undeployAction = new UndeployAction();
         //
         renameFolderAction.initCommonViewer(commonViewer);
         createProcessAction.initCommonViewer(commonViewer);
@@ -96,6 +100,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         generateTransformerAction.initCommonViewer(commonViewer);
         generateTriggerAction.initCommonViewer(commonViewer);
         editPropAction.initCommonViewer(commonViewer);
+        undeployAction.initCommonViewer(commonViewer);
 
     }
 
@@ -132,9 +137,11 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             actions.add(generateTransformerAction);
             actions.add(generateTriggerAction);
             // deploy
+
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
+            actions.add(undeployAction);
         }
         actions.add(deployAllAction);
         return actions;

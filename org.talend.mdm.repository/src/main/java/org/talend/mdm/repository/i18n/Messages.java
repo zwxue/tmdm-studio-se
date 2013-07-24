@@ -782,6 +782,8 @@ public class Messages extends NLS {
 
     public static String ViewLabelProvider_WebfilterNodeName;
 
+    public static String UndeployAction;
+
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
