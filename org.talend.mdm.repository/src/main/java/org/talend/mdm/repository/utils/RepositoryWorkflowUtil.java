@@ -13,8 +13,7 @@
 package org.talend.mdm.repository.utils;
 
 import org.apache.log4j.Logger;
-import org.eclipse.emf.common.ui.URIEditorInput;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -63,31 +62,16 @@ public class RepositoryWorkflowUtil {
         return false;
     }
 
-    public static IRepositoryViewObject getWorkflowViewObject(IEditorPart input) {
-        String workflowName = getWorkflowProcessName(input);
+    public static IRepositoryViewObject getWorkflowViewObject(IEditorPart part) {
+        if (isWorkflowEditorFromBPM(part)) {
+            IFileEditorInput fileInput = (IFileEditorInput) part.getEditorInput();
+            IFile file = fileInput.getFile();
+            IRepositoryViewObject workflowViewObject = RepositoryResourceUtil.findViewObjectByReferenceResource(
+                    IServerObjectRepositoryType.TYPE_WORKFLOW, file);
 
-        IRepositoryViewObject workflowViewObject = RepositoryResourceUtil.findViewObjectByName(
-                IServerObjectRepositoryType.TYPE_WORKFLOW, workflowName);
-
-        return workflowViewObject;
-    }
-
-    private static String getWorkflowProcessName(IEditorPart editorPart) {
-        IEditorInput editorInput = editorPart.getEditorInput();
-        String fileName = null;
-        if (editorInput instanceof IFileEditorInput) {
-            IFileEditorInput wfInput = (IFileEditorInput) editorInput;
-            fileName = wfInput.getFile().getName();
-        } else if (editorInput instanceof URIEditorInput) {
-            URIEditorInput wfInput = (URIEditorInput) editorInput;
-            String[] segments = wfInput.getURI().segments();
-            fileName = segments[segments.length - 1];
+            return workflowViewObject;
         }
 
-        if (fileName != null) {
-            fileName = fileName.substring(0, fileName.lastIndexOf("_")); //$NON-NLS-1$
-        }
-
-        return fileName;
+        return null;
     }
 }

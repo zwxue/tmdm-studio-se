@@ -1005,7 +1005,7 @@ public class RepositoryResourceUtil {
                     if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM(ref.getEditor(false))) {
                         IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(ref
                                 .getEditor(false));
-                        if (viewObj != null && viewObj.equals(workflowViewObject)) {
+                        if (isIdEquals(viewObj, workflowViewObject)) {
                             return ref;
                         }
                     }
@@ -1015,6 +1015,14 @@ public class RepositoryResourceUtil {
             }
         }
         return null;
+    }
+
+    private static boolean isIdEquals(IRepositoryViewObject objA, IRepositoryViewObject objB) {
+        if (objA != null && objB != null && objA.getId().equals(objB.getId())) {
+            return true;
+        }
+
+        return false;
     }
 
     public static void closeEditor(IEditorReference ref, boolean save) {
