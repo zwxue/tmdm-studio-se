@@ -33,7 +33,6 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
-import org.talend.mdm.repository.ui.actions.UndeployAction;
 import org.talend.mdm.repository.ui.actions.bridge.DeleteAction;
 import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
 import org.talend.mdm.repository.ui.actions.job.CreateProcessAction;
@@ -72,8 +71,6 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
 
     AbstractRepositoryAction editPropAction;
 
-    AbstractRepositoryAction undeployAction;
-
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
@@ -88,7 +85,6 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
         generateTriggerAction = new GenerateJobTriggerAction();
         refreshAction = globalActionHandler.getGlobalAction(IRepositoryViewGlobalActionHandler.REFRESH);
         editPropAction = new EditJobPropertiesAction();
-        undeployAction = new UndeployAction();
         //
         renameFolderAction.initCommonViewer(commonViewer);
         createProcessAction.initCommonViewer(commonViewer);
@@ -141,7 +137,7 @@ public class TISProcessActionProvider extends RepositoryNodeActionProviderAdapte
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
-            actions.add(undeployAction);
+            addAction(actions, undeployAction, viewObj);
         }
         actions.add(deployAllAction);
         return actions;

@@ -90,6 +90,7 @@ public class TransformerV2ActionProvider extends RepositoryNodeActionProviderAda
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
+            addAction(actions, undeployAction, viewObj);
         }
         actions.add(deployAllAction);
         return actions;

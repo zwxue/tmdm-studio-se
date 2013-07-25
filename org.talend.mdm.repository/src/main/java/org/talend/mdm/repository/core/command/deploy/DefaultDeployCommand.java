@@ -53,7 +53,11 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
             } catch (OperationCanceledException e) {
                 return DeployStatus.getInfoStatus(this, Messages.bind(Messages.Deploy_cancel_text, typeLabel, objectName));
             } catch (RemoteException e) {
-                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, (Exception) e.getCause());
+                Exception ex = (Exception) e.getCause();
+                if (null == ex) {
+                    ex = e;
+                }
+                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, ex);
             } catch (XtentisException e) {
                 return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, e);
             } catch (RuntimeException e) {

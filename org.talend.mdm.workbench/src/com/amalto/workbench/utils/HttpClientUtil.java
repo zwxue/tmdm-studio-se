@@ -319,7 +319,10 @@ public class HttpClientUtil {
         DefaultHttpClient client = wrapAuthClient(URL, username, password);
         String errMessage = Messages.Util_25 + "%s" + Messages.Util_26 + "%s"; //$NON-NLS-1$//$NON-NLS-2$
         String content = getTextContent(client, request, errMessage);
-        if (null != content && content.contains("upload")) {//$NON-NLS-1$
+        if (null == content) {
+            throw new XtentisException("no response content"); //$NON-NLS-1$
+        }
+        if (content.contains("upload")) {//$NON-NLS-1$
             String returnValue = content.substring(content.indexOf("upload"), content.indexOf("}") - 1);//$NON-NLS-1$//$NON-NLS-2$
             if (picturePathMap != null) {
                 File file = new File(localFilename);
@@ -328,7 +331,7 @@ public class HttpClientUtil {
             }
             return returnValue;
         } else {
-            throw new XtentisException("no response content"); //$NON-NLS-1$
+            return ""; //$NON-NLS-1$
         }
     }
 

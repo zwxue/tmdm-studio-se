@@ -74,6 +74,18 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
         return GROUP_DEPLOY;
     }
 
+    @Override
+    public boolean isVisible(IRepositoryViewObject viewObj) {
+        if (getSelectedObject().size() == 1) {
+            String path = viewObj.getPath();
+            if (path != null && path.equalsIgnoreCase("system")) {//$NON-NLS-1$
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     /*
      * (non-Javadoc)
      * 

@@ -60,6 +60,7 @@ import org.talend.mdm.repository.ui.actions.MDMEditPropertyAction;
 import org.talend.mdm.repository.ui.actions.MDMOpenExistVersionProcessAction;
 import org.talend.mdm.repository.ui.actions.RemoveFromRepositoryAction;
 import org.talend.mdm.repository.ui.actions.RenameObjectAction;
+import org.talend.mdm.repository.ui.actions.UndeployAction;
 import org.talend.mdm.repository.ui.actions.ValidateAction;
 import org.talend.mdm.repository.ui.actions.process.MDMEventManagerAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
@@ -91,6 +92,8 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     protected static AbstractRepositoryAction deployAnotherToAction;
 
     protected static AbstractRepositoryAction deployToLastServerAction;
+
+    protected static AbstractRepositoryAction undeployAction;
 
     protected static AbstractRepositoryAction deployAllAction;
 
@@ -131,6 +134,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
         deployToAction = initRepositoryAction(new DeployToAction(), commonViewer);
         deployAnotherToAction = initRepositoryAction(new DeployAnotherVersionAction(), commonViewer);
         deployToLastServerAction = initRepositoryAction(new DeployToLastServerAction(), commonViewer);
+        undeployAction = initRepositoryAction(new UndeployAction(), commonViewer);
         deployAllAction = initRepositoryAction(new DeployAllAction(false), commonViewer);
         emAction = initRepositoryAction(new MDMEventManagerAction(), commonViewer);
         importServerObjectAction = initRepositoryAction(new ImportServerObjectAction(), commonViewer);

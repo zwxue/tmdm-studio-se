@@ -2,7 +2,7 @@
 //
 // Talend Community Edition
 //
-// Copyright (C) 2006-2012 Talend ¨C www.talend.com
+// Copyright (C) 2006-2012 Talend ï¿½C www.talend.com
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -63,6 +63,7 @@ public class MenuActionProvider extends RepositoryNodeActionProviderAdapter {
             actions.add(deployToAction);
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
+            addAction(actions, undeployAction, viewObj);
         }
         actions.add(deployAllAction);
         return actions;
