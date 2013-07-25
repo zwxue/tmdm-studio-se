@@ -10,8 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.actions.job;
+package org.talend.mdm.repository.ui.actions;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CommandStack;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -82,33 +84,40 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
         DeployService deployService = DeployService.getInstance();
         CommandManager cmanager = CommandManager.getInstance();
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-
+        if (viewObjs.size() < 1) {
+            return;
+        }
         SelectServerDefDialog dialog = getServerDefDialog(viewObjs);
 
         if (dialog.open() == IDialogConstants.OK_ID) {
+            MDMServerDef serverDef = dialog.getSelectedServerDef();
+            List<AbstractDeployCommand> deleteCommands = new ArrayList<AbstractDeployCommand>(viewObjs.size());
             for (IRepositoryViewObject obj : viewObjs) {
-                cmanager.pushCommand(ICommand.CMD_NOP, obj);
+                ICommand deleteCmd = cmanager.getNewCommand(ICommand.CMD_DELETE);
+                deleteCmd.init(obj);
+                deleteCommands.add((AbstractDeployCommand) deleteCmd);
             }
-            IStatus status = deployService.deploy(dialog.getSelectedServerDef(), viewObjs, ICommand.CMD_DELETE);
+            IStatus status = deployService.runCommands(deleteCommands, serverDef);
             IProgressMonitor monitor = new NullProgressMonitor();
             deployService.updateChangedStatus(status);
             if (status.isMultiStatus()) {
                 new DeployStatusDialog(getShell(), status).open();
             }
-            deployService.updateLastServer(status, monitor);
             for (IRepositoryViewObject viewObj : viewObjs) {
+                MDMServerDef lastServerDef = RepositoryResourceUtil.getLastServerDef(viewObj);
                 String id = viewObj.getId();
                 CommandStack stack = cmanager.findCommandStack(id);
                 if (stack != null) {
-                    List<ICommand> commands = stack.getCommands(ICommand.PHASE_RESTORE);
-                    for (ICommand cmd : commands) {
-                        cmd.updateViewObject(viewObj);
-                        cmd.execute(null, monitor);
+                    if (isSameMDMServerDef(lastServerDef, serverDef)) {
+                        List<ICommand> commands = stack.getCommands(ICommand.PHASE_RESTORE);
+                        for (ICommand cmd : commands) {
+                            cmd.execute(null, monitor);
+                        }
                     }
                     cmanager.removeCommandStack(id, ICommand.PHASE_RESTORE);
+                    commonViewer.refresh(viewObj);
                 }
             }
-            refreshDeployedViewObjects(viewObjs);
         } else {
             return;
         }
@@ -125,12 +134,6 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
         return viewObjs;
     }
 
-    private void refreshDeployedViewObjects(List<IRepositoryViewObject> viewObjs) {
-        for (IRepositoryViewObject viewObj : viewObjs) {
-            commonViewer.refresh(viewObj);
-        }
-    }
-
     private SelectServerDefDialog getServerDefDialog(List<IRepositoryViewObject> viewObjs) {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
         MDMServerDef defServer = null;
@@ -143,7 +146,6 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
                 break;
             }
         }
-
         dialog.create();
         dialog.setSelectServer(defServer);
         return dialog;
@@ -159,7 +161,6 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
                 return true;
             }
         }
-
         return false;
     }
 }

@@ -33,6 +33,7 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
+import org.talend.mdm.repository.ui.actions.UndeployAction;
 import org.talend.mdm.repository.ui.actions.bridge.DeleteAction;
 import org.talend.mdm.repository.ui.actions.bridge.RenameFolderAction;
 import org.talend.mdm.repository.ui.actions.job.CreateProcessAction;
@@ -43,7 +44,6 @@ import org.talend.mdm.repository.ui.actions.job.GenerateJobTriggerAction;
 import org.talend.mdm.repository.ui.actions.job.OpenExistVersionProcessAction;
 import org.talend.mdm.repository.ui.actions.job.ReadProcessAction;
 import org.talend.mdm.repository.ui.actions.job.RunProcessAction;
-import org.talend.mdm.repository.ui.actions.job.UndeployAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 /**
