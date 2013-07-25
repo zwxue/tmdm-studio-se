@@ -193,7 +193,7 @@ public class RepositoryResourceUtil {
             property.setAuthor(context.getUser());
             property.setLabel(propLabel);
             //
-            factory.create(item, new Path(item.getState().getPath()), true);
+            factory.create(item, new Path(item.getState().getPath()));
             //
             IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
             if (configuration != null) {
