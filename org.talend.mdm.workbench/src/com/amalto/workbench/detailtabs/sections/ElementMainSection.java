@@ -45,6 +45,13 @@ public class ElementMainSection extends CommitBarListenerSection<XSDParticle> {
         compElementInfoCfg.setXSDParticle(curXSDParticle);
     }
 
+
+    @Override
+    public void refresh() {
+        super.refresh();
+        updateSectionEnabled();
+    }
+    
     @Override
     protected ISubmittable getSubmittedObj() {
         elementWrapper = new ElementWrapper(curXSDParticle, compElementInfoCfg.getElementName(),
@@ -74,7 +81,7 @@ public class ElementMainSection extends CommitBarListenerSection<XSDParticle> {
 
         compSectionClient.setLayout(new GridLayout());
 
-        compElementInfoCfg = new ElementInfoConfigComposite(compSectionClient, SWT.NONE,this,curXSDParticle);
+        compElementInfoCfg = new ElementInfoConfigComposite(compSectionClient, SWT.NONE, this, curXSDParticle);
         GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
         compElementInfoCfg.setLayoutData(data);
 
