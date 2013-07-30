@@ -59,19 +59,6 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
     @Override
     public IStatus doAction() {
         try {
-
-            // add by ymli. fix the bug:0010293
-            if (page.isDirty()) {
-                // MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
-                        Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName()));
-                if (save) {
-                    IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
-                } else {
-                    return Status.CANCEL_STATUS;
-                }
-            }
             IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
             XSDComponent xSDCom = null;
             if (selection.getFirstElement() instanceof Element) {
