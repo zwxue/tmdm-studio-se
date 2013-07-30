@@ -695,6 +695,17 @@
          </command>
       </menuContribution>
    </extension>
+   <extension
+         point="org.talend.core.runtime.demoProjects_provider">
+      <demoProvider
+            descHtml="resources/demoprojects/mdm_ce_demos.html"
+            description="MDM CE Demos Project"
+            id="org.talend.demo.project.mdmce"
+            name="MDM_CE_DEMOS"
+            order="40"
+            projectUrl="resources/demoprojects/MDM_CE_DEMOS/">
+      </demoProvider>
+   </extension>
       
    
 </plugin>
