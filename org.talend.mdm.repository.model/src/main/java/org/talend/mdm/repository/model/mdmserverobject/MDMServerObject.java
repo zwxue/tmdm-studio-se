@@ -23,6 +23,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getLastServerDef <em>Last Server Def</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getType <em>Type</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getTimestamp <em>Timestamp</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getDigestValue <em>Digest Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -186,6 +187,32 @@ public interface MDMServerObject extends EObject {
      * @generated
      */
     void setTimestamp(long value);
+
+    /**
+     * Returns the value of the '<em><b>Digest Value</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Digest Value</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Digest Value</em>' attribute.
+     * @see #setDigestValue(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getMDMServerObject_DigestValue()
+     * @model transient="true"
+     * @generated
+     */
+    String getDigestValue();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getDigestValue <em>Digest Value</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Digest Value</em>' attribute.
+     * @see #getDigestValue()
+     * @generated
+     */
+    void setDigestValue(String value);
 
     /**
      * <!-- begin-user-doc -->

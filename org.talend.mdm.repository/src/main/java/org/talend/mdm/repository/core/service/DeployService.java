@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,6 +45,7 @@ import org.talend.mdm.repository.core.command.common.UpdateLastServerCommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.command.deploy.DeployCompoundCommand;
 import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
+import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyCheckResult;
 import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -52,6 +54,8 @@ import org.talend.mdm.repository.ui.dialogs.deploy.DeployStatusDialog;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+
+import com.amalto.workbench.utils.XtentisException;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -78,7 +82,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         *
+         * 
          * @param severity
          * @param pluginId
          * @param message
@@ -161,14 +165,22 @@ public class DeployService {
         }
         List<IRepositoryViewObject> validObjects = validateResult.getValidObjects(selectedButton);
         List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
+        // consistency check
+        ConsistencyCheckResult consistencyCheckResult = checkConsistency(serverDef, validObjects);
+        if (consistencyCheckResult == null || consistencyCheckResult.isCanceled()) {
+            return Status.CANCEL_STATUS;
+        } else {
+            validObjects = consistencyCheckResult.getToDeployObjects();
+        }
         CommandManager manager = CommandManager.getInstance();
         List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
         IStatus mainStatus = runCommands(commands, serverDef);
-        generateCancelDeployStatus(mainStatus, invalidObjects);
+        generateValidationFailedDeployStatus(mainStatus, invalidObjects);
+        generateConsistencyCancelDeployStatus(mainStatus, consistencyCheckResult.getToSkipObjects());
         return mainStatus;
     }
 
-    public void generateCancelDeployStatus(IStatus mainStatus, List<IRepositoryViewObject> cancelViewObjs) {
+    public void generateValidationFailedDeployStatus(IStatus mainStatus, List<IRepositoryViewObject> cancelViewObjs) {
         for (IRepositoryViewObject viewObj : cancelViewObjs) {
             ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
             cancelCmd.updateViewObject(viewObj);
@@ -177,6 +189,27 @@ public class DeployService {
             ((MultiStatus) mainStatus).add(cancelStatus);
         }
 
+    }
+
+    public void generateConsistencyCancelDeployStatus(IStatus mainStatus, List<IRepositoryViewObject> cancelViewObjs) {
+        for (IRepositoryViewObject viewObj : cancelViewObjs) {
+            ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
+            cancelCmd.updateViewObject(viewObj);
+            DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd, Messages.DeployService_conflictCancelStatus + viewObj.getLabel());
+            ((MultiStatus) mainStatus).add(cancelStatus);
+        }
+
+    }
+
+    public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) {
+        try {
+            return ConsistencyService.getInstance().checkConsistency(serverDef, viewObjs);
+        } catch (RemoteException e) {
+            log.error(e.getMessage(), e);
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     public IModelValidateResult validateModel(List<IRepositoryViewObject> viewObjs) {

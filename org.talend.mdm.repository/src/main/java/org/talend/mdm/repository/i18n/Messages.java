@@ -154,6 +154,8 @@ public class Messages extends NLS {
 
     public static String DeployAllLinkAction_authorityMessage;
 
+    public static String DeployService_conflictCancelStatus;
+
     public static String DeployService_processTitle;
 
     public static String DeployStatusDialog_dataModelWarning;
@@ -387,6 +389,50 @@ public class Messages extends NLS {
     public static String Confirm_Overwrite;
 
     public static String Confirm_Overwrite_Info;
+
+    public static String ConfirmConflictMessageDialog_dialogMessage;
+
+    public static String ConfirmConflictMessageDialog_rememberChoice;
+
+    public static String ConfirmConflictMessageDialog_showConflicts;
+
+    public static String ConsistencyConflict_conflictStrategy;
+
+    public static String ConsistencyConflict_defaultStrategyLabel;
+
+    public static String ConsistencyConflict_overrideStrategyLabel;
+
+    public static String ConsistencyConflict_overwrite;
+
+    public static String ConsistencyConflict_skip;
+
+    public static String ConsistencyConflict_skipStrategyLabel;
+
+    public static String ConsistencyConflictDialog_compareResult;
+
+    public static String ConsistencyConflictDialog_Deploy;
+
+    public static String ConsistencyConflictDialog_dialogMessage;
+
+    public static String ConsistencyConflictDialog_Different;
+
+    public static String ConsistencyConflictDialog_localTimestamp;
+
+    public static String ConsistencyConflictDialog_name;
+
+    public static String ConsistencyConflictDialog_notExist;
+
+    public static String ConsistencyConflictDialog_Operation;
+
+    public static String ConsistencyConflictDialog_ovewriteAll;
+
+    public static String ConsistencyConflictDialog_Same;
+
+    public static String ConsistencyConflictDialog_serverTimestamp;
+
+    public static String ConsistencyConflictDialog_skipSame;
+
+    public static String ConsistencyConflictPreferencePage_warnUserWhenHasConflict;
 
     public static String NewCustomFormDialog_selectEntity;
 
@@ -783,6 +829,9 @@ public class Messages extends NLS {
     public static String ViewLabelProvider_WebfilterNodeName;
 
     public static String UndeployAction;
+    public static String ConsistencyConflictDialog_btnNewButton_text;
+    public static String ConsistencyConflictDialog_btnCheckButton_text;
+    public static String ConsistencyConflictDialog_btnCheckButton_text_1;
 
     // //////////////////////////////////////////////////////////////////////////
     //

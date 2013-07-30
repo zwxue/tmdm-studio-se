@@ -147,6 +147,26 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected long timestamp = TIMESTAMP_EDEFAULT;
 
     /**
+     * The default value of the '{@link #getDigestValue() <em>Digest Value</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getDigestValue()
+     * @generated
+     * @ordered
+     */
+    protected static final String DIGEST_VALUE_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getDigestValue() <em>Digest Value</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getDigestValue()
+     * @generated
+     * @ordered
+     */
+    protected String digestValue = DIGEST_VALUE_EDEFAULT;
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -309,6 +329,27 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getDigestValue() {
+        return digestValue;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setDigestValue(String newDigestValue) {
+        String oldDigestValue = digestValue;
+        digestValue = newDigestValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE, oldDigestValue, digestValue));
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * 
      * @generated NOT
@@ -349,6 +390,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return getType();
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
                 return getTimestamp();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
+                return getDigestValue();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -377,6 +420,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
                 setTimestamp((Long)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
+                setDigestValue((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -407,6 +453,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
                 setTimestamp(TIMESTAMP_EDEFAULT);
                 return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
+                setDigestValue(DIGEST_VALUE_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -430,6 +479,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return type != TYPE_EDEFAULT;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__TIMESTAMP:
                 return timestamp != TIMESTAMP_EDEFAULT;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
+                return DIGEST_VALUE_EDEFAULT == null ? digestValue != null : !DIGEST_VALUE_EDEFAULT.equals(digestValue);
         }
         return super.eIsSet(featureID);
     }
@@ -454,6 +505,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         result.append(type);
         result.append(", timestamp: ");
         result.append(timestamp);
+        result.append(", digestValue: ");
+        result.append(digestValue);
         result.append(')');
         return result.toString();
     }

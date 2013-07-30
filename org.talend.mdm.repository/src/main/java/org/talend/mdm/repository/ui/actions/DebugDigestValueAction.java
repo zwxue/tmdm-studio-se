@@ -17,20 +17,19 @@ import java.util.List;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
-import org.talend.mdm.repository.utils.EMFClassUtil;
+import org.talend.mdm.repository.core.service.ConsistencyService;
 
 /**
- * created by HHB on 2013-7-15 
- * Just used for test DigestValueAction , only actved in debug mode
+ * created by HHB on 2013-7-15 Just used for test DigestValueAction , only actved in debug mode
  * 
  */
 public class DebugDigestValueAction extends AbstractRepositoryAction {
 
-    EMFClassUtil util;
+    ConsistencyService service;
 
     public DebugDigestValueAction() {
         super("Debug digestValue"); //$NON-NLS-1$
-        util = EMFClassUtil.getInstance();
+        service = ConsistencyService.getInstance();
     }
 
     /*
@@ -49,7 +48,7 @@ public class DebugDigestValueAction extends AbstractRepositoryAction {
         if (!selectedObject.isEmpty()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) selectedObject.get(0);
             Item item = viewObj.getProperty().getItem();
-            String digestValue = util.caculateDigestValue(item);
+            String digestValue = service.getDigestValue(item);
             System.out.println("DigestValue:(" + item.getProperty().getLabel() + ") = " + digestValue); //$NON-NLS-1$ //$NON-NLS-2$
         }
 

@@ -12,20 +12,24 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.preferences;
 
-public class PreferenceConstants {
+public interface PreferenceConstants {
 
     // auto deploy
-    public static final String P_AUTO_DEPLOY = "autoDeploy"; //$NON-NLS-1$
+    String P_AUTO_DEPLOY = "autoDeploy"; //$NON-NLS-1$
 
-    public static final String P_WARN_USER_AUTO_DEPLOY = "warnUserBeforeAutoDeploy"; //$NON-NLS-1$
+    String P_WARN_USER_AUTO_DEPLOY = "warnUserBeforeAutoDeploy"; //$NON-NLS-1$
 
     // switch perspective
-    public static final String P_AUTO_SWITCH_TO_DI = "autoSwitchToDI"; //$NON-NLS-1$
+    String P_AUTO_SWITCH_TO_DI = "autoSwitchToDI"; //$NON-NLS-1$
 
-    public static final String P_AUTO_SWITCH_TO_BONITA = "autoSwitchToBonita"; //$NON-NLS-1$
+    String P_AUTO_SWITCH_TO_BONITA = "autoSwitchToBonita"; //$NON-NLS-1$
 
-    public static final String P_NOT_ASK_AUTO_SWITCH_TO_DI = "notAskAutoSwitchToDI"; //$NON-NLS-1$
+    String P_NOT_ASK_AUTO_SWITCH_TO_DI = "notAskAutoSwitchToDI"; //$NON-NLS-1$
 
-    public static final String P_NOT_ASK_AUTO_SWITCH_TO_BONITA = "notAskAutoSwitchToBonita"; //$NON-NLS-1$
+    String P_NOT_ASK_AUTO_SWITCH_TO_BONITA = "notAskAutoSwitchToBonita"; //$NON-NLS-1$
 
+    // Consistency Conflict
+    String P_WARN_USER_HAS_CONFLICT = "warnUserWhenHasConflict"; //$NON-NLS-1$
+
+    String P_CONFLICT_STRATEGY = "conflictStrategy"; //$NON-NLS-1$
 }

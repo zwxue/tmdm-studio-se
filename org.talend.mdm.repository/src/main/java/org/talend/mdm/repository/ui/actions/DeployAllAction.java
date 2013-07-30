@@ -21,6 +21,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyCheckResult;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
@@ -84,7 +85,17 @@ public class DeployAllAction extends AbstractDeployAction {
                 }
                 List<IRepositoryViewObject> validObjects = validateResult.getValidObjects(selectedButton);
                 List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
+                //
+                MDMServerDef serverDef = dialog.getServerDef();
+                // consistency check
+                ConsistencyCheckResult consistencyCheckResult = deployService.checkConsistency(serverDef, validObjects);
+                if (consistencyCheckResult == null || consistencyCheckResult.isCanceled()) {
+                    return;
+                } else {
+                    validObjects = consistencyCheckResult.getToDeployObjects();
+                }
                 deployService.removeInvalidCommands(invalidObjects, selectededCommands);
+                deployService.removeInvalidCommands(consistencyCheckResult.getToSkipObjects(), selectededCommands);
                 // save editors
                 LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
                         Messages.AbstractDeployAction_promptToSaveEditors, validObjects);
@@ -93,11 +104,10 @@ public class DeployAllAction extends AbstractDeployAction {
                 }
                 lockDirtyDialog.saveDirtyObjects();
 
-                MDMServerDef serverDef = dialog.getServerDef();
-
                 IStatus status = deployService.runCommands(selectededCommands, serverDef);
                 // add canceled object to status
-                deployService.generateCancelDeployStatus(status, invalidObjects);
+                deployService.generateValidationFailedDeployStatus(status, invalidObjects);
+                deployService.generateConsistencyCancelDeployStatus(status, consistencyCheckResult.getToSkipObjects());
                 //
                 updateChangedStatus(status);
                 if (status.isMultiStatus()) {

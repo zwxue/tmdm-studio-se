@@ -458,6 +458,15 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getMDMServerObject_DigestValue() {
+        return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(6);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getWSMenuE() {
         return wsMenuEEClass;
     }
@@ -1748,6 +1757,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEReference(mdmServerObjectEClass, MDM_SERVER_OBJECT__LAST_SERVER_DEF);
         createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__TYPE);
         createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__TIMESTAMP);
+        createEAttribute(mdmServerObjectEClass, MDM_SERVER_OBJECT__DIGEST_VALUE);
 
         wsMenuEEClass = createEClass(WS_MENU_E);
         createEReference(wsMenuEEClass, WS_MENU_E__MENU_ENTRIES);
@@ -1984,6 +1994,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEReference(getMDMServerObject_LastServerDef(), theMdmmetadataPackage.getMDMServerDef(), null, "lastServerDef", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerObject_Type(), ecorePackage.getEInt(), "type", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getMDMServerObject_Timestamp(), ecorePackage.getELong(), "timestamp", null, 0, 1, MDMServerObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getMDMServerObject_DigestValue(), ecorePackage.getEString(), "digestValue", null, 0, 1, MDMServerObject.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         addEOperation(mdmServerObjectEClass, ecorePackage.getEString(), "getUniqueName", 0, 1, IS_UNIQUE, IS_ORDERED);
 

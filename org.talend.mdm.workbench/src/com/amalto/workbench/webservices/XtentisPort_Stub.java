@@ -14081,4 +14081,13 @@ public class XtentisPort_Stub
                                         };
     
     private static final QName[] understoodHeaderNames = new QName[] {  };
+
+    /* (non-Javadoc)
+     * @see com.amalto.workbench.webservices.XtentisPort#getDigest(com.amalto.workbench.webservices.WSDigestValueKey)
+     */
+    public WSDigestValueTimeStamp getDigest(WSDigestValueKey key) throws RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
