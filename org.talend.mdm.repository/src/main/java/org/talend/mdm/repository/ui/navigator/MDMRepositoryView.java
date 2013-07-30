@@ -423,7 +423,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                         if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
                             IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil
                                     .getWorkflowViewObject((IEditorPart) part);
-                            item = workflowViewObject.getProperty().getItem();
+                            if (workflowViewObject != null) {
+                                item = workflowViewObject.getProperty().getItem();
+                            }
                         }
                     }
 
