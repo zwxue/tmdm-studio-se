@@ -1874,6 +1874,8 @@ public class Util {
         EObject parent = null;
         EObject obj = component;
         do {
+        	if(null == obj)
+        		return false;
             parent = obj.eContainer();
             obj = parent;
         } while (!(parent instanceof XSDSchema));
@@ -3242,6 +3244,8 @@ public class Util {
 
     public static boolean isUUID(XSDElementDeclaration decl) {
         XSDTypeDefinition typeDefinition = decl.getTypeDefinition();
+        if(null == typeDefinition)
+        	return false;
         String type = typeDefinition.getName();
         if (type == null) {
             type = typeDefinition.getBaseType().getName();
