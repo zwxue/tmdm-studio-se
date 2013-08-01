@@ -85,9 +85,6 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
     @Override
     public IStatus doAction() {
-        String originalXpath = getOriginalXpath();
-        System.out.println(originalXpath);
-
         if (!init()) {
             return Status.CANCEL_STATUS;
         }
