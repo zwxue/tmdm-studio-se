@@ -164,7 +164,7 @@ public class FilteredCheckboxTree extends Composite {
     }
 
     public FilteredCheckboxTree(Composite parent, int treeStyle) {
-        this(parent, SWT.NONE, new PatternFilter());
+        this(parent, treeStyle, new PatternFilter());
     }
 
     /**
@@ -601,7 +601,7 @@ public class FilteredCheckboxTree extends Composite {
         // narrowingDown = previousFilterText==null || getFilterString().startsWith(previousFilterText);
         previousFilterText = getFilterString();
         // cancel currently running job first, to prevent unnecessary redraw
-        if(refreshJob != null) {
+        if (refreshJob != null) {
             refreshJob.cancel();
             refreshJob.schedule(200);
         }
@@ -1211,8 +1211,7 @@ public class FilteredCheckboxTree extends Composite {
 
             // Otherwise check if any of the words of the text matches
             String[] words = text.split("\\W");//$NON-NLS-1$
-            for (int i = 0; i < words.length; i++) {
-                String word = words[i];
+            for (String word : words) {
                 if (match(word)) {
                     return true;
                 }

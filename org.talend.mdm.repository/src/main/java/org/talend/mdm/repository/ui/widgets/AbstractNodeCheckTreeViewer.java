@@ -129,7 +129,7 @@ public abstract class AbstractNodeCheckTreeViewer {
     }
 
     public void addCheckStateListener(ICheckStateListener listener) {
-        ((CheckboxTreeViewer) filteredCheckboxTree.getViewer()).addCheckStateListener(listener);
+        filteredCheckboxTree.getViewer().addCheckStateListener(listener);
     }
 
     public SashForm createContents(Composite parent) {
@@ -224,7 +224,7 @@ public abstract class AbstractNodeCheckTreeViewer {
      * 
      * @param itemComposite
      */
-    private void createSelectionButton(Composite itemComposite) {
+    protected Composite createSelectionButton(Composite itemComposite) {
         Composite buttonComposite = new Composite(itemComposite, SWT.NONE);
         GridLayoutFactory.swtDefaults().margins(0, 25).applyTo(buttonComposite);
         GridDataFactory.swtDefaults().align(SWT.FILL, SWT.BEGINNING).applyTo(buttonComposite);
@@ -279,6 +279,7 @@ public abstract class AbstractNodeCheckTreeViewer {
             }
         });
         // setButtonLayoutData(collapseBtn);
+        return buttonComposite;
     }
 
     protected abstract void createTreeViewer(Composite itemComposite);
@@ -312,8 +313,9 @@ public abstract class AbstractNodeCheckTreeViewer {
         }
 
         if (!isOverWrite) {
-            if (isExist(node))
+            if (isExist(node)) {
                 return false;
+            }
         }
         return true;
     }
@@ -328,8 +330,9 @@ public abstract class AbstractNodeCheckTreeViewer {
             return false;
         }
         List<IRepositoryViewObject> children = RepositoryResourceUtil.findAllViewObjectsWithDeleted(rType);
-        if (children == null)
+        if (children == null) {
             return false;
+        }
         String treeObjName = treeObj.getName();
         if (type == TreeObject.PICTURES_RESOURCE) {
             int index = treeObjName.indexOf("-"); //$NON-NLS-1$
@@ -359,8 +362,9 @@ public abstract class AbstractNodeCheckTreeViewer {
     }
 
     public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
-        if (theInput == null || type == null)
+        if (theInput == null || type == null) {
             return null;
+        }
         for (IRepositoryViewObject viewObj : theInput) {
             if (viewObj.getRepositoryObjectType().equals(type)) {
                 return viewObj;
@@ -436,7 +440,7 @@ public abstract class AbstractNodeCheckTreeViewer {
     }
 
     public void removeCheckStateListener(ICheckStateListener listener) {
-        ((CheckboxTreeViewer) filteredCheckboxTree.getViewer()).removeCheckStateListener(listener);
+        filteredCheckboxTree.getViewer().removeCheckStateListener(listener);
     }
 
     public void setCheckItems(List<TreeObject> list) {

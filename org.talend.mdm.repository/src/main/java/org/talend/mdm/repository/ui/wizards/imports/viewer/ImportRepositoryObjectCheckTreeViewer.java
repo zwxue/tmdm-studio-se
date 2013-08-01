@@ -13,6 +13,8 @@
 package org.talend.mdm.repository.ui.wizards.imports.viewer;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -80,9 +82,31 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
                     public Object[] getChildren(Object parentElement) {
                         if (parentElement instanceof IContainerNode) {
-                            return ((IContainerNode) parentElement).getChildren().toArray();
+                            List children = ((IContainerNode) parentElement).getChildren();
+                            sortInputItems(children);
+                            return children.toArray();
                         }
                         return null;
+                    }
+
+                    private void sortInputItems(List typeNodes) {
+                        Collections.sort(typeNodes, new Comparator() {
+
+                            public int compare(Object o1, Object o2) {
+
+                                if (o1 instanceof IContainerNode && o2 instanceof IContainerNode) {
+                                    String name1 = ((IContainerNode) o1).getLabel();
+                                    String name2 = ((IContainerNode) o2).getLabel();
+                                    return name1.compareTo(name2);
+                                } else if (o1 instanceof ItemRecord && o2 instanceof ItemRecord) {
+                                    String name1 = ((ItemRecord) o1).getLabel();
+                                    String name2 = ((ItemRecord) o2).getLabel();
+                                    return name1.compareTo(name2);
+                                }
+                                return 0;
+                            }
+
+                        });
                     }
 
                     public Object[] getElements(Object inputElement) {

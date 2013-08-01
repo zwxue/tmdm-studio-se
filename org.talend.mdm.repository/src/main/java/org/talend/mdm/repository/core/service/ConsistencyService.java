@@ -50,6 +50,7 @@ import org.talend.core.model.properties.ByteArray;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.ReferenceFileItem;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -61,9 +62,11 @@ import org.talend.mdm.repository.ui.dialogs.consistency.ConsistencyConflictDialo
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.DigestUtil;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDigestValueKey;
 import com.amalto.workbench.webservices.WSDigestValueTimeStamp;
+import com.amalto.workbench.webservices.WSLong;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -77,6 +80,13 @@ public class ConsistencyService {
     public static final int CONFLICT_STRATEGY_OVERWRITE = 1;
 
     public static final int CONFLICT_STRATEGY_SKIP_DIFFERENCE = 2;
+
+    public enum CompareResultEnum {
+        NOT_EXIST_IN_SERVER,
+        NOT_EXIST_IN_LOCAL,
+        DIFFERENT,
+        SAME
+    }
 
     public static class ConsistencyCheckResult {
 
@@ -348,7 +358,7 @@ public class ConsistencyService {
         return new ConsistencyCheckResult(toDeployObjs, toSkipObjs);
     }
 
-    public String getDigestValue(Item item) {
+    public String calculateDigestValue(Item item) {
         DigestCalStrategyEnum strategy = getDigetValueCaculateStrategy(item);
         switch (strategy) {
         case OBJ_RESOURCE:
@@ -448,31 +458,69 @@ public class ConsistencyService {
         return total;
     }
 
-    public Map<IRepositoryViewObject, WSDigestValueTimeStamp> queryServerDigestValue(MDMServerDef serverDef,
-            Collection<IRepositoryViewObject> viewObjIl) throws XtentisException, RemoteException {
-        Map<IRepositoryViewObject, WSDigestValueTimeStamp> result = new LinkedHashMap<IRepositoryViewObject, WSDigestValueTimeStamp>();
+    public void updateDigestValue(MDMServerDef serverDef, IRepositoryViewObject viewObj) throws XtentisException {
+        XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+        updateLocalDigestValue(viewObj);
+        Item item = viewObj.getProperty().getItem();
+        // value
+        WSDigestValueTimeStamp value = new WSDigestValueTimeStamp(getLocalDigestValue(item), 0L);
+        // key
+        String type = viewObj.getRepositoryObjectType().getKey();
+        String objectName = viewObj.getLabel();
+        WSDigestValueKey key = new WSDigestValueKey(type, objectName);
+        WSLong timeValue = port.updateDigest(key, value);
+        //
+        if (timeValue != null) {
+            updateLocalTimestamp(item, timeValue.getValue());
+        }
+    }
+
+    public <T> Map<T, WSDigestValueTimeStamp> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs)
+            throws XtentisException, RemoteException {
+        Map<T, WSDigestValueTimeStamp> result = new LinkedHashMap<T, WSDigestValueTimeStamp>();
         XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
         // TODO remove it
         // int i = 0;
-        for (IRepositoryViewObject viewObj : viewObjIl) {
-            String type = viewObj.getRepositoryObjectType().getKey();
-            String objectName = viewObj.getLabel();
+        for (T obj : objs) {
+            String type = null;
+            String objectName = null;
+            if (obj instanceof IRepositoryViewObject) {
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+
+                type = viewObj.getRepositoryObjectType().getKey();
+                objectName = viewObj.getLabel();
+            } else if (obj instanceof TreeObject) {
+                TreeObject treeObj = (TreeObject) obj;
+
+                ERepositoryObjectType repositoryObjectType = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
+                if (type != null) {
+                    type = repositoryObjectType.getKey();
+                    objectName = treeObj.getDisplayName();
+                }
+            }
+
             // TODO uncomment the following
-            WSDigestValueTimeStamp digest = port.getDigest(new WSDigestValueKey(type, objectName));
+            if (type != null && objectName != null) {
+                WSDigestValueTimeStamp digest = port.getDigest(new WSDigestValueKey(type, objectName));
+                result.put(obj, digest);
+            }
             // construct demo data
             // WSDigestValueTimeStamp digest = null;
             // if (i == 0) {
             // digest = new WSDigestValueTimeStamp("not same value", System.currentTimeMillis());
             // } else if (i == 1) {
+            // if (obj instanceof IRepositoryViewObject) {
+            // IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
             // Item item = viewObj.getProperty().getItem();
-            // digest = new WSDigestValueTimeStamp(getDigestValue(item), System.currentTimeMillis() - 100000);
+            // digest = new WSDigestValueTimeStamp(calculateDigestValue(item), System.currentTimeMillis() - 100000);
+            // }
             // } else if (i == 3) {
             // digest = null;
             // i = -1;
             // }
             // i++;
             //
-            result.put(viewObj, digest);
+            // result.put(obj, digest);
 
         }
         return result;
@@ -488,10 +536,19 @@ public class ConsistencyService {
 
     public void updateLocalDigestValue(Iterable<IRepositoryViewObject> it) {
         for (IRepositoryViewObject viewObj : it) {
-            Item item = viewObj.getProperty().getItem();
-            String digestValue = getDigestValue(item);
-            updateLocalDigestValue(item, digestValue);
+            updateLocalDigestValue(viewObj);
         }
+    }
+
+    /**
+     * caculate and update local digest value
+     * 
+     * @param viewObj
+     */
+    public void updateLocalDigestValue(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
+        String digestValue = calculateDigestValue(item);
+        updateLocalDigestValue(item, digestValue);
     }
 
     private void updateLocalTimestamp(Item item, long timestamp) {

@@ -653,4 +653,6 @@ public interface XtentisPort extends java.rmi.Remote {
     // Manual add
     public com.amalto.workbench.webservices.WSDigestValueTimeStamp getDigest(WSDigestValueKey key)
             throws java.rmi.RemoteException;
+
+    public com.amalto.workbench.webservices.WSLong updateDigest(WSDigestValueKey key, WSDigestValueTimeStamp value);
 }

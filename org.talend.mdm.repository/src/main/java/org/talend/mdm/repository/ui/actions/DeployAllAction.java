@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -33,10 +34,14 @@ import org.talend.mdm.repository.ui.dialogs.deploy.DeployAllDialog;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 
+import com.amalto.workbench.utils.XtentisException;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public class DeployAllAction extends AbstractDeployAction {
+
+    private static Logger log = Logger.getLogger(DeployAllAction.class);
 
     private final boolean isDeployAll;
 
@@ -105,6 +110,12 @@ public class DeployAllAction extends AbstractDeployAction {
                 lockDirtyDialog.saveDirtyObjects();
 
                 IStatus status = deployService.runCommands(selectededCommands, serverDef);
+                // update consistency value
+                try {
+                    deployService.updateServerConsistencyStatus(serverDef, status);
+                } catch (XtentisException e) {
+                    log.error(e.getMessage(), e);
+                }
                 // add canceled object to status
                 deployService.generateValidationFailedDeployStatus(status, invalidObjects);
                 deployService.generateConsistencyCancelDeployStatus(status, consistencyCheckResult.getToSkipObjects());

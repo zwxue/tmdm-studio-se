@@ -15,6 +15,7 @@ package org.talend.mdm.repository.core.service;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -175,9 +176,59 @@ public class DeployService {
         CommandManager manager = CommandManager.getInstance();
         List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
         IStatus mainStatus = runCommands(commands, serverDef);
+        // update consistency value
+        try {
+            updateServerConsistencyStatus(serverDef, mainStatus);
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        //
         generateValidationFailedDeployStatus(mainStatus, invalidObjects);
         generateConsistencyCancelDeployStatus(mainStatus, consistencyCheckResult.getToSkipObjects());
         return mainStatus;
+    }
+
+    public void updateServerConsistencyStatus(MDMServerDef serverDef, IStatus mainStatus) throws XtentisException {
+        if (mainStatus.isMultiStatus()) {
+            Set<IRepositoryViewObject> viewObjs = new HashSet<IRepositoryViewObject>();
+            for (IStatus childStatus : mainStatus.getChildren()) {
+                DeployStatus deployStatus = null;
+                if (childStatus instanceof DeployStatus) {
+                    deployStatus = (DeployStatus) childStatus;
+                    if (deployStatus.isOK()) {
+                        AbstractDeployCommand command = (AbstractDeployCommand) deployStatus.getCommand();
+                        if (command instanceof BatchDeployJobCommand) {
+                            for (ICommand subCmd : ((BatchDeployJobCommand) command).getSubCmds()) {
+                                if (subCmd instanceof AbstractDeployCommand) {
+                                    IRepositoryViewObject viewObj = ((AbstractDeployCommand) subCmd).getViewObject();
+                                    if (viewObj != null) {
+                                        viewObjs.add(viewObj);
+                                    }
+                                }
+                            }
+                        } else {
+                            IRepositoryViewObject viewObj = command.getViewObject();
+                            if (viewObj != null) {
+                                viewObjs.add(viewObj);
+                            }
+                        }
+
+                    }
+                } else if (childStatus instanceof MultiStatus) {
+                    updateServerConsistencyStatus(serverDef, childStatus);
+                }
+
+            }
+            updateServerConsistencyStatus(serverDef, viewObjs);
+        }
+    }
+
+    private void updateServerConsistencyStatus(MDMServerDef serverDef, Collection<IRepositoryViewObject> viewObjs)
+            throws XtentisException {
+        ConsistencyService consistencyService = ConsistencyService.getInstance();
+        for (IRepositoryViewObject viewObj : viewObjs) {
+            consistencyService.updateDigestValue(serverDef, viewObj);
+        }
     }
 
     public void generateValidationFailedDeployStatus(IStatus mainStatus, List<IRepositoryViewObject> cancelViewObjs) {
@@ -195,7 +246,8 @@ public class DeployService {
         for (IRepositoryViewObject viewObj : cancelViewObjs) {
             ICommand cancelCmd = CommandManager.getInstance().getNewCommand(ICommand.CMD_NOP);
             cancelCmd.updateViewObject(viewObj);
-            DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd, Messages.DeployService_conflictCancelStatus + viewObj.getLabel());
+            DeployStatus cancelStatus = DeployStatus.getInfoStatus(cancelCmd, Messages.DeployService_conflictCancelStatus
+                    + viewObj.getLabel());
             ((MultiStatus) mainStatus).add(cancelStatus);
         }
 

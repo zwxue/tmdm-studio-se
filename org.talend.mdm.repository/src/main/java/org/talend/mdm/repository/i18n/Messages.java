@@ -408,17 +408,21 @@ public class Messages extends NLS {
 
     public static String ConsistencyConflict_skipStrategyLabel;
 
-    public static String ConsistencyConflictDialog_compareResult;
+    public static String ConsistencyConflict_compareResult;
 
     public static String ConsistencyConflictDialog_Deploy;
 
     public static String ConsistencyConflictDialog_dialogMessage;
 
-    public static String ConsistencyConflictDialog_Different;
+    public static String ConsistencyConflict_Different;
 
-    public static String ConsistencyConflictDialog_localTimestamp;
+    public static String ConsistencyConflict_localTimestamp;
 
-    public static String ConsistencyConflictDialog_name;
+    public static String ConsistencyConflict_name;
+
+    public static String ConsistencyConflict_noDataInServer;
+
+    public static String ConsistencyConflict_notExistInLocal;
 
     public static String ConsistencyConflictDialog_notExist;
 
@@ -426,11 +430,11 @@ public class Messages extends NLS {
 
     public static String ConsistencyConflictDialog_ovewriteAll;
 
-    public static String ConsistencyConflictDialog_Same;
+    public static String ConsistencyConflict_Same;
 
-    public static String ConsistencyConflictDialog_serverTimestamp;
+    public static String ConsistencyConflict_serverTimestamp;
 
-    public static String ConsistencyConflictDialog_skipSame;
+    public static String ConsistencyConflict_skipSame;
 
     public static String ConsistencyConflictPreferencePage_warnUserWhenHasConflict;
 
@@ -830,8 +834,8 @@ public class Messages extends NLS {
 
     public static String UndeployAction;
     public static String ConsistencyConflictDialog_btnNewButton_text;
-    public static String ConsistencyConflictDialog_btnCheckButton_text;
-    public static String ConsistencyConflictDialog_btnCheckButton_text_1;
+    public static String ConsistencyConflict_showTimeStampColumn;
+    public static String ConsistencyConflictDialog_onlyShowConflictObjs;
 
     // //////////////////////////////////////////////////////////////////////////
     //

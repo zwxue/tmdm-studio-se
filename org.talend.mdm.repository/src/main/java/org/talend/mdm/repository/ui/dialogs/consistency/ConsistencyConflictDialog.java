@@ -62,6 +62,7 @@ import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ConsistencyService;
+import org.talend.mdm.repository.core.service.ConsistencyService.CompareResultEnum;
 import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyCheckResult;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
@@ -76,12 +77,6 @@ import com.amalto.workbench.webservices.WSDigestValueTimeStamp;
  * 
  */
 public class ConsistencyConflictDialog extends Dialog {
-
-    enum CompareResultEnum {
-        NOT_EXIST_IN_SERVER,
-        DIFFERENT,
-        SAME
-    }
 
     private static final String[] OPERATIONS = new String[] { Messages.ConsistencyConflict_overwrite,
             Messages.ConsistencyConflict_skip };
@@ -158,9 +153,9 @@ public class ConsistencyConflictDialog extends Dialog {
                     case NOT_EXIST_IN_SERVER:
                         return Messages.ConsistencyConflictDialog_notExist;
                     case SAME:
-                        return Messages.ConsistencyConflictDialog_Same;
+                        return Messages.ConsistencyConflict_Same;
                     case DIFFERENT:
-                        return Messages.ConsistencyConflictDialog_Different;
+                        return Messages.ConsistencyConflict_Different;
                     }
                     break;
                 // operation
@@ -218,7 +213,7 @@ public class ConsistencyConflictDialog extends Dialog {
         }
     }
 
-    private Map<IRepositoryViewObject, CompareResultEnum> compareResultMap = new HashMap<IRepositoryViewObject, ConsistencyConflictDialog.CompareResultEnum>();
+    private Map<IRepositoryViewObject, CompareResultEnum> compareResultMap = new HashMap<IRepositoryViewObject, CompareResultEnum>();
 
     private CompareResultEnum getCompareResult(IRepositoryViewObject viewObj) {
         CompareResultEnum result = compareResultMap.get(viewObj);
@@ -332,21 +327,21 @@ public class ConsistencyConflictDialog extends Dialog {
 
         tc0 = new TreeColumn(tree, SWT.NONE);
         tc0.setWidth(160);
-        tc0.setText(Messages.ConsistencyConflictDialog_name);
+        tc0.setText(Messages.ConsistencyConflict_name);
 
         tc1 = new TreeColumn(tree, SWT.NONE);
         tc1.setWidth(120);
-        tc1.setText(Messages.ConsistencyConflictDialog_compareResult);
+        tc1.setText(Messages.ConsistencyConflict_compareResult);
 
         tc2 = new TreeColumn(tree, SWT.NONE);
         tc2.setWidth(80);
         tc2.setText(Messages.ConsistencyConflictDialog_Operation);
 
         tc3 = new TreeColumn(tree, SWT.NONE);
-        tc3.setText(Messages.ConsistencyConflictDialog_localTimestamp);
+        tc3.setText(Messages.ConsistencyConflict_localTimestamp);
 
         tc4 = new TreeColumn(tree, SWT.NONE);
-        tc4.setText(Messages.ConsistencyConflictDialog_serverTimestamp);
+        tc4.setText(Messages.ConsistencyConflict_serverTimestamp);
 
         treeViewer.setLabelProvider(new ViewerLabelProvider());
         treeViewer.setContentProvider(new TreeContentProvider());
@@ -373,7 +368,7 @@ public class ConsistencyConflictDialog extends Dialog {
                 skipObjects(CompareResultEnum.SAME);
             }
         });
-        ignoreBun.setText(Messages.ConsistencyConflictDialog_skipSame);
+        ignoreBun.setText(Messages.ConsistencyConflict_skipSame);
 
         Button skipDiffBun = new Button(composite, SWT.NONE);
         skipDiffBun.addSelectionListener(new SelectionAdapter() {
@@ -393,7 +388,7 @@ public class ConsistencyConflictDialog extends Dialog {
                 showConflictObjects(showConflictBun.getSelection());
             }
         });
-        showConflictBun.setText(Messages.ConsistencyConflictDialog_btnCheckButton_text_1);
+        showConflictBun.setText(Messages.ConsistencyConflictDialog_onlyShowConflictObjs);
         new Label(container, SWT.NONE);
 
         final Button showTimestampBun = new Button(container, SWT.CHECK);
@@ -404,7 +399,7 @@ public class ConsistencyConflictDialog extends Dialog {
                 showTimeStampColumns(showTimestampBun.getSelection());
             }
         });
-        showTimestampBun.setText(Messages.ConsistencyConflictDialog_btnCheckButton_text);
+        showTimestampBun.setText(Messages.ConsistencyConflict_showTimeStampColumn);
         new Label(container, SWT.NONE);
 
         //

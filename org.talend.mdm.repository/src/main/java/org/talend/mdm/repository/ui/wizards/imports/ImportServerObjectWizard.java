@@ -23,6 +23,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -762,6 +764,8 @@ public class ImportServerObjectWizard extends Wizard {
             if (Util.IsEnterPrise()) {
                 retrieverCustomForms((TreeParent) serverRoot, m);
             }
+            // sort
+            sortTreeObjs((TreeParent) serverRoot);
             //
             Display.getDefault().syncExec(new Runnable() {
 
@@ -769,14 +773,25 @@ public class ImportServerObjectWizard extends Wizard {
                     try {
 
                         treeViewer.setRoot((TreeParent) serverRoot);
-                        treeViewer.getViewer().setInput(serverRoot);
-                        treeViewer.setServerRoot((TreeParent) serverRoot);
-                        treeViewer.getViewer().refresh();
+
+                        treeViewer.initInput();
 
                     } catch (Exception e) {
                         log.error(e);
                     }
                 }
+            });
+        }
+
+        private void sortTreeObjs(TreeParent serverRoot) {
+            Collections.sort(serverRoot.getChildrenList(), new Comparator() {
+
+                public int compare(Object o1, Object o2) {
+                    String name1 = ((TreeObject) o1).getDisplayName();
+                    String name2 = ((TreeObject) o2).getDisplayName();
+                    return name1.compareTo(name2);
+                }
+
             });
         }
     }
@@ -911,7 +926,7 @@ public class ImportServerObjectWizard extends Wizard {
                 toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
             }
             // create viewer
-            treeViewer = new TreeObjectCheckTreeViewer((TreeParent) serverRoot);
+            treeViewer = new TreeObjectCheckTreeViewer(serverDef, (TreeParent) serverRoot);
             treeViewer.addButtonSelectionListener(new SelectionAdapter() {
 
                 @Override
@@ -947,6 +962,16 @@ public class ImportServerObjectWizard extends Wizard {
                     return true;
                 }
             });
+            final Button showTimeColumnBun = new Button(composite, SWT.CHECK);
+            showTimeColumnBun.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 4, 1));
+            showTimeColumnBun.setText(Messages.ConsistencyConflict_showTimeStampColumn);
+            showTimeColumnBun.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    treeViewer.showTimeStampColumns(showTimeColumnBun.getSelection());
+                }
+            });
             btnOverwrite = new Button(composite, SWT.CHECK);
             btnOverwrite.addSelectionListener(new SelectionAdapter() {
 
@@ -960,7 +985,6 @@ public class ImportServerObjectWizard extends Wizard {
 
             });
             btnOverwrite.setText(Messages.Overwrite_Exists_Items);
-            // btnOverwrite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
             btnOverwrite.setSelection(true);
             GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(920, 600).applyTo(composite);
         }

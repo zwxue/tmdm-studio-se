@@ -14090,4 +14090,10 @@ public class XtentisPort_Stub
         return null;
     }
 
+
+    public WSLong updateDigest(WSDigestValueKey key, WSDigestValueTimeStamp value) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
