@@ -39,8 +39,6 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
-import org.eclipse.xsd.impl.XSDModelGroupImpl;
-import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import org.w3c.dom.Element;
 
@@ -347,18 +345,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
         if (complexType != null && complexType.getSchema() != null) {
 
-            XSDParticleImpl partCnt = (XSDParticleImpl) complexType.getContentType();
-            XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-            // if (mdlGrp.getSchema() != null) {
-            // if (isChoice) {
-            // mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
-            // } else if (isAll) {
-            // mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
-            //
-            // } else {
-            // mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-            // }
-            // }
+            XSDParticle partCnt = (XSDParticle) complexType.getContentType();
             partCnt.unsetMaxOccurs();
             partCnt.unsetMinOccurs();
             XSDTypeDefinition superType = null;
@@ -370,7 +357,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             }
 
             if (superType != null) {
-
+                XSDModelGroup mdlGrp = (XSDModelGroup) partCnt.getTerm();
                 boolean status = updateCompositorType(superType, mdlGrp);
                 if (!status) {
                     return false;
@@ -469,50 +456,6 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             decl.setTypeDefinition(complexType);
         }
 
-        // boolean isConcept = false;
-        // if (isConcept) {
-        //
-        // // remove exisiting unique key(s)
-        // List<XSDIdentityConstraintDefinition> keys = new ArrayList<XSDIdentityConstraintDefinition>();
-        // EList<XSDIdentityConstraintDefinition> list = decl.getIdentityConstraintDefinitions();
-        // for (XSDIdentityConstraintDefinition icd : list) {
-        // if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-        // keys.add(icd);
-        // }
-        // }
-        // decl.getIdentityConstraintDefinitions().removeAll(keys);
-        //
-        // // add new unique key with first element declaration name
-        // XSDElementDeclaration firstDecl = null;
-        // if (complexType.getContent() instanceof XSDParticle) {
-        // if (((XSDParticle) complexType.getContent()).getTerm() instanceof XSDModelGroup) {
-        // XSDModelGroup group = (XSDModelGroup) ((XSDParticle) complexType.getContent()).getTerm();
-        // EList<XSDParticle> gpl = group.getContents();
-        // for (XSDParticle part : gpl) {
-        // if (part.getTerm() instanceof XSDElementDeclaration) {
-        // firstDecl = (XSDElementDeclaration) part.getTerm();
-        // break;
-        // }
-        // }
-        // }
-        // }
-        // if (firstDecl != null) {
-        // XSDIdentityConstraintDefinition uniqueKey = factory.createXSDIdentityConstraintDefinition();
-        // uniqueKey.setIdentityConstraintCategory(XSDIdentityConstraintCategory.UNIQUE_LITERAL);
-        // uniqueKey.setName(decl.getName());
-        // XSDXPathDefinition selector = factory.createXSDXPathDefinition();
-        // selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-        //                selector.setValue(".");//$NON-NLS-1$
-        // uniqueKey.setSelector(selector);
-        // XSDXPathDefinition field = factory.createXSDXPathDefinition();
-        // field.setVariety(XSDXPathVariety.FIELD_LITERAL);
-        // field.setValue(firstDecl.getAliasName());
-        // uniqueKey.getFields().add(field);
-        // decl.getIdentityConstraintDefinitions().add(uniqueKey);
-        // }
-        //
-        // }// if isConcept
-
         decl.updateElement();
         schema.update();
 
@@ -537,12 +480,5 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             }
         }
         return true;
-    }
-
-    private String getOriginalXpath() {
-        XSDGetXPathAction getXpathAction = new XSDGetXPathAction(page);
-        getXpathAction.doAction();
-        String originalXpath = getXpathAction.getCopiedXpath();
-        return originalXpath;
     }
 }
