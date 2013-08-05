@@ -35,7 +35,7 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
         if (allServerDefs == null || allServerDefs.isEmpty()) {
             MessageDialog.openInformation(null, Messages.ShowMDMServerConsole_InfoDialog_Title, Messages.ShowMDMServerConsole_InfoDialog_Message);
         } else if (allServerDefs.size() == 1) {
-            MDMServerDef serverDef = allServerDefs.get(0).getDecryptedServerDef();
+            MDMServerDef serverDef = allServerDefs.get(0);
             showMDMServerConsole(serverDef);
         } else {
             SelectServerDefDialog d = new SelectServerDefDialog(new Shell());
