@@ -529,12 +529,21 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         }
 
         // Save dirty editors if possible but do not stop if not all are saved
-        saveDirtyEditors();
+        doSaveDirtyEditors();
         // about to invoke the operation so save our state
         doSaveWidgetValues();
 
         monitor.worked(W_PREPARE_PROCESS);
         return true;
+    }
+
+    protected void doSaveDirtyEditors() {
+        Display.getDefault().syncExec(new Runnable() {
+
+            public void run() {
+                saveDirtyEditors();
+            }
+        });
     }
 
     private boolean exportJob(ExportFileResource p, int type, boolean needContextScript, IProgressMonitor monitor) {
