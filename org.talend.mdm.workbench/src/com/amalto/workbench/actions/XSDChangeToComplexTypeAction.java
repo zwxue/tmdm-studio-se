@@ -43,6 +43,7 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
@@ -343,50 +344,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             }
 
             if (isConcept) {
-
-                // remove exisiting unique key(s)
-                List<XSDIdentityConstraintDefinition> keys = new ArrayList<XSDIdentityConstraintDefinition>();
-                EList<XSDIdentityConstraintDefinition> list = decl.getIdentityConstraintDefinitions();
-                for (Iterator<XSDIdentityConstraintDefinition> iter = list.iterator(); iter.hasNext();) {
-                    XSDIdentityConstraintDefinition icd = iter.next();
-                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-                        keys.add(icd);
-                    }
-                }
-                decl.getIdentityConstraintDefinitions().removeAll(keys);
-
-                // add new unique key with first element declaration name
-                if (anonymous || !alreadyExists) {
-                    XSDElementDeclaration firstDecl = null;
-                    if (complexType.getContent() instanceof XSDParticle) {
-                        if (((XSDParticle) complexType.getContent()).getTerm() instanceof XSDModelGroup) {
-                            XSDModelGroup group = (XSDModelGroup) ((XSDParticle) complexType.getContent()).getTerm();
-                            EList gpl = group.getContents();
-                            for (Iterator iter = gpl.iterator(); iter.hasNext();) {
-                                XSDParticle part = (XSDParticle) iter.next();
-                                if (part.getTerm() instanceof XSDElementDeclaration) {
-                                    firstDecl = (XSDElementDeclaration) part.getTerm();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (firstDecl != null) {
-                        XSDIdentityConstraintDefinition uniqueKey = factory.createXSDIdentityConstraintDefinition();
-                        uniqueKey.setIdentityConstraintCategory(XSDIdentityConstraintCategory.UNIQUE_LITERAL);
-                        uniqueKey.setName(decl.getName());
-                        XSDXPathDefinition selector = factory.createXSDXPathDefinition();
-                        selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-                        selector.setValue(".");//$NON-NLS-1$
-                        uniqueKey.setSelector(selector);
-                        XSDXPathDefinition field = factory.createXSDXPathDefinition();
-                        field.setVariety(XSDXPathVariety.FIELD_LITERAL);
-                        field.setValue(firstDecl.getAliasName());
-                        uniqueKey.getFields().add(field);
-                        decl.getIdentityConstraintDefinitions().add(uniqueKey);
-                    }
-                }
-
+                buildUniqueKey(factory, decl, complexType, anonymous, alreadyExists);
             }// if isConcept
 
             decl.updateElement();
@@ -404,6 +362,146 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
         }
 
         return Status.OK_STATUS;
+    }
+
+    private void buildUniqueKey(XSDFactory factory, XSDElementDeclaration declaration, XSDComplexTypeDefinition complexType,
+            boolean anonymous, boolean alreadyExists) {
+        if (factory == null || declaration == null || complexType == null) {
+            return;
+        }
+
+        // remove exisiting unique key(s)
+        removeExistUniqueKey(declaration);
+
+        // add new unique key with first element declaration name
+        if (anonymous || !alreadyExists) {
+            createUniqueKey(factory, declaration, complexType);
+        }
+    }
+
+    private void removeExistUniqueKey(XSDElementDeclaration declaration) {
+        List<XSDIdentityConstraintDefinition> keys = new ArrayList<XSDIdentityConstraintDefinition>();
+        EList<XSDIdentityConstraintDefinition> list = declaration.getIdentityConstraintDefinitions();
+        for (Iterator<XSDIdentityConstraintDefinition> iter = list.iterator(); iter.hasNext();) {
+            XSDIdentityConstraintDefinition icd = iter.next();
+            if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
+                keys.add(icd);
+            }
+        }
+        declaration.getIdentityConstraintDefinitions().removeAll(keys);
+    }
+
+    private void createUniqueKey(XSDFactory factory, XSDElementDeclaration declaration, XSDComplexTypeDefinition complexType) {
+        List<String> fields = getPKFields(complexType);
+        if (!fields.isEmpty()) {
+            XSDIdentityConstraintDefinition uniqueKey = factory.createXSDIdentityConstraintDefinition();
+            uniqueKey.setIdentityConstraintCategory(XSDIdentityConstraintCategory.UNIQUE_LITERAL);
+            uniqueKey.setName(declaration.getName());
+            XSDXPathDefinition selector = factory.createXSDXPathDefinition();
+            selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
+            selector.setValue(".");//$NON-NLS-1$
+            uniqueKey.setSelector(selector);
+            for (String fieldName : fields) {
+                XSDXPathDefinition field = factory.createXSDXPathDefinition();
+                field.setVariety(XSDXPathVariety.FIELD_LITERAL);
+                field.setValue(fieldName);
+                uniqueKey.getFields().add(field);
+            }
+            declaration.getIdentityConstraintDefinitions().add(uniqueKey);
+        }
+    }
+
+    /**
+     * return all defined pk field names or return the first element's name
+     */
+    private List<String> getPKFields(XSDComplexTypeDefinition complexType) {
+        List<String> fields = getUsablePKFields(complexType, getElementDecarations());
+
+        if (fields.isEmpty()) {
+            XSDElementDeclaration firstElement = getFirstElement((XSDComplexTypeDefinition) complexType.getRootType());
+            if(firstElement != null) {
+                fields.add(firstElement.getName());
+            }
+        }
+
+        return fields;
+    }
+
+    private EList<XSDElementDeclaration> getElementDecarations() {
+        return schema.getElementDeclarations();
+    }
+
+    private List<String> getUsablePKFields(XSDComplexTypeDefinition complexType, List<XSDElementDeclaration> elementDeclarations) {
+        List<String> fields = new ArrayList<String>();
+
+        List<String> definedPKs = new ArrayList<String>();
+
+        XSDComplexTypeDefinition rootType = (XSDComplexTypeDefinition) complexType.getRootType();
+        for (XSDElementDeclaration decla : elementDeclarations) {
+            XSDComplexTypeDefinition typeDefinition = (XSDComplexTypeDefinition) decla.getTypeDefinition();
+            XSDTypeDefinition arootType = typeDefinition.getRootTypeDefinition();
+            if (arootType == rootType) {
+                recordFields(decla, definedPKs);
+            }
+        }
+
+        List<XSDComplexTypeDefinition> allSuperComplexTypes = Util.getAllSuperComplexTypes(complexType);
+        for (int i = allSuperComplexTypes.size() - 1; i >= 0; i--) {
+            XSDComplexTypeDefinition cTypeDef = allSuperComplexTypes.get(i);
+            if (cTypeDef.getContent() instanceof XSDParticle) {
+                XSDParticleImpl particle = (XSDParticleImpl) cTypeDef.getContent();
+                if (particle.getTerm() instanceof XSDModelGroup) {
+                    XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+                    EList<XSDParticle> particles = group.getParticles();
+                    for (XSDParticle part : particles) {
+                        if (part.getTerm() instanceof XSDElementDeclaration) {
+                            XSDElementDeclaration xsdDecl = (XSDElementDeclaration) part.getTerm();
+                            if (definedPKs.contains(xsdDecl.getName())) {
+                                fields.add(xsdDecl.getName());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return fields;
+    }
+
+    private void recordFields(XSDElementDeclaration decla, List<String> definedPKs) {
+        EList<XSDIdentityConstraintDefinition> idConstraintDefs = decla.getIdentityConstraintDefinitions();
+        if (idConstraintDefs != null) {
+            for (XSDIdentityConstraintDefinition idCDef : idConstraintDefs) {
+                if (idCDef.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
+                    EList<XSDXPathDefinition> xsdXPath = idCDef.getFields();
+                    for (XSDXPathDefinition xpath : xsdXPath) {
+                        if (!definedPKs.contains(xpath.getValue()) && xpath.getVariety() == XSDXPathVariety.FIELD_LITERAL
+                                && !xpath.getValue().equals(".")) { //$NON-NLS-1$
+                            definedPKs.add(xpath.getValue());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private XSDElementDeclaration getFirstElement(XSDComplexTypeDefinition rootType) {
+        if (rootType.getContent() instanceof XSDParticle) {
+            if (((XSDParticle) rootType.getContent()).getTerm() instanceof XSDModelGroup) {
+                XSDModelGroup group = (XSDModelGroup) ((XSDParticle) rootType.getContent()).getTerm();
+                EList<XSDParticle> gpl = group.getContents();
+                XSDElementDeclaration firstDecl = null;
+                for (Iterator<XSDParticle> iter = gpl.iterator(); iter.hasNext();) {
+                    XSDParticle part = iter.next();
+                    if (part.getTerm() instanceof XSDElementDeclaration) {
+                        firstDecl = (XSDElementDeclaration) part.getTerm();
+                        return firstDecl;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     private boolean updateCompositorType(XSDTypeDefinition superType, XSDModelGroup currentGroup) {
@@ -427,9 +525,9 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
     }
 
     private void checkConcept() {
-        EList l = decl.getIdentityConstraintDefinitions();
-        for (Iterator iter = l.iterator(); iter.hasNext();) {
-            XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
+        EList<XSDIdentityConstraintDefinition> l = decl.getIdentityConstraintDefinitions();
+        for (Iterator<XSDIdentityConstraintDefinition> iter = l.iterator(); iter.hasNext();) {
+            XSDIdentityConstraintDefinition icd = iter.next();
             if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                 isConcept = true;
                 break;
@@ -467,9 +565,9 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
     private boolean validateType() {
         if (!"".equals(typeName)) {//$NON-NLS-1$
-            EList list = schema.getTypeDefinitions();
-            for (Iterator iter = list.iterator(); iter.hasNext();) {
-                XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
+            EList<XSDTypeDefinition> list = schema.getTypeDefinitions();
+            for (Iterator<XSDTypeDefinition> iter = list.iterator(); iter.hasNext();) {
+                XSDTypeDefinition td = iter.next();
                 if (td.getName().equals(typeName)) {
                     if (td instanceof XSDSimpleTypeDefinition) {
                         MessageDialog.openError(page.getSite().getShell(), Messages._Error,
