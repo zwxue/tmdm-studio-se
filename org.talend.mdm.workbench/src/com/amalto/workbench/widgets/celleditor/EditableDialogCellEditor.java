@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -47,15 +48,19 @@ public abstract class EditableDialogCellEditor extends DialogCellEditor {
             }
         });
 
-        txtEdit.addFocusListener(new FocusAdapter() {
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                doChange();
-            }
-        });
+        cell.getParent().addFocusListener(getFocusListener());
 
         return txtEdit;
+    }
+
+    private FocusListener getFocusListener() {
+        return new FocusAdapter() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                doChange();
+            }
+        };
     }
 
     private void doChange() {
