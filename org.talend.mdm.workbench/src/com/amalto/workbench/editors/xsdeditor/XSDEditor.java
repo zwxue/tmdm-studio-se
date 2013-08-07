@@ -13,6 +13,7 @@
 package com.amalto.workbench.editors.xsdeditor;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyComposite;
 import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyTitle;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
@@ -150,23 +152,31 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements IServerObje
         InputStreamReader reader = null;
         try {
             IFile file = getXSDFile(xobject);
-            if (getSelectedPage() instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
-                DataModelMainPage mainPage = (DataModelMainPage) getSelectedPage();
-                String xsd = mainPage.getXSDSchemaString();
+            EditorPart part = (EditorPart) getSelectedPage();
+            String xsd =null;
+            if(null != part){
+        		if (part instanceof DataModelMainPage) {// save DataModelMainPage's contents to file
+                    DataModelMainPage dmp = (DataModelMainPage) getSelectedPage();
+                    xsd = dmp.getXSDSchemaString();
+                    file.setCharset("utf-8", null);//$NON-NLS-1$
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(xsd.getBytes("utf-8"));//$NON-NLS-1$
+                    file.setContents(inputStream, IFile.FORCE, null);
+                } else if(part instanceof StructuredTextEditor){
+                	XSDEditorInput input = (XSDEditorInput) ((StructuredTextEditor) getSelectedPage()).getEditorInput();
+                	InputStream stream = input.getFile().getContents();
+                	xsd = IOUtils.toString(stream);
+                	IOUtils.closeQuietly(stream);
+                } 
+            }
+            if(null != xsd){
+            	DataModelMainPage mainPage = getdMainPage();
                 WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                 wsDataModel.setXsdSchema(xsd);
-                //
-                file.setCharset("utf-8", null);//$NON-NLS-1$
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(xsd.getBytes("utf-8"));//$NON-NLS-1$
-                file.setContents(inputStream, IFile.FORCE, null);
-
                 if (mainPage != null) {
                     mainPage.save(xsd);
                 }
                 fileContents = xsd.getBytes("utf-8"); //$NON-NLS-1$
-
             }
-
             getDataModelEditorPage().setDirty(false);
 
         } catch (Exception e) {
