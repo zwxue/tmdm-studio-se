@@ -21,52 +21,66 @@ import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
 public class XPathCellEditor extends EditableDialogCellEditor {
 
-    public interface IXPathUpdate {
+	public interface IXPathUpdate {
 
-        public String updateXPath(String xpath);
-    }
+		public String updateXPath(String xpath);
+	}
 
-    private IAllDataModelHolder allDataModelHolder;
+	private IAllDataModelHolder allDataModelHolder;
 
-    private IXPathUpdate xpathUpdate = null;
+	private IXPathUpdate xpathUpdate = null;
 
-    public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder) {
-        super(parent);
-        this.allDataModelHolder = allDataModelHolder;
-    }
+	private boolean lock;
 
-    public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder, IXPathUpdate xpathUpdate) {
-        this(parent, allDataModelHolder);
-        this.xpathUpdate = xpathUpdate;
-    }
+	public XPathCellEditor(Composite parent,
+			IAllDataModelHolder allDataModelHolder) {
+		super(parent);
+		this.allDataModelHolder = allDataModelHolder;
+	}
 
-    public IAllDataModelHolder getAllDataModelHolder() {
-        return allDataModelHolder;
-    }
+	public XPathCellEditor(Composite parent,
+			IAllDataModelHolder allDataModelHolder, IXPathUpdate xpathUpdate) {
+		this(parent, allDataModelHolder);
+		this.xpathUpdate = xpathUpdate;
+	}
 
-    public void setAllDataModelHolder(IAllDataModelHolder allDataModelHolder) {
+	public IAllDataModelHolder getAllDataModelHolder() {
+		return allDataModelHolder;
+	}
 
-        if (allDataModelHolder == null)
-            return;
+	public void setAllDataModelHolder(IAllDataModelHolder allDataModelHolder) {
 
-        this.allDataModelHolder = allDataModelHolder;
-    }
+		if (allDataModelHolder == null)
+			return;
 
-    @Override
-    protected Object openDialogBox(Control cellEditorWindow) {
+		this.allDataModelHolder = allDataModelHolder;
+	}
 
-        SelectXPathDialog dialog = new SelectXPathDialog(cellEditorWindow.getShell(), allDataModelHolder,
-                allDataModelHolder.getDefaultDataModel(), allDataModelHolder.getDefaultEntity());
+	@Override
+	protected Object openDialogBox(Control cellEditorWindow) {
 
-        if (dialog.open() != Window.OK)
-            return null;
+		SelectXPathDialog dialog = new SelectXPathDialog(
+				cellEditorWindow.getShell(), allDataModelHolder,
+				allDataModelHolder.getDefaultDataModel(),
+				allDataModelHolder.getDefaultEntity());
 
-        String xpath = dialog.getSelectedXPath();
-        if (xpathUpdate != null) {
-            return xpathUpdate.updateXPath(xpath);
-        }
-        return xpath;
+		if (dialog.open() != Window.OK)
+			return null;
+		dialog.setLock(lock);
+		String xpath = dialog.getSelectedXPath();
+		if (xpathUpdate != null) {
+			return xpathUpdate.updateXPath(xpath);
+		}
+		return xpath;
 
-    }
+	}
+
+	public boolean isLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
 
 }

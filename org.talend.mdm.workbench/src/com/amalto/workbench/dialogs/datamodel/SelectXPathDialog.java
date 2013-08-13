@@ -27,70 +27,87 @@ import com.amalto.workbench.widgets.composites.SelectXPathComposite;
 
 public class SelectXPathDialog extends Dialog {
 
-    private SelectXPathComposite selectXPathComposite;
+	private SelectXPathComposite selectXPathComposite;
 
-    private IAllDataModelHolder allDataModelHolder;
+	private IAllDataModelHolder allDataModelHolder;
 
-    private String defaultSelectedDataModel;
+	private String defaultSelectedDataModel;
 
-    private String conceptName;
+	private String conceptName;
 
-    private String selectedXPath = "";//$NON-NLS-1$
+	private String selectedXPath = "";//$NON-NLS-1$
 
-    public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder) {
-        this(parentShell, allDataModelHolder, null, null);
-    }
+	private boolean lock;
 
-    public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder, String defaultSelectedDataModel) {
-        this(parentShell, allDataModelHolder, defaultSelectedDataModel, null);
-    }
+	public SelectXPathDialog(Shell parentShell,
+			IAllDataModelHolder allDataModelHolder) {
+		this(parentShell, allDataModelHolder, null, null);
+	}
 
-    public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder, String defaultSelectedDataModel,
-            String conceptName) {
-        super(parentShell);
+	public SelectXPathDialog(Shell parentShell,
+			IAllDataModelHolder allDataModelHolder,
+			String defaultSelectedDataModel) {
+		this(parentShell, allDataModelHolder, defaultSelectedDataModel, null);
+	}
 
-        this.allDataModelHolder = allDataModelHolder;
-        this.defaultSelectedDataModel = defaultSelectedDataModel;
-        this.conceptName = conceptName;
-    }
+	public SelectXPathDialog(Shell parentShell,
+			IAllDataModelHolder allDataModelHolder,
+			String defaultSelectedDataModel, String conceptName) {
+		super(parentShell);
 
-    @Override
-    protected Control createDialogArea(Composite parent) {
+		this.allDataModelHolder = allDataModelHolder;
+		this.defaultSelectedDataModel = defaultSelectedDataModel;
+		this.conceptName = conceptName;
+	}
 
-        getShell().setText(Messages.SelectXPathDialog_SetXPath);
+	@Override
+	protected Control createDialogArea(Composite parent) {
 
-        Composite container = (Composite) super.createDialogArea(parent);
+		getShell().setText(Messages.SelectXPathDialog_SetXPath);
 
-        selectXPathComposite = new SelectXPathComposite(container, SWT.NONE, allDataModelHolder, defaultSelectedDataModel,
-                conceptName);
-        selectXPathComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		Composite container = (Composite) super.createDialogArea(parent);
 
-        return container;
-    }
+		selectXPathComposite = new SelectXPathComposite(container, SWT.NONE,
+				allDataModelHolder, defaultSelectedDataModel, conceptName);
+		selectXPathComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+				true, true));
+		selectXPathComposite.lockCombo(lock);
+		return container;
+	}
 
-    @Override
-    protected void createButtonsForButtonBar(Composite parent) {
-        createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
-    }
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
+	}
 
-    @Override
-    protected Point getInitialSize() {
-        return new Point(500, 575);
-    }
+	@Override
+	protected Point getInitialSize() {
+		return new Point(500, 575);
+	}
 
-    protected int getShellStyle() {
-        return super.getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE;
-    }
+	protected int getShellStyle() {
+		return super.getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE;
+	}
 
-    public String getSelectedXPath() {
-        return selectedXPath.replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
-    }
+	public String getSelectedXPath() {
+		return selectedXPath.replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
+	}
 
-    @Override
-    protected void okPressed() {
-        selectedXPath = selectXPathComposite.getSelectedXPath();
-        super.okPressed();
-    }
+	@Override
+	protected void okPressed() {
+		selectedXPath = selectXPathComposite.getSelectedXPath();
+		super.okPressed();
+	}
+
+	public boolean isLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
 
 }
