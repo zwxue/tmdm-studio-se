@@ -16,8 +16,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDSchema;
@@ -72,14 +71,13 @@ public class XpathSelectDialog2 extends XpathSelectDialog {
 		this.dataModelName = modelDisplay;
 		try {
 			XSDSchema xsd = null;
-			IEditorReference[] references = PlatformUI.getWorkbench()
+			IEditorPart[] editors = PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getActivePage()
-					.getEditorReferences();
-			if (null != references) {
-				for (IEditorReference refer : references) {
-					IWorkbenchPart part = refer.getPart(true);
-					if (part instanceof XSDEditor) {
-						XSDEditor xeditor = (XSDEditor) part;
+					.getDirtyEditors();
+			if (null != editors) {
+				for (IEditorPart editorpart : editors) {
+					if (editorpart instanceof XSDEditor) {
+						XSDEditor xeditor = (XSDEditor) editorpart;
 						DataModelMainPage mainPage = xeditor.getdMainPage();
 						if (mainPage.getDataModel().getName()
 								.equals(dataModelName)) {
