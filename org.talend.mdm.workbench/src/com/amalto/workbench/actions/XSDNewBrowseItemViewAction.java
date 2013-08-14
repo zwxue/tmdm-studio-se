@@ -13,7 +13,6 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -26,15 +25,12 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDElementDeclaration;
-import org.talend.core.GlobalServiceRegister;
 
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.utils.Util;
 
 public class XSDNewBrowseItemViewAction extends Action {
@@ -54,14 +50,16 @@ public class XSDNewBrowseItemViewAction extends Action {
         setToolTipText(Messages.XSDNewBrowseItemViewAction_Text);
     }
 
+    @Override
     public void run() {
         if (page.isDirty()) {
             boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
-                    Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName())); //$NON-NLS-1$
+                    Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName()));
             if (save) {
                 pageSave();
-            } else
+            } else {
                 return;
+            }
         }
         IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
         declList.clear();
@@ -69,23 +67,12 @@ public class XSDNewBrowseItemViewAction extends Action {
         for (Object obj : list) {
             if (obj instanceof XSDElementDeclaration) {
                 XSDElementDeclaration declaration = (XSDElementDeclaration) obj;
-                if (Util.getParent(obj) == obj)
+                if (Util.getParent(obj) == obj) {
                     declList.add(declaration);
-            }
-        }
-        // check exist
-        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
-                IValidateService.class);
-        if (validateService != null) {
-            for (Iterator<XSDElementDeclaration> il = declList.iterator(); il.hasNext();) {
-                String name = AddBrowseItemsWizard.BROWSE_ITEMS + il.next().getName();
-
-                boolean result = validateService.validateAndAlertObjectExistence(TreeObject.VIEW, name);
-                if (!result) {
-                    il.remove();
                 }
             }
         }
+
         if (!declList.isEmpty()) {
             //
             AddBrowseItemsWizard wizard = getAddBrowseItemsWizard(declList);
@@ -110,6 +97,7 @@ public class XSDNewBrowseItemViewAction extends Action {
         }
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

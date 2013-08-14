@@ -124,11 +124,13 @@ public class AddBrowseItemsWizard extends Wizard {
         }
     }
 
+    @Override
     public void addPages() {
         configureRolePage = new ConfigureRolePage();
         addPage(configureRolePage);
     }
 
+    @Override
     public boolean performFinish() {
         configureRolePage.applyChangeToRoles();
         if (saveConfiguration()) {
@@ -191,7 +193,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
         WSView view = new WSView();
         view.setIsTransformerActive(new WSBoolean(false));
-        view.setTransformerPK("");//$NON-NLS-1$        
+        view.setTransformerPK("");//$NON-NLS-1$
         view.setName(browseItem);
         EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
         List<String> keys = new ArrayList<String>();
@@ -211,10 +213,13 @@ public class AddBrowseItemsWizard extends Wizard {
 
         StringBuffer desc = new StringBuffer();
         LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
-        if (decl.getAnnotation() != null)
+        if (decl.getAnnotation() != null) {
             labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
+        }
         if (labels.size() == 0)
+         {
             labels.put("EN", decl.getName());//$NON-NLS-1$
+        }
         for (String lan : labels.keySet()) {
             desc.append("[" + lan.toUpperCase() + ":" + labels.get(lan) + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         }
@@ -251,8 +256,9 @@ public class AddBrowseItemsWizard extends Wizard {
 
             activePage.closeEditor(currentEditor, false);
 
-            if (editors.contains(currentEditor))
+            if (editors.contains(currentEditor)) {
                 return true;
+            }
         }
 
         return false;
@@ -399,17 +405,20 @@ public class AddBrowseItemsWizard extends Wizard {
                     }
 
                     XSDElementDeclaration elem = (XSDElementDeclaration) item.getData();
-                    if (!(BROWSE_ITEMS + elem.getName()).equals(tValue)) {
+
+                    String declName = elem.getName();
+                    if (!(BROWSE_ITEMS + declName).equals(tValue)) {
                         for (XSDElementDeclaration theElem : declList) {
-                            if (theElem == elem)
+                            if (theElem == elem) {
                                 continue;
+                            }
                             if ((BROWSE_ITEMS + theElem.getName()).equals(tValue)) {
                                 MessageDialog.openInformation(null, Messages.Warning, Messages.BrowseNameExists);
                                 return;
                             }
                         }
-                        List<Line> lines = browseItemToRoles.get(BROWSE_ITEMS + elem.getName());
-                        browseItemToRoles.remove(BROWSE_ITEMS + elem.getName());
+                        List<Line> lines = browseItemToRoles.get(BROWSE_ITEMS + declName);
+                        browseItemToRoles.remove(BROWSE_ITEMS + declName);
                         int prex = tValue.indexOf(BROWSE_ITEMS);
 
                         if (prex != -1 && (prex + BROWSE_ITEMS.length()) <= tValue.length()) {
@@ -418,6 +427,8 @@ public class AddBrowseItemsWizard extends Wizard {
                         browseItemToRoles.put(tValue, lines);
                         refreshRoleView(BROWSE_ITEMS + elem.getName());
                         browseViewer.update(elem, null);
+
+                        elem.setName(declName);
                     }
                 }
 
@@ -482,9 +493,9 @@ public class AddBrowseItemsWizard extends Wizard {
         private void refreshRoleView(String browseItem) {
             if (complexTableViewer != null) {
                 List<Line> roles = browseItemToRoles.get(browseItem);
-                if (roles != null)
+                if (roles != null) {
                     complexTableViewer.getViewer().setInput(roles);
-                // complexTableViewer.getViewer().refresh();
+                }
             }
         }
 
@@ -527,7 +538,7 @@ public class AddBrowseItemsWizard extends Wizard {
 
     /**
      * DOC hbhong Comment method "getAllRoleNames".
-     * 
+     *
      * @return
      */
     protected List<String> getAllRoleNames() {

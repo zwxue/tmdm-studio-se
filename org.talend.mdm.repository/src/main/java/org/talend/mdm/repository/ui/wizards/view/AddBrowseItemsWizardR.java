@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -27,6 +26,7 @@ import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -34,7 +34,6 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
-import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -51,6 +50,8 @@ import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.service.IValidateService;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSConceptKey;
@@ -66,7 +67,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     /**
      * DOC hbhong AddBrowseItemsWizardR constructor comment.
-     * 
+     *
      * @param launchPage
      * @param list
      */
@@ -136,10 +137,13 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
             XSDElementDeclaration decl = getXSDElementDeclaration();
 
-            if (decl.getAnnotation() != null)
+            if (decl.getAnnotation() != null) {
                 labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
+            }
             if (labels.size() == 0)
+             {
                 labels.put("EN", decl.getName());//$NON-NLS-1$
+            }
             for (String lan : labels.keySet()) {
                 desc.append("[" + lan.toUpperCase() + ":" + labels.get(lan) + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             }
@@ -190,25 +194,26 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         if (decl == null || idList.size() >= 5) {
             return fields;
         }
-        if (((XSDElementDeclaration) decl).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+        if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             String labelValue = null;
             List childrenList = Util.getComplexTypeDefinitionChildren(
-                    (XSDComplexTypeDefinition) ((XSDElementDeclaration) decl).getTypeDefinition(), true);
+                    (XSDComplexTypeDefinition) decl.getTypeDefinition(), true);
             if (childrenList == null) {
                 return fields;
             }
             for (int j = 0; j < childrenList.size(); j++) {
                 List<XSDParticle> particles = new ArrayList<XSDParticle>();
-                if (childrenList.get(j) instanceof XSDModelGroup)
+                if (childrenList.get(j) instanceof XSDModelGroup) {
                     particles = ((XSDModelGroup) childrenList.get(j)).getParticles();
+                }
                 if (particles != null) {
                     for (int k = 0; k < particles.size(); k++) {
                         // Only the top 5 attributes will be searchable and viewable when generating the default view
 
                         XSDParticle xSDCom = particles.get(k);
-                        if ((xSDCom != null && xSDCom.getContent() != null) && (xSDCom instanceof XSDParticle)
-                                && ((XSDParticle) xSDCom).getContent() instanceof XSDElementDeclaration) {
-                            labelValue = ((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent()).getName();
+                        if ((xSDCom != null && xSDCom.getContent() != null)
+                                && xSDCom.getContent() instanceof XSDElementDeclaration) {
+                            labelValue = ((XSDElementDeclaration) xSDCom.getContent()).getName();
                             String field = decl.getName();
                             field = field.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
                             field += "/" + labelValue;//$NON-NLS-1$
@@ -229,37 +234,39 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     @Override
     protected void newBrowseItemView(String browseItem) throws RemoteException {
-        IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW,
-                browseItem);
-        if (viewObject != null) {
+        if (toRecreateBrowserView(browseItem)) {
+            IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW,
+                    browseItem);
+            if (viewObject != null) {
 
-            IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor((IRepositoryViewObject) viewObject);
-            if (ref != null) {
-                boolean ok = MessageDialog.openConfirm(this.getShell(), Messages.AddBrowseItemsWizardR_warning,
-                        Messages.AddBrowseItemsWizardR_duplicatedView);
-                if (!ok)
-                    return;
+                IEditorReference ref = RepositoryResourceUtil.isOpenedInEditor(viewObject);
+                if (ref != null) {
+                    RepositoryResourceUtil.closeEditor(ref, false);
+                }
 
-                // delete the existed browse view
-                RepositoryResourceUtil.closeEditor(ref, false);
+                try {
+                    ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                    RemoteException rx = new RemoteException(e.getMessage());
+                    throw rx;
+                }
             }
 
-            try {
-                ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-                RemoteException rx = new RemoteException(e.getMessage());
-                throw rx;
-            }
-        }
-
-        for (XSDElementDeclaration decl : declList) {
-            String fullName = BROWSE_ITEMS + decl.getName();
-            if (fullName.equals(browseItem)) {
-                newViewAction.setXSDElementDeclaration(decl);
-                newViewAction.createNewView(fullName);
+            for (XSDElementDeclaration decl : declList) {
+                String fullName = BROWSE_ITEMS + decl.getName();
+                if (browseItem.equals(fullName) || browseItem.startsWith(fullName + "#")) { //$NON-NLS-1$
+                    newViewAction.setXSDElementDeclaration(decl);
+                    newViewAction.createNewView(browseItem);
+                }
             }
         }
     }
 
+    private boolean toRecreateBrowserView(String viewName) {
+        IValidateService validateService = (IValidateService) GlobalServiceRegister.getDefault().getService(
+                IValidateService.class);
+        boolean result = validateService.validateAndAlertObjectExistence(TreeObject.VIEW, viewName);
+        return result;
+    }
 }
