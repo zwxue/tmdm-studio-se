@@ -471,7 +471,7 @@ public class Util {
 
     /**
      * Join an array of strings into a single string using a separator
-     * 
+     *
      * @param strings
      * @param separator
      * @return a single string or null
@@ -490,7 +490,7 @@ public class Util {
 
     /**
      * Returns the first part - eg. the concept - from the path
-     * 
+     *
      * @param path
      * @return the concept Name
      */
@@ -508,7 +508,7 @@ public class Util {
 
     /**
      * get the concept name from the child elment
-     * 
+     *
      * @param child
      * @return
      */
@@ -525,7 +525,7 @@ public class Util {
 
     /**
      * Generates an xml string from a node (not pretty formatted)
-     * 
+     *
      * @param n the node
      * @return the xml string
      * @throws Exception
@@ -541,7 +541,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     * 
+     *
      * @throws Exception
      */
     public static NodeList getNodeList(Document d, String xPath) throws Exception {
@@ -550,7 +550,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     * 
+     *
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath) throws Exception {
@@ -559,7 +559,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     * 
+     *
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
@@ -573,7 +573,7 @@ public class Util {
 
     /**
      * Returns a namespaced root element of a document Useful to create a namespace holder element
-     * 
+     *
      * @param namespace
      * @return the root Element
      */
@@ -648,13 +648,13 @@ public class Util {
         ;
 
         // test for hard-coded values
-        if (xPath.startsWith("\"") && xPath.endsWith("\"")) {
+        if (xPath.startsWith("\"") && xPath.endsWith("\"")) { //$NON-NLS-1$ //$NON-NLS-2$
             return new String[] { xPath.substring(1, xPath.length() - 1) };
         }
 
         // test for incomplete path (elements missing /text())
-        if (!xPath.matches(".*@[^/\\]]+")) {
-            if (!xPath.endsWith(")")) {
+        if (!xPath.matches(".*@[^/\\]]+")) { //$NON-NLS-1$
+            if (!xPath.endsWith(")")) { //$NON-NLS-1$
                 xPath += "/text()";//$NON-NLS-1$
             }
         }
@@ -723,12 +723,12 @@ public class Util {
 
     /**
      * Find elementDeclarations that use any types derived from a named type.
-     * 
+     *
      * <p>
      * This shows one way to query the schema for elementDeclarations and then how to find specific kinds of
      * typeDefinitions.
      * </p>
-     * 
+     *
      * @param objList collection set to search for elemDecls
      * @param localName for the type used
      * @return Boolean indicate any XSDElementDeclarations is found or not
@@ -796,7 +796,7 @@ public class Util {
     }
 
     public static List<String> getAllCustomSimpleDataType(XSDSchema schema) {
-        ArrayList customTypes = new ArrayList();
+        List<String> customTypes = new ArrayList<String>();
         for (Object element : schema.getTypeDefinitions()) {
             XSDTypeDefinition type = (XSDTypeDefinition) element;
             if (type instanceof XSDSimpleTypeDefinition) {
@@ -861,7 +861,7 @@ public class Util {
 
     /**
      * set the list with foreign concept name of in the element
-     * 
+     *
      * @author ymli
      * @param list
      * @param element
@@ -879,9 +879,9 @@ public class Util {
                 if (particle.getTerm() instanceof XSDModelGroup) {
 
                     XSDModelGroup modelGroup = ((XSDModelGroup) particle.getTerm());
-                    EList fromlist = modelGroup.getContents();
+                    EList<XSDParticle> fromlist = modelGroup.getContents();
 
-                    for (XSDParticle el : (XSDParticle[]) fromlist.toArray(new XSDParticle[fromlist.size()])) {
+                    for (XSDParticle el : fromlist.toArray(new XSDParticle[fromlist.size()])) {
                         XSDTerm term = el.getTerm();
                         if (term instanceof XSDElementDeclaration) {
                             if (isReferrenced(element, (XSDElementDeclaration) term)) {
@@ -938,7 +938,7 @@ public class Util {
 
     /**
      * set the list with all the foreign concepty name in the parent
-     * 
+     *
      * @author ymli
      * @param list
      * @param parent
@@ -959,7 +959,7 @@ public class Util {
 
     /**
      * set the list with foreign concept names in the schema
-     * 
+     *
      * @author ymli
      * @param list
      * @param schema
@@ -978,7 +978,7 @@ public class Util {
 
     /**
      * the all the typeDefinition in the schema
-     * 
+     *
      * @author ymli
      * @param schema
      * @return
@@ -1179,6 +1179,10 @@ public class Util {
             return null;
         }
 
+        if (!isDirectChild(currentEntity, son)) {
+            return null;
+        }
+
         List<Object> list = new ArrayList<Object>();
 
         XSDTerm term = son.getTerm();
@@ -1198,6 +1202,24 @@ public class Util {
         }
 
         return list;
+    }
+
+    private static boolean isDirectChild(XSDElementDeclaration entity, XSDParticle child) {
+        if (entity == null || child == null) {
+            return false;
+        }
+
+        XSDComplexTypeDefinition ctypeDefinition = (XSDComplexTypeDefinition) entity.getTypeDefinition();
+        try {
+            Map<String, XSDParticle> childElements = getChildElements(null, ctypeDefinition, true, new HashSet<Object>());
+            if (childElements.values().contains(child)) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return false;
     }
 
     private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son,
@@ -1296,7 +1318,7 @@ public class Util {
 
     /**
      * update reference to newType
-     * 
+     *
      * @param elem
      * @param newType
      * @param provider
@@ -1502,12 +1524,12 @@ public class Util {
     }
 
     public static XSDElementDeclaration findReference(String refName, XSDSchema schema) {
-        EList eDecls = schema.getElementDeclarations();
+        EList<XSDElementDeclaration> eDecls = schema.getElementDeclarations();
         if (refName.indexOf(" : ") != -1) {//$NON-NLS-1$
             refName = refName.substring(0, refName.indexOf(" : "));//$NON-NLS-1$
         }
-        for (Iterator iter = eDecls.iterator(); iter.hasNext();) {
-            XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+        for (Iterator<XSDElementDeclaration> iter = eDecls.iterator(); iter.hasNext();) {
+            XSDElementDeclaration d = iter.next();
             if (d.getQName().equals(refName)) {
                 return d;
             }
@@ -1520,7 +1542,7 @@ public class Util {
 
     /**
      * Clipboard support
-     * 
+     *
      * @return the Clipboard
      */
     public static Clipboard getClipboard() {
@@ -1787,11 +1809,9 @@ public class Util {
 
     public static List<String> getChildElementNames(XSDSchema schema, String concept) throws Exception {
         List<String> childNames = new ArrayList<String>();
-        EList xsdElementDeclarations = schema.getElementDeclarations();
-        List<String> list = new ArrayList<String>();
+        EList<XSDElementDeclaration> xsdElementDeclarations = schema.getElementDeclarations();
         XSDElementDeclaration conceptEl = null;
-        for (XSDElementDeclaration el : (XSDElementDeclaration[]) xsdElementDeclarations
-                .toArray(new XSDElementDeclaration[xsdElementDeclarations.size()])) {
+        for (XSDElementDeclaration el : xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()])) {
             if (el.getName().equals(concept)) {
                 conceptEl = el;
                 break;
@@ -1874,8 +1894,9 @@ public class Util {
         EObject parent = null;
         EObject obj = component;
         do {
-        	if(null == obj)
-        		return false;
+        	if(null == obj) {
+                return false;
+            }
             parent = obj.eContainer();
             obj = parent;
         } while (!(parent instanceof XSDSchema));
@@ -2051,7 +2072,7 @@ public class Util {
         int imp = 0;
         for (XSDImport xsdImport : imports) {
             String ns = xsdImport.getNamespace();
-            if (ns.equals("")) {
+            if (ns.equals("")) { //$NON-NLS-1$
                 continue;
             }
             int last = ns.lastIndexOf("/");//$NON-NLS-1$
@@ -2438,7 +2459,7 @@ public class Util {
         List<WSUniverse> list = new ArrayList<WSUniverse>();
         String objectName = objectName1;
         WSUniversePK[] universePKs = null;
-        if (objectName1.equals("Transformer")) {
+        if (objectName1.equals("Transformer")) { //$NON-NLS-1$
             objectName = "Transformer V2";//$NON-NLS-1$
         }
         try {
@@ -2595,27 +2616,27 @@ public class Util {
         wc.setXpath(values[0]);
 
         WSRoutingRuleOperator operator = null;
-        if (values[1].equals("Contains")) {
+        if (values[1].equals("Contains")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.CONTAINS;
-        } else if (values[1].equals("Matches")) {
+        } else if (values[1].equals("Matches")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.MATCHES;
-        } else if (values[1].equals("=")) {
+        } else if (values[1].equals("=")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.EQUALS;
-        } else if (values[1].equals(">")) {
+        } else if (values[1].equals(">")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.GREATER_THAN;
-        } else if (values[1].equals(">=")) {
+        } else if (values[1].equals(">=")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
-        } else if (values[1].equals("<")) {
+        } else if (values[1].equals("<")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.LOWER_THAN;
-        } else if (values[1].equals("<=")) {
+        } else if (values[1].equals("<=")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
-        } else if (values[1].equals("!=")) {
+        } else if (values[1].equals("!=")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.NOT_EQUALS;
-        } else if (values[1].equals("Starts With")) {
+        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.STARTSWITH;
-        } else if (values[1].equals("Is Null")) {
+        } else if (values[1].equals("Is Null")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.IS_NULL;
-        } else if (values[1].equals("Is Not Null")) {
+        } else if (values[1].equals("Is Not Null")) { //$NON-NLS-1$
             operator = WSRoutingRuleOperator.IS_NOT_NULL;
         }
         wc.setWsOperator(operator);
@@ -2630,49 +2651,49 @@ public class Util {
         wc.setLeftPath(values[0]);
 
         WSWhereOperator operator = null;
-        if (values[1].equals("Contains")) {
+        if (values[1].equals("Contains")) { //$NON-NLS-1$
             operator = WSWhereOperator.CONTAINS;
-        } else if (values[1].equals("Contains Text Of")) {
+        } else if (values[1].equals("Contains Text Of")) { //$NON-NLS-1$
             operator = WSWhereOperator.CONTAINS_TEXT_OF;
         } else if (values[1].equals("Join With")) {//$NON-NLS-1$
             operator = WSWhereOperator.JOIN;
-        } else if (values[1].equals("=")) {
+        } else if (values[1].equals("=")) { //$NON-NLS-1$
             operator = WSWhereOperator.EQUALS;
-        } else if (values[1].equals(">")) {
+        } else if (values[1].equals(">")) { //$NON-NLS-1$
             operator = WSWhereOperator.GREATER_THAN;
-        } else if (values[1].equals(">=")) {
+        } else if (values[1].equals(">=")) { //$NON-NLS-1$
             operator = WSWhereOperator.GREATER_THAN_OR_EQUAL;
-        } else if (values[1].equals("<")) {
+        } else if (values[1].equals("<")) { //$NON-NLS-1$
             operator = WSWhereOperator.LOWER_THAN;
-        } else if (values[1].equals("<=")) {
+        } else if (values[1].equals("<=")) { //$NON-NLS-1$
             operator = WSWhereOperator.LOWER_THAN_OR_EQUAL;
-        } else if (values[1].equals("!=")) {
+        } else if (values[1].equals("!=")) { //$NON-NLS-1$
             operator = WSWhereOperator.NOT_EQUALS;
-        } else if (values[1].equals("Starts With")) {
+        } else if (values[1].equals("Starts With")) { //$NON-NLS-1$
             operator = WSWhereOperator.STARTSWITH;
-        } else if (values[1].equals("Strict Contains")) {
+        } else if (values[1].equals("Strict Contains")) { //$NON-NLS-1$
             operator = WSWhereOperator.STRICTCONTAINS;
-        } else if (values[1].equals("Is Empty Or Null")) {
+        } else if (values[1].equals("Is Empty Or Null")) { //$NON-NLS-1$
             operator = WSWhereOperator.EMPTY_NULL;
         }
         wc.setOperator(operator);
         wc.setRightValueOrPath(values[2]);
         WSStringPredicate predicate = null;
-        if (values[3].equals("")) {
+        if (values[3].equals("")) { //$NON-NLS-1$
             predicate = WSStringPredicate.NONE;
-        } else if (values[3].equals("Or")) {
+        } else if (values[3].equals("Or")) { //$NON-NLS-1$
             predicate = WSStringPredicate.OR;
         }
-        if (values[3].equals("And")) {
+        if (values[3].equals("And")) { //$NON-NLS-1$
             predicate = WSStringPredicate.AND;
         }
-        if (values[3].equals("Strict And")) {
+        if (values[3].equals("Strict And")) { //$NON-NLS-1$
             predicate = WSStringPredicate.STRICTAND;
         }
-        if (values[3].equals("Exactly")) {
+        if (values[3].equals("Exactly")) { //$NON-NLS-1$
             predicate = WSStringPredicate.EXACTLY;
         }
-        if (values[3].equals("Not")) {
+        if (values[3].equals("Not")) { //$NON-NLS-1$
             predicate = WSStringPredicate.NOT;
         }
         wc.setStringPredicate(predicate);
@@ -2725,7 +2746,7 @@ public class Util {
 
     /**
      * get all complex types's complextype children
-     * 
+     *
      * @param complexTypeDefinition
      * @return
      */
@@ -2818,7 +2839,7 @@ public class Util {
 
             if (baseTypeDefinition instanceof XSDComplexTypeDefinition && baseTypeDefinition != complexTypeDefinition) {
                 String name = ((XSDComplexTypeDefinition) baseTypeDefinition).getDerivationMethod().getName();
-                if (name.equals("restriction") || ignoreRestriction) {
+                if (name.equals("restriction") || ignoreRestriction) { //$NON-NLS-1$
                     list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) baseTypeDefinition, ignoreRestriction));
                     //
                 }
@@ -2878,10 +2899,9 @@ public class Util {
     }
 
     public static List<String> getConcepts(XSDSchema schema) {
-        EList xsdElementDeclarations = schema.getElementDeclarations();
+        EList<XSDElementDeclaration> xsdElementDeclarations = schema.getElementDeclarations();
         List<String> list = new ArrayList<String>();
-        for (XSDElementDeclaration el : (XSDElementDeclaration[]) xsdElementDeclarations
-                .toArray(new XSDElementDeclaration[xsdElementDeclarations.size()])) {
+        for (XSDElementDeclaration el : xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()])) {
             if (!el.getIdentityConstraintDefinitions().isEmpty()) {
                 list.add(el.getName());
             }
@@ -2891,7 +2911,7 @@ public class Util {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     * 
+     *
      * @param schema
      * @return
      * @throws Exception
@@ -3155,7 +3175,7 @@ public class Util {
 
     /**
      * Replace the source string by the parameters
-     * 
+     *
      * @param sourceString the source string with parameters,like : "This is {0} examples for {1}"
      * @param parameters the parameters used to do the replacement, the key is the index of the parameter, the value is
      * the content;
@@ -3244,8 +3264,9 @@ public class Util {
 
     public static boolean isUUID(XSDElementDeclaration decl) {
         XSDTypeDefinition typeDefinition = decl.getTypeDefinition();
-        if(null == typeDefinition)
-        	return false;
+        if(null == typeDefinition) {
+            return false;
+        }
         String type = typeDefinition.getName();
         if (type == null) {
             type = typeDefinition.getBaseType().getName();
@@ -3417,7 +3438,7 @@ public class Util {
     /**
      * DOC hbhong Comment method "unZipFile". same with unZipFile(String zipfile, String unzipdir) method except having
      * a progressMonitor
-     * 
+     *
      * @param zipfile
      * @param unzipdir
      * @param totalProgress
