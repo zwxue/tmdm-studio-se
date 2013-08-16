@@ -206,29 +206,28 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             Object pObject = Util.getParent(decl);
             if (pObject instanceof XSDElementDeclaration) {
                 parent = (XSDElementDeclaration) pObject;
-            } else if (pObject instanceof XSDComplexTypeDefinition) {
-                complexType = (XSDComplexTypeDefinition) pObject;
             }
 
             if (!anonymous) {
-                EList<XSDTypeDefinition> list = schema.getTypeDefinitions();
+                List<XSDComplexTypeDefinition> list = Util.getComplexTypes(schema);
                 if (typeName.lastIndexOf(" : ") != -1) {//$NON-NLS-1$
                     typeName = typeName.substring(0, typeName.lastIndexOf(" : "));//$NON-NLS-1$
                 }
-                for (Iterator<XSDTypeDefinition> iter = list.iterator(); iter.hasNext();) {
-                    XSDTypeDefinition td = iter.next();
-                    if ((td.getName().equals(typeName) && (td instanceof XSDComplexTypeDefinition))) {
+                for (Iterator<XSDComplexTypeDefinition> iter = list.iterator(); iter.hasNext();) {
+                    XSDComplexTypeDefinition td = iter.next();
+                    if ((td.getName().equals(typeName))) {
                         alreadyExists = true;
-                        complexType = (XSDComplexTypeDefinition) td;
+                        complexType = td;
                         break;
                     }
                 }
 
             } else {
+                XSDComplexTypeDefinition declComplexType = null;
                 if (parent != null && decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-                    complexType = (XSDComplexTypeDefinition) decl.getTypeDefinition();
+                    declComplexType = (XSDComplexTypeDefinition) decl.getTypeDefinition();
                 }
-                if (complexType != null && complexType.getSchema() != null && complexType.getName() == null) {
+                if (declComplexType != null && declComplexType.getSchema() != null && declComplexType.getName() == null) {
                     alreadyExists = true;
                 }
                 if (decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
@@ -236,8 +235,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 }
             }
 
-            if (complexType != null && complexType.getSchema() != null && !anonymous) {
-
+            if (alreadyExists) {
                 XSDParticle partCnt = (XSDParticle) complexType.getContentType();
                 partCnt.unsetMaxOccurs();
                 partCnt.unsetMinOccurs();
@@ -272,10 +270,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 if (complexType != null) {
                     complexType.updateElement();
                 }
-            }
-
-            // Create if does not exist
-            if (!alreadyExists) {
+            } else {// Create if does not exist
 
                 // add an element declaration
                 subElement = factory.createXSDElementDeclaration();

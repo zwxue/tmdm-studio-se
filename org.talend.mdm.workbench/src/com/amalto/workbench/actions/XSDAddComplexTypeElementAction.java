@@ -22,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -314,25 +313,20 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         XSDParticle groupParticle = null;
         XSDElementDeclaration subElement = null;
 
-        // check if already exist
-        // add by ymli; fix the bug:0012278;
         XSDElementDeclaration parent = null;
         Object pObject = Util.getParent(decl);
         if (pObject instanceof XSDElementDeclaration) {
             parent = (XSDElementDeclaration) pObject;
-        } else if (pObject instanceof XSDComplexTypeDefinition) {
-            complexType = (XSDComplexTypeDefinition) pObject;
         }
 
         if (!anonymous) {
-            EList<XSDTypeDefinition> list = schema.getTypeDefinitions();
             if (typeName.lastIndexOf(" : ") != -1) {//$NON-NLS-1$
                 typeName = typeName.substring(0, typeName.lastIndexOf(" : "));//$NON-NLS-1$
             }
-            for (XSDTypeDefinition td : list) {
-                if ((td.getName().equals(typeName) && (td instanceof XSDComplexTypeDefinition))) {
+            for (XSDComplexTypeDefinition td : types) {
+                if ((td.getName().equals(typeName))) {
                     alreadyExists = true;
-                    complexType = (XSDComplexTypeDefinition) td;
+                    complexType = td;
                     break;
                 }
             }
@@ -343,8 +337,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             }
         }
 
-        if (complexType != null && complexType.getSchema() != null) {
-
+        if (alreadyExists) {
             XSDParticle partCnt = (XSDParticle) complexType.getContentType();
             partCnt.unsetMaxOccurs();
             partCnt.unsetMinOccurs();
@@ -378,10 +371,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             if (complexType != null) {
                 complexType.updateElement();
             }
-        }
-
-        // Create if does not exist
-        if (!alreadyExists) {
+        } else {// Create if does not exist
 
             // add an element declaration
             subElement = factory.createXSDElementDeclaration();
