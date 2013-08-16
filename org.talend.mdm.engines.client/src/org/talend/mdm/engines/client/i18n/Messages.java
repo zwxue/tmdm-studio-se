@@ -136,4 +136,7 @@ public class Messages extends NLS {
     public static String ZipExport_alreadyExistsError;
 
     public static String ZipExport_mustBeFile;
+    
+    public static String EditorManager_saveChangesQuestion;
+    public static String Save_Resource;
 }

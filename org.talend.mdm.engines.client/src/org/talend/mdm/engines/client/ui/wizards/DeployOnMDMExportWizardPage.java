@@ -49,6 +49,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
@@ -145,6 +146,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     protected Map<ExportFileResource, RepositoryNode> processMap = new HashMap<ExportFileResource, RepositoryNode>();
 
     protected String selectedServer;
+    
+    private boolean saveflag= true;
 
     /**
      * Create an instance of this class.
@@ -530,6 +533,11 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         // Save dirty editors if possible but do not stop if not all are saved
         doSaveDirtyEditors();
+        
+        if(!saveflag){
+        	saveflag = true;
+        	return false;
+        }
         // about to invoke the operation so save our state
         doSaveWidgetValues();
 
@@ -539,9 +547,16 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     protected void doSaveDirtyEditors() {
         Display.getDefault().syncExec(new Runnable() {
-
             public void run() {
-                saveDirtyEditors();
+            	IEditorPart[] editors = PlatformUI.getWorkbench()
+        				.getActiveWorkbenchWindow().getActivePage()
+        				.getDirtyEditors();
+                if(null != editors && editors.length >0){
+                	saveflag =MessageDialog.openConfirm(getShell(), Messages.Save_Resource,Messages.EditorManager_saveChangesQuestion);
+                	if(saveflag){
+                		PlatformUI.getWorkbench().saveAllEditors(false);
+                	}
+                }
             }
         });
     }
