@@ -12,8 +12,13 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.util.LocalSelectionTransfer;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
@@ -27,28 +32,35 @@ import com.amalto.workbench.image.ImageCache;
  */
 public class CopyAction extends AbstractRepositoryAction {
 
-    /**
-     * DOC hbhong CreateFolderAction constructor comment.
-     * 
-     * @param text
-     */
-    public CopyAction() {
-        super(Messages.CopyAction_copy);
-        setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
-        this.setId(IRepositoryViewGlobalActionHandler.COPY);
-        this.setActionDefinitionId(IRepositoryViewGlobalActionHandler.COPY);
-    }
+	/**
+	 * DOC hbhong CreateFolderAction constructor comment.
+	 * 
+	 * @param text
+	 */
+	public CopyAction() {
+		super(Messages.CopyAction_copy);
+		setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
+		this.setId(IRepositoryViewGlobalActionHandler.COPY);
+		this.setActionDefinitionId(IRepositoryViewGlobalActionHandler.COPY);
+	}
 
-    public String getGroupName() {
-        return GROUP_COMMON;
-    }
+	public String getGroupName() {
+		return GROUP_COMMON;
+	}
 
-    protected void doRun() {
-        IStructuredSelection selection = (IStructuredSelection) getStructuredSelection();
-        LocalSelectionTransfer.getTransfer().setSelection(selection);
-    }
+	protected void doRun() {
+		ITreeSelection selection = (ITreeSelection) getStructuredSelection();
+		List<TreePath> paths = new ArrayList<TreePath>(selection.getPaths().length);
+		for(TreePath path : selection.getPaths()){
+			if (path.getSegmentCount() > 2) {
+				paths.add(path);
+			}
+		}
+		selection = new TreeSelection(paths.toArray(new TreePath[]{}));
+		LocalSelectionTransfer.getTransfer().setSelection(selection);
+	}
 
-    public boolean isVisible(IRepositoryViewObject viewObj) {
-        return getSelectedObject().size() == 1;
-    }
+	public boolean isVisible(IRepositoryViewObject viewObj) {
+		return getSelectedObject().size() == 1;
+	}
 }
