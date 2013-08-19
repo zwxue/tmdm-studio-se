@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -66,6 +68,7 @@ import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.SpagoBiServer;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.prefs.ITalendCorePrefConstants;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -75,6 +78,7 @@ import org.talend.designer.runprocess.JobErrorsChecker;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
 import org.talend.mdm.engines.client.i18n.Messages;
+import org.talend.mdm.engines.client.utils.WorkbenchUtil;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -147,6 +151,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     protected String selectedServer;
     
+    private IStructuredSelection selection;
+    
     private boolean saveflag= true;
 
     /**
@@ -156,6 +162,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
         super(name, null);
+        this.selection = selection;
         this.mdmServer = mdmserver;
         manager = new JobJavaScriptsWSManager(getExportChoiceMap(0, needContextScript()), BLANK,
                 JobScriptsManager.ALL_ENVIRONMENTS, IProcessor.NO_STATISTICS, IProcessor.NO_TRACES, EXT_WAR);
@@ -544,17 +551,21 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         monitor.worked(W_PREPARE_PROCESS);
         return true;
     }
-
+    
     protected void doSaveDirtyEditors() {
         Display.getDefault().syncExec(new Runnable() {
             public void run() {
-            	IEditorPart[] editors = PlatformUI.getWorkbench()
-        				.getActiveWorkbenchWindow().getActivePage()
-        				.getDirtyEditors();
-                if(null != editors && editors.length >0){
+            	if(selection.isEmpty()){
+            		saveflag = false;
+                	return;
+            	}
+            	Collection<IEditorPart> editors = WorkbenchUtil.getSelectDirtyEditor(selection, ERepositoryObjectType.PROCESS);
+                if(null != editors && editors.size() >0){
                 	saveflag =MessageDialog.openConfirm(getShell(), Messages.Save_Resource,Messages.EditorManager_saveChangesQuestion);
                 	if(saveflag){
-                		PlatformUI.getWorkbench().saveAllEditors(false);
+                		for (IEditorPart part : editors) {
+                			part.doSave(new NullProgressMonitor());
+        				}
                 	}
                 }
             }
