@@ -14,7 +14,6 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +44,6 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.impl.XSDModelGroupImpl;
-import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import org.w3c.dom.Element;
 
@@ -108,18 +106,21 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         if (selection.getFirstElement() instanceof XSDParticle) {
             selParticle = (XSDParticle) selection.getFirstElement();
 
-            if (!(selParticle.getContainer() instanceof XSDModelGroup))
+            if (!(selParticle.getContainer() instanceof XSDModelGroup)) {
                 return Status.CANCEL_STATUS;
+            }
 
             modelGroup = (XSDModelGroup) selParticle.getContainer();
         } else {
             if (selection.getFirstElement() instanceof XSDComplexTypeDefinition) {
                 XSDComplexTypeDefinition ctd = (XSDComplexTypeDefinition) selection.getFirstElement();
-                if (!(ctd.getContent() instanceof XSDParticle))
+                if (!(ctd.getContent() instanceof XSDParticle)) {
                     return Status.CANCEL_STATUS;
-                if (!(((XSDParticle) ctd.getContent()).getTerm() instanceof XSDModelGroup))
+                }
+                if (!(((XSDParticle) ctd.getContent()).getTerm() instanceof XSDModelGroup)) {
                     return Status.CANCEL_STATUS;
-                ;
+                }
+                
                 modelGroup = (XSDModelGroup) ((XSDParticle) ctd.getContent()).getTerm();
             } else if (selection.getFirstElement() instanceof XSDParticle) {
                 modelGroup = (XSDModelGroup) ((XSDParticle) selection.getFirstElement()).getTerm();
@@ -127,7 +128,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 modelGroup = (XSDModelGroup) selection.getFirstElement();
             } else {
                 log.info(Messages.bind(Messages._UnkownSection, selection.getFirstElement().getClass().getName(), selection
-                        .getFirstElement().toString())); //$NON-NLS-1$
+                        .getFirstElement().toString()));
                 return Status.CANCEL_STATUS;
             }
         }
@@ -174,7 +175,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 defaultTypeName);
         List<XSDComplexTypeDefinition> types = Util.getComplexTypes(schema);
 
-        dialogR = new ComplexTypeInputDialogR(page.getSite().getShell(), Messages._AddCType, modelGroup, schema, types, //$NON-NLS-1$
+        dialogR = new ComplexTypeInputDialogR(page.getSite().getShell(), Messages._AddCType, modelGroup, schema, types,
                 simpleTypeDefinition, false, false);
 
         dialogR.setBlockOnOpen(true);
@@ -205,9 +206,9 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             resultParticle.setMaxOccurs(this.maxOccurs);
             group.getContents().add(group.getContents().size(), resultParticle);
             group.updateElement();
-            if (resultParticle.getElement().getAttributeNode("maxOccurs") != null)//$NON-NLS-1$
+            if (resultParticle.getElement().getAttributeNode("maxOccurs") != null) {
                 resultParticle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");//$NON-NLS-1$//$NON-NLS-2$
-            else {
+            } else {
                 resultParticle.getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
             }
         }
@@ -217,19 +218,21 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             XSDElementDeclaration concept = null;
 
             Object parent = Util.getParent(resultParticle);
-            if (parent instanceof XSDElementDeclaration)
+            if (parent instanceof XSDElementDeclaration) {
                 concept = (XSDElementDeclaration) parent;
-            else {
+            } else {
                 concept = (XSDElementDeclaration) resultParticle.getContent();
             }
 
             XSDAnnotation fromannotation = null;
-            if (concept != null)
+            if (concept != null) {
                 fromannotation = concept.getAnnotation();
+            }
             if (fromannotation != null) {
                 XSDAnnotationsStructure struc = new XSDAnnotationsStructure(totm);
-                if (((XSDElementDeclaration) totm).getType() != null)
+                if (((XSDElementDeclaration) totm).getType() != null) {
                     addAnnotion(struc, fromannotation);
+                }
             }
 
         }
@@ -242,7 +245,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         infor = cloneXSDAnnotation(xsdannotationparent);
         Set<String> keys = infor.keySet();
         for (int i = 0; i < infor.size(); i++) {
-            List<String> lists = (List<String>) infor.get(keys.toArray()[i]);
+            List<String> lists = infor.get(keys.toArray()[i]);
             try {
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
@@ -293,56 +296,35 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         XSDParticle groupParticle = null;
         XSDElementDeclaration subElement = null;
 
-        // check if already exist
-        // add by ymli; fix the bug:0012278;
         XSDElementDeclaration parent = null;
         Object pObject = Util.getParent(decl);
-        if (pObject instanceof XSDElementDeclaration)
+        if (pObject instanceof XSDElementDeclaration) {
             parent = (XSDElementDeclaration) pObject;
-        else if (pObject instanceof XSDComplexTypeDefinition)
-            complexType = (XSDComplexTypeDefinition) pObject;
+        }
 
         if (!anonymous) {
-            EList<XSDTypeDefinition> list = schema.getTypeDefinitions();
             String ns = "";//$NON-NLS-1$
             if (typeName.lastIndexOf(" : ") != -1) {//$NON-NLS-1$
                 ns = typeName.substring(typeName.lastIndexOf(" : ") + 3);//$NON-NLS-1$
                 typeName = typeName.substring(0, typeName.lastIndexOf(" : "));//$NON-NLS-1$
             }
-            for (Iterator<XSDTypeDefinition> iter = list.iterator(); iter.hasNext();) {
-                XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
-                if ((td.getName().equals(typeName) && (td instanceof XSDComplexTypeDefinition))) {
+            for (XSDComplexTypeDefinition td : types) {
+                if ((td.getName().equals(typeName))) {
                     alreadyExists = true;
-                    complexType = (XSDComplexTypeDefinition) td;
+                    complexType = td;
                     break;
                 }
             }
 
         } else {
-            if (parent != null && decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-                // complexType = (XSDComplexTypeDefinition) parent.getTypeDefinition();
-                complexType = (XSDComplexTypeDefinition) decl.getTypeDefinition();
-            if (complexType != null && complexType.getSchema() != null && complexType.getName() == null) {
-                alreadyExists = true;
-            }
-            if (decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+            if (decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
                 alreadyExists = false;
+            }
         }
 
-        if (complexType != null && complexType.getSchema() != null) {
+        if (alreadyExists) {
 
-            XSDParticleImpl partCnt = (XSDParticleImpl) complexType.getContentType();
-            XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-            if (mdlGrp.getSchema() != null) {
-                if (isChoice)
-                    mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
-                else if (isAll) {
-                    mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
-
-                } else {
-                    mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-                }
-            }
+            XSDParticle partCnt = (XSDParticle) complexType.getContentType();
             partCnt.unsetMaxOccurs();
             partCnt.unsetMinOccurs();
             XSDTypeDefinition superType = null;
@@ -354,27 +336,28 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             }
 
             if (superType != null) {
-
+                XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
                 boolean status = updateCompositorType(superType, mdlGrp);
-                if (!status)
+                if (!status) {
                     return false;
+                }
 
                 complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                 complexType.setBaseTypeDefinition(superType);
             }
-            if (isAbstract)
+            if (isAbstract) {
                 complexType.setAbstract(isAbstract);
-            else
+            } else {
                 complexType.unsetAbstract();
+            }
 
-            if (parent != null)
+            if (parent != null) {
                 parent.updateElement();
-            if (complexType != null)
+            }
+            if (complexType != null) {
                 complexType.updateElement();
-        }
-
-        // Create if does not exist
-        if (!alreadyExists) {
+            }
+        } else {// Create if does not exist
 
             // add an element declaration
             subElement = factory.createXSDElementDeclaration();
@@ -390,12 +373,13 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
 
             // create group
             XSDModelGroup group = factory.createXSDModelGroup();
-            if (isChoice)
+            if (isChoice) {
                 group.setCompositor(XSDCompositor.CHOICE_LITERAL);
-            else if (isAll)
+            } else if (isAll) {
                 group.setCompositor(XSDCompositor.ALL_LITERAL);
-            else
+            } else {
                 group.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+            }
             group.getContents().add(0, subParticle);
             group.updateElement();
 
@@ -414,16 +398,18 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 complexType.setName(typeName);
                 if (superType != null) {
                     boolean status = updateCompositorType(superType, group);
-                    if (!status)
+                    if (!status) {
                         return false;
+                    }
 
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                     complexType.setBaseTypeDefinition(superType);
                 }
-                if (isAbstract)
+                if (isAbstract) {
                     complexType.setAbstract(isAbstract);
-                else
+                } else {
                     complexType.unsetAbstract();
+                }
                 schema.getContents().add(complexType);
             }
             complexType.updateElement();
@@ -440,9 +426,9 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
         }// end if NOT already exusts
 
         // set complex type to concept
-        if (anonymous)
+        if (anonymous) {
             decl.setAnonymousTypeDefinition(complexType);
-        else {
+        } else {
             decl.setTypeDefinition(complexType);
         }
 
@@ -452,10 +438,10 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
             // remove exisiting unique key(s)
             List<XSDIdentityConstraintDefinition> keys = new ArrayList<XSDIdentityConstraintDefinition>();
             EList<XSDIdentityConstraintDefinition> list = decl.getIdentityConstraintDefinitions();
-            for (Iterator<XSDIdentityConstraintDefinition> iter = list.iterator(); iter.hasNext();) {
-                XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-                if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+            for (XSDIdentityConstraintDefinition icd : list) {
+                if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                     keys.add(icd);
+                }
             }
             decl.getIdentityConstraintDefinitions().removeAll(keys);
 
@@ -465,8 +451,7 @@ public class XSDAddComplexTypeElementAction extends UndoAction {
                 if (((XSDParticle) complexType.getContent()).getTerm() instanceof XSDModelGroup) {
                     XSDModelGroup group = (XSDModelGroup) ((XSDParticle) complexType.getContent()).getTerm();
                     EList<XSDParticle> gpl = group.getContents();
-                    for (Iterator<XSDParticle> iter = gpl.iterator(); iter.hasNext();) {
-                        XSDParticle part = (XSDParticle) iter.next();
+                    for (XSDParticle part : gpl) {
                         if (part.getTerm() instanceof XSDElementDeclaration) {
                             firstDecl = (XSDElementDeclaration) part.getTerm();
                             break;
