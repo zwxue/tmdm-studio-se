@@ -37,8 +37,13 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -56,11 +61,13 @@ import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
@@ -73,6 +80,7 @@ import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.core.service.IMDMSVNProviderService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.actions.DeployAllAction;
@@ -94,7 +102,7 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
@@ -125,6 +133,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         super.createPartControl(aParent);
         initInput();
         registerEditorListener();
+        registerViewListener();
         contributeToActionBars();
         activateContext();
 
@@ -513,6 +522,39 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     private void unRegisterEditorListener() {
         this.getSite().getPage().removePartListener(editorListener);
         this.getSite().getPage().removePartListener(partListener);
+    }
+
+    private void registerViewListener() {
+        CommonViewer commonViewer = getCommonViewer();
+        commonViewer.getTree().addListener(SWT.MouseHover, getToolTipListener());
+    }
+
+    private Listener getToolTipListener() {
+        return new Listener() {
+
+            public void handleEvent(Event event) {
+                if (event.type == SWT.MouseHover) {
+                    TreeItem item = getCommonViewer().getTree().getItem(new Point(event.x, event.y));
+                    if (item != null) {
+                        Object data = item.getData();
+                        if (data instanceof IRepositoryViewObject) {
+                            IRepositoryViewObject viewObj = (IRepositoryViewObject) data;
+
+                            IMDMSVNProviderService toolTipProvider = (IMDMSVNProviderService) GlobalServiceRegister.getDefault()
+                                    .getService(IMDMSVNProviderService.class);
+
+                            String toolTip = toolTipProvider.getToolTip(viewObj);
+                            if (toolTip != null && !toolTip.trim().isEmpty()) {
+                                getCommonViewer().getTree().setToolTipText(toolTip);
+                            } else {
+                                getCommonViewer().getTree().setToolTipText(""); //$NON-NLS-1$
+                            }
+                        }
+                    }
+                }
+            }
+
+        };
     }
 
     @Override

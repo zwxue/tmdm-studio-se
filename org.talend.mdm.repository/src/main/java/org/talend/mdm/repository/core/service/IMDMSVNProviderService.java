@@ -23,4 +23,6 @@ public interface IMDMSVNProviderService extends IService {
     public String getCurrentSVNRevision(IRepositoryViewObject viewObj);
 
     public boolean isProjectInSvnMode();
+
+    public String getToolTip(IRepositoryViewObject viewObj);
 }
