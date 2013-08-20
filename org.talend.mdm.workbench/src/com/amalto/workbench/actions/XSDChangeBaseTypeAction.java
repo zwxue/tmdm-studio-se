@@ -13,7 +13,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +38,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class XSDChangeBaseTypeAction extends UndoAction implements SelectionListener {
 
@@ -69,25 +70,20 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 
             // build list of custom types and built in types
             ArrayList customTypes = new ArrayList();
-            for (Iterator iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+            for (Object element : schema.getTypeDefinitions()) {
+                XSDTypeDefinition type = (XSDTypeDefinition) element;
                 if (type instanceof XSDSimpleTypeDefinition) {
                     if (type.getTargetNamespace() != null
                             && !type.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)
-                            || type.getTargetNamespace() == null)
-
+                            || type.getTargetNamespace() == null) {
                         customTypes.add(type.getName());
+                    }
                 }
             }
-            ArrayList builtInTypes = new ArrayList();
-            for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-                if (type instanceof XSDSimpleTypeDefinition)
-                    builtInTypes.add(type.getName());
-            }
-            //can't change builtin's base type
-            if(builtInTypes.contains(typedef.getName())){
-            	return Status.CANCEL_STATUS;
+            List builtInTypes = XSDUtil.getBuiltInTypes();
+            // can't change builtin's base type
+            if (builtInTypes.contains(typedef.getName())) {
+                return Status.CANCEL_STATUS;
             }
             dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema,
                     Messages.XSDChangeBaseTypeAction_DialogTitle, customTypes, builtInTypes, typedef.getBaseTypeDefinition()
@@ -165,24 +161,27 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
     }
 
     public void widgetSelected(SelectionEvent e) {
-        if (dialog.getReturnCode() == -1)
+        if (dialog.getReturnCode() == -1) {
             return;
+        }
         typeName = dialog.getTypeName();
         builtIn = dialog.isBuiltIn();
 
         // if built in, check that the type actually exists
         if (builtIn) {
             boolean found = false;
-            for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-                if (type instanceof XSDSimpleTypeDefinition)
+            for (Object element : schema.getSchemaForSchema().getTypeDefinitions()) {
+                XSDTypeDefinition type = (XSDTypeDefinition) element;
+                if (type instanceof XSDSimpleTypeDefinition) {
                     if (type.getName().equals(typeName)) {
                         found = true;
                         break;
                     }
+                }
             }
             if (!found) {
-                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDChangeBaseTypeAction_ErrorMsg2, typeName));
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.XSDChangeBaseTypeAction_ErrorMsg2, typeName));
                 return;
             }
         }

@@ -35,6 +35,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionListener {
 
@@ -58,19 +59,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
     public IStatus doAction() {
 
         List<String> customTypes = new ArrayList<String>();
-        List<String> builtInTypes = new ArrayList<String>();
-        // These types are not supposed to show in the custom list box when create a simple type.
-        /*
-         * for (Iterator iter = schema.getTypeDefinitions().iterator(); iter.hasNext(); ) { XSDTypeDefinition type =
-         * (XSDTypeDefinition) iter.next(); if (type instanceof XSDSimpleTypeDefinition)
-         * customTypes.add(type.getName()); }
-         */
-
-        for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-            XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-            if (type instanceof XSDSimpleTypeDefinition)
-                builtInTypes.add(type.getName());
-        }
+        List<String> builtInTypes = XSDUtil.getBuiltInTypes();
 
         dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema,
                 Messages.XSDNewSimpleTypeDefinition_NewSimpleType, customTypes, builtInTypes, null);
@@ -102,26 +91,30 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
     }
 
     public void widgetSelected(SelectionEvent e) {
-        if (dialog.getReturnCode() == -1)
+        if (dialog.getReturnCode() == -1) {
             return;
+        }
         typeName = dialog.getTypeName();
-        if (typeName.trim().length() == 0)
+        if (typeName.trim().length() == 0) {
             return;
+        }
         builtIn = dialog.isBuiltIn();
 
         // if built in, check that the type actually exists
         if (builtIn) {
             boolean found = false;
-            for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-                if (type instanceof XSDSimpleTypeDefinition)
+            for (Object element : schema.getSchemaForSchema().getTypeDefinitions()) {
+                XSDTypeDefinition type = (XSDTypeDefinition) element;
+                if (type instanceof XSDSimpleTypeDefinition) {
                     if (type.getName().equals(typeName)) {
                         found = true;
                         break;
                     }
+                }
             }
             if (!found) {
-                MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDNewSimpleTypeDefinition_ErrorMsg, typeName));
+                MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.XSDNewSimpleTypeDefinition_ErrorMsg, typeName));
                 return;
             }
         }

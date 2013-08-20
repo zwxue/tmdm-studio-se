@@ -47,6 +47,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.XSDUtil;
 
 public class XSDChangeToSimpleTypeAction extends UndoAction implements SelectionListener {
 
@@ -91,9 +92,9 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
             // fliu
             // add declNew to support convert action invoked from new concept/new element menu, in this case
             // declNew is the new created one not the selected one in tree vew
-            if (declNew != null)
+            if (declNew != null) {
                 decl = declNew;
-            else if (selection.getFirstElement() instanceof XSDElementDeclaration) {
+            } else if (selection.getFirstElement() instanceof XSDElementDeclaration) {
                 isConcept = true;
                 decl = (XSDElementDeclaration) selection.getFirstElement();
 
@@ -106,26 +107,27 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 
             // build list of custom types and built in types
             List<String> customTypes = new ArrayList<String>();
-            for (Iterator<XSDTypeDefinition> iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = iter.next();
+            for (XSDTypeDefinition type : schema.getTypeDefinitions()) {
                 if (type instanceof XSDSimpleTypeDefinition) {
                     if (type.getTargetNamespace() != null
                             && !type.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)
-                            || type.getTargetNamespace() == null)
+                            || type.getTargetNamespace() == null) {
                         customTypes.add(type.getName());
+                    }
                 }
             }
-            List<String> builtInTypes = new ArrayList<String>();
-            initBuiltInTypesWithSelectedTypes(builtInTypes);
+            List<String> builtInTypes = XSDUtil.getBuiltInTypes();
 
             if (showDlg) {
                 String name = decl.getTypeDefinition().getName();
 
-                if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+                if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
                     name = null;
-                    boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning, Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
-                    if(!confirm)
+                    boolean confirm = MessageDialog.openConfirm(page.getSite().getShell(), Messages.Warning,
+                            Messages.XSDChangeToCXX_ChangeToAnotherTypeWarning);
+                    if (!confirm) {
                         return Status.CANCEL_STATUS;
+                    }
                 }
 
                 dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, Messages.XSDChangeToXX_DialogTitle,
@@ -146,8 +148,9 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                 EList list = decl.getIdentityConstraintDefinitions();
                 for (Iterator iter = list.iterator(); iter.hasNext();) {
                     XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                         keys.add(icd);
+                    }
                 }
                 decl.getIdentityConstraintDefinitions().removeAll(keys);
                 // add new unique Key
@@ -194,7 +197,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                         std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(),
                                 "string"));//$NON-NLS-1$
 
-                        if(typeName.equals(EUUIDCustomType.MULTI_LINGUAL.getName())){
+                        if (typeName.equals(EUUIDCustomType.MULTI_LINGUAL.getName())) {
                             XSDPatternFacet f = XSDSchemaBuildingTools.getXSDFactory().createXSDPatternFacet();
                             f.setLexicalValue("(\\[\\w+\\:[^\\[\\]]*\\]){0,}");//$NON-NLS-1$
                             std.getFacetContents().add(f);
@@ -238,61 +241,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
         return Status.OK_STATUS;
     }
 
-    private void initBuiltInTypesWithSelectedTypes(List<String> builtInTypes) {
-
-    	builtInTypes.add("anyURI");              //$NON-NLS-1$
-    	builtInTypes.add("base64Binary");              //$NON-NLS-1$
-    	builtInTypes.add("boolean");              //$NON-NLS-1$
-    	builtInTypes.add("byte");              //$NON-NLS-1$
-    	builtInTypes.add("date");              //$NON-NLS-1$
-    	builtInTypes.add("dateTime");              //$NON-NLS-1$
-    	builtInTypes.add("decimal");              //$NON-NLS-1$
-    	builtInTypes.add("double");              //$NON-NLS-1$
-    	builtInTypes.add("duration");              //$NON-NLS-1$
-    	builtInTypes.add("float");              //$NON-NLS-1$
-    	builtInTypes.add("gDay");              //$NON-NLS-1$
-    	builtInTypes.add("gMonth");              //$NON-NLS-1$
-    	builtInTypes.add("gMonthDay");              //$NON-NLS-1$
-    	builtInTypes.add("gYear");              //$NON-NLS-1$
-    	builtInTypes.add("gYearMonth");              //$NON-NLS-1$
-    	builtInTypes.add("hexBinary");              //$NON-NLS-1$
-    	builtInTypes.add("int");              //$NON-NLS-1$
-    	builtInTypes.add("integer");              //$NON-NLS-1$
-    	builtInTypes.add("language");              //$NON-NLS-1$
-    	builtInTypes.add("long");              //$NON-NLS-1$
-    	builtInTypes.add("negativeInteger");              //$NON-NLS-1$
-    	builtInTypes.add("nonNegativeInteger");              //$NON-NLS-1$
-    	builtInTypes.add("nonPositiveInteger");              //$NON-NLS-1$
-    	builtInTypes.add("normalizedString");              //$NON-NLS-1$
-    	builtInTypes.add("positiveInteger");              //$NON-NLS-1$
-    	builtInTypes.add("short");              //$NON-NLS-1$
-    	builtInTypes.add("string");              //$NON-NLS-1$
-    	builtInTypes.add("time");              //$NON-NLS-1$
-    	builtInTypes.add("token");              //$NON-NLS-1$
-    	builtInTypes.add("unsignedByte");              //$NON-NLS-1$
-    	builtInTypes.add("unsignedInt");              //$NON-NLS-1$
-    	builtInTypes.add("unsignedLong");              //$NON-NLS-1$
-    	builtInTypes.add("unsignedShort");              //$NON-NLS-1$
-
-
-    	builtInTypes.add("ENTITIES");              //$NON-NLS-1$
-    	builtInTypes.add("ENTITY");              //$NON-NLS-1$
-    	builtInTypes.add("ID");              //$NON-NLS-1$
-    	builtInTypes.add("IDREF");              //$NON-NLS-1$
-    	builtInTypes.add("IDREFS");              //$NON-NLS-1$
-    	builtInTypes.add("NCName");              //$NON-NLS-1$
-    	builtInTypes.add("NMTOKEN");              //$NON-NLS-1$
-    	builtInTypes.add("NMTOKENS");              //$NON-NLS-1$
-    	builtInTypes.add("NOTATION");              //$NON-NLS-1$
-    	builtInTypes.add("Name");              //$NON-NLS-1$
-    	builtInTypes.add("QName");              //$NON-NLS-1$
-
-
-	}
-
-
-
-	@Override
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
@@ -304,8 +253,9 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
     }
 
     public void widgetSelected(SelectionEvent e) {
-        if (dialog.getReturnCode() == -1)
+        if (dialog.getReturnCode() == -1) {
             return;
+        }
         typeName = dialog.getTypeName();
         builtIn = dialog.isBuiltIn();
 
@@ -318,16 +268,18 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 
     private boolean validateType() {
         boolean found = false;
-        for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-            XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-            if (type instanceof XSDSimpleTypeDefinition)
+        for (Object element : schema.getSchemaForSchema().getTypeDefinitions()) {
+            XSDTypeDefinition type = (XSDTypeDefinition) element;
+            if (type instanceof XSDSimpleTypeDefinition) {
                 if (type.getName().equals(typeName)) {
                     found = true;
                     break;
                 }
+            }
         }
         if (!found) {
-            MessageDialog.openError(page.getSite().getShell(), Messages._Error, Messages.bind(Messages.XSDChangeToXX_ErrorMsg2, typeName ));
+            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.XSDChangeToXX_ErrorMsg2, typeName));
             return false;
         }
 
