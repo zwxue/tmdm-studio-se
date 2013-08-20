@@ -76,8 +76,8 @@ public class JobResourceListener implements PropertyChangeListener {
                 try {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof RepositoryEditorInput) {
-                        RepositoryNode repositoryNode = ((RepositoryEditorInput) editorInput).getRepositoryNode();
-                        if (repositoryNode != null && repositoryNode.getObject().equals(vObj)) {
+                    	Item item = ((RepositoryEditorInput) editorInput).getItem();
+                        if (item != null && item.equals(vObj.getProperty().getItem())) {
                             return true;
                         }
                     }
