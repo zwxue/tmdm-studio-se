@@ -71,9 +71,6 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
         if (type == TYPE_EVENTMANAGER) {
             return ServerObjectImage.EVENTMANAGER_ICON;
         }
-        if (type == TYPE_JOBMODEL) {
-            return ServerObjectImage.JOBMODEL_ICON;
-        }
         if (type == TYPE_RESOURCE) {
             return ServerObjectImage.RESOURCE_ICON;
         }

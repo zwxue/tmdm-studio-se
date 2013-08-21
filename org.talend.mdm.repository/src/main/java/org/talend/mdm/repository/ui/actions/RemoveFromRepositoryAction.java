@@ -24,6 +24,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.TDQItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
@@ -74,6 +75,7 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         return true;
     }
 
+    @Override
     protected void doRun() {
         List<Object> selectedObject = getSelectedObject();
         int size = selectedObject.size();
@@ -107,12 +109,14 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
 
         commonViewer.refresh();
 
-        if (lockedObjs.size() > 0)
+        if (lockedObjs.size() > 0) {
             MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
+        }
     }
 
     private boolean isServerObject(IRepositoryViewObject viewObj) {
-        return viewObj.getProperty().getItem() instanceof MDMServerObjectItem;
+        Item item = viewObj.getProperty().getItem();
+        return item instanceof MDMServerObjectItem || item instanceof TDQItem;
     }
 
     private void removeServerObject(IRepositoryViewObject viewObj) {
@@ -123,11 +127,13 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
             if (ref != null) {
                 RepositoryResourceUtil.closeEditor(ref, true);
             }
-            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
 
             factory.deleteObjectLogical(viewObj);
-            CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), serverObj.getName());
-        } catch(BusinessException e) {
+            if (item instanceof MDMServerObjectItem) {
+                MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+                CommandManager.getInstance().pushCommand(ICommand.CMD_DELETE, viewObj.getId(), serverObj.getName());
+            }
+        } catch (BusinessException e) {
             MessageDialog.openError(getShell(), Messages.Common_Error, e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -180,8 +186,9 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
     }
 
     private void initLockedObjectArray() {
-        if (lockedObjs == null)
+        if (lockedObjs == null) {
             lockedObjs = new ArrayList<Object>();
+        }
         lockedObjs.clear();
     }
 

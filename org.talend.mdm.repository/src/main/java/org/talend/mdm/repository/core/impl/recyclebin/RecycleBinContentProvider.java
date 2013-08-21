@@ -58,11 +58,16 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
 
     private static final String JOB_PREFIX = "process"; //$NON-NLS-1$
 
+    private static final String DQ_PREFIX = "TDQ_"; //$NON-NLS-1$
+
     private Map<ERepositoryObjectType, Map<String, FolderRepositoryObject>> containerMap = new HashMap<ERepositoryObjectType, Map<String, FolderRepositoryObject>>();
 
     private static final Pattern mdmPattern = Pattern.compile("(MDM/\\w*+)((/(\\w*))+)"); //$NON-NLS-1$
 
     private static final Pattern jobPattern = Pattern.compile("(process)((/(\\w*))+)"); //$NON-NLS-1$
+
+    // TODO
+    private static final Pattern matchRulePattern = Pattern.compile("(TDQ_Libraries/Rules/SQL)((/(\\w*))+)"); //$NON-NLS-1$
 
     private static Logger log = Logger.getLogger(RecycleBinContentProvider.class);
 
@@ -94,6 +99,8 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
                 matcher = mdmPattern.matcher(path);
             } else if (path.startsWith(JOB_PREFIX)) {
                 matcher = jobPattern.matcher(path);
+            } else if (path.startsWith(DQ_PREFIX)) {
+                matcher = matchRulePattern.matcher(path);
             }
             if (matcher != null && matcher.find()) {
                 String parentFolder = matcher.group(1);
@@ -184,6 +191,7 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
         return null;
     }
 
+    @Override
     protected List<IRepositoryViewObject> getViewObjFromSystemFolder(Item parentItem) {
         return null;
     }
@@ -197,7 +205,7 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
         List<String> result = new ArrayList<String>(folderPaths.size());
         while (il.hasNext()) {
             String path = (String) il.next();
-            if (path.startsWith(MDM_PREFIX) || path.startsWith(JOB_PREFIX)) {
+            if (path.startsWith(MDM_PREFIX) || path.startsWith(JOB_PREFIX) || path.startsWith(DQ_PREFIX)) {
                 result.add(path);
             }
         }
