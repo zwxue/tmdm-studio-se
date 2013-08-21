@@ -25,14 +25,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.talend.core.CorePlugin;
 import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.mdm.engines.client.i18n.Messages;
 
 /**
  * Publish SpagoBI export wizard. <br/>
- * 
+ *
  * $Id: DeployOnMDMExportWizard.java 1 2007-04-27 11:30:00 cantoine
- * 
+ *
  */
 public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
 
@@ -93,10 +94,18 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
      */
     @Override
     public boolean performFinish() {
+        if (hasCompileErrors()) {
+            return true;
+        }
+
         boolean finish = mainPage.finish();
         setMdmServer(mainPage.getMdmServer());
 
         return finish;
+    }
+
+    private boolean hasCompileErrors() {
+        return CorePlugin.getDefault().getRunProcessService().checkExportProcess(selection, true);
     }
 
     public SpagoBiServer getMdmServer() {
