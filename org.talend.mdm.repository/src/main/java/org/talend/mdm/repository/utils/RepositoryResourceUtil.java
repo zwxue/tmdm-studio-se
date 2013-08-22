@@ -719,29 +719,32 @@ public class RepositoryResourceUtil {
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem, IFolder folder,
             boolean useRepositoryViewObject, boolean withDeleted) {
         List<IRepositoryViewObject> viewObjects = new LinkedList<IRepositoryViewObject>();
-        try {
-            for (IResource res : folder.members()) {
-                if (res instanceof IFolder) {
-                    if ((withDeleted || !isDeletedFolder((IFolder) res)) && !isSVNFolder((IFolder) res)) {
-                        IRepositoryViewObject folderObject = null;
+        if (folder.exists()) {
+            try {
+                for (IResource res : folder.members()) {
+                    if (res instanceof IFolder) {
+                        if ((withDeleted || !isDeletedFolder((IFolder) res)) && !isSVNFolder((IFolder) res)) {
+                            IRepositoryViewObject folderObject = null;
 
-                        // firstly,to get the cached one, if not find, create it
-                        String resPath = parentItem.getState().getPath() + IPath.SEPARATOR + res.getName();
-                        folderObject = ContainerCacheService.get(type, resPath);
+                            // firstly,to get the cached one, if not find, create it
+                            String resPath = parentItem.getState().getPath() + IPath.SEPARATOR + res.getName();
+                            folderObject = ContainerCacheService.get(type, resPath);
 
-                        if (folderObject == null) {
-                            folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
+                            if (folderObject == null) {
+                                folderObject = createFolderViewObject(type, res.getName(), parentItem, false);
+                            }
+
+                            viewObjects.add(folderObject);
                         }
-
-                        viewObjects.add(folderObject);
                     }
                 }
-            }
-            List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem, useRepositoryViewObject, withDeleted);
-            viewObjects.addAll(children);
+                List<IRepositoryViewObject> children = findViewObjectsInFolder(type, parentItem, useRepositoryViewObject,
+                        withDeleted);
+                viewObjects.addAll(children);
 
-        } catch (CoreException e) {
-            log.error(e.getMessage(), e);
+            } catch (CoreException e) {
+                log.error(e.getMessage(), e);
+            }
         }
         // ((ContainerRepositoryObject) parentItem.getParent()).getChildren().addAll(viewObjects);
         return viewObjects;
