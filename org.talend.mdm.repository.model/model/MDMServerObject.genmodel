@@ -3,7 +3,7 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.talend.mdm.repository.model/src/main/java"
     modelPluginID="org.talend.mdm.repository.model" modelName="MDMServerObject" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg MDMMetadata.genmodel#//mdmmetadata ../../org.talend.model/model/metadata.genmodel#//connection">
+    complianceLevel="6.0" copyrightFields="false" runtimeVersion="2.6" usedGenPackages="../../org.talend.cwm.mip/model/cwm_mip.genmodel#//orgomg platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore MDMMetadata.genmodel#//mdmmetadata ../../org.talend.model/model/metadata.genmodel#//connection">
   <foreignModel>MDMServerObject.ecore</foreignModel>
   <genPackages prefix="Mdmserverobject" basePackage="org.talend.mdm.repository.model"
       disposableProviderFactory="true" ecorePackage="MDMServerObject.ecore#/">
@@ -13,6 +13,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/system"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference MDMServerObject.ecore#//MDMServerObject/lastServerDef"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/timestamp"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//MDMServerObject/digestValue"/>
       <genOperations ecoreOperation="MDMServerObject.ecore#//MDMServerObject/getUniqueName"/>
     </genClasses>
     <genClasses ecoreClass="MDMServerObject.ecore#//WSMenuE">
@@ -190,5 +192,28 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/xml"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//WSCustomFormE/role"/>
     </genClasses>
+    <nestedGenPackages prefix="MatchRule" basePackage="org.talend.mdm.repository.model.mdmserverobject"
+        disposableProviderFactory="true" ecorePackage="MDMServerObject.ecore#//matchrule">
+      <genClasses ecoreClass="MDMServerObject.ecore#//matchrule/MatchRuleMapInfo">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//matchrule/MatchRuleMapInfo/entityMapInfos"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//matchrule/MatchRuleMapInfo/matchRuleName"/>
+      </genClasses>
+      <genClasses ecoreClass="MDMServerObject.ecore#//matchrule/EntityMapInfo">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//matchrule/EntityMapInfo/entityName"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//matchrule/EntityMapInfo/matchKeyMap"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//matchrule/EntityMapInfo/blockingKeyDefinition"/>
+      </genClasses>
+      <genClasses ecoreClass="MDMServerObject.ecore#//matchrule/MatchKeyXPathMap">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//matchrule/MatchKeyXPathMap/key"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//matchrule/MatchKeyXPathMap/value"/>
+      </genClasses>
+      <genClasses ecoreClass="MDMServerObject.ecore#//matchrule/BlockingKeyDefinition">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MDMServerObject.ecore#//matchrule/BlockingKeyDefinition/blockingKeys"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//matchrule/BlockingKeyDefinition/useBuiltInColumn"/>
+      </genClasses>
+      <genClasses ecoreClass="MDMServerObject.ecore#//matchrule/BlockingKey">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MDMServerObject.ecore#//matchrule/BlockingKey/elmentName"/>
+      </genClasses>
+    </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>

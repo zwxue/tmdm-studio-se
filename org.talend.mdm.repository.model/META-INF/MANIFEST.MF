@@ -24,4 +24,7 @@ Export-Package: org.talend.mdm.repository.model.mdmmetadata,
  org.talend.mdm.repository.model.mdmproperties.util,
  org.talend.mdm.repository.model.mdmserverobject,
  org.talend.mdm.repository.model.mdmserverobject.impl,
+ org.talend.mdm.repository.model.mdmserverobject.matchrule,
+ org.talend.mdm.repository.model.mdmserverobject.matchrule.impl,
+ org.talend.mdm.repository.model.mdmserverobject.matchrule.util,
  org.talend.mdm.repository.model.mdmserverobject.util

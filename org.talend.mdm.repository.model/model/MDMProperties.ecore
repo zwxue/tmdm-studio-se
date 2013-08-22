@@ -76,4 +76,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="WorkspaceRootItem" eSuperTypes="#//MDMItem ../../org.talend.model/model/properties.ecore#//FolderItem">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSMatchRuleItem" eSuperTypes="#//MDMServerObjectItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mdmMatchRule" eType="ecore:EClass MDMServerObject.ecore#//WSMatchRuleE"/>
+  </eClassifiers>
 </ecore:EPackage>

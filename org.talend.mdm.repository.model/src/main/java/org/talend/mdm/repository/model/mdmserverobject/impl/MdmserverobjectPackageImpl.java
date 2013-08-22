@@ -1,7 +1,6 @@
 /**
- * <copyright>
- * </copyright>
- *
+ * <copyright> </copyright>
+ * 
  * $Id$
  */
 package org.talend.mdm.repository.model.mdmserverobject.impl;
@@ -10,6 +9,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
@@ -52,290 +52,251 @@ import org.talend.mdm.repository.model.mdmserverobject.WSWhereConditionE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWhereOperatorE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowDeployE;
 import org.talend.mdm.repository.model.mdmserverobject.WSWorkflowE;
+import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage;
+import org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Package</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
  * @generated
  */
 public class MdmserverobjectPackageImpl extends EPackageImpl implements MdmserverobjectPackage {
+
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass mdmServerObjectEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsMenuEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsMenuEntryEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsMenuMenuEntriesDescriptionsEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsRoleEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsRoleSpecificationEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsRoleSpecificationInstanceEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsViewEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsWhereConditionEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsWhereOperatorEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsStringPredicateEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsDataModelEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsDataClusterEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsStoredProcedureEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsUniverseEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsUniverseXtentisObjectsRevisionIDsEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsUniverseItemsRevisionIDsEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsSynchronizationPlanEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsSynchronizationPlanItemsSynchronizationsEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsBooleanEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsWorkflowDeployEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsTransformerV2EEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsTransformerProcessStepEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsTransformerVariablesMappingEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsTypedContentEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsByteArrayEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsRoutingRuleEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsRoutingRuleExpressionEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsRoutingRuleOperatorEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsJobModelEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsEventManagerEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsServiceConfigurationEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsServicePutConfigurationEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsWorkflowEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsResourceEEClass = null;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private EClass wsCustomFormEEClass = null;
 
     /**
-     * Creates an instance of the model <b>Package</b>, registered with
-     * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
-     * package URI value.
-     * <p>Note: the correct way to create the package is via the static
-     * factory method {@link #init init()}, which also performs
-     * initialization of the package, or returns the registered package,
-     * if one already exists.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
+     * EPackage.Registry} by the package package URI value.
+     * <p>
+     * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also
+     * performs initialization of the package, or returns the registered package, if one already exists. <!--
+     * begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see org.eclipse.emf.ecore.EPackage.Registry
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#eNS_URI
      * @see #init()
@@ -346,8 +307,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private static boolean isInited = false;
@@ -355,10 +315,11 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     /**
      * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
      * 
-     * <p>This method is used to initialize {@link MdmserverobjectPackage#eINSTANCE} when that field is accessed.
-     * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <p>
+     * This method is used to initialize {@link MdmserverobjectPackage#eINSTANCE} when that field is accessed. Clients
+     * should not invoke it directly. Instead, they should simply access that field to obtain the package. <!--
+     * begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #eNS_URI
      * @see #createPackageContents()
      * @see #initializePackageContents()
@@ -373,13 +334,19 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         isInited = true;
 
         // Initialize simple dependencies
+        EcorePackage.eINSTANCE.eClass();
         MdmmetadataPackage.eINSTANCE.eClass();
+
+        // Obtain or create and register interdependencies
+        MatchRulePackageImpl theMatchRulePackage = (MatchRulePackageImpl)(EPackage.Registry.INSTANCE.getEPackage(MatchRulePackage.eNS_URI) instanceof MatchRulePackageImpl ? EPackage.Registry.INSTANCE.getEPackage(MatchRulePackage.eNS_URI) : MatchRulePackage.eINSTANCE);
 
         // Create package meta-data objects
         theMdmserverobjectPackage.createPackageContents();
+        theMatchRulePackage.createPackageContents();
 
         // Initialize created meta-data
         theMdmserverobjectPackage.initializePackageContents();
+        theMatchRulePackage.initializePackageContents();
 
         // Mark meta-data to indicate it can't be changed
         theMdmserverobjectPackage.freeze();
@@ -391,1349 +358,1348 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getMDMServerObject() {
         return mdmServerObjectEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Name() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Description() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_System() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getMDMServerObject_LastServerDef() {
         return (EReference)mdmServerObjectEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Type() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_Timestamp() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(5);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getMDMServerObject_DigestValue() {
         return (EAttribute)mdmServerObjectEClass.getEStructuralFeatures().get(6);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMenuE() {
         return wsMenuEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMenuE_MenuEntries() {
         return (EReference)wsMenuEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMenuEntryE() {
         return wsMenuEntryEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Id() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Application() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Context() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuEntryE_Icon() {
         return (EAttribute)wsMenuEntryEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMenuEntryE_Descriptions() {
         return (EReference)wsMenuEntryEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSMenuEntryE_SubMenus() {
         return (EReference)wsMenuEntryEEClass.getEStructuralFeatures().get(5);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSMenuMenuEntriesDescriptionsE() {
         return wsMenuMenuEntriesDescriptionsEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuMenuEntriesDescriptionsE_Language() {
         return (EAttribute)wsMenuMenuEntriesDescriptionsEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSMenuMenuEntriesDescriptionsE_Label() {
         return (EAttribute)wsMenuMenuEntriesDescriptionsEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoleE() {
         return wsRoleEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoleE_Specification() {
         return (EReference)wsRoleEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoleSpecificationE() {
         return wsRoleSpecificationEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationE_Admin() {
         return (EAttribute)wsRoleSpecificationEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationE_ObjectType() {
         return (EAttribute)wsRoleSpecificationEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoleSpecificationE_Instance() {
         return (EReference)wsRoleSpecificationEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoleSpecificationInstanceE() {
         return wsRoleSpecificationInstanceEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationInstanceE_InstanceName() {
         return (EAttribute)wsRoleSpecificationInstanceEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationInstanceE_Writable() {
         return (EAttribute)wsRoleSpecificationInstanceEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoleSpecificationInstanceE_Parameter() {
         return (EAttribute)wsRoleSpecificationInstanceEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSViewE() {
         return wsViewEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_SearchableBusinessElements() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_ViewableBusinessElements() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_TransformerActive() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSViewE_WhereConditions() {
         return (EReference)wsViewEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSViewE_IsTransformerActive() {
         return (EReference)wsViewEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSViewE_TransformerPK() {
         return (EAttribute)wsViewEEClass.getEStructuralFeatures().get(5);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWhereConditionE() {
         return wsWhereConditionEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereConditionE_LeftPath() {
         return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereConditionE_RightValueOrPath() {
         return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSWhereConditionE_StringPredicate() {
         return (EReference)wsWhereConditionEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSWhereConditionE_Operator() {
         return (EReference)wsWhereConditionEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereConditionE_SpellCheck() {
         return (EAttribute)wsWhereConditionEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWhereOperatorE() {
         return wsWhereOperatorEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWhereOperatorE_Value() {
         return (EAttribute)wsWhereOperatorEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSStringPredicateE() {
         return wsStringPredicateEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSStringPredicateE_Value() {
         return (EAttribute)wsStringPredicateEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSDataModelE() {
         return wsDataModelEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSDataModelE_XsdSchema() {
         return (EAttribute)wsDataModelEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSDataClusterE() {
         return wsDataClusterEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSDataClusterE_Vocabulary() {
         return (EAttribute)wsDataClusterEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSStoredProcedureE() {
         return wsStoredProcedureEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSStoredProcedureE_Procedure() {
         return (EAttribute)wsStoredProcedureEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSStoredProcedureE_RefreshCache() {
         return (EAttribute)wsStoredProcedureEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSUniverseE() {
         return wsUniverseEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSUniverseE_DefaultItemsRevisionID() {
         return (EAttribute)wsUniverseEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSUniverseE_XtentisObjectsRevisionIDs() {
         return (EReference)wsUniverseEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSUniverseE_ItemsRevisionIDs() {
         return (EReference)wsUniverseEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSUniverseXtentisObjectsRevisionIDsE() {
         return wsUniverseXtentisObjectsRevisionIDsEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSUniverseXtentisObjectsRevisionIDsE_XtentisObjectName() {
         return (EAttribute)wsUniverseXtentisObjectsRevisionIDsEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSUniverseXtentisObjectsRevisionIDsE_RevisionID() {
         return (EAttribute)wsUniverseXtentisObjectsRevisionIDsEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSUniverseItemsRevisionIDsE() {
         return wsUniverseItemsRevisionIDsEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSUniverseItemsRevisionIDsE_ConceptPattern() {
         return (EAttribute)wsUniverseItemsRevisionIDsEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSUniverseItemsRevisionIDsE_RevisionID() {
         return (EAttribute)wsUniverseItemsRevisionIDsEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSSynchronizationPlanE() {
         return wsSynchronizationPlanEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_RemoteSystemName() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_RemoteSystemURL() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_RemoteSystemUsername() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_RemoteSystemPassword() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_TisURL() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_TisUsername() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(5);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_TisPassword() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(6);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanE_TisParameters() {
         return (EAttribute)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(7);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSSynchronizationPlanE_XtentisObjectsSynchronizations() {
         return (EReference)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(8);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSSynchronizationPlanE_ItemsSynchronizations() {
         return (EReference)wsSynchronizationPlanEEClass.getEStructuralFeatures().get(9);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSSynchronizationPlanItemsSynchronizationsE() {
         return wsSynchronizationPlanItemsSynchronizationsEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_ConceptName() {
         return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_IdsPattern() {
         return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_LocalCluster() {
         return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_LocalRevisionID() {
         return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_RemoteCluster() {
         return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_RemoteRevisionID() {
         return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(5);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanItemsSynchronizationsE_Algorithm() {
         return (EAttribute)wsSynchronizationPlanItemsSynchronizationsEEClass.getEStructuralFeatures().get(6);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSSynchronizationPlanXtentisObjectsSynchronizationsE() {
         return wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsE_XtentisObjectName() {
         return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSSynchronizationPlanXtentisObjectsSynchronizationsE_Synchronizations() {
         return (EReference)wsSynchronizationPlanXtentisObjectsSynchronizationsEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE() {
         return wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_InstancePattern() {
         return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_LocalRevisionID() {
         return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_RemoteRevisionID() {
         return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsE_Algorithm() {
         return (EAttribute)wsSynchronizationPlanXtentisObjectsSynchronizationsSynchronizationsEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSBooleanE() {
         return wsBooleanEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSBooleanE__true() {
         return (EAttribute)wsBooleanEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWorkflowDeployE() {
         return wsWorkflowDeployEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWorkflowDeployE_Filename() {
         return (EAttribute)wsWorkflowDeployEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTransformerV2E() {
         return wsTransformerV2EEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerV2E_ProcessSteps() {
         return (EReference)wsTransformerV2EEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTransformerProcessStepE() {
         return wsTransformerProcessStepEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_PluginJNDI() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_Description() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_Parameters() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerProcessStepE_Disabled() {
         return (EAttribute)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerProcessStepE_InputMappings() {
         return (EReference)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerProcessStepE_OutputMappings() {
         return (EReference)wsTransformerProcessStepEEClass.getEStructuralFeatures().get(5);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTransformerVariablesMappingE() {
         return wsTransformerVariablesMappingEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerVariablesMappingE_PipelineVariable() {
         return (EAttribute)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTransformerVariablesMappingE_PluginVariable() {
         return (EAttribute)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTransformerVariablesMappingE_HardCoding() {
         return (EReference)wsTransformerVariablesMappingEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSTypedContentE() {
         return wsTypedContentEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTypedContentE_Url() {
         return (EAttribute)wsTypedContentEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSTypedContentE_ContentType() {
         return (EAttribute)wsTypedContentEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSTypedContentE_WsBytes() {
         return (EReference)wsTypedContentEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSByteArrayE() {
         return wsByteArrayEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSByteArrayE_Bytes() {
         return (EAttribute)wsByteArrayEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoutingRuleE() {
         return wsRoutingRuleEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Synchronous() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Concept() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_ServiceJNDI() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Parameters() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Condition() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleE_Deactive() {
         return (EAttribute)wsRoutingRuleEEClass.getEStructuralFeatures().get(5);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoutingRuleE_WsRoutingRuleExpressions() {
         return (EReference)wsRoutingRuleEEClass.getEStructuralFeatures().get(6);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoutingRuleExpressionE() {
         return wsRoutingRuleExpressionEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleExpressionE_Name() {
         return (EAttribute)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleExpressionE_Xpath() {
         return (EAttribute)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleExpressionE_Value() {
         return (EAttribute)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSRoutingRuleExpressionE_WsOperator() {
         return (EReference)wsRoutingRuleExpressionEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSRoutingRuleOperatorE() {
         return wsRoutingRuleOperatorEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSRoutingRuleOperatorE_Value() {
         return (EAttribute)wsRoutingRuleOperatorEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSJobModelE() {
         return wsJobModelEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSEventManagerE() {
         return wsEventManagerEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSServiceConfigurationE() {
         return wsServiceConfigurationEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EReference getWSServiceConfigurationE_ServicePutConfigurations() {
         return (EReference)wsServiceConfigurationEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSServicePutConfigurationE() {
         return wsServicePutConfigurationEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSServicePutConfigurationE_JndiName() {
         return (EAttribute)wsServicePutConfigurationEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSServicePutConfigurationE_Configuration() {
         return (EAttribute)wsServicePutConfigurationEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSWorkflowE() {
         return wsWorkflowEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSWorkflowE_FileContent() {
         return (EAttribute)wsWorkflowEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSResourceE() {
         return wsResourceEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSResourceE_FileExtension() {
         return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSResourceE_FileContent() {
         return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSResourceE_ImageCatalog() {
         return (EAttribute)wsResourceEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EClass getWSCustomFormE() {
         return wsCustomFormEEClass;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Filename() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(0);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Datamodel() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(1);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Entity() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(2);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Xml() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(3);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public EAttribute getWSCustomFormE_Role() {
         return (EAttribute)wsCustomFormEEClass.getEStructuralFeatures().get(4);
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public MdmserverobjectFactory getMdmserverobjectFactory() {
         return (MdmserverobjectFactory)getEFactoryInstance();
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private boolean isCreated = false;
@@ -1741,8 +1707,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     /**
      * Creates the meta-model objects for the package.  This method is
      * guarded to have no affect on any invocation but its first.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     public void createPackageContents() {
@@ -1938,8 +1903,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     private boolean isInitialized = false;
@@ -1947,8 +1911,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     /**
      * Complete the initialization of the package and its meta-model.  This
      * method is guarded to have no affect on any invocation but its first.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     public void initializePackageContents() {
@@ -1961,7 +1924,11 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         setNsURI(eNS_URI);
 
         // Obtain other dependent packages
+        MatchRulePackage theMatchRulePackage = (MatchRulePackage)EPackage.Registry.INSTANCE.getEPackage(MatchRulePackage.eNS_URI);
         MdmmetadataPackage theMdmmetadataPackage = (MdmmetadataPackage)EPackage.Registry.INSTANCE.getEPackage(MdmmetadataPackage.eNS_URI);
+
+        // Add subpackages
+        getESubpackages().add(theMatchRulePackage);
 
         // Create type parameters
 
@@ -2179,4 +2146,4 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createResource(eNS_URI);
     }
 
-} //MdmserverobjectPackageImpl
+} // MdmserverobjectPackageImpl
