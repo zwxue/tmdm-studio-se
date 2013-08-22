@@ -76,6 +76,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.IRepositoryFactory;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.dataprofiler.core.ui.editor.matchrule.MatchRuleItemEditorInput;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -102,7 +103,7 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
@@ -426,6 +427,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                         item = ((IRepositoryViewEditorInput) input).getInputItem();
                     } else if (input instanceof ProcessEditorInput) {
                         item = ((ProcessEditorInput) input).getItem();
+                    } else if (input instanceof MatchRuleItemEditorInput) {
+                        item = ((MatchRuleItemEditorInput) input).getItem();
                     }
 
                     if (item == null) {

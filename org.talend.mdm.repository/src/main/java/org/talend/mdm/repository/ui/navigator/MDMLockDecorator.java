@@ -19,13 +19,13 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.dataquality.properties.TDQMatchRuleItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
-
 
 /**
  * created by liusongbo on 2013-4-25
@@ -40,7 +40,7 @@ public class MDMLockDecorator implements ILightweightLabelDecorator {
     public void decorate(Object element, IDecoration decoration) {
         Item item = RepositoryResourceUtil.getItemFromRepViewObj(element);
         if (item != null) {
-            if (item instanceof MDMServerObjectItem) {
+            if (item instanceof MDMServerObjectItem || item instanceof TDQMatchRuleItem) {
                 decorateLockImage((IRepositoryViewObject) element, decoration);
             }
         }
