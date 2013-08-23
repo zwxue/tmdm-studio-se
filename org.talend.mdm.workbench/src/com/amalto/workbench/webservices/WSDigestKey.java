@@ -16,20 +16,32 @@ package com.amalto.workbench.webservices;
  * created by HHB on 2013-7-18 Detailled comment
  * 
  */
-public class WSDigestValueKey {
+public class WSDigestKey {
 
     protected String objectName;
 
     protected String type;
 
-    public WSDigestValueKey(String type, String objectName) {
+    public WSDigestKey() {
+        
+    }
+
+    public WSDigestKey(String type, String objectName) {
         super();
         this.type = type;
         this.objectName = objectName;
     }
 
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
+    
     public String getObjectName() {
         return this.objectName;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getType() {

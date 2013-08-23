@@ -16,23 +16,46 @@ package com.amalto.workbench.webservices;
  * created by HHB on 2013-7-18 Detailled comment
  * 
  */
-public class WSDigestValueTimeStamp {
+public class WSDigest {
+    
+    protected WSDigestKey wsDigestKey; 
 
     protected String digestValue;
 
     protected long timeStamp;
+    
+    public WSDigest() {
+        
+    }
 
-    public WSDigestValueTimeStamp(String digestValue, long timeStamp) {
+    public WSDigest(WSDigestKey wsDigestKey,String digestValue, long timeStamp) {
         super();
+        this.wsDigestKey = wsDigestKey;
         this.digestValue = digestValue;
         this.timeStamp = timeStamp;
+    }
+
+    public WSDigestKey getWsDigestKey() {
+        return this.wsDigestKey;
+    }
+
+    public void setWsDigestKey(WSDigestKey wsDigestKey) {
+        this.wsDigestKey = wsDigestKey;
     }
 
     public String getDigestValue() {
         return this.digestValue;
     }
 
+    public void setDigestValue(String digestValue) {
+        this.digestValue = digestValue;
+    }
+
     public long getTimeStamp() {
         return this.timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
