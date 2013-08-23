@@ -1975,4 +1975,11 @@
          version="4.1.0.v201101201700"
          unpack="false"/>
 
+   <plugin
+         id="org.apache.commons.jxpath"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
