@@ -52,7 +52,8 @@ import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDigestValueTimeStamp;
+import com.amalto.workbench.webservices.WSDigest;
+import com.amalto.workbench.webservices.WSDigestKey;
 import com.amalto.workbench.widgets.FilteredCheckboxTree;
 
 /**
@@ -104,21 +105,21 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     class ConsistencyData {
 
-        private WSDigestValueTimeStamp localDigestTime;
+        private WSDigest localDigestTime;
 
-        public WSDigestValueTimeStamp getLocalDigestTime() {
+        public WSDigest getLocalDigestTime() {
             return this.localDigestTime;
         }
 
-        public void setLocalDigestTime(WSDigestValueTimeStamp localDigestTime) {
+        public void setLocalDigestTime(WSDigest localDigestTime) {
             this.localDigestTime = localDigestTime;
         }
 
-        public WSDigestValueTimeStamp getServerDigestTime() {
+        public WSDigest getServerDigestTime() {
             return this.serverDigestTime;
         }
 
-        public void setServerDigestTime(WSDigestValueTimeStamp serverDigestTime) {
+        public void setServerDigestTime(WSDigest serverDigestTime) {
             this.serverDigestTime = serverDigestTime;
         }
 
@@ -130,7 +131,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
             this.compareResult = compareResult;
         }
 
-        private WSDigestValueTimeStamp serverDigestTime;
+        private WSDigest serverDigestTime;
 
         private CompareResultEnum compareResult;
 
@@ -214,8 +215,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
         public String getText(Object element) {
             if (!(element instanceof TreeParent)) {
                 ConsistencyData consistencyData = consistencyMap.get(element);
-                WSDigestValueTimeStamp dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData
-                        .getServerDigestTime();
+                WSDigest dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData.getServerDigestTime();
                 if (dt != null) {
                     return DATE_FORMAT.format(new Date(dt.getTimeStamp()));
                 }
@@ -229,11 +229,10 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
         Map<TreeObject, ConsistencyData> map = new HashMap<TreeObject, TreeObjectCheckTreeViewer.ConsistencyData>();
         try {
             ConsistencyService consistencyService = ConsistencyService.getInstance();
-            Map<TreeObject, WSDigestValueTimeStamp> serverDigestValues = consistencyService.queryServerDigestValue(serverDef,
-                    treeObjs);
+            Map<TreeObject, WSDigest> serverDigestValues = consistencyService.queryServerDigestValue(serverDef, treeObjs);
             for (TreeObject treeObject : treeObjs) {
                 ConsistencyData consistencyData = new ConsistencyData();
-                WSDigestValueTimeStamp serverDigestTime = serverDigestValues.get(treeObject);
+                WSDigest serverDigestTime = serverDigestValues.get(treeObject);
                 consistencyData.setServerDigestTime(serverDigestTime);
                 String objName = treeObject.getDisplayName();
                 ERepositoryObjectType viewType = RepositoryQueryService.getRepositoryObjectType(treeObject.getType());
@@ -248,7 +247,11 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                     consistencyService.updateLocalDigestValue(viewObj);
                     String digestValue = consistencyService.getLocalDigestValue(item);
                     long localTimestamp = consistencyService.getLocalTimestamp(item);
-                    consistencyData.setLocalDigestTime(new WSDigestValueTimeStamp(digestValue, localTimestamp));
+                    // key
+                    String type = viewObj.getRepositoryObjectType().getKey();
+                    String objectName = viewObj.getLabel();
+                    WSDigestKey key = new WSDigestKey(type, objectName);
+                    consistencyData.setLocalDigestTime(new WSDigest(key, digestValue, localTimestamp));
                     // init compare result;
                     CompareResultEnum result;
                     if (serverDigestTime == null) {

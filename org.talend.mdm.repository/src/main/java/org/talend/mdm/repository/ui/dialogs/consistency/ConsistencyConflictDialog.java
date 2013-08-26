@@ -70,7 +70,7 @@ import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
-import com.amalto.workbench.webservices.WSDigestValueTimeStamp;
+import com.amalto.workbench.webservices.WSDigest;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
@@ -172,7 +172,7 @@ public class ConsistencyConflictDialog extends Dialog {
                     break;
                 // remote timestamp
                 case 4:
-                    WSDigestValueTimeStamp dt = viewObjMap.get(viewObj);
+                    WSDigest dt = viewObjMap.get(viewObj);
                     if (dt != null) {
                         return df.format(new Date(dt.getTimeStamp()));
                     }
@@ -218,7 +218,7 @@ public class ConsistencyConflictDialog extends Dialog {
     private CompareResultEnum getCompareResult(IRepositoryViewObject viewObj) {
         CompareResultEnum result = compareResultMap.get(viewObj);
         if (result == null) {
-            WSDigestValueTimeStamp dt = viewObjMap.get(viewObj);
+            WSDigest dt = viewObjMap.get(viewObj);
             if (dt == null) {
                 result = CompareResultEnum.NOT_EXIST_IN_SERVER;
             } else {
@@ -280,7 +280,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     private TreeViewer treeViewer;
 
-    private final Map<IRepositoryViewObject, WSDigestValueTimeStamp> viewObjMap;
+    private final Map<IRepositoryViewObject, WSDigest> viewObjMap;
 
     private final int conflictCount;
 
@@ -292,8 +292,7 @@ public class ConsistencyConflictDialog extends Dialog {
      * @param parentShell
      * @param conflictCount
      */
-    public ConsistencyConflictDialog(Shell parentShell, int conflictCount,
-            Map<IRepositoryViewObject, WSDigestValueTimeStamp> viewObjMap) {
+    public ConsistencyConflictDialog(Shell parentShell, int conflictCount, Map<IRepositoryViewObject, WSDigest> viewObjMap) {
         super(parentShell);
         this.conflictCount = conflictCount;
         this.viewObjMap = viewObjMap;

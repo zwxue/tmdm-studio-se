@@ -181,6 +181,8 @@ public class DeployService {
             updateServerConsistencyStatus(serverDef, mainStatus);
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);
+        } catch (RemoteException e) {
+            log.error(e.getMessage(), e);
         }
         //
         generateValidationFailedDeployStatus(mainStatus, invalidObjects);
@@ -188,7 +190,8 @@ public class DeployService {
         return mainStatus;
     }
 
-    public void updateServerConsistencyStatus(MDMServerDef serverDef, IStatus mainStatus) throws XtentisException {
+    public void updateServerConsistencyStatus(MDMServerDef serverDef, IStatus mainStatus) throws XtentisException,
+            RemoteException {
         if (mainStatus.isMultiStatus()) {
             Set<IRepositoryViewObject> viewObjs = new HashSet<IRepositoryViewObject>();
             for (IStatus childStatus : mainStatus.getChildren()) {
@@ -224,7 +227,7 @@ public class DeployService {
     }
 
     private void updateServerConsistencyStatus(MDMServerDef serverDef, Collection<IRepositoryViewObject> viewObjs)
-            throws XtentisException {
+            throws XtentisException, RemoteException {
         ConsistencyService consistencyService = ConsistencyService.getInstance();
         for (IRepositoryViewObject viewObj : viewObjs) {
             consistencyService.updateDigestValue(serverDef, viewObj);
