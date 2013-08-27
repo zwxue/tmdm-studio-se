@@ -1773,21 +1773,6 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsView.class, type, serializer);
         }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDigestKey");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDigestKey_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDigestKey.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDigest");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDigest_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDigest.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSLong");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSLong_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSLong.class, type, serializer);
-        }
         return registry;
     }
     

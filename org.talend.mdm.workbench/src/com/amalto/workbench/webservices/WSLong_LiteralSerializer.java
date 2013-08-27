@@ -45,7 +45,7 @@ public class WSLong_LiteralSerializer extends LiteralObjectSerializerBase implem
     }
     
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
-        ns1_myns3__long__long_Long_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns1_long_TYPE_QNAME);
+        ns1_myns3__long__long_Long_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Long.class, ns1_long_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,

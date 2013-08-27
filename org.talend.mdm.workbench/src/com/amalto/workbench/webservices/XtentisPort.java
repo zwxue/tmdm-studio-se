@@ -650,8 +650,9 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSAutoIncrement getAutoIncrement(
             com.amalto.workbench.webservices.WSAutoIncrement wsAutoIncrementRequest) throws java.rmi.RemoteException;
 
-    public com.amalto.workbench.webservices.WSDigest getDigest(com.amalto.workbench.webservices.WSDigestKey key)
+    // Manual add
+    public com.amalto.workbench.webservices.WSDigestValueTimeStamp getDigest(WSDigestKey wsDigestKey)
             throws java.rmi.RemoteException;
 
-    public com.amalto.workbench.webservices.WSLong updateDigest(com.amalto.workbench.webservices.WSDigest digest) throws java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSLong updateDigest(WSDigest wsDigest);
 }
