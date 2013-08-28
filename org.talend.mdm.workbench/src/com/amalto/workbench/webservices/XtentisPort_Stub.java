@@ -14085,7 +14085,7 @@ public class XtentisPort_Stub
     /* (non-Javadoc)
      * @see com.amalto.workbench.webservices.XtentisPort#getDigest(com.amalto.workbench.webservices.WSDigestValueKey)
      */
-    public WSDigestValueTimeStamp getDigest(WSDigestKey wsDigestKey) throws RemoteException {
+    public WSDigest getDigest(WSDigestKey wsDigestKey) throws RemoteException {
         // TODO Auto-generated method stub
         return null;
     }
