@@ -36,8 +36,9 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackag
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getEntityName <em>Entity Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getMatchKeyMap <em>Match Key Map</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getSurvivorshipKeyMap <em>Survivorship Key Map</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getBlockingKeyDefinition <em>Blocking Key Definition</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getMatchRuleName <em>Match Rule Name</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getMatchRuleDefName <em>Match Rule Def Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
@@ -76,6 +77,16 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
     protected EMap<String, String> matchKeyMap;
 
     /**
+     * The cached value of the '{@link #getSurvivorshipKeyMap() <em>Survivorship Key Map</em>}' map.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getSurvivorshipKeyMap()
+     * @generated
+     * @ordered
+     */
+    protected EMap<String, String> survivorshipKeyMap;
+
+    /**
      * The cached value of the '{@link #getBlockingKeyDefinition() <em>Blocking Key Definition</em>}' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -86,24 +97,24 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
     protected BlockingKeyDefinition blockingKeyDefinition;
 
     /**
-     * The default value of the '{@link #getMatchRuleName() <em>Match Rule Name</em>}' attribute.
+     * The default value of the '{@link #getMatchRuleDefName() <em>Match Rule Def Name</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getMatchRuleName()
+     * @see #getMatchRuleDefName()
      * @generated
      * @ordered
      */
-    protected static final String MATCH_RULE_NAME_EDEFAULT = null;
+    protected static final String MATCH_RULE_DEF_NAME_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getMatchRuleName() <em>Match Rule Name</em>}' attribute.
+     * The cached value of the '{@link #getMatchRuleDefName() <em>Match Rule Def Name</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getMatchRuleName()
+     * @see #getMatchRuleDefName()
      * @generated
      * @ordered
      */
-    protected String matchRuleName = MATCH_RULE_NAME_EDEFAULT;
+    protected String matchRuleDefName = MATCH_RULE_DEF_NAME_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -152,9 +163,21 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
      */
     public EMap<String, String> getMatchKeyMap() {
         if (matchKeyMap == null) {
-            matchKeyMap = new EcoreEMap<String,String>(MatchRulePackage.Literals.MATCH_KEY_XPATH_MAP, MatchKeyXPathMapImpl.class, this, MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP);
+            matchKeyMap = new EcoreEMap<String,String>(MatchRulePackage.Literals.KEY_XPATH_MAP, KeyXPathMapImpl.class, this, MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP);
         }
         return matchKeyMap;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EMap<String, String> getSurvivorshipKeyMap() {
+        if (survivorshipKeyMap == null) {
+            survivorshipKeyMap = new EcoreEMap<String,String>(MatchRulePackage.Literals.KEY_XPATH_MAP, KeyXPathMapImpl.class, this, MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP);
+        }
+        return survivorshipKeyMap;
     }
 
     /**
@@ -205,8 +228,8 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
      * <!-- end-user-doc -->
      * @generated
      */
-    public String getMatchRuleName() {
-        return matchRuleName;
+    public String getMatchRuleDefName() {
+        return matchRuleDefName;
     }
 
     /**
@@ -214,11 +237,11 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setMatchRuleName(String newMatchRuleName) {
-        String oldMatchRuleName = matchRuleName;
-        matchRuleName = newMatchRuleName;
+    public void setMatchRuleDefName(String newMatchRuleDefName) {
+        String oldMatchRuleDefName = matchRuleDefName;
+        matchRuleDefName = newMatchRuleDefName;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_NAME, oldMatchRuleName, matchRuleName));
+            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME, oldMatchRuleDefName, matchRuleDefName));
     }
 
     /**
@@ -288,6 +311,8 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
         switch (featureID) {
             case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
                 return ((InternalEList<?>)getMatchKeyMap()).basicRemove(otherEnd, msgs);
+            case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
+                return ((InternalEList<?>)getSurvivorshipKeyMap()).basicRemove(otherEnd, msgs);
             case MatchRulePackage.ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION:
                 return basicSetBlockingKeyDefinition(null, msgs);
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
@@ -323,10 +348,13 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
             case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
                 if (coreType) return getMatchKeyMap();
                 else return getMatchKeyMap().map();
+            case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
+                if (coreType) return getSurvivorshipKeyMap();
+                else return getSurvivorshipKeyMap().map();
             case MatchRulePackage.ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION:
                 return getBlockingKeyDefinition();
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_NAME:
-                return getMatchRuleName();
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME:
+                return getMatchRuleDefName();
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 return getParent();
         }
@@ -347,11 +375,14 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
             case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
                 ((EStructuralFeature.Setting)getMatchKeyMap()).set(newValue);
                 return;
+            case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
+                ((EStructuralFeature.Setting)getSurvivorshipKeyMap()).set(newValue);
+                return;
             case MatchRulePackage.ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION:
                 setBlockingKeyDefinition((BlockingKeyDefinition)newValue);
                 return;
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_NAME:
-                setMatchRuleName((String)newValue);
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME:
+                setMatchRuleDefName((String)newValue);
                 return;
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 setParent((MatchRuleMapInfo)newValue);
@@ -374,11 +405,14 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
             case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
                 getMatchKeyMap().clear();
                 return;
+            case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
+                getSurvivorshipKeyMap().clear();
+                return;
             case MatchRulePackage.ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION:
                 setBlockingKeyDefinition((BlockingKeyDefinition)null);
                 return;
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_NAME:
-                setMatchRuleName(MATCH_RULE_NAME_EDEFAULT);
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME:
+                setMatchRuleDefName(MATCH_RULE_DEF_NAME_EDEFAULT);
                 return;
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 setParent((MatchRuleMapInfo)null);
@@ -399,10 +433,12 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
                 return ENTITY_NAME_EDEFAULT == null ? entityName != null : !ENTITY_NAME_EDEFAULT.equals(entityName);
             case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
                 return matchKeyMap != null && !matchKeyMap.isEmpty();
+            case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
+                return survivorshipKeyMap != null && !survivorshipKeyMap.isEmpty();
             case MatchRulePackage.ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION:
                 return blockingKeyDefinition != null;
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_NAME:
-                return MATCH_RULE_NAME_EDEFAULT == null ? matchRuleName != null : !MATCH_RULE_NAME_EDEFAULT.equals(matchRuleName);
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME:
+                return MATCH_RULE_DEF_NAME_EDEFAULT == null ? matchRuleDefName != null : !MATCH_RULE_DEF_NAME_EDEFAULT.equals(matchRuleDefName);
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 return getParent() != null;
         }
@@ -421,8 +457,8 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
         StringBuffer result = new StringBuffer(super.toString());
         result.append(" (entityName: ");
         result.append(entityName);
-        result.append(", matchRuleName: ");
-        result.append(matchRuleName);
+        result.append(", matchRuleDefName: ");
+        result.append(matchRuleDefName);
         result.append(')');
         return result.toString();
     }

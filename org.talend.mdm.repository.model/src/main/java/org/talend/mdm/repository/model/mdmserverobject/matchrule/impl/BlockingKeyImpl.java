@@ -23,7 +23,7 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackag
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.BlockingKeyImpl#getElmentName <em>Elment Name</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.BlockingKeyImpl#getKeyName <em>Key Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,24 +31,24 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackag
  */
 public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
     /**
-     * The default value of the '{@link #getElmentName() <em>Elment Name</em>}' attribute.
+     * The default value of the '{@link #getKeyName() <em>Key Name</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getElmentName()
+     * @see #getKeyName()
      * @generated
      * @ordered
      */
-    protected static final String ELMENT_NAME_EDEFAULT = null;
+    protected static final String KEY_NAME_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getElmentName() <em>Elment Name</em>}' attribute.
+     * The cached value of the '{@link #getKeyName() <em>Key Name</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getElmentName()
+     * @see #getKeyName()
      * @generated
      * @ordered
      */
-    protected String elmentName = ELMENT_NAME_EDEFAULT;
+    protected String keyName = KEY_NAME_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -74,8 +74,8 @@ public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
      * <!-- end-user-doc -->
      * @generated
      */
-    public String getElmentName() {
-        return elmentName;
+    public String getKeyName() {
+        return keyName;
     }
 
     /**
@@ -83,11 +83,11 @@ public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setElmentName(String newElmentName) {
-        String oldElmentName = elmentName;
-        elmentName = newElmentName;
+    public void setKeyName(String newKeyName) {
+        String oldKeyName = keyName;
+        keyName = newKeyName;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.BLOCKING_KEY__ELMENT_NAME, oldElmentName, elmentName));
+            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.BLOCKING_KEY__KEY_NAME, oldKeyName, keyName));
     }
 
     /**
@@ -98,8 +98,8 @@ public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case MatchRulePackage.BLOCKING_KEY__ELMENT_NAME:
-                return getElmentName();
+            case MatchRulePackage.BLOCKING_KEY__KEY_NAME:
+                return getKeyName();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -112,8 +112,8 @@ public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case MatchRulePackage.BLOCKING_KEY__ELMENT_NAME:
-                setElmentName((String)newValue);
+            case MatchRulePackage.BLOCKING_KEY__KEY_NAME:
+                setKeyName((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -127,8 +127,8 @@ public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case MatchRulePackage.BLOCKING_KEY__ELMENT_NAME:
-                setElmentName(ELMENT_NAME_EDEFAULT);
+            case MatchRulePackage.BLOCKING_KEY__KEY_NAME:
+                setKeyName(KEY_NAME_EDEFAULT);
                 return;
         }
         super.eUnset(featureID);
@@ -142,8 +142,8 @@ public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case MatchRulePackage.BLOCKING_KEY__ELMENT_NAME:
-                return ELMENT_NAME_EDEFAULT == null ? elmentName != null : !ELMENT_NAME_EDEFAULT.equals(elmentName);
+            case MatchRulePackage.BLOCKING_KEY__KEY_NAME:
+                return KEY_NAME_EDEFAULT == null ? keyName != null : !KEY_NAME_EDEFAULT.equals(keyName);
         }
         return super.eIsSet(featureID);
     }
@@ -158,8 +158,8 @@ public class BlockingKeyImpl extends EObjectImpl implements BlockingKey {
         if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (elmentName: ");
-        result.append(elmentName);
+        result.append(" (keyName: ");
+        result.append(keyName);
         result.append(')');
         return result.toString();
     }

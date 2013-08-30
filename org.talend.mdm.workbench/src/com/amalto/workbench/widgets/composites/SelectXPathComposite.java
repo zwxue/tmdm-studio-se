@@ -12,6 +12,7 @@
 // ============================================================================
 package com.amalto.workbench.widgets.composites;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +39,7 @@ import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
+import com.amalto.workbench.dialogs.datamodel.IXPathSelectionFilter;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
@@ -47,287 +49,287 @@ import com.amalto.workbench.utils.SchemaElementNameFilterDes;
 
 public class SelectXPathComposite extends Composite {
 
-	private TreeViewer tvXPath;
+    private TreeViewer tvXPath;
 
-	private Text txtFilter;
+    private Text txtFilter;
 
-	private Text txtXPath;
+    private Text txtXPath;
 
-	private Combo comboDataModels;
+    private Combo comboDataModels;
 
-	private IAllDataModelHolder allDataModelHolder;
+    private IAllDataModelHolder allDataModelHolder;
 
-	private String defaultSelectedDataModel;
+    private String defaultSelectedDataModel;
 
-	private String conceptName;
+    private String conceptName;
 
-	private static String context;
+    private static String context;
 
-	private SchemaNameFilter xpathTopElementNameFilter;
+    private SchemaNameFilter xpathTopElementNameFilter;
 
-	private boolean isAbsolutePath = false;
+    private boolean isAbsolutePath = false;
 
-	public SelectXPathComposite(Composite parent, int style,
-			IAllDataModelHolder allDataModelHolder,
-			String defaultSelectedDataModel) {
-		this(parent, style, allDataModelHolder, defaultSelectedDataModel, null,
-				false);
-	}
+    public SelectXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder,
+            String defaultSelectedDataModel) {
+        this(parent, style, allDataModelHolder, defaultSelectedDataModel, null, false);
+    }
 
-	public SelectXPathComposite(Composite parent, int style,
-			IAllDataModelHolder allDataModelHolder,
-			String defaultSelectedDataModel, String conceptName) {
-		this(parent, style, allDataModelHolder, defaultSelectedDataModel,
-				conceptName, false);
-	}
+    public SelectXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder,
+            String defaultSelectedDataModel, String conceptName) {
+        this(parent, style, allDataModelHolder, defaultSelectedDataModel, conceptName, false);
+    }
 
-	public SelectXPathComposite(Composite parent, int style,
-			IAllDataModelHolder allDataModelHolder,
-			String defaultSelectedDataModel, String conceptName,
-			boolean isAbsolutePath) {
-		super(parent, style);
+    public SelectXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder,
+            String defaultSelectedDataModel, String conceptName, boolean isAbsolutePath) {
+        this(parent, style, allDataModelHolder, defaultSelectedDataModel, conceptName, false, null);
+    }
 
-		this.allDataModelHolder = allDataModelHolder;
-		this.defaultSelectedDataModel = defaultSelectedDataModel;
-		this.conceptName = conceptName;
-		this.isAbsolutePath = isAbsolutePath;
+    public SelectXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder,
+            String defaultSelectedDataModel, String conceptName, boolean isAbsolutePath, IXPathSelectionFilter filter) {
+        super(parent, style);
 
-		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 2;
-		setLayout(gridLayout);
+        this.allDataModelHolder = allDataModelHolder;
+        this.defaultSelectedDataModel = defaultSelectedDataModel;
+        this.conceptName = conceptName;
+        this.isAbsolutePath = isAbsolutePath;
 
-		final Label lblDataModels = new Label(this, SWT.NONE);
-		lblDataModels.setText(Messages.SelectXPathComposite_DataModels);
+        final GridLayout gridLayout = new GridLayout();
+        gridLayout.numColumns = 2;
+        setLayout(gridLayout);
 
-		comboDataModels = new Combo(this, SWT.READ_ONLY);
-		comboDataModels.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-				false));
+        final Label lblDataModels = new Label(this, SWT.NONE);
+        lblDataModels.setText(Messages.SelectXPathComposite_DataModels);
 
-		final Label lblXPath = new Label(this, SWT.NONE);
-		lblXPath.setText(Messages.SelectXPathComposite_XPath);
+        comboDataModels = new Combo(this, SWT.READ_ONLY);
+        comboDataModels.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		txtXPath = new Text(this, SWT.READ_ONLY | SWT.BORDER);
-		final GridData gd_txtXPath = new GridData(SWT.FILL, SWT.CENTER, true,
-				false);
-		txtXPath.setLayoutData(gd_txtXPath);
+        final Label lblXPath = new Label(this, SWT.NONE);
+        lblXPath.setText(Messages.SelectXPathComposite_XPath);
 
-		final Label lblFilter = new Label(this, SWT.NONE);
-		lblFilter.setText(Messages.SelectXPathComposite_Filters);
+        txtXPath = new Text(this, SWT.READ_ONLY | SWT.BORDER);
+        final GridData gd_txtXPath = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        txtXPath.setLayoutData(gd_txtXPath);
 
-		txtFilter = new Text(this, SWT.BORDER);
-		final GridData gd_txtFilter = new GridData(SWT.FILL, SWT.CENTER, true,
-				false);
-		txtFilter.setLayoutData(gd_txtFilter);
+        final Label lblFilter = new Label(this, SWT.NONE);
+        lblFilter.setText(Messages.SelectXPathComposite_Filters);
 
-		tvXPath = new TreeViewer(this, SWT.BORDER);
-		tvXPath.setContentProvider(new XPathContentProvider());
-		tvXPath.setLabelProvider(new XSDTreeLabelProvider());
-		xpathTopElementNameFilter = new SchemaNameFilter(
-				new SchemaElementNameFilterDes(true, "*")); //$NON-NLS-1$
-		tvXPath.setFilters(new ViewerFilter[] { xpathTopElementNameFilter });
+        txtFilter = new Text(this, SWT.BORDER);
+        final GridData gd_txtFilter = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        txtFilter.setLayoutData(gd_txtFilter);
 
-		Tree tree = tvXPath.getTree();
-		final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true,
-				2, 1);
-		tree.setLayoutData(gd_tree);
-		//
+        tvXPath = new TreeViewer(this, SWT.BORDER);
+        tvXPath.setContentProvider(new XPathContentProvider());
+        tvXPath.setLabelProvider(new XSDTreeLabelProvider());
+        xpathTopElementNameFilter = new SchemaNameFilter(new SchemaElementNameFilterDes(true, "*")); //$NON-NLS-1$
+        tvXPath.setFilters(new ViewerFilter[] { xpathTopElementNameFilter });
 
-		initUIListeners();
+        Tree tree = tvXPath.getTree();
+        final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+        tree.setLayoutData(gd_tree);
+        //
 
-		initUIContents();
-	}
+        initUIListeners();
 
-	private void initUIListeners() {
+        initUIContents();
+    }
 
-		initListenerForDataModelCombo();
+    private void initUIListeners() {
 
-		initListenerForFilterTextBox();
+        initListenerForDataModelCombo();
 
-		initListenerForXPathTree();
-	}
+        initListenerForFilterTextBox();
 
-	private void initUIContents() {
+        initListenerForXPathTree();
+    }
 
-		initDataModelComboContents();
+    private void initUIContents() {
 
-		initXPathTreeContents();
+        initDataModelComboContents();
 
-		initFilterText();
-	}
+        initXPathTreeContents();
 
-	private void initFilterText() {
-		if (conceptName != null) {
-			txtFilter.setText(conceptName);
-		}
-	}
+        initFilterText();
+    }
 
-	private void initDataModelComboContents() {
+    private void initFilterText() {
+        if (conceptName != null) {
+            txtFilter.setText(conceptName);
+        }
+    }
 
-		List<String> allCurDataModels = Arrays.asList(allDataModelHolder
-				.getAllDataModelNames());
-		comboDataModels.setItems(allCurDataModels.toArray(new String[0]));
+    private void initDataModelComboContents() {
 
-		if (allCurDataModels.size() > 0) {
-			comboDataModels.select(0);
-		}
+        List<String> allCurDataModels = Arrays.asList(allDataModelHolder.getAllDataModelNames());
+        comboDataModels.setItems(allCurDataModels.toArray(new String[0]));
 
-		if (allCurDataModels.contains(defaultSelectedDataModel)) {
-			comboDataModels.select(allCurDataModels
-					.indexOf(defaultSelectedDataModel));
-		}
-	}
+        if (allCurDataModels.size() > 0) {
+            comboDataModels.select(0);
+        }
 
-	private void initXPathTreeContents() {
+        if (allCurDataModels.contains(defaultSelectedDataModel)) {
+            comboDataModels.select(allCurDataModels.indexOf(defaultSelectedDataModel));
+        }
+    }
 
-		tvXPath.setInput(allDataModelHolder.getDataModel(comboDataModels
-				.getText().trim()));
-	}
+    private void initXPathTreeContents() {
 
-	private void initListenerForDataModelCombo() {
+        tvXPath.setInput(allDataModelHolder.getDataModel(comboDataModels.getText().trim()));
+    }
 
-		comboDataModels.addMouseListener(new MouseAdapter() {
+    private void initListenerForDataModelCombo() {
 
-			@Override
-			public void mouseDown(MouseEvent e) {
+        comboDataModels.addMouseListener(new MouseAdapter() {
 
-				String old = comboDataModels.getText().trim();
-				String[] allModels = allDataModelHolder.getAllDataModelNames();
+            @Override
+            public void mouseDown(MouseEvent e) {
 
-				comboDataModels.setItems(allModels);
+                String old = comboDataModels.getText().trim();
+                String[] allModels = allDataModelHolder.getAllDataModelNames();
 
-				if (Arrays.asList(allModels).contains(old)) {
-					comboDataModels.setText(old);
-				}
-			}
+                comboDataModels.setItems(allModels);
 
-		});
+                if (Arrays.asList(allModels).contains(old)) {
+                    comboDataModels.setText(old);
+                }
+            }
 
-		comboDataModels.addSelectionListener(new SelectionAdapter() {
+        });
 
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				txtXPath.setText("");//$NON-NLS-1$
-				tvXPath.setInput(allDataModelHolder
-						.getDataModel(comboDataModels.getText().trim()));
-			}
-		});
-
-	}
-
-	private void initListenerForFilterTextBox() {
-
-		txtFilter.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-
-				xpathTopElementNameFilter
-						.setNameFilterDes(new SchemaElementNameFilterDes(true,
-								getFilterExpression()));
-				tvXPath.refresh();
-			}
-		});
-
-	}
-
-	private void initListenerForXPathTree() {
-
-		tvXPath.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-
-				txtXPath.setText(getXpath());
-
-			}
-		});
-
-	}
-
-	public String getSelectedXPath() {
-		return txtXPath.getText().trim();
-	}
-
-	private String getFilterExpression() {
-		String starFlag = "*"; //$NON-NLS-1$
-
-		String filterText = txtFilter.getText().trim();
-		if (filterText.isEmpty()) {
-			return starFlag;
-		}
-
-		return filterText + starFlag;
-	}
-
-	private String getXpath() {
-
-		String path = "";//$NON-NLS-1$
-		String totalXpath = "";//$NON-NLS-1$
-		TreeItem item;
-		TreeItem[] items = tvXPath.getTree().getSelection();
-		for (int i = 0; i < items.length; i++) {
-			item = items[i];
-			XSDConcreteComponent component = (XSDConcreteComponent) item
-					.getData();
-			if (!(component instanceof XSDParticle)
-					&& !(component instanceof XSDElementDeclaration)) {
-				continue;
-			}
-			do {
-				component = (XSDConcreteComponent) item.getData();
-				if (component instanceof XSDParticle) {
-					if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration) {
-						path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
-					}
-				} else if (component instanceof XSDElementDeclaration) {
-					path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;//$NON-NLS-1$//$NON-NLS-2$
-				}
-				item = item.getParentItem();
-
-			} while (item != null);
-			if (i == 0) {
-				totalXpath = path;
-			} else {
-				totalXpath += "&" + path;//$NON-NLS-1$
-			}
-			path = "";//$NON-NLS-1$
-		}// for(i=0
-		if (context != null && conceptName != null) {
-
-			if (totalXpath.equals(conceptName)) {
-				totalXpath = totalXpath.replaceAll(conceptName, "/");//$NON-NLS-1$
-			} else {
-				totalXpath = totalXpath.replaceAll(conceptName + "/", "");//$NON-NLS-1$//$NON-NLS-2$
-			}
-			if (totalXpath.equals(context)
-					|| totalXpath.equals(context.replaceAll(
-							conceptName + "/", ""))) {//$NON-NLS-1$//$NON-NLS-2$
-				totalXpath = ".";//$NON-NLS-1$
-			}
-			if (totalXpath.indexOf('/') == -1
-					&& !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					&& !context.equals(conceptName)) {
-				totalXpath = "../" + totalXpath;//$NON-NLS-1$
-			}
-		}
-		return totalXpath;
-	}
-
-	public String getConceptName() {
-		return conceptName;
-	}
-
-	public void lockCombo(boolean lock) {
-		comboDataModels.setEnabled(!lock);
-	}
-
-	public void setConceptName(String conceptName) {
-		this.conceptName = conceptName;
-	}
-
-	public static String getContext() {
-		return context;
-	}
-
-	public static void setContext(String c) {
-		context = c;
-	}
+        comboDataModels.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent event) {
+                txtXPath.setText("");//$NON-NLS-1$
+                tvXPath.setInput(allDataModelHolder.getDataModel(comboDataModels.getText().trim()));
+            }
+        });
+
+    }
+
+    private void initListenerForFilterTextBox() {
+
+        txtFilter.addModifyListener(new ModifyListener() {
+
+            public void modifyText(ModifyEvent e) {
+
+                xpathTopElementNameFilter.setNameFilterDes(new SchemaElementNameFilterDes(true, getFilterExpression()));
+                tvXPath.refresh();
+            }
+        });
+
+    }
+
+    private void initListenerForXPathTree() {
+
+        ISelectionChangedListener listener = new ISelectionChangedListener() {
+
+            public void selectionChanged(SelectionChangedEvent event) {
+
+                txtXPath.setText(getXpath());
+
+            }
+        };
+        addSelectionChangedListener(listener);
+
+    }
+
+    List<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
+
+    public void addSelectionChangedListener(ISelectionChangedListener listener) {
+        selectionChangedListeners.add(listener);
+        tvXPath.addSelectionChangedListener(listener);
+    }
+
+    @Override
+    public void dispose() {
+        for (ISelectionChangedListener listner : selectionChangedListeners) {
+            tvXPath.removeSelectionChangedListener(listner);
+        }
+        selectionChangedListeners.clear();
+        super.dispose();
+    }
+
+    public String getSelectedXPath() {
+        return txtXPath.getText().trim();
+    }
+
+    private String getFilterExpression() {
+        String starFlag = "*"; //$NON-NLS-1$
+
+        String filterText = txtFilter.getText().trim();
+        if (filterText.isEmpty()) {
+            return starFlag;
+        }
+
+        return filterText + starFlag;
+    }
+
+    private String getXpath() {
+
+        String path = "";//$NON-NLS-1$
+        String totalXpath = "";//$NON-NLS-1$
+        TreeItem item;
+        TreeItem[] items = tvXPath.getTree().getSelection();
+        for (int i = 0; i < items.length; i++) {
+            item = items[i];
+            XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
+            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration)) {
+                continue;
+            }
+            do {
+                component = (XSDConcreteComponent) item.getData();
+                if (component instanceof XSDParticle) {
+                    if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration) {
+                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
+                    }
+                } else if (component instanceof XSDElementDeclaration) {
+                    path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;//$NON-NLS-1$//$NON-NLS-2$
+                }
+                item = item.getParentItem();
+
+            } while (item != null);
+            if (i == 0) {
+                totalXpath = path;
+            } else {
+                totalXpath += "&" + path;//$NON-NLS-1$
+            }
+            path = "";//$NON-NLS-1$
+        }// for(i=0
+        if (context != null && conceptName != null) {
+
+            if (totalXpath.equals(conceptName)) {
+                totalXpath = totalXpath.replaceAll(conceptName, "/");//$NON-NLS-1$
+            } else {
+                totalXpath = totalXpath.replaceAll(conceptName + "/", "");//$NON-NLS-1$//$NON-NLS-2$
+            }
+            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {//$NON-NLS-1$//$NON-NLS-2$
+                totalXpath = ".";//$NON-NLS-1$
+            }
+            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    && !context.equals(conceptName)) {
+                totalXpath = "../" + totalXpath;//$NON-NLS-1$
+            }
+        }
+        return totalXpath;
+    }
+
+    public String getConceptName() {
+        return conceptName;
+    }
+
+    public void lockCombo(boolean lock) {
+        comboDataModels.setEnabled(!lock);
+    }
+
+    public void setConceptName(String conceptName) {
+        this.conceptName = conceptName;
+    }
+
+    public static String getContext() {
+        return context;
+    }
+
+    public static void setContext(String c) {
+        context = c;
+    }
 }

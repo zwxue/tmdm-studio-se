@@ -21,19 +21,19 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackag
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Match Key XPath Map</b></em>'.
+ * An implementation of the model object '<em><b>Key XPath Map</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchKeyXPathMapImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchKeyXPathMapImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.KeyXPathMapImpl#getTypedKey <em>Key</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.KeyXPathMapImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry<String,String> {
+public class KeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry<String,String> {
     /**
      * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
      * <!-- begin-user-doc -->
@@ -79,7 +79,7 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
      * <!-- end-user-doc -->
      * @generated
      */
-    protected MatchKeyXPathMapImpl() {
+    protected KeyXPathMapImpl() {
         super();
     }
 
@@ -90,7 +90,7 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
      */
     @Override
     protected EClass eStaticClass() {
-        return MatchRulePackage.Literals.MATCH_KEY_XPATH_MAP;
+        return MatchRulePackage.Literals.KEY_XPATH_MAP;
     }
 
     /**
@@ -111,7 +111,7 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
         String oldKey = key;
         key = newKey;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.MATCH_KEY_XPATH_MAP__KEY, oldKey, key));
+            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.KEY_XPATH_MAP__KEY, oldKey, key));
     }
 
     /**
@@ -132,7 +132,7 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
         String oldValue = value;
         value = newValue;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.MATCH_KEY_XPATH_MAP__VALUE, oldValue, value));
+            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.KEY_XPATH_MAP__VALUE, oldValue, value));
     }
 
     /**
@@ -143,9 +143,9 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__KEY:
+            case MatchRulePackage.KEY_XPATH_MAP__KEY:
                 return getTypedKey();
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__VALUE:
+            case MatchRulePackage.KEY_XPATH_MAP__VALUE:
                 return getTypedValue();
         }
         return super.eGet(featureID, resolve, coreType);
@@ -159,10 +159,10 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__KEY:
+            case MatchRulePackage.KEY_XPATH_MAP__KEY:
                 setTypedKey((String)newValue);
                 return;
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__VALUE:
+            case MatchRulePackage.KEY_XPATH_MAP__VALUE:
                 setTypedValue((String)newValue);
                 return;
         }
@@ -177,10 +177,10 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__KEY:
+            case MatchRulePackage.KEY_XPATH_MAP__KEY:
                 setTypedKey(KEY_EDEFAULT);
                 return;
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__VALUE:
+            case MatchRulePackage.KEY_XPATH_MAP__VALUE:
                 setTypedValue(VALUE_EDEFAULT);
                 return;
         }
@@ -195,9 +195,9 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__KEY:
+            case MatchRulePackage.KEY_XPATH_MAP__KEY:
                 return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-            case MatchRulePackage.MATCH_KEY_XPATH_MAP__VALUE:
+            case MatchRulePackage.KEY_XPATH_MAP__VALUE:
                 return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
         }
         return super.eIsSet(featureID);
@@ -299,4 +299,4 @@ public class MatchKeyXPathMapImpl extends EObjectImpl implements BasicEMap.Entry
         return container == null ? null : (EMap<String, String>)container.eGet(eContainmentFeature());
     }
 
-} //MatchKeyXPathMapImpl
+} //KeyXPathMapImpl

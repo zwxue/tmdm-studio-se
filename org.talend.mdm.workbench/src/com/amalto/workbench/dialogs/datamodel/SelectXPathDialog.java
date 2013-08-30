@@ -27,87 +27,88 @@ import com.amalto.workbench.widgets.composites.SelectXPathComposite;
 
 public class SelectXPathDialog extends Dialog {
 
-	private SelectXPathComposite selectXPathComposite;
+    private SelectXPathComposite selectXPathComposite;
 
-	private IAllDataModelHolder allDataModelHolder;
+    private IAllDataModelHolder allDataModelHolder;
 
-	private String defaultSelectedDataModel;
+    private String defaultSelectedDataModel;
 
-	private String conceptName;
+    private String conceptName;
 
-	private String selectedXPath = "";//$NON-NLS-1$
+    private String selectedXPath = "";//$NON-NLS-1$
 
-	private boolean lock;
+    private boolean lock;
 
-	public SelectXPathDialog(Shell parentShell,
-			IAllDataModelHolder allDataModelHolder) {
-		this(parentShell, allDataModelHolder, null, null);
-	}
+    private final IXPathSelectionFilter filter;
 
-	public SelectXPathDialog(Shell parentShell,
-			IAllDataModelHolder allDataModelHolder,
-			String defaultSelectedDataModel) {
-		this(parentShell, allDataModelHolder, defaultSelectedDataModel, null);
-	}
+    public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder) {
+        this(parentShell, allDataModelHolder, null, null);
+    }
 
-	public SelectXPathDialog(Shell parentShell,
-			IAllDataModelHolder allDataModelHolder,
-			String defaultSelectedDataModel, String conceptName) {
-		super(parentShell);
+    public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder, String defaultSelectedDataModel) {
+        this(parentShell, allDataModelHolder, defaultSelectedDataModel, null);
+    }
 
-		this.allDataModelHolder = allDataModelHolder;
-		this.defaultSelectedDataModel = defaultSelectedDataModel;
-		this.conceptName = conceptName;
-	}
+    public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder, String defaultSelectedDataModel,
+            String conceptName) {
+        this(parentShell, allDataModelHolder, defaultSelectedDataModel, conceptName, null);
+    }
 
-	@Override
-	protected Control createDialogArea(Composite parent) {
+    public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder, String defaultSelectedDataModel,
+            String conceptName, IXPathSelectionFilter filter) {
+        super(parentShell);
 
-		getShell().setText(Messages.SelectXPathDialog_SetXPath);
+        this.allDataModelHolder = allDataModelHolder;
+        this.defaultSelectedDataModel = defaultSelectedDataModel;
+        this.conceptName = conceptName;
+        this.filter = filter;
+    }
 
-		Composite container = (Composite) super.createDialogArea(parent);
+    @Override
+    protected Control createDialogArea(Composite parent) {
 
-		selectXPathComposite = new SelectXPathComposite(container, SWT.NONE,
-				allDataModelHolder, defaultSelectedDataModel, conceptName);
-		selectXPathComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				true, true));
-		selectXPathComposite.lockCombo(lock);
-		return container;
-	}
+        getShell().setText(Messages.SelectXPathDialog_SetXPath);
 
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
-	}
+        Composite container = (Composite) super.createDialogArea(parent);
+        selectXPathComposite = new SelectXPathComposite(container, SWT.NONE, allDataModelHolder, defaultSelectedDataModel,
+                conceptName, false, filter);
+        selectXPathComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        selectXPathComposite.lockCombo(lock);
+        return container;
+    }
 
-	@Override
-	protected Point getInitialSize() {
-		return new Point(500, 575);
-	}
+    @Override
+    protected void createButtonsForButtonBar(Composite parent) {
+        createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+    }
 
-	protected int getShellStyle() {
-		return super.getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE;
-	}
+    @Override
+    protected Point getInitialSize() {
+        return new Point(500, 575);
+    }
 
-	public String getSelectedXPath() {
-		return selectedXPath.replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
-	}
+    @Override
+    protected int getShellStyle() {
+        return super.getShellStyle() | SWT.MIN | SWT.MAX | SWT.RESIZE;
+    }
 
-	@Override
-	protected void okPressed() {
-		selectedXPath = selectXPathComposite.getSelectedXPath();
-		super.okPressed();
-	}
+    public String getSelectedXPath() {
+        return selectedXPath.replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
+    }
 
-	public boolean isLock() {
-		return lock;
-	}
+    @Override
+    protected void okPressed() {
+        selectedXPath = selectXPathComposite.getSelectedXPath();
+        super.okPressed();
+    }
 
-	public void setLock(boolean lock) {
-		this.lock = lock;
-	}
+    public boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
 
 }

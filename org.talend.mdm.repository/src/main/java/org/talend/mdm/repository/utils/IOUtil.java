@@ -25,6 +25,7 @@ public class IOUtil {
      * 
      */
     private static final String TEMP_Folder_NAME = "temp"; //$NON-NLS-1$
+
     public static File getTempFolder() {
         String usrDir = System.getProperty("java.io.tmpdir");//$NON-NLS-1$
 
@@ -46,6 +47,7 @@ public class IOUtil {
         return tempFolder;
 
     }
+
     public static void cleanFolder(File folder) {
         if (folder != null && folder.exists() && folder.isDirectory()) {
             File[] files = folder.listFiles();
@@ -58,5 +60,10 @@ public class IOUtil {
             folder.delete();
         }
 
+    }
+
+    public static boolean isExist(String path) {
+        assert (path != null);
+        return new File(path).exists();
     }
 }

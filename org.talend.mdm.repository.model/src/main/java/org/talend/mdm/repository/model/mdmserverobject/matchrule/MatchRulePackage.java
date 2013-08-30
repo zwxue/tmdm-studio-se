@@ -116,22 +116,31 @@ public interface MatchRulePackage extends EPackage {
     int ENTITY_MAP_INFO__MATCH_KEY_MAP = 1;
 
     /**
+     * The feature id for the '<em><b>Survivorship Key Map</b></em>' map.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP = 2;
+
+    /**
      * The feature id for the '<em><b>Blocking Key Definition</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION = 2;
+    int ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION = 3;
 
     /**
-     * The feature id for the '<em><b>Match Rule Name</b></em>' attribute.
+     * The feature id for the '<em><b>Match Rule Def Name</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int ENTITY_MAP_INFO__MATCH_RULE_NAME = 3;
+    int ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME = 4;
 
     /**
      * The feature id for the '<em><b>Parent</b></em>' container reference.
@@ -140,7 +149,7 @@ public interface MatchRulePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int ENTITY_MAP_INFO__PARENT = 4;
+    int ENTITY_MAP_INFO__PARENT = 5;
 
     /**
      * The number of structural features of the '<em>Entity Map Info</em>' class.
@@ -149,17 +158,17 @@ public interface MatchRulePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int ENTITY_MAP_INFO_FEATURE_COUNT = 5;
+    int ENTITY_MAP_INFO_FEATURE_COUNT = 6;
 
     /**
-     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchKeyXPathMapImpl <em>Match Key XPath Map</em>}' class.
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.KeyXPathMapImpl <em>Key XPath Map</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchKeyXPathMapImpl
-     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl#getMatchKeyXPathMap()
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.KeyXPathMapImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl#getKeyXPathMap()
      * @generated
      */
-    int MATCH_KEY_XPATH_MAP = 2;
+    int KEY_XPATH_MAP = 2;
 
     /**
      * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -168,7 +177,7 @@ public interface MatchRulePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int MATCH_KEY_XPATH_MAP__KEY = 0;
+    int KEY_XPATH_MAP__KEY = 0;
 
     /**
      * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -177,16 +186,16 @@ public interface MatchRulePackage extends EPackage {
      * @generated
      * @ordered
      */
-    int MATCH_KEY_XPATH_MAP__VALUE = 1;
+    int KEY_XPATH_MAP__VALUE = 1;
 
     /**
-     * The number of structural features of the '<em>Match Key XPath Map</em>' class.
+     * The number of structural features of the '<em>Key XPath Map</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int MATCH_KEY_XPATH_MAP_FEATURE_COUNT = 2;
+    int KEY_XPATH_MAP_FEATURE_COUNT = 2;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.BlockingKeyDefinitionImpl <em>Blocking Key Definition</em>}' class.
@@ -236,13 +245,13 @@ public interface MatchRulePackage extends EPackage {
     int BLOCKING_KEY = 4;
 
     /**
-     * The feature id for the '<em><b>Elment Name</b></em>' attribute.
+     * The feature id for the '<em><b>Key Name</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int BLOCKING_KEY__ELMENT_NAME = 0;
+    int BLOCKING_KEY__KEY_NAME = 0;
 
     /**
      * The number of structural features of the '<em>Blocking Key</em>' class.
@@ -308,6 +317,17 @@ public interface MatchRulePackage extends EPackage {
     EReference getEntityMapInfo_MatchKeyMap();
 
     /**
+     * Returns the meta object for the map '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getSurvivorshipKeyMap <em>Survivorship Key Map</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the map '<em>Survivorship Key Map</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getSurvivorshipKeyMap()
+     * @see #getEntityMapInfo()
+     * @generated
+     */
+    EReference getEntityMapInfo_SurvivorshipKeyMap();
+
+    /**
      * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getBlockingKeyDefinition <em>Blocking Key Definition</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -319,15 +339,15 @@ public interface MatchRulePackage extends EPackage {
     EReference getEntityMapInfo_BlockingKeyDefinition();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleName <em>Match Rule Name</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleDefName <em>Match Rule Def Name</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Match Rule Name</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleName()
+     * @return the meta object for the attribute '<em>Match Rule Def Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleDefName()
      * @see #getEntityMapInfo()
      * @generated
      */
-    EAttribute getEntityMapInfo_MatchRuleName();
+    EAttribute getEntityMapInfo_MatchRuleDefName();
 
     /**
      * Returns the meta object for the container reference '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getParent <em>Parent</em>}'.
@@ -341,16 +361,16 @@ public interface MatchRulePackage extends EPackage {
     EReference getEntityMapInfo_Parent();
 
     /**
-     * Returns the meta object for class '{@link java.util.Map.Entry <em>Match Key XPath Map</em>}'.
+     * Returns the meta object for class '{@link java.util.Map.Entry <em>Key XPath Map</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for class '<em>Match Key XPath Map</em>'.
+     * @return the meta object for class '<em>Key XPath Map</em>'.
      * @see java.util.Map.Entry
      * @model keyDataType="org.eclipse.emf.ecore.EString"
      *        valueDataType="org.eclipse.emf.ecore.EString"
      * @generated
      */
-    EClass getMatchKeyXPathMap();
+    EClass getKeyXPathMap();
 
     /**
      * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
@@ -358,10 +378,10 @@ public interface MatchRulePackage extends EPackage {
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Key</em>'.
      * @see java.util.Map.Entry
-     * @see #getMatchKeyXPathMap()
+     * @see #getKeyXPathMap()
      * @generated
      */
-    EAttribute getMatchKeyXPathMap_Key();
+    EAttribute getKeyXPathMap_Key();
 
     /**
      * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
@@ -369,10 +389,10 @@ public interface MatchRulePackage extends EPackage {
      * <!-- end-user-doc -->
      * @return the meta object for the attribute '<em>Value</em>'.
      * @see java.util.Map.Entry
-     * @see #getMatchKeyXPathMap()
+     * @see #getKeyXPathMap()
      * @generated
      */
-    EAttribute getMatchKeyXPathMap_Value();
+    EAttribute getKeyXPathMap_Value();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKeyDefinition <em>Blocking Key Definition</em>}'.
@@ -417,15 +437,15 @@ public interface MatchRulePackage extends EPackage {
     EClass getBlockingKey();
 
     /**
-     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getElmentName <em>Elment Name</em>}'.
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getKeyName <em>Key Name</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Elment Name</em>'.
-     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getElmentName()
+     * @return the meta object for the attribute '<em>Key Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getKeyName()
      * @see #getBlockingKey()
      * @generated
      */
-    EAttribute getBlockingKey_ElmentName();
+    EAttribute getBlockingKey_KeyName();
 
     /**
      * Returns the factory that creates the instances of the model.
@@ -494,6 +514,14 @@ public interface MatchRulePackage extends EPackage {
         EReference ENTITY_MAP_INFO__MATCH_KEY_MAP = eINSTANCE.getEntityMapInfo_MatchKeyMap();
 
         /**
+         * The meta object literal for the '<em><b>Survivorship Key Map</b></em>' map feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP = eINSTANCE.getEntityMapInfo_SurvivorshipKeyMap();
+
+        /**
          * The meta object literal for the '<em><b>Blocking Key Definition</b></em>' containment reference feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -502,12 +530,12 @@ public interface MatchRulePackage extends EPackage {
         EReference ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION = eINSTANCE.getEntityMapInfo_BlockingKeyDefinition();
 
         /**
-         * The meta object literal for the '<em><b>Match Rule Name</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Match Rule Def Name</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute ENTITY_MAP_INFO__MATCH_RULE_NAME = eINSTANCE.getEntityMapInfo_MatchRuleName();
+        EAttribute ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME = eINSTANCE.getEntityMapInfo_MatchRuleDefName();
 
         /**
          * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
@@ -518,14 +546,14 @@ public interface MatchRulePackage extends EPackage {
         EReference ENTITY_MAP_INFO__PARENT = eINSTANCE.getEntityMapInfo_Parent();
 
         /**
-         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchKeyXPathMapImpl <em>Match Key XPath Map</em>}' class.
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.KeyXPathMapImpl <em>Key XPath Map</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchKeyXPathMapImpl
-         * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl#getMatchKeyXPathMap()
+         * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.KeyXPathMapImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl#getKeyXPathMap()
          * @generated
          */
-        EClass MATCH_KEY_XPATH_MAP = eINSTANCE.getMatchKeyXPathMap();
+        EClass KEY_XPATH_MAP = eINSTANCE.getKeyXPathMap();
 
         /**
          * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
@@ -533,7 +561,7 @@ public interface MatchRulePackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute MATCH_KEY_XPATH_MAP__KEY = eINSTANCE.getMatchKeyXPathMap_Key();
+        EAttribute KEY_XPATH_MAP__KEY = eINSTANCE.getKeyXPathMap_Key();
 
         /**
          * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
@@ -541,7 +569,7 @@ public interface MatchRulePackage extends EPackage {
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute MATCH_KEY_XPATH_MAP__VALUE = eINSTANCE.getMatchKeyXPathMap_Value();
+        EAttribute KEY_XPATH_MAP__VALUE = eINSTANCE.getKeyXPathMap_Value();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.BlockingKeyDefinitionImpl <em>Blocking Key Definition</em>}' class.
@@ -580,12 +608,12 @@ public interface MatchRulePackage extends EPackage {
         EClass BLOCKING_KEY = eINSTANCE.getBlockingKey();
 
         /**
-         * The meta object literal for the '<em><b>Elment Name</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Key Name</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute BLOCKING_KEY__ELMENT_NAME = eINSTANCE.getBlockingKey_ElmentName();
+        EAttribute BLOCKING_KEY__KEY_NAME = eINSTANCE.getBlockingKey_KeyName();
 
     }
 

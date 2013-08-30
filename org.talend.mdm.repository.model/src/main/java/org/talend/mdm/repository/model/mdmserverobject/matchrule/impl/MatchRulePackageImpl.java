@@ -55,7 +55,7 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
-    private EClass matchKeyXPathMapEClass = null;
+    private EClass keyXPathMapEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -191,7 +191,7 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getEntityMapInfo_BlockingKeyDefinition() {
+    public EReference getEntityMapInfo_SurvivorshipKeyMap() {
         return (EReference)entityMapInfoEClass.getEStructuralFeatures().get(2);
     }
 
@@ -200,8 +200,17 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getEntityMapInfo_MatchRuleName() {
-        return (EAttribute)entityMapInfoEClass.getEStructuralFeatures().get(3);
+    public EReference getEntityMapInfo_BlockingKeyDefinition() {
+        return (EReference)entityMapInfoEClass.getEStructuralFeatures().get(3);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getEntityMapInfo_MatchRuleDefName() {
+        return (EAttribute)entityMapInfoEClass.getEStructuralFeatures().get(4);
     }
 
     /**
@@ -210,7 +219,7 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * @generated
      */
     public EReference getEntityMapInfo_Parent() {
-        return (EReference)entityMapInfoEClass.getEStructuralFeatures().get(4);
+        return (EReference)entityMapInfoEClass.getEStructuralFeatures().get(5);
     }
 
     /**
@@ -218,8 +227,8 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getMatchKeyXPathMap() {
-        return matchKeyXPathMapEClass;
+    public EClass getKeyXPathMap() {
+        return keyXPathMapEClass;
     }
 
     /**
@@ -227,8 +236,8 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getMatchKeyXPathMap_Key() {
-        return (EAttribute)matchKeyXPathMapEClass.getEStructuralFeatures().get(0);
+    public EAttribute getKeyXPathMap_Key() {
+        return (EAttribute)keyXPathMapEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -236,8 +245,8 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getMatchKeyXPathMap_Value() {
-        return (EAttribute)matchKeyXPathMapEClass.getEStructuralFeatures().get(1);
+    public EAttribute getKeyXPathMap_Value() {
+        return (EAttribute)keyXPathMapEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -281,7 +290,7 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getBlockingKey_ElmentName() {
+    public EAttribute getBlockingKey_KeyName() {
         return (EAttribute)blockingKeyEClass.getEStructuralFeatures().get(0);
     }
 
@@ -319,20 +328,21 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
         entityMapInfoEClass = createEClass(ENTITY_MAP_INFO);
         createEAttribute(entityMapInfoEClass, ENTITY_MAP_INFO__ENTITY_NAME);
         createEReference(entityMapInfoEClass, ENTITY_MAP_INFO__MATCH_KEY_MAP);
+        createEReference(entityMapInfoEClass, ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP);
         createEReference(entityMapInfoEClass, ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION);
-        createEAttribute(entityMapInfoEClass, ENTITY_MAP_INFO__MATCH_RULE_NAME);
+        createEAttribute(entityMapInfoEClass, ENTITY_MAP_INFO__MATCH_RULE_DEF_NAME);
         createEReference(entityMapInfoEClass, ENTITY_MAP_INFO__PARENT);
 
-        matchKeyXPathMapEClass = createEClass(MATCH_KEY_XPATH_MAP);
-        createEAttribute(matchKeyXPathMapEClass, MATCH_KEY_XPATH_MAP__KEY);
-        createEAttribute(matchKeyXPathMapEClass, MATCH_KEY_XPATH_MAP__VALUE);
+        keyXPathMapEClass = createEClass(KEY_XPATH_MAP);
+        createEAttribute(keyXPathMapEClass, KEY_XPATH_MAP__KEY);
+        createEAttribute(keyXPathMapEClass, KEY_XPATH_MAP__VALUE);
 
         blockingKeyDefinitionEClass = createEClass(BLOCKING_KEY_DEFINITION);
         createEReference(blockingKeyDefinitionEClass, BLOCKING_KEY_DEFINITION__BLOCKING_KEYS);
         createEAttribute(blockingKeyDefinitionEClass, BLOCKING_KEY_DEFINITION__USE_BUILT_IN_COLUMN);
 
         blockingKeyEClass = createEClass(BLOCKING_KEY);
-        createEAttribute(blockingKeyEClass, BLOCKING_KEY__ELMENT_NAME);
+        createEAttribute(blockingKeyEClass, BLOCKING_KEY__KEY_NAME);
     }
 
     /**
@@ -373,21 +383,22 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
 
         initEClass(entityMapInfoEClass, EntityMapInfo.class, "EntityMapInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getEntityMapInfo_EntityName(), theEcorePackage.getEString(), "entityName", null, 0, 1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getEntityMapInfo_MatchKeyMap(), this.getMatchKeyXPathMap(), null, "matchKeyMap", null, 0, -1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getEntityMapInfo_MatchKeyMap(), this.getKeyXPathMap(), null, "matchKeyMap", null, 0, -1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getEntityMapInfo_SurvivorshipKeyMap(), this.getKeyXPathMap(), null, "survivorshipKeyMap", null, 0, -1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getEntityMapInfo_BlockingKeyDefinition(), this.getBlockingKeyDefinition(), null, "blockingKeyDefinition", null, 0, 1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getEntityMapInfo_MatchRuleName(), theEcorePackage.getEString(), "matchRuleName", null, 0, 1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getEntityMapInfo_MatchRuleDefName(), theEcorePackage.getEString(), "matchRuleDefName", null, 0, 1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEReference(getEntityMapInfo_Parent(), this.getMatchRuleMapInfo(), this.getMatchRuleMapInfo_EntityMapInfos(), "parent", null, 0, 1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(matchKeyXPathMapEClass, Map.Entry.class, "MatchKeyXPathMap", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getMatchKeyXPathMap_Key(), theEcorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getMatchKeyXPathMap_Value(), theEcorePackage.getEString(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(keyXPathMapEClass, Map.Entry.class, "KeyXPathMap", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getKeyXPathMap_Key(), theEcorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getKeyXPathMap_Value(), theEcorePackage.getEString(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(blockingKeyDefinitionEClass, BlockingKeyDefinition.class, "BlockingKeyDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getBlockingKeyDefinition_BlockingKeys(), this.getBlockingKey(), null, "blockingKeys", null, 0, -1, BlockingKeyDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBlockingKeyDefinition_UseBuiltInColumn(), theEcorePackage.getEBoolean(), "useBuiltInColumn", null, 0, 1, BlockingKeyDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(blockingKeyEClass, BlockingKey.class, "BlockingKey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getBlockingKey_ElmentName(), theEcorePackage.getEString(), "elmentName", null, 0, 1, BlockingKey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBlockingKey_KeyName(), theEcorePackage.getEString(), "keyName", null, 0, 1, BlockingKey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     }
 
 } //MatchRulePackageImpl

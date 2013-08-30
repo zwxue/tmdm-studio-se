@@ -13,14 +13,20 @@
 package org.talend.mdm.repository.ui.editors;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
@@ -34,11 +40,14 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
 import org.talend.mdm.repository.core.service.IModelValidationService;
 import org.talend.mdm.repository.core.service.IModelValidationService.IModelValidateResult;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo;
+import org.talend.mdm.repository.utils.ServiceUtil;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
@@ -59,6 +68,12 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
     private DataModelMainPage2 dMainPage;
 
     private CTabFolder folder;
+
+    private MatchRuleMapInfo mapInfo;
+
+    private EditingDomain editingDomain;
+
+    private CommandStackListener commandStackListener;
 
     @Override
     protected void createPages() {
@@ -173,7 +188,12 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         IRepositoryViewObject viewObject = editorInput.getViewObject();
         Item item = viewObject.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-
+        if (isEE()) {
+            IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
+            mapInfoService.saveMatchRuleMapInfo(item);
+            getMapinfoCommandStack().saveIsDone();
+            firePropertyChange(PROP_DIRTY);
+        }
         //
         DeployService deployService = DeployService.getInstance();
         if (deployService.isAutoDeploy()) {
@@ -212,8 +232,78 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         if (type == IGotoMarker.class) {
 
             return dMainPage;
+        } else if (type == MatchRuleMapInfo.class) {
+            return mapInfo;
+        } else if (type == EditingDomain.class) {
+            return editingDomain;
+        } else if (type == XSDEditorInput2.class) {
+            return getEditorInput();
         }
+
         return super.getAdapter(type);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor#init(org.eclipse.ui.IEditorSite,
+     * org.eclipse.ui.IEditorInput)
+     */
+    @Override
+    public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
+
+        super.init(site, editorInput);
+
+        if (isEE()) {
+            IRepositoryViewEditorInput input = (IRepositoryViewEditorInput) editorInput;
+            Item inputItem = input.getInputItem();
+            IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
+            mapInfo = mapInfoService.loadMatchRuleMapInfo(inputItem);
+            this.editingDomain = mapInfoService.getNewEditingDomain();
+            BasicCommandStack stack = getMapinfoCommandStack();
+            this.commandStackListener = new CommandStackListener() {
+
+                public void commandStackChanged(EventObject event) {
+                    firePropertyChange(PROP_DIRTY);
+                }
+            };
+            stack.addCommandStackListener(commandStackListener);
+        }
+    }
+
+    private BasicCommandStack getMapinfoCommandStack() {
+        return (BasicCommandStack) editingDomain.getCommandStack();
+    }
+
+    private boolean isEE() {
+        return Util.IsEnterPrise();
+    }
+
+    @Override
+    public void dispose() {
+        if (isEE() && editingDomain != null) {
+            BasicCommandStack stack = getMapinfoCommandStack();
+            if (commandStackListener != null) {
+                stack.removeCommandStackListener(commandStackListener);
+            }
+            if (isDirty()) {
+
+                while (stack.isSaveNeeded() && stack.canUndo()) {
+                    stack.undo();
+                }
+            }
+        }
+        super.dispose();
+    }
+
+    @Override
+    public boolean isDirty() {
+        boolean mapInfoDirty = false;
+        if (isEE() && editingDomain != null) {
+            BasicCommandStack stack = getMapinfoCommandStack();
+            mapInfoDirty = stack.isSaveNeeded();
+        }
+        return super.isDirty() || mapInfoDirty;
     }
 
 }

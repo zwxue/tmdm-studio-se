@@ -12,16 +12,26 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.amalto.workbench.dialogs.datamodel.IXPathSelectionFilter;
+import com.amalto.workbench.dialogs.datamodel.IXPathSelectionFilter.FilterResult;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -108,6 +118,49 @@ public class XSDUtil {
 
         }
         return builtInTypes;
+    }
 
+    private static final String DIVIDE = "/"; //$NON-NLS-1$
+
+    public static Set<String> getValidElementPaths(XSDElementDeclaration ed, IXPathSelectionFilter filter) {
+
+        String curPrefix = ed.getName() + DIVIDE;
+        XSDTypeDefinition type = ed.getType();
+        Set<String> paths = new HashSet<String>();
+        if (type instanceof XSDComplexTypeDefinition) {
+            XSDParticle particle = type.getComplexType();
+            iterateParticle(particle, filter, paths, curPrefix);
+
+        }
+
+        return paths;
+    }
+
+    private static void iterateParticle(XSDParticle particle, IXPathSelectionFilter filter, Set<String> paths, String prefix) {
+        XSDTerm term = particle.getTerm();
+        if (term instanceof XSDModelGroup) {
+            EList<XSDParticle> contents = ((XSDModelGroup) term).getContents();
+            for (XSDParticle p : contents) {
+                XSDTerm t = p.getTerm();
+                if (t instanceof XSDElementDeclaration) {
+                    XSDElementDeclaration element = ((XSDElementDeclaration) t);
+                    FilterResult r = filter.check(p);
+                    if (r == FilterResult.ENABLE) {
+                        String path = prefix + element.getName();
+                        paths.add(path);
+                    } else {
+                        XSDTypeDefinition type = element.getType();
+                        if (type instanceof XSDComplexTypeDefinition) {
+                            String nextPrefix = prefix + element.getName() + DIVIDE;
+                            XSDParticle cp = type.getComplexType();
+                            iterateParticle(cp, filter, paths, nextPrefix);
+
+                        }
+                    }
+
+                }
+
+            }
+        }
     }
 }

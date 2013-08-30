@@ -671,6 +671,7 @@
             class="org.talend.mdm.repository.core.service.ValidateService"
             serviceId="IValidateService">
       </Service>
+
    </extension>
    <extension
          point="org.eclipse.ui.commands">

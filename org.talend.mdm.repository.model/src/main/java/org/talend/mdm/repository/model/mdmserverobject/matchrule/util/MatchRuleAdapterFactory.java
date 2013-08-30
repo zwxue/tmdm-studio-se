@@ -82,8 +82,8 @@ public class MatchRuleAdapterFactory extends AdapterFactoryImpl {
                 return createEntityMapInfoAdapter();
             }
             @Override
-            public Adapter caseMatchKeyXPathMap(Map.Entry<String, String> object) {
-                return createMatchKeyXPathMapAdapter();
+            public Adapter caseKeyXPathMap(Map.Entry<String, String> object) {
+                return createKeyXPathMapAdapter();
             }
             @Override
             public Adapter caseBlockingKeyDefinition(BlockingKeyDefinition object) {
@@ -142,7 +142,7 @@ public class MatchRuleAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Match Key XPath Map</em>}'.
+     * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Key XPath Map</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
      * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -151,7 +151,7 @@ public class MatchRuleAdapterFactory extends AdapterFactoryImpl {
      * @see java.util.Map.Entry
      * @generated
      */
-    public Adapter createMatchKeyXPathMapAdapter() {
+    public Adapter createKeyXPathMapAdapter() {
         return null;
     }
 

@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getElmentName <em>Elment Name</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getKeyName <em>Key Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -26,29 +26,29 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface BlockingKey extends EObject {
     /**
-     * Returns the value of the '<em><b>Elment Name</b></em>' attribute.
+     * Returns the value of the '<em><b>Key Name</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Elment Name</em>' attribute isn't clear,
+     * If the meaning of the '<em>Key Name</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Elment Name</em>' attribute.
-     * @see #setElmentName(String)
-     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getBlockingKey_ElmentName()
+     * @return the value of the '<em>Key Name</em>' attribute.
+     * @see #setKeyName(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getBlockingKey_KeyName()
      * @model
      * @generated
      */
-    String getElmentName();
+    String getKeyName();
 
     /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getElmentName <em>Elment Name</em>}' attribute.
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKey#getKeyName <em>Key Name</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Elment Name</em>' attribute.
-     * @see #getElmentName()
+     * @param value the new value of the '<em>Key Name</em>' attribute.
+     * @see #getKeyName()
      * @generated
      */
-    void setElmentName(String value);
+    void setKeyName(String value);
 
 } // BlockingKey

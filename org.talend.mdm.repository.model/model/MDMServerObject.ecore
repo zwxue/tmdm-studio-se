@@ -230,14 +230,16 @@
     <eClassifiers xsi:type="ecore:EClass" name="EntityMapInfo">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="matchKeyMap" upperBound="-1"
-          eType="#//matchrule/MatchKeyXPathMap" containment="true"/>
+          eType="#//matchrule/KeyXPathMap" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="survivorshipKeyMap" upperBound="-1"
+          eType="#//matchrule/KeyXPathMap" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="blockingKeyDefinition"
           eType="#//matchrule/BlockingKeyDefinition" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchRuleName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchRuleDefName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//matchrule/MatchRuleMapInfo"
           eOpposite="#//matchrule/MatchRuleMapInfo/entityMapInfos"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="MatchKeyXPathMap" instanceClassName="java.util.Map$Entry">
+    <eClassifiers xsi:type="ecore:EClass" name="KeyXPathMap" instanceClassName="java.util.Map$Entry">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     </eClassifiers>
@@ -247,7 +249,7 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="useBuiltInColumn" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="BlockingKey">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="elmentName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

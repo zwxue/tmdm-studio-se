@@ -20,8 +20,9 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getEntityName <em>Entity Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchKeyMap <em>Match Key Map</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getSurvivorshipKeyMap <em>Survivorship Key Map</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getBlockingKeyDefinition <em>Blocking Key Definition</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleName <em>Match Rule Name</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleDefName <em>Match Rule Def Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
@@ -69,10 +70,27 @@ public interface EntityMapInfo extends EObject {
      * <!-- end-user-doc -->
      * @return the value of the '<em>Match Key Map</em>' map.
      * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getEntityMapInfo_MatchKeyMap()
-     * @model mapType="org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchKeyXPathMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
+     * @model mapType="org.talend.mdm.repository.model.mdmserverobject.matchrule.KeyXPathMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
      * @generated
      */
     EMap<String, String> getMatchKeyMap();
+
+    /**
+     * Returns the value of the '<em><b>Survivorship Key Map</b></em>' map.
+     * The key is of type {@link java.lang.String},
+     * and the value is of type {@link java.lang.String},
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Survivorship Key Map</em>' map isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Survivorship Key Map</em>' map.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getEntityMapInfo_SurvivorshipKeyMap()
+     * @model mapType="org.talend.mdm.repository.model.mdmserverobject.matchrule.KeyXPathMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
+     * @generated
+     */
+    EMap<String, String> getSurvivorshipKeyMap();
 
     /**
      * Returns the value of the '<em><b>Blocking Key Definition</b></em>' containment reference.
@@ -101,30 +119,30 @@ public interface EntityMapInfo extends EObject {
     void setBlockingKeyDefinition(BlockingKeyDefinition value);
 
     /**
-     * Returns the value of the '<em><b>Match Rule Name</b></em>' attribute.
+     * Returns the value of the '<em><b>Match Rule Def Name</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Match Rule Name</em>' attribute isn't clear,
+     * If the meaning of the '<em>Match Rule Def Name</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Match Rule Name</em>' attribute.
-     * @see #setMatchRuleName(String)
-     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getEntityMapInfo_MatchRuleName()
+     * @return the value of the '<em>Match Rule Def Name</em>' attribute.
+     * @see #setMatchRuleDefName(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getEntityMapInfo_MatchRuleDefName()
      * @model
      * @generated
      */
-    String getMatchRuleName();
+    String getMatchRuleDefName();
 
     /**
-     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleName <em>Match Rule Name</em>}' attribute.
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleDefName <em>Match Rule Def Name</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Match Rule Name</em>' attribute.
-     * @see #getMatchRuleName()
+     * @param value the new value of the '<em>Match Rule Def Name</em>' attribute.
+     * @see #getMatchRuleDefName()
      * @generated
      */
-    void setMatchRuleName(String value);
+    void setMatchRuleDefName(String value);
 
     /**
      * Returns the value of the '<em><b>Parent</b></em>' container reference.
