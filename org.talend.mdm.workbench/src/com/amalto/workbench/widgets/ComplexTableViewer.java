@@ -1035,7 +1035,7 @@ public class ComplexTableViewer {
 
         @Override
         protected Object doGetValue() {
-
+        	ComplexTableViewer.this.datamodelName = xpath.getDataModelName();
             if (context)
                 XpathSelectDialog.setContext(null);
             return xpath.getText();

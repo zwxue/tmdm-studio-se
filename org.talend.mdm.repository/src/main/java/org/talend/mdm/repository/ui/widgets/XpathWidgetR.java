@@ -12,9 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.widgets;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -33,8 +30,6 @@ public class XpathWidgetR extends XpathWidget {
 
     private DataModelMainPage page;
     
-    private PropertyChangeSupport support = new PropertyChangeSupport(this);
-    
     /**
      * DOC hbhong XpathWidgetR constructor comment.
      * 
@@ -52,7 +47,6 @@ public class XpathWidgetR extends XpathWidget {
         super(buttonName, null, toolkit, parent, dialog, isButtonLeft, readOnly, dataModelName);
     }
 
-    
     /**
      * DOC hbhong XpathWidgetR constructor comment.
      * 
@@ -101,24 +95,11 @@ public class XpathWidgetR extends XpathWidget {
         dlg.open();
 
         if (dlg.getReturnCode() == Window.OK) {
-        	String xpath = descriptionText.getText();
-        	String dname = dataModelName;
             descriptionText.setText(dlg.getXpath());
             dataModelName = dlg.getDataModelName();
             dlg.close();
             setOutFocus();
-            support.firePropertyChange("XPath", xpath, descriptionText);
-            support.firePropertyChange("DataModel", dname, dataModelName);
         }
     }
 
-    public void addXpathListener(PropertyChangeListener listener){
-    	support.addPropertyChangeListener(listener);
-    }
-    
-    public void removeXpathListener(PropertyChangeListener listener){
-    	support.removePropertyChangeListener(listener);
-    }
-    
-    
 }
