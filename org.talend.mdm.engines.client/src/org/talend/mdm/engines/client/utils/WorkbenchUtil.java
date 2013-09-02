@@ -13,8 +13,9 @@ import org.talend.repository.editor.RepositoryEditorInput;
 import org.talend.repository.model.RepositoryNode;
 
 public class WorkbenchUtil {
-	
-	public static Collection<IEditorPart> getSelectDirtyEditor(IStructuredSelection selection,ERepositoryObjectType etype){
+
+	public static Collection<IEditorPart> getSelectDirtyEditor(
+			IStructuredSelection selection, ERepositoryObjectType etype) {
 		List<?> nodes = selection.toList();
 		Collection<IEditorPart> dirtyEditors = new LinkedList<IEditorPart>();
 		for (Object obj : nodes) {
@@ -31,19 +32,40 @@ public class WorkbenchUtil {
 		}
 		return dirtyEditors;
 	}
-	
+
 	public static IEditorPart getRepositoryEditor(RepositoryNode node) {
 		IEditorPart[] parts = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage().getDirtyEditors();
 		for (IEditorPart part : parts) {
 			IEditorInput inputObj = part.getEditorInput();
-			if(inputObj instanceof RepositoryEditorInput){
+			if (inputObj instanceof RepositoryEditorInput) {
 				RepositoryEditorInput input = (RepositoryEditorInput) inputObj;
-				if(input.getRepositoryNode().equals(node)){
+				if (equals(input.getRepositoryNode(), node)) {
 					return part;
 				}
 			}
 		}
 		return null;
+	}
+
+	static boolean equals(RepositoryNode node1, RepositoryNode node2) {
+		try {
+			if (null == node1 || null == node2) {
+				return false;
+			}
+			if (!node1.getId().equals(node2.getId())) {
+				return false;
+			}
+			if (!node1.getObject().getProperty()
+					.equals(node2.getObject().getProperty())) {
+				return false;
+			}
+			if (!node1.getType().equals(node2.getType())) {
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 }

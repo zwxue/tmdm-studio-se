@@ -147,19 +147,18 @@ public final class DeployOnMDMAction extends AContextualAction {
                         property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, mdmServer.getName());
                         factory.save(item);
                     }
-
+                    Collection<IEditorPart> editors = WorkbenchUtil.getSelectDirtyEditor((IStructuredSelection) getSelection(), ERepositoryObjectType.PROCESS);
+    				
+    				for (IEditorPart part : editors) {
+    					if (part instanceof MultiPageTalendEditor) {
+    						MultiPageTalendEditor mptEditor = (MultiPageTalendEditor) part;
+    						mptEditor.doSave(new NullProgressMonitor());
+    						mptEditor.refreshName();
+    					}
+    				}
+                    refreshMdmRepositoryViewTree();
                     service.removeDeployPhaseCommandOf(ERepositoryObjectType.PROCESS, item);
                 }
-                Collection<IEditorPart> editors = WorkbenchUtil.getSelectDirtyEditor((IStructuredSelection) getSelection(), ERepositoryObjectType.PROCESS);
-				
-				for (IEditorPart part : editors) {
-					if (part instanceof MultiPageTalendEditor) {
-						MultiPageTalendEditor mptEditor = (MultiPageTalendEditor) part;
-						mptEditor.doSave(new NullProgressMonitor());
-						mptEditor.refreshName();
-					}
-				}
-                refreshMdmRepositoryViewTree();
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
             }
