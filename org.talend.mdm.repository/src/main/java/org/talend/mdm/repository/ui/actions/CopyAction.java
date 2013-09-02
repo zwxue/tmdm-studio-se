@@ -23,6 +23,8 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IRepositoryViewGlobalActionHandler;
 import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.models.FolderRepositoryObject;
+import org.talend.mdm.repository.models.WSRootRepositoryObject;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -52,9 +54,14 @@ public class CopyAction extends AbstractRepositoryAction {
 		ITreeSelection selection = (ITreeSelection) getStructuredSelection();
 		List<TreePath> paths = new ArrayList<TreePath>(selection.getPaths().length);
 		for(TreePath path : selection.getPaths()){
-			if (path.getSegmentCount() > 2) {
-				paths.add(path);
+			Object lastObj = path.getLastSegment();
+			if(lastObj instanceof WSRootRepositoryObject){
+				continue;
 			}
+			if(lastObj instanceof FolderRepositoryObject){
+				continue;
+			}
+			paths.add(path);
 		}
 		selection = new TreeSelection(paths.toArray(new TreePath[]{}));
 		LocalSelectionTransfer.getTransfer().setSelection(selection);
