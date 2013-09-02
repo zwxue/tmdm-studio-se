@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.navigator;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -28,31 +29,49 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.navigator.ICommonContentExtensionSite;
+import org.eclipse.ui.navigator.ICommonLabelProvider;
 import org.eclipse.ui.navigator.IDescriptionProvider;
+import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
+import org.talend.mdm.repository.core.service.IMDMSVNProviderService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
-public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionProvider, IColorProvider, IFontProvider {
+public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements ILabelProvider, IDescriptionProvider,
+        IColorProvider, IFontProvider, ICommonLabelProvider {
 
+    private IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+    private IMDMSVNProviderService svnProviderSerice = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
+            IMDMSVNProviderService.class);
+
+    @Override
     public void addListener(ILabelProviderListener listener) {
     }
 
+    @Override
     public void dispose() {
 
     }
 
+    @Override
     public boolean isLabelProperty(Object element, String property) {
         return false;
     }
 
+    @Override
     public void removeListener(ILabelProviderListener listener) {
     }
 
@@ -64,6 +83,7 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
+    @Override
     public Image getImage(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if (provider != null) {
@@ -72,6 +92,7 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
+    @Override
     public String getText(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if (provider != null) {
@@ -93,6 +114,7 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
+    @Override
     public Color getForeground(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if (provider != null) {
@@ -101,6 +123,7 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
+    @Override
     public Font getFont(Object element) {
         IRepositoryNodeLabelProvider provider = getLabelProvider(element);
         if (provider != null) {
@@ -109,8 +132,35 @@ public class MDMRepositoryLabelProvider implements ILabelProvider, IDescriptionP
         return null;
     }
 
+    @Override
     public Color getBackground(Object element) {
         return null;
+    }
+
+    @Override
+    public String getToolTipText(Object element) {
+        try {
+            if (!factory.isLocalConnectionProvider()) {
+                if (svnProviderSerice != null && svnProviderSerice.isProjectInSvnMode()) {
+                    IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+
+                    String toolTip = svnProviderSerice.getLockInfo(viewObj);
+                    return toolTip;
+                }
+            }
+        } catch (PersistenceException e) {
+        }
+
+        return null;
+    }
+
+    public void restoreState(IMemento aMemento) {
+    }
+
+    public void saveState(IMemento aMemento) {
+    }
+
+    public void init(ICommonContentExtensionSite aConfig) {
     }
 
 }
