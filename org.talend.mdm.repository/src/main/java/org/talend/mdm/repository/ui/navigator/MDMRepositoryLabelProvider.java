@@ -57,30 +57,9 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
 
     private IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
-    private IMDMSVNProviderService svnProviderSerice = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
-            IMDMSVNProviderService.class);
+    private IMDMSVNProviderService svnProviderService = null;
 
     private Boolean isInSvnMode = null;
-
-    private boolean isInSvnMode() {
-        if (isInSvnMode == null) {
-            try {
-                if (!factory.isLocalConnectionProvider()) {
-                    if (svnProviderSerice != null && svnProviderSerice.isProjectInSvnMode()) {
-                        isInSvnMode = Boolean.TRUE;
-                    }
-                }
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            }
-
-            if (isInSvnMode == null) {
-                isInSvnMode = Boolean.FALSE;
-            }
-        }
-
-        return isInSvnMode.booleanValue();
-    }
 
     @Override
     public void addListener(ILabelProviderListener listener) {
@@ -167,11 +146,47 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
         if (isInSvnMode()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
 
-            String toolTip = svnProviderSerice.getLockInfo(viewObj);
-            return toolTip;
+            if (getSvnProviderService() != null) {
+                String toolTip = getSvnProviderService().getLockInfo(viewObj);
+                return toolTip;
+            }
         }
 
         return null;
+    }
+
+    private boolean isInSvnMode() {
+        if (isInSvnMode == null) {
+            try {
+                if (!factory.isLocalConnectionProvider()) {
+                    IMDMSVNProviderService service = getSvnProviderService();
+                    if (service != null && service.isProjectInSvnMode()) {
+                        isInSvnMode = Boolean.TRUE;
+                    }
+                }
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+
+            if (isInSvnMode == null) {
+                isInSvnMode = Boolean.FALSE;
+            }
+        }
+
+        return isInSvnMode.booleanValue();
+    }
+
+    private IMDMSVNProviderService getSvnProviderService() {
+        if (svnProviderService == null) {
+            try {
+                svnProviderService = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
+                        IMDMSVNProviderService.class);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        return svnProviderService;
     }
 
     public void restoreState(IMemento aMemento) {
