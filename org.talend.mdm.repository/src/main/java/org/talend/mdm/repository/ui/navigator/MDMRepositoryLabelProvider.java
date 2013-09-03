@@ -21,6 +21,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.navigator;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
@@ -52,10 +53,32 @@ import org.talend.repository.model.IProxyRepositoryFactory;
 public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements ILabelProvider, IDescriptionProvider,
         IColorProvider, IFontProvider, ICommonLabelProvider {
 
+    private static Logger log = Logger.getLogger(MDMRepositoryLabelProvider.class);
+
     private IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
     private IMDMSVNProviderService svnProviderSerice = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
             IMDMSVNProviderService.class);
+
+    private boolean isINSVNMode = false;
+
+    public MDMRepositoryLabelProvider() {
+        isINSVNMode = isInSvnMode();
+    }
+
+    private boolean isInSvnMode() {
+        try {
+            if (!factory.isLocalConnectionProvider()) {
+                if (svnProviderSerice != null && svnProviderSerice.isProjectInSvnMode()) {
+                    return true;
+                }
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return false;
+    }
 
     @Override
     public void addListener(ILabelProviderListener listener) {
@@ -139,16 +162,11 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
 
     @Override
     public String getToolTipText(Object element) {
-        try {
-            if (!factory.isLocalConnectionProvider()) {
-                if (svnProviderSerice != null && svnProviderSerice.isProjectInSvnMode()) {
-                    IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+        if (isINSVNMode) {
+            IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
 
-                    String toolTip = svnProviderSerice.getLockInfo(viewObj);
-                    return toolTip;
-                }
-            }
-        } catch (PersistenceException e) {
+            String toolTip = svnProviderSerice.getLockInfo(viewObj);
+            return toolTip;
         }
 
         return null;
