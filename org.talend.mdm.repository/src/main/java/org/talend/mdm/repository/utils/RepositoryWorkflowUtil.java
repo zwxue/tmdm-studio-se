@@ -18,6 +18,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.ui.editors.WorkflowEditorInput;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -48,12 +49,20 @@ public class RepositoryWorkflowUtil {
         }
     }
 
-    public static boolean isWorkflowEditorFromBPM(IEditorPart part) {
+    public static boolean isWorkflowEditor(IEditorPart part) {
         if (part == null) {
             return false;
         }
 
         if (WORKFLOWEDITOR_ID.equals(part.getEditorSite().getId())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isWorkflowEditorFromBPM(IEditorPart part) {
+        if (isWorkflowEditor(part)) {
             if (part.getEditorInput() instanceof IFileEditorInput) {
                 return true;
             }
@@ -63,13 +72,19 @@ public class RepositoryWorkflowUtil {
     }
 
     public static IRepositoryViewObject getWorkflowViewObject(IEditorPart part) {
-        if (isWorkflowEditorFromBPM(part)) {
-            IFileEditorInput fileInput = (IFileEditorInput) part.getEditorInput();
-            IFile file = fileInput.getFile();
-            IRepositoryViewObject workflowViewObject = RepositoryResourceUtil.findViewObjectByReferenceResource(
-                    IServerObjectRepositoryType.TYPE_WORKFLOW, file);
+        if (isWorkflowEditor(part)) {
+            if (isWorkflowEditorFromBPM(part)) {
+                IFileEditorInput fileInput = (IFileEditorInput) part.getEditorInput();
+                IFile file = fileInput.getFile();
+                IRepositoryViewObject workflowViewObject = RepositoryResourceUtil.findViewObjectByReferenceResource(
+                        IServerObjectRepositoryType.TYPE_WORKFLOW, file);
 
-            return workflowViewObject;
+                return workflowViewObject;
+            } else {
+                WorkflowEditorInput workflowInput = (WorkflowEditorInput) part.getEditorInput();
+                IRepositoryViewObject workflowViewObject = workflowInput.getViewObject();
+                return workflowViewObject;
+            }
         }
 
         return null;
