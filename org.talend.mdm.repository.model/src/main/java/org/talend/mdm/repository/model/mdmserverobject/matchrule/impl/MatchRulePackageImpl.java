@@ -16,6 +16,13 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.talend.dataquality.analysis.AnalysisPackage;
+import org.talend.dataquality.domain.DomainPackage;
+import org.talend.dataquality.expressions.ExpressionsPackage;
+import org.talend.dataquality.indicators.IndicatorsPackage;
+import org.talend.dataquality.properties.PropertiesPackage;
+import org.talend.dataquality.reports.ReportsPackage;
+import org.talend.dataquality.rules.RulesPackage;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
 
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage;
@@ -27,6 +34,7 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKeyDefi
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleFactory;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo;
+import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage;
 
 /**
@@ -70,6 +78,13 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * @generated
      */
     private EClass blockingKeyEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass matchRuleMapInfoContainerEClass = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -118,7 +133,13 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
         isInited = true;
 
         // Initialize simple dependencies
-        EcorePackage.eINSTANCE.eClass();
+        AnalysisPackage.eINSTANCE.eClass();
+        ReportsPackage.eINSTANCE.eClass();
+        IndicatorsPackage.eINSTANCE.eClass();
+        ExpressionsPackage.eINSTANCE.eClass();
+        DomainPackage.eINSTANCE.eClass();
+        RulesPackage.eINSTANCE.eClass();
+        PropertiesPackage.eINSTANCE.eClass();
         MdmmetadataPackage.eINSTANCE.eClass();
 
         // Obtain or create and register interdependencies
@@ -157,6 +178,15 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      */
     public EReference getMatchRuleMapInfo_EntityMapInfos() {
         return (EReference)matchRuleMapInfoEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getMatchRuleMapInfo_ModelName() {
+        return (EAttribute)matchRuleMapInfoEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -299,6 +329,33 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getMatchRuleMapInfoContainer() {
+        return matchRuleMapInfoContainerEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getMatchRuleMapInfoContainer_MapInfos() {
+        return (EReference)matchRuleMapInfoContainerEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getMatchRuleMapInfoContainer_MatchRuleDefinitions() {
+        return (EReference)matchRuleMapInfoContainerEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public MatchRuleFactory getMatchRuleFactory() {
         return (MatchRuleFactory)getEFactoryInstance();
     }
@@ -324,6 +381,7 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
         // Create classes and their features
         matchRuleMapInfoEClass = createEClass(MATCH_RULE_MAP_INFO);
         createEReference(matchRuleMapInfoEClass, MATCH_RULE_MAP_INFO__ENTITY_MAP_INFOS);
+        createEAttribute(matchRuleMapInfoEClass, MATCH_RULE_MAP_INFO__MODEL_NAME);
 
         entityMapInfoEClass = createEClass(ENTITY_MAP_INFO);
         createEAttribute(entityMapInfoEClass, ENTITY_MAP_INFO__ENTITY_NAME);
@@ -343,6 +401,10 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
 
         blockingKeyEClass = createEClass(BLOCKING_KEY);
         createEAttribute(blockingKeyEClass, BLOCKING_KEY__KEY_NAME);
+
+        matchRuleMapInfoContainerEClass = createEClass(MATCH_RULE_MAP_INFO_CONTAINER);
+        createEReference(matchRuleMapInfoContainerEClass, MATCH_RULE_MAP_INFO_CONTAINER__MAP_INFOS);
+        createEReference(matchRuleMapInfoContainerEClass, MATCH_RULE_MAP_INFO_CONTAINER__MATCH_RULE_DEFINITIONS);
     }
 
     /**
@@ -370,6 +432,7 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
 
         // Obtain other dependent packages
         EcorePackage theEcorePackage = (EcorePackage)EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI);
+        RulesPackage theRulesPackage = (RulesPackage)EPackage.Registry.INSTANCE.getEPackage(RulesPackage.eNS_URI);
 
         // Create type parameters
 
@@ -380,6 +443,7 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
         // Initialize classes and features; add operations and parameters
         initEClass(matchRuleMapInfoEClass, MatchRuleMapInfo.class, "MatchRuleMapInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getMatchRuleMapInfo_EntityMapInfos(), this.getEntityMapInfo(), this.getEntityMapInfo_Parent(), "entityMapInfos", null, 0, -1, MatchRuleMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getMatchRuleMapInfo_ModelName(), theEcorePackage.getEString(), "modelName", null, 0, 1, MatchRuleMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(entityMapInfoEClass, EntityMapInfo.class, "EntityMapInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getEntityMapInfo_EntityName(), theEcorePackage.getEString(), "entityName", null, 0, 1, EntityMapInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -399,6 +463,10 @@ public class MatchRulePackageImpl extends EPackageImpl implements MatchRulePacka
 
         initEClass(blockingKeyEClass, BlockingKey.class, "BlockingKey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getBlockingKey_KeyName(), theEcorePackage.getEString(), "keyName", null, 0, 1, BlockingKey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(matchRuleMapInfoContainerEClass, MatchRuleMapInfoContainer.class, "MatchRuleMapInfoContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getMatchRuleMapInfoContainer_MapInfos(), this.getMatchRuleMapInfo(), null, "mapInfos", null, 0, 1, MatchRuleMapInfoContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getMatchRuleMapInfoContainer_MatchRuleDefinitions(), theRulesPackage.getMatchRuleDefinition(), null, "matchRuleDefinitions", null, 0, -1, MatchRuleMapInfoContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     }
 
 } //MatchRulePackageImpl

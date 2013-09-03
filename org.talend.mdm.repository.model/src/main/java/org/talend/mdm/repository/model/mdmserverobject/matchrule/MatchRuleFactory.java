@@ -62,6 +62,15 @@ public interface MatchRuleFactory extends EFactory {
     BlockingKey createBlockingKey();
 
     /**
+     * Returns a new object of class '<em>Map Info Container</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Map Info Container</em>'.
+     * @generated
+     */
+    MatchRuleMapInfoContainer createMatchRuleMapInfoContainer();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

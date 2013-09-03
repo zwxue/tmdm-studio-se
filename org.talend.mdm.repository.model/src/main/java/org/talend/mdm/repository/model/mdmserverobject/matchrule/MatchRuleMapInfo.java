@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo#getEntityMapInfos <em>Entity Map Infos</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo#getModelName <em>Model Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -44,5 +45,31 @@ public interface MatchRuleMapInfo extends EObject {
      * @generated
      */
     EList<EntityMapInfo> getEntityMapInfos();
+
+    /**
+     * Returns the value of the '<em><b>Model Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Model Name</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Model Name</em>' attribute.
+     * @see #setModelName(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getMatchRuleMapInfo_ModelName()
+     * @model
+     * @generated
+     */
+    String getModelName();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo#getModelName <em>Model Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Model Name</em>' attribute.
+     * @see #getModelName()
+     * @generated
+     */
+    void setModelName(String value);
 
 } // MatchRuleMapInfo

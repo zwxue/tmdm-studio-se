@@ -11,6 +11,13 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.talend.dataquality.analysis.AnalysisPackage;
+import org.talend.dataquality.domain.DomainPackage;
+import org.talend.dataquality.expressions.ExpressionsPackage;
+import org.talend.dataquality.indicators.IndicatorsPackage;
+import org.talend.dataquality.properties.PropertiesPackage;
+import org.talend.dataquality.reports.ReportsPackage;
+import org.talend.dataquality.rules.RulesPackage;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
@@ -334,7 +341,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         isInited = true;
 
         // Initialize simple dependencies
-        EcorePackage.eINSTANCE.eClass();
+        AnalysisPackage.eINSTANCE.eClass();
+        ReportsPackage.eINSTANCE.eClass();
+        IndicatorsPackage.eINSTANCE.eClass();
+        ExpressionsPackage.eINSTANCE.eClass();
+        DomainPackage.eINSTANCE.eClass();
+        RulesPackage.eINSTANCE.eClass();
+        PropertiesPackage.eINSTANCE.eClass();
         MdmmetadataPackage.eINSTANCE.eClass();
 
         // Obtain or create and register interdependencies

@@ -35,6 +35,7 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackag
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRuleMapInfoImpl#getEntityMapInfos <em>Entity Map Infos</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRuleMapInfoImpl#getModelName <em>Model Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -50,6 +51,25 @@ public class MatchRuleMapInfoImpl extends EObjectImpl implements MatchRuleMapInf
      * @ordered
      */
     protected EList<EntityMapInfo> entityMapInfos;
+
+    /**
+     * The default value of the '{@link #getModelName() <em>Model Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getModelName()
+     * @generated
+     * @ordered
+     */
+    protected static final String MODEL_NAME_EDEFAULT = null;
+    /**
+     * The cached value of the '{@link #getModelName() <em>Model Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getModelName()
+     * @generated
+     * @ordered
+     */
+    protected String modelName = MODEL_NAME_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -80,6 +100,27 @@ public class MatchRuleMapInfoImpl extends EObjectImpl implements MatchRuleMapInf
             entityMapInfos = new EObjectContainmentWithInverseEList<EntityMapInfo>(EntityMapInfo.class, this, MatchRulePackage.MATCH_RULE_MAP_INFO__ENTITY_MAP_INFOS, MatchRulePackage.ENTITY_MAP_INFO__PARENT);
         }
         return entityMapInfos;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getModelName() {
+        return modelName;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setModelName(String newModelName) {
+        String oldModelName = modelName;
+        modelName = newModelName;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.MATCH_RULE_MAP_INFO__MODEL_NAME, oldModelName, modelName));
     }
 
     /**
@@ -121,6 +162,8 @@ public class MatchRuleMapInfoImpl extends EObjectImpl implements MatchRuleMapInf
         switch (featureID) {
             case MatchRulePackage.MATCH_RULE_MAP_INFO__ENTITY_MAP_INFOS:
                 return getEntityMapInfos();
+            case MatchRulePackage.MATCH_RULE_MAP_INFO__MODEL_NAME:
+                return getModelName();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -138,6 +181,9 @@ public class MatchRuleMapInfoImpl extends EObjectImpl implements MatchRuleMapInf
                 getEntityMapInfos().clear();
                 getEntityMapInfos().addAll((Collection<? extends EntityMapInfo>)newValue);
                 return;
+            case MatchRulePackage.MATCH_RULE_MAP_INFO__MODEL_NAME:
+                setModelName((String)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -153,6 +199,9 @@ public class MatchRuleMapInfoImpl extends EObjectImpl implements MatchRuleMapInf
             case MatchRulePackage.MATCH_RULE_MAP_INFO__ENTITY_MAP_INFOS:
                 getEntityMapInfos().clear();
                 return;
+            case MatchRulePackage.MATCH_RULE_MAP_INFO__MODEL_NAME:
+                setModelName(MODEL_NAME_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -167,8 +216,26 @@ public class MatchRuleMapInfoImpl extends EObjectImpl implements MatchRuleMapInf
         switch (featureID) {
             case MatchRulePackage.MATCH_RULE_MAP_INFO__ENTITY_MAP_INFOS:
                 return entityMapInfos != null && !entityMapInfos.isEmpty();
+            case MatchRulePackage.MATCH_RULE_MAP_INFO__MODEL_NAME:
+                return MODEL_NAME_EDEFAULT == null ? modelName != null : !MODEL_NAME_EDEFAULT.equals(modelName);
         }
         return super.eIsSet(featureID);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public String toString() {
+        if (eIsProxy()) return super.toString();
+
+        StringBuffer result = new StringBuffer(super.toString());
+        result.append(" (modelName: ");
+        result.append(modelName);
+        result.append(')');
+        return result.toString();
     }
 
 } //MatchRuleMapInfoImpl

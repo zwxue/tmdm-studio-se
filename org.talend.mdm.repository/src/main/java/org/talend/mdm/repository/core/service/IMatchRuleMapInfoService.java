@@ -20,6 +20,7 @@ import org.talend.core.model.properties.Item;
 import org.talend.dataquality.rules.MatchRuleDefinition;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo;
+import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer;
 
 /**
  * created by HHB on 2013-8-21 Detailled comment
@@ -27,15 +28,19 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInf
  */
 public interface IMatchRuleMapInfoService extends IService {
 
-    public void saveMatchRuleMapInfo(Item item);
+    void saveMatchRuleMapInfo(Item item);
 
-    public MatchRuleMapInfo loadMatchRuleMapInfo(Item item);
+    MatchRuleMapInfo loadMatchRuleMapInfo(Item item);
 
-    public List<String> getAllMatchRuleNames();
+    List<String> getAllMatchRuleNames();
 
-    public EntityMapInfo findEntityMap(MatchRuleMapInfo mapInfo, String entityName);
+    EntityMapInfo findEntityMap(MatchRuleMapInfo mapInfo, String entityName);
 
     EditingDomain getNewEditingDomain();
 
     MatchRuleDefinition getMatchRuleDef(String ruleDefName);
+
+    MatchRuleMapInfoContainer generateMatchRuleMapInfoContainer(Item item);
+
+    String convertMatchRuleMapInfoContainerToXML(MatchRuleMapInfoContainer container);
 }

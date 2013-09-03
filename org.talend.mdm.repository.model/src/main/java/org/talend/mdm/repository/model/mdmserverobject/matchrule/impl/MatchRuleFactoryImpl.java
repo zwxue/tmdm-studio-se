@@ -67,6 +67,7 @@ public class MatchRuleFactoryImpl extends EFactoryImpl implements MatchRuleFacto
             case MatchRulePackage.KEY_XPATH_MAP: return (EObject)createKeyXPathMap();
             case MatchRulePackage.BLOCKING_KEY_DEFINITION: return createBlockingKeyDefinition();
             case MatchRulePackage.BLOCKING_KEY: return createBlockingKey();
+            case MatchRulePackage.MATCH_RULE_MAP_INFO_CONTAINER: return createMatchRuleMapInfoContainer();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -120,6 +121,16 @@ public class MatchRuleFactoryImpl extends EFactoryImpl implements MatchRuleFacto
     public BlockingKey createBlockingKey() {
         BlockingKeyImpl blockingKey = new BlockingKeyImpl();
         return blockingKey;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public MatchRuleMapInfoContainer createMatchRuleMapInfoContainer() {
+        MatchRuleMapInfoContainerImpl matchRuleMapInfoContainer = new MatchRuleMapInfoContainerImpl();
+        return matchRuleMapInfoContainer;
     }
 
     /**

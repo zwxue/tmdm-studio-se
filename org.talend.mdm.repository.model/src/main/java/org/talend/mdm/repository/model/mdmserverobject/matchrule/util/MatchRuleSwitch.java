@@ -118,6 +118,12 @@ public class MatchRuleSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MatchRulePackage.MATCH_RULE_MAP_INFO_CONTAINER: {
+                MatchRuleMapInfoContainer matchRuleMapInfoContainer = (MatchRuleMapInfoContainer)theEObject;
+                T result = caseMatchRuleMapInfoContainer(matchRuleMapInfoContainer);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -194,6 +200,21 @@ public class MatchRuleSwitch<T> {
      * @generated
      */
     public T caseBlockingKey(BlockingKey object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Map Info Container</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Map Info Container</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseMatchRuleMapInfoContainer(MatchRuleMapInfoContainer object) {
         return null;
     }
 

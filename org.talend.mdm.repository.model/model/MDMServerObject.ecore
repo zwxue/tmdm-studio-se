@@ -226,6 +226,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="MatchRuleMapInfo">
       <eStructuralFeatures xsi:type="ecore:EReference" name="entityMapInfos" upperBound="-1"
           eType="#//matchrule/EntityMapInfo" containment="true" eOpposite="#//matchrule/EntityMapInfo/parent"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="EntityMapInfo">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
@@ -250,6 +251,13 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="BlockingKey">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MatchRuleMapInfoContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mapInfos" eType="#//matchrule/MatchRuleMapInfo"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="matchRuleDefinitions"
+          upperBound="-1" eType="ecore:EClass ../../org.talend.dataquality/model/dataquality.ecore#//rules/MatchRuleDefinition"
+          containment="true"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

@@ -24,6 +24,7 @@ import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.w3c.dom.Element;
@@ -62,6 +63,18 @@ public class XSDUtil {
             }
         }
         return null;
+    }
+
+    public static List<String> getEntityName(XSDSchema schema) {
+
+        List<String> names = new LinkedList<String>();
+        if (schema != null) {
+            for (XSDElementDeclaration elem : schema.getElementDeclarations()) {
+                names.add(elem.getName());
+            }
+        }
+        return names;
+
     }
 
     public static boolean hasFKInfo(XSDElementDeclaration elementDeclaration) {

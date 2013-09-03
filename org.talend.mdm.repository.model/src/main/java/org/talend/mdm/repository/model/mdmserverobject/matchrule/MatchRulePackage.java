@@ -79,13 +79,22 @@ public interface MatchRulePackage extends EPackage {
     int MATCH_RULE_MAP_INFO__ENTITY_MAP_INFOS = 0;
 
     /**
+     * The feature id for the '<em><b>Model Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MATCH_RULE_MAP_INFO__MODEL_NAME = 1;
+
+    /**
      * The number of structural features of the '<em>Map Info</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int MATCH_RULE_MAP_INFO_FEATURE_COUNT = 1;
+    int MATCH_RULE_MAP_INFO_FEATURE_COUNT = 2;
 
     /**
      * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl <em>Entity Map Info</em>}' class.
@@ -264,6 +273,44 @@ public interface MatchRulePackage extends EPackage {
 
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRuleMapInfoContainerImpl <em>Map Info Container</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRuleMapInfoContainerImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl#getMatchRuleMapInfoContainer()
+     * @generated
+     */
+    int MATCH_RULE_MAP_INFO_CONTAINER = 5;
+
+    /**
+     * The feature id for the '<em><b>Map Infos</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MATCH_RULE_MAP_INFO_CONTAINER__MAP_INFOS = 0;
+
+    /**
+     * The feature id for the '<em><b>Match Rule Definitions</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MATCH_RULE_MAP_INFO_CONTAINER__MATCH_RULE_DEFINITIONS = 1;
+
+    /**
+     * The number of structural features of the '<em>Map Info Container</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MATCH_RULE_MAP_INFO_CONTAINER_FEATURE_COUNT = 2;
+
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo <em>Map Info</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -283,6 +330,17 @@ public interface MatchRulePackage extends EPackage {
      * @generated
      */
     EReference getMatchRuleMapInfo_EntityMapInfos();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo#getModelName <em>Model Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Model Name</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo#getModelName()
+     * @see #getMatchRuleMapInfo()
+     * @generated
+     */
+    EAttribute getMatchRuleMapInfo_ModelName();
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo <em>Entity Map Info</em>}'.
@@ -448,6 +506,38 @@ public interface MatchRulePackage extends EPackage {
     EAttribute getBlockingKey_KeyName();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer <em>Map Info Container</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Map Info Container</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer
+     * @generated
+     */
+    EClass getMatchRuleMapInfoContainer();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer#getMapInfos <em>Map Infos</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Map Infos</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer#getMapInfos()
+     * @see #getMatchRuleMapInfoContainer()
+     * @generated
+     */
+    EReference getMatchRuleMapInfoContainer_MapInfos();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer#getMatchRuleDefinitions <em>Match Rule Definitions</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Match Rule Definitions</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer#getMatchRuleDefinitions()
+     * @see #getMatchRuleMapInfoContainer()
+     * @generated
+     */
+    EReference getMatchRuleMapInfoContainer_MatchRuleDefinitions();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -486,6 +576,14 @@ public interface MatchRulePackage extends EPackage {
          * @generated
          */
         EReference MATCH_RULE_MAP_INFO__ENTITY_MAP_INFOS = eINSTANCE.getMatchRuleMapInfo_EntityMapInfos();
+
+        /**
+         * The meta object literal for the '<em><b>Model Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MATCH_RULE_MAP_INFO__MODEL_NAME = eINSTANCE.getMatchRuleMapInfo_ModelName();
 
         /**
          * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl <em>Entity Map Info</em>}' class.
@@ -614,6 +712,32 @@ public interface MatchRulePackage extends EPackage {
          * @generated
          */
         EAttribute BLOCKING_KEY__KEY_NAME = eINSTANCE.getBlockingKey_KeyName();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRuleMapInfoContainerImpl <em>Map Info Container</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRuleMapInfoContainerImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.MatchRulePackageImpl#getMatchRuleMapInfoContainer()
+         * @generated
+         */
+        EClass MATCH_RULE_MAP_INFO_CONTAINER = eINSTANCE.getMatchRuleMapInfoContainer();
+
+        /**
+         * The meta object literal for the '<em><b>Map Infos</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference MATCH_RULE_MAP_INFO_CONTAINER__MAP_INFOS = eINSTANCE.getMatchRuleMapInfoContainer_MapInfos();
+
+        /**
+         * The meta object literal for the '<em><b>Match Rule Definitions</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference MATCH_RULE_MAP_INFO_CONTAINER__MATCH_RULE_DEFINITIONS = eINSTANCE.getMatchRuleMapInfoContainer_MatchRuleDefinitions();
 
     }
 
