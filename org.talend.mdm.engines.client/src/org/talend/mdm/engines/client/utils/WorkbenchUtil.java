@@ -49,21 +49,10 @@ public class WorkbenchUtil {
 	}
 
 	static boolean equals(RepositoryNode node1, RepositoryNode node2) {
-		try {
-			if (null == node1 || null == node2) {
-				return false;
-			}
-			if (!node1.getId().equals(node2.getId())) {
-				return false;
-			}
-			if (!node1.getObject().getProperty()
-					.equals(node2.getObject().getProperty())) {
-				return false;
-			}
-			if (!node1.getType().equals(node2.getType())) {
-				return false;
-			}
-		} catch (Exception e) {
+		if (null == node1 || null == node2) {
+			return false;
+		}
+		if(null == node1.getId() || !node1.getId().equals(node2.getId())){
 			return false;
 		}
 		return true;
