@@ -52,10 +52,13 @@ import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
+import org.talend.mdm.repository.model.mdmproperties.WSCustomFormItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.WSCustomFormE;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConfirmConflictMessageDialog;
 import org.talend.mdm.repository.ui.dialogs.consistency.ConsistencyConflictDialog;
@@ -74,6 +77,11 @@ import com.amalto.workbench.webservices.XtentisPort;
  * 
  */
 public class ConsistencyService {
+
+    /**
+     * 
+     */
+    private static final String OBJ_NAME_DIVIDE = ".."; //$NON-NLS-1$
 
     public static final int CONFLICT_STRATEGY_DEFAULT = 0;
 
@@ -464,7 +472,7 @@ public class ConsistencyService {
 
         // key
         String type = viewObj.getRepositoryObjectType().getKey();
-        String objectName = viewObj.getLabel();
+        String objectName = getObjectName(viewObj);
         WSDigestKey key = new WSDigestKey(type, objectName);
         // value
         WSDigest value = new WSDigest(key, getLocalDigestValue(item), 0L);
@@ -473,6 +481,17 @@ public class ConsistencyService {
         if (timeValue != null) {
             updateLocalTimestamp(item, timeValue.getValue());
         }
+    }
+
+    private String getObjectName(IRepositoryViewObject viewObj) {
+        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+        String objectName = viewObj.getLabel();
+        if (type == IServerObjectRepositoryType.TYPE_CUSTOM_FORM) {
+            WSCustomFormItem item = (WSCustomFormItem) viewObj.getProperty().getItem();
+            WSCustomFormE customForm = item.getCustomForm();
+            objectName = customForm.getDatamodel() + OBJ_NAME_DIVIDE + customForm.getEntity() + OBJ_NAME_DIVIDE + objectName;
+        }
+        return objectName;
     }
 
     public <T> Map<T, WSDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException,
