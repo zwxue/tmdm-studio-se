@@ -60,24 +60,26 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
     private IMDMSVNProviderService svnProviderSerice = (IMDMSVNProviderService) GlobalServiceRegister.getDefault().getService(
             IMDMSVNProviderService.class);
 
-    private boolean isINSVNMode = false;
-
-    public MDMRepositoryLabelProvider() {
-        isINSVNMode = isInSvnMode();
-    }
+    private Boolean isInSvnMode = null;
 
     private boolean isInSvnMode() {
-        try {
-            if (!factory.isLocalConnectionProvider()) {
-                if (svnProviderSerice != null && svnProviderSerice.isProjectInSvnMode()) {
-                    return true;
+        if (isInSvnMode == null) {
+            try {
+                if (!factory.isLocalConnectionProvider()) {
+                    if (svnProviderSerice != null && svnProviderSerice.isProjectInSvnMode()) {
+                        isInSvnMode = Boolean.TRUE;
+                    }
                 }
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
             }
-        } catch (PersistenceException e) {
-            log.error(e.getMessage(), e);
+
+            if (isInSvnMode == null) {
+                isInSvnMode = Boolean.FALSE;
+            }
         }
 
-        return false;
+        return isInSvnMode.booleanValue();
     }
 
     @Override
@@ -162,7 +164,7 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
 
     @Override
     public String getToolTipText(Object element) {
-        if (isINSVNMode) {
+        if (isInSvnMode()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
 
             String toolTip = svnProviderSerice.getLockInfo(viewObj);
