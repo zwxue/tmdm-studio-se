@@ -221,7 +221,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="xml" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="role" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eSubpackages name="matchrule" nsURI="http://www.talend.org/mdmserverobject/matchrule"
+  <eSubpackages name="matchrule" nsURI="http://www.talend.org/mdm/server/matchrule"
       nsPrefix="matchrule">
     <eClassifiers xsi:type="ecore:EClass" name="MatchRuleMapInfo">
       <eStructuralFeatures xsi:type="ecore:EReference" name="entityMapInfos" upperBound="-1"

@@ -33,7 +33,7 @@ public class MatchRuleFactoryImpl extends EFactoryImpl implements MatchRuleFacto
      */
     public static MatchRuleFactory init() {
         try {
-            MatchRuleFactory theMatchRuleFactory = (MatchRuleFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.talend.org/mdmserverobject/matchrule"); 
+            MatchRuleFactory theMatchRuleFactory = (MatchRuleFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.talend.org/mdm/server/matchrule"); 
             if (theMatchRuleFactory != null) {
                 return theMatchRuleFactory;
             }

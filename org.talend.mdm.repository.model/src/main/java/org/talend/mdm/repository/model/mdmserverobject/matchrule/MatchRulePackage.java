@@ -41,7 +41,7 @@ public interface MatchRulePackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    String eNS_URI = "http://www.talend.org/mdmserverobject/matchrule";
+    String eNS_URI = "http://www.talend.org/mdm/server/matchrule";
 
     /**
      * The package namespace name.
