@@ -87,8 +87,6 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     private boolean isOverWrite = true;
 
-    private final MDMServerDef serverDef;
-
     private Map<TreeObject, ConsistencyData> consistencyMap;
 
     /**
@@ -98,9 +96,8 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
      * 
      * @param serverRoot
      */
-    public TreeObjectCheckTreeViewer(MDMServerDef serverDef, TreeParent serverRoot) {
+    public TreeObjectCheckTreeViewer(TreeParent serverRoot) {
         super(serverRoot);
-        this.serverDef = serverDef;
     }
 
     class ConsistencyData {
@@ -137,7 +134,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     }
 
-    public void initInput() {
+    public void initInput(MDMServerDef serverDef) {
         List<TreeObject> treeObjs = initTreeObjs(serverRoot);
         this.consistencyMap = initConsistencyData(serverDef, treeObjs);
         getViewer().setInput(serverRoot);

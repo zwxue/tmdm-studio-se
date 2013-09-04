@@ -774,10 +774,10 @@ public class ImportServerObjectWizard extends Wizard {
 
                         treeViewer.setRoot((TreeParent) serverRoot);
 
-                        treeViewer.initInput();
+                        treeViewer.initInput(serverDef);
 
                     } catch (Exception e) {
-                        log.error(e);
+                        log.error(e.getMessage(), e);
                     }
                 }
             });
@@ -926,7 +926,7 @@ public class ImportServerObjectWizard extends Wizard {
                 toolkit.setBackGround((Composite) comboVersion.getComposite(), serverGroup.getBackground());
             }
             // create viewer
-            treeViewer = new TreeObjectCheckTreeViewer(serverDef, (TreeParent) serverRoot);
+            treeViewer = new TreeObjectCheckTreeViewer((TreeParent) serverRoot);
             treeViewer.addButtonSelectionListener(new SelectionAdapter() {
 
                 @Override

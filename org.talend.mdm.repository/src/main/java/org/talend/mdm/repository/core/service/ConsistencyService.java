@@ -67,6 +67,7 @@ import org.talend.mdm.repository.utils.DigestUtil;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSCustomForm;
 import com.amalto.workbench.webservices.WSDigest;
 import com.amalto.workbench.webservices.WSDigestKey;
 import com.amalto.workbench.webservices.WSLong;
@@ -494,6 +495,17 @@ public class ConsistencyService {
         return objectName;
     }
 
+    private String getObjectName(TreeObject treeObj) {
+        int type = treeObj.getType();
+        String objectName = treeObj.getDisplayName();
+        ;
+        if (type == TreeObject.CUSTOM_FORM) {
+            WSCustomForm customForm = (WSCustomForm) treeObj.getWsObject();
+            objectName = customForm.getDatamodel() + OBJ_NAME_DIVIDE + customForm.getEntity() + OBJ_NAME_DIVIDE + objectName;
+        }
+        return objectName;
+    }
+
     public <T> Map<T, WSDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException,
             RemoteException {
         Map<T, WSDigest> result = new LinkedHashMap<T, WSDigest>();
@@ -512,9 +524,9 @@ public class ConsistencyService {
                 TreeObject treeObj = (TreeObject) obj;
 
                 ERepositoryObjectType repositoryObjectType = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
-                if (type != null) {
+                if (repositoryObjectType != null) {
                     type = repositoryObjectType.getKey();
-                    objectName = treeObj.getDisplayName();
+                    objectName = getObjectName(treeObj);
                 }
             }
 
