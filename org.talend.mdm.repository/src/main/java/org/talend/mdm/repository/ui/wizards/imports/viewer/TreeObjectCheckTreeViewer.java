@@ -54,6 +54,7 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDigest;
 import com.amalto.workbench.webservices.WSDigestKey;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.widgets.FilteredCheckboxTree;
 
 /**
@@ -212,14 +213,28 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
         public String getText(Object element) {
             if (!(element instanceof TreeParent)) {
                 ConsistencyData consistencyData = consistencyMap.get(element);
-                WSDigest dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData.getServerDigestTime();
-                if (dt != null) {
-                    return DATE_FORMAT.format(new Date(dt.getTimeStamp()));
+                if (consistencyData != null) {
+                    WSDigest dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData.getServerDigestTime();
+                    if (dt != null) {
+                        return DATE_FORMAT.format(new Date(dt.getTimeStamp()));
+                    }
                 }
             }
             return ""; //$NON-NLS-1$
         }
 
+    }
+
+    private String getTreeObjectName(TreeObject treeObject) {
+        if (treeObject != null) {
+            int type = treeObject.getType();
+            if (type == TreeObject.WORKFLOW_PROCESS) {
+                WSWorkflowProcessDefinitionUUID key = (WSWorkflowProcessDefinitionUUID) treeObject.getWsKey();
+                return key.getProcessName();
+            }
+            return treeObject.getDisplayName();
+        }
+        return null;
     }
 
     private Map<TreeObject, ConsistencyData> initConsistencyData(MDMServerDef serverDef, List<TreeObject> treeObjs) {
@@ -231,7 +246,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 ConsistencyData consistencyData = new ConsistencyData();
                 WSDigest serverDigestTime = serverDigestValues.get(treeObject);
                 consistencyData.setServerDigestTime(serverDigestTime);
-                String objName = treeObject.getDisplayName();
+                String objName = getTreeObjectName(treeObject);
                 ERepositoryObjectType viewType = RepositoryQueryService.getRepositoryObjectType(treeObject.getType());
                 if (viewType == null) {
                     continue;
@@ -251,7 +266,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                     consistencyData.setLocalDigestTime(new WSDigest(key, digestValue, localTimestamp));
                     // init compare result;
                     CompareResultEnum result;
-                    if (serverDigestTime == null) {
+                    if (serverDigestTime == null || serverDigestTime.getDigestValue() == null) {
                         result = CompareResultEnum.NOT_EXIST_IN_SERVER;
                     } else {
                         if (serverDigestTime.getDigestValue().equals(digestValue)) {
