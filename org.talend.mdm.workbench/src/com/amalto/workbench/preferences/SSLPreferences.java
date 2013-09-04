@@ -290,6 +290,7 @@ public class SSLPreferences extends PreferencePage implements IWorkbenchPreferen
             store.setValue(PreferenceConstants.TRUSTSTORE_FILE, trustpath);
             store.setValue(PreferenceConstants.TRUSTSTORE_PASSWORD, trustpass);
             store.setValue(PreferenceConstants.TRUSTSTORE_TYPE, trusttype);
+            setErrorMessage(null);
             return super.performOk();
         } catch (Exception e) {
             setErrorMessage(e.getMessage());
