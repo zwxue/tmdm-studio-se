@@ -77,6 +77,8 @@ public class TransformerMainPage2 extends TransformerMainPage {
         initExternalInfoHolderForEachType("workflowtrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder, //$NON-NLS-1$
                 allDataModelHolderProxy });
 
+        initExternalInfoHolderForEachType("workflowcontexttrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder, //$NON-NLS-1$
+                allDataModelHolderProxy });
     }
 
     @Override
@@ -153,10 +155,11 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     private boolean openConfirmDialog() {
         String msg = null;
-        if (editor2.isDirty())
+        if (editor2.isDirty()) {
             msg = Messages.TransformerMainPage_ConfirmContent;
-        else
+        } else {
             msg = Messages.TransformerMainPage_ConfirmContent1;
+        }
 
         return MessageDialog.openConfirm(getSite().getShell(), Messages.TransformerMainPage_ConfirmTitle, msg);
     }

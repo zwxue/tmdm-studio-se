@@ -38,7 +38,7 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
 
     /**
      * DOC hbhong RoutingRuleMainPage2 constructor comment.
-     * 
+     *
      * @param editor
      */
     public RoutingRuleMainPage2(FormEditor editor) {
@@ -62,17 +62,22 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
         ExternalInfoHolder<?> workflowInfoHolder = RepositoryExternalInfoHolder.getAllWorkflowInfoHolder(null);
         ExternalInfoHolder<?> allDataModelHolderProxy = RepositoryExternalInfoHolder.getAllDataModelInfoHolderProxy(null);
 
-        
+
         initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });//$NON-NLS-1$
         initExternalInfoHolderForEachType("smtp", new ExternalInfoHolder<?>[] { allProcessNamesHolder });//$NON-NLS-1$
         initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder,//$NON-NLS-1$
                 allVarCandidatesHolder });
         initExternalInfoHolderForEachType("workflow", new ExternalInfoHolder<?>[] { workflowInfoHolder, //$NON-NLS-1$
                 allDataModelHolderProxy });
+
+        initExternalInfoHolderForEachType("workflowcontext", new ExternalInfoHolder<?>[] { workflowInfoHolder, //$NON-NLS-1$
+                allDataModelHolderProxy });
+
         //
 
     }
 
+    @Override
     protected TisTableViewer getNewTisTableViewer(FormToolkit toolkit, Composite routingExpressionsGroup) {
         return new TisTableViewerR(Arrays.asList(conditionsColumns), toolkit, routingExpressionsGroup);
     }

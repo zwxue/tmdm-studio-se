@@ -35,6 +35,7 @@ import org.talend.mdm.repository.core.service.wsimpl.servicedoc.LoggingSmtpGetDo
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SVNGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SmtpGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.SynchronizationServiceGetDocument;
+import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowContextGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.servicedoc.WorkflowGetDocument;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.AbstractPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.BatchProjectPluginDetail;
@@ -52,6 +53,7 @@ import org.talend.mdm.repository.core.service.wsimpl.transformplugin.RegexpPlugi
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.ReplacePluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.RoutePluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.TISCallJobPluginDetail;
+import org.talend.mdm.repository.core.service.wsimpl.transformplugin.WorkflowContextTriggerPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.WorkflowTriggerPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.XPathPluginDetail;
 import org.talend.mdm.repository.core.service.wsimpl.transformplugin.XSLTPluginDetail;
@@ -83,17 +85,18 @@ public class RepositoryWebServiceAdapter {
 
     /**
      * Warning: the param ServerDef must a decrypted serverDef
-     * 
+     *
      * @param serverDef
      * @return
      * @throws XtentisException
      */
     public static XtentisPort getXtentisPort(MDMServerDef serverDef) throws XtentisException {
         try {
-            if (serverDef == null)
+            if (serverDef == null) {
                 return null;
-            XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(), serverDef
-                    .getPasswd());
+            }
+            XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
+                    serverDef.getPasswd());
 
             return port;
         } catch (MalformedURLException e) {
@@ -137,8 +140,9 @@ public class RepositoryWebServiceAdapter {
     }
 
     public static WSTransformerPluginV2Details findTransformerPluginV2Detail(String jndiName) {
-        if (jndiName == null)
+        if (jndiName == null) {
             return null;
+        }
         initTransformerPluginDetails();
         return transformerPluginMap.get(jndiName);
     }
@@ -149,14 +153,15 @@ public class RepositoryWebServiceAdapter {
     }
 
     public static WSServiceGetDocument getServiceDocument(String jndiName) {
-        if (jndiName == null)
+        if (jndiName == null) {
             return null;
+        }
         initGetDocumentServices();
         return documentServiceMap.get(jndiName);
     }
 
     private static void initGetDocumentServices() {
-        if (documentServiceMap == null) {
+         if (documentServiceMap == null) {
             documentServiceMap = new LinkedHashMap<String, AbstractGetDocument>();
             String twoLettersLanguageCode = "en"; //$NON-NLS-1$
             addGetDoc(documentServiceMap, new CallJobGetDocument(twoLettersLanguageCode));
@@ -170,32 +175,34 @@ public class RepositoryWebServiceAdapter {
             addGetDoc(documentServiceMap, new SVNGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new SynchronizationServiceGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new WorkflowGetDocument(twoLettersLanguageCode));
-        }
+            addGetDoc(documentServiceMap, new WorkflowContextGetDocument(twoLettersLanguageCode));
+         }
     }
 
     private static void initTransformerPluginDetails() {
-        if (transformerPluginMap == null) {
-            transformerPluginMap = new LinkedHashMap<String, AbstractPluginDetail>();
-            String twoLettersLanguageCode = "en"; //$NON-NLS-1$
-            addDetail(transformerPluginMap, new BatchProjectPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new CodeProjectPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new CrossReferencingPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new CSVParserPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new DumpAndGoPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new FixedLengthParserPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new GroovyPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new GroupedLinesReaderPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new LineReaderPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new PartialUpdatePluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new ProjectPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new RegexpPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new ReplacePluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new RoutePluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new TISCallJobPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new WorkflowTriggerPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new XPathPluginDetail(twoLettersLanguageCode));
-            addDetail(transformerPluginMap, new XSLTPluginDetail(twoLettersLanguageCode));
-        }
+         if (transformerPluginMap == null) {
+        transformerPluginMap = new LinkedHashMap<String, AbstractPluginDetail>();
+        String twoLettersLanguageCode = "en"; //$NON-NLS-1$
+        addDetail(transformerPluginMap, new BatchProjectPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new CodeProjectPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new CrossReferencingPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new CSVParserPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new DumpAndGoPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new FixedLengthParserPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new GroovyPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new GroupedLinesReaderPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new LineReaderPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new PartialUpdatePluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new ProjectPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new RegexpPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new ReplacePluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new RoutePluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new TISCallJobPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new WorkflowTriggerPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new WorkflowContextTriggerPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new XPathPluginDetail(twoLettersLanguageCode));
+        addDetail(transformerPluginMap, new XSLTPluginDetail(twoLettersLanguageCode));
+         }
     }
 
     public static String[] getTheObjectsForUniverse() {
@@ -210,7 +217,7 @@ public class RepositoryWebServiceAdapter {
     public static List<String> getListForUniverseMap() {
         List<String> list = new ArrayList<String>();
 
-        list.add("Transformer V2"); //$NON-NLS-1$ 
+        list.add("Transformer V2"); //$NON-NLS-1$
         list.add("View");//$NON-NLS-1$
         list.add("Data Model");//$NON-NLS-1$
         list.add("Role");//$NON-NLS-1$
@@ -224,14 +231,14 @@ public class RepositoryWebServiceAdapter {
 
     public static String[] getItemsAlgorithmsStringsForSynchronization() {
 
-        String algorithms[] = new String[] { "Local Wins", "Manual", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        String algorithms[] = new String[] { "Local Wins", "Manual", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         return algorithms;
     }
 
     public static String[] getObjectsAlgorithmsStringsForSynchronization() {
 
-        String algorithms[] = new String[] { "Local Wins", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$  
+        String algorithms[] = new String[] { "Local Wins", "Remote Wins" };//$NON-NLS-1$ //$NON-NLS-2$
 
         return algorithms;
     }
@@ -239,9 +246,9 @@ public class RepositoryWebServiceAdapter {
     public static String[] getXtentisObjectsForSynchronizationPlans() {
 
         String objects[] = new String[] {
-                "Background Job", "Data Cluster", "Data Model", "Item", "Menu", "Role", "Routing Engine V2", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ 
-                "Routing Order V2 Completed", "Routing Order V2 Failed", "Routing Rule", "Service", "Stored Procedure", "Synchronization Conflict",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ 
-                "Transformer Plugin V2", "Transformer V2", "Universe", "View" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
+                "Background Job", "Data Cluster", "Data Model", "Item", "Menu", "Role", "Routing Engine V2", "Routing Order V2 Active",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                "Routing Order V2 Completed", "Routing Order V2 Failed", "Routing Rule", "Service", "Stored Procedure", "Synchronization Conflict",//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+                "Transformer Plugin V2", "Transformer V2", "Universe", "View" };//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         return objects;
     }
@@ -264,13 +271,13 @@ public class RepositoryWebServiceAdapter {
 
     public static List<KeyValue> getListForUniverseXtentisObjects() {
         List<KeyValue> list = new ArrayList<KeyValue>();
-        list.add(new KeyValue("Data Model", ""));//$NON-NLS-1$ //$NON-NLS-2$ 
+        list.add(new KeyValue("Data Model", ""));//$NON-NLS-1$ //$NON-NLS-2$
         list.add(new KeyValue("Menu", ""));//$NON-NLS-1$ //$NON-NLS-2$
-        list.add(new KeyValue("Role", ""));//$NON-NLS-1$ //$NON-NLS-2$  
-        list.add(new KeyValue(EXtentisObjects.RoutingRule.getDisplayName(), ""));//$NON-NLS-1$   
+        list.add(new KeyValue("Role", ""));//$NON-NLS-1$ //$NON-NLS-2$
+        list.add(new KeyValue(EXtentisObjects.RoutingRule.getDisplayName(), ""));//$NON-NLS-1$
         list.add(new KeyValue("Stored Procedure", ""));//$NON-NLS-1$ //$NON-NLS-2$
-        list.add(new KeyValue("Synchronization Plan", ""));//$NON-NLS-1$ //$NON-NLS-2$ 
-        list.add(new KeyValue(EXtentisObjects.Transformer.getDisplayName(), ""));//$NON-NLS-1$ 
+        list.add(new KeyValue("Synchronization Plan", ""));//$NON-NLS-1$ //$NON-NLS-2$
+        list.add(new KeyValue(EXtentisObjects.Transformer.getDisplayName(), ""));//$NON-NLS-1$
         list.add(new KeyValue("View", ""));//$NON-NLS-1$ //$NON-NLS-2$
 
         return list;
