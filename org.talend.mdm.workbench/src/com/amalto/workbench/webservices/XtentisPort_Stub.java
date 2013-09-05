@@ -9392,6 +9392,95 @@ public class XtentisPort_Stub
     }
     
     /*
+     *  implementation of getDigest
+     */
+    public com.amalto.workbench.webservices.WSDigest getDigest(com.amalto.workbench.webservices.WSDigestKey wsDigestKey) throws java.rmi.RemoteException {
+        try {
+            
+            StreamingSenderState _state = _start(_handlerChain);
+            
+            InternalSOAPMessage _request = _state.getRequest();
+            _request.setOperationCode(getDigest_OPCODE);            
+            
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getDigest_WSDigestKey_QNAME);
+            _bodyBlock.setValue(wsDigestKey);
+            _bodyBlock.setSerializer(ns1_myWSGetDigest_LiteralSerializer);
+            _request.setBody(_bodyBlock);
+            
+            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
+            
+            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
+            
+            com.amalto.workbench.webservices.WSDigest _result = null;
+            Object _responseObj = _state.getResponse().getBody().getValue();
+            if (_responseObj instanceof SOAPDeserializationState) {
+                _result = (com.amalto.workbench.webservices.WSDigest)((SOAPDeserializationState) _responseObj).getInstance();
+            } else {
+                _result = (com.amalto.workbench.webservices.WSDigest)_responseObj;
+            }
+            
+            return _result;
+            
+        } catch (RemoteException e) {
+            // let this one through unchanged
+            throw e;
+        } catch (JAXRPCException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new RemoteException(e.getMessage(), e);
+            }
+        }
+    }
+
+    /*
+     *  implementation of updateDigest
+     */
+    public com.amalto.workbench.webservices.WSLong updateDigest(com.amalto.workbench.webservices.WSDigest wsDigest) throws java.rmi.RemoteException {
+        try {
+            
+            StreamingSenderState _state = _start(_handlerChain);
+            
+            InternalSOAPMessage _request = _state.getRequest();
+            _request.setOperationCode(updateDigest_OPCODE);
+            
+            
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_updateDigest_WSDigest_QNAME);
+            _bodyBlock.setValue(wsDigest);
+            _bodyBlock.setSerializer(ns1_myWSUpdateDigest_LiteralSerializer);
+            _request.setBody(_bodyBlock);
+            
+            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
+            
+            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
+            
+            com.amalto.workbench.webservices.WSLong _result = null;
+            Object _responseObj = _state.getResponse().getBody().getValue();
+            if (_responseObj instanceof SOAPDeserializationState) {
+                _result = (com.amalto.workbench.webservices.WSLong)((SOAPDeserializationState) _responseObj).getInstance();
+            } else {
+                _result = (com.amalto.workbench.webservices.WSLong)_responseObj;
+            }
+            
+            return _result;
+            
+        } catch (RemoteException e) {
+            // let this one through unchanged
+            throw e;
+        } catch (JAXRPCException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new RemoteException(e.getMessage(), e);
+            }
+        }
+    }
+    
+    /*
      *  this method deserializes the request/response structure in the body
      */
     protected void _readFirstBodyElement(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState  state) throws Exception {
@@ -9994,6 +10083,12 @@ public class XtentisPort_Stub
             case getRoutingOrderV2ByCriteriaWithPaging_OPCODE:
                 _deserialize_getRoutingOrderV2ByCriteriaWithPaging(bodyReader, deserializationContext, state);
                 break;
+            case getDigest_OPCODE:
+                _deserialize_getDigest(bodyReader, deserializationContext, state);
+                break;
+            case updateDigest_OPCODE:
+                _deserialize_updateDigest(bodyReader, deserializationContext, state);
+                break;     
             default:
                 throw new SenderException("sender.response.unrecognizedOperation", Integer.toString(opcode));
         }
@@ -12588,7 +12683,31 @@ public class XtentisPort_Stub
         state.getResponse().setBody(bodyBlock);
     }
     
+    /*
+     * This method deserializes the body of the getDigest operation.
+     */
+    private void _deserialize_getDigest(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSUpdateDigestObj =
+                ns1_myWSUpdateDigest_LiteralSerializer.deserialize(ns1_getDigest_WSDigest_QNAME,
+                bodyReader, deserializationContext);
+        
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getDigest_WSDigest_QNAME);
+        bodyBlock.setValue(myWSUpdateDigestObj);
+        state.getResponse().setBody(bodyBlock);
+    }
     
+    /*
+     * This method deserializes the body of the updateDigest operation.
+     */
+    private void _deserialize_updateDigest(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSLongObj =
+            ns1_myWSLong_LiteralSerializer.deserialize(ns1_updateDigest_WSLong_QNAME,
+                bodyReader, deserializationContext);
+        
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_updateDigest_WSLong_QNAME);
+        bodyBlock.setValue(myWSLongObj);
+        state.getResponse().setBody(bodyBlock);
+    }
     
     protected String _getDefaultEnvelopeEncodingStyle() {
         return null;
@@ -12919,6 +13038,9 @@ public class XtentisPort_Stub
         ns1_myWSPutDataModel_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSPutDataModel.class, ns1_WSPutDataModel_TYPE_QNAME);
         ns1_myWSGetTransformerPKs_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetTransformerPKs.class, ns1_WSGetTransformerPKs_TYPE_QNAME);
         ns1_myWSWorkflowProcessDefinitionUUID_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID.class, ns1_WSWorkflowProcessDefinitionUUID_TYPE_QNAME);
+        ns1_myWSGetDigest_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDigestKey.class, ns1_WSDigestKey_TYPE_QNAME);
+        ns1_myWSUpdateDigest_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDigest.class, ns1_WSDigest_TYPE_QNAME);
+        ns1_myWSLong_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSLong.class, ns1_WSLong_TYPE_QNAME);
     }
     
     private static final QName _portName = new QName("urn-com-amalto-xtentis-webservice", "XtentisPort");
@@ -13121,6 +13243,8 @@ public class XtentisPort_Stub
     private static final int deleteUniverse_OPCODE = 196;
     private static final int getServicesList_OPCODE = 197;
     private static final int getRoutingOrderV2ByCriteriaWithPaging_OPCODE = 198;
+    private static final int getDigest_OPCODE = 199;
+    private static final int updateDigest_OPCODE = 200;
     private static final QName ns1_isItemModifiedByOther_WSIsItemModifiedByOther_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSIsItemModifiedByOther");
     private static final QName ns1_WSIsItemModifiedByOther_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSIsItemModifiedByOther");
     private CombinedSerializer ns1_myWSIsItemModifiedByOther_LiteralSerializer;
@@ -14074,26 +14198,20 @@ public class XtentisPort_Stub
     private static final QName ns1_WSGetRoutingOrderV2ByCriteriaWithPaging_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2ByCriteriaWithPaging");
     private CombinedSerializer ns1_myWSGetRoutingOrderV2ByCriteriaWithPaging_LiteralSerializer;
     private static final QName ns1_getRoutingOrderV2ByCriteriaWithPaging_WSRoutingOrderV2Array_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2Array");
-    
+    private static final QName ns1_getDigest_WSDigestKey_QNAME = new QName("urn-com-amalto-xtentis-webservice","WSDigestKey");
+    private static final QName ns1_WSDigestKey_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDigestKey");
+    private CombinedSerializer ns1_myWSGetDigest_LiteralSerializer;
+    private static final QName ns1_getDigest_WSDigest_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDigest");
+    private static final QName ns1_updateDigest_WSDigest_QNAME = new QName("urn-com-amalto-xtentis-webservice","WSDigest");
+    private static final QName ns1_WSDigest_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDigest");
+    private CombinedSerializer ns1_myWSUpdateDigest_LiteralSerializer;
+    private static final QName ns1_updateDigest_WSLong_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLong");
+    private static final QName ns1_WSLong_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLong");
+    private CombinedSerializer ns1_myWSLong_LiteralSerializer;
     private static final String[] myNamespace_declarations =
                                         new String[] {
                                             "ns0", "urn-com-amalto-xtentis-webservice"
                                         };
     
     private static final QName[] understoodHeaderNames = new QName[] {  };
-
-    /* (non-Javadoc)
-     * @see com.amalto.workbench.webservices.XtentisPort#getDigest(com.amalto.workbench.webservices.WSDigestValueKey)
-     */
-    public WSDigest getDigest(WSDigestKey wsDigestKey) throws RemoteException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    public WSLong updateDigest(WSDigest wsDigest) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

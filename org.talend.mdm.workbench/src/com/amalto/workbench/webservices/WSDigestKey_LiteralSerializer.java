@@ -37,8 +37,8 @@ import com.sun.xml.rpc.wsdl.document.schema.SchemaConstants;
  *
  */
 public class WSDigestKey_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable {
+    private static final QName ns1_type_QNAME = new QName("", "type");
     private static final QName ns1_objectName_QNAME = new QName("", "objectName");
-    private static final QName ns1_type_QNAME = new QName("", "type");    
     private static final QName ns1_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns1_myns1_string__java_lang_String_String_Serializer;
     
@@ -63,23 +63,6 @@ public class WSDigestKey_LiteralSerializer extends LiteralObjectSerializerBase i
         reader.nextElementContent();
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_objectName_QNAME)) {
-                member = ns1_myns1_string__java_lang_String_String_Serializer.deserialize(ns1_objectName_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setObjectName((java.lang.String)member);
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_objectName_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        reader.nextElementContent();
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_type_QNAME)) {
                 member = ns1_myns1_string__java_lang_String_String_Serializer.deserialize(ns1_type_QNAME, reader, context);
                 if (member == null) {
@@ -89,6 +72,22 @@ public class WSDigestKey_LiteralSerializer extends LiteralObjectSerializerBase i
                 reader.nextElementContent();
             } else {
                 throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_type_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_objectName_QNAME)) {
+                member = ns1_myns1_string__java_lang_String_String_Serializer.deserialize(ns1_objectName_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setObjectName((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_objectName_QNAME, reader.getName() });
             }
         }
         else {
@@ -106,14 +105,14 @@ public class WSDigestKey_LiteralSerializer extends LiteralObjectSerializerBase i
     public void doSerialize(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
         com.amalto.workbench.webservices.WSDigestKey instance = (com.amalto.workbench.webservices.WSDigestKey)obj;
         
-        if (instance.getObjectName() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns1_myns1_string__java_lang_String_String_Serializer.serialize(instance.objectName, ns1_objectName_QNAME, null, writer, context);
-        
         if (instance.getType() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
         ns1_myns1_string__java_lang_String_String_Serializer.serialize(instance.type, ns1_type_QNAME, null, writer, context);
+        
+        if (instance.getObjectName() == null) {
+            throw new SerializationException("literal.unexpectedNull");
+        }
+        ns1_myns1_string__java_lang_String_String_Serializer.serialize(instance.objectName, ns1_objectName_QNAME, null, writer, context);
     }
 }

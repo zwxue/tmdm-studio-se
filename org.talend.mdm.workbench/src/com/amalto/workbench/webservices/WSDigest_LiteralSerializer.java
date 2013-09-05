@@ -87,14 +87,10 @@ public class WSDigest_LiteralSerializer extends LiteralObjectSerializerBase impl
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
-        reader.nextElementContent();
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_digestValue_QNAME)) {
                 member = ns1_myns1_string__java_lang_String_String_Serializer.deserialize(ns1_digestValue_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
                 instance.setDigestValue((java.lang.String)member);
                 reader.nextElementContent();
             } else {
@@ -104,7 +100,6 @@ public class WSDigest_LiteralSerializer extends LiteralObjectSerializerBase impl
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
-        reader.nextElementContent();
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_timeStamp_QNAME)) {
