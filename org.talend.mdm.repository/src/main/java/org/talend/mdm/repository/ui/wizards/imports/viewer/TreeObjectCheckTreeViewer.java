@@ -37,6 +37,7 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ConsistencyService;
 import org.talend.mdm.repository.core.service.ConsistencyService.CompareResultEnum;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
@@ -249,6 +250,10 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 String objName = getTreeObjectName(treeObject);
                 ERepositoryObjectType viewType = RepositoryQueryService.getRepositoryObjectType(treeObject.getType());
                 if (viewType == null) {
+                    continue;
+                }
+                if (viewType == IServerObjectRepositoryType.TYPE_RESOURCE || viewType == IServerObjectRepositoryType.TYPE_JOB
+                        || viewType == IServerObjectRepositoryType.TYPE_WORKFLOW) {
                     continue;
                 }
                 IRepositoryViewObject viewObj = RepositoryResourceUtil.findViewObjectByName(viewType, objName);
