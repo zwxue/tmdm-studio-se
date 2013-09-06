@@ -130,8 +130,9 @@ public abstract class CommitBarListenerSection<T> extends BasePropertySection im
     }
 
     protected CommitHandler<?> createCommotHandler() {
-        if (getSubmittedObj() != null) {
-            return getSubmittedObj().createCommitHandler();
+    	ISubmittable submit = getSubmittedObj();
+        if (submit != null) {
+            return submit.createCommitHandler();
         }
         return null;
     }
