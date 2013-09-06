@@ -47,7 +47,7 @@ public class WorkflowContextTriggerPluginDetail extends AbstractPluginDetail {
 
     @Override
     public String getDescription() {
-        return ""; //$NON-NLS-1$
+        return "Pass an mdm context object to a workflow engine"; //$NON-NLS-1$
     }
 
     @Override

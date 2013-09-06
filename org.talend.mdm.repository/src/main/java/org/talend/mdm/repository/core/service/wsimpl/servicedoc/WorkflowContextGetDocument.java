@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.service.wsimpl.servicedoc;
 
 
+
 /**
  * created by liusongbo on 2013-9-5
  *
@@ -26,6 +27,11 @@ public class WorkflowContextGetDocument extends AbstractGetDocument {
     @Override
     public String getJNDIName() {
         return "workflowcontext"; //$NON-NLS-1$
+    }
+
+    @Override
+    public String getDescription() {
+        return "This service handle the basic functionality of workflow"; //$NON-NLS-1$
     }
 
     @Override
