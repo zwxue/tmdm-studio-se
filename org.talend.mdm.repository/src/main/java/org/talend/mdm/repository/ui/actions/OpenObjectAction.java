@@ -30,6 +30,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
@@ -52,6 +53,7 @@ import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.models.WSRootRepositoryObject;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 import org.talend.repository.model.ERepositoryStatus;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -66,7 +68,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class OpenObjectAction extends AbstractRepositoryAction {
 
@@ -80,7 +82,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong OpenObjectAction constructor comment.
-     * 
+     *
      * @param text
      */
     public OpenObjectAction() {
@@ -168,7 +170,17 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                     getCommonViewer().expandToLevel(obj, 1);
                 }
             } else {
-                openItem(viewObject);
+                IEditorReference editorRef = RepositoryResourceUtil.isOpenedInEditor(viewObject);
+                if (editorRef != null) {
+                    if (page == null) {
+                        this.page = getCommonViewer().getCommonNavigator().getSite().getWorkbenchWindow().getActivePage();
+                    }
+                    if (page != null) {
+                        page.bringToTop(editorRef.getPart(false));
+                    }
+                } else {
+                    openItem(viewObject);
+                }
             }
         }
 
@@ -301,7 +313,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * return a decrypted server def
-     * 
+     *
      * @param serverObject
      * @return a decrypted server def
      */

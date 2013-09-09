@@ -73,6 +73,7 @@ import org.talend.core.repository.model.ResourceModelUtils;
 import org.talend.core.repository.utils.ResourceFilenameHelper;
 import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeResourceProvider;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
@@ -109,12 +110,12 @@ import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class RepositoryResourceUtil {
 
     /**
-     * 
+     *
      */
     private static final String SVN_FOLDER_NAME = ".svn"; //$NON-NLS-1$
 
@@ -350,7 +351,7 @@ public class RepositoryResourceUtil {
         Property property = item.getProperty();
 
         String fileName = ResourceFilenameHelper.getExpectedFileName(property.getLabel(), property.getVersion()) + DOT
-                + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$ 
+                + (fileExtension != null ? fileExtension : ""); //$NON-NLS-1$
         IFile file = folder.getFile(fileName);
         return file;
     }
@@ -973,7 +974,7 @@ public class RepositoryResourceUtil {
 
     /**
      * convert viewObj's children to RepositoryNode type and add to node as its children
-     * 
+     *
      * @param viewObj
      * @param node RepositoryNode Object corresponding to viewObj
      */
@@ -1012,6 +1013,15 @@ public class RepositoryResourceUtil {
                         IRepositoryViewObject workflowViewObject = RepositoryWorkflowUtil.getWorkflowViewObject(ref
                                 .getEditor(false));
                         if (isIdEquals(viewObj, workflowViewObject)) {
+                            return ref;
+                        }
+                    }
+
+                    if (editorInput instanceof ProcessEditorInput) {
+                        ProcessEditorInput processEditorInput = (ProcessEditorInput) editorInput;
+                        Property property = processEditorInput.getItem().getProperty();
+                        IRepositoryViewObject vObj = ContainerCacheService.get(property);
+                        if (vObj != null && vObj.equals(viewObj)) {
                             return ref;
                         }
                     }
@@ -1102,7 +1112,7 @@ public class RepositoryResourceUtil {
     public static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /**
-     * 
+     *
      * @param viewObj
      * @return A decrypted serverDef
      */
@@ -1115,7 +1125,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     * 
+     *
      * @param item
      * @return A decrypted serverDef
      */
@@ -1139,7 +1149,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     * 
+     *
      * @param item
      * @param def need A decrypted serverDef
      */
