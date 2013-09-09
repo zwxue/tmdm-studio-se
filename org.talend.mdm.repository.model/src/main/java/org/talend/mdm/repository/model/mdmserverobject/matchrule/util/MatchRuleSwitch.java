@@ -100,6 +100,12 @@ public class MatchRuleSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MatchRulePackage.MATCH_RULE_MAP_INFO_PAGE: {
+                MatchRuleMapInfoPage matchRuleMapInfoPage = (MatchRuleMapInfoPage)theEObject;
+                T result = caseMatchRuleMapInfoPage(matchRuleMapInfoPage);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             case MatchRulePackage.KEY_XPATH_MAP: {
                 @SuppressWarnings("unchecked") Map.Entry<String, String> keyXPathMap = (Map.Entry<String, String>)theEObject;
                 T result = caseKeyXPathMap(keyXPathMap);
@@ -155,6 +161,21 @@ public class MatchRuleSwitch<T> {
      * @generated
      */
     public T caseEntityMapInfo(EntityMapInfo object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Map Info Page</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Map Info Page</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseMatchRuleMapInfoPage(MatchRuleMapInfoPage object) {
         return null;
     }
 

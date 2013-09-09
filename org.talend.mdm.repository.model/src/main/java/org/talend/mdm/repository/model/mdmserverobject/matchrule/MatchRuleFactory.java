@@ -44,6 +44,15 @@ public interface MatchRuleFactory extends EFactory {
     EntityMapInfo createEntityMapInfo();
 
     /**
+     * Returns a new object of class '<em>Map Info Page</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Map Info Page</em>'.
+     * @generated
+     */
+    MatchRuleMapInfoPage createMatchRuleMapInfoPage();
+
+    /**
      * Returns a new object of class '<em>Blocking Key Definition</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

@@ -47,6 +47,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ServiceUtil;
 
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -191,6 +192,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         if (isEE()) {
             IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
             mapInfoService.saveMatchRuleMapInfo(item);
+            RepositoryResourceUtil.saveItem(item);
             getMapinfoCommandStack().saveIsDone();
             firePropertyChange(PROP_DIRTY);
         }

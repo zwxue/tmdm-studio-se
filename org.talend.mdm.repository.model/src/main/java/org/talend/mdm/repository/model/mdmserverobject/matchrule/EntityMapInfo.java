@@ -6,6 +6,7 @@
  */
 package org.talend.mdm.repository.model.mdmserverobject.matchrule;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EObject;
@@ -19,11 +20,11 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getEntityName <em>Entity Name</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchKeyMap <em>Match Key Map</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getSurvivorshipKeyMap <em>Survivorship Key Map</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getBlockingKeyDefinition <em>Blocking Key Definition</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleDefName <em>Match Rule Def Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getParent <em>Parent</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo#getMatchRuleMapInfoPages <em>Match Rule Map Info Pages</em>}</li>
  * </ul>
  * </p>
  *
@@ -57,23 +58,6 @@ public interface EntityMapInfo extends EObject {
      * @generated
      */
     void setEntityName(String value);
-
-    /**
-     * Returns the value of the '<em><b>Match Key Map</b></em>' map.
-     * The key is of type {@link java.lang.String},
-     * and the value is of type {@link java.lang.String},
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Match Key Map</em>' map isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Match Key Map</em>' map.
-     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getEntityMapInfo_MatchKeyMap()
-     * @model mapType="org.talend.mdm.repository.model.mdmserverobject.matchrule.KeyXPathMap<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
-     * @generated
-     */
-    EMap<String, String> getMatchKeyMap();
 
     /**
      * Returns the value of the '<em><b>Survivorship Key Map</b></em>' map.
@@ -171,5 +155,23 @@ public interface EntityMapInfo extends EObject {
      * @generated
      */
     void setParent(MatchRuleMapInfo value);
+
+    /**
+     * Returns the value of the '<em><b>Match Rule Map Info Pages</b></em>' containment reference list.
+     * The list contents are of type {@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoPage}.
+     * It is bidirectional and its opposite is '{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoPage#getParent <em>Parent</em>}'.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Match Rule Map Info Pages</em>' reference list isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Match Rule Map Info Pages</em>' containment reference list.
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage#getEntityMapInfo_MatchRuleMapInfoPages()
+     * @see org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoPage#getParent
+     * @model opposite="parent" containment="true"
+     * @generated
+     */
+    EList<MatchRuleMapInfoPage> getMatchRuleMapInfoPages();
 
 } // EntityMapInfo

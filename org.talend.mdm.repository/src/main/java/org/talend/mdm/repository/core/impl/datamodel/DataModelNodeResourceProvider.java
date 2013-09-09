@@ -71,6 +71,7 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
         return null;
     }
 
+    @Override
     public Resource save(Item item) throws PersistenceException {
         if (item instanceof WSDataModelItem) {
             Resource resource = xmiResourceManager.getItemResource(item);
@@ -96,13 +97,16 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
 
     @Override
     public void handleReferenceFile(Item item) {
-        IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
-
+        IFile xsdFile = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
+        IFile mapInfoFile = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "mapinfo"); //$NON-NLS-1$
         try {
 
-            createOrUpdateFile(item, file);
+            createOrUpdateFile(item, xsdFile);
+            linkReferenceFile(item, xsdFile);
+            if (mapInfoFile.getLocation().toFile().exists()) {
+                linkReferenceFile(item, mapInfoFile);
+            }
 
-            linkReferenceFile(item, file);
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
 
             factory.save(item);
@@ -121,10 +125,11 @@ public class DataModelNodeResourceProvider extends AbstractRepositoryNodeResourc
         String resource = ((WSDataModelItem) item).getWsDataModel().getXsdSchema();
         if (resource != null) {
             byte[] content = resource.getBytes("utf-8"); //$NON-NLS-1$
-            if (!file.exists())
-                file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
-            else
-                file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
+            if (!file.exists()) {
+                file.create(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
+            } else {
+                file.setContents(new ByteArrayInputStream(content), IFile.FORCE, new NullProgressMonitor());
+            }
         }
         return file;
     }

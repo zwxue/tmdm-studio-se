@@ -6,9 +6,11 @@
  */
 package org.talend.mdm.repository.model.mdmserverobject.matchrule.impl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
@@ -18,6 +20,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -25,6 +30,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.BlockingKeyDefinition;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo;
+import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoPage;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackage;
 
 /**
@@ -35,11 +41,11 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRulePackag
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getEntityName <em>Entity Name</em>}</li>
- *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getMatchKeyMap <em>Match Key Map</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getSurvivorshipKeyMap <em>Survivorship Key Map</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getBlockingKeyDefinition <em>Blocking Key Definition</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getMatchRuleDefName <em>Match Rule Def Name</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.matchrule.impl.EntityMapInfoImpl#getMatchRuleMapInfoPages <em>Match Rule Map Info Pages</em>}</li>
  * </ul>
  * </p>
  *
@@ -65,16 +71,6 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
      * @ordered
      */
     protected String entityName = ENTITY_NAME_EDEFAULT;
-
-    /**
-     * The cached value of the '{@link #getMatchKeyMap() <em>Match Key Map</em>}' map.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getMatchKeyMap()
-     * @generated
-     * @ordered
-     */
-    protected EMap<String, String> matchKeyMap;
 
     /**
      * The cached value of the '{@link #getSurvivorshipKeyMap() <em>Survivorship Key Map</em>}' map.
@@ -117,6 +113,16 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
     protected String matchRuleDefName = MATCH_RULE_DEF_NAME_EDEFAULT;
 
     /**
+     * The cached value of the '{@link #getMatchRuleMapInfoPages() <em>Match Rule Map Info Pages</em>}' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getMatchRuleMapInfoPages()
+     * @generated
+     * @ordered
+     */
+    protected EList<MatchRuleMapInfoPage> matchRuleMapInfoPages;
+
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -154,18 +160,6 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
         entityName = newEntityName;
         if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, MatchRulePackage.ENTITY_MAP_INFO__ENTITY_NAME, oldEntityName, entityName));
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EMap<String, String> getMatchKeyMap() {
-        if (matchKeyMap == null) {
-            matchKeyMap = new EcoreEMap<String,String>(MatchRulePackage.Literals.KEY_XPATH_MAP, KeyXPathMapImpl.class, this, MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP);
-        }
-        return matchKeyMap;
     }
 
     /**
@@ -290,6 +284,19 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
      * <!-- end-user-doc -->
      * @generated
      */
+    public EList<MatchRuleMapInfoPage> getMatchRuleMapInfoPages() {
+        if (matchRuleMapInfoPages == null) {
+            matchRuleMapInfoPages = new EObjectContainmentWithInverseEList<MatchRuleMapInfoPage>(MatchRuleMapInfoPage.class, this, MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_MAP_INFO_PAGES, MatchRulePackage.MATCH_RULE_MAP_INFO_PAGE__PARENT);
+        }
+        return matchRuleMapInfoPages;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @SuppressWarnings("unchecked")
     @Override
     public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
@@ -297,6 +304,8 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
                 if (eInternalContainer() != null)
                     msgs = eBasicRemoveFromContainer(msgs);
                 return basicSetParent((MatchRuleMapInfo)otherEnd, msgs);
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_MAP_INFO_PAGES:
+                return ((InternalEList<InternalEObject>)(InternalEList<?>)getMatchRuleMapInfoPages()).basicAdd(otherEnd, msgs);
         }
         return super.eInverseAdd(otherEnd, featureID, msgs);
     }
@@ -309,14 +318,14 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
-                return ((InternalEList<?>)getMatchKeyMap()).basicRemove(otherEnd, msgs);
             case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
                 return ((InternalEList<?>)getSurvivorshipKeyMap()).basicRemove(otherEnd, msgs);
             case MatchRulePackage.ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION:
                 return basicSetBlockingKeyDefinition(null, msgs);
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 return basicSetParent(null, msgs);
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_MAP_INFO_PAGES:
+                return ((InternalEList<?>)getMatchRuleMapInfoPages()).basicRemove(otherEnd, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
@@ -345,9 +354,6 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
         switch (featureID) {
             case MatchRulePackage.ENTITY_MAP_INFO__ENTITY_NAME:
                 return getEntityName();
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
-                if (coreType) return getMatchKeyMap();
-                else return getMatchKeyMap().map();
             case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
                 if (coreType) return getSurvivorshipKeyMap();
                 else return getSurvivorshipKeyMap().map();
@@ -357,6 +363,8 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
                 return getMatchRuleDefName();
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 return getParent();
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_MAP_INFO_PAGES:
+                return getMatchRuleMapInfoPages();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -366,14 +374,12 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
      * <!-- end-user-doc -->
      * @generated
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
             case MatchRulePackage.ENTITY_MAP_INFO__ENTITY_NAME:
                 setEntityName((String)newValue);
-                return;
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
-                ((EStructuralFeature.Setting)getMatchKeyMap()).set(newValue);
                 return;
             case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
                 ((EStructuralFeature.Setting)getSurvivorshipKeyMap()).set(newValue);
@@ -386,6 +392,10 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
                 return;
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 setParent((MatchRuleMapInfo)newValue);
+                return;
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_MAP_INFO_PAGES:
+                getMatchRuleMapInfoPages().clear();
+                getMatchRuleMapInfoPages().addAll((Collection<? extends MatchRuleMapInfoPage>)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -402,9 +412,6 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
             case MatchRulePackage.ENTITY_MAP_INFO__ENTITY_NAME:
                 setEntityName(ENTITY_NAME_EDEFAULT);
                 return;
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
-                getMatchKeyMap().clear();
-                return;
             case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
                 getSurvivorshipKeyMap().clear();
                 return;
@@ -416,6 +423,9 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
                 return;
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 setParent((MatchRuleMapInfo)null);
+                return;
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_MAP_INFO_PAGES:
+                getMatchRuleMapInfoPages().clear();
                 return;
         }
         super.eUnset(featureID);
@@ -431,8 +441,6 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
         switch (featureID) {
             case MatchRulePackage.ENTITY_MAP_INFO__ENTITY_NAME:
                 return ENTITY_NAME_EDEFAULT == null ? entityName != null : !ENTITY_NAME_EDEFAULT.equals(entityName);
-            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_KEY_MAP:
-                return matchKeyMap != null && !matchKeyMap.isEmpty();
             case MatchRulePackage.ENTITY_MAP_INFO__SURVIVORSHIP_KEY_MAP:
                 return survivorshipKeyMap != null && !survivorshipKeyMap.isEmpty();
             case MatchRulePackage.ENTITY_MAP_INFO__BLOCKING_KEY_DEFINITION:
@@ -441,6 +449,8 @@ public class EntityMapInfoImpl extends EObjectImpl implements EntityMapInfo {
                 return MATCH_RULE_DEF_NAME_EDEFAULT == null ? matchRuleDefName != null : !MATCH_RULE_DEF_NAME_EDEFAULT.equals(matchRuleDefName);
             case MatchRulePackage.ENTITY_MAP_INFO__PARENT:
                 return getParent() != null;
+            case MatchRulePackage.ENTITY_MAP_INFO__MATCH_RULE_MAP_INFO_PAGES:
+                return matchRuleMapInfoPages != null && !matchRuleMapInfoPages.isEmpty();
         }
         return super.eIsSet(featureID);
     }

@@ -64,6 +64,7 @@ public class MatchRuleFactoryImpl extends EFactoryImpl implements MatchRuleFacto
         switch (eClass.getClassifierID()) {
             case MatchRulePackage.MATCH_RULE_MAP_INFO: return createMatchRuleMapInfo();
             case MatchRulePackage.ENTITY_MAP_INFO: return createEntityMapInfo();
+            case MatchRulePackage.MATCH_RULE_MAP_INFO_PAGE: return createMatchRuleMapInfoPage();
             case MatchRulePackage.KEY_XPATH_MAP: return (EObject)createKeyXPathMap();
             case MatchRulePackage.BLOCKING_KEY_DEFINITION: return createBlockingKeyDefinition();
             case MatchRulePackage.BLOCKING_KEY: return createBlockingKey();
@@ -91,6 +92,16 @@ public class MatchRuleFactoryImpl extends EFactoryImpl implements MatchRuleFacto
     public EntityMapInfo createEntityMapInfo() {
         EntityMapInfoImpl entityMapInfo = new EntityMapInfoImpl();
         return entityMapInfo;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public MatchRuleMapInfoPage createMatchRuleMapInfoPage() {
+        MatchRuleMapInfoPageImpl matchRuleMapInfoPage = new MatchRuleMapInfoPageImpl();
+        return matchRuleMapInfoPage;
     }
 
     /**

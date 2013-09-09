@@ -140,7 +140,7 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
                 procFileItem.setContent(byteArray);
                 procFileItem.setExtension(file.getFileExtension());
                 // procFileItem.setName(file.getName());
-                item.getReferenceResources().clear();
+                // item.getReferenceResources().clear();
                 item.getReferenceResources().add(procFileItem);
             }
         } catch (IOException e) {
@@ -152,16 +152,18 @@ public abstract class AbstractRepositoryNodeResourceProvider implements IReposit
 
     private ReferenceFileItem findReferenceFileItem(Item item, IFile file) {
         EList referenceResources = item.getReferenceResources();
-        if (referenceResources != null)
+        if (referenceResources != null) {
             for (Object refObj : referenceResources) {
                 ReferenceFileItem fileItem = (ReferenceFileItem) refObj;
 
                 URI uri = fileItem.getContent().eResource().getURI();
                 String name = uri.lastSegment();
 
-                if (name != null && name.equals(file.getName()))
+                if (name != null && name.equals(file.getName())) {
                     return fileItem;
+                }
             }
+        }
         return null;
     }
 }
