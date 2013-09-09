@@ -12,63 +12,68 @@
 // ============================================================================
 package com.amalto.workbench.detailtabs.sections;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xsd.XSDComponent;
+import org.eclipse.xsd.XSDNamedComponent;
 
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.PrimaryKeyInfosAnnoInfo;
+import com.amalto.workbench.detailtabs.sections.util.FixDMNameBasePropertySectionDataModelExtractor;
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.models.infoextractor.XSDComponentChildElementsHolder;
+import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
-import com.amalto.workbench.widgets.composites.SelectElementsOfEntityComposite;
+import com.amalto.workbench.widgets.composites.XpathComposite;
 
-public class EntityPKInfosSection extends XSDComponentSection {
+public class EntityPKInfosSection extends XpathSection {
 
-    private SelectElementsOfEntityComposite compElements;
+	private XpathComposite composite;
 
-    private List<String> primaryKeyInfos = new ArrayList<String>();
+	FixDMNameBasePropertySectionDataModelExtractor holder;
+	@Override
+	public Set<String> getEntities() {
+		if(curXSDComponent instanceof XSDNamedComponent){
+			return Collections.singleton(((XSDNamedComponent) curXSDComponent).getName());
+		}
+		return null;
+	}
+
+	@Override
+	public IAllDataModelHolder getDataHolder() {
+		return holder;
+	}
 
     @Override
     public void refresh() {
-        compElements.setInfos(primaryKeyInfos.toArray(new String[0]));
+    	composite.setInfos(list.toArray(new String[0]));
         updateSectionEnabled();
     }
-
+    Collection<String> list = new LinkedList<String>();
     @Override
     protected void initUIContents(XSDComponent editedObj) {
         super.initUIContents(editedObj);
 
-        primaryKeyInfos.clear();
-
-        XSDAnnotationsStructure annoStruct = new XSDAnnotationsStructure(curXSDComponent);
-
+        list.clear();
+        holder.setDefaultDataModel(getDataModelName());
+        holder.setDefaultEntity(getEntityName());
+        XSDAnnotationsStructure annoStruct = new XSDAnnotationsStructure(curXSDComponent);   
         for (String eachLookUpFields : annoStruct.getPrimaryKeyInfos().values())
-            primaryKeyInfos.add(eachLookUpFields);
-
-        compElements.setElementsHolder(new XSDComponentChildElementsHolder(curXSDComponent));
-
+            list.add(eachLookUpFields);
     }
 
     @Override
     protected ISubmittable getSubmittedObj() {
         String[] pkinfos = getPkInfos();
-
         return new PrimaryKeyInfosAnnoInfo(curXSDComponent, pkinfos);
     }
 
     private String[] getPkInfos() {
-        String[] pkinfos = new XSDAnnotationsStructure(curXSDComponent).getPrimaryKeyInfos().values().toArray(new String[0]);
-
-        if (compElements.isContentChanged()) {
-            compElements.setContentChanged(false);
-            pkinfos = compElements.getInfos();
-        }
-
-        return pkinfos;
+    	return composite.getInfos();
     }
 
     @Override
@@ -78,10 +83,10 @@ public class EntityPKInfosSection extends XSDComponentSection {
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, "XPaths", null, this); //$NON-NLS-1$
+    	composite = new XpathComposite(compSectionClient,SWT.NONE,this);
+    	holder =new FixDMNameBasePropertySectionDataModelExtractor(this);
         String tooltips = Messages.EntityPKInfosSection_pkInfoTooltips;
-        compElements.getInfosTreeViewer().getTree().setToolTipText(tooltips);
-        compElements.getInfosComboViewer().getCombo().setToolTipText(tooltips);
+        composite.getInfosTreeViewer().getTree().setToolTipText(tooltips);
     }
 
 }

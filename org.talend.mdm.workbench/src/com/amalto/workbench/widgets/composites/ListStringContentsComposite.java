@@ -205,7 +205,7 @@ public abstract class ListStringContentsComposite extends Composite {
         return infos.toArray(new String[0]);
     }
 
-    private void addInfoToInfoTree(String info) {
+    protected void addInfoToInfoTree(String info) {
         infos.add(info);
         treeContentChanged = true;
 
