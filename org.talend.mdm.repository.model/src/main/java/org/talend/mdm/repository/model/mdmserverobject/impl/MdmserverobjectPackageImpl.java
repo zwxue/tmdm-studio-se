@@ -29,6 +29,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSDataClusterE;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSEventManagerE;
 import org.talend.mdm.repository.model.mdmserverobject.WSJobModelE;
+import org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
@@ -295,6 +296,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsCustomFormEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsMatchRuleEEClass = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
@@ -1703,6 +1711,24 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSMatchRuleE() {
+        return wsMatchRuleEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSMatchRuleE_ConfigurationXmlContent() {
+        return (EAttribute)wsMatchRuleEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -1913,6 +1939,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__ENTITY);
         createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__XML);
         createEAttribute(wsCustomFormEEClass, WS_CUSTOM_FORM_E__ROLE);
+
+        wsMatchRuleEEClass = createEClass(WS_MATCH_RULE_E);
+        createEAttribute(wsMatchRuleEEClass, WS_MATCH_RULE_E__CONFIGURATION_XML_CONTENT);
     }
 
     /**
@@ -1939,6 +1968,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         // Obtain other dependent packages
         MatchRulePackage theMatchRulePackage = (MatchRulePackage)EPackage.Registry.INSTANCE.getEPackage(MatchRulePackage.eNS_URI);
         MdmmetadataPackage theMdmmetadataPackage = (MdmmetadataPackage)EPackage.Registry.INSTANCE.getEPackage(MdmmetadataPackage.eNS_URI);
+        EcorePackage theEcorePackage = (EcorePackage)EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI);
 
         // Add subpackages
         getESubpackages().add(theMatchRulePackage);
@@ -1965,6 +1995,7 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         wsWorkflowEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsResourceEEClass.getESuperTypes().add(this.getMDMServerObject());
         wsCustomFormEEClass.getESuperTypes().add(this.getMDMServerObject());
+        wsMatchRuleEEClass.getESuperTypes().add(this.getMDMServerObject());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmServerObjectEClass, MDMServerObject.class, "MDMServerObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2154,6 +2185,9 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
         initEAttribute(getWSCustomFormE_Entity(), ecorePackage.getEString(), "entity", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSCustomFormE_Xml(), ecorePackage.getEString(), "xml", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getWSCustomFormE_Role(), ecorePackage.getEString(), "role", null, 0, 1, WSCustomFormE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsMatchRuleEEClass, WSMatchRuleE.class, "WSMatchRuleE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSMatchRuleE_ConfigurationXmlContent(), theEcorePackage.getEString(), "configurationXmlContent", null, 0, 1, WSMatchRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

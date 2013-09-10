@@ -285,6 +285,15 @@ public class MdmpropertiesSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case MdmpropertiesPackage.WS_MATCH_RULE_ITEM: {
+                WSMatchRuleItem wsMatchRuleItem = (WSMatchRuleItem)theEObject;
+                T result = caseWSMatchRuleItem(wsMatchRuleItem);
+                if (result == null) result = caseMDMServerObjectItem(wsMatchRuleItem);
+                if (result == null) result = caseMDMItem(wsMatchRuleItem);
+                if (result == null) result = caseItem(wsMatchRuleItem);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -616,6 +625,21 @@ public class MdmpropertiesSwitch<T> {
      * @generated
      */
     public T caseWorkspaceRootItem(WorkspaceRootItem object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>WS Match Rule Item</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>WS Match Rule Item</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseWSMatchRuleItem(WSMatchRuleItem object) {
         return null;
     }
 

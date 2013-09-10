@@ -2844,6 +2844,97 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_CUSTOM_FORM_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 5;
 
     /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRuleEImpl <em>WS Match Rule E</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRuleEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMatchRuleE()
+     * @generated
+     */
+    int WS_MATCH_RULE_E = 38;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__NAME = MDM_SERVER_OBJECT__NAME;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__DESCRIPTION = MDM_SERVER_OBJECT__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>System</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__SYSTEM = MDM_SERVER_OBJECT__SYSTEM;
+
+    /**
+     * The feature id for the '<em><b>Last Server Def</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__LAST_SERVER_DEF = MDM_SERVER_OBJECT__LAST_SERVER_DEF;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__TYPE = MDM_SERVER_OBJECT__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__TIMESTAMP = MDM_SERVER_OBJECT__TIMESTAMP;
+
+    /**
+     * The feature id for the '<em><b>Digest Value</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__DIGEST_VALUE = MDM_SERVER_OBJECT__DIGEST_VALUE;
+
+    /**
+     * The feature id for the '<em><b>Configuration Xml Content</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__CONFIGURATION_XML_CONTENT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>WS Match Rule E</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4434,6 +4525,27 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSCustomFormE_Role();
 
     /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE <em>WS Match Rule E</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Match Rule E</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE
+     * @generated
+     */
+    EClass getWSMatchRuleE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE#getConfigurationXmlContent <em>Configuration Xml Content</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Configuration Xml Content</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE#getConfigurationXmlContent()
+     * @see #getWSMatchRuleE()
+     * @generated
+     */
+    EAttribute getWSMatchRuleE_ConfigurationXmlContent();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5714,6 +5826,24 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_CUSTOM_FORM_E__ROLE = eINSTANCE.getWSCustomFormE_Role();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRuleEImpl <em>WS Match Rule E</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRuleEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMatchRuleE()
+         * @generated
+         */
+        EClass WS_MATCH_RULE_E = eINSTANCE.getWSMatchRuleE();
+
+        /**
+         * The meta object literal for the '<em><b>Configuration Xml Content</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_MATCH_RULE_E__CONFIGURATION_XML_CONTENT = eINSTANCE.getWSMatchRuleE_ConfigurationXmlContent();
 
     }
 

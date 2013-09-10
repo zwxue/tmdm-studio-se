@@ -28,6 +28,7 @@ import org.talend.mdm.repository.model.mdmproperties.WSDataClusterItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSEventManagerItem;
 import org.talend.mdm.repository.model.mdmproperties.WSJobModelItem;
+import org.talend.mdm.repository.model.mdmproperties.WSMatchRuleItem;
 import org.talend.mdm.repository.model.mdmproperties.WSMenuItem;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmproperties.WSRoleItem;
@@ -209,6 +210,13 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    private EClass wsMatchRuleItemEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     private EDataType eRepositoryObjectTypeEDataType = null;
 
     /**
@@ -259,7 +267,6 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         // Initialize simple dependencies
         MdmserverobjectPackage.eINSTANCE.eClass();
-        PropertiesPackage.eINSTANCE.eClass();
 
         // Create package meta-data objects
         theMdmpropertiesPackage.createPackageContents();
@@ -677,6 +684,24 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getWSMatchRuleItem() {
+        return wsMatchRuleItemEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSMatchRuleItem_MdmMatchRule() {
+        return (EReference)wsMatchRuleItemEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getERepositoryObjectType() {
         return eRepositoryObjectTypeEDataType;
     }
@@ -775,6 +800,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         workspaceRootItemEClass = createEClass(WORKSPACE_ROOT_ITEM);
         createEAttribute(workspaceRootItemEClass, WORKSPACE_ROOT_ITEM__LABEL);
 
+        wsMatchRuleItemEClass = createEClass(WS_MATCH_RULE_ITEM);
+        createEReference(wsMatchRuleItemEClass, WS_MATCH_RULE_ITEM__MDM_MATCH_RULE);
+
         // Create data types
         eRepositoryObjectTypeEDataType = createEDataType(EREPOSITORY_OBJECT_TYPE);
     }
@@ -837,6 +865,7 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
         wsCustomFormItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
         workspaceRootItemEClass.getESuperTypes().add(this.getMDMItem());
         workspaceRootItemEClass.getESuperTypes().add(thePropertiesPackage.getFolderItem());
+        wsMatchRuleItemEClass.getESuperTypes().add(this.getMDMServerObjectItem());
 
         // Initialize classes and features; add operations and parameters
         initEClass(mdmItemEClass, MDMItem.class, "MDMItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -909,6 +938,9 @@ public class MdmpropertiesPackageImpl extends EPackageImpl implements Mdmpropert
 
         initEClass(workspaceRootItemEClass, WorkspaceRootItem.class, "WorkspaceRootItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWorkspaceRootItem_Label(), ecorePackage.getEString(), "label", null, 0, 1, WorkspaceRootItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsMatchRuleItemEClass, WSMatchRuleItem.class, "WSMatchRuleItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEReference(getWSMatchRuleItem_MdmMatchRule(), theMdmserverobjectPackage.getWSMatchRuleE(), null, "mdmMatchRule", null, 0, 1, WSMatchRuleItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Initialize data types
         initEDataType(eRepositoryObjectTypeEDataType, ERepositoryObjectType.class, "ERepositoryObjectType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

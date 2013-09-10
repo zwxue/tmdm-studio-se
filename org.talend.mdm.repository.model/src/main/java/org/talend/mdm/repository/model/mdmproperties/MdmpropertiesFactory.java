@@ -224,6 +224,15 @@ public interface MdmpropertiesFactory extends EFactory {
     WorkspaceRootItem createWorkspaceRootItem();
 
     /**
+     * Returns a new object of class '<em>WS Match Rule Item</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Match Rule Item</em>'.
+     * @generated
+     */
+    WSMatchRuleItem createWSMatchRuleItem();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
