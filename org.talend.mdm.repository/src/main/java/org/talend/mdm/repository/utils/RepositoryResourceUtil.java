@@ -54,6 +54,7 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.commons.utils.workbench.resources.ResourceUtils;
+import org.talend.core.PluginChecker;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.general.Project;
 import org.talend.core.model.properties.BusinessProcessItem;
@@ -517,6 +518,47 @@ public class RepositoryResourceUtil {
 
             newViewObjs.add(getCategoryViewObject(RepositoryNodeConfigurationManager.getRecycleBinNodeConfiguration()));
 
+            // add ref project
+            org.talend.core.model.general.Project project = ProjectManager.getInstance().getCurrentProject();
+            if (PluginChecker.isRefProjectLoaded() && project != null
+                    && project.getEmfProject().getReferencedProjects().size() > 0) {
+
+                Property prop1 = PropertiesFactory.eINSTANCE.createProperty();
+                prop1.setId(EcoreUtil.generateUUID());
+
+                ItemState state1 = PropertiesFactory.eINSTANCE.createItemState();
+                ContainerItem item1 = MdmpropertiesFactory.eINSTANCE.createContainerItem();
+                item1.setType(FolderType.STABLE_SYSTEM_FOLDER_LITERAL);
+                item1.setRepObjType(ERepositoryObjectType.REFERENCED_PROJECTS);
+                item1.setLabel(ERepositoryObjectType.REFERENCED_PROJECTS.name());
+                item1.setState(state1);
+                prop1.setItem(item1);
+                FolderRepositoryObject refs = new FolderRepositoryObject(prop1);
+                newViewObjs.add(refs);
+
+                EList<?> projs = project.getEmfProject().getReferencedProjects();
+                Object x = projs.get(0);
+                if (x instanceof org.talend.core.model.general.Project) {
+                    org.talend.core.model.general.Project proj = (Project) x;
+
+                    Property prop2 = PropertiesFactory.eINSTANCE.createProperty();
+                    prop2.setId(EcoreUtil.generateUUID());
+                    ItemState state2 = PropertiesFactory.eINSTANCE.createItemState();
+                    ContainerItem item2 = MdmpropertiesFactory.eINSTANCE.createContainerItem();
+                    item2.setType(FolderType.STABLE_SYSTEM_FOLDER_LITERAL);
+                    item2.setRepObjType(ERepositoryObjectType.REFERENCED_PROJECTS);
+                    item2.setLabel(proj.getLabel());
+                    item2.setState(state2);
+                    prop2.setItem(item2);
+                    FolderRepositoryObject refs2 = new FolderRepositoryObject(prop2);
+                    refs.getChildren().add(refs2);
+
+                    // IRepositoryViewObject refProjViewObject =
+                    // getRefProjViewObject(ERepositoryObjectType.REFERENCED_PROJECTS,
+                    // ERepositoryObjectType.REFERENCED_PROJECTS.name());
+                    // newViewObjs.add(refProjViewObject);
+                }
+            }
         }
         return new IRepositoryViewObject[] { rootViewObj };
     }
@@ -538,6 +580,30 @@ public class RepositoryResourceUtil {
         itemState.setPath(""); //$NON-NLS-1$
         item.setState(itemState);
         item.setLabel(conf.getLabelProvider().getCategoryLabel(item.getRepObjType()));
+        //
+        prop.setItem(item);
+        //
+        FolderRepositoryObject containerObject = new FolderRepositoryObject(prop);
+        ContainerCacheService.putContainer(containerObject);
+        return containerObject;
+    }
+
+    private static IRepositoryViewObject getRefProjViewObject(ERepositoryObjectType type, String label) {
+        Property prop = PropertiesFactory.eINSTANCE.createProperty();
+        prop.setId(EcoreUtil.generateUUID());
+        //
+        ContainerItem item = MdmpropertiesFactory.eINSTANCE.createContainerItem();
+        item.setType(FolderType.SYSTEM_FOLDER_LITERAL);
+
+        if (type == null) {
+            return null;
+        }
+        item.setRepObjType(type);
+        ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
+        itemState.setDeleted(false);
+        itemState.setPath(""); //$NON-NLS-1$
+        item.setState(itemState);
+        item.setLabel(label);
         //
         prop.setItem(item);
         //
@@ -1020,8 +1086,7 @@ public class RepositoryResourceUtil {
                     if (editorInput instanceof ProcessEditorInput) {
                         ProcessEditorInput processEditorInput = (ProcessEditorInput) editorInput;
                         Property property = processEditorInput.getItem().getProperty();
-                        IRepositoryViewObject vObj = ContainerCacheService.get(property);
-                        if (vObj != null && vObj.equals(viewObj)) {
+                        if (viewObj.getProperty().getId().equals(property.getId())) {
                             return ref;
                         }
                     }
