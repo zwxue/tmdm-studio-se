@@ -710,6 +710,20 @@
             projectUrl="resources/demoprojects/MDM_CE_DEMOS/">
       </demoProvider>
    </extension>
-      
+      <extension
+         point="org.talend.repository.items.importexport.handler">
+      <importItemsProvider
+            id="org.talend.mdm.workbench.item"
+            name="MDM  importer"
+            priority="NORMAL">
+         <importItemsHandler
+               class="org.talend.mdm.repository.handler.MdmImportHandler">
+            <parameter
+                  name="type"
+                  value="MDM.DataModel,MDM.Role,MDM.Menu,MDM.DataCluster,MDM.StoredProcedure,MDM.Universe,MDM.SynchronizationPlan,MDM.View,MDM.Workflow,MDM.TransformerV2,MDM.RoutingRule,MDM.EventManager,MDM.ServiceConfiguration,MDM.Resource,MDM.CustomForm">
+            </parameter>
+         </importItemsHandler>
+      </importItemsProvider>
+   </extension>
    
 </plugin>
