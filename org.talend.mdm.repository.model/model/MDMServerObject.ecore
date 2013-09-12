@@ -224,6 +224,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="WSMatchRuleE" eSuperTypes="#//MDMServerObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="configurationXmlContent"
         eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PK" eType="#//WSMatchRulePKE"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WSMatchRulePKE">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pk" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
   </eClassifiers>
   <eSubpackages name="matchrule" nsURI="http://www.talend.org/mdm/server/matchrule"
       nsPrefix="matchrule">

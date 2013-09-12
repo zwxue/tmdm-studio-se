@@ -30,6 +30,7 @@ import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSEventManagerE;
 import org.talend.mdm.repository.model.mdmserverobject.WSJobModelE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE;
+import org.talend.mdm.repository.model.mdmserverobject.WSMatchRulePKE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuEntryE;
 import org.talend.mdm.repository.model.mdmserverobject.WSMenuMenuEntriesDescriptionsE;
@@ -303,6 +304,13 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
      * @generated
      */
     private EClass wsMatchRuleEEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass wsMatchRulePKEEClass = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
@@ -1729,6 +1737,33 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getWSMatchRuleE_PK() {
+        return (EReference)wsMatchRuleEEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getWSMatchRulePKE() {
+        return wsMatchRulePKEEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getWSMatchRulePKE_Pk() {
+        return (EAttribute)wsMatchRulePKEEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -1942,6 +1977,10 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         wsMatchRuleEEClass = createEClass(WS_MATCH_RULE_E);
         createEAttribute(wsMatchRuleEEClass, WS_MATCH_RULE_E__CONFIGURATION_XML_CONTENT);
+        createEReference(wsMatchRuleEEClass, WS_MATCH_RULE_E__PK);
+
+        wsMatchRulePKEEClass = createEClass(WS_MATCH_RULE_PKE);
+        createEAttribute(wsMatchRulePKEEClass, WS_MATCH_RULE_PKE__PK);
     }
 
     /**
@@ -2188,6 +2227,10 @@ public class MdmserverobjectPackageImpl extends EPackageImpl implements Mdmserve
 
         initEClass(wsMatchRuleEEClass, WSMatchRuleE.class, "WSMatchRuleE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEAttribute(getWSMatchRuleE_ConfigurationXmlContent(), theEcorePackage.getEString(), "configurationXmlContent", null, 0, 1, WSMatchRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEReference(getWSMatchRuleE_PK(), this.getWSMatchRulePKE(), null, "PK", null, 0, 1, WSMatchRuleE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+        initEClass(wsMatchRulePKEEClass, WSMatchRulePKE.class, "WSMatchRulePKE", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getWSMatchRulePKE_Pk(), theEcorePackage.getEString(), "pk", null, 0, 1, WSMatchRulePKE.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         // Create resource
         createResource(eNS_URI);

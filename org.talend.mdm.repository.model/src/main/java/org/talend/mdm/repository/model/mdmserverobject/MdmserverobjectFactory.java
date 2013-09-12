@@ -349,6 +349,15 @@ public interface MdmserverobjectFactory extends EFactory {
     WSMatchRuleE createWSMatchRuleE();
 
     /**
+     * Returns a new object of class '<em>WS Match Rule PKE</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>WS Match Rule PKE</em>'.
+     * @generated
+     */
+    WSMatchRulePKE createWSMatchRulePKE();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @return the package supported by this factory.

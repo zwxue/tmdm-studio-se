@@ -101,6 +101,7 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
             case MdmserverobjectPackage.WS_RESOURCE_E: return createWSResourceE();
             case MdmserverobjectPackage.WS_CUSTOM_FORM_E: return createWSCustomFormE();
             case MdmserverobjectPackage.WS_MATCH_RULE_E: return createWSMatchRuleE();
+            case MdmserverobjectPackage.WS_MATCH_RULE_PKE: return createWSMatchRulePKE();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
         }
@@ -494,6 +495,16 @@ public class MdmserverobjectFactoryImpl extends EFactoryImpl implements Mdmserve
     public WSMatchRuleE createWSMatchRuleE() {
         WSMatchRuleEImpl wsMatchRuleE = new WSMatchRuleEImpl();
         return wsMatchRuleE;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public WSMatchRulePKE createWSMatchRulePKE() {
+        WSMatchRulePKEImpl wsMatchRulePKE = new WSMatchRulePKEImpl();
+        return wsMatchRulePKE;
     }
 
     /**

@@ -2926,13 +2926,50 @@ public interface MdmserverobjectPackage extends EPackage {
     int WS_MATCH_RULE_E__CONFIGURATION_XML_CONTENT = MDM_SERVER_OBJECT_FEATURE_COUNT + 0;
 
     /**
+     * The feature id for the '<em><b>PK</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_E__PK = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+
+    /**
      * The number of structural features of the '<em>WS Match Rule E</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int WS_MATCH_RULE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 1;
+    int WS_MATCH_RULE_E_FEATURE_COUNT = MDM_SERVER_OBJECT_FEATURE_COUNT + 2;
+
+    /**
+     * The meta object id for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRulePKEImpl <em>WS Match Rule PKE</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRulePKEImpl
+     * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMatchRulePKE()
+     * @generated
+     */
+    int WS_MATCH_RULE_PKE = 39;
+
+    /**
+     * The feature id for the '<em><b>Pk</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_PKE__PK = 0;
+
+    /**
+     * The number of structural features of the '<em>WS Match Rule PKE</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int WS_MATCH_RULE_PKE_FEATURE_COUNT = 1;
 
     /**
      * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject <em>MDM Server Object</em>}'.
@@ -4546,6 +4583,38 @@ public interface MdmserverobjectPackage extends EPackage {
     EAttribute getWSMatchRuleE_ConfigurationXmlContent();
 
     /**
+     * Returns the meta object for the containment reference '{@link org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE#getPK <em>PK</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>PK</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMatchRuleE#getPK()
+     * @see #getWSMatchRuleE()
+     * @generated
+     */
+    EReference getWSMatchRuleE_PK();
+
+    /**
+     * Returns the meta object for class '{@link org.talend.mdm.repository.model.mdmserverobject.WSMatchRulePKE <em>WS Match Rule PKE</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>WS Match Rule PKE</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMatchRulePKE
+     * @generated
+     */
+    EClass getWSMatchRulePKE();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.talend.mdm.repository.model.mdmserverobject.WSMatchRulePKE#getPk <em>Pk</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Pk</em>'.
+     * @see org.talend.mdm.repository.model.mdmserverobject.WSMatchRulePKE#getPk()
+     * @see #getWSMatchRulePKE()
+     * @generated
+     */
+    EAttribute getWSMatchRulePKE_Pk();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5844,6 +5913,32 @@ public interface MdmserverobjectPackage extends EPackage {
          * @generated
          */
         EAttribute WS_MATCH_RULE_E__CONFIGURATION_XML_CONTENT = eINSTANCE.getWSMatchRuleE_ConfigurationXmlContent();
+
+        /**
+         * The meta object literal for the '<em><b>PK</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference WS_MATCH_RULE_E__PK = eINSTANCE.getWSMatchRuleE_PK();
+
+        /**
+         * The meta object literal for the '{@link org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRulePKEImpl <em>WS Match Rule PKE</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.WSMatchRulePKEImpl
+         * @see org.talend.mdm.repository.model.mdmserverobject.impl.MdmserverobjectPackageImpl#getWSMatchRulePKE()
+         * @generated
+         */
+        EClass WS_MATCH_RULE_PKE = eINSTANCE.getWSMatchRulePKE();
+
+        /**
+         * The meta object literal for the '<em><b>Pk</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute WS_MATCH_RULE_PKE__PK = eINSTANCE.getWSMatchRulePKE_Pk();
 
     }
 
