@@ -32,7 +32,10 @@ public class DeployToAction extends AbstractDeployAction {
 
     public DeployToAction() {
         super(Messages.DeployToAction_deployTo);
+    }
 
+    public DeployToAction(String label) {
+        super(label);
     }
 
     @Override

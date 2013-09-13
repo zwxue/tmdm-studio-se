@@ -489,6 +489,13 @@
             products="MDM"
             type="MDM.RecycleBin">
       </repositoryNode>
+      <repositoryNode
+            folder="mapinfo"
+            isResouce="false"
+            label="MatchRule MapInfo"
+            products="MDM"
+            type="MDM.MatchRuleMapInfo">
+      </repositoryNode>
    </extension>
    <extension
          point="org.talend.mdm.repository.repositoryConfiguration">

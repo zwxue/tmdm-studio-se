@@ -12,20 +12,21 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions.datamodel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
-import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfoContainer;
+import org.talend.mdm.repository.i18n.Messages;
+import org.talend.mdm.repository.ui.actions.DeployToAction;
 import org.talend.mdm.repository.utils.ServiceUtil;
 
 /**
  * created by HHB on 2013-9-2 Detailled comment
  * 
  */
-public class DeployMatchRuleAction extends AbstractRepositoryAction {
+public class DeployMatchRuleAction extends DeployToAction {
 
     IMatchRuleMapInfoService service = null;
 
@@ -37,31 +38,22 @@ public class DeployMatchRuleAction extends AbstractRepositoryAction {
     }
 
     public DeployMatchRuleAction() {
-        super("Deploy Match Rule");
+        super(Messages.DeployMatchRuleAction_label);
     }
 
     @Override
-    public String getGroupName() {
-        return GROUP_DEPLOY;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.mdm.repository.core.AbstractRepositoryAction#doRun()
-     */
-    @Override
-    protected void doRun() {
+    protected List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
+        List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
         List<Object> selectedObjects = getSelectedObject();
         if (getService() != null && selectedObjects != null && !selectedObjects.isEmpty()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) selectedObjects.get(0);
             Item item = viewObj.getProperty().getItem();
             if (item != null) {
-                MatchRuleMapInfoContainer container = getService().generateMatchRuleMapInfoContainer(item);
-                String xml = getService().convertMatchRuleMapInfoContainerToXML(container);
-                System.out.println(xml);
+                IRepositoryViewObject matchRuleViewObj = getService().generateWSMatchRuleObject(item);
+                viewObjs.add(matchRuleViewObj);
             }
         }
+        return viewObjs;
     }
 
 }

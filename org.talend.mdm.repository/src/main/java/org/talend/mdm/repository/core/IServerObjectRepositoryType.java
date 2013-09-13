@@ -76,7 +76,9 @@ public interface IServerObjectRepositoryType {
 
     public ERepositoryObjectType TYPE_RECYCLE_BIN = ERepositoryObjectType.valueOf(ERepositoryObjectType.class, "MDM.RecycleBin"); //$NON-NLS-1$
 
-    // TODO replace the following with Match rule type
+    public ERepositoryObjectType TYPE_MATCH_RULE_MAPINFO = ERepositoryObjectType.valueOf(ERepositoryObjectType.class,
+            "MDM.MatchRuleMapInfo"); //$NON-NLS-1$
+
     public ERepositoryObjectType TYPE_MATCH_RULE = ERepositoryObjectType.TDQ_RULES_MATCHER;
 
     public ERepositoryObjectType[] ALL_TYPES = new ERepositoryObjectType[] { TYPE_CUSTOM_FORM, TYPE_DATACLUSTER, TYPE_DATAMODEL,

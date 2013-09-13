@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.talend.core.IService;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.dataquality.rules.MatchRuleDefinition;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.EntityMapInfo;
 import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInfo;
@@ -43,4 +44,6 @@ public interface IMatchRuleMapInfoService extends IService {
     MatchRuleMapInfoContainer generateMatchRuleMapInfoContainer(Item item);
 
     String convertMatchRuleMapInfoContainerToXML(MatchRuleMapInfoContainer container);
+
+    IRepositoryViewObject generateWSMatchRuleObject(Item item);
 }

@@ -172,6 +172,35 @@
     </xsd:complexType>
     <xsd:element name="WSDigest" type="tns:WSDigest"/>
 
+    <xsd:complexType name="WSPutMatchRule">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="rule" nillable="false" type="tns:WSMatchRule"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSPutMatchRule" type="tns:WSPutMatchRule"/>
+
+    <xsd:complexType name="WSDeleteMatchRule">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="PK" nillable="false" type="tns:WSMatchRulePK"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSDeleteMatchRule" type="tns:WSDeleteMatchRule"/>
+
+    <xsd:complexType name="WSMatchRule">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="PK" nillable="false" type="tns:WSMatchRulePK"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="configurationXmlContent" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSMatchRule" type="tns:WSMatchRule"/>
+
+    <xsd:complexType name="WSMatchRulePK">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="pk" nillable="false" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSMatchRulePK" type="tns:WSMatchRulePK"/>
+
 	<!-- *****************************************************
 		MANAGEMENT
 		*******************************************************-->

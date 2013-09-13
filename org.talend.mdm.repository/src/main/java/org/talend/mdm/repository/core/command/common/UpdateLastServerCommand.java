@@ -106,6 +106,10 @@ public class UpdateLastServerCommand extends AbstractCommand {
         if (item.eResource() == null) {
             try {
                 IRepositoryViewObject viewObj = factory.getLastVersion(item.getProperty().getId());
+                if (viewObj == null) {
+                    // when object is match rule map info object,it must not exist and return null
+                    return;
+                }
                 Property property = viewObj.getProperty();
                 item = property.getItem();
                 ContainerCacheService.put(property, viewObj);

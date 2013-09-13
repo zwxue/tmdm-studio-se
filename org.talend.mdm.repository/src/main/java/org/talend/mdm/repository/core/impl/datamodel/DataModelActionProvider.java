@@ -63,6 +63,7 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
         //
         if (Util.IsEnterPrise()) {
             deployMatchRuleAction = new DeployMatchRuleAction();
+            deployMatchRuleAction.initCommonViewer(commonViewer);
         }
 
     }
@@ -84,9 +85,9 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
             addAction(actions, undeployAction, viewObj);
-//            if (Util.IsEnterPrise()) {
-//                addAction(actions, deployMatchRuleAction, viewObj);
-//            }
+            if (Util.IsEnterPrise()) {
+                addAction(actions, deployMatchRuleAction, viewObj);
+            }
         }
         actions.add(deployAllAction);
         return actions;
@@ -94,10 +95,8 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
 
     @Override
     public IRepositoryViewEditorInput getOpenEditorInput(IRepositoryViewObject viewObj) {
-        // MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         try {
             Item item = viewObj.getProperty().getItem();
-            // IFile file = createFile((WSDataModelE) serverObject);
             IFile file = RepositoryResourceUtil.findReferenceFile(IServerObjectRepositoryType.TYPE_DATAMODEL, item, "xsd"); //$NON-NLS-1$
             return new XSDEditorInput2(viewObj, file);
         } catch (Exception e) {
@@ -105,34 +104,4 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
         }
         return null;
     }
-
-    // private IFile createFile(WSDataModelE dataModel) throws Exception {
-    //        String filename = dataModel.getName() + ".xsd";//$NON-NLS-1$
-    // String content = dataModel.getXsdSchema();
-    //
-    // Project currentProject = ProjectManager.getInstance().getCurrentProject();
-    // IProject fsProject = ResourceModelUtils.getProject(currentProject);
-    // if (fsProject == null) {
-    // return null;
-    // }
-    // IFolder objectFolder = null;
-    // try {
-    // objectFolder = ResourceUtils.getFolder(fsProject,
-    // ERepositoryObjectType.getFolderName(IServerObjectRepositoryType.TYPE_DATAMODEL), true);
-    // } catch (ResourceNotFoundException e) {
-    // log.error(e.getMessage(), e);
-    // }
-    //
-    // if (!objectFolder.exists()) {
-    // objectFolder.create(true, true, null);
-    // }
-    // IFile file = objectFolder.getFile(filename);
-    //
-    // if (!file.exists())
-    //            file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
-    // else
-    //            file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
-    //
-    // return file;
-    // }
 }

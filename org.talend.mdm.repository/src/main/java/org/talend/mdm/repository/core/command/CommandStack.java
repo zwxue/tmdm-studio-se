@@ -163,7 +163,12 @@ public class CommandStack implements IMementoAware {
     }
 
     private ICommand copyCommand(ICommand cmd, ICommand first, ICommand last) {
-        return manager.copyCommand(cmd, new String[] { first.getObjName(), last.getObjLastName() });
+        ICommand copyCommand = manager.copyCommand(cmd, new String[] { first.getObjName(), last.getObjLastName() });
+        // patch for match rule mapinfo object
+        if (first == last) {
+            copyCommand.updateViewObject(first.getViewObject());
+        }
+        return copyCommand;
     }
 
     private ICommand getFirstCommand(List<ICommand> cmds) {

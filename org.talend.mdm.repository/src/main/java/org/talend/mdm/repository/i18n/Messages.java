@@ -642,6 +642,8 @@ public class Messages extends NLS {
 
     public static String Deploy_notSupport_text;
 
+    public static String DeployMatchRuleAction_label;
+
     public static String CallTransformerGetDocument_EnglishDesc;
 
     public static String CallTransformerGetDocument_FrenchDesc;

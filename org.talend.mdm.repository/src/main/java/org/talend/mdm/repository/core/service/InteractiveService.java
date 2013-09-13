@@ -46,11 +46,13 @@ public class InteractiveService {
 
     public static IInteractiveHandler findHandler(ERepositoryObjectType type) {
         if (type != null) {
-            if (handlers.isEmpty() || handlers.size() == 1)
+            if (handlers.isEmpty() || handlers.size() == 2) {
                 initHandler();
+            }
             for (IInteractiveHandler handler : handlers) {
-                if (handler.getRepositoryObjectType().equals(type))
+                if (handler.getRepositoryObjectType().equals(type)) {
                     return handler;
+                }
             }
         }
         return null;
