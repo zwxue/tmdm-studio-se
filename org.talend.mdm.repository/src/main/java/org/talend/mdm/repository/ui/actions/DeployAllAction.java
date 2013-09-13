@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -93,41 +94,45 @@ public class DeployAllAction extends AbstractDeployAction {
                 List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
                 //
                 MDMServerDef serverDef = dialog.getServerDef();
-                // consistency check
-                ConsistencyCheckResult consistencyCheckResult = deployService.checkConsistency(serverDef, validObjects);
-                if (consistencyCheckResult == null || consistencyCheckResult.isCanceled()) {
-                    return;
-                } else {
-                    validObjects = consistencyCheckResult.getToDeployObjects();
-                }
-                deployService.removeInvalidCommands(invalidObjects, selectededCommands);
-                deployService.removeInvalidCommands(consistencyCheckResult.getToSkipObjects(), selectededCommands);
-                // save editors
-                LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
-                        Messages.AbstractDeployAction_promptToSaveEditors, validObjects);
-                if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
-                    return;
-                }
-                lockDirtyDialog.saveDirtyObjects();
-
-                IStatus status = deployService.runCommands(selectededCommands, serverDef);
-                // update consistency value
-                try {
-                    deployService.updateServerConsistencyStatus(serverDef, status);
-                } catch (XtentisException e) {
-                    log.error(e.getMessage(), e);
-                } catch (RemoteException e) {
-                    log.error(e.getMessage(), e);
-                }
-                // add canceled object to status
-                deployService.generateValidationFailedDeployStatus(status, invalidObjects);
-                deployService.generateConsistencyCancelDeployStatus(status, consistencyCheckResult.getToSkipObjects());
-                //
-                updateChangedStatus(status);
-                if (status.isMultiStatus()) {
-                    showDeployStatus(status);
-                }
-                updateLastServer(status, new NullProgressMonitor());
+				try {
+	                // consistency check
+					ConsistencyCheckResult consistencyCheckResult = deployService.checkConsistency(serverDef, validObjects);
+					if (consistencyCheckResult.isCanceled()) {
+	                    return;
+	                } else {
+	                    validObjects = consistencyCheckResult.getToDeployObjects();
+	                }
+	                deployService.removeInvalidCommands(invalidObjects, selectededCommands);
+	                deployService.removeInvalidCommands(consistencyCheckResult.getToSkipObjects(), selectededCommands);
+	                // save editors
+	                LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
+	                        Messages.AbstractDeployAction_promptToSaveEditors, validObjects);
+	                if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+	                    return;
+	                }
+	                lockDirtyDialog.saveDirtyObjects();
+	                IStatus status = deployService.runCommands(selectededCommands, serverDef);
+	                // update consistency value
+	                try {
+	                    deployService.updateServerConsistencyStatus(serverDef, status);
+	                } catch (XtentisException e) {
+	                    log.error(e.getMessage(), e);
+	                } catch (RemoteException e) {
+	                    log.error(e.getMessage(), e);
+	                }
+	                // add canceled object to status
+	                deployService.generateValidationFailedDeployStatus(status, invalidObjects);
+	                deployService.generateConsistencyCancelDeployStatus(status, consistencyCheckResult.getToSkipObjects());
+	                //
+	                updateChangedStatus(status);
+	                if (status.isMultiStatus()) {
+	                    showDeployStatus(status);
+	                }
+	                updateLastServer(status, new NullProgressMonitor());
+				} catch (Exception e) {
+					String title = Messages.bind(Messages.Server_cannot_connected,serverDef.getUrl());
+					MessageDialog.openError(getShell(), title, Messages.AbstractDataClusterAction_ConnectFailed);
+				}
             }
         }
     }
