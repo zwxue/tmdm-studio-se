@@ -56,6 +56,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
+import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -119,9 +120,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     public static final String VIEW_ID = "org.talend.mdm.repository.ui.navigator.MDMRepositoryView"; //$NON-NLS-1$
 
-    private static final String DI_PERSPECTIVE_ID = "org.talend.rcp.perspective";//$NON-NLS-1$
-
-    private static final String MDM_PERSPECTIVE_ID = "org.talend.mdm.perspective"; //$NON-NLS-1$
+    private static final String EDITOR_ID_WORKFLOW_CUSTOMFORM = "org.bonitasoft.studio.diagram.form.custom.part.CustomFormDiagram"; //$NON-NLS-1$
 
     @Override
     public void createPartControl(Composite aParent) {
@@ -340,7 +339,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
         private boolean needConfirm(String curPerspectiveId, IWorkbenchPartReference partRef) {
             String curPartId = partRef.getId();
-            return MDM_PERSPECTIVE_ID.equals(curPerspectiveId) && JOB_EDITOR_ID.equals(curPartId)
+            return MDMPerspective.PERPECTIVE_ID.equals(curPerspectiveId) && JOB_EDITOR_ID.equals(curPartId)
                     && !activedJobEditorRefs.contains(partRef);
 
         }
@@ -356,7 +355,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
                     public void run() {
                         SwitchPerspectiveDialog dialog = new SwitchPerspectiveDialog(getSite().getShell(),
-                                Messages.MDMRepositoryView_integration, DI_PERSPECTIVE_ID,
+                                Messages.MDMRepositoryView_integration, IPerspectiveConstants.PERSPECTIVE_ID_DI,
                                 PreferenceConstants.P_AUTO_SWITCH_TO_DI, PreferenceConstants.P_NOT_ASK_AUTO_SWITCH_TO_DI);
 
                         dialog.run();
@@ -414,6 +413,10 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     final IRepositoryViewObject viewObject = ContainerCacheService.get(id);
 
                     refreshViewObject(viewObject);
+                }
+
+                if (part.getSite().getId().equals(EDITOR_ID_WORKFLOW_CUSTOMFORM)) {
+                    switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_FORM);
                 }
             }
         }
@@ -482,6 +485,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (part instanceof IEditorPart) {
                 if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
                     refreshLockState((IEditorPart) part);
+                } else if (RepositoryWorkflowUtil.isWorkflowEditor((IEditorPart) part)) {
+                    switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_WORKFLOW);
                 }
             }
         }
@@ -516,6 +521,14 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             });
         }
     };
+
+    private void switchToPerspective(String perspectiveId) {
+        IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
+                .findPerspectiveWithId(perspectiveId);
+        if (perspective != null) {
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+        }
+    }
 
     private DeployAllAction deployAll;
 
