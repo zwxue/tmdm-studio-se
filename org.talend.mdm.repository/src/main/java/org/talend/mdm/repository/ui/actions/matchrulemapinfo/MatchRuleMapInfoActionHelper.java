@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.repository.ui.actions.datamodel;
+package org.talend.mdm.repository.ui.actions.matchrulemapinfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,33 +18,26 @@ import java.util.List;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.IMatchRuleMapInfoService;
-import org.talend.mdm.repository.i18n.Messages;
-import org.talend.mdm.repository.ui.actions.DeployToAction;
 import org.talend.mdm.repository.utils.ServiceUtil;
 
 /**
- * created by HHB on 2013-9-2 Detailled comment
+ * created by HHB on 2013-9-13 Detailled comment
  * 
  */
-public class DeployMatchRuleAction extends DeployToAction {
+public class MatchRuleMapInfoActionHelper {
 
-    IMatchRuleMapInfoService service = null;
+    static IMatchRuleMapInfoService service = null;
 
-    private IMatchRuleMapInfoService getService() {
+    private static IMatchRuleMapInfoService getService() {
         if (service == null) {
             service = ServiceUtil.getService(IMatchRuleMapInfoService.class);
         }
-        return this.service;
+        return service;
     }
 
-    public DeployMatchRuleAction() {
-        super(Messages.DeployMatchRuleAction_label);
-    }
-
-    @Override
-    protected List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
+    public static List<IRepositoryViewObject> convertToMapInfoObject(List<Object> selectedObjects) {
         List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
-        List<Object> selectedObjects = getSelectedObject();
+
         if (getService() != null && selectedObjects != null && !selectedObjects.isEmpty()) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) selectedObjects.get(0);
             Item item = viewObj.getProperty().getItem();
@@ -55,5 +48,4 @@ public class DeployMatchRuleAction extends DeployToAction {
         }
         return viewObjs;
     }
-
 }

@@ -835,6 +835,8 @@ public class Messages extends NLS {
     public static String ViewLabelProvider_WebfilterNodeName;
 
     public static String UndeployAction;
+
+    public static String UndeployMatchRuleAction_label;
     public static String ConsistencyConflictDialog_btnNewButton_text;
     public static String ConsistencyConflict_showTimeStampColumn;
     public static String ConsistencyConflictDialog_onlyShowConflictObjs;

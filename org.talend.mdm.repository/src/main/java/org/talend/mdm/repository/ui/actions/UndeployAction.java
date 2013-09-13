@@ -54,6 +54,10 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
         super(Messages.UndeployAction);
     }
 
+    public UndeployAction(String label) {
+        super(label);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -136,7 +140,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     }
 
-    private List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
+    protected List<IRepositoryViewObject> getSelectedRepositoryViewObject() {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {

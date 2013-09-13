@@ -33,8 +33,9 @@ import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.ui.actions.datamodel.DeployMatchRuleAction;
 import org.talend.mdm.repository.ui.actions.datamodel.NewDataModelAction;
+import org.talend.mdm.repository.ui.actions.matchrulemapinfo.DeployMatchRuleAction;
+import org.talend.mdm.repository.ui.actions.matchrulemapinfo.UndeployMatchRuleAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XSDEditorInput2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
@@ -53,6 +54,8 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
 
     AbstractRepositoryAction deployMatchRuleAction;
 
+    AbstractRepositoryAction undeployMatchRuleAction;
+
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
@@ -64,6 +67,8 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
         if (Util.IsEnterPrise()) {
             deployMatchRuleAction = new DeployMatchRuleAction();
             deployMatchRuleAction.initCommonViewer(commonViewer);
+            undeployMatchRuleAction = new UndeployMatchRuleAction();
+            undeployMatchRuleAction.initCommonViewer(commonViewer);
         }
 
     }
@@ -87,6 +92,8 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
             addAction(actions, undeployAction, viewObj);
             if (Util.IsEnterPrise()) {
                 addAction(actions, deployMatchRuleAction, viewObj);
+                addAction(actions, undeployMatchRuleAction, viewObj);
+
             }
         }
         actions.add(deployAllAction);
