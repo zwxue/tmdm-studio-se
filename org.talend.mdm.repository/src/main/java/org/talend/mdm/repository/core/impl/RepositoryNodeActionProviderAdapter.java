@@ -124,7 +124,7 @@ public class RepositoryNodeActionProviderAdapter implements IRepositoryNodeActio
     protected AbstractRepositoryAction debugDigestValueAction;
 
     public void initCommonViewer(CommonViewer commonViewer) {
-        importObjectAction = initRepositoryAction(new ImportObjectAction(), commonViewer);
+        importObjectAction = initRepositoryAction(ImportObjectAction.createImportAction(), commonViewer);
 
         exportObjectAction = initRepositoryAction(new ExportObjectAction(), commonViewer);
         createFolderAction = initRepositoryAction(new CreateFolderAction(), commonViewer);

@@ -74,6 +74,7 @@ import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.dataprofiler.core.ui.editor.matchrule.MatchRuleItemEditorInput;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
+import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
@@ -175,7 +176,7 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
         deployAll.initCommonViewer(((CommonNavigator) this).getCommonViewer());
         manager.add(deployAll);
         manager.add(new Separator());
-        ImportObjectAction importObject = new ImportObjectAction();
+        AbstractRepositoryAction importObject = ImportObjectAction.createImportAction();
         importObject.initCommonViewer(((CommonNavigator) this).getCommonViewer());
         manager.add(importObject);
         // manager.add(new Separator());
