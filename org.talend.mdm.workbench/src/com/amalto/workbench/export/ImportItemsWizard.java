@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -227,35 +228,33 @@ public class ImportItemsWizard extends Wizard {
         }
 
         final Object[] objs = getCheckedObjects();
-        UIJob job = new UIJob(Messages.ImportItemsWizard_1) {
+        IRunnableWithProgress iRunnableWithProgress = new IRunnableWithProgress(){
 
-            @Override
-            public IStatus runInUIThread(IProgressMonitor monitor) {
-                try {
-
+			public void run(IProgressMonitor monitor)
+					throws InvocationTargetException, InterruptedException {
+				try {
                     doImport(objs, monitor);
                     // run initMDM to call backend migration task
                     if (port != null) {
                         port.initMDM(null);
                     }
-                    return Status.OK_STATUS;
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    return Status.CANCEL_STATUS;
                 } finally {
                     refreshViewJob();
-
                     // modified by honghb ,fix bug 21552
                     if (selectZip && zipFilePath != null && new File(importFolder).exists()) {
                         ZipToFile.deleteDirectory(new File(importFolder));
                     }
                 }
-            }
-
+			}
+        	
         };
-        job.setPriority(Job.INTERACTIVE);
-        job.schedule();
-
+        try {
+			new ProgressMonitorDialog(getShell()).run(true, true, iRunnableWithProgress);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
         return true;
     }
 
