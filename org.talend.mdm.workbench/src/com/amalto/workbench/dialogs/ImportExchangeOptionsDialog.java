@@ -74,6 +74,8 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
     private boolean export = true;
 
+    private boolean radioEnable;
+    
     private JSONObject[] dataContent = null;
 
     private String revision;
@@ -97,8 +99,12 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         this.toolkit = toolkit;
         this.zipFileRepository = zipFileRepository;
     }
+    
+    public void setRadioEnable(boolean radioEnable) {
+		this.radioEnable = radioEnable;
+	}
 
-    @Override
+	@Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(Messages.ImportExchangeOptionsDialog_DialogTitle);
 
@@ -110,13 +116,13 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         exportsBtn = new Button(composite, SWT.RADIO);
         exportsBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         exportsBtn.setText(Messages.ImportExchangeOptionsDialog_Exports);
-        exportsBtn.setEnabled(export ? true : false);
+        exportsBtn.setEnabled((export | radioEnable)? true : false);
         exportsBtn.setSelection(false);
 
         dataModelBtn = new Button(composite, SWT.RADIO);
         dataModelBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         dataModelBtn.setText(Messages.ImportExchangeOptionsDialog_Datamodels);
-        dataModelBtn.setEnabled(!export ? true : false);
+        dataModelBtn.setEnabled((!export)| radioEnable ? true : false);
         dataModelBtn.setSelection(false);
 
         Label label = new Label(composite, SWT.BORDER);
@@ -153,7 +159,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         executeBtn.addSelectionListener(this);
         executeBtn.setImage(ImageCache.getCreatedImage(EImage.REFRESH.getPath()));
 
-        if (export) {
+        if (exportsBtn.getSelection()) {
             exchangeDwnTable = new Table(composite, SWT.VIRTUAL | SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
         } else {
             exchangeDwnTable = new Table(composite, SWT.VIRTUAL | SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL
@@ -290,7 +296,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
 
     public void fillInTable() {
         clearTable();
-        String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$        
+        String url = EXCHANGE_DOWNLOAD_URL + "version=" + revision + "&categories=" + (exportsBtn.getSelection() ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$        
         try {
             String out = HttpClientUtil.getStringContentByHttpget(url);
             if (StringUtils.isEmpty(out)) {
@@ -333,7 +339,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
     @Override
     protected void okPressed() {
         // no close let Action Handler handle it
-        unzipDownloadRes(export);
+        unzipDownloadRes(exportsBtn.getSelection());
         super.okPressed();
     }
 

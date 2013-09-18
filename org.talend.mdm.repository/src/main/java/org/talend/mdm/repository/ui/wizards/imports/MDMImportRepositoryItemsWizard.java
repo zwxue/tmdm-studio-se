@@ -305,6 +305,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
     protected ImportExchangeOptionsDialog getExchangeOptionsDialog() {
         FormToolkit toolkit = WidgetFactory.getWidgetFactory();
         ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialogR(getShell(), toolkit, true, zipFileRepository);
+        dlg.setRadioEnable(true);
         dlg.create();
 
         return dlg;
