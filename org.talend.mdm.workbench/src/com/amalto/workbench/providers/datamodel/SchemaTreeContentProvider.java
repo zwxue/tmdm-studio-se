@@ -12,11 +12,18 @@
 // ============================================================================
 package com.amalto.workbench.providers.datamodel;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.EList;
@@ -28,12 +35,15 @@ import org.eclipse.xsd.XSDAttributeGroupDefinition;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDInclude;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDNamedComponent;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDSchemaContent;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDWildcard;
+import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -158,14 +168,45 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         return schema;
     }
 
-    protected Object[] getXSDSchemaChildren(XSDSchema schema) {
-    	List<XSDElementDeclaration> declarations = new ArrayList<XSDElementDeclaration>();
+    public XSDSchema createSchema(String location){
+		InputStream stream = null;
+    	try {
+			stream = new FileInputStream(location);
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			documentBuilderFactory.setNamespaceAware(true);
+			documentBuilderFactory.setValidating(false);
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document document = documentBuilder.parse(stream);
+			return XSDSchemaImpl.createSchema(document.getDocumentElement());
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return null;
+		}finally{
+			IOUtils.closeQuietly(stream);
+		}
     	
+    }
+    protected void addElementDeclarationFromSchema(XSDSchema schema,Collection<XSDElementDeclaration> declarations){
     	EList<XSDElementDeclaration> elementDeclarations = schema.getElementDeclarations();
     	for(XSDElementDeclaration declaration:elementDeclarations) {
     		if(declaration.eContainer().equals(schema))
     			declarations.add(declaration);
     	}
+    }
+    
+    protected Object[] getXSDSchemaChildren(XSDSchema schema) {
+    	List<XSDElementDeclaration> declarations = new ArrayList<XSDElementDeclaration>();
+    	for (XSDSchemaContent cnt : xsdSchema.getContents()) {
+            if (cnt instanceof XSDInclude) {
+            	XSDInclude incu = (XSDInclude) cnt;
+                String schemaLocation = incu.getSchemaLocation();
+                XSDSchema schemaInc = createSchema(schemaLocation);
+                addElementDeclarationFromSchema(schemaInc,declarations);
+            } else {
+                continue;
+            }
+    	}
+    	addElementDeclarationFromSchema(schema,declarations);
     	
         Object[] schemaChildren = Util.filterOutDuplicatedElems(declarations.toArray(new XSDNamedComponent[declarations.size()]));
         
