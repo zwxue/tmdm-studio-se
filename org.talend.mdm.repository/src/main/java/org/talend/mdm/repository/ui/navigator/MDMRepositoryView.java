@@ -123,6 +123,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
     private static final String EDITOR_ID_WORKFLOW_CUSTOMFORM = "org.bonitasoft.studio.diagram.form.custom.part.CustomFormDiagram"; //$NON-NLS-1$
 
+    private static final String EDITOR_ID_WORKFLOW_CUSTOMFORM_EX = "org.bonitasoft.studio.diagram.form.custom.ex.part.FormDiagramEditorEx"; //$NON-NLS-1$
+
     @Override
     public void createPartControl(Composite aParent) {
         super.createPartControl(aParent);
@@ -416,7 +418,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                     refreshViewObject(viewObject);
                 }
 
-                if (part.getSite().getId().equals(EDITOR_ID_WORKFLOW_CUSTOMFORM)) {
+                String partId = part.getSite().getId();
+                if (partId.equals(EDITOR_ID_WORKFLOW_CUSTOMFORM) || partId.equals(EDITOR_ID_WORKFLOW_CUSTOMFORM_EX)) {
                     switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_FORM);
                 }
             }
@@ -524,10 +527,12 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
     };
 
     private void switchToPerspective(String perspectiveId) {
-        IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
-                .findPerspectiveWithId(perspectiveId);
-        if (perspective != null) {
-            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+        if (currentPerspective == null || (perspectiveId != null && !perspectiveId.equals(currentPerspective.getId()))) {
+            IPerspectiveDescriptor perspective = WorkbenchPlugin.getDefault().getPerspectiveRegistry()
+                    .findPerspectiveWithId(perspectiveId);
+            if (perspective != null) {
+                PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().setPerspective(perspective);
+            }
         }
     }
 
