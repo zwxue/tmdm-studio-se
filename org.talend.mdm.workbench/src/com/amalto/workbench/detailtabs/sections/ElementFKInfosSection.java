@@ -60,8 +60,9 @@ public class ElementFKInfosSection extends XpathSection {
 		EList<XSDElementDeclaration> elementDeclarations = schema
 				.getElementDeclarations();
 		for (XSDElementDeclaration declaration : elementDeclarations) {
-			if (declaration.eContainer().equals(schema))
-				declarations.add(declaration);
+			if (declaration.eContainer().equals(schema)) {
+                declarations.add(declaration);
+            }
 		}
 
 		Object[] schemaChildren = Util.filterOutDuplicatedElems(declarations
@@ -95,8 +96,9 @@ public class ElementFKInfosSection extends XpathSection {
 		XSDAnnotationsStructure annoStruct = new XSDAnnotationsStructure(
 				curXSDComponent);
 
-		for (String eachFKInfo : annoStruct.getForeignKeyInfos().values())
-			fkInfos.add(eachFKInfo);
+		for (String eachFKInfo : annoStruct.getForeignKeyInfos().values()) {
+            fkInfos.add(eachFKInfo);
+        }
 
 		isResolveAutoInWeb = annoStruct.getRetrieveFKinfos();
 		holder.setDefaultDataModel(getDataModelName());
@@ -105,8 +107,7 @@ public class ElementFKInfosSection extends XpathSection {
 
 	@Override
 	protected ISubmittable getSubmittedObj() {
-		return new ForeignKeyInfosAnnoInfo(curXSDComponent,
-				composite.getInfos(), true);
+        return new ForeignKeyInfosAnnoInfo(curXSDComponent, composite.getInfos(), isResolveAutoInWeb);
 	}
 
 	@Override
@@ -126,6 +127,7 @@ public class ElementFKInfosSection extends XpathSection {
 	SelectionAdapter selectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+            isResolveAutoInWeb = chkResolveAutoInWeb.getSelection();
 			autoCommit();
 		}
 	};
