@@ -243,6 +243,9 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
         try {
             ConsistencyService consistencyService = ConsistencyService.getInstance();
             Map<TreeObject, WSDigest> serverDigestValues = consistencyService.queryServerDigestValue(serverDef, treeObjs);
+            if (treeObjs.size() > 0 && serverDigestValues.isEmpty()) {
+                return map;
+            }
             for (TreeObject treeObject : treeObjs) {
                 ConsistencyData consistencyData = new ConsistencyData();
                 WSDigest serverDigestTime = serverDigestValues.get(treeObject);

@@ -67,6 +67,7 @@ import org.talend.mdm.repository.utils.DigestUtil;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSCustomForm;
 import com.amalto.workbench.webservices.WSDigest;
 import com.amalto.workbench.webservices.WSDigestKey;
@@ -510,49 +511,32 @@ public class ConsistencyService {
             RemoteException {
         Map<T, WSDigest> result = new LinkedHashMap<T, WSDigest>();
         XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-        // TODO remove it
-        // int i = 0;
-        for (T obj : objs) {
-            String type = null;
-            String objectName = null;
-            if (obj instanceof IRepositoryViewObject) {
-                IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+        if (isSupportConsistency(port)) {
+            for (T obj : objs) {
+                String type = null;
+                String objectName = null;
+                if (obj instanceof IRepositoryViewObject) {
+                    IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
 
-                type = viewObj.getRepositoryObjectType().getKey();
-                objectName = viewObj.getLabel();
-            } else if (obj instanceof TreeObject) {
-                TreeObject treeObj = (TreeObject) obj;
+                    type = viewObj.getRepositoryObjectType().getKey();
+                    objectName = viewObj.getLabel();
+                } else if (obj instanceof TreeObject) {
+                    TreeObject treeObj = (TreeObject) obj;
 
-                ERepositoryObjectType repositoryObjectType = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
-                if (repositoryObjectType != null) {
-                    type = repositoryObjectType.getKey();
-                    objectName = getObjectName(treeObj);
+                    ERepositoryObjectType repositoryObjectType = RepositoryQueryService
+                            .getRepositoryObjectType(treeObj.getType());
+                    if (repositoryObjectType != null) {
+                        type = repositoryObjectType.getKey();
+                        objectName = getObjectName(treeObj);
+                    }
                 }
-            }
 
-            // TODO uncomment the following
-            if (type != null && objectName != null) {
-                WSDigest digest = port.getDigest(new WSDigestKey(type, objectName));
-                result.put(obj, digest);
-            }
-            // construct demo data
-            // WSDigest digest = null;
-            // if (i == 0) {
-            // digest = new WSDigest("not same value", System.currentTimeMillis());
-            // } else if (i == 1) {
-            // if (obj instanceof IRepositoryViewObject) {
-            // IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
-            // Item item = viewObj.getProperty().getItem();
-            // digest = new WSDigest(calculateDigestValue(item), System.currentTimeMillis() - 100000);
-            // }
-            // } else if (i == 3) {
-            // digest = null;
-            // i = -1;
-            // }
-            // i++;
-            //
-            // result.put(obj, digest);
+                if (type != null && objectName != null) {
+                    WSDigest digest = port.getDigest(new WSDigestKey(type, objectName));
+                    result.put(obj, digest);
+                }
 
+            }
         }
         return result;
     }
@@ -610,4 +594,8 @@ public class ConsistencyService {
         return getPreferenceStore().getInt(PreferenceConstants.P_CONFLICT_STRATEGY);
     }
 
+    private boolean isSupportConsistency(XtentisPort port) throws RemoteException {
+        WSBoolean isXmlDB = port.isXmlDB();
+        return !isXmlDB.is_true();
+    }
 }
