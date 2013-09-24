@@ -2857,6 +2857,14 @@ public class Messages extends NLS {
 
     public static String MenuMainPage_There;
 
+    public static String MissingJarDialog_downloadJar;
+
+    public static String MissingJarDialog_goto;
+
+    public static String MissingJarDialog_modulesView;
+
+    public static String MissingJarDialog_title;
+
     public static String MoveUpSelectedItem;
 
     public static String MovedownSelectedItem;

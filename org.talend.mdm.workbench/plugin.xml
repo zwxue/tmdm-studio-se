@@ -474,5 +474,132 @@
             class="com.amalto.workbench.preferences.WorkbenchPreferenceInitializer">
       </initializer>
    </extension>
-   
+  <extension
+         point="org.talend.core.runtime.librariesNeeded">
+      <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="saaj-api.jar"
+            required="true">
+      </libraryNeeded>
+         <libraryNeeded
+               context="MDM"
+               language="java"
+                           message="Required for using this component."
+               name="saaj-impl.jar"
+               required="true">
+      </libraryNeeded>   
+      
+      
+      
+      
+      
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="activation.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jax-qname.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxb-api.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxb-impl.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxb-libs.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxb-xjc.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxrpc-api.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxrpc-impl.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxrpc-spi.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jaxrpc.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="jta-spec1_0_1.jar"
+            required="true">
+      </libraryNeeded>
+            <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="mail.jar"
+            required="true">
+      </libraryNeeded>
+                  <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="namespace.jar"
+            required="true">
+      </libraryNeeded>
+                  <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="wsdl4j-1.5.1.jar"
+            required="true">
+      </libraryNeeded>
+                  <libraryNeeded
+            context="MDM"
+            language="java"
+            message="Required for using this component."
+            name="xsdlib.jar"
+            required="true">
+      </libraryNeeded>
+   </extension> 
+
 </plugin>

@@ -143,6 +143,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.service.MissingJarService;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -364,7 +365,15 @@ public class Util {
     }
 
     public static XtentisPort getPort(URL url, String universe, String username, String password) throws XtentisException {
+        return getPort(url, universe, username, password, true);
+    }
 
+    public static XtentisPort getPort(URL url, String universe, String username, String password, boolean showMissingJarDialog)
+            throws XtentisException {
+        boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
+        if (!checkResult) {
+            throw new XtentisException("Missing dependency libraries."); //$NON-NLS-1$
+        }
         try {
 
             SSLContext context = SSLContextProvider.getContext();
@@ -471,7 +480,7 @@ public class Util {
 
     /**
      * Join an array of strings into a single string using a separator
-     *
+     * 
      * @param strings
      * @param separator
      * @return a single string or null
@@ -490,7 +499,7 @@ public class Util {
 
     /**
      * Returns the first part - eg. the concept - from the path
-     *
+     * 
      * @param path
      * @return the concept Name
      */
@@ -508,7 +517,7 @@ public class Util {
 
     /**
      * get the concept name from the child elment
-     *
+     * 
      * @param child
      * @return
      */
@@ -525,7 +534,7 @@ public class Util {
 
     /**
      * Generates an xml string from a node (not pretty formatted)
-     *
+     * 
      * @param n the node
      * @return the xml string
      * @throws Exception
@@ -541,7 +550,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Document d, String xPath) throws Exception {
@@ -550,7 +559,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath) throws Exception {
@@ -559,7 +568,7 @@ public class Util {
 
     /**
      * Get a nodelist from an xPath
-     *
+     * 
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
@@ -573,7 +582,7 @@ public class Util {
 
     /**
      * Returns a namespaced root element of a document Useful to create a namespace holder element
-     *
+     * 
      * @param namespace
      * @return the root Element
      */
@@ -723,12 +732,12 @@ public class Util {
 
     /**
      * Find elementDeclarations that use any types derived from a named type.
-     *
+     * 
      * <p>
      * This shows one way to query the schema for elementDeclarations and then how to find specific kinds of
      * typeDefinitions.
      * </p>
-     *
+     * 
      * @param objList collection set to search for elemDecls
      * @param localName for the type used
      * @return Boolean indicate any XSDElementDeclarations is found or not
@@ -861,7 +870,7 @@ public class Util {
 
     /**
      * set the list with foreign concept name of in the element
-     *
+     * 
      * @author ymli
      * @param list
      * @param element
@@ -938,7 +947,7 @@ public class Util {
 
     /**
      * set the list with all the foreign concepty name in the parent
-     *
+     * 
      * @author ymli
      * @param list
      * @param parent
@@ -959,7 +968,7 @@ public class Util {
 
     /**
      * set the list with foreign concept names in the schema
-     *
+     * 
      * @author ymli
      * @param list
      * @param schema
@@ -978,7 +987,7 @@ public class Util {
 
     /**
      * the all the typeDefinition in the schema
-     *
+     * 
      * @author ymli
      * @param schema
      * @return
@@ -1318,7 +1327,7 @@ public class Util {
 
     /**
      * update reference to newType
-     *
+     * 
      * @param elem
      * @param newType
      * @param provider
@@ -1528,8 +1537,7 @@ public class Util {
         if (refName.indexOf(" : ") != -1) {//$NON-NLS-1$
             refName = refName.substring(0, refName.indexOf(" : "));//$NON-NLS-1$
         }
-        for (Iterator<XSDElementDeclaration> iter = eDecls.iterator(); iter.hasNext();) {
-            XSDElementDeclaration d = iter.next();
+        for (XSDElementDeclaration d : eDecls) {
             if (d.getQName().equals(refName)) {
                 return d;
             }
@@ -1542,7 +1550,7 @@ public class Util {
 
     /**
      * Clipboard support
-     *
+     * 
      * @return the Clipboard
      */
     public static Clipboard getClipboard() {
@@ -1894,7 +1902,7 @@ public class Util {
         EObject parent = null;
         EObject obj = component;
         do {
-        	if(null == obj) {
+            if (null == obj) {
                 return false;
             }
             parent = obj.eContainer();
@@ -2746,7 +2754,7 @@ public class Util {
 
     /**
      * get all complex types's complextype children
-     *
+     * 
      * @param complexTypeDefinition
      * @return
      */
@@ -2911,7 +2919,7 @@ public class Util {
 
     /**
      * Returns and XSDSchema Object from an xsd
-     *
+     * 
      * @param schema
      * @return
      * @throws Exception
@@ -3175,7 +3183,7 @@ public class Util {
 
     /**
      * Replace the source string by the parameters
-     *
+     * 
      * @param sourceString the source string with parameters,like : "This is {0} examples for {1}"
      * @param parameters the parameters used to do the replacement, the key is the index of the parameter, the value is
      * the content;
@@ -3264,7 +3272,7 @@ public class Util {
 
     public static boolean isUUID(XSDElementDeclaration decl) {
         XSDTypeDefinition typeDefinition = decl.getTypeDefinition();
-        if(null == typeDefinition) {
+        if (null == typeDefinition) {
             return false;
         }
         String type = typeDefinition.getName();
@@ -3438,7 +3446,7 @@ public class Util {
     /**
      * DOC hbhong Comment method "unZipFile". same with unZipFile(String zipfile, String unzipdir) method except having
      * a progressMonitor
-     *
+     * 
      * @param zipfile
      * @param unzipdir
      * @param totalProgress
