@@ -83,20 +83,26 @@ public class RepositoryWebServiceAdapter {
 
     private static Map<String, AbstractGetDocument> documentServiceMap;
 
+    public static XtentisPort getXtentisPort(MDMServerDef serverDef) throws XtentisException {
+        return getXtentisPort(serverDef, true);
+    }
+
     /**
      * Warning: the param ServerDef must a decrypted serverDef
-     *
+     * 
      * @param serverDef
      * @return
      * @throws XtentisException
      */
-    public static XtentisPort getXtentisPort(MDMServerDef serverDef) throws XtentisException {
+    public static XtentisPort getXtentisPort(MDMServerDef serverDef, boolean showMissingJarDialog) throws XtentisException {
+
         try {
             if (serverDef == null) {
                 return null;
             }
+
             XtentisPort port = Util.getPort(new URL(serverDef.getUrl()), serverDef.getUniverse(), serverDef.getUser(),
-                    serverDef.getPasswd());
+                    serverDef.getPasswd(), showMissingJarDialog);
 
             return port;
         } catch (MalformedURLException e) {
@@ -161,7 +167,7 @@ public class RepositoryWebServiceAdapter {
     }
 
     private static void initGetDocumentServices() {
-         if (documentServiceMap == null) {
+        if (documentServiceMap == null) {
             documentServiceMap = new LinkedHashMap<String, AbstractGetDocument>();
             String twoLettersLanguageCode = "en"; //$NON-NLS-1$
             addGetDoc(documentServiceMap, new CallJobGetDocument(twoLettersLanguageCode));
@@ -176,33 +182,33 @@ public class RepositoryWebServiceAdapter {
             addGetDoc(documentServiceMap, new SynchronizationServiceGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new WorkflowGetDocument(twoLettersLanguageCode));
             addGetDoc(documentServiceMap, new WorkflowContextGetDocument(twoLettersLanguageCode));
-         }
+        }
     }
 
     private static void initTransformerPluginDetails() {
-         if (transformerPluginMap == null) {
-        transformerPluginMap = new LinkedHashMap<String, AbstractPluginDetail>();
-        String twoLettersLanguageCode = "en"; //$NON-NLS-1$
-        addDetail(transformerPluginMap, new BatchProjectPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new CodeProjectPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new CrossReferencingPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new CSVParserPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new DumpAndGoPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new FixedLengthParserPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new GroovyPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new GroupedLinesReaderPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new LineReaderPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new PartialUpdatePluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new ProjectPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new RegexpPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new ReplacePluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new RoutePluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new TISCallJobPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new WorkflowTriggerPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new WorkflowContextTriggerPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new XPathPluginDetail(twoLettersLanguageCode));
-        addDetail(transformerPluginMap, new XSLTPluginDetail(twoLettersLanguageCode));
-         }
+        if (transformerPluginMap == null) {
+            transformerPluginMap = new LinkedHashMap<String, AbstractPluginDetail>();
+            String twoLettersLanguageCode = "en"; //$NON-NLS-1$
+            addDetail(transformerPluginMap, new BatchProjectPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new CodeProjectPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new CrossReferencingPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new CSVParserPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new DumpAndGoPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new FixedLengthParserPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new GroovyPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new GroupedLinesReaderPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new LineReaderPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new PartialUpdatePluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new ProjectPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new RegexpPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new ReplacePluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new RoutePluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new TISCallJobPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new WorkflowTriggerPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new WorkflowContextTriggerPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new XPathPluginDetail(twoLettersLanguageCode));
+            addDetail(transformerPluginMap, new XSLTPluginDetail(twoLettersLanguageCode));
+        }
     }
 
     public static String[] getTheObjectsForUniverse() {
