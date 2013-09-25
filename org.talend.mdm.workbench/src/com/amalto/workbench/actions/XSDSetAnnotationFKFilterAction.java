@@ -23,8 +23,6 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
@@ -58,18 +56,6 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
     @Override
     public IStatus doAction() {
         try {
-
-            if (page.isDirty()) {
-                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
-                        Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName()));
-
-                if (save) {
-                    IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
-                } else {
-                    return Status.CANCEL_STATUS;
-                }
-            }
             IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
             XSDComponent xSDCom = null;
             String conceptName = null;
