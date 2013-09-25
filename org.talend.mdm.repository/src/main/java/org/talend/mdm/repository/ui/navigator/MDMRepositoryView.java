@@ -421,6 +421,8 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
                 String partId = part.getSite().getId();
                 if (partId.equals(EDITOR_ID_WORKFLOW_CUSTOMFORM) || partId.equals(EDITOR_ID_WORKFLOW_CUSTOMFORM_EX)) {
                     switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_FORM);
+                } else if (RepositoryWorkflowUtil.isWorkflowEditor((IEditorPart) part)) {
+                    switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_WORKFLOW);
                 }
             }
         }
@@ -489,8 +491,6 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
             if (part instanceof IEditorPart) {
                 if (RepositoryWorkflowUtil.isWorkflowEditorFromBPM((IEditorPart) part)) {
                     refreshLockState((IEditorPart) part);
-                } else if (RepositoryWorkflowUtil.isWorkflowEditor((IEditorPart) part)) {
-                    switchToPerspective(IPerspectiveConstants.PERSPECTIVE_ID_WORKFLOW);
                 }
             }
         }
