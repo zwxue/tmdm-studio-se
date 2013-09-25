@@ -13,9 +13,11 @@
 package org.talend.mdm.repository.core.service;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 
@@ -27,20 +29,20 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public interface IInteractiveHandler {
 
-    public ERepositoryObjectType getRepositoryObjectType();
+    ERepositoryObjectType getRepositoryObjectType();
 
-    public String getLabel();
+    String getLabel();
 
-    public Object convert(Item item, MDMServerObject serverObj);
+    Object convert(Item item, MDMServerObject serverObj);
 
-    public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException;
+    boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException;
 
-    public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException;
+    boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException;
 
+    boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException, XtentisException;
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException, XtentisException;
+    void assertPropertyIsInited(Item item);
 
-    public void assertPropertyIsInited(Item item);
-
+    List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject obj);
 
 }

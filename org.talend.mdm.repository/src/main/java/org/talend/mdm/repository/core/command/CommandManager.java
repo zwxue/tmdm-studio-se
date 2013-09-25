@@ -62,8 +62,9 @@ public class CommandManager implements IMementoAware {
     private Map<String, CommandStack> map = new HashMap<String, CommandStack>();
 
     public CommandStack findCommandStack(String id) {
-        if (id == null)
+        if (id == null) {
             return null;
+        }
         return map.get(id);
     }
 
@@ -153,8 +154,9 @@ public class CommandManager implements IMementoAware {
         if (commandStack == null) {
             commandStack = new CommandStack();
             if (commandStack.pushCommand(command)) {
-                if (command.getCommandId() != null)
+                if (command.getCommandId() != null) {
                     map.put(command.getCommandId(), commandStack);
+                }
             }
         } else {
             commandStack.pushCommand(command);
@@ -172,14 +174,16 @@ public class CommandManager implements IMementoAware {
     }
 
     public void removeCommandStack(String id) {
-        if (id == null)
+        if (id == null) {
             return;
+        }
         map.remove(id);
     }
 
     public void removeCommandStack(String id, int phase) {
-        if (id == null)
+        if (id == null) {
             return;
+        }
         CommandStack stack = map.get(id);
         if (stack != null) {
             stack.removeCommandsByPhase(phase);
@@ -190,16 +194,18 @@ public class CommandManager implements IMementoAware {
     }
 
     private void removeCommandStack(List<ICommand> cmds, int phase) {
-        if (cmds == null || cmds.isEmpty())
+        if (cmds == null || cmds.isEmpty()) {
             return;
+        }
         for (ICommand cmd : cmds) {
             removeCommandStack(cmd.getCommandId(), phase);
         }
     }
 
     public void removeCommandStack(ICommand cmd, int phase) {
-        if (cmd == null)
+        if (cmd == null) {
             return;
+        }
         if (cmd instanceof BatchDeployJobCommand) {
             BatchDeployJobCommand jobCommand = (BatchDeployJobCommand) cmd;
             removeCommandStack(jobCommand.getSubCmds(), phase);
@@ -282,7 +288,7 @@ public class CommandManager implements IMementoAware {
             CommandStack stack = findCommandStack(viewObj.getId());
             if (stack == null) {
                 stack = new CommandStack();
-                ICommand cmd = getNewCommand(ICommand.CMD_MODIFY);
+                ICommand cmd = getNewCommand(defaultCmdType);
                 cmd.init(viewObj);
                 stack.pushCommand(cmd);
             }
@@ -310,8 +316,9 @@ public class CommandManager implements IMementoAware {
             ICommand cmd = getNewCommand(ICommand.CMD_MODIFY);
             cmd.setVersion(viewObj.getVersion());
             cmd.init(viewObj);
-            if (cmd instanceof AbstractDeployCommand)
+            if (cmd instanceof AbstractDeployCommand) {
                 cmds.add((AbstractDeployCommand) cmd);
+            }
         }
         return cmds;
     }

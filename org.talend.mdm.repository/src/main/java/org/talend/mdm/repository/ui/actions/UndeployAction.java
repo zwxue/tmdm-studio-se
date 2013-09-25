@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -28,6 +29,8 @@ import org.talend.mdm.repository.core.command.CommandStack;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
 import org.talend.mdm.repository.core.service.DeployService;
+import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
@@ -144,7 +147,20 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
-                viewObjs.add((IRepositoryViewObject) obj);
+                IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+                ERepositoryObjectType type = viewObject.getRepositoryObjectType();
+                if (type != null) {
+                    IInteractiveHandler handler = InteractiveService.findHandler(type);
+                    if (handler != null) {
+                        List<IRepositoryViewObject> associatedObjects = handler.getAssociatedObjects(viewObject);
+                        if (associatedObjects != null) {
+                            for (IRepositoryViewObject associatedObj : associatedObjects) {
+                                viewObjs.add(associatedObj);
+                            }
+                        }
+                    }
+                }
+                viewObjs.add(viewObject);
             }
         }
         return viewObjs;

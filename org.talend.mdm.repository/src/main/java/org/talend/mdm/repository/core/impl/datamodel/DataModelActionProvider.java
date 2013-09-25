@@ -34,13 +34,9 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.impl.RepositoryNodeActionProviderAdapter;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.ui.actions.datamodel.NewDataModelAction;
-import org.talend.mdm.repository.ui.actions.matchrulemapinfo.DeployMatchRuleAction;
-import org.talend.mdm.repository.ui.actions.matchrulemapinfo.UndeployMatchRuleAction;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.ui.editors.XSDEditorInput2;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-
-import com.amalto.workbench.utils.Util;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
@@ -52,10 +48,6 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
 
     AbstractRepositoryAction addAction;
 
-    AbstractRepositoryAction deployMatchRuleAction;
-
-    AbstractRepositoryAction undeployMatchRuleAction;
-
     @Override
     public void initCommonViewer(CommonViewer commonViewer) {
         super.initCommonViewer(commonViewer);
@@ -64,12 +56,12 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
         //
         addAction.initCommonViewer(commonViewer);
         //
-        if (Util.IsEnterPrise()) {
-            deployMatchRuleAction = new DeployMatchRuleAction();
-            deployMatchRuleAction.initCommonViewer(commonViewer);
-            undeployMatchRuleAction = new UndeployMatchRuleAction();
-            undeployMatchRuleAction.initCommonViewer(commonViewer);
-        }
+        // if (Util.IsEnterPrise()) {
+        // deployMatchRuleAction = new DeployMatchRuleAction();
+        // deployMatchRuleAction.initCommonViewer(commonViewer);
+        // undeployMatchRuleAction = new UndeployMatchRuleAction();
+        // undeployMatchRuleAction.initCommonViewer(commonViewer);
+        // }
 
     }
 
@@ -90,11 +82,11 @@ public class DataModelActionProvider extends RepositoryNodeActionProviderAdapter
             addAction(actions, deployToLastServerAction, viewObj);
             addAction(actions, deployAnotherToAction, viewObj);
             addAction(actions, undeployAction, viewObj);
-            if (Util.IsEnterPrise()) {
-                addAction(actions, deployMatchRuleAction, viewObj);
-                addAction(actions, undeployMatchRuleAction, viewObj);
-
-            }
+            // if (Util.IsEnterPrise()) {
+            // addAction(actions, deployMatchRuleAction, viewObj);
+            // addAction(actions, undeployMatchRuleAction, viewObj);
+            //
+            // }
         }
         actions.add(deployAllAction);
         return actions;

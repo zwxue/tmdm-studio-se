@@ -155,51 +155,47 @@ public class DeployService {
 
     }
 
-	public IStatus deploy(MDMServerDef serverDef,
-			List<IRepositoryViewObject> viewObjs, int defaultCmdType,
-			boolean removeLocked) {
-		if (removeLocked) {
-			removeLockedViewObj(viewObjs);
-		}
-		IModelValidateResult validateResult = validateModel(viewObjs);
-		int selectedButton = validateResult.getSelectedButton();
-		if (selectedButton == IModelValidationService.BUTTON_CANCEL) {
-			return Status.CANCEL_STATUS;
-		}
-		List<IRepositoryViewObject> validObjects = validateResult
-				.getValidObjects(selectedButton);
-		List<IRepositoryViewObject> invalidObjects = validateResult
-				.getInvalidObjects(selectedButton);
-		try {
-			// consistency check
-			ConsistencyCheckResult consistencyCheckResult = checkConsistency(serverDef, validObjects);
-		    if (consistencyCheckResult.isCanceled()) {
-				return Status.CANCEL_STATUS;
-		    }
-		    validObjects = consistencyCheckResult.getToDeployObjects();
-			CommandManager manager = CommandManager.getInstance();
-			List<AbstractDeployCommand> commands = manager.getDeployCommands(
-					validObjects, defaultCmdType);
-			IStatus mainStatus = runCommands(commands, serverDef);
-			// update consistency value
-			try {
-				updateServerConsistencyStatus(serverDef, mainStatus);
-			} catch (XtentisException e) {
-				log.error(e.getMessage(), e);
-			} catch (RemoteException e) {
-				log.error(e.getMessage(), e);
-			}
-			//
-			generateValidationFailedDeployStatus(mainStatus, invalidObjects);
-			generateConsistencyCancelDeployStatus(mainStatus,
-					consistencyCheckResult.getToSkipObjects());
-			return mainStatus;
-		} catch (Exception e) {
-			String title = Messages.bind(Messages.Server_cannot_connected,serverDef.getUrl());
-			MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title, Messages.AbstractDataClusterAction_ConnectFailed);
-			return Status.CANCEL_STATUS;
-		}
-	}
+    public IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType, boolean removeLocked) {
+        if (removeLocked) {
+            removeLockedViewObj(viewObjs);
+        }
+        IModelValidateResult validateResult = validateModel(viewObjs);
+        int selectedButton = validateResult.getSelectedButton();
+        if (selectedButton == IModelValidationService.BUTTON_CANCEL) {
+            return Status.CANCEL_STATUS;
+        }
+        List<IRepositoryViewObject> validObjects = validateResult.getValidObjects(selectedButton);
+        List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
+        try {
+            // consistency check
+            ConsistencyCheckResult consistencyCheckResult = checkConsistency(serverDef, validObjects);
+            if (consistencyCheckResult.isCanceled()) {
+                return Status.CANCEL_STATUS;
+            }
+            validObjects = consistencyCheckResult.getToDeployObjects();
+            CommandManager manager = CommandManager.getInstance();
+            List<AbstractDeployCommand> commands = manager.getDeployCommands(validObjects, defaultCmdType);
+            IStatus mainStatus = runCommands(commands, serverDef);
+            // update consistency value
+            try {
+                updateServerConsistencyStatus(serverDef, mainStatus);
+            } catch (XtentisException e) {
+                log.error(e.getMessage(), e);
+            } catch (RemoteException e) {
+                log.error(e.getMessage(), e);
+            }
+            //
+            generateValidationFailedDeployStatus(mainStatus, invalidObjects);
+            generateConsistencyCancelDeployStatus(mainStatus, consistencyCheckResult.getToSkipObjects());
+            return mainStatus;
+        } catch (Exception e) {
+            e.printStackTrace();
+            String title = Messages.bind(Messages.Server_cannot_connected, serverDef.getUrl());
+            MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title,
+                    Messages.AbstractDataClusterAction_ConnectFailed);
+            return Status.CANCEL_STATUS;
+        }
+    }
 
     public void updateServerConsistencyStatus(MDMServerDef serverDef, IStatus mainStatus) throws XtentisException,
             RemoteException {
@@ -267,8 +263,9 @@ public class DeployService {
 
     }
 
-    public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs) throws RemoteException, XtentisException {
-            return ConsistencyService.getInstance().checkConsistency(serverDef, viewObjs);
+    public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs)
+            throws RemoteException, XtentisException {
+        return ConsistencyService.getInstance().checkConsistency(serverDef, viewObjs);
     }
 
     public IModelValidateResult validateModel(List<IRepositoryViewObject> viewObjs) {

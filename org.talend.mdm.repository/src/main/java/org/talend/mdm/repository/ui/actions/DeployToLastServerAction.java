@@ -49,8 +49,7 @@ public class DeployToLastServerAction extends AbstractDeployAction {
         }
         lockDirtyDialog.saveDirtyObjects();
         // deploy
-        IRepositoryViewObject viewObj = viewObjs.get(0);
-        MDMServerDef currentServerDef = RepositoryResourceUtil.getLastServerDef(viewObj);
+        MDMServerDef currentServerDef = getLastServer(viewObjs);
         //
         IStatus status = deploy(currentServerDef, viewObjs, ICommand.CMD_MODIFY);
         if (status.getSeverity() != IStatus.CANCEL) {
@@ -62,6 +61,16 @@ public class DeployToLastServerAction extends AbstractDeployAction {
                 commonViewer.refresh(viewObject);
             }
         }
+    }
+
+    private MDMServerDef getLastServer(List<IRepositoryViewObject> viewObjs) {
+        for (IRepositoryViewObject viewObj : viewObjs) {
+            MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObj);
+            if (serverDef != null) {
+                return serverDef;
+            }
+        }
+        return null;
     }
 
     @Override

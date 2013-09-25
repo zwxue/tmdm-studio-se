@@ -42,8 +42,11 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -136,10 +139,32 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             if (obj instanceof FolderRepositoryObject) {
                 continue;
             }
-            String id = ((IRepositoryViewObject) obj).getId();
-            commands.add(cmdMap.get(id));
+            IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+            String id = viewObject.getId();
+            AbstractDeployCommand e = cmdMap.get(id);
+            commands.add(e);
+            List<AbstractDeployCommand> associatedCommands = getAssociatedObjectCommand(viewObject, e.getCommandType());
+            if (associatedCommands != null) {
+                commands.addAll(associatedCommands);
+            }
         }
         return commands;
+    }
+
+    private List<AbstractDeployCommand> getAssociatedObjectCommand(IRepositoryViewObject viewObj, int cmdType) {
+        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+
+        CommandManager commandManager = CommandManager.getInstance();
+        if (type != null) {
+            IInteractiveHandler handler = InteractiveService.findHandler(type);
+            if (handler != null) {
+                List<IRepositoryViewObject> associatedObjects = handler.getAssociatedObjects(viewObj);
+                if (associatedObjects != null) {
+                   return commandManager.getDeployCommands(associatedObjects, cmdType);
+                }
+            }
+        }
+        return null;
     }
 
     public List<IRepositoryViewObject> getSelectededViewObjs() {

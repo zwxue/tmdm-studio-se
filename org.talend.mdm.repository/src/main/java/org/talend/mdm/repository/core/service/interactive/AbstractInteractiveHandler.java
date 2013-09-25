@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.core.service.interactive;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -78,10 +79,11 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return doRemove(port, cmd);
     }
 
-
-
-
     public void assertPropertyIsInited(Item item) {
+    }
+
+    public List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject obj) {
+        return null;
     }
 
 }
