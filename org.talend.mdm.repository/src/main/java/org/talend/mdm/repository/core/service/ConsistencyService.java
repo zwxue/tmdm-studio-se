@@ -32,6 +32,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -64,6 +65,7 @@ import org.talend.mdm.repository.ui.dialogs.consistency.ConfirmConflictMessageDi
 import org.talend.mdm.repository.ui.dialogs.consistency.ConsistencyConflictDialog;
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.DigestUtil;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
@@ -94,8 +96,10 @@ public class ConsistencyService {
     public enum CompareResultEnum {
         NOT_EXIST_IN_SERVER,
         NOT_EXIST_IN_LOCAL,
-        DIFFERENT,
-        SAME
+        CONFLICT,
+        SAME,
+        MODIFIED_LOCALLY,
+        NOT_SUPPORT
     }
 
     public static class ConsistencyCheckResult {
@@ -198,6 +202,8 @@ public class ConsistencyService {
 
     private static final String DIGEST_VALUE = "digestValue"; //$NON-NLS-1$
 
+    private static final String CURRENT_DIGEST_VALUE = "currentDigestValue"; //$NON-NLS-1$
+
     private static ConsistencyService instance = new ConsistencyService();
 
     static Logger log = Logger.getLogger(ConsistencyService.class);
@@ -236,6 +242,8 @@ public class ConsistencyService {
             // remove server def property
             MDMServerObject copiedMdmObj = (MDMServerObject) copy;
             copiedMdmObj.setLastServerDef(null);
+            copiedMdmObj.setCurrentDigestValue(null);
+            copiedMdmObj.setDigestValue(null);
             // restore the timestamp to default
             copiedMdmObj.setTimestamp(0L);
 
@@ -310,7 +318,7 @@ public class ConsistencyService {
 
     public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, Collection<IRepositoryViewObject> viewObjs)
             throws XtentisException, RemoteException {
-        updateLocalDigestValue(viewObjs);
+        updateCurrentlDigestValue(viewObjs);
         Map<IRepositoryViewObject, WSDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
         int conflictCount = getConflictCount(viewObjMap);
         if (conflictCount > 0) {
@@ -347,15 +355,17 @@ public class ConsistencyService {
                 toDeployObjs.add(viewObj);
             } else {
                 Item item = viewObj.getProperty().getItem();
-                String localDigestValue = ConsistencyService.getInstance().getLocalDigestValue(item);
-                String serverDigestValue = dt.getDigestValue();
-                if (localDigestValue.equals(serverDigestValue)) {
+                String ld = getLocalDigestValue(item);
+                String rd = dt.getDigestValue();
+                String cd = getCurrentDigestValue(item);
+                CompareResultEnum result = getCompareResult(cd, ld, rd);
+                if (result == CompareResultEnum.SAME) {
                     if (strategy == CONFLICT_STRATEGY_DEFAULT || strategy == CONFLICT_STRATEGY_SKIP_DIFFERENCE) {
                         toSkipObjs.add(viewObj);
                     } else if (strategy == CONFLICT_STRATEGY_OVERWRITE) {
                         toDeployObjs.add(viewObj);
                     }
-                } else {
+                } else if (result == CompareResultEnum.CONFLICT || result == CompareResultEnum.MODIFIED_LOCALLY) {
                     if (strategy == CONFLICT_STRATEGY_SKIP_DIFFERENCE) {
                         toSkipObjs.add(viewObj);
                     } else if (strategy == CONFLICT_STRATEGY_DEFAULT || strategy == CONFLICT_STRATEGY_OVERWRITE) {
@@ -365,6 +375,37 @@ public class ConsistencyService {
             }
         }
         return new ConsistencyCheckResult(toDeployObjs, toSkipObjs);
+    }
+
+    /**
+     * DOC HHB Comment method "getCompareResult".
+     * 
+     * @param cd current digest value
+     * @param ld local digest value
+     * @param rd remote digest value
+     * @return
+     */
+    public CompareResultEnum getCompareResult(String cd, String ld, String rd) {
+        if (rd == null) {
+            return CompareResultEnum.NOT_EXIST_IN_SERVER;
+        }
+        if (ld != null) {
+            if (!ld.equals(rd)) {
+                return CompareResultEnum.CONFLICT;
+            } else {
+                if (cd.equals(ld)) {
+                    return CompareResultEnum.SAME;
+                } else {
+                    return CompareResultEnum.MODIFIED_LOCALLY;
+                }
+            }
+        } else {
+            if (!cd.equals(rd)) {
+                return CompareResultEnum.CONFLICT;
+            } else {
+                return CompareResultEnum.SAME;
+            }
+        }
     }
 
     public String calculateDigestValue(Item item) {
@@ -414,6 +455,18 @@ public class ConsistencyService {
         throw new UnsupportedOperationException();
     }
 
+    public String getCurrentDigestValue(Item item) {
+        if (item == null) {
+            return null;
+        }
+        if (item instanceof MDMServerObjectItem) {
+            return ((MDMServerObjectItem) item).getMDMServerObject().getCurrentDigestValue();
+        } else if (item instanceof ProcessItem) {
+            return (String) item.getProperty().getAdditionalProperties().get(CURRENT_DIGEST_VALUE);
+        }
+        throw new UnsupportedOperationException();
+    }
+
     public long getLocalTimestamp(Item item) {
         if (item == null) {
             throw new IllegalArgumentException();
@@ -455,12 +508,17 @@ public class ConsistencyService {
         int total = 0;
         for (IRepositoryViewObject viewObj : map.keySet()) {
             WSDigest digestTime = map.get(viewObj);
-            if (digestTime != null && digestTime.getDigestValue() != null) {
-                String localDigestValue = getLocalDigestValue(viewObj.getProperty().getItem());
-                if (localDigestValue != null) {
-                    if (!localDigestValue.equals(digestTime.getDigestValue())) {
-                        total++;
-                    }
+            if (digestTime == null) {
+                continue;
+            }
+            String rd = digestTime.getDigestValue();
+            if (digestTime != null && rd != null) {
+                Item item = viewObj.getProperty().getItem();
+                String ld = getLocalDigestValue(item);
+                String cd = getCurrentDigestValue(item);
+                CompareResultEnum result = getCompareResult(cd, ld, rd);
+                if (result == CompareResultEnum.CONFLICT) {
+                    total++;
                 }
             }
         }
@@ -482,6 +540,9 @@ public class ConsistencyService {
         //
         if (timeValue != null) {
             updateLocalTimestamp(item, timeValue.getValue());
+        }
+        if (!viewObj.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_MATCH_RULE_MAPINFO)) {
+            RepositoryResourceUtil.saveItem(item);
         }
     }
 
@@ -545,13 +606,23 @@ public class ConsistencyService {
         if (item instanceof MDMServerObjectItem) {
             ((MDMServerObjectItem) item).getMDMServerObject().setDigestValue(digestValue);
         } else if (item instanceof ProcessItem) {
-            item.getProperty().getAdditionalProperties().put(DIGEST_VALUE, digestValue);
+            EMap additionalProperties = item.getProperty().getAdditionalProperties();
+            additionalProperties.removeKey(CURRENT_DIGEST_VALUE);
+            additionalProperties.put(DIGEST_VALUE, digestValue);
         }
     }
 
-    public void updateLocalDigestValue(Iterable<IRepositoryViewObject> it) {
+    private void updateCurrentDigestValue(Item item, String digestValue) {
+        if (item instanceof MDMServerObjectItem) {
+            ((MDMServerObjectItem) item).getMDMServerObject().setCurrentDigestValue(digestValue);
+        } else if (item instanceof ProcessItem) {
+            item.getProperty().getAdditionalProperties().put(CURRENT_DIGEST_VALUE, digestValue);
+        }
+    }
+
+    public void updateCurrentlDigestValue(Iterable<IRepositoryViewObject> it) {
         for (IRepositoryViewObject viewObj : it) {
-            updateLocalDigestValue(viewObj);
+            updateCurrentDigestValue(viewObj);
         }
     }
 
@@ -564,6 +635,12 @@ public class ConsistencyService {
         Item item = viewObj.getProperty().getItem();
         String digestValue = calculateDigestValue(item);
         updateLocalDigestValue(item, digestValue);
+    }
+
+    public void updateCurrentDigestValue(IRepositoryViewObject viewObj) {
+        Item item = viewObj.getProperty().getItem();
+        String digestValue = calculateDigestValue(item);
+        updateCurrentDigestValue(item, digestValue);
     }
 
     private void updateLocalTimestamp(Item item, long timestamp) {

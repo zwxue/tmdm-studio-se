@@ -83,6 +83,8 @@ public class ConsistencyConflictDialog extends Dialog {
 
     private static final Color COLOR_LIGHT_RED = EclipseResourceManager.getColor(255, 210, 210);
 
+    private static final Color COLOR_LIGHT_GREEN = EclipseResourceManager.getColor(223, 255, 186);
+
     private class ViewerLabelProvider implements ITableLabelProvider, IColorProvider {
 
         public void addListener(ILabelProviderListener listener) {
@@ -114,9 +116,16 @@ public class ConsistencyConflictDialog extends Dialog {
          */
         public Color getBackground(Object element) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
-            if (getCompareResult(viewObj) == CompareResultEnum.DIFFERENT && !isSkipObj(viewObj)) {
-                return COLOR_LIGHT_RED;
+            CompareResultEnum cresult = getCompareResult(viewObj);
+            if (!isSkipObj(viewObj)) {
+                if (cresult == CompareResultEnum.CONFLICT) {
+                    return COLOR_LIGHT_RED;
+                }
+                if (cresult == CompareResultEnum.MODIFIED_LOCALLY) {
+                    return COLOR_LIGHT_GREEN;
+                }
             }
+
             return null;
         }
 
@@ -154,8 +163,12 @@ public class ConsistencyConflictDialog extends Dialog {
                         return Messages.ConsistencyConflictDialog_notExist;
                     case SAME:
                         return Messages.ConsistencyConflict_Same;
-                    case DIFFERENT:
-                        return Messages.ConsistencyConflict_Different;
+                    case CONFLICT:
+                        return Messages.ConsistencyConflict_Conflict;
+                    case MODIFIED_LOCALLY:
+                        return Messages.ConsistencyConflict_modifiedLocally;
+                    case NOT_SUPPORT:
+                        return Messages.ConsistencyConflict_undefined;
                     }
                     break;
                 // operation
@@ -218,17 +231,22 @@ public class ConsistencyConflictDialog extends Dialog {
     private CompareResultEnum getCompareResult(IRepositoryViewObject viewObj) {
         CompareResultEnum result = compareResultMap.get(viewObj);
         if (result == null) {
-            WSDigest dt = viewObjMap.get(viewObj);
-            if (dt == null) {
-                result = CompareResultEnum.NOT_EXIST_IN_SERVER;
+            ERepositoryObjectType viewType = viewObj.getRepositoryObjectType();
+            if (viewType == IServerObjectRepositoryType.TYPE_RESOURCE || viewType == IServerObjectRepositoryType.TYPE_JOB
+                    || viewType == IServerObjectRepositoryType.TYPE_WORKFLOW) {
+                result = CompareResultEnum.NOT_SUPPORT;
             } else {
-                Item item = viewObj.getProperty().getItem();
-                String localDigestValue = ConsistencyService.getInstance().getLocalDigestValue(item);
-                String serverDigestValue = dt.getDigestValue();
-                if (localDigestValue.equals(serverDigestValue)) {
-                    result = CompareResultEnum.SAME;
+                WSDigest dt = viewObjMap.get(viewObj);
+                if (dt == null) {
+                    result = CompareResultEnum.NOT_EXIST_IN_SERVER;
                 } else {
-                    result = CompareResultEnum.DIFFERENT;
+                    Item item = viewObj.getProperty().getItem();
+                    ConsistencyService service = ConsistencyService.getInstance();
+                    String ld = service.getLocalDigestValue(item);
+                    String cd = service.getCurrentDigestValue(item);
+                    String rd = dt.getDigestValue();
+                    result = service.getCompareResult(cd, ld, rd);
+
                 }
             }
             compareResultMap.put(viewObj, result);
@@ -374,7 +392,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                skipObjects(CompareResultEnum.DIFFERENT);
+                skipObjects(CompareResultEnum.CONFLICT, CompareResultEnum.MODIFIED_LOCALLY);
             }
         });
         skipDiffBun.setText(Messages.ConsistencyConflictDialog_btnNewButton_text);
@@ -529,7 +547,8 @@ public class ConsistencyConflictDialog extends Dialog {
             if (element instanceof FolderRepositoryObject) {
                 return true;
             }
-            return getCompareResult((IRepositoryViewObject) element) == CompareResultEnum.DIFFERENT;
+            CompareResultEnum compareResult = getCompareResult((IRepositoryViewObject) element);
+            return compareResult == CompareResultEnum.CONFLICT || compareResult == CompareResultEnum.MODIFIED_LOCALLY;
         }
 
     };
@@ -631,13 +650,15 @@ public class ConsistencyConflictDialog extends Dialog {
         toDeployObjs.add(viewObj);
     }
 
-    protected void skipObjects(CompareResultEnum skipEnum) {
+    protected void skipObjects(CompareResultEnum... skipEnums) {
         for (Iterator<IRepositoryViewObject> il = toDeployObjs.iterator(); il.hasNext();) {
             IRepositoryViewObject viewObj = il.next();
             CompareResultEnum compareResult = getCompareResult(viewObj);
-            if (compareResult == skipEnum) {
-                toSkipObjs.add(viewObj);
-                il.remove();
+            for (CompareResultEnum skipEnum : skipEnums) {
+                if (compareResult == skipEnum) {
+                    toSkipObjs.add(viewObj);
+                    il.remove();
+                }
             }
         }
         treeViewer.refresh();

@@ -169,7 +169,7 @@ public class DeployService {
         try {
             // consistency check
             ConsistencyCheckResult consistencyCheckResult = checkConsistency(serverDef, validObjects);
-            if (consistencyCheckResult.isCanceled()) {
+            if (consistencyCheckResult == null || consistencyCheckResult.isCanceled()) {
                 return Status.CANCEL_STATUS;
             }
             validObjects = consistencyCheckResult.getToDeployObjects();
@@ -189,7 +189,7 @@ public class DeployService {
             generateConsistencyCancelDeployStatus(mainStatus, consistencyCheckResult.getToSkipObjects());
             return mainStatus;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             String title = Messages.bind(Messages.Server_cannot_connected, serverDef.getUrl());
             MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title,
                     Messages.AbstractDataClusterAction_ConnectFailed);

@@ -414,7 +414,7 @@ public class Messages extends NLS {
 
     public static String ConsistencyConflictDialog_dialogMessage;
 
-    public static String ConsistencyConflict_Different;
+    public static String ConsistencyConflict_Conflict;
 
     public static String ConsistencyConflict_localTimestamp;
 
@@ -838,7 +838,11 @@ public class Messages extends NLS {
 
     public static String UndeployMatchRuleAction_label;
     public static String ConsistencyConflictDialog_btnNewButton_text;
+
+    public static String ConsistencyConflict_modifiedLocally;
     public static String ConsistencyConflict_showTimeStampColumn;
+
+    public static String ConsistencyConflict_undefined;
     public static String ConsistencyConflictDialog_onlyShowConflictObjs;
 
     // //////////////////////////////////////////////////////////////////////////

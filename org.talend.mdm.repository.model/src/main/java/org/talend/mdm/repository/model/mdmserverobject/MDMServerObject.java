@@ -24,6 +24,7 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getType <em>Type</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getTimestamp <em>Timestamp</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getDigestValue <em>Digest Value</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getCurrentDigestValue <em>Current Digest Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -199,7 +200,7 @@ public interface MDMServerObject extends EObject {
      * @return the value of the '<em>Digest Value</em>' attribute.
      * @see #setDigestValue(String)
      * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getMDMServerObject_DigestValue()
-     * @model transient="true"
+     * @model
      * @generated
      */
     String getDigestValue();
@@ -213,6 +214,32 @@ public interface MDMServerObject extends EObject {
      * @generated
      */
     void setDigestValue(String value);
+
+    /**
+     * Returns the value of the '<em><b>Current Digest Value</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Current Digest Value</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Current Digest Value</em>' attribute.
+     * @see #setCurrentDigestValue(String)
+     * @see org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectPackage#getMDMServerObject_CurrentDigestValue()
+     * @model transient="true"
+     * @generated
+     */
+    String getCurrentDigestValue();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmserverobject.MDMServerObject#getCurrentDigestValue <em>Current Digest Value</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Current Digest Value</em>' attribute.
+     * @see #getCurrentDigestValue()
+     * @generated
+     */
+    void setCurrentDigestValue(String value);
 
     /**
      * <!-- begin-user-doc -->

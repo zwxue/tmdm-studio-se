@@ -167,6 +167,26 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     protected String digestValue = DIGEST_VALUE_EDEFAULT;
 
     /**
+     * The default value of the '{@link #getCurrentDigestValue() <em>Current Digest Value</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getCurrentDigestValue()
+     * @generated
+     * @ordered
+     */
+    protected static final String CURRENT_DIGEST_VALUE_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getCurrentDigestValue() <em>Current Digest Value</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getCurrentDigestValue()
+     * @generated
+     * @ordered
+     */
+    protected String currentDigestValue = CURRENT_DIGEST_VALUE_EDEFAULT;
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -350,6 +370,27 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getCurrentDigestValue() {
+        return currentDigestValue;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setCurrentDigestValue(String newCurrentDigestValue) {
+        String oldCurrentDigestValue = currentDigestValue;
+        currentDigestValue = newCurrentDigestValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE, oldCurrentDigestValue, currentDigestValue));
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * 
      * @generated NOT
@@ -392,6 +433,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return getTimestamp();
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
                 return getDigestValue();
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
+                return getCurrentDigestValue();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -423,6 +466,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
                 setDigestValue((String)newValue);
+                return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
+                setCurrentDigestValue((String)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -456,6 +502,9 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
                 setDigestValue(DIGEST_VALUE_EDEFAULT);
                 return;
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
+                setCurrentDigestValue(CURRENT_DIGEST_VALUE_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -481,6 +530,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
                 return timestamp != TIMESTAMP_EDEFAULT;
             case MdmserverobjectPackage.MDM_SERVER_OBJECT__DIGEST_VALUE:
                 return DIGEST_VALUE_EDEFAULT == null ? digestValue != null : !DIGEST_VALUE_EDEFAULT.equals(digestValue);
+            case MdmserverobjectPackage.MDM_SERVER_OBJECT__CURRENT_DIGEST_VALUE:
+                return CURRENT_DIGEST_VALUE_EDEFAULT == null ? currentDigestValue != null : !CURRENT_DIGEST_VALUE_EDEFAULT.equals(currentDigestValue);
         }
         return super.eIsSet(featureID);
     }
@@ -507,6 +558,8 @@ public class MDMServerObjectImpl extends EObjectImpl implements MDMServerObject 
         result.append(timestamp);
         result.append(", digestValue: ");
         result.append(digestValue);
+        result.append(", currentDigestValue: ");
+        result.append(currentDigestValue);
         result.append(')');
         return result.toString();
     }

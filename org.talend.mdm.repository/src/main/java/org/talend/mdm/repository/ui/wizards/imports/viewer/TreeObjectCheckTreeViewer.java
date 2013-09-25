@@ -162,6 +162,8 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     private static final Color COLOR_LIGHT_RED = EclipseResourceManager.getColor(255, 210, 210);
 
+    private static final Color COLOR_LIGHT_GREEN = EclipseResourceManager.getColor(223, 255, 186);
+
     class CompareResultColumnProvider extends ColumnLabelProvider {
 
         @Override
@@ -169,9 +171,13 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
             if (!(element instanceof TreeParent)) {
                 ConsistencyData consistencyData = consistencyMap.get(element);
                 if (consistencyData != null) {
-                    if (consistencyData.getCompareResult() == CompareResultEnum.DIFFERENT) {
+                    CompareResultEnum compareResult = consistencyData.getCompareResult();
+                    if (compareResult == CompareResultEnum.CONFLICT) {
                         return COLOR_LIGHT_RED;
+                    } else if (compareResult == CompareResultEnum.MODIFIED_LOCALLY) {
+                        return COLOR_LIGHT_GREEN;
                     }
+
                 }
             }
             return null;
@@ -190,8 +196,12 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                         return Messages.ConsistencyConflict_notExistInLocal;
                     case SAME:
                         return Messages.ConsistencyConflict_Same;
-                    case DIFFERENT:
-                        return Messages.ConsistencyConflict_Different;
+                    case CONFLICT:
+                        return Messages.ConsistencyConflict_Conflict;
+                    case MODIFIED_LOCALLY:
+                        return Messages.ConsistencyConflict_modifiedLocally;
+                    case NOT_SUPPORT:
+                        return Messages.ConsistencyConflict_undefined;
                     }
                 }
             }
@@ -216,7 +226,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 ConsistencyData consistencyData = consistencyMap.get(element);
                 if (consistencyData != null) {
                     WSDigest dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData.getServerDigestTime();
-                    if (dt != null) {
+                    if (dt != null && dt.getTimeStamp() > 0) {
                         return DATE_FORMAT.format(new Date(dt.getTimeStamp()));
                     }
                 }
@@ -257,33 +267,34 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 }
                 if (viewType == IServerObjectRepositoryType.TYPE_RESOURCE || viewType == IServerObjectRepositoryType.TYPE_JOB
                         || viewType == IServerObjectRepositoryType.TYPE_WORKFLOW) {
-                    continue;
-                }
-                IRepositoryViewObject viewObj = RepositoryResourceUtil.findViewObjectByName(viewType, objName);
-                if (viewObj == null) {
-                    consistencyData.setCompareResult(CompareResultEnum.NOT_EXIST_IN_LOCAL);
+
+                    consistencyData.setCompareResult(CompareResultEnum.NOT_SUPPORT);
                 } else {
-                    Item item = viewObj.getProperty().getItem();
-                    consistencyService.updateLocalDigestValue(viewObj);
-                    String digestValue = consistencyService.getLocalDigestValue(item);
-                    long localTimestamp = consistencyService.getLocalTimestamp(item);
-                    // key
-                    String type = viewObj.getRepositoryObjectType().getKey();
-                    String objectName = viewObj.getLabel();
-                    WSDigestKey key = new WSDigestKey(type, objectName);
-                    consistencyData.setLocalDigestTime(new WSDigest(key, digestValue, localTimestamp));
-                    // init compare result;
-                    CompareResultEnum result;
-                    if (serverDigestTime == null || serverDigestTime.getDigestValue() == null) {
-                        result = CompareResultEnum.NOT_EXIST_IN_SERVER;
+                    IRepositoryViewObject viewObj = RepositoryResourceUtil.findViewObjectByName(viewType, objName);
+                    if (viewObj == null) {
+                        consistencyData.setCompareResult(CompareResultEnum.NOT_EXIST_IN_LOCAL);
                     } else {
-                        if (serverDigestTime.getDigestValue().equals(digestValue)) {
-                            result = CompareResultEnum.SAME;
+                        consistencyService.updateCurrentDigestValue(viewObj);
+                        Item item = viewObj.getProperty().getItem();
+                        consistencyService.updateCurrentDigestValue(viewObj);
+                        String ld = consistencyService.getLocalDigestValue(item);
+                        String cd = consistencyService.getCurrentDigestValue(item);
+                        long localTimestamp = consistencyService.getLocalTimestamp(item);
+                        // key
+                        String type = viewObj.getRepositoryObjectType().getKey();
+                        String objectName = viewObj.getLabel();
+                        WSDigestKey key = new WSDigestKey(type, objectName);
+                        consistencyData.setLocalDigestTime(new WSDigest(key, ld, localTimestamp));
+                        // init compare result;
+                        CompareResultEnum result;
+                        if (serverDigestTime == null || serverDigestTime.getDigestValue() == null) {
+                            result = CompareResultEnum.NOT_EXIST_IN_SERVER;
                         } else {
-                            result = CompareResultEnum.DIFFERENT;
+                            String rd = serverDigestTime.getDigestValue();
+                            result = consistencyService.getCompareResult(cd, ld, rd);
                         }
+                        consistencyData.setCompareResult(result);
                     }
-                    consistencyData.setCompareResult(result);
                 }
                 map.put(treeObject, consistencyData);
             }
