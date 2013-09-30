@@ -64,14 +64,17 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             for (Iterator<XSDTypeDefinition> iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
                 XSDTypeDefinition type = iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
+                 {
                     customTypes
                             .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : "")); //$NON-NLS-1$ //$NON-NLS-2$
+                }
             }
             List<String>builtInTypes = new ArrayList<String>();
             for (Iterator<XSDTypeDefinition> iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
                 XSDTypeDefinition type = iter.next();
-                if (type instanceof XSDSimpleTypeDefinition)
+                if (type instanceof XSDSimpleTypeDefinition) {
                     builtInTypes.add(type.getName());
+                }
             }
 
             NewConceptOrElementDialog id = new NewConceptOrElementDialog(this, page.getSite().getShell(), schema, Messages.XSDNewConceptAction_NewEntity,
@@ -144,6 +147,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             }
             dlg.close();
 
+            changeAction.setOmitTrack(true);
             IStatus status = changeAction.execute();
             if (status == Status.CANCEL_STATUS) {
                 schema.getContents().remove(decl);

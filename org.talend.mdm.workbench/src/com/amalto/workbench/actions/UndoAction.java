@@ -31,7 +31,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDSchema;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
@@ -50,6 +49,8 @@ public class UndoAction extends Action {
     private Map<Integer, String> undoActionTrack = null;
 
     private Map<Integer, String> redoActionTrack = null;
+
+    private boolean omitTrack = false;
 
     public UndoAction(DataModelMainPage page) {
         this.page = page;
@@ -80,6 +81,7 @@ public class UndoAction extends Action {
         }
     };
 
+    @Override
     public void run() {
 
         operation.addContext(page.getUndoContext());
@@ -105,7 +107,9 @@ public class UndoAction extends Action {
 
     protected IStatus execute() {
         log.info(getText() + " execute...."); //$NON-NLS-1$
-        String oldValue = beforeDoAction();
+        String oldValue = undoActionTrack.get(getActionUndoPos());
+
+        beforeDoAction();
 
         if (doAction() == Status.CANCEL_STATUS) {
             cancelDoAction(oldValue);
@@ -116,13 +120,17 @@ public class UndoAction extends Action {
         return Status.OK_STATUS;
     }
 
-    protected String beforeDoAction() {
+    protected void beforeDoAction() {
         schema = ((ISchemaContentProvider) page.getTreeViewer().getContentProvider()).getXsdSchema();
-        return commitDocumentToHistory(schema.getDocument());
+        if (!omitTrack) {
+            commitDocumentToHistory(schema.getDocument());
+        }
     }
 
     protected void afterDoAction() {
-        commitDocumentToCurrent(schema.getDocument());
+        if (!omitTrack) {
+            commitDocumentToCurrent(schema.getDocument());
+        }
     }
 
     protected void cancelDoAction(String oldValue) {
@@ -132,25 +140,26 @@ public class UndoAction extends Action {
         }
     }
 
-    protected String commitDocumentToHistory(Document history) {
-        String oldValue = null;
+    protected void commitDocumentToHistory(Document history) {
         try {
-            String value = Util.nodeToString((Node) history);
-            oldValue = undoActionTrack.get(getActionUndoPos());
+            String value = Util.nodeToString(history);
             undoActionTrack.put(getActionUndoPos(), value);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return oldValue;
     }
 
     protected void removeDocumentFromHistory() {
         undoActionTrack.remove(getActionUndoPos());
     }
 
+    protected void setOmitTrack(boolean omit) {
+        this.omitTrack = omit;
+    }
+
     protected void commitDocumentToCurrent(Document currnt) {
         try {
-            String value = Util.nodeToString((Node) currnt);
+            String value = Util.nodeToString(currnt);
             redoActionTrack.keySet().size();
             redoActionTrack.put(getActionUndoPos(), value);
         } catch (Exception e) {
@@ -170,7 +179,7 @@ public class UndoAction extends Action {
 
     /**
      * need override by subclass
-     * 
+     *
      * @return
      */
     protected IStatus undo() {
@@ -207,12 +216,12 @@ public class UndoAction extends Action {
     public IOperationHistory getOperationHistory() {
         return PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
     }
-    
+
     // Modified by hbhong,to fix bug 21784
     protected TreeParent getTreeParent() {
         TreeParent treeParent = (TreeParent) page.getAdapter(TreeParent.class);
         return treeParent;
     }
     // The ending| bug:21784
-    
+
 }

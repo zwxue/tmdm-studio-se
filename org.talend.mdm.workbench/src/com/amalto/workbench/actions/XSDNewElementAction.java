@@ -14,6 +14,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,30 +42,31 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
 
     private static Log log = LogFactory.getLog(XSDNewElementAction.class);
 
-    // protected DataModelMainPage page = null;
-
     public XSDNewElementAction(DataModelMainPage page) {
         super(page);
-        // this.page = page;
         setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
         setText(Messages.XSDNewElementAction_Text);
         setToolTipText(Messages.XSDNewElementAction_ActionTip);
     }
 
+    @Override
     public IStatus doAction() {
         try {
-            ArrayList customTypes = new ArrayList();
-            for (Iterator iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+            List<String> customTypes = new ArrayList<String>();
+            for (Iterator<XSDTypeDefinition> iter = schema.getTypeDefinitions().iterator(); iter.hasNext();) {
+                XSDTypeDefinition type = iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
+                 {
                     customTypes
                             .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));//$NON-NLS-1$ //$NON-NLS-2$
+                }
             }
-            ArrayList builtInTypes = new ArrayList();
-            for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
-                XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-                if (type instanceof XSDSimpleTypeDefinition)
+            List<String> builtInTypes = new ArrayList<String>();
+            for (Iterator<XSDTypeDefinition> iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {
+                XSDTypeDefinition type = iter.next();
+                if (type instanceof XSDSimpleTypeDefinition) {
                     builtInTypes.add(type.getName());
+                }
             }
 
             NewConceptOrElementDialog id = new NewConceptOrElementDialog(this, page.getSite().getShell(), schema, Messages.XSDNewElementAction_Text,
@@ -84,6 +86,7 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
         return Status.OK_STATUS;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
@@ -121,11 +124,12 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
             }
             dlg.close();
 
+            changeAction.setOmitTrack(true);
             IStatus status = changeAction.execute();
             if(status == Status.CANCEL_STATUS) {
                 schema.getContents().remove(decl);
             }
-            
+
             page.refresh();
         }
     }
