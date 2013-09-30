@@ -166,10 +166,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 							xsd.getBytes("utf-8"));//$NON-NLS-1$
 					file.setContents(inputStream, IFile.FORCE, null);
 				} else if (part instanceof StructuredTextEditor) {
-					XSDEditorInput input = (XSDEditorInput) ((StructuredTextEditor) getSelectedPage())
-							.getEditorInput();
-					stream = input.getFile().getContents();
-					xsd = IOUtils.toString(stream);
+					xsd = ((StructuredTextEditor) part).getTextViewer().getDocument().get();
 				}
 			}
 			if (null != xsd) {
