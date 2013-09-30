@@ -115,6 +115,7 @@
     <elementParameter field="CHECK" name="INFORMATION" value="false"/>
     <elementParameter field="MEMO" name="COMMENT" value=""/>
     <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <elementParameter field="CHECK" name="DISCARD_TRAILING_EMPTY_STR" value="true"/>
     <metadata connector="FLOW" name="tNormalize_1">
       <column comment="" key="false" name="Id" nullable="true" pattern="" sourceType="" type="id_String"/>
       <column comment="" key="false" name="Color" nullable="true" pattern="" sourceType="" type="id_String"/>
@@ -154,6 +155,7 @@
     <elementParameter field="CHECK" name="INFORMATION" value="false"/>
     <elementParameter field="MEMO" name="COMMENT" value=""/>
     <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <elementParameter field="CLOSED_LIST" name="CONTAINER_TYPE" value="MASTER"/>
     <metadata connector="FLOW" name="tMDMInput_1">
       <column comment="" key="false" name="Id" nullable="true" pattern="" sourceType="" type="id_String"/>
       <column comment="" key="false" name="Name" nullable="true" pattern="" sourceType="" type="id_String"/>
@@ -243,6 +245,7 @@
     <elementParameter field="CHECK" name="INFORMATION" value="false"/>
     <elementParameter field="MEMO" name="COMMENT" value=""/>
     <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <elementParameter field="CLOSED_LIST" name="CONTAINER_TYPE" value="MASTER"/>
     <metadata connector="OUTPUT" name="OUTPUT">
       <column comment="" key="false" name="Id" nullable="true" pattern="" sourceType="" type="id_String"/>
       <column comment="" key="false" name="Color" nullable="true" pattern="" sourceType="" type="id_String"/>
@@ -318,6 +321,7 @@
     <elementParameter field="CHECK" name="INFORMATION" value="false"/>
     <elementParameter field="MEMO" name="COMMENT" value=""/>
     <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <elementParameter field="CLOSED_LIST" name="CONTAINER_TYPE" value="MASTER"/>
     <metadata connector="FLOW" name="tMDMInput_2">
       <column comment="" key="false" name="Id" nullable="true" pattern="" sourceType="" type="id_String"/>
       <column comment="" key="false" name="Name" nullable="true" pattern="" sourceType="" type="id_String"/>
@@ -378,6 +382,7 @@
     <elementParameter field="CHECK" name="INFORMATION" value="false"/>
     <elementParameter field="MEMO" name="COMMENT" value=""/>
     <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <elementParameter field="CHECK" name="DISCARD_TRAILING_EMPTY_STR" value="true"/>
     <metadata connector="FLOW" name="tNormalize_2">
       <column comment="" key="false" name="Id" nullable="true" pattern="" sourceType="" type="id_String"/>
       <column comment="" key="false" name="Size" nullable="true" pattern="" sourceType="" type="id_String"/>
@@ -460,6 +465,7 @@
     <elementParameter field="CHECK" name="INFORMATION" value="false"/>
     <elementParameter field="MEMO" name="COMMENT" value=""/>
     <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <elementParameter field="CLOSED_LIST" name="CONTAINER_TYPE" value="MASTER"/>
     <metadata connector="OUTPUT" name="OUTPUT">
       <column comment="" key="false" name="Id" nullable="true" pattern="" sourceType="" type="id_String"/>
       <column comment="" key="false" name="Size" nullable="true" pattern="" sourceType="" type="id_String"/>
