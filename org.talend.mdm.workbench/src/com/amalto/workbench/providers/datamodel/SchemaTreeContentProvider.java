@@ -194,24 +194,27 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     	}
     }
     
-    protected Object[] getXSDSchemaChildren(XSDSchema schema) {
-    	List<XSDElementDeclaration> declarations = new ArrayList<XSDElementDeclaration>();
-    	for (XSDSchemaContent cnt : xsdSchema.getContents()) {
-            if (cnt instanceof XSDInclude) {
-            	XSDInclude incu = (XSDInclude) cnt;
-                String schemaLocation = incu.getSchemaLocation();
-                XSDSchema schemaInc = createSchema(schemaLocation);
-                addElementDeclarationFromSchema(schemaInc,declarations);
-            } else {
-                continue;
-            }
-    	}
-    	addElementDeclarationFromSchema(schema,declarations);
-    	
-        Object[] schemaChildren = Util.filterOutDuplicatedElems(declarations.toArray(new XSDNamedComponent[declarations.size()]));
-        
+	protected Object[] getXSDSchemaChildren(XSDSchema schema) {
+		List<XSDElementDeclaration> declarations = new ArrayList<XSDElementDeclaration>();
+		if (null != xsdSchema) {
+			for (XSDSchemaContent cnt : xsdSchema.getContents()) {
+				if (cnt instanceof XSDInclude) {
+					XSDInclude incu = (XSDInclude) cnt;
+					String schemaLocation = incu.getSchemaLocation();
+					XSDSchema schemaInc = createSchema(schemaLocation);
+					addElementDeclarationFromSchema(schemaInc, declarations);
+				} else {
+					continue;
+				}
+			}
+		}
+		addElementDeclarationFromSchema(schema, declarations);
+
+		Object[] schemaChildren = Util.filterOutDuplicatedElems(declarations
+				.toArray(new XSDNamedComponent[declarations.size()]));
+
 		return schemaChildren;
-    }
+	}
 
     protected Object[] getXSDAttributeGroupDefinitionChildren(XSDAttributeGroupDefinition parent) {
         XSDAttributeGroupDefinition attributeGroupDefinition = parent;
