@@ -102,6 +102,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
@@ -134,6 +135,7 @@ import org.eclipse.xsd.XSDWhiteSpaceFacet;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDAttributeUseImpl;
 import org.eclipse.xsd.impl.XSDComplexTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 import org.eclipse.xsd.impl.XSDIdentityConstraintDefinitionImpl;
@@ -157,6 +159,7 @@ import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDCopyConceptAction;
 import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
+import com.amalto.workbench.actions.XSDDeleteAttributeAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
@@ -262,6 +265,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
     private XSDNewElementAction newElementAction = null;
 
     private XSDDeleteElementAction deleteElementAction = null;
+
+    private XSDDeleteAttributeAction deleteAttributeAction = null;
 
     private XSDChangeToComplexTypeAction changeToComplexTypeAction = null;
 
@@ -740,7 +745,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         public boolean equals(Object a, Object b) {
@@ -754,7 +759,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         public int hashCode(Object element) {
@@ -1032,6 +1037,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
         this.newElementAction = new XSDNewElementAction(this);
         this.deleteElementAction = new XSDDeleteElementAction(this);
+        this.deleteAttributeAction = new XSDDeleteAttributeAction(this);
         this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this, false);
         this.changeSubElementGroupAction = new XSDChangeToComplexTypeAction(this, true);
         this.deleteParticleAction = new XSDDeleteParticleAction(this);
@@ -1076,6 +1082,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         this.setFacetMsgAction = new XSDSetFacetMessageAction(this);
         deleteConceptWrapAction.regisDelAction(XSDElementDeclarationImpl.class, deleteConceptAction);
         deleteConceptWrapAction.regisDelAction(XSDParticleImpl.class, deleteParticleAction);
+        deleteConceptWrapAction.regisDelAction(XSDAttributeUseImpl.class, deleteAttributeAction);
         deleteConceptWrapAction.regisDelAction(XSDIdentityConstraintDefinitionImpl.class, deleteIdentityConstraintAction);
         deleteConceptWrapAction.regisDelAction(XSDXPathDefinitionImpl.class, deleteXPathAction);
         deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
@@ -1392,6 +1399,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             addPasteElementAction(manager);
         }
 
+        if (obj instanceof XSDAttributeUse && selectedObjs.length == 1) {
+            manager.add(deleteAttributeAction);
+        }
+
         if (obj instanceof XSDParticle && selectedObjs.length == 1) {
             XSDTerm term = ((XSDParticle) obj).getTerm();
             if (!(term instanceof XSDWildcard)) {
@@ -1639,7 +1650,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     * 
+     *
      * @param obj
      * @return
      */
@@ -1783,7 +1794,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * Returns and XSDSchema Object from an xsd
-     * 
+     *
      * @param schema
      * @return
      * @throws Exception
@@ -3041,7 +3052,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
     public void gotoMarker(IMarker marker) {

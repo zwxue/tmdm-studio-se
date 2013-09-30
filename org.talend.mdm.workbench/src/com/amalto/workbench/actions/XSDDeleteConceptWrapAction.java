@@ -28,6 +28,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -78,6 +79,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
         extraClsToDel.clear();
     }
 
+    @Override
     public IStatus doAction() {
 
         List<IStatus> results = new ArrayList<IStatus>();
@@ -96,11 +98,13 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
                             + (!sameType ? Messages.DelLabel2B : elemDesc.substring(backPos + 1));
                     if (deleteLabel.endsWith("y")) {//$NON-NLS-1$
                         deleteLabel = deleteLabel.substring(0, deleteLabel.length() - 1) + Messages.DelLabel3;
-                    } else
+                    } else {
                         deleteLabel = deleteLabel + Messages.XSDDeleteXX_DelLabel4;
-                } else
+                    }
+                } else {
                     deleteLabel += elemDesc.substring(0, backPos) + Messages.XSDDeleteXX_DelLabel5
                             + (!sameType ? Messages.XSDDeleteXX_DelLabel5A : elemDesc.substring(backPos + 1));
+                }
 
                 if (!MessageDialog.openConfirm(page.getSite().getShell(), Messages.XSDDeleteXX_DialogTitle, deleteLabel)) {
                     return Status.CANCEL_STATUS;
@@ -108,7 +112,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
             }
 
             for (Iterator iterator = delObjs.iterator(); iterator.hasNext();) {
-                Object toDel = (Object) iterator.next();
+                Object toDel = iterator.next();
                 UndoAction delExecute = null;
                 boolean isElem = true;
                 if (toDel instanceof XSDElementDeclaration) {
@@ -125,8 +129,9 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
                 }
                 if (toDel instanceof XSDXPathDefinition) {
                     XSDXPathDefinition xpath = (XSDXPathDefinition) toDel;
-                    if (!xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
+                    if (!xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL)) {
                         continue;
+                    }
                 }
 
                 delExecute = clsAction.get(toDel.getClass());
@@ -149,8 +154,11 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
                     ((XSDDeleteTypeDefinition) delExecute).setXSDTODel((XSDComplexTypeDefinition) toDel);
                 } else if (delExecute instanceof XSDDeleteTypeDefinition && toDel instanceof XSDSimpleTypeDefinition) {
                     ((XSDDeleteTypeDefinition) delExecute).setXSDTODel((XSDSimpleTypeDefinition) toDel);
-                } else
+                } else if (delExecute instanceof XSDDeleteAttributeAction && toDel instanceof XSDAttributeUse) {
+                    ((XSDDeleteAttributeAction) delExecute).setXSDAttribute((XSDAttributeUse) toDel);
+                } else {
                     return Status.CANCEL_STATUS;
+                }
 
                 results.add(delExecute.execute());
             }
@@ -170,9 +178,9 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
         clearDelData();
         for (Object del : toDels) {
             if (((XSDConcreteComponent) del).getSchema().getTargetNamespace() == null
-                    && !Util.IsAImporedElement((XSDConcreteComponent) del, page.reConfigureXSDSchema(false)))
+                    && !Util.IsAImporedElement((XSDConcreteComponent) del, page.reConfigureXSDSchema(false))) {
                 delObjs.add((XSDConcreteComponent) del);
-            else {
+            } else {
                 delObjs.clear();
                 break;
             }
@@ -185,7 +193,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
 
     /**
      * author: Fliu it is meant to support multiple deletions on data modules on key press
-     * 
+     *
      * @param selections: tree node picking up in the data module view
      */
     public void prepareToDelSelectedItems(IStructuredSelection selections, TreeViewer treeView) {
@@ -198,7 +206,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
     /**
      * Author: Fliu this fun is to filter out all the children listed in the selections, all left is the top parent
      * level ones in the selections
-     * 
+     *
      * @param selections
      * @return all parent array with no corresponding children in the selection list
      */
@@ -217,8 +225,9 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
                 Object[] offsprings = populateAllOffspring(objOther, new ArrayList());
                 for (Object offspring : offsprings) {
                     if (offspring == obj) {
-                        if (lst.indexOf(obj) < 0)
+                        if (lst.indexOf(obj) < 0) {
                             lst.add(obj);
+                        }
                     }
                 }
             }
@@ -256,20 +265,24 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
     }
 
     private void refreshAction() {
-        if (delObjs.isEmpty())
+        if (delObjs.isEmpty()) {
             return;
-        XSDConcreteComponent comp = (XSDConcreteComponent) delObjs.get(0);
+        }
+        XSDConcreteComponent comp = delObjs.get(0);
         if (checkInSameClassType(delObjs.toArray(), comp.getClass())) {
             String actionTxt = clsAction.get(comp.getClass()).getText();
             if (delObjs.size() > 1) {
                 if (actionTxt.endsWith("y")) {//$NON-NLS-1$
                     actionTxt = actionTxt.substring(0, actionTxt.length() - 1) + "ies";//$NON-NLS-1$
-                } else
+                }
+                else {
                     actionTxt = actionTxt + "s";//$NON-NLS-1$
+                }
             }
             setText(actionTxt);
-        } else
+        } else {
             setText(Messages.XSDDeleteXX_DeleteObjects);
+        }
         setToolTipText(Messages.XSDDeleteXX_DeleteEntities);
     }
 
@@ -300,27 +313,31 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
 
         for (Object obj : selects) {
             if (obj instanceof XSDElementDeclaration || obj instanceof XSDParticle
-                    || obj instanceof XSDIdentityConstraintDefinition) {
+                    || obj instanceof XSDIdentityConstraintDefinition || obj instanceof XSDAttributeUse) {
                 continue;
             } else if (obj instanceof XSDXPathDefinition) {
                 XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
-                if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
+                if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL)) {
                     continue;
-                else
+                } else {
                     return false;
-            } else if (extraClsToDel.indexOf(obj.getClass()) < 0)
+                }
+            } else if (extraClsToDel.indexOf(obj.getClass()) < 0) {
                 return false;
+            }
         }
 
         return true;
     }
 
     public boolean checkInAllElementType(Object[] selects) {
-        if (selects.length == 0)
+        if (selects.length == 0) {
             return false;
+        }
         for (Object obj : selects) {
-            if (!(obj instanceof XSDElementDeclaration))
+            if (!(obj instanceof XSDElementDeclaration)) {
                 return false;
+            }
         }
 
         return true;
@@ -328,22 +345,26 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
 
     public boolean checkOutAllConcept(Object[] selections) {
         for (Object obj : selections) {
-            if (!(obj instanceof XSDElementDeclaration))
+            if (!(obj instanceof XSDElementDeclaration)) {
                 return false;
-            if (!Util.checkConcept((XSDElementDeclaration) obj))
+            }
+            if (!Util.checkConcept((XSDElementDeclaration) obj)) {
                 return false;
+            }
         }
 
         return true;
     }
 
     public Action outPutDeleteActions() {
-        if (delObjs.size() == 0)
+        if (delObjs.size() == 0) {
             return null;
+        }
 
         return this;
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }

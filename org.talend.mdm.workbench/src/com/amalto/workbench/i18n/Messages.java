@@ -205,6 +205,8 @@ public class Messages extends NLS {
 
     public static String XSDDefaultValueRuleAction_buildDefaultValue;
 
+    public static String XSDDeleteAttributeAction_label;
+
     public static String XSDDeleteConceptAction_ActionTip;
 
     public static String XSDDeleteConceptAction_ConfirmDel;
