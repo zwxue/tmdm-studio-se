@@ -178,6 +178,9 @@ public class OpenObjectAction extends AbstractRepositoryAction {
                     if (page != null) {
                         page.bringToTop(editorRef.getPart(false));
                     }
+                    if (marker != null) {
+                        IDE.gotoMarker(editorRef.getEditor(true), marker);
+                    }
                 } else {
                     openItem(viewObject);
                 }
