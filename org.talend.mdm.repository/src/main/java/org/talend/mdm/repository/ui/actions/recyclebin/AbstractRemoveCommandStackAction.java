@@ -25,6 +25,7 @@ import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.dataquality.properties.TDQMatchRuleItem;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -86,7 +87,7 @@ public abstract class AbstractRemoveCommandStackAction extends AbstractRepositor
 
     private boolean isServerObject(IRepositoryViewObject viewObj) {
         Item item = viewObj.getProperty().getItem();
-        return item instanceof MDMServerObjectItem || item instanceof ProcessItem;
+        return item instanceof MDMServerObjectItem || item instanceof ProcessItem || item instanceof TDQMatchRuleItem;
     }
 
     private void removeServerObject(IRepositoryViewObject viewObj) {
