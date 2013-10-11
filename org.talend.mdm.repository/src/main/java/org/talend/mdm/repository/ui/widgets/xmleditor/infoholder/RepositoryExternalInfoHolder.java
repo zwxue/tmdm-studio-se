@@ -31,7 +31,7 @@ import com.amalto.workbench.widgets.xmleditor.util.WorkflowInfo;
 public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder<T> {
 
     public static ExternalInfoHolder<JobInfo[]> getAllJobInfosHolder(XtentisPort port) {
-        return new RepositoryJobInfoHolder();
+        return (ExternalInfoHolder<JobInfo[]>) getEnternalInfoHolder("job");
     }
 
     public static ExternalInfoHolder<WSMDMConfig[]> getAllMDMServerInfoHolder2(XtentisPort port) {
@@ -39,11 +39,11 @@ public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder
     }
 
     public static ExternalInfoHolder<IAllDataModelHolder> getAllDataModelInfoHolderProxy(TreeObject treeNode) {
-        return new RepositoryDataModelInfoHolder();
+    	 return (ExternalInfoHolder<IAllDataModelHolder>) getEnternalInfoHolder("job");
     }
 
-    public static ExternalInfoHolder<WorkflowInfo[]> getAllWorkflowInfoHolder(XtentisPort port) {
-        return new RepositoryWorkflowInfoHolder();
+	public static ExternalInfoHolder<WorkflowInfo[]> getAllWorkflowInfoHolder(XtentisPort port) {
+        return (ExternalInfoHolder<WorkflowInfo[]>) getEnternalInfoHolder("workflow");
     }
 
     public static ExternalInfoHolder<String[]> getProcessAllCallJobVarsCandidatesHolder(WSTransformerV2 service) {
@@ -51,7 +51,7 @@ public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder
     }
 
     public static ExternalInfoHolder<String[]> getTriggerAllCallJobVarsCandidatesHolder() {
-        return new TriggerAllCallJobVariableCandidatesHolder();
+    	return (ExternalInfoHolder<String[]>) getEnternalInfoHolder("callJobVariableCandidates");
     }
 
     public static ExternalInfoHolder<String[]> getAllProcessesNamesHolder(XtentisPort port) {

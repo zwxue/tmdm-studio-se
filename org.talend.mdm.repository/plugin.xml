@@ -733,5 +733,19 @@
          </importItemsHandler>
       </importItemsProvider>
    </extension>
-   
+   <extension
+            point="org.talend.mdm.workbench.infoholder">
+         <externalInfoHolder
+               class="org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryDataModelInfoHolder"
+               type="datamodel">
+         </externalInfoHolder>
+         <externalInfoHolder
+               class="org.talend.mdm.repository.ui.widgets.xmleditor.infoholder.RepositoryJobInfoHolder"
+               type="job">
+         </externalInfoHolder>
+         <externalInfoHolder
+               class="com.amalto.workbench.widgets.xmleditor.infoholder.TriggerAllCallJobVariableCandidatesHolder"
+               type="callJobVariableCandidates">
+         </externalInfoHolder>
+      </extension>
 </plugin>

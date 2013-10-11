@@ -5,6 +5,7 @@
    <extension-point id="service" name="Service Registration" schema="schema/service.exsd"/>
    <extension-point id="extensibleXMLEditorPage" name="ExtensibleXMLEditorPage" schema="schema/extensibleXMLEditorPage.exsd"/>
    <extension-point id="repositoryViewService" name="repositoryViewService" schema="schema/repositoryViewService.exsd"/>
+   <extension-point id="infoholder" name="infoholder" schema="schema/infoholder.exsd"/>
 
    <extension
          point="org.eclipse.ui.editors">
