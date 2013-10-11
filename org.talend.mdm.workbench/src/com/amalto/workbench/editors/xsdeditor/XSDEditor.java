@@ -45,6 +45,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -106,6 +107,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 	protected TreeObject xobject;
 
 	private XSDSelectionManagerSelectionListener fXSDSelectionListener;
+
+    private IPropertyListener dirtyNotifyListener;
 
 	private byte[] fileContents = null;
 
@@ -204,7 +207,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 		if (doUpdateSourceLocation && fXSDSelectionListener != null) {
 			fXSDSelectionListener.doSetSelection();
 		}
-		doPageChanged();
+        doPageChanged();
 		refreshPropertyView();
 		setFocus();
 	}
@@ -275,7 +278,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 
 		/**
 		 * Determines DOM node based on object (xsd node)
-		 * 
+		 *
 		 * @param object
 		 * @return
 		 */
@@ -312,11 +315,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 								if (name.equals(elem.getName())) {
 									if (isUnderSameComplexType(declar,
 											isReference, elem)) {
-										if (isReference)
-											node = declarMap.get(elem)
+										if (isReference) {
+                                            node = declarMap.get(elem)
 													.getElement();
-										else
-											node = elem.getElement();
+                                        } else {
+                                            node = elem.getElement();
+                                        }
 
 										break;
 									}
@@ -452,8 +456,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 							.get(elemInSource).isElementDeclarationReference();
 					if (isDeclarationReference
 							&& (elemOnTree.getContainer() instanceof XSDSchema)
-							&& (elemInSource.getContainer() instanceof XSDSchema))
-						return true;
+							&& (elemInSource.getContainer() instanceof XSDSchema)) {
+                        return true;
+                    }
 
 					return false;
 				} else {
@@ -467,15 +472,17 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 							.equals(tarContainer.getContainer().getClass())) {
 						if (selContainer.getContainer() instanceof XSDSchema) {
 							if (selContainer.getName().equals(
-									tarContainer.getName()))
-								return true;
+									tarContainer.getName())) {
+                                return true;
+                            }
 						} else if (selContainer.getContainer() instanceof XSDElementDeclaration) {
 							XSDElementDeclaration selDec = (XSDElementDeclaration) selContainer
 									.getContainer();
 							XSDElementDeclaration tarDec = (XSDElementDeclaration) tarContainer
 									.getContainer();
-							if (selDec.getName().equals(tarDec.getName()))
-								return true;
+							if (selDec.getName().equals(tarDec.getName())) {
+                                return true;
+                            }
 						}
 					}
 				}
@@ -591,6 +598,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 				}
 				return super.isEditable();
 			}
+
 		};
 		try {
 			int index = addPage(this.structuredTextEditor, getEditorInput());
@@ -599,13 +607,34 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 					org.eclipse.wst.xsd.ui.internal.adt.editor.Messages._UI_LABEL_SOURCE);
 			this.structuredTextEditor.update();
 			this.structuredTextEditor.setEditorPart(this);
-			this.structuredTextEditor.addPropertyListener(this);
+            this.structuredTextEditor.addPropertyListener(this);
+            this.structuredTextEditor.addPropertyListener(getDirtyNotifyListener());
 			firePropertyChange(1);
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),
 					Messages.XSDEditor_ErrorMessage, null, e.getStatus());
 		}
 	}
+
+    private IPropertyListener getDirtyNotifyListener() {
+        if (dirtyNotifyListener == null) {
+            dirtyNotifyListener = new IPropertyListener() {
+                public void propertyChanged(Object source, int propId) {
+                    if (source == structuredTextEditor && propId == PROP_DIRTY) {
+                        boolean dirty = structuredTextEditor.isDirty();
+                        if (dirty) {
+                            DataModelMainPage dMainPage = getdMainPage();
+                            if (dMainPage != null) {
+                                dMainPage.setDirty(dirty);
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        return dirtyNotifyListener;
+    }
 
 	private Exception validateXsdSourceEditor() {
 		String xsd = getTextEditor().getTextViewer().getDocument().get();
@@ -626,7 +655,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 
 	/**
 	 * DOC talend-mdm Comment method "validateDiagnoses".
-	 * 
+	 *
 	 * @param xsdSchema
 	 * @return
 	 */
@@ -770,7 +799,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.amalto.workbench.editors.IServerObjectEditorState#isLocalInput()
 	 */
 	public boolean isLocalInput() {
