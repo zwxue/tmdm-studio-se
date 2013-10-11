@@ -100,6 +100,10 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         this.zipFileRepository = zipFileRepository;
     }
     
+	public boolean chooseExport() {
+		return exportsBtn.getSelection();
+	}
+    
     public void setRadioEnable(boolean radioEnable) {
 		this.radioEnable = radioEnable;
 	}
@@ -129,7 +133,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
         label.setText(Messages.ImportExchangeOptionsDialog_RevisionXX);
 
-        revisionCombo = new CCombo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.FLAT);
+        revisionCombo = new CCombo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.FLAT| SWT.BORDER);
         GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
         revisionCombo.setLayoutData(gd);
         gd.widthHint = 100;
@@ -372,7 +376,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             IOUtils.copy(stream, out);
             out.flush();
             if (!export) {
-                ZipToFile.unZipFile(tempFile.getAbsolutePath(), subFolderForTmp);
+            	ZipToFile.unZipFile(tempFile.getAbsolutePath(), subFolderForTmp);
                 boolean result = false;
                 int tryCount = 0;
                 while (!result && tryCount++ < 10) {

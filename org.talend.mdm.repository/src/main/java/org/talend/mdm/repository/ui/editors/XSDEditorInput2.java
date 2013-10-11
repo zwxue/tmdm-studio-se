@@ -66,7 +66,10 @@ public class XSDEditorInput2 extends XSDEditorInput implements IRepositoryViewEd
     }
 
     public Item getInputItem() {
-        return viewObject.getProperty().getItem();
+    	if(null != viewObject.getProperty()){
+    		return viewObject.getProperty().getItem();
+    	}
+        return null;
     }
 
     public IRepositoryViewObject getViewObject() {

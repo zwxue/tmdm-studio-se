@@ -844,6 +844,7 @@ public class Messages extends NLS {
 
     public static String ConsistencyConflict_undefined;
     public static String ConsistencyConflictDialog_onlyShowConflictObjs;
+    public static String NO_XSD_RESOURCE;
 
     // //////////////////////////////////////////////////////////////////////////
     //

@@ -13,8 +13,12 @@ public class ImportExchangeOptionsDialogR extends ImportExchangeOptionsDialog {
         super(parentShell, toolkit, importOption, zipFileRepository);
     }
     
-    @Override
-    public void fillInTable() {
-        clearTable();
-    }
+	@Override
+	public void fillInTable() {
+		if (chooseExport()) {
+			clearTable();
+		} else {
+			super.fillInTable();
+		}
+	}
 }

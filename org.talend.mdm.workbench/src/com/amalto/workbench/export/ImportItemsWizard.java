@@ -1305,14 +1305,7 @@ public class ImportItemsWizard extends Wizard {
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-
-                    ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
-                    dlg.setBlockOnOpen(true);
-                    if (dlg.open() == Window.OK) {
-                        zip.getText().setText(zipFileRepository.toString());
-                        parse();
-                        checkUpExchangeImport(false);
-                    }
+                	exchangeImport();
                 }
 
             });
@@ -1351,7 +1344,17 @@ public class ImportItemsWizard extends Wizard {
         }
 
     }
-
+    
+	protected void exchangeImport() {
+		ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
+		dlg.setBlockOnOpen(true);
+		if (dlg.open() == Window.OK) {
+			zip.getText().setText(zipFileRepository.toString());
+			parse();
+			checkUpExchangeImport(false);
+		}
+	}
+    
     protected Composite initItemTreeViewer(Composite composite) {
         Composite returnComposite = treeViewer.createItemList(composite);
         treeViewer.getViewer().setInput(null);

@@ -13,7 +13,10 @@
 package org.talend.mdm.repository.ui.wizards.imports;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -32,6 +36,8 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -51,9 +57,12 @@ import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.properties.ItemState;
+import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
+import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.impl.transformerV2.ITransformerV2NodeConsDef;
@@ -63,9 +72,13 @@ import org.talend.mdm.repository.core.service.ISyncWorkflowService;
 import org.talend.mdm.repository.core.service.ImportService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
+import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmproperties.WSTransformerV2Item;
 import org.talend.mdm.repository.model.mdmproperties.WSViewItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmserverobject.MdmserverobjectFactory;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.ui.dialogs.importexchange.ImportExchangeOptionsDialogR;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedObjectDialog;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
@@ -77,7 +90,6 @@ import org.talend.repository.imports.ImportItemUtil;
 import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
 import org.talend.repository.imports.ResourcesManagerFactory;
-
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
 import com.amalto.workbench.export.ImportItemsWizard;
 import com.amalto.workbench.utils.Util;
@@ -102,7 +114,59 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         super(sel);
     }
 
-    @Override
+	@Override
+	protected void exchangeImport() {
+		ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
+		dlg.setBlockOnOpen(true);
+		if (dlg.open() == Window.OK) {
+
+			File directory = new File(zipFileRepository.toString());
+			File[] files = directory.listFiles(new FileFilter() {
+				public boolean accept(File pathname) {
+					return pathname.getName().endsWith(".xsd");
+				}
+			});
+			if (null != files && files.length > 0) {
+				try {
+					MDMRepositoryView view = MDMRepositoryView.show();
+					for (File file : files) {
+						final String label = file.getName().substring(0,
+								file.getName().lastIndexOf('.'));
+						final WSDataModelItem item = MdmpropertiesFactory.eINSTANCE
+								.createWSDataModelItem();
+						ItemState itemState = PropertiesFactory.eINSTANCE
+								.createItemState();
+						item.setState(itemState);
+						WSDataModelE dataModel = MdmserverobjectFactory.eINSTANCE
+								.createWSDataModelE();
+						dataModel.setName(label);
+						InputStream stream = null;
+						try {
+							stream = new FileInputStream(file);
+							dataModel.setXsdSchema(IOUtils.toString(stream));
+							item.setWsDataModel(dataModel);
+						} catch (Exception e) {
+							log.error(e.getMessage());
+						}
+						IOUtils.closeQuietly(stream);
+						item.getState().setPath("");
+						RepositoryResourceUtil.createItem(item, label);
+						view.refreshRootNode(IServerObjectRepositoryType.TYPE_DATAMODEL);
+					}
+				} catch (Exception ex) {
+					log.error(ex.getMessage());
+				}
+				WizardDialog dialog = (WizardDialog) MDMImportRepositoryItemsWizard.this
+						.getContainer();
+				dialog.close();
+			} else {
+				MessageDialog.openWarning(getShell(), null,
+						Messages.NO_XSD_RESOURCE);
+			}
+		}
+	}
+
+	@Override
     public boolean performFinish() {
         if (!showLockedObjDialog(getCheckedObjects())) {
             return false;
