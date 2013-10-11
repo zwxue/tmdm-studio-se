@@ -29,11 +29,15 @@ import org.talend.mdm.repository.model.mdmserverobject.matchrule.MatchRuleMapInf
  */
 public interface IMatchRuleMapInfoService extends IService {
 
+    String T_SWOOSH_ALGORITHM = "T_SwooshAlgorithm"; //$NON-NLS-1$
+
     void saveMatchRuleMapInfo(Item item);
 
     MatchRuleMapInfo loadMatchRuleMapInfo(Item item);
 
     List<String> getAllMatchRuleNames();
+
+    List<MatchRuleDefinition> getAllMatchRules();
 
     EntityMapInfo findEntityMap(MatchRuleMapInfo mapInfo, String entityName);
 
