@@ -20,7 +20,6 @@ import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ProcessAllCallJobVariableCandidatesHolder;
-import com.amalto.workbench.widgets.xmleditor.infoholder.TriggerAllCallJobVariableCandidatesHolder;
 import com.amalto.workbench.widgets.xmleditor.util.WorkflowInfo;
 
 /**
@@ -39,7 +38,7 @@ public abstract class RepositoryExternalInfoHolder<T> extends ExternalInfoHolder
     }
 
     public static ExternalInfoHolder<IAllDataModelHolder> getAllDataModelInfoHolderProxy(TreeObject treeNode) {
-    	 return (ExternalInfoHolder<IAllDataModelHolder>) getEnternalInfoHolder("job");
+    	 return (ExternalInfoHolder<IAllDataModelHolder>) getEnternalInfoHolder("datamodel");
     }
 
 	public static ExternalInfoHolder<WorkflowInfo[]> getAllWorkflowInfoHolder(XtentisPort port) {

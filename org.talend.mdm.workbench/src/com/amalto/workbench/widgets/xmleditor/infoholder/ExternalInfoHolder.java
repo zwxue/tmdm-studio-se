@@ -15,6 +15,7 @@ package com.amalto.workbench.widgets.xmleditor.infoholder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -48,7 +49,9 @@ public abstract class ExternalInfoHolder<T> {
 	private static final Map<String, ExternalInfoHolder<?>> cache = new HashMap<String, ExternalInfoHolder<?>>();
 
 	private static final String holderExtension = "org.talend.mdm.workbench.infoholder";
-
+	
+	protected static Logger log = Logger.getLogger(ExternalInfoHolder.class);
+	
 	private static ExternalInfoHolder<?> getHolderFromExtension(String type) {
 		IExtensionPoint point = Platform.getExtensionRegistry()
 				.getExtensionPoint(holderExtension);
@@ -65,7 +68,7 @@ public abstract class ExternalInfoHolder<T> {
 						return (ExternalInfoHolder<?>) ce
 								.createExecutableExtension("class");
 					} catch (CoreException e) {
-						e.printStackTrace();
+						log.error(e.getMessage());
 					}
 				}
 			}
