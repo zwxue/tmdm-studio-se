@@ -710,7 +710,7 @@
          point="org.talend.core.runtime.demoProjects_provider">
       <demoProvider
             descHtml="resources/demoprojects/mdm_ce_demos.html"
-            description="MDM Demos"
+            description="%demo.description"
             icon="resources/demoprojects/product-icon-mdm-16px.gif"
             id="org.talend.demo.project.mdmce"
             name="MDM_CE_DEMOS"
