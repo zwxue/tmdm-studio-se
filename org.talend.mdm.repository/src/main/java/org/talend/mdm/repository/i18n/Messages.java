@@ -146,9 +146,13 @@ public class Messages extends NLS {
 
     public static String DeployAllDialog_label_selectserver;
 
+    public static String DeployAllDialog_reconcliation;
+
     public static String DeployAllDialog_selectAll;
 
     public static String DeployAllDialog_selectMoreItem;
+
+    public static String DeployAllDialog_skipDeployed;
 
     public static String DeployAllDialog_warning;
 
@@ -845,6 +849,10 @@ public class Messages extends NLS {
     public static String ConsistencyConflict_undefined;
     public static String ConsistencyConflictDialog_onlyShowConflictObjs;
     public static String NO_XSD_RESOURCE;
+
+    public static String ConsistencyConflictt_Deployed;
+
+    public static String ConsistencyConflictt_NotDeployed;
 
     // //////////////////////////////////////////////////////////////////////////
     //

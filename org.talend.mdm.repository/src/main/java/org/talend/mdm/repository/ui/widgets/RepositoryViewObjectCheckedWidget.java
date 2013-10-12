@@ -12,31 +12,49 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.widgets;
 
+import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.DecoratingLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
+import org.eclipse.ui.progress.UIJob;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -45,6 +63,9 @@ import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
+import org.talend.mdm.repository.core.service.ConsistencyService;
+import org.talend.mdm.repository.core.service.ConsistencyService.CompareResultEnum;
+import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyData;
 import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
@@ -56,10 +77,16 @@ import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSDigest;
+import com.amalto.workbench.webservices.WSDigestKey;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
 public class RepositoryViewObjectCheckedWidget extends Composite {
+
+    protected static Log log = LogFactory.getLog(RepositoryViewObjectCheckedWidget.class);
 
     class ContentProvider implements ITreeContentProvider {
 
@@ -104,6 +131,14 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     private CheckboxTreeViewer treeViewer;
 
+    private TreeViewerColumn localTimeColumn;
+
+    private TreeViewerColumn serverTimeColumn;
+
+    private boolean reconciliation;
+
+    private MDMServerDef curServerDef;
+
     /**
      * if type==null, return all type
      * 
@@ -133,8 +168,25 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         return this.lastServerDef;
     }
 
+    public void updateCurrentServerDef(final MDMServerDef curServerDef) {
+        new UIJob("Switch Server") { //$NON-NLS-1$
+
+            @Override
+            public IStatus runInUIThread(IProgressMonitor monitor) {
+                RepositoryViewObjectCheckedWidget.this.curServerDef = curServerDef;
+                consistencyMap.clear();
+                treeViewer.refresh();
+                selectObjects(true);
+                selectObjects(false);
+                return Status.OK_STATUS;
+            }
+        }.schedule();
+
+    }
+
     public List<AbstractDeployCommand> getSelectedCommands() {
         List<AbstractDeployCommand> commands = new LinkedList<AbstractDeployCommand>();
+        CommandManager commandManager = CommandManager.getInstance();
         for (Object obj : treeViewer.getCheckedElements()) {
             if (obj instanceof FolderRepositoryObject) {
                 continue;
@@ -142,6 +194,14 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
             String id = viewObject.getId();
             AbstractDeployCommand e = cmdMap.get(id);
+            if (e == null) {
+                List<IRepositoryViewObject> objs = new ArrayList<IRepositoryViewObject>();
+                objs.add(viewObject);
+                List<AbstractDeployCommand> newCommands = commandManager.getDeployCommands(objs, ICommand.CMD_MODIFY);
+                if (!newCommands.isEmpty()) {
+                    e = newCommands.get(0);
+                }
+            }
             commands.add(e);
             List<AbstractDeployCommand> associatedCommands = getAssociatedObjectCommand(viewObject, e.getCommandType());
             if (associatedCommands != null) {
@@ -160,7 +220,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             if (handler != null) {
                 List<IRepositoryViewObject> associatedObjects = handler.getAssociatedObjects(viewObj);
                 if (associatedObjects != null) {
-                   return commandManager.getDeployCommands(associatedObjects, cmdType);
+                    return commandManager.getDeployCommands(associatedObjects, cmdType);
                 }
             }
         }
@@ -222,18 +282,42 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             return objs.toArray(new IRepositoryViewObject[0]);
         } else {
             IRepositoryViewObject[] elements = RepositoryResourceUtil.getCategoryViewObjects();
-
-            IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
-                    .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
-            IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
-                    .getConfiguration(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
             List<IRepositoryViewObject> objs = new ArrayList<IRepositoryViewObject>();
-            addCategoryViewObject(objs, processConf);
-            addCategoryViewObject(objs, triggerConf);
 
-            objs.addAll(Arrays.asList(elements));
+            for (IRepositoryViewObject folderObj : elements) {
+                ERepositoryObjectType objType = folderObj.getRepositoryObjectType();
+                if (objType == IServerObjectRepositoryType.TYPE_EVENTMANAGER) {
+                    IRepositoryNodeConfiguration processConf = RepositoryNodeConfigurationManager
+                            .getConfiguration(IServerObjectRepositoryType.TYPE_TRANSFORMERV2);
+                    IRepositoryNodeConfiguration triggerConf = RepositoryNodeConfigurationManager
+                            .getConfiguration(IServerObjectRepositoryType.TYPE_ROUTINGRULE);
+
+                    addCategoryViewObject(objs, processConf);
+                    addCategoryViewObject(objs, triggerConf);
+                } else if (objType != IServerObjectRepositoryType.TYPE_MATCH_RULE) {
+                    objs.add(folderObj);
+                }
+            }
+            Collections.sort(objs, new Comparator() {
+
+                public int compare(Object o1, Object o2) {
+                    String name1 = ((IRepositoryViewObject) o1).getRepositoryObjectType().getLabel();
+                    String name2 = ((IRepositoryViewObject) o2).getRepositoryObjectType().getLabel();
+                    return name1.compareTo(name2);
+                }
+
+            });
             return objs.toArray(new IRepositoryViewObject[0]);
         }
+    }
+
+    public void enableReconciliation(boolean enable) {
+        this.reconciliation = enable;
+
+        treeViewer.refresh();
+        treeViewer.expandAll();
+        selectObjects(true);
+        selectObjects(false);
     }
 
     private void addCategoryViewObject(List<IRepositoryViewObject> result, IRepositoryNodeConfiguration conf) {
@@ -247,12 +331,13 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     private void initWidget() {
         //
-        setLayout(new FillLayout(SWT.HORIZONTAL));
+        setLayout(new GridLayout());
 
-        treeViewer = new ContainerCheckedTreeViewer(this, SWT.BORDER);
-        ILabelDecorator labelDecorator = RepositoryPlugin.getDefault().getWorkbench().getDecoratorManager().getLabelDecorator();
-        DecoratingLabelProvider labelProvider = new DecoratingLabelProvider(new MDMRepositoryLabelProvider(), labelDecorator);
-        treeViewer.setLabelProvider(labelProvider);
+        treeViewer = new ContainerCheckedTreeViewer(this, SWT.BORDER | SWT.FULL_SELECTION);
+        Tree tree = getTree();
+        tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+        installColumns();
         treeViewer.setContentProvider(new ContentProvider());
 
         treeViewer.getTree().addListener(SWT.PaintItem, new Listener() {
@@ -314,8 +399,6 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                             result = true;
                         }
                     } else if (viewObj instanceof IRepositoryViewObject) {
-                        boolean r = cmdMap.containsKey(viewObj.getId());
-
                         if (isVisibleViewObj(viewObj)) {
                             updateServerDef(viewObj);
                             // updateLockedObject(viewObj);
@@ -343,18 +426,197 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
             @Override
             public boolean select(Viewer viewer, Object parentElement, Object element) {
-                if (element instanceof FolderRepositoryObject) {
-                    return containVisibleElement((FolderRepositoryObject) element);
+                if (reconciliation) {
+                    return true;
                 } else {
-                    IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
-                    return isVisibleViewObj(viewObj);
+                    if (element instanceof FolderRepositoryObject) {
+                        return containVisibleElement((FolderRepositoryObject) element);
+                    } else {
+                        IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+                        return isVisibleViewObj(viewObj);
+                    }
                 }
-
             }
         });
+        // show time
+        final Button showTimestampBun = new Button(this, SWT.CHECK);
+        showTimestampBun.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                showTimeStampColumns(showTimestampBun.getSelection());
+            }
+        });
+        showTimestampBun.setText(Messages.ConsistencyConflict_showTimeStampColumn);
+        //
         treeViewer.setInput(input);
         selectAll(true);
         treeViewer.expandAll();
+    }
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy/MM/dd HH:mm:ss"); //$NON-NLS-1$
+
+    public void selectObjects(boolean deployed) {
+        for (IRepositoryViewObject viewObj : consistencyMap.keySet()) {
+            ConsistencyData consistencyData = consistencyMap.get(viewObj);
+            if (consistencyData != null) {
+                CompareResultEnum compareResult = consistencyData.getCompareResult();
+                if (deployed) {
+                    if (compareResult == CompareResultEnum.NOT_EXIST_IN_SERVER) {
+                        treeViewer.setChecked(viewObj, true);
+                    }
+                } else {
+                    if (compareResult == CompareResultEnum.SAME || compareResult == CompareResultEnum.CONFLICT
+                            || compareResult == CompareResultEnum.MODIFIED_LOCALLY) {
+                        treeViewer.setChecked(viewObj, false);
+                    }
+                }
+            }
+        }
+    }
+
+    class TimeStampColumnProvider extends ColumnLabelProvider {
+
+        private final boolean isLocal;
+
+        public TimeStampColumnProvider(boolean isLocal) {
+            this.isLocal = isLocal;
+        }
+
+        @Override
+        public String getText(Object element) {
+            if (element instanceof IRepositoryViewObject && curServerDef != null && !(element instanceof FolderRepositoryObject)) {
+                ConsistencyData consistencyData = getConsistencyData(curServerDef, (IRepositoryViewObject) element);
+                if (consistencyData != null) {
+                    WSDigest dt = isLocal ? consistencyData.getLocalDigestTime() : consistencyData.getServerDigestTime();
+                    if (dt != null && dt.getTimeStamp() > 0) {
+                        return DATE_FORMAT.format(new Date(dt.getTimeStamp()));
+                    }
+                }
+            }
+            return ""; //$NON-NLS-1$
+        }
+
+    }
+
+    class CompareResultColumnProvider extends ColumnLabelProvider {
+
+        @Override
+        public String getText(Object element) {
+            if (element instanceof IRepositoryViewObject && curServerDef != null && !(element instanceof FolderRepositoryObject)) {
+                ConsistencyData consistencyData = getConsistencyData(curServerDef, (IRepositoryViewObject) element);
+                if (consistencyData != null) {
+                    CompareResultEnum compareResult = consistencyData.getCompareResult();
+                    switch (compareResult) {
+                    case NOT_EXIST_IN_SERVER:
+                        return Messages.ConsistencyConflictt_NotDeployed;
+
+                    case SAME:
+                    case CONFLICT:
+                    case MODIFIED_LOCALLY:
+                        return Messages.ConsistencyConflictt_Deployed;
+                    case NOT_SUPPORT:
+                        return Messages.ConsistencyConflict_undefined;
+                    }
+                }
+            }
+            return ""; //$NON-NLS-1$
+        }
+
+    }
+
+    private void installColumns() {
+        treeViewer.getTree().setHeaderVisible(true);
+        //
+        TreeViewerColumn nameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        nameColumn.getColumn().setWidth(320);
+        nameColumn.getColumn().setText(Messages.ConsistencyConflict_name);
+        ILabelDecorator labelDecorator = RepositoryPlugin.getDefault().getWorkbench().getDecoratorManager().getLabelDecorator();
+        DecoratingStyledCellLabelProvider consistencyLabelProvider = new DecoratingStyledCellLabelProvider(
+                new MDMRepositoryLabelProvider(), labelDecorator, null);
+        nameColumn.setLabelProvider(consistencyLabelProvider);
+        // compare result
+        TreeViewerColumn resultColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        resultColumn.getColumn().setWidth(120);
+        resultColumn.getColumn().setText(Messages.ConsistencyConflict_compareResult);
+        resultColumn.setLabelProvider(new CompareResultColumnProvider());
+        //
+        localTimeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        localTimeColumn.getColumn().setText(Messages.ConsistencyConflict_localTimestamp);
+        localTimeColumn.setLabelProvider(new TimeStampColumnProvider(true));
+        //
+        serverTimeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        serverTimeColumn.getColumn().setText(Messages.ConsistencyConflict_serverTimestamp);
+        serverTimeColumn.setLabelProvider(new TimeStampColumnProvider(false));
+        //
+        showTimeStampColumns(false);
+    }
+
+    protected void showTimeStampColumns(boolean selection) {
+        int width = selection ? 120 : 0;
+        localTimeColumn.getColumn().setWidth(width);
+        serverTimeColumn.getColumn().setWidth(width);
+        localTimeColumn.getColumn().setResizable(selection);
+        serverTimeColumn.getColumn().setResizable(selection);
+        treeViewer.refresh();
+    }
+
+    Map<IRepositoryViewObject, ConsistencyData> consistencyMap = new HashMap<IRepositoryViewObject, ConsistencyData>();
+
+    private synchronized ConsistencyData getConsistencyData(MDMServerDef serverDef, IRepositoryViewObject viewObj) {
+        ConsistencyData consistencyData = consistencyMap.get(viewObj);
+        if (consistencyData != null) {
+            return consistencyData;
+        }
+        try {
+            ConsistencyService consistencyService = ConsistencyService.getInstance();
+
+            consistencyData = new ConsistencyData();
+
+            ERepositoryObjectType viewType = viewObj.getRepositoryObjectType();
+            if (viewType == null) {
+                return null;
+            }
+            if (viewType == IServerObjectRepositoryType.TYPE_RESOURCE || viewType == IServerObjectRepositoryType.TYPE_JOB
+                    || viewType == IServerObjectRepositoryType.TYPE_WORKFLOW) {
+
+                consistencyData.setCompareResult(CompareResultEnum.NOT_SUPPORT);
+            } else {
+                ArrayList<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+                viewObjs.add(viewObj);
+                Map<IRepositoryViewObject, WSDigest> digestValueResult = consistencyService.queryServerDigestValue(serverDef,
+                        viewObjs);
+                WSDigest serverDigestTime = digestValueResult.get(viewObj);
+                consistencyData.setServerDigestTime(serverDigestTime);
+                consistencyService.updateCurrentDigestValue(viewObj);
+                Item item = viewObj.getProperty().getItem();
+                String ld = consistencyService.getLocalDigestValue(item);
+                String cd = consistencyService.getCurrentDigestValue(item);
+                long localTimestamp = consistencyService.getLocalTimestamp(item);
+                // key
+                String type = viewObj.getRepositoryObjectType().getKey();
+                String objectName = viewObj.getLabel();
+                WSDigestKey key = new WSDigestKey(type, objectName);
+                consistencyData.setLocalDigestTime(new WSDigest(key, ld, localTimestamp));
+
+                // init compare result;
+                CompareResultEnum result;
+                if (serverDigestTime == null || serverDigestTime.getDigestValue() == null) {
+                    result = CompareResultEnum.NOT_EXIST_IN_SERVER;
+                } else {
+                    String rd = serverDigestTime.getDigestValue();
+                    result = consistencyService.getCompareResult(cd, ld, rd);
+                }
+                consistencyData.setCompareResult(result);
+
+            }
+            consistencyMap.put(viewObj, consistencyData);
+        } catch (RemoteException e) {
+            log.error(e.getMessage(), e);
+        } catch (XtentisException e) {
+            log.error(e.getMessage(), e);
+        }
+        return consistencyData;
     }
 
     public void selectAll(boolean isAll) {
@@ -387,6 +649,11 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     }
 
     private Set<IRepositoryViewObject> lockedViewObjs = new HashSet<IRepositoryViewObject>();
+
+    //
+    // private TreeColumn tc3;
+    //
+    // private TreeColumn tc4;
 
     private void updateLockedObject(IRepositoryViewObject viewObject) {
         if (viewObject instanceof FolderRepositoryObject) {

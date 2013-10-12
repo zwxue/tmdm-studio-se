@@ -23,10 +23,12 @@ package org.talend.mdm.repository.ui.navigator;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -48,10 +50,10 @@ import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements ILabelProvider, IDescriptionProvider,
-        IColorProvider, IFontProvider, ICommonLabelProvider {
+        IColorProvider, IFontProvider, ICommonLabelProvider, IStyledLabelProvider {
 
     private static Logger log = Logger.getLogger(MDMRepositoryLabelProvider.class);
 
@@ -196,6 +198,10 @@ public class MDMRepositoryLabelProvider extends ColumnLabelProvider implements I
     }
 
     public void init(ICommonContentExtensionSite aConfig) {
+    }
+
+    public StyledString getStyledText(Object element) {
+        return new StyledString(getText(element));
     }
 
 }

@@ -40,6 +40,7 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ConsistencyService;
 import org.talend.mdm.repository.core.service.ConsistencyService.CompareResultEnum;
+import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyData;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -100,40 +101,6 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
      */
     public TreeObjectCheckTreeViewer(TreeParent serverRoot) {
         super(serverRoot);
-    }
-
-    class ConsistencyData {
-
-        private WSDigest localDigestTime;
-
-        public WSDigest getLocalDigestTime() {
-            return this.localDigestTime;
-        }
-
-        public void setLocalDigestTime(WSDigest localDigestTime) {
-            this.localDigestTime = localDigestTime;
-        }
-
-        public WSDigest getServerDigestTime() {
-            return this.serverDigestTime;
-        }
-
-        public void setServerDigestTime(WSDigest serverDigestTime) {
-            this.serverDigestTime = serverDigestTime;
-        }
-
-        public CompareResultEnum getCompareResult() {
-            return this.compareResult;
-        }
-
-        public void setCompareResult(CompareResultEnum compareResult) {
-            this.compareResult = compareResult;
-        }
-
-        private WSDigest serverDigestTime;
-
-        private CompareResultEnum compareResult;
-
     }
 
     public void initInput(MDMServerDef serverDef) {
@@ -249,7 +216,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
     }
 
     private Map<TreeObject, ConsistencyData> initConsistencyData(MDMServerDef serverDef, List<TreeObject> treeObjs) {
-        Map<TreeObject, ConsistencyData> map = new HashMap<TreeObject, TreeObjectCheckTreeViewer.ConsistencyData>();
+        Map<TreeObject, ConsistencyData> map = new HashMap<TreeObject, ConsistencyData>();
         try {
             ConsistencyService consistencyService = ConsistencyService.getInstance();
             Map<TreeObject, WSDigest> serverDigestValues = consistencyService.queryServerDigestValue(serverDef, treeObjs);
@@ -257,6 +224,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 return map;
             }
             for (TreeObject treeObject : treeObjs) {
+
                 ConsistencyData consistencyData = new ConsistencyData();
                 WSDigest serverDigestTime = serverDigestValues.get(treeObject);
                 consistencyData.setServerDigestTime(serverDigestTime);
@@ -276,7 +244,6 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                     } else {
                         consistencyService.updateCurrentDigestValue(viewObj);
                         Item item = viewObj.getProperty().getItem();
-                        consistencyService.updateCurrentDigestValue(viewObj);
                         String ld = consistencyService.getLocalDigestValue(item);
                         String cd = consistencyService.getCurrentDigestValue(item);
                         long localTimestamp = consistencyService.getLocalTimestamp(item);

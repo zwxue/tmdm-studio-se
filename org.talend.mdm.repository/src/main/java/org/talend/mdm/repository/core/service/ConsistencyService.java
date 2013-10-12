@@ -102,6 +102,40 @@ public class ConsistencyService {
         NOT_SUPPORT
     }
 
+    public static class ConsistencyData {
+
+        private WSDigest localDigestTime;
+
+        public WSDigest getLocalDigestTime() {
+            return this.localDigestTime;
+        }
+
+        public void setLocalDigestTime(WSDigest localDigestTime) {
+            this.localDigestTime = localDigestTime;
+        }
+
+        public WSDigest getServerDigestTime() {
+            return this.serverDigestTime;
+        }
+
+        public void setServerDigestTime(WSDigest serverDigestTime) {
+            this.serverDigestTime = serverDigestTime;
+        }
+
+        public CompareResultEnum getCompareResult() {
+            return this.compareResult;
+        }
+
+        public void setCompareResult(CompareResultEnum compareResult) {
+            this.compareResult = compareResult;
+        }
+
+        private WSDigest serverDigestTime;
+
+        private CompareResultEnum compareResult;
+
+    }
+
     public static class ConsistencyCheckResult {
 
         private boolean isCanceled;

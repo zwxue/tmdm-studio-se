@@ -70,17 +70,19 @@ public class DeployAllDialog extends Dialog {
      */
     @Override
     protected Control createDialogArea(Composite parent) {
-        Composite container1 = (Composite) super.createDialogArea(parent);
-        GridLayout gridLayout = (GridLayout) container1.getLayout();
-        container1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        gridLayout.numColumns = 1;
+        Composite mainContainer = (Composite) super.createDialogArea(parent);
+        GridLayout gridLayout = (GridLayout) mainContainer.getLayout();
+        mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        gridLayout.numColumns = 2;
 
-        Label lblNewLabel_selserver = new Label(container1, SWT.NONE);
+        Label lblNewLabel_selserver = new Label(mainContainer, SWT.NONE);
         lblNewLabel_selserver.setText(Messages.DeployAllDialog_label_selectserver);
-        comboViewer = new ComboViewer(container1, SWT.DROP_DOWN | SWT.READ_ONLY);
+        lblNewLabel_selserver.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+        comboViewer = new ComboViewer(mainContainer, SWT.DROP_DOWN | SWT.READ_ONLY);
+
         Combo combo = comboViewer.getCombo();
-        GridData data = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 2);
-        data.widthHint = 400;
+        GridData data = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
+
         combo.setLayoutData(data);
         comboViewer.setLabelProvider(new LabelProvider() {
 
@@ -91,25 +93,38 @@ public class DeployAllDialog extends Dialog {
             }
         });
         comboViewer.setContentProvider(new ArrayContentProvider());
-
+        Label emptyLabel = new Label(mainContainer, SWT.NONE);
+        GridData emptydata = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+        emptydata.widthHint = 98;
+        emptyLabel.setLayoutData(emptydata);
         List<MDMServerDef> allServerDefs = ServerDefService.getAllServerDefs();
         comboViewer.setInput(allServerDefs);
         comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
                 serverDef = (MDMServerDef) ((IStructuredSelection) comboViewer.getSelection()).getFirstElement();
+                treeViewer.updateCurrentServerDef(serverDef);
             }
         });
+        final Button reconciliationBun = new Button(mainContainer, SWT.CHECK);
 
-        Composite container = new Composite(container1, SWT.BORDER);
+        reconciliationBun.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                treeViewer.enableReconciliation(reconciliationBun.getSelection());
+            }
+        });
+        reconciliationBun.setText(Messages.DeployAllDialog_reconcliation);
+        reconciliationBun.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+
+        Composite container = new Composite(mainContainer, SWT.BORDER);
         container.setLayout(new GridLayout(2, false));
-        container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         Label lblNewLabel = new Label(container, SWT.NONE);
         lblNewLabel.setText(Messages.DeployAllDialog_label);
         new Label(container, SWT.NONE);
-        // IRepositoryViewObject[] theInput = (IRepositoryViewObject[]) input;
-        // theInput = getNewInput();
-        // restoreDeleteObjectsTreeView(theInput);
+
         List<AbstractDeployCommand> commands = CommandManager.getInstance().getAllDeployCommands();
         treeViewer = new RepositoryViewObjectCheckedWidget(container, initType, commands);
         treeViewer.addCheckStateListener(new ICheckStateListener() {
@@ -118,7 +133,7 @@ public class DeployAllDialog extends Dialog {
                 // enableOkBun();
             }
         });
-        treeViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2));
+        treeViewer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
         Button selAllButton = new Button(container, SWT.NONE);
         selAllButton.addSelectionListener(new SelectionAdapter() {
 
@@ -139,6 +154,18 @@ public class DeployAllDialog extends Dialog {
                 treeViewer.selectAll(false);
             }
         });
+
+        Button skipDeployedBun = new Button(container, SWT.NONE);
+        skipDeployedBun.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+        skipDeployedBun.setText(Messages.DeployAllDialog_skipDeployed);
+        skipDeployedBun.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                treeViewer.selectObjects(false);
+            }
+        });
+
         initComboSelect();
         return container;
     }
@@ -156,12 +183,15 @@ public class DeployAllDialog extends Dialog {
                     }
                 }
             }
-            if (defaultServerDef == null && serverDefs.size() > 0)
+            if (defaultServerDef == null && serverDefs.size() > 0) {
                 defaultServerDef = serverDefs.get(0);
+            }
 
         }
-        if (defaultServerDef != null)
+        if (defaultServerDef != null) {
             comboViewer.setSelection(new StructuredSelection(defaultServerDef));
+            treeViewer.updateCurrentServerDef(defaultServerDef);
+        }
     }
 
     public IRepositoryViewObject getViewObjectByType(IRepositoryViewObject[] theInput, ERepositoryObjectType type) {
@@ -189,7 +219,7 @@ public class DeployAllDialog extends Dialog {
      */
     @Override
     protected Point getInitialSize() {
-        return new Point(450, 500);
+        return new Point(800, 500);
     }
 
     List<AbstractDeployCommand> selectedCommands;
