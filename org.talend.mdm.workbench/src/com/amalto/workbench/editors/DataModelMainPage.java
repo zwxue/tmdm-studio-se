@@ -102,6 +102,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDAttributeDeclaration;
 import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
@@ -135,6 +136,7 @@ import org.eclipse.xsd.XSDWhiteSpaceFacet;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDAttributeDeclarationImpl;
 import org.eclipse.xsd.impl.XSDAttributeUseImpl;
 import org.eclipse.xsd.impl.XSDComplexTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
@@ -1083,6 +1085,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         deleteConceptWrapAction.regisDelAction(XSDElementDeclarationImpl.class, deleteConceptAction);
         deleteConceptWrapAction.regisDelAction(XSDParticleImpl.class, deleteParticleAction);
         deleteConceptWrapAction.regisDelAction(XSDAttributeUseImpl.class, deleteAttributeAction);
+        deleteConceptWrapAction.regisDelAction(XSDAttributeDeclarationImpl.class, deleteAttributeAction);
         deleteConceptWrapAction.regisDelAction(XSDIdentityConstraintDefinitionImpl.class, deleteIdentityConstraintAction);
         deleteConceptWrapAction.regisDelAction(XSDXPathDefinitionImpl.class, deleteXPathAction);
         deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
@@ -1400,6 +1403,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         }
 
         if (obj instanceof XSDAttributeUse && selectedObjs.length == 1) {
+            manager.add(deleteAttributeAction);
+        }
+
+        if (obj instanceof XSDAttributeDeclaration && selectedObjs.length == 1) {
             manager.add(deleteAttributeAction);
         }
 

@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDAttributeDeclaration;
 import org.eclipse.xsd.XSDAttributeGroupDefinition;
 import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDAttributeUseCategory;
@@ -205,6 +206,19 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
             String name = attributeUse.getAttributeDeclaration().getName();
             if (name == null) {
                 name = " [" + attributeUse.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
+            }
+            return name;
+        }
+
+        if (obj instanceof XSDAttributeDeclaration) {
+            XSDAttributeDeclaration attributeDec = (XSDAttributeDeclaration) obj;
+            String name = attributeDec.getName();
+            if (name == null) {
+                name = attributeDec.getAliasName();
+                if (name == null)
+                 {
+                    name = " [null]"; //$NON-NLS-1$
+                }
             }
             return name;
         }
@@ -464,6 +478,16 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
             }
         }
 
+        if (obj instanceof XSDAttributeDeclaration) {
+            XSDAttributeDeclaration attributeDec = (XSDAttributeDeclaration) obj;
+            if ("xmlns".equals(attributeDec.getTargetNamespace())) //$NON-NLS-1$
+            {
+                return ImageCache.getCreatedImage(EImage.ANNOTATION.getPath());
+            } else {
+                return ImageCache.getCreatedImage("icons/attribute.gif");//$NON-NLS-1$
+            }
+        }
+
         if (obj instanceof XSDAnnotation) {
             return ImageCache.getCreatedImage(EImage.ANNOTATION.getPath());
         }
@@ -543,7 +567,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     /**
      * Print a simple type definition for the document.
-     * 
+     *
      * @param xsdSimpleTypeDefinition a simple type definition in the schema for schema.
      */
     public String getSimpleTypeDefinition(XSDSimpleTypeDefinition xsdSimpleTypeDefinition) {
@@ -555,7 +579,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
              * s+= "("; } for (Iterator enumerators = value.iterator(); enumerators.hasNext();) { String enumerator =
              * enumerators.next().toString(); s+= enumerator; if (enumerators.hasNext()) { s+= " | ;"; } } if
              * (value.size() > 1) { s+= ")";
-             * 
+             *
              * }
              */
             s += xsdSimpleTypeDefinition.getName() != null ? xsdSimpleTypeDefinition.getName() : xsdSimpleTypeDefinition
@@ -621,7 +645,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
      */
     public Color getForeground(Object element) {
@@ -640,7 +664,7 @@ public class XSDTreeLabelProvider extends LabelProvider implements ITreePathLabe
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
      */
     public Color getBackground(Object element) {

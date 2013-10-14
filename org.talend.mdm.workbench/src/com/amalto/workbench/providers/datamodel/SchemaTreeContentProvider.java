@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDAttributeDeclaration;
 import org.eclipse.xsd.XSDAttributeGroupDefinition;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -99,33 +100,42 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
     protected Object[] findChildren(Object parent) {
 
-        if (parent instanceof XSDSchema)
+        if (parent instanceof XSDSchema) {
             return getXSDSchemaChildren((XSDSchema) parent);
+        }
 
-        if (parent instanceof XSDAttributeGroupDefinition)
+        if (parent instanceof XSDAttributeGroupDefinition) {
             return getXSDAttributeGroupDefinitionChildren((XSDAttributeGroupDefinition) parent);
+        }
 
-        if (parent instanceof XSDParticle)
+        if (parent instanceof XSDParticle) {
             return getXSDParticleChildren((XSDParticle) parent);
+        }
 
-        if (parent instanceof XSDModelGroup)
+        if (parent instanceof XSDModelGroup) {
             return getXSDModelGroupChildren((XSDModelGroup) parent);
+        }
 
-        if (parent instanceof XSDSimpleTypeDefinition)
+        if (parent instanceof XSDSimpleTypeDefinition) {
             return getXSDSimpleTypeDefinitionChildren((XSDSimpleTypeDefinition) parent);
+        }
 
-        if (parent instanceof XSDElementDeclaration)
+        if (parent instanceof XSDElementDeclaration) {
             return getXSDElementDeclarationChildren((XSDElementDeclaration) parent);
+        }
 
-        if (parent instanceof XSDIdentityConstraintDefinition)
+        if (parent instanceof XSDIdentityConstraintDefinition) {
             return getXSDIdentityConstraintDefinitionChildren((XSDIdentityConstraintDefinition) parent);
+        }
 
-        if (parent instanceof XSDAnnotation)
+        if (parent instanceof XSDAnnotation) {
             return getXSDAnnotationChildren((XSDAnnotation) parent);
+        }
 
         // appinfos
-        if (parent instanceof Element)
+        if (parent instanceof Element) {
             return new Object[0];
+        }
 
         return new Object[0];
     }
@@ -154,7 +164,9 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     public String getXSDSchemaAsString() throws Exception {
 
         if (xsdSchema == null)
+         {
             return "";//$NON-NLS-1$
+        }
 
         Document document = xsdSchema.getDocument();
         String schema = Util.nodeToString(document);
@@ -184,18 +196,21 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 		}finally{
 			IOUtils.closeQuietly(stream);
 		}
-    	
+
     }
     protected void addElementDeclarationFromSchema(XSDSchema schema,Collection<XSDElementDeclaration> declarations){
     	EList<XSDElementDeclaration> elementDeclarations = schema.getElementDeclarations();
     	for(XSDElementDeclaration declaration:elementDeclarations) {
-    		if(declaration.eContainer().equals(schema))
-    			declarations.add(declaration);
+    		if(declaration.eContainer().equals(schema)) {
+                declarations.add(declaration);
+            }
     	}
     }
-    
+
 	protected Object[] getXSDSchemaChildren(XSDSchema schema) {
 		List<XSDElementDeclaration> declarations = new ArrayList<XSDElementDeclaration>();
+
+        List<Object> attributeDeclarations = new ArrayList<Object>();
 		if (null != xsdSchema) {
 			for (XSDSchemaContent cnt : xsdSchema.getContents()) {
 				if (cnt instanceof XSDInclude) {
@@ -203,8 +218,9 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 					String schemaLocation = incu.getSchemaLocation();
 					XSDSchema schemaInc = createSchema(schemaLocation);
 					addElementDeclarationFromSchema(schemaInc, declarations);
-				} else {
-					continue;
+                } else if (cnt instanceof XSDAttributeDeclaration) {
+                    XSDAttributeDeclaration attriDec = (XSDAttributeDeclaration) cnt;
+                    attributeDeclarations.add(attriDec);
 				}
 			}
 		}
@@ -212,24 +228,28 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
 		Object[] schemaChildren = Util.filterOutDuplicatedElems(declarations
 				.toArray(new XSDNamedComponent[declarations.size()]));
+        attributeDeclarations.addAll(Arrays.asList(schemaChildren));
 
-		return schemaChildren;
+        return attributeDeclarations.toArray();
 	}
 
     protected Object[] getXSDAttributeGroupDefinitionChildren(XSDAttributeGroupDefinition parent) {
         XSDAttributeGroupDefinition attributeGroupDefinition = parent;
-        if (attributeGroupDefinition.getContents().size() == 0)
+        if (attributeGroupDefinition.getContents().size() == 0) {
             attributeGroupDefinition = attributeGroupDefinition.getResolvedAttributeGroupDefinition();
+        }
         return attributeGroupDefinition.getContents().toArray(new Object[attributeGroupDefinition.getContents().size()]);
     }
 
     protected Object[] getXSDParticleChildren(XSDParticle particle) {
 
-        if (particle.getTerm() instanceof XSDElementDeclaration)
+        if (particle.getTerm() instanceof XSDElementDeclaration) {
             return getXSDElementDeclarationChildren((XSDElementDeclaration) particle.getTerm());
+        }
 
-        if (particle.getTerm() instanceof XSDModelGroup)
+        if (particle.getTerm() instanceof XSDModelGroup) {
             return getXSDModelGroupChildren((XSDModelGroup) particle.getTerm());
+        }
 
         if (particle.getTerm() instanceof XSDWildcard) {
         }
@@ -244,7 +264,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
     protected Object[] getXSDSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition parent) {
         Object[] result = null;
-        
+
         switch (parent.getVariety()) {
         case ATOMIC_LITERAL:
             result = getXSDSimpleTypeDefinitionChildren_ATOMIC(parent);
@@ -258,7 +278,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         default:
             result = new Object[0];
         }
-        
+
         return result;
     }
 
@@ -275,12 +295,14 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         ArrayList<Object> list = new ArrayList<Object>();
         // add Base Type if not a pre-defined type
         if (parent != null && parent.getSchema() != null && parent.getSchema().getSchemaForSchema() != null) {
-            if (!parent.getSchema().getSchemaForSchema().getTypeDefinitions().contains(parent))
+            if (!parent.getSchema().getSchemaForSchema().getTypeDefinitions().contains(parent)) {
                 list.add(parent.getBaseTypeDefinition());
+            }
         }
 
-        if (!Util.isBuildInType(parent))
+        if (!Util.isBuildInType(parent)) {
             list.addAll(parent.getFacetContents());
+        }
 
         return list.toArray(new Object[list.size()]);
     }
@@ -308,8 +330,9 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     }
 
     protected void addEleDeclarationAnn2List(List<Object> list, XSDElementDeclaration element) {
-        if (element.getAnnotation() != null)
+        if (element.getAnnotation() != null) {
             list.add(element.getAnnotation());
+        }
     }
 
     protected Object[] getXSDElementDeclarationChildren_TypeDef(XSDElementDeclaration parent) {
@@ -317,13 +340,16 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         ArrayList<Object> list = new ArrayList<Object>();
 
         if (parent.getTypeDefinition() == null)
+         {
             return new Object[0]; // elements with not type declaration
+        }
 
         // handle extensions and restrictions directly
-        if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+        if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) parent.getTypeDefinition(), true));
-        else
+        } else {
             list.addAll(Util.getSimpleTypeDefinitionChildren((XSDSimpleTypeDefinition)parent.getTypeDefinition()));
+        }
 
         return list.toArray();
     }
@@ -334,8 +360,9 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
     protected Object[] getXSDElementDeclarationChildren(XSDElementDeclaration parent) {
         // abstract elements do not have children
-        if (parent.isAbstract())
+        if (parent.isAbstract()) {
             return new Object[0];
+        }
 
         ArrayList<Object> list = new ArrayList<Object>();
 

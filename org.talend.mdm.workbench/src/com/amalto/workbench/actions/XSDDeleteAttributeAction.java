@@ -19,9 +19,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.xsd.XSDAttributeDeclaration;
 import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDConcreteComponent;
+import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
@@ -35,7 +37,9 @@ public class XSDDeleteAttributeAction extends UndoAction {
 
     private static Log log = LogFactory.getLog(XSDDeleteAttributeAction.class);
 
-    private XSDAttributeUse attribute;
+    private XSDAttributeUse attributeUse;
+
+    private XSDAttributeDeclaration attributeDeclaration;
 
     public XSDDeleteAttributeAction(DataModelMainPage page) {
         super(page);
@@ -47,28 +51,47 @@ public class XSDDeleteAttributeAction extends UndoAction {
     @Override
     protected IStatus doAction() {
         try {
-
-            XSDAttributeUse attri = attribute;
-            if (attri == null) {
+            XSDAttributeUse attriUse = attributeUse;
+            XSDAttributeDeclaration attriDec = attributeDeclaration;
+            if (attriUse == null || attriDec == null) {
                 ISelection selection = page.getTreeViewer().getSelection();
-                attri = (XSDAttributeUse) ((IStructuredSelection) selection).getFirstElement();
+                Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+                if (firstElement instanceof XSDAttributeUse) {
+                    attriUse = (XSDAttributeUse) firstElement;
+                } else if (firstElement instanceof XSDAttributeDeclaration) {
+                    attriDec = (XSDAttributeDeclaration) firstElement;
+                }
             }
 
-            if (attri.getContainer() == null) {
-                return Status.CANCEL_STATUS;
-            }
+            if (attriUse != null) {
+                if (attriUse.getContainer() == null) {
+                    return Status.CANCEL_STATUS;
+                }
 
-            XSDConcreteComponent container = attri.getContainer();
-            if (container instanceof XSDComplexTypeDefinition) {
-                XSDComplexTypeDefinition cType = (XSDComplexTypeDefinition) container;
-                cType.getAttributeUses().remove(attri);
-                cType.getAttributeContents().remove(attri);
-                cType.updateElement();
+                XSDConcreteComponent container = attriUse.getContainer();
+                if (container instanceof XSDComplexTypeDefinition) {
+                    XSDComplexTypeDefinition cType = (XSDComplexTypeDefinition) container;
+                    cType.getAttributeUses().remove(attriUse);
+                    cType.getAttributeContents().remove(attriUse);
+                    cType.updateElement();
+                }
+            } else if (attriDec != null) {
+                if(attriDec.getContainer() == null){
+                    return Status.CANCEL_STATUS;
+                }
+
+                XSDConcreteComponent container = attriDec.getContainer();
+                if(container instanceof XSDSchema) {
+                    XSDSchema xsdschema = (XSDSchema) container;
+                    xsdschema.getContents().remove(attriDec);
+                }
             }
 
             schema.update();
 
-            attribute = null;
+            attributeUse = null;
+            attributeDeclaration = null;
+
             page.refresh();
             page.markDirtyWithoutCommit();
 
@@ -81,7 +104,11 @@ public class XSDDeleteAttributeAction extends UndoAction {
         return Status.OK_STATUS;
     }
 
-    public void setXSDAttribute(XSDAttributeUse attribute) {
-        this.attribute = attribute;
+    public void setXSDAttributeUse(XSDAttributeUse attribute) {
+        this.attributeUse = attribute;
+    }
+
+    public void setXSDAttribute(XSDAttributeDeclaration attribute) {
+        this.attributeDeclaration = attribute;
     }
 }

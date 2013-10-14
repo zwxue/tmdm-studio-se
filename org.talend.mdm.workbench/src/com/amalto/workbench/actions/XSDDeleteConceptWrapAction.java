@@ -28,6 +28,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDAttributeDeclaration;
 import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDConcreteComponent;
@@ -155,7 +156,9 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
                 } else if (delExecute instanceof XSDDeleteTypeDefinition && toDel instanceof XSDSimpleTypeDefinition) {
                     ((XSDDeleteTypeDefinition) delExecute).setXSDTODel((XSDSimpleTypeDefinition) toDel);
                 } else if (delExecute instanceof XSDDeleteAttributeAction && toDel instanceof XSDAttributeUse) {
-                    ((XSDDeleteAttributeAction) delExecute).setXSDAttribute((XSDAttributeUse) toDel);
+                    ((XSDDeleteAttributeAction) delExecute).setXSDAttributeUse((XSDAttributeUse) toDel);
+                } else if (delExecute instanceof XSDDeleteAttributeAction && toDel instanceof XSDAttributeDeclaration) {
+                    ((XSDDeleteAttributeAction) delExecute).setXSDAttribute((XSDAttributeDeclaration) toDel);
                 } else {
                     return Status.CANCEL_STATUS;
                 }
@@ -313,7 +316,8 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
 
         for (Object obj : selects) {
             if (obj instanceof XSDElementDeclaration || obj instanceof XSDParticle
-                    || obj instanceof XSDIdentityConstraintDefinition || obj instanceof XSDAttributeUse) {
+                    || obj instanceof XSDIdentityConstraintDefinition || obj instanceof XSDAttributeUse
+                    || obj instanceof XSDAttributeDeclaration) {
                 continue;
             } else if (obj instanceof XSDXPathDefinition) {
                 XSDXPathDefinition xpath = (XSDXPathDefinition) obj;

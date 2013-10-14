@@ -52,8 +52,9 @@ public class TreeExpandHelper {
     }
 
     public void recordExpandState(DataModelMainPage mainPage) {
-        if (mainPage == null)
+        if (mainPage == null) {
             return;
+        }
 
         cleanCache();
 
@@ -65,8 +66,9 @@ public class TreeExpandHelper {
     }
 
     public void recoverExpandState(DataModelMainPage mainPage) {
-        if (mainPage == null)
+        if (mainPage == null) {
             return;
+        }
 
         Object[] expandedEntityElements = getExpandedEntityElements(mainPage);
         mainPage.getElementsViewer().setExpandedElements(expandedEntityElements);
@@ -96,9 +98,9 @@ public class TreeExpandHelper {
             for (int i = 1; i < segmentCount; i++) {
                 Object segment = path.getSegment(i);
                 ExpandInfoNode newNode = ExpandInfoNode.create(getName(segment), segment.getClass().getName());
-                if (rootNode.childs == null)
+                if (rootNode.childs == null) {
                     rootNode.addChild(newNode);
-                else {
+                } else {
                     if (rootNode.childs.contains(newNode)) {
                         newNode = rootNode.childs.get(rootNode.childs.indexOf(newNode));
                     } else {
@@ -128,8 +130,9 @@ public class TreeExpandHelper {
             pathSet.add(path);
 
             //
-            if (maxSegmentCount < segmentCount)
+            if (maxSegmentCount < segmentCount) {
                 maxSegmentCount = segmentCount;
+            }
         }
 
         Set<TreePath> roots = pathMaps.get(1);
@@ -143,17 +146,19 @@ public class TreeExpandHelper {
 
         for (int i = 2; i < maxSegmentCount + 1; i++) {
             Set<TreePath> set = pathMaps.get(i);
-            if (set == null || set.size() == 0)
+            if (set == null || set.size() == 0) {
                 break;
+            }
 
             Set<TreePath> parents = pathMaps.get(i - 1);
             Iterator<TreePath> iterator = set.iterator();
             while (iterator.hasNext()) {
                 TreePath path = iterator.next();
-                if (parents.contains(path.getParentPath()))
+                if (parents.contains(path.getParentPath())) {
                     paths.add(path);
-                else
+                } else {
                     iterator.remove();
+                }
             }
         }
 
@@ -174,16 +179,18 @@ public class TreeExpandHelper {
         // record entities
         Map<ExpandInfoNode, XSDElementDeclaration> expandedRoots = new HashMap<ExpandInfoNode, XSDElementDeclaration>();
         for (Object obj : xsdDeclarations) {
-            XSDElementDeclaration decl = (XSDElementDeclaration) obj;
-            String name = decl.getName();
-            for (ExpandInfoNode node : expandedElements) {
-                if (name.equals(node.name)) {
-                    expandedRoots.put(node, decl);
+            if (obj instanceof XSDElementDeclaration) {
+                XSDElementDeclaration decl = (XSDElementDeclaration) obj;
+                String name = decl.getName();
+                for (ExpandInfoNode node : expandedElements) {
+                    if (name.equals(node.name)) {
+                        expandedRoots.put(node, decl);
 
-                    result.add(decl);
-                    nodeStack.add(node);// /
-                    elementStack.add(decl);// /
-                    break;
+                        result.add(decl);
+                        nodeStack.add(node);// /
+                        elementStack.add(decl);// /
+                        break;
+                    }
                 }
             }
         }
@@ -263,10 +270,11 @@ public class TreeExpandHelper {
         Map<ExpandInfoNode, Object> pairs = new HashMap<ExpandInfoNode, Object>();
 
         for (Object child : elementChildrens) {
-            for (ExpandInfoNode node : nodes)
+            for (ExpandInfoNode node : nodes) {
                 if (isSameXSDElement(child, node)) {
                     pairs.put(node, child);
                 }
+            }
         }
 
         return pairs;
@@ -309,8 +317,9 @@ public class TreeExpandHelper {
             }
         }
 
-        if (objA instanceof XSDAnnotation)
+        if (objA instanceof XSDAnnotation) {
             return null;
+        }
 
         if (objA instanceof XSDIdentityConstraintDefinition) {
             XSDIdentityConstraintDefinition constraint = (XSDIdentityConstraintDefinition) objA;
@@ -363,23 +372,26 @@ public class TreeExpandHelper {
         }
 
         public boolean hasChildren() {
-            if (childs == null || childs.size() == 0)
+            if (childs == null || childs.size() == 0) {
                 return false;
+            }
 
             return true;
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (obj == null)
+            if (obj == null) {
                 return false;
+            }
 
             if (obj instanceof ExpandInfoNode) {
                 ExpandInfoNode node = (ExpandInfoNode) obj;
-                if (name != null)
+                if (name != null) {
                     return name.equals(node.name) && type.equals(node.type);
-                else
+                } else {
                     return type.equals(node.type);
+                }
             }
 
             return false;
