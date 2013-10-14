@@ -45,6 +45,8 @@ public interface IMatchRuleMapInfoService extends IService {
 
     MatchRuleDefinition getMatchRuleDef(String ruleDefName);
 
+    IRepositoryViewObject getMatchRuleDefViewObject(String ruleDefName);
+
     MatchRuleMapInfoContainer generateMatchRuleMapInfoContainer(Item item);
 
     String convertMatchRuleMapInfoContainerToXML(MatchRuleMapInfoContainer container);
