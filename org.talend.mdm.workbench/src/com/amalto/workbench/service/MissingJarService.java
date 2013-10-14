@@ -15,14 +15,16 @@ package com.amalto.workbench.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.talend.core.model.general.ModuleNeeded;
 import org.talend.core.model.general.ModuleNeeded.ELibraryInstallStatus;
 import org.talend.librariesmanager.model.ModulesNeededProvider;
+import org.talend.librariesmanager.ui.dialogs.ExternalModulesInstallDialogWithProgress;
 
-import com.amalto.workbench.dialogs.MissingJarDialog;
+import com.amalto.workbench.i18n.Messages;
 
 /**
  * created by HHB on 2013-9-22 Detailled comment
@@ -74,8 +76,10 @@ public class MissingJarService {
 
             public void run() {
                 Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-                MissingJarDialog dialog = new MissingJarDialog(shell, missingJars);
-                dialog.open();
+
+                ExternalModulesInstallDialogWithProgress dialog = new ExternalModulesInstallDialogWithProgress(shell,
+                        Messages.MissingJarDialog_title, Messages.MissingJarDialog_text, SWT.APPLICATION_MODAL);
+                dialog.showDialog(true, missingJars.toArray(new String[0]));
             }
         });
 
