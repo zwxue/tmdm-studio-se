@@ -176,8 +176,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 RepositoryViewObjectCheckedWidget.this.curServerDef = curServerDef;
                 consistencyMap.clear();
                 treeViewer.refresh();
-                selectObjects(true);
-                selectObjects(false);
+                selectObjects(new InitDeployCheckHandler());
                 return Status.OK_STATUS;
             }
         }.schedule();
@@ -316,8 +315,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
         treeViewer.refresh();
         treeViewer.expandAll();
-        selectObjects(true);
-        selectObjects(false);
+        selectObjects(new InitDeployCheckHandler());
     }
 
     private void addCategoryViewObject(List<IRepositoryViewObject> result, IRepositoryNodeConfiguration conf) {
@@ -409,21 +407,6 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 return result;
             }
 
-            private boolean isVisibleViewObj(IRepositoryViewObject viewObj) {
-                AbstractDeployCommand cmd = cmdMap.get(viewObj.getId());
-                if (cmd != null) {
-                    ERepositoryObjectType type = viewObj.getRepositoryObjectType();
-                    if (type == ERepositoryObjectType.PROCESS) {
-                        int commandType = cmd.getCommandType();
-                        return commandType == ICommand.CMD_MODIFY || commandType == ICommand.CMD_DELETE;
-                    } else {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
             @Override
             public boolean select(Viewer viewer, Object parentElement, Object element) {
                 if (reconciliation) {
@@ -454,25 +437,66 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         treeViewer.expandAll();
     }
 
+    private boolean isVisibleViewObj(IRepositoryViewObject viewObj) {
+        AbstractDeployCommand cmd = cmdMap.get(viewObj.getId());
+        if (cmd != null) {
+            ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+            if (type == ERepositoryObjectType.PROCESS) {
+                int commandType = cmd.getCommandType();
+                return commandType == ICommand.CMD_MODIFY || commandType == ICommand.CMD_DELETE;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yy/MM/dd HH:mm:ss"); //$NON-NLS-1$
 
-    public void selectObjects(boolean deployed) {
+    public void skipDeployedObjects() {
+        selectObjects(new SkipDeployedCheckHandler());
+    }
+
+    public void selectObjects(CheckHandler checkHandler) {
         for (IRepositoryViewObject viewObj : consistencyMap.keySet()) {
             ConsistencyData consistencyData = consistencyMap.get(viewObj);
             if (consistencyData != null) {
                 CompareResultEnum compareResult = consistencyData.getCompareResult();
-                if (deployed) {
-                    if (compareResult == CompareResultEnum.NOT_EXIST_IN_SERVER) {
-                        treeViewer.setChecked(viewObj, true);
-                    }
-                } else {
-                    if (compareResult == CompareResultEnum.SAME || compareResult == CompareResultEnum.CONFLICT
-                            || compareResult == CompareResultEnum.MODIFIED_LOCALLY) {
-                        treeViewer.setChecked(viewObj, false);
-                    }
-                }
+                checkHandler.handle(compareResult, viewObj);
             }
         }
+    }
+
+    interface CheckHandler {
+
+        void handle(CompareResultEnum compareResult, IRepositoryViewObject viewObj);
+    }
+
+    class InitDeployCheckHandler implements CheckHandler {
+
+        public void handle(CompareResultEnum compareResult, IRepositoryViewObject viewObj) {
+
+            if (compareResult == CompareResultEnum.NOT_EXIST_IN_SERVER) {
+                treeViewer.setChecked(viewObj, true);
+            } else {
+                treeViewer.setChecked(viewObj, isVisibleViewObj(viewObj));
+            }
+        }
+
+    }
+
+    class SkipDeployedCheckHandler implements CheckHandler {
+
+        public void handle(CompareResultEnum compareResult, IRepositoryViewObject viewObj) {
+
+            if (compareResult == CompareResultEnum.SAME || compareResult == CompareResultEnum.CONFLICT
+                    || compareResult == CompareResultEnum.MODIFIED_LOCALLY) {
+                treeViewer.setChecked(viewObj, false);
+            }
+
+        }
+
     }
 
     class TimeStampColumnProvider extends ColumnLabelProvider {

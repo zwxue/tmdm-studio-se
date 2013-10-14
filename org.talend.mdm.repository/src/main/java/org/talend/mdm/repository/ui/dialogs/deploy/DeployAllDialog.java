@@ -162,7 +162,7 @@ public class DeployAllDialog extends Dialog {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                treeViewer.selectObjects(false);
+                treeViewer.skipDeployedObjects();
             }
         });
 
