@@ -608,6 +608,20 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 			this.structuredTextEditor.update();
 			this.structuredTextEditor.setEditorPart(this);
             this.structuredTextEditor.addPropertyListener(this);
+
+            /*
+             * **please don't remove this annotation util the problem is really resolve.
+             * 
+             * Here add a property listener to source editor to achieve a effect that when source editor is modified by
+             * user, notify the model editor that it should be in dirty state.
+             * 
+             * this is not a perfect resolution of issue TMDM-6403, because we have not find the real reason that lead
+             * to that result. the more detailed thing is the variable 'fSynchronizationStamp' in class
+             * 'ResourceTextFileBuffer' is updated in some place and this variable finally affect the variable
+             * 'fCanBeSaved' (see documentChanged method of the inner class DocumentListener)which indicated the source
+             * editor's dirty state, so affect combined editor's dirty state,then affect the combined editor's property
+             * listener's execution, then lead to the editor's save and model validation.
+             */
             this.structuredTextEditor.addPropertyListener(getDirtyNotifyListener());
 			firePropertyChange(1);
 		} catch (PartInitException e) {
