@@ -531,16 +531,18 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                 ConsistencyData consistencyData = getConsistencyData(curServerDef, (IRepositoryViewObject) element);
                 if (consistencyData != null) {
                     CompareResultEnum compareResult = consistencyData.getCompareResult();
-                    switch (compareResult) {
-                    case NOT_EXIST_IN_SERVER:
-                        return Messages.ConsistencyConflictt_NotDeployed;
+                    if (compareResult != null) {
+                        switch (compareResult) {
+                        case NOT_EXIST_IN_SERVER:
+                            return Messages.ConsistencyConflictt_NotDeployed;
 
-                    case SAME:
-                    case CONFLICT:
-                    case MODIFIED_LOCALLY:
-                        return Messages.ConsistencyConflictt_Deployed;
-                    case NOT_SUPPORT:
-                        return Messages.ConsistencyConflict_undefined;
+                        case SAME:
+                        case CONFLICT:
+                        case MODIFIED_LOCALLY:
+                            return Messages.ConsistencyConflictt_Deployed;
+                        case NOT_SUPPORT:
+                            return Messages.ConsistencyConflict_undefined;
+                        }
                     }
                 }
             }
@@ -606,7 +608,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
                 consistencyData.setCompareResult(CompareResultEnum.NOT_SUPPORT);
             } else {
-                ArrayList<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
+                List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
                 viewObjs.add(viewObj);
                 Map<IRepositoryViewObject, WSDigest> digestValueResult = consistencyService.queryServerDigestValue(serverDef,
                         viewObjs);
