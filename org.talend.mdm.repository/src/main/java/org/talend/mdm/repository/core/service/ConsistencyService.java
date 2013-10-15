@@ -47,12 +47,15 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.ByteArray;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -66,6 +69,7 @@ import org.talend.mdm.repository.ui.dialogs.consistency.ConsistencyConflictDialo
 import org.talend.mdm.repository.ui.preferences.PreferenceConstants;
 import org.talend.mdm.repository.utils.DigestUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
+import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.XtentisException;
@@ -576,6 +580,19 @@ public class ConsistencyService {
             updateLocalTimestamp(item, timeValue.getValue());
         }
         if (!viewObj.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_MATCH_RULE_MAPINFO)) {
+
+            Resource eResource = item.eResource();
+            Property property = item.getProperty();
+            if (eResource == null && property != null) {
+                IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
+
+                try {
+                    IRepositoryViewObject newViewObj = factory.getLastVersion(property.getId());
+                    item = newViewObj.getProperty().getItem();
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             RepositoryResourceUtil.saveItem(item);
         }
     }
