@@ -37,7 +37,6 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.documentation.ERepositoryActionName;
 import org.talend.repository.editor.RepositoryEditorInput;
-import org.talend.repository.model.RepositoryNode;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -112,7 +111,8 @@ public class JobResourceListener implements PropertyChangeListener {
         }
 
         if (propertyName.equals(ERepositoryActionName.CREATE.getName())
-                || propertyName.equals(ERepositoryActionName.IMPORT.getName())) {
+                || propertyName.equals(ERepositoryActionName.IMPORT.getName())
+                || propertyName.equals(ERepositoryActionName.COPY.getName())) {
             jobCreated = true;
         }
         if (!jobSaved && !jobCreated) {
