@@ -67,7 +67,7 @@ import com.amalto.workbench.utils.HttpClientUtil;
 
 /**
  * created by Karelun Huang on Mar 19, 2013 Detailled comment
- * 
+ *
  */
 public class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
 
@@ -216,7 +216,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     /**
      * Getter for serverDef.
-     * 
+     *
      * @return the serverDef
      */
     public MDMServerDef getServerDef() {
@@ -229,18 +229,21 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private TerminateConsoleAction terminateConsoleAction;
 
+    private int logType;
+
     /**
      * Getter for terminateConsoleAction.
-     * 
+     *
      * @return the terminateConsoleAction
      */
     public TerminateConsoleAction getTerminateConsoleAction() {
         return this.terminateConsoleAction;
     }
 
-    public MDMServerMessageConsole(MDMServerDef serverDef) {
+    public MDMServerMessageConsole(MDMServerDef serverDef, int type) {
         this(Messages.MDMServerMessageConsole_Name, null);
         this.serverDef = serverDef;
+        this.logType = type;
         initMessageConsole();
         initActions();
         PlatformUI.getPreferenceStore().addPropertyChangeListener(this);
@@ -256,7 +259,13 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     }
 
     private void initMessageConsole() {
-        String name = Messages.bind(Messages.MDMServerMessageConsole_Name, serverDef.getName());
+
+        String name = null;
+        if (logType == IConsoleConstants.CONSOLE_SERVER_LOG) {
+            name = Messages.bind(Messages.MDMServerMessageConsole_Name, serverDef.getName());
+        } else {
+            name = Messages.bind(Messages.MDMServerMessageConsole_MatchName, serverDef.getName());
+        }
         setName(name);
         initWaterMarks();
     }
@@ -291,7 +300,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             public void dispose() {
                 disposeTimer();
                 PlatformUI.getPreferenceStore().removePropertyChangeListener(MDMServerMessageConsole.this);
-                MDMServerExplorerPlugin.getDefault().getServerToConsole().remove(serverDef.getName());
+                MDMServerExplorerPlugin.getDefault().getServerToConsole(logType).remove(serverDef.getName());
                 ConsolePlugin.getDefault().getConsoleManager().removeConsoles(new IConsole[] { MDMServerMessageConsole.this });
                 super.dispose();
             }
@@ -456,12 +465,23 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     }
 
     private String buildMonitorURL(int pos) {
+        String buildURL = buildURL();
+        buildURL += "?position=" + pos; //$NON-NLS-1$
+        return buildURL;
+    }
+
+    private String buildURL() {
         StringBuilder sb = new StringBuilder();
         sb.append(serverDef.getProtocol());
         sb.append(serverDef.getHost());
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());
-        sb.append("/datamanager/logviewer/log?position=" + pos); //$NON-NLS-1$
+        if (logType == IConsoleConstants.CONSOLE_SERVER_LOG) {
+            sb.append("/datamanager/logviewer/log"); //$NON-NLS-1$
+        } else {
+            sb.append("/datamanager/logviewer/match"); //$NON-NLS-1$
+        }
+
         return sb.toString();
     }
 
@@ -484,7 +504,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         try {
 
             DefaultHttpClient httpClient = createHttpClient();
-            String monitorURL = buildDownloadURL();
+            String monitorURL = buildURL();
             HttpGet httpGet = new HttpGet(monitorURL);
             monitor.worked(20);
             HttpResponse response = httpClient.execute(httpGet);
@@ -541,16 +561,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         }
     }
 
-    private String buildDownloadURL() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(serverDef.getProtocol());
-        sb.append(serverDef.getHost());
-        sb.append(":"); //$NON-NLS-1$
-        sb.append(serverDef.getPort());
-        sb.append("/datamanager/logviewer/log"); //$NON-NLS-1$
-        return sb.toString();
-    }
-
     private String getFileName(HttpResponse response) {
         Header[] headers = response.getHeaders("Content-Disposition"); //$NON-NLS-1$
         Assert.isTrue(headers.length > 0);
@@ -599,11 +609,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         return this.downloadAction;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof MDMServerMessageConsole)) {
@@ -615,5 +620,4 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         MDMServerMessageConsole otherConsole = (MDMServerMessageConsole) obj;
         return serverDef == otherConsole.getServerDef();
     }
-
 }

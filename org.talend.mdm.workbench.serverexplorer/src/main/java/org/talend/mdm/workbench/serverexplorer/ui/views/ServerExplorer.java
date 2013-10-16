@@ -61,7 +61,8 @@ import org.talend.core.IService;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
-import org.talend.mdm.workbench.serverexplorer.console.MDMServerConsoleFactory;
+import org.talend.mdm.workbench.serverexplorer.console.MDMServerLogConsoleFactory;
+import org.talend.mdm.workbench.serverexplorer.console.MDMServerMatchLogConsoleFactory;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
 import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
@@ -79,7 +80,7 @@ import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- * 
+ *
  */
 public class ServerExplorer extends ViewPart {
 
@@ -115,7 +116,7 @@ public class ServerExplorer extends ViewPart {
 
     /**
      * Create contents of the view part.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -211,7 +212,8 @@ public class ServerExplorer extends ViewPart {
         allActions.add(new CheckConnectionAction());
         allActions.add(new EventManageAction());
         allActions.add(new RefreshServerCacheAction());
-        allActions.add(new ShowConsoleAction());
+        allActions.add(new ShowServerConsoleAction());
+        allActions.add(new ShowServerMatchConsoleAction());
     }
 
     private IMenuListener getMenuListener() {
@@ -508,11 +510,10 @@ public class ServerExplorer extends ViewPart {
         }
     }
 
-    private class ShowConsoleAction extends Action {
+    private class ShowServerConsoleAction extends Action {
 
-        public ShowConsoleAction() {
-            super(Messages.ServerExplorer_ViewLogAction_Text);
-
+        public ShowServerConsoleAction() {
+            setText(Messages.ServerExplorer_ViewLogAction_Text);
         }
 
         @Override
@@ -522,7 +523,26 @@ public class ServerExplorer extends ViewPart {
                 MDMServerDefItem serverDefItem = getMDMItem(viewObject);
                 MDMServerDef selectedServerDef = serverDefItem.getServerDef();
                 if (selectedServerDef != null) {
-                    new MDMServerConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
+                    new MDMServerLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
+                }
+            }
+        }
+    }
+
+    private class ShowServerMatchConsoleAction extends Action {
+
+        public ShowServerMatchConsoleAction() {
+            setText(Messages.ServerExplorer_ViewMatchLog);
+        }
+
+        @Override
+        public void run() {
+            IRepositoryViewObject viewObject = getCurSelectedViewObject();
+            if (viewObject != null) {
+                MDMServerDefItem serverDefItem = getMDMItem(viewObject);
+                MDMServerDef selectedServerDef = serverDefItem.getServerDef();
+                if (selectedServerDef != null) {
+                    new MDMServerMatchLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
                 }
             }
         }

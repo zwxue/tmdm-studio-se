@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.talend.mdm.workbench.serverexplorer.console.IConsoleConstants;
 import org.talend.mdm.workbench.serverexplorer.console.MDMServerMessageConsole;
 
 /**
@@ -32,6 +33,8 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
 
     private Map<String, MDMServerMessageConsole> serverToConsole = null;
 
+    private Map<String, MDMServerMessageConsole> serverMatchToConsole = null;
+
     /**
      * The constructor
      */
@@ -43,6 +46,7 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         super.start(context);
         plugin = this;
         serverToConsole = new HashMap<String, MDMServerMessageConsole>();
+        serverMatchToConsole = new HashMap<String, MDMServerMessageConsole>();
     }
 
     @Override
@@ -50,6 +54,10 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         if (serverToConsole != null) {
             serverToConsole.clear();
             serverToConsole = null;
+        }
+        if (serverMatchToConsole != null) {
+            serverMatchToConsole.clear();
+            serverMatchToConsole = null;
         }
         plugin = null;
         super.stop(context);
@@ -64,7 +72,11 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         return plugin;
     }
 
-    public Map<String, MDMServerMessageConsole> getServerToConsole() {
-        return this.serverToConsole;
+    public Map<String, MDMServerMessageConsole> getServerToConsole(int type) {
+        if (type == IConsoleConstants.CONSOLE_SERVER_LOG) {
+            return this.serverToConsole;
+        } else {
+            return this.serverMatchToConsole;
+        }
     }
 }

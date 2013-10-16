@@ -98,8 +98,12 @@
    <extension
          point="org.eclipse.ui.console.consoleFactories">
       <consoleFactory
-            class="org.talend.mdm.workbench.serverexplorer.console.MDMServerConsoleFactory"
-            label="%MDMServerConsoleFactory.label">
+            class="org.talend.mdm.workbench.serverexplorer.console.MDMServerLogConsoleFactory"
+            label="%MDMServerLogConsoleFactory.label">
+      </consoleFactory>
+      <consoleFactory
+            class="org.talend.mdm.workbench.serverexplorer.console.MDMServerMatchLogConsoleFactory"
+            label="%MDMServerMatchLogConsoleFactory.label">
       </consoleFactory>
    </extension>
    <extension

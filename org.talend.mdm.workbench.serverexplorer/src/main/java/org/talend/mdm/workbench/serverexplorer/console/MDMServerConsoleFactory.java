@@ -26,7 +26,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
  * created by Karelun Huang on Mar 20, 2013 Detailled comment
  *
  */
-public class MDMServerConsoleFactory implements IConsoleFactory {
+public abstract class MDMServerConsoleFactory implements IConsoleFactory {
 
     private static final Log log = LogFactory.getLog(MDMServerConsoleFactory.class);
 
@@ -57,17 +57,19 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
         if (page == null) {
             return;
         }
-        Map<String, MDMServerMessageConsole> serverToConsole = MDMServerExplorerPlugin.getDefault().getServerToConsole();
+
+        Map<String, MDMServerMessageConsole> serverToConsole = MDMServerExplorerPlugin.getDefault().getServerToConsole(
+                getConsoleType());
         MDMServerMessageConsole mdmServerConsole = serverToConsole.get(serverDef.getName());
         if (mdmServerConsole == null) {
-            mdmServerConsole = new MDMServerMessageConsole(serverDef);
+            mdmServerConsole = new MDMServerMessageConsole(serverDef, getConsoleType());
             serverToConsole.put(serverDef.getName(), mdmServerConsole);
         }
 
         if (!containedMDMServerMessageConsole(mdmServerConsole)) {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
             consoleManager.addConsoles(new IConsole[] { mdmServerConsole });
-
+            
             mdmServerConsole.activate();
         } else {
             mdmServerConsole.setServerDef(serverDef);
@@ -109,4 +111,6 @@ public class MDMServerConsoleFactory implements IConsoleFactory {
         }
         return false;
     }
+
+    protected abstract int getConsoleType();
 }
