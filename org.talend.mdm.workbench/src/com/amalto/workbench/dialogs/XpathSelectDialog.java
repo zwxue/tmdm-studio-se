@@ -115,6 +115,8 @@ public class XpathSelectDialog extends Dialog {
 
     private boolean isAbsolutePath = false;
 
+    private boolean lock;
+    
     protected DataModelMainPage page;
 
     private final IXPathSelectionFilter selectionFilter;
@@ -149,7 +151,15 @@ public class XpathSelectDialog extends Dialog {
 
     }
 
-    public String getEntityName() {
+    public boolean isLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
+
+	public String getEntityName() {
 
         if (xpath == null || "".equals(xpath)) {
             return "";//$NON-NLS-1$
@@ -300,7 +310,7 @@ public class XpathSelectDialog extends Dialog {
         } else {
             dataModelCombo.select(index);
         }
-
+        dataModelCombo.setEnabled(!lock);
         changeDomTree(tree, filterText.getText());
 
         domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));

@@ -53,6 +53,8 @@ public class SimpleXpathInputDialog extends Dialog {
     private String dataModelName;
 
     private Button btnSep;
+    
+    private boolean lock;
 
     /**
      * @param parentShell
@@ -104,6 +106,7 @@ public class SimpleXpathInputDialog extends Dialog {
                 XpathSelectDialog dlg = getNewXpathSelectDialog(parentPage, dataModelName);
                 // new XpathSelectDialog(parentPage.getSite().getShell(), parentPage.getXObject()
                 // .getParent(), "Select Xpath", parentPage.getSite(), false, dataModelName);
+                dlg.setLock(lock);
                 dlg.setBlockOnOpen(true);
                 dlg.open();
 
@@ -165,4 +168,12 @@ public class SimpleXpathInputDialog extends Dialog {
     public boolean getSepFk() {
         return sepFk;
     }
+
+	public boolean isLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
 }

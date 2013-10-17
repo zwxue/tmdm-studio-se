@@ -80,6 +80,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             }
 
             sxid = getNewSimpleXpathInputDlg(struc.getForeignKey());
+            sxid.setLock(true);
             String fksep = struc.getForeignKeyNotSep();
             if (fksep != null) {
                 sxid.setFkSep(Boolean.valueOf(fksep));
