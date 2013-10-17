@@ -844,6 +844,9 @@ public class Messages extends NLS {
     public static String ConsistencyConflictDialog_btnNewButton_text;
 
     public static String ConsistencyConflict_modifiedLocally;
+
+    public static String ConsistencyConflict_potentialConflict;
+
     public static String ConsistencyConflict_showTimeStampColumn;
 
     public static String ConsistencyConflict_undefined;

@@ -74,7 +74,7 @@ import com.amalto.workbench.webservices.WSDigest;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
- * 
+ *
  */
 public class ConsistencyConflictDialog extends Dialog {
 
@@ -102,7 +102,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
          */
         public Color getForeground(Object element) {
@@ -111,14 +111,14 @@ public class ConsistencyConflictDialog extends Dialog {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
          */
         public Color getBackground(Object element) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
             CompareResultEnum cresult = getCompareResult(viewObj);
             if (!isSkipObj(viewObj)) {
-                if (cresult == CompareResultEnum.CONFLICT) {
+                if (cresult == CompareResultEnum.CONFLICT || cresult == CompareResultEnum.POTENTIAL_CONFLICT) {
                     return COLOR_LIGHT_RED;
                 }
                 if (cresult == CompareResultEnum.MODIFIED_LOCALLY) {
@@ -165,6 +165,8 @@ public class ConsistencyConflictDialog extends Dialog {
                         return Messages.ConsistencyConflict_Same;
                     case CONFLICT:
                         return Messages.ConsistencyConflict_Conflict;
+                    case POTENTIAL_CONFLICT:
+                        return Messages.ConsistencyConflict_potentialConflict;
                     case MODIFIED_LOCALLY:
                         return Messages.ConsistencyConflict_modifiedLocally;
                     case NOT_SUPPORT:
@@ -306,7 +308,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Create the dialog.
-     * 
+     *
      * @param parentShell
      * @param conflictCount
      */
@@ -319,7 +321,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Create contents of the dialog.
-     * 
+     *
      * @param parent
      */
     @Override
@@ -548,7 +550,8 @@ public class ConsistencyConflictDialog extends Dialog {
                 return true;
             }
             CompareResultEnum compareResult = getCompareResult((IRepositoryViewObject) element);
-            return compareResult == CompareResultEnum.CONFLICT || compareResult == CompareResultEnum.MODIFIED_LOCALLY;
+            return compareResult == CompareResultEnum.CONFLICT || compareResult == CompareResultEnum.MODIFIED_LOCALLY
+                    || compareResult == CompareResultEnum.POTENTIAL_CONFLICT;
         }
 
     };
@@ -725,7 +728,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Getter for result.
-     * 
+     *
      * @return the result
      */
     public ConsistencyCheckResult getResult() {

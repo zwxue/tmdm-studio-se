@@ -68,7 +68,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
         /**
          * DOC hbhong TreeObjectContentProvider constructor comment.
-         * 
+         *
          * @param site
          * @param invisibleRoot
          */
@@ -94,9 +94,9 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     /**
      * DOC hbhong TreeObjectCheckTreeViewer constructor comment.
-     * 
+     *
      * @param serverDef
-     * 
+     *
      * @param serverRoot
      */
     public TreeObjectCheckTreeViewer(TreeParent serverRoot) {
@@ -139,7 +139,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 ConsistencyData consistencyData = consistencyMap.get(element);
                 if (consistencyData != null) {
                     CompareResultEnum compareResult = consistencyData.getCompareResult();
-                    if (compareResult == CompareResultEnum.CONFLICT) {
+                    if (compareResult == CompareResultEnum.CONFLICT || compareResult == CompareResultEnum.POTENTIAL_CONFLICT) {
                         return COLOR_LIGHT_RED;
                     } else if (compareResult == CompareResultEnum.MODIFIED_LOCALLY) {
                         return COLOR_LIGHT_GREEN;
@@ -165,6 +165,8 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                         return Messages.ConsistencyConflict_Same;
                     case CONFLICT:
                         return Messages.ConsistencyConflict_Conflict;
+                    case POTENTIAL_CONFLICT:
+                        return Messages.ConsistencyConflict_potentialConflict;
                     case MODIFIED_LOCALLY:
                         return Messages.ConsistencyConflict_modifiedLocally;
                     case NOT_SUPPORT:

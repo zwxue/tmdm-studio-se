@@ -141,7 +141,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * if type==null, return all type
-     * 
+     *
      * @param parent
      * @param type
      * @param commands
@@ -255,7 +255,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * DOC hbhong Comment method "initInput".
-     * 
+     *
      * @param type
      * @return
      */
@@ -535,9 +535,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
                         switch (compareResult) {
                         case NOT_EXIST_IN_SERVER:
                             return Messages.ConsistencyConflictt_NotDeployed;
-
                         case SAME:
                         case CONFLICT:
+                        case POTENTIAL_CONFLICT:
                         case MODIFIED_LOCALLY:
                             return Messages.ConsistencyConflictt_Deployed;
                         case NOT_SUPPORT:

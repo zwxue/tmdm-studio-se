@@ -82,12 +82,12 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
- * 
+ *
  */
 public class ConsistencyService {
 
     /**
-     * 
+     *
      */
     private static final String OBJ_NAME_DIVIDE = ".."; //$NON-NLS-1$
 
@@ -101,6 +101,7 @@ public class ConsistencyService {
         NOT_EXIST_IN_SERVER,
         NOT_EXIST_IN_LOCAL,
         CONFLICT,
+        POTENTIAL_CONFLICT,
         SAME,
         MODIFIED_LOCALLY,
         NOT_SUPPORT
@@ -403,7 +404,8 @@ public class ConsistencyService {
                     } else if (strategy == CONFLICT_STRATEGY_OVERWRITE) {
                         toDeployObjs.add(viewObj);
                     }
-                } else if (result == CompareResultEnum.CONFLICT || result == CompareResultEnum.MODIFIED_LOCALLY) {
+                } else if (result == CompareResultEnum.CONFLICT || result == CompareResultEnum.MODIFIED_LOCALLY
+                        || result == CompareResultEnum.POTENTIAL_CONFLICT) {
                     if (strategy == CONFLICT_STRATEGY_SKIP_DIFFERENCE) {
                         toSkipObjs.add(viewObj);
                     } else if (strategy == CONFLICT_STRATEGY_DEFAULT || strategy == CONFLICT_STRATEGY_OVERWRITE) {
@@ -417,7 +419,7 @@ public class ConsistencyService {
 
     /**
      * DOC HHB Comment method "getCompareResult".
-     * 
+     *
      * @param cd current digest value
      * @param ld local digest value
      * @param rd remote digest value
@@ -439,7 +441,7 @@ public class ConsistencyService {
             }
         } else {
             if (!cd.equals(rd)) {
-                return CompareResultEnum.CONFLICT;
+                return CompareResultEnum.POTENTIAL_CONFLICT;
             } else {
                 return CompareResultEnum.SAME;
             }
@@ -679,7 +681,7 @@ public class ConsistencyService {
 
     /**
      * caculate and update local digest value
-     * 
+     *
      * @param viewObj
      */
     public void updateLocalDigestValue(IRepositoryViewObject viewObj) {
