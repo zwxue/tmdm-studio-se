@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
@@ -51,6 +52,20 @@ public class XSDNewBrowseItemViewAction extends Action {
 
     @Override
     public void run() {
+		IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage().getActiveEditor();
+		if (part.isDirty()) {
+			boolean save = MessageDialog.openConfirm(page.getSite().getShell(),
+					Messages.SaveResource, Messages.bind(
+							Messages.modifiedChanges, page.getXObject()
+									.getDisplayName()));
+			if (save) {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+						.getActivePage().saveEditor(part, false);
+			} else {
+				return;
+			}
+		}
         IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
         declList.clear();
         List list = selection.toList();
