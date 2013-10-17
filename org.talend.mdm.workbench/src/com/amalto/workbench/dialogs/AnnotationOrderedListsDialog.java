@@ -90,6 +90,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     private boolean recursive = true;
 
+    private boolean lock;
+    
     private boolean retrieveFKinfos = true;
 
     public boolean isRetrieveFKinfos() {
@@ -242,7 +244,10 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 public void widgetSelected(SelectionEvent e) {
                     XpathSelectDialog dlg = getNewXpathSelectDialog(parentPage, dataModelName);
 
+                    dlg.setLock(lock);
+                    
                     dlg.setBlockOnOpen(true);
+                    
                     dlg.open();
 
                     if (dlg.getReturnCode() == Window.OK) {
@@ -637,7 +642,15 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     }
 
-    /**************************************************************************************************
+    public boolean isLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
+
+	/**************************************************************************************************
      * A table viewer line
      ***************************************************************************************************/
     class DescriptionLine {

@@ -37,7 +37,7 @@ public class XSDSetAnnotationFKFilterActionR extends XSDSetAnnotationFKFilterAct
 
     @Override
     protected FKFilterDialog getNewFKFilterDialog(Shell shell, String filter, DataModelMainPage page, String conceptName) {
-        return new FKFilterDialogR(shell, Messages.XSDSetAnnotationFKFilterActionR_title, filter, page, conceptName);
+        return new FKFilterDialogR(shell, Messages.XSDSetAnnotationFKFilterActionR_title, filter, page, conceptName, true);
     }
 
 }

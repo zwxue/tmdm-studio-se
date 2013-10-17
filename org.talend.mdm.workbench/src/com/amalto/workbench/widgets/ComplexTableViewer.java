@@ -115,7 +115,18 @@ public class ComplexTableViewer {
 
     protected boolean context;
 
-    public boolean isContext() {
+    protected boolean modelLock;
+    
+    
+    public boolean isModelLock() {
+		return modelLock;
+	}
+
+	public void setModelLock(boolean modelLock) {
+		this.modelLock = modelLock;
+	}
+
+	public boolean isContext() {
         return context;
     }
 
@@ -979,6 +990,7 @@ public class ComplexTableViewer {
 
             xpath = getNewXpathWidget(parent);
             // The ending| bug:21784
+            xpath.setLock(modelLock);
             xpaths.add(xpath);
             xpath.setConceptName(conceptName);
             xpath.setDataModelName(getDatamodelName());

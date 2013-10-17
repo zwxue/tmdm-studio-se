@@ -78,15 +78,30 @@ public class FKFilterDialog extends Dialog {
 
     private Composite dialogAreaComposite;
 
+    private boolean lock;
+    
     public FKFilterDialog(Shell parentShell, String title, String filter, DataModelMainPage page, String conceptName) {
+        this(parentShell,title,filter,page,conceptName,false);
+    }
+    
+    public FKFilterDialog(Shell parentShell, String title, String filter, DataModelMainPage page, String conceptName,boolean lock) {
         super(parentShell);
         this.filter = filter;
         this.page = page;
         this.title = title;
         this.conceptName = conceptName;
+        this.lock = lock;
     }
 
-    @Override
+    public boolean isLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
+
+	@Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
         dialogAreaComposite = (Composite) super.createDialogArea(parent);
@@ -105,6 +120,7 @@ public class FKFilterDialog extends Dialog {
         columns[2].setColumnWidth(200);
         columns[3].setColumnWidth(140);
         viewer = getNewTisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), dialogAreaComposite);
+        viewer.setModelLock(lock);
         viewer.setXpath(true);
         viewer.setDatamodelName(dataModelName);
         // viewer.setMainPage(page);//TODO

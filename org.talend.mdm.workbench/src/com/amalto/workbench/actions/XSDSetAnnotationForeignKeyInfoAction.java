@@ -76,6 +76,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction {
 
             dlg = getNewAnnotaionOrderedListsDialog(struc.getForeignKeyInfos().values());
 
+            dlg.setLock(true);
             dlg.setRetrieveFKinfos(struc.getRetrieveFKinfos());
             dlg.setBlockOnOpen(true);
             int ret = dlg.open();

@@ -48,4 +48,9 @@ public class FKFilterDialogR extends FKFilterDialog {
         return new TisTableViewerR(columns, toolkit, parent);
     }
 
+	public FKFilterDialogR(Shell parentShell, String title, String filter,
+			DataModelMainPage page, String conceptName, boolean lock) {
+		super(parentShell, title, filter, page, conceptName, lock);
+	}
+
 }

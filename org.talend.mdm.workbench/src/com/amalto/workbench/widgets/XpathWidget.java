@@ -58,6 +58,8 @@ public class XpathWidget implements SelectionListener {
     protected IWorkbenchPartSite site;
 
     protected String dataModelName;
+    
+    protected boolean lock;
 
     protected boolean isMulti = true;
 
@@ -65,7 +67,15 @@ public class XpathWidget implements SelectionListener {
 
     private String context;
 
-    public String getContext() {
+    public boolean isLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
+
+	public String getContext() {
         return context;
     }
 
@@ -189,7 +199,7 @@ public class XpathWidget implements SelectionListener {
                 dlg.setConceptName(conceptName);
             }
         }
-
+        dlg.setLock(lock);
         dlg.setBlockOnOpen(true);
         dlg.open();
 

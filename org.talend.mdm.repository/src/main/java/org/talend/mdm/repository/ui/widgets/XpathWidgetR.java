@@ -91,6 +91,7 @@ public class XpathWidgetR extends XpathWidget {
         }
 
         dlg.setDataModelPage(page);
+        dlg.setLock(isLock());
         dlg.setBlockOnOpen(true);
         dlg.open();
 
