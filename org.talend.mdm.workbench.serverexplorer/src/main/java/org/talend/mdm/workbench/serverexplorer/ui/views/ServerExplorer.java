@@ -523,28 +523,25 @@ public class ServerExplorer extends ViewPart {
                 MDMServerDefItem serverDefItem = getMDMItem(viewObject);
                 MDMServerDef selectedServerDef = serverDefItem.getServerDef();
                 if (selectedServerDef != null) {
-                    new MDMServerLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
+                    showMDMServerConsole(selectedServerDef);
                 }
             }
         }
+
+        protected void showMDMServerConsole(MDMServerDef selectedServerDef) {
+            new MDMServerLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
+        }
     }
 
-    private class ShowServerMatchConsoleAction extends Action {
+    private class ShowServerMatchConsoleAction extends ShowServerConsoleAction {
 
         public ShowServerMatchConsoleAction() {
             setText(Messages.ServerExplorer_ViewMatchLog);
         }
 
         @Override
-        public void run() {
-            IRepositoryViewObject viewObject = getCurSelectedViewObject();
-            if (viewObject != null) {
-                MDMServerDefItem serverDefItem = getMDMItem(viewObject);
-                MDMServerDef selectedServerDef = serverDefItem.getServerDef();
-                if (selectedServerDef != null) {
-                    new MDMServerMatchLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
-                }
-            }
+        protected void showMDMServerConsole(MDMServerDef selectedServerDef) {
+            new MDMServerMatchLogConsoleFactory().showMDMServerConsole(selectedServerDef.getDecryptedServerDef());
         }
     }
 }

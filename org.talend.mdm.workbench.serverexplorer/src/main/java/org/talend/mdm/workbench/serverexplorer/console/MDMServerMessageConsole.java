@@ -69,7 +69,7 @@ import com.amalto.workbench.utils.HttpClientUtil;
  * created by Karelun Huang on Mar 19, 2013 Detailled comment
  *
  */
-public class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
+public abstract class MDMServerMessageConsole extends MessageConsole implements IPropertyChangeListener {
 
     private static final Log log = LogFactory.getLog(MDMServerMessageConsole.class);
 
@@ -229,8 +229,6 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
 
     private TerminateConsoleAction terminateConsoleAction;
 
-    private int logType;
-
     /**
      * Getter for terminateConsoleAction.
      *
@@ -240,10 +238,9 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         return this.terminateConsoleAction;
     }
 
-    public MDMServerMessageConsole(MDMServerDef serverDef, int type) {
+    public MDMServerMessageConsole(MDMServerDef serverDef) {
         this(Messages.MDMServerMessageConsole_Name, null);
         this.serverDef = serverDef;
-        this.logType = type;
         initMessageConsole();
         initActions();
         PlatformUI.getPreferenceStore().addPropertyChangeListener(this);
@@ -259,13 +256,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
     }
 
     private void initMessageConsole() {
-
-        String name = null;
-        if (logType == IConsoleConstants.CONSOLE_SERVER_LOG) {
-            name = Messages.bind(Messages.MDMServerMessageConsole_Name, serverDef.getName());
-        } else {
-            name = Messages.bind(Messages.MDMServerMessageConsole_MatchName, serverDef.getName());
-        }
+        String name = getConsoleTitle();
         setName(name);
         initWaterMarks();
     }
@@ -300,7 +291,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
             public void dispose() {
                 disposeTimer();
                 PlatformUI.getPreferenceStore().removePropertyChangeListener(MDMServerMessageConsole.this);
-                MDMServerExplorerPlugin.getDefault().getServerToConsole(logType).remove(serverDef.getName());
+                removeFromCache(serverDef.getName());
                 ConsolePlugin.getDefault().getConsoleManager().removeConsoles(new IConsole[] { MDMServerMessageConsole.this });
                 super.dispose();
             }
@@ -476,11 +467,7 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         sb.append(serverDef.getHost());
         sb.append(":"); //$NON-NLS-1$
         sb.append(serverDef.getPort());
-        if (logType == IConsoleConstants.CONSOLE_SERVER_LOG) {
-            sb.append("/datamanager/logviewer/log"); //$NON-NLS-1$
-        } else {
-            sb.append("/datamanager/logviewer/match"); //$NON-NLS-1$
-        }
+        sb.append(getLogPath());
 
         return sb.toString();
     }
@@ -620,4 +607,10 @@ public class MDMServerMessageConsole extends MessageConsole implements IProperty
         MDMServerMessageConsole otherConsole = (MDMServerMessageConsole) obj;
         return serverDef == otherConsole.getServerDef();
     }
+
+    protected abstract String getLogPath();
+
+    protected abstract String getConsoleTitle();
+
+    protected abstract void removeFromCache(String serverName);
 }

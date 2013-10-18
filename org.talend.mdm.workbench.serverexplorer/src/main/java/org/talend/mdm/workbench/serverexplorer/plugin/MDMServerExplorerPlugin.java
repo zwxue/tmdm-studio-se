@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.talend.mdm.workbench.serverexplorer.console.IConsoleConstants;
 import org.talend.mdm.workbench.serverexplorer.console.MDMServerMessageConsole;
 
 /**
@@ -72,11 +71,11 @@ public class MDMServerExplorerPlugin extends AbstractUIPlugin {
         return plugin;
     }
 
-    public Map<String, MDMServerMessageConsole> getServerToConsole(int type) {
-        if (type == IConsoleConstants.CONSOLE_SERVER_LOG) {
-            return this.serverToConsole;
-        } else {
-            return this.serverMatchToConsole;
-        }
+    public Map<String, MDMServerMessageConsole> getServerToConsole() {
+        return this.serverToConsole;
+    }
+
+    public Map<String, MDMServerMessageConsole> getServerMatchToConsole() {
+        return this.serverMatchToConsole;
     }
 }

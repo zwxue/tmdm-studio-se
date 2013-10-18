@@ -12,6 +12,10 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.console;
 
+import java.util.Map;
+
+import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
+import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 
 /**
  * created by liusongbo on 2013-10-16
@@ -19,8 +23,12 @@ package org.talend.mdm.workbench.serverexplorer.console;
 public class MDMServerLogConsoleFactory extends MDMServerConsoleFactory {
 
     @Override
-    protected int getConsoleType() {
-        return IConsoleConstants.CONSOLE_SERVER_LOG;
+    protected Map<String, MDMServerMessageConsole> getServerToConsole() {
+        return MDMServerExplorerPlugin.getDefault().getServerToConsole();
     }
 
+    @Override
+    protected MDMServerMessageConsole createMDMServerMessageConsole(MDMServerDef serverDef) {
+        return new MDMServerLogMessageConsole(serverDef);
+    }
 }

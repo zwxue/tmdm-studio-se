@@ -18,7 +18,6 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.workbench.serverexplorer.core.ServerDefService;
 import org.talend.mdm.workbench.serverexplorer.i18n.Messages;
-import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 /**
@@ -58,18 +57,17 @@ public abstract class MDMServerConsoleFactory implements IConsoleFactory {
             return;
         }
 
-        Map<String, MDMServerMessageConsole> serverToConsole = MDMServerExplorerPlugin.getDefault().getServerToConsole(
-                getConsoleType());
+        Map<String, MDMServerMessageConsole> serverToConsole = getServerToConsole();
         MDMServerMessageConsole mdmServerConsole = serverToConsole.get(serverDef.getName());
         if (mdmServerConsole == null) {
-            mdmServerConsole = new MDMServerMessageConsole(serverDef, getConsoleType());
+            mdmServerConsole = createMDMServerMessageConsole(serverDef);
             serverToConsole.put(serverDef.getName(), mdmServerConsole);
         }
 
         if (!containedMDMServerMessageConsole(mdmServerConsole)) {
             IConsoleManager consoleManager = ConsolePlugin.getDefault().getConsoleManager();
             consoleManager.addConsoles(new IConsole[] { mdmServerConsole });
-            
+
             mdmServerConsole.activate();
         } else {
             mdmServerConsole.setServerDef(serverDef);
@@ -112,5 +110,7 @@ public abstract class MDMServerConsoleFactory implements IConsoleFactory {
         return false;
     }
 
-    protected abstract int getConsoleType();
+    protected abstract MDMServerMessageConsole createMDMServerMessageConsole(MDMServerDef serverDef);
+
+    protected abstract Map<String, MDMServerMessageConsole> getServerToConsole();
 }
