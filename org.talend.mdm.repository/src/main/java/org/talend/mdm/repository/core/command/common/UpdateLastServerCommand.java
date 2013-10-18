@@ -33,9 +33,9 @@ import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.AbstractCommand;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.impl.RepositoryViewObjectResourceChangeManager;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
-import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.editor.RepositoryEditorInput;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -129,7 +129,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
             if (isWorkInUI()) {
                 // for job object
                 try {
-                    RepositoryPlugin.getDefault().stopJobListener();
+                    RepositoryViewObjectResourceChangeManager.stopListening();
                     IEditorReference editorRef = getJobEditor(item);
                     if (editorRef != null) {
                         IEditorPart editor = editorRef.getEditor(false);
@@ -144,7 +144,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
                 } finally {
-                    RepositoryPlugin.getDefault().startupJobListener();
+                    RepositoryViewObjectResourceChangeManager.startListening();
                 }
             }
         }

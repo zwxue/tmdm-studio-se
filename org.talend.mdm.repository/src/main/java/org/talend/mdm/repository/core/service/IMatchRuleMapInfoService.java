@@ -52,4 +52,6 @@ public interface IMatchRuleMapInfoService extends IService {
     String convertMatchRuleMapInfoContainerToXML(MatchRuleMapInfoContainer container);
 
     IRepositoryViewObject generateWSMatchRuleObject(Item item);
+
+    List<IRepositoryViewObject> findReferencedDataModels(String matchRuleName);
 }

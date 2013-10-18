@@ -1,11 +1,8 @@
 package org.talend.mdm.repository.plugin;
 
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import org.talend.core.repository.model.ProxyRepositoryFactory;
-import org.talend.mdm.repository.core.impl.jobmodel.JobResourceListener;
+import org.talend.mdm.repository.core.impl.RepositoryViewObjectResourceChangeManager;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -17,8 +14,6 @@ public class RepositoryPlugin extends AbstractUIPlugin {
 
     // The shared instance
     private static RepositoryPlugin plugin;
-
-    PropertyChangeListener jobListener = new JobResourceListener();
 
     /**
      * The constructor
@@ -35,17 +30,7 @@ public class RepositoryPlugin extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
-        startupJobListener();
-    }
-
-    public void startupJobListener() {
-        ProxyRepositoryFactory.getInstance().addPropertyChangeListener(jobListener);
-    }
-
-    public void stopJobListener() {
-        if (jobListener != null) {
-            ProxyRepositoryFactory.getInstance().removePropertyChangeListener(jobListener);
-        }
+        RepositoryViewObjectResourceChangeManager.startListening();
     }
 
     /*
@@ -55,7 +40,7 @@ public class RepositoryPlugin extends AbstractUIPlugin {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-        stopJobListener();
+        RepositoryViewObjectResourceChangeManager.stopListening();
         plugin = null;
         super.stop(context);
     }

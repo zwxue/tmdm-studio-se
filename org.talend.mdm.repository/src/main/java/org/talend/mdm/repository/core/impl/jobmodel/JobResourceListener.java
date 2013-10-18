@@ -12,10 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.impl.jobmodel;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
@@ -31,6 +29,7 @@ import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.impl.AbstractRepositoryResourceChangeListener;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
@@ -41,21 +40,9 @@ import org.talend.repository.editor.RepositoryEditorInput;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class JobResourceListener implements PropertyChangeListener {
+public class JobResourceListener extends AbstractRepositoryResourceChangeListener {
 
     static Logger log = Logger.getLogger(JobResourceListener.class);
-
-    public JobResourceListener() {
-
-    }
-
-    private boolean isWorkInUI() {
-        try {
-            return PlatformUI.getWorkbench() != null;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     private static final String JOB_EDITOR_ID = "org.talend.designer.core.ui.MultiPageTalendEditor"; //$NON-NLS-1$
 
@@ -75,7 +62,7 @@ public class JobResourceListener implements PropertyChangeListener {
                 try {
                     IEditorInput editorInput = ref.getEditorInput();
                     if (editorInput instanceof RepositoryEditorInput) {
-                    	Item item = ((RepositoryEditorInput) editorInput).getItem();
+                        Item item = ((RepositoryEditorInput) editorInput).getItem();
                         if (item != null && item.equals(vObj.getProperty().getItem())) {
                             return true;
                         }
@@ -88,24 +75,24 @@ public class JobResourceListener implements PropertyChangeListener {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-     */
-    public void propertyChange(PropertyChangeEvent event) {
-        if (!isWorkInUI() || !ProxyRepositoryFactory.getInstance().isFullLogonFinished()) {
-            return;
-        }
+    @Override
+    protected boolean isHandleProperty(String propertyName) {
+        return propertyName.equals(ERepositoryActionName.SAVE.getName())
+                || propertyName.equals(ERepositoryActionName.CREATE.getName())
+                || propertyName.equals(ERepositoryActionName.IMPORT.getName())
+                || propertyName.equals(ERepositoryActionName.COPY.getName());
+    }
+
+    @Override
+    protected boolean isHandleItem(Item item) {
+        return item instanceof ProcessItem;
+    }
+
+    @Override
+    protected void run(String propertyName, Item item, IProgressMonitor monitor) throws Exception {
         boolean jobSaved = false;
         boolean jobCreated = false;
 
-        // only monitor the jobs
-        if (!(event.getNewValue() instanceof ProcessItem)) {
-            return;
-        }
-
-        String propertyName = event.getPropertyName();
         if (propertyName.equals(ERepositoryActionName.SAVE.getName())) {
             jobSaved = true;
         }
@@ -119,8 +106,6 @@ public class JobResourceListener implements PropertyChangeListener {
             // if the operation is not job saved or created, just don't do anything.
             return;
         }
-
-        final Item item = (Item) event.getNewValue();
 
         if (jobCreated) {
             CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, item.getProperty().getId(),
@@ -142,6 +127,7 @@ public class JobResourceListener implements PropertyChangeListener {
                 MDMRepositoryView.show().getCommonViewer().refresh(viewObject);
             }
         }
+
     }
 
     private void removeLastServerInfo(final Item item) {
