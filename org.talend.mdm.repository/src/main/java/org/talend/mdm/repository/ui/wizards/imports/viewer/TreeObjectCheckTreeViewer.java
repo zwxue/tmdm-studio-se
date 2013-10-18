@@ -312,7 +312,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 resultColumn.setLabelProvider(new CompareResultColumnProvider());
                 //
                 localTimeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
-                localTimeColumn.getColumn().setText(Messages.ConsistencyConflict_localTimestamp);
+                localTimeColumn.getColumn().setText(Messages.ConsistencyConflict_retrievalTimestamp);
                 localTimeColumn.setLabelProvider(new TimeStampColumnProvider(true));
                 //
                 serverTimeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);

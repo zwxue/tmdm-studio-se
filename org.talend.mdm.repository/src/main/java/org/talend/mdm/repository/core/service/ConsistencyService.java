@@ -557,7 +557,7 @@ public class ConsistencyService {
                 String ld = getLocalDigestValue(item);
                 String cd = getCurrentDigestValue(item);
                 CompareResultEnum result = getCompareResult(cd, ld, rd);
-                if (result == CompareResultEnum.CONFLICT) {
+                if (result == CompareResultEnum.CONFLICT || result == CompareResultEnum.POTENTIAL_CONFLICT) {
                     total++;
                 }
             }

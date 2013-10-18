@@ -420,7 +420,7 @@ public class Messages extends NLS {
 
     public static String ConsistencyConflict_Conflict;
 
-    public static String ConsistencyConflict_localTimestamp;
+    public static String ConsistencyConflict_retrievalTimestamp;
 
     public static String ConsistencyConflict_name;
 

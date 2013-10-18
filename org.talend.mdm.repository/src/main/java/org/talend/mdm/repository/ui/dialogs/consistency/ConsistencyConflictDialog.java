@@ -357,7 +357,7 @@ public class ConsistencyConflictDialog extends Dialog {
         tc2.setText(Messages.ConsistencyConflictDialog_Operation);
 
         tc3 = new TreeColumn(tree, SWT.NONE);
-        tc3.setText(Messages.ConsistencyConflict_localTimestamp);
+        tc3.setText(Messages.ConsistencyConflict_retrievalTimestamp);
 
         tc4 = new TreeColumn(tree, SWT.NONE);
         tc4.setText(Messages.ConsistencyConflict_serverTimestamp);
@@ -394,7 +394,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                skipObjects(CompareResultEnum.CONFLICT, CompareResultEnum.MODIFIED_LOCALLY);
+                skipObjects(CompareResultEnum.CONFLICT, CompareResultEnum.POTENTIAL_CONFLICT, CompareResultEnum.MODIFIED_LOCALLY);
             }
         });
         skipDiffBun.setText(Messages.ConsistencyConflictDialog_btnNewButton_text);
