@@ -12,11 +12,10 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,13 +24,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -141,8 +137,6 @@ import org.eclipse.xsd.impl.XSDAttributeUseImpl;
 import org.eclipse.xsd.impl.XSDComplexTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 import org.eclipse.xsd.impl.XSDIdentityConstraintDefinitionImpl;
-import org.eclipse.xsd.impl.XSDImportImpl;
-import org.eclipse.xsd.impl.XSDIncludeImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSimpleTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
@@ -238,6 +232,7 @@ import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.WidgetFactory;
 
+@SuppressWarnings("restriction")
 public class DataModelMainPage extends EditorPart implements ModifyListener, IGotoMarker {
 
     public static final String ADDITIONMENUID = "talend.menuadition.datamodel";//$NON-NLS-1$
@@ -487,29 +482,29 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     }// createCharacteristicsContent
 
-    protected void doImportSchema(final List<String> addList, final List<String> delList) {
-        TimerTask task = new TimerTask() {
+    protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
+    	if(null == addtional || addtional.isEmpty()){
+        	return;
+        }
+    	TimerTask task = new TimerTask() {
 
             @Override
             public void run() {
                 getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
                     public void run() {
-                        XSDSchema schemaCpy = null;
                         try {
-                            schemaCpy = Util.createXsdSchema(Util.nodeToString(xsdSchema.getDocument()), xobject);
-                            xsdSchema.clearDiagnostics();
-                            performImport(addList);
-                            performDeletion(delList);
                             validateSchema();
-
                             markDirtyWithoutCommit();
-                            // refreshData();
-                            // below code is to refill the tree view with xsdScham including one xsd schma which
-                            // contains the other xsd ,
-                            // and in the case of deleting the included xsd
+                            for(XSDSchemaContent content : addtional){
+                            	xsdSchema.getContents().add(content);
+                            }
                             setXsdSchema(xsdSchema);
-                            refreshData();
+                            getSchemaRoleFilterFromSchemaTree().setDataModelFilter(dataModelFilter);
+                            
+                            // refresh types
+                            viewer.setInput(getSite());
+                            typesViewer.setInput(getSite());
                             MessageDialog.openInformation(getSite().getShell(), Messages.ImportXSDSche,
                                     Messages.ImportingXSDSchemaCompleted);
                         } catch (Exception ex) {
@@ -518,9 +513,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                             if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
                                 detail += " , " + Messages.bind(Messages.Dueto, ex.getMessage()); //$NON-NLS-1$
                             }
-                            setXsdSchema(schemaCpy);
-                            commit();
-                            refresh();
                             MessageDialog.openError(getSite().getShell(), Messages._Error,
                                     Messages.bind(Messages.ImportingXSDSchemaFailed, detail));
                         }
@@ -2022,7 +2014,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                             for (String key : nameList) {
                                 customTypeList.add(customTypesMap.get(key));
                             }
-                            doImportSchema(customTypeList, new ArrayList<String>());
+//                            doImportSchema();
                         } catch (SecurityException e) {
                             MessageDialog.openError(sash.getShell(), Messages._Error, e.getMessage());
                         }
@@ -2078,101 +2070,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             }
             typeCntMap.put(type.getName() + tail + type.getTargetNamespace(), Boolean.TRUE);
         }
-    }
-
-    private void performDeletion(List<String> toDels) throws Exception {
-        List<XSDSchemaContent> impToDels = new ArrayList<XSDSchemaContent>();
-        List<String> nsToDels = new ArrayList<String>();
-        for (String delName : toDels) {
-            EList<XSDSchemaContent> list = xsdSchema.getContents();
-            for (XSDSchemaContent cnt : list) {
-                if (cnt instanceof XSDImportImpl) {
-                    XSDImportImpl imp = (XSDImportImpl) cnt;
-                    String ns = imp.getNamespace();
-                    String loct = imp.getSchemaLocation();
-                    if (ns == null || loct == null) {
-                        continue;
-                    }
-                    if (loct.equals(delName)) {
-                        Iterator<Map.Entry<String, String>> iter = xsdSchema.getQNamePrefixToNamespaceMap().entrySet().iterator();
-                        while (iter.hasNext()) {
-                            Map.Entry<String, String> entry = iter.next();
-                            if (entry.getValue().equalsIgnoreCase(ns)) {
-                                nsToDels.add(entry.getKey());
-                                impToDels.add(cnt);
-                                break;
-                            }
-                        }
-                    }
-                } else if (cnt instanceof XSDIncludeImpl) {
-                    XSDIncludeImpl inude = (XSDIncludeImpl) cnt;
-                    if (inude.getSchemaLocation().equals(delName)) {
-                        impToDels.add(cnt);
-                        break;
-                    }
-                }
-            }
-        }
-        if (!impToDels.isEmpty() && xsdSchema.getContents().containsAll(impToDels)) {
-            xsdSchema.updateElement();
-            xsdSchema.getReferencingDirectives().clear();
-            Map<String, String> map = xsdSchema.getQNamePrefixToNamespaceMap();
-            for (String ns : nsToDels) {
-                map.remove(ns);
-            }
-            for (XSDSchemaContent cnt : impToDels) {
-                xsdSchema.getContents().remove(cnt);
-            }
-
-            xsdSchema.updateElement();
-            setXsdSchema(xsdSchema);
-
-            String xsd = Util.nodeToString(xsdSchema.getDocument());
-            WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
-            wsObject.setXsdSchema(xsd);
-        }
-
-    }
-
-    private void performImport(List<String> list) throws Exception {
-        for (String fileName : list) {
-            importSchemaFromFile(fileName);
-        }
-    }
-
-    private void importSchemaFromFile(String fileName) throws Exception {
-        InputSource source = null;
-        Pattern httpUrl = Pattern.compile("^(http|https|ftp):(\\//|\\\\)(.*)(\\.)+(xsd)$");//$NON-NLS-1$
-        Matcher match = httpUrl.matcher(fileName);
-        if (match.matches()) {
-            URL url = new URL(fileName);
-            String urlContent = IOUtils.toString(url.openConnection().getInputStream());
-            urlContent = urlContent.replaceAll("<!DOCTYPE(.*?)>", "");//$NON-NLS-1$//$NON-NLS-2$
-            source = new InputSource(IOUtils.toInputStream(urlContent));
-            importSchema(source, fileName);
-        } else {
-            importFromFile(source, fileName);
-        }
-
-    }
-
-    protected void importFromFile(InputSource source, String fileName) {
-        String inputType = ""; //$NON-NLS-1$
-        if (fileName.lastIndexOf(".") != -1) { //$NON-NLS-1$
-            inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
-        }
-        if (!inputType.equals(".xsd")) { //$NON-NLS-1$
-            return;
-        }
-        File file = new File(fileName);
-
-        try {
-            source = new InputSource(new FileInputStream(file));
-            importSchema(source, file.getAbsolutePath());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-
     }
 
     protected void importSchema(InputSource source, String uri) throws Exception {
@@ -2916,7 +2813,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                 dlg.setBlockOnOpen(true);
                 dlg.open();
                 if (dlg.getReturnCode() == Window.OK) {
-                    doImportSchema(dlg.getImportedXSDList(), dlg.getToDelXSDList());
+                    doImportSchema(dlg.getXSDContents());
                 }
             }
 
@@ -2925,7 +2822,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
     }
 
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
-        return new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, xobject, Messages.ImportXSDSchema);
+        return new SelectImportedModulesDialog(getSite().getShell(), xobject, Messages.ImportXSDSchema);
     }
 
     @Override

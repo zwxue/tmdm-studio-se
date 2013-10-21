@@ -188,7 +188,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 		} finally {
 			IOUtils.closeQuietly(stream);
 			super.doSave(monitor);
-			monitor.done();
+			if(null != monitor){
+				monitor.done();
+			}
 		}
 	}
 

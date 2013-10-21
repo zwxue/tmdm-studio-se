@@ -181,14 +181,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
     @Override
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
-        return new SelectImportedModulesDialog2(getSite().getShell(), xsdSchema, xobject, Messages.ImportXSDSchema);
+        return new SelectImportedModulesDialog2(getSite().getShell(), xobject, Messages.ImportXSDSchema);
     }
 
-    @Override
-    protected void doImportSchema(List<String> addList, List<String> delList) {
-        List<String> resolvedList = resolveAddList(addList);
-        super.doImportSchema(resolvedList, delList);
-    }
 
     private List<String> resolveAddList(List<String> addList) {
         List<String> result = new ArrayList<String>();

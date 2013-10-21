@@ -13,55 +13,59 @@
 package com.amalto.workbench.dialogs;
 
 import java.io.File;
-import java.io.Serializable;
-import java.net.InetAddress;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ICheckStateProvider;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
-import org.eclipse.xsd.impl.XSDImportImpl;
-import org.eclipse.xsd.impl.XSDIncludeImpl;
+import org.eclipse.xsd.XSDTypeDefinition;
+import org.eclipse.xsd.impl.XSDSchemaImpl;
+import org.w3c.dom.Document;
 
 import com.amalto.workbench.i18n.Messages;
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.providers.TypesLabelProvider;
+import com.amalto.workbench.providers.XSDTreeLabelProvider;
+import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
+import com.amalto.workbench.providers.datamodel.TypesTreeContentProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -70,446 +74,420 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class SelectImportedModulesDialog extends Dialog {
 
-    private static Log log = LogFactory.getLog(SelectImportedModulesDialog.class);
-
-    private String title;
-
-    private TableViewer tableViewer;
-
-    private List<XSDDesc> xsdDescList = new ArrayList<XSDDesc>();
-
-    private List<String> xsdImpList = new ArrayList<String>();
-
-    private List<String> toDelList = new ArrayList<String>();
-
-    private Shell shell;
-
-    private TreeObject treeObject;
-
-    private XSDSchema xsdSchema;
-
-    private Button delLabelButton;
-
-    private static final Image LOCAL = ImageCache.getCreatedImage(EImage.SERVER.getPath());
-
-    private static final Image MDM_WEB = ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
-
-    private static final Image OTHER_WEB = ImageCache.getCreatedImage(EImage.SERVERNAVIGATOR.getPath());
-
-    private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";//$NON-NLS-1$
-
-    protected String url = null;
-
-    public SelectImportedModulesDialog(Shell parentShell, XSDSchema schema, TreeObject treeObj, String title) {
-        super(parentShell);
-        this.shell = parentShell;
-        this.treeObject = treeObj;
-        this.title = title;
-        this.xsdSchema = schema;
-
-        String endpointIpAddress = treeObject.getEndpointIpAddress();
-        if (endpointIpAddress != null && endpointIpAddress.length() > 0) {
-            url = endpointIpAddress + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
-        }
-    }
-
-    @Override
-    protected Control createDialogArea(Composite parent) {
-        parent.getShell().setText(this.title);
-
-        Composite composite = (Composite) super.createDialogArea(parent);
-        GridLayout layout = (GridLayout) composite.getLayout();
-        layout.numColumns = 2;
-
-        Label label = new Label(composite, SWT.NONE);
-        label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 2, 1));
-        label.setText(Messages.ViewerWithModules);
-
-        tableViewer = new TableViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        GridData data = new GridData(GridData.FILL, GridData.FILL, true, true, 1, 1);
-        tableViewer.getControl().setLayoutData(data);
-        ((GridData) tableViewer.getControl().getLayoutData()).heightHint = 250;
-        ((GridData) tableViewer.getControl().getLayoutData()).widthHint = 300;
-
-        XSDSchemaLabelProvider labelProvider = new XSDSchemaLabelProvider();
-        XSDSchemaContentProvider contentProvider = new XSDSchemaContentProvider();
-        tableViewer.setContentProvider(contentProvider);
-        tableViewer.setLabelProvider(labelProvider);
-        tableViewer.setInput(new Object());
-        tableViewer.setSorter(new ViewerSorter() {
-
-            @Override
-            public int category(Object element) {
-                if (element instanceof XSDDesc) {
-                    return ((XSDDesc) element).getType();
-                }
-                return -1;
-            }
-
-            @Override
-            public int compare(Viewer theViewer, Object e1, Object e2) {
-                int cat1 = category(e1);
-                int cat2 = category(e2);
-                return cat1 - cat2;
-            }
-        });
-
-        tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-            public void selectionChanged(SelectionChangedEvent event) {
-                IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                delLabelButton.setEnabled(!selection.isEmpty());
-            }
-        });
-
-        Composite compositeBtn = new Composite(composite, SWT.FILL);
-        compositeBtn.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        compositeBtn.setLayout(new GridLayout(1, false));
-
-        Button addXSDFromLocal = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
-        addXSDFromLocal.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        addXSDFromLocal.setText(Messages.AddXsdFromlocal);
-        addXSDFromLocal.setToolTipText(Messages.AddXsdSchemaFromlocal);
-        addXSDFromLocal.addSelectionListener(new SelectionListener() {
-
-            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-            };
-
-            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                FileDialog fd = new FileDialog(shell.getShell(), SWT.SAVE);
-                fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
-                fd.setText(Messages.ImportXSDSchema);
-                String filename = fd.open();
-
-                if (filename == null) {
-                    return;
-                }
-                File file = new File(filename);
-                try {
-                    log.info(file.toURL());
-                } catch (MalformedURLException e1) {
-                    log.error(e1.getMessage(), e1);
-                }
-                XSDDesc xsdDesc = buildUp(filename, LOCAL, 0);
-                include(xsdDesc);
-                getButton(IDialogConstants.OK_ID).setEnabled(true);
-                tableViewer.refresh();
-            }
-        });
-        if (Util.IsEnterPrise()) {
-            Button addXSDFromWebSite = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
-            addXSDFromWebSite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-            addXSDFromWebSite.setText(Messages.AddTypesDataModels);
-            addXSDFromWebSite.setToolTipText(Messages.AddFromModelTypes);
-            addXSDFromWebSite.addSelectionListener(new SelectionListener() {
-
-                public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-                };
-
-                public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), Messages.SelectXSDSchemaWebSite);
-                    try {
-                        List<String> schemaList = new ArrayList<String>();
-                        resolveSchemaList(schemaList, dlg);
-                    } catch (Exception es) {
-                        log.error(es.getMessage(), es);
-                        return;
-                    }
-
-                    dlg.setBlockOnOpen(true);
-                    dlg.open();
-                    if (dlg.getReturnCode() == Window.OK) {
-                        if (getUrl() == null) {
-                            MessageDialog.openError(getShell(), Messages._Error, Messages.ServerNotNull);
-                            return;
-                        }
-                        List<String> urls = dlg.getMDMDataModelUrls();
-                        for (String url : urls) {
-                            XSDDesc xsdDesc = buildUp(getUrl() + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
-                            include(xsdDesc);
-                        }
-                        getButton(IDialogConstants.OK_ID).setEnabled(true);
-                        tableViewer.refresh();
-                    }
-                }
-            });
-        }
-
-        Button impXSDFromExchange = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
-        impXSDFromExchange.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        impXSDFromExchange.setText(Messages.ImportFromExchangeServer);
-        impXSDFromExchange.setToolTipText(Messages.ImportSchemaFromServer);
-        impXSDFromExchange.addSelectionListener(new SelectionListener() {
-
-            public void widgetDefaultSelected(SelectionEvent e) {
-            }
-
-            public void widgetSelected(SelectionEvent e) {
-                String importFolder = System.getProperty("user.dir");//$NON-NLS-1$
-                StringBuffer repository = new StringBuffer();
-                ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(shell.getShell(), null, false, repository);
-                dlg.setBlockOnOpen(true);
-                int ret = dlg.open();
-                if (ret == Window.OK) {
-                    File dir = new File(repository.toString());
-                    for (File file : dir.listFiles()) {
-                        if (file.getName().endsWith(".xsd")) {//$NON-NLS-1$
-                            XSDDesc xsdDesc = buildUp(file.getAbsolutePath(), MDM_WEB, 1);
-                            include(xsdDesc);
-                        }
-                    }
-
-                    getButton(IDialogConstants.OK_ID).setEnabled(true);
-                    tableViewer.refresh();
-                }
-            }
-
-        });
-
-        Button addXSDFromInputDlg = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
-        addXSDFromInputDlg.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        addXSDFromInputDlg.setText(Messages.AddXsdFromOther);
-        addXSDFromInputDlg.setToolTipText(Messages.AddFromOtherSite);
-        addXSDFromInputDlg.addSelectionListener(new SelectionListener() {
-
-            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-            };
-
-            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                InputDialog id = new InputDialog(shell.getShell(), Messages.AddXsdFromOther, Messages.EnterTextUrl,
-                        "", new IInputValidator() { //$NON-NLS-1$
-
-                            public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText)) {
-                                    return Messages.NameNotEmpty;
-                                }
-                                return null;
-                            };
-                        });
-
-                id.setBlockOnOpen(true);
-                int ret = id.open();
-                if (ret == Window.CANCEL) {
-                    return;
-                }
-                XSDDesc xsdDesc = buildUp(id.getValue(), OTHER_WEB, 2);
-                include(xsdDesc);
-                getButton(IDialogConstants.OK_ID).setEnabled(true);
-                tableViewer.refresh();
-            }
-        });
-
-        delLabelButton = new Button(compositeBtn, SWT.PUSH);
-        delLabelButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
-        delLabelButton.setText(Messages.DeleteXsdModule);
-        delLabelButton.setToolTipText(Messages.Delete);
-        delLabelButton.addSelectionListener(new SelectionListener() {
-
-            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-            };
-
-            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
-                for (Iterator<XSDDesc> iter = selection.iterator(); iter.hasNext();) {
-                    XSDDesc desc = iter.next();
-                    xsdDescList.remove(desc);
-                    toDelList.add(desc.getURL());
-                }
-                getButton(IDialogConstants.OK_ID).setEnabled(true);
-                tableViewer.refresh();
-            };
-        });
-
-        countImportListInSchema();
-
-        tableViewer.setInput(xsdDescList);
-        return composite;
-    }
-
-    private void countImportListInSchema() {
-        xsdDescList.clear();
-        try {
-            for (XSDSchemaContent cnt : xsdSchema.getContents()) {
-                String schemaLocation = "";//$NON-NLS-1$
-                if (cnt instanceof XSDImportImpl) {
-                    XSDImportImpl imp = (XSDImportImpl) cnt;
-                    schemaLocation = imp.getSchemaLocation();
-                } else if (cnt instanceof XSDIncludeImpl) {
-                    XSDIncludeImpl incu = (XSDIncludeImpl) cnt;
-                    schemaLocation = incu.getSchemaLocation();
-                } else {
-                    continue;
-                }
-                if (schemaLocation != null) {
-                    Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");//$NON-NLS-1$
-                    Matcher match = httpUrl.matcher(schemaLocation);
-                    if (match.matches()) {
-                        InetAddress addr = InetAddress.getLocalHost();
-                        String ip = match.group(3);
-                        boolean local = ip.equals(addr.getHostAddress()) || ip.equals("localhost") || ip.equals("127.0.0.1");//$NON-NLS-1$//$NON-NLS-2$
-                        Image img = local ? MDM_WEB : OTHER_WEB;
-                        int type = local ? 1 : 2;
-                        XSDDesc xsdDesc = buildUp(schemaLocation, img, type);
-                        xsdDescList.add(xsdDesc);
-                    } else if (!schemaLocation.equals("")) {//$NON-NLS-1$
-                        XSDDesc xsdDesc = buildUp(schemaLocation, LOCAL, 0);
-                        xsdDescList.add(xsdDesc);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-        }
-    }
-
-    private void include(XSDDesc xsdDesc) {
-        for (XSDDesc xc : xsdDescList) {
-            if (xc.getURL().equals(xsdDesc.getURL())) {
-                return;
-            }
-        }
-
-        xsdDescList.add(xsdDesc);
-    }
-
-    private XSDDesc buildUp(String url, Image image, int type) {
-        return new XSDDesc(url, image, type);
-    }
-
-    @Override
-    protected Control createButtonBar(Composite parent) {
-        Control control = super.createButtonBar(parent);
-        getButton(IDialogConstants.OK_ID).setEnabled(false);
-        delLabelButton.setEnabled(false);
-        return control;
-    }
-
-    public List<String> getImportedXSDList() {
-        for (XSDDesc des : xsdDescList) {
-            xsdImpList.add(des.getURL());
-        }
-        return xsdImpList;
-    }
-
-    public List<String> getToDelXSDList() {
-        for (String xsd : xsdImpList) {
-            if (toDelList.contains(xsd)) {
-                toDelList.remove(xsd);
-            }
-        }
-        return toDelList;
-    }
-
-    private void resolveSchemaList(List<String> schemaList, MDMXSDSchemaEntryDialog dlg) throws Exception {
-
-        boolean resolved = resolveSchemaList(schemaList);
-        if (!resolved) {
-            return;
-        }
-
-        String currentModelName = treeObject.getName();
-        schemaList.remove(currentModelName);
-
-        dlg.create();
-        dlg.retrieveDataModels(schemaList, false);
-    }
-
-    protected boolean resolveSchemaList(List<String> schemaList) throws XtentisException, RemoteException {
-        XtentisPort port = getPort();
-        if (port == null) {
-            MessageDialog.openError(getShell(), Messages._Error, Messages.ServerNotNull);
-            return false;
-        }
-        WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
-        if (xdmPKs != null) {
-            for (WSDataModelPK xdmPK : xdmPKs) {
-                String name = xdmPK.getPk();
-                if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
-                    schemaList.add(name);
-                }
-            }
-        }
-
-        return true;
-    }
-
-    protected XtentisPort getPort() throws XtentisException {
-        return Util.getPort(treeObject);
-    }
-
-    protected String getUrl() {
-        return this.url;
-    }
-
-    private static class XSDSchemaLabelProvider extends StyledCellLabelProvider {
-
-        public XSDSchemaLabelProvider() {
-        }
-
-        @Override
-        public void update(ViewerCell cell) {
-            Object element = cell.getElement();
-
-            if (element instanceof XSDDesc) {
-                XSDDesc xsdDesc = (XSDDesc) element;
-
-                cell.setText(xsdDesc.getURL());
-                cell.setImage(xsdDesc.getImage());
-
-            } else {
-                cell.setText("Unknown element"); //$NON-NLS-1$
-            }
-
-            super.update(cell);
-        }
-
-        @Override
-        protected void measure(Event event, Object element) {
-            super.measure(event, element);
-        }
-    }
-
-    private class XSDSchemaContentProvider implements IStructuredContentProvider {
-
-        public Object[] getElements(Object element) {
-
-            return xsdDescList.toArray(new XSDDesc[] {});
-        }
-
-        public void dispose() {
-        }
-
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        }
-    }
-
-    private class XSDDesc implements Serializable {
-
-        private String _url;
-
-        private Image _image;
-
-        private int _type;
-
-        public XSDDesc() {
-        }
-
-        public XSDDesc(String url, Image image, int type) {
-            _url = url;
-            _image = image;
-            _type = type;
-        }
-
-        public String getURL() {
-            return _url;
-        }
-
-        public Image getImage() {
-            return _image;
-        }
-
-        public int getType() {
-            return _type;
-        }
-    }
+	protected static Log log = LogFactory
+			.getLog(SelectImportedModulesDialog.class);
+
+	private String title;
+
+	private Shell shell;
+
+	private TreeObject treeObject;
+
+	private TypesTreeContentProvider typeprovider = new TypeContentProvider();
+	private SchemaTreeContentProvider entityprovider = new SchemaContentProvider();
+
+	private class TypeContentProvider extends TypesTreeContentProvider {
+
+		public TypeContentProvider() {
+			super(null, null);
+		}
+
+		@Override
+		public Object[] getElements(Object parent) {
+			if (null == parent) {
+				return null;
+			}
+			if (parent instanceof XSDSchema) {
+				return getChildren(parent);
+			}
+			if (parent instanceof Collection<?>) {
+				Collection<?> col = (Collection<?>) parent;
+				Collection<XSDTypeDefinition> ret = new LinkedList<XSDTypeDefinition>();
+				for (Object obj : col) {
+					if (obj instanceof XSDTypeDefinition) {
+						ret.add((XSDTypeDefinition) obj);
+					}
+				}
+				return ret.toArray();
+			}
+			return null;
+		}
+	}
+
+	private class SchemaContentProvider extends SchemaTreeContentProvider {
+		public SchemaContentProvider() {
+			super(null, null);
+		}
+
+		@Override
+		public Object[] getElements(Object parent) {
+			if (null == parent) {
+				return null;
+			}
+			if (parent instanceof XSDSchema) {
+				return getChildren(parent);
+			}
+			if (parent instanceof Collection<?>) {
+				Collection<?> col = (Collection<?>) parent;
+				Collection<XSDElementDeclaration> ret = new LinkedList<XSDElementDeclaration>();
+				for (Object obj : col) {
+					if (obj instanceof XSDElementDeclaration) {
+						ret.add((XSDElementDeclaration) obj);
+					}
+				}
+				return ret.toArray();
+			}
+			return null;
+		}
+
+	}
+
+	public SelectImportedModulesDialog(Shell parentShell, TreeObject treeObj, String title) {
+		super(parentShell);
+		this.shell = parentShell;
+		this.treeObject = treeObj;
+		this.title = title;
+	}
+
+	public void addEntity(XSDSchema xsdSchema) {
+		addSchemaContent(entityprovider, xsdSchema);
+		entityViewer.refresh();
+	}
+
+	public void addTypes(XSDSchema xsdSchema) {
+		addSchemaContent(typeprovider, xsdSchema);
+		typeViewer.refresh();
+	}
+
+	final Collection<XSDSchemaContent> addContent = new LinkedList<XSDSchemaContent>();
+
+	public Collection<XSDSchemaContent> getXSDContents() {
+		return addContent;
+	}
+
+	protected void addSchemaContent(SchemaTreeContentProvider provider,
+			XSDSchema xsdSchema) {
+		if (null == xsdSchema || null == provider) {
+			return;
+		}
+		Object[] objs = provider.getChildren(xsdSchema);
+		if (null == objs) {
+			return;
+		}
+		for (Object object : objs) {
+			if (object instanceof XSDSchemaContent) {
+				addContent.add((XSDSchemaContent) object);
+			}
+		}
+	}
+
+	CheckboxTableViewer entityViewer;
+	CheckboxTableViewer typeViewer;
+
+	CheckboxTableViewer createTableViewer(Composite parent, String columnName,
+			IContentProvider contentProvider, ILabelProvider lableProvider) {
+		CheckboxTableViewer viewer = CheckboxTableViewer.newCheckList(parent,
+				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK
+						| SWT.BORDER);
+		viewer.setCheckStateProvider(new ICheckStateProvider() {
+
+			public boolean isChecked(Object element) {
+				return true;
+			}
+
+			public boolean isGrayed(Object element) {
+				return false;
+			}
+		});
+		viewer.getTable().setLinesVisible(true);
+		viewer.setContentProvider(contentProvider);
+		viewer.getTable().setHeaderVisible(true);
+		TableLayout lay = new TableLayout();
+		TableColumn column = new TableColumn(viewer.getTable(), SWT.CENTER);
+		column.setText(columnName);
+		lay.addColumnData(new ColumnWeightData(200, 100));
+		viewer.getTable().setLayout(lay);
+		viewer.setLabelProvider(lableProvider);
+		return viewer;
+	}
+
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		parent.getShell().setText(this.title);
+
+		Composite composite = (Composite) super.createDialogArea(parent);
+		GridLayout layout = (GridLayout) composite.getLayout();
+		layout.numColumns = 2;
+		SashForm form = new SashForm(composite, SWT.HORIZONTAL);
+		GridData data = new GridData(GridData.FILL, GridData.FILL, true, true,
+				1, 1);
+		data.widthHint = 300;
+		data.heightHint = 300;
+		form.setLayoutData(data);
+		entityViewer = createTableViewer(form, "Entities", entityprovider,
+				new XSDTreeLabelProvider());
+		typeViewer = createTableViewer(form, "Types", typeprovider,
+				new TypesLabelProvider());
+
+		form.setWeights(new int[] { 3, 5 });
+		Composite compositeBtn = new Composite(composite, SWT.FILL);
+		compositeBtn.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,
+				false, 1, 1));
+		compositeBtn.setLayout(new GridLayout(1, false));
+
+		Button addXSDFromLocal = new Button(compositeBtn, SWT.PUSH | SWT.FILL);
+		addXSDFromLocal.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,
+				false, 1, 1));
+		addXSDFromLocal.setText(Messages.AddXsdFromlocal);
+		addXSDFromLocal.setToolTipText(Messages.AddXsdSchemaFromlocal);
+		addXSDFromLocal.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(
+					org.eclipse.swt.events.SelectionEvent e) {
+			};
+
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				FileDialog fd = new FileDialog(shell.getShell(), SWT.SAVE);
+				fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
+				fd.setText(Messages.ImportXSDSchema);
+				String filename = fd.open();
+				if (filename == null) {
+					return;
+				}
+				URL url = getSourceURL("file:///" + filename);
+				XSDSchema schema = createSchema(url);
+				if (null == schema) {
+					return;
+				}
+				addEntity(schema);
+				addTypes(schema);
+			}
+		});
+		if (Util.IsEnterPrise()) {
+			Button addXSDFromWebSite = new Button(compositeBtn, SWT.PUSH
+					| SWT.FILL);
+			addXSDFromWebSite.setLayoutData(new GridData(SWT.FILL, SWT.NONE,
+					false, false, 1, 1));
+			addXSDFromWebSite.setText(Messages.AddTypesDataModels);
+			addXSDFromWebSite.setToolTipText(Messages.AddFromModelTypes);
+			addXSDFromWebSite.addSelectionListener(new SelectionListener() {
+
+				public void widgetDefaultSelected(
+						org.eclipse.swt.events.SelectionEvent e) {
+				};
+
+				public void widgetSelected(
+						org.eclipse.swt.events.SelectionEvent e) {
+					MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(
+							shell.getShell(), Messages.SelectXSDSchemaWebSite);
+					try {
+						List<String> schemaList = new ArrayList<String>();
+						resolveSchemaList(schemaList, dlg);
+					} catch (Exception es) {
+						log.error(es.getMessage(), es);
+						return;
+					}
+
+					dlg.setBlockOnOpen(true);
+					dlg.open();
+					if (dlg.getReturnCode() == Window.OK) {
+						List<String> urls = dlg.getMDMDataModelUrls();
+						for (String datamodel : urls) {
+							URL url = getSourceURL("type:" + datamodel);
+							XSDSchema schema = createSchema(url);
+							if (null == schema) {
+								return;
+							}
+							addTypes(schema);
+						}
+					}
+				}
+			});
+		}
+
+		Button impXSDFromExchange = new Button(compositeBtn, SWT.PUSH
+				| SWT.FILL);
+		impXSDFromExchange.setLayoutData(new GridData(SWT.FILL, SWT.NONE,
+				false, false, 1, 1));
+		impXSDFromExchange.setText(Messages.ImportFromExchangeServer);
+		impXSDFromExchange.setToolTipText(Messages.ImportSchemaFromServer);
+		impXSDFromExchange.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				StringBuffer repository = new StringBuffer();
+				ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(
+						shell.getShell(), null, false, repository);
+				dlg.setBlockOnOpen(true);
+				int ret = dlg.open();
+				if (ret == Window.OK) {
+					File dir = new File(repository.toString());
+					for (File file : dir.listFiles()) {
+						if (file.getName().endsWith(".xsd")) {//$NON-NLS-1$
+							XSDSchema schema = createSchema(getSourceURL("file:///"
+									+ file.getPath()));
+							if (null == schema) {
+								return;
+							}
+							addEntity(schema);
+							addTypes(schema);
+							file.deleteOnExit();
+						}
+					}
+				}
+			}
+
+		});
+
+		Button addXSDFromInputDlg = new Button(compositeBtn, SWT.PUSH
+				| SWT.FILL);
+		addXSDFromInputDlg.setLayoutData(new GridData(SWT.FILL, SWT.NONE,
+				false, false, 1, 1));
+		addXSDFromInputDlg.setText(Messages.AddXsdFromOther);
+		addXSDFromInputDlg.setToolTipText(Messages.AddFromOtherSite);
+		addXSDFromInputDlg.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(
+					org.eclipse.swt.events.SelectionEvent e) {
+			};
+
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				InputDialog id = new InputDialog(shell.getShell(),
+						Messages.AddXsdFromOther, Messages.EnterTextUrl,
+						"", new IInputValidator() { //$NON-NLS-1$
+
+							public String isValid(String newText) {
+								if ((newText == null) || "".equals(newText)) {
+									return Messages.NameNotEmpty;
+								}
+								return null;
+							};
+						});
+
+				id.setBlockOnOpen(true);
+				int ret = id.open();
+				if (ret == Window.CANCEL) {
+					return;
+				}
+				XSDSchema schema = createSchema(getSourceURL(id.getValue()));
+				if (null == schema) {
+					return;
+				}
+				addEntity(schema);
+				addTypes(schema);
+			}
+		});
+		entityViewer.setInput(addContent);
+		typeViewer.setInput(addContent);
+		return composite;
+	}
+
+	protected XSDSchema createSchema(URL url) {
+		InputStream stream = null;
+		try {
+			stream = url.openStream();
+			return createSchema(stream);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		} finally {
+			IOUtils.closeQuietly(stream);
+		}
+		return null;
+	}
+
+	private static final String DEFAULT_PROTOCAL = "(http|https|file|ftp):(\\//|\\\\)(.*):(.*)";//$NON-NLS-1$
+	private Pattern urlPattern = Pattern.compile(DEFAULT_PROTOCAL);
+
+	protected URL getSourceURL(String path) {
+		Matcher match = urlPattern.matcher(path);
+		if (match.matches()) {
+			try {
+				return new URL(path);
+			} catch (MalformedURLException e) {
+				log.error(e.getMessage());
+			}
+		}
+		return null;
+	}
+
+	protected XSDSchema createSchema(InputStream stream) {
+		try {
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+					.newInstance();
+			documentBuilderFactory.setNamespaceAware(true);
+			documentBuilderFactory.setValidating(false);
+			DocumentBuilder documentBuilder = documentBuilderFactory
+					.newDocumentBuilder();
+			Document document = documentBuilder.parse(stream);
+			return XSDSchemaImpl.createSchema(document.getDocumentElement());
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return null;
+		}
+	}
+
+	private void resolveSchemaList(List<String> schemaList,
+			MDMXSDSchemaEntryDialog dlg) throws Exception {
+
+		boolean resolved = resolveSchemaList(schemaList);
+		if (!resolved) {
+			return;
+		}
+
+		String currentModelName = treeObject.getName();
+		schemaList.remove(currentModelName);
+
+		dlg.create();
+		dlg.retrieveDataModels(schemaList, false);
+	}
+
+	protected boolean resolveSchemaList(List<String> schemaList)
+			throws XtentisException, RemoteException {
+		XtentisPort port = getPort();
+		if (port == null) {
+			MessageDialog.openError(getShell(), Messages._Error,
+					Messages.ServerNotNull);
+			return false;
+		}
+		WSDataModelPK[] xdmPKs = port.getDataModelPKs(
+				new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
+		if (xdmPKs != null) {
+			for (WSDataModelPK xdmPK : xdmPKs) {
+				String name = xdmPK.getPk();
+				if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
+					schemaList.add(name);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	protected void okPressed() {
+		addContent.clear();
+		Object[] objs = entityViewer.getCheckedElements();
+		if (null != objs) {
+			for (Object obj : objs) {
+				if (obj instanceof XSDSchemaContent) {
+					addContent.add((XSDSchemaContent) obj);
+				}
+			}
+		}
+		objs = typeViewer.getCheckedElements();
+		if (null != objs) {
+			for (Object obj : objs) {
+				if (obj instanceof XSDSchemaContent) {
+					addContent.add((XSDSchemaContent) obj);
+				}
+			}
+		}
+		super.okPressed();
+	}
+
+	protected XtentisPort getPort() throws XtentisException {
+		return Util.getPort(treeObject);
+	}
 }
