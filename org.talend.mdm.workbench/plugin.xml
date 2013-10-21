@@ -504,6 +504,11 @@
             required="true">
       </libraryNeeded>
             <libraryNeeded
+                  context="MDM"
+                  name="jaas.jar"
+                  required="true">
+            </libraryNeeded>
+            <libraryNeeded
             context="MDM"
             language="java"
             message="Required for using this component."
