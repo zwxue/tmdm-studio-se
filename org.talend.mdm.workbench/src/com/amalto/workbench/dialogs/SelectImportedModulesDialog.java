@@ -34,6 +34,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICheckStateProvider;
@@ -43,6 +44,7 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -53,6 +55,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
@@ -186,8 +190,10 @@ public class SelectImportedModulesDialog extends Dialog {
 
 	CheckboxTableViewer createTableViewer(Composite parent, String columnName,
 			IContentProvider contentProvider, ILabelProvider lableProvider) {
-		CheckboxTableViewer viewer = CheckboxTableViewer.newCheckList(parent,
-				SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK
+		Composite com = new Composite(parent, SWT.NONE);
+		com.setLayout(new GridLayout(1, false));
+		final CheckboxTableViewer viewer = CheckboxTableViewer.newCheckList(
+				com, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK
 						| SWT.BORDER);
 		viewer.setCheckStateProvider(new ICheckStateProvider() {
 
@@ -199,6 +205,8 @@ public class SelectImportedModulesDialog extends Dialog {
 				return false;
 			}
 		});
+		GridDataFactory.fillDefaults().grab(true, true)
+				.applyTo(viewer.getControl());
 		viewer.getTable().setLinesVisible(true);
 		viewer.setContentProvider(contentProvider);
 		viewer.getTable().setHeaderVisible(true);
@@ -208,9 +216,38 @@ public class SelectImportedModulesDialog extends Dialog {
 		lay.addColumnData(new ColumnWeightData(200, 100));
 		viewer.getTable().setLayout(lay);
 		viewer.setLabelProvider(lableProvider);
+
+		ToolBar toolBar = new ToolBar(com, SWT.HORIZONTAL | SWT.FLAT);
+
+		createToolBarItem(toolBar,
+				Messages.RepositoryCheckTreeViewer_SelectAll,
+				new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						viewer.setAllChecked(true);
+					}
+				});
+		createToolBarItem(toolBar,
+				Messages.RepositoryCheckTreeViewer_DeselectAll,
+				new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						viewer.setAllChecked(false);
+					}
+				});
 		return viewer;
 	}
 
+	private ToolItem createToolBarItem(ToolBar toolBar, String title,
+			SelectionListener listen) {
+		ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setText(title);
+		item.setToolTipText(title);
+		item.addSelectionListener(listen);
+		return item;
+	}
+	
+	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		parent.getShell().setText(this.title);
@@ -221,7 +258,7 @@ public class SelectImportedModulesDialog extends Dialog {
 		SashForm form = new SashForm(composite, SWT.HORIZONTAL);
 		GridData data = new GridData(GridData.FILL, GridData.FILL, true, true,
 				1, 1);
-		data.widthHint = 300;
+		data.widthHint = 400;
 		data.heightHint = 300;
 		form.setLayoutData(data);
 		entityViewer = createTableViewer(form, "Entities", entityprovider,

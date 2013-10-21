@@ -76,7 +76,7 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
     	}
     	if(path.startsWith("type:")){
     		String modelName = path.substring(5);
-    		IRepositoryViewObject rvobject = getViewObjForDataModel(modelName);
+    		IRepositoryViewObject rvobject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL,modelName);
     		if(null == rvobject){
     			return null;
     		}
@@ -102,15 +102,5 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
             path = itemPath + path;
 
         return path;
-    }
-    private IRepositoryViewObject getViewObjForDataModel(String name) {
-        List<IRepositoryViewObject> vObjs = RepositoryResourceUtil.findAllViewObjects(IServerObjectRepositoryType.TYPE_DATAMODEL);
-        IRepositoryViewObject theViewObj = null;
-        for (IRepositoryViewObject obj : vObjs) {
-            if (obj.getLabel().equals(name)) {
-                theViewObj = obj;
-            }
-        }
-        return theViewObj;
     }
 }
