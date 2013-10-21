@@ -75,19 +75,30 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
     		return null;
     	}
     	if(path.startsWith("type:")){
-    		String modelName = path.substring(5);
-    		IRepositoryViewObject rvobject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_DATAMODEL,modelName);
-    		if(null == rvobject){
-    			return null;
-    		}
-    		String prjLabel = rvobject.getProjectLabel();
+			String modelName = path.substring(5);
+			IRepositoryViewObject rvobject = RepositoryResourceUtil
+					.findViewObjectByName(
+							IServerObjectRepositoryType.TYPE_DATAMODEL,
+							modelName);
+			if (null == rvobject) {
+				return null;
+			}
+			String prjLabel = rvobject.getProjectLabel();
 
-            String parentPath = buildParentPath(rvobject);
-            String sep = "" + IPath.SEPARATOR; //$NON-NLS-1$
+			String parentPath = buildParentPath(rvobject);
+			if (!parentPath.startsWith("/")) {
+				parentPath = "/" + parentPath;
+			}
+			String sep = "" + IPath.SEPARATOR; //$NON-NLS-1$
 
-            String fileName ="file:///"+ ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + sep + prjLabel.toUpperCase() + sep
-                    + "MDM" + sep + "datamodel" + parentPath + rvobject.getLabel() + "_" + rvobject.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
-            return super.getSourceURL(fileName);
+			String fileName = "file:///"
+					+ ResourcesPlugin.getWorkspace().getRoot().getLocation()
+							.toOSString()
+					+ sep
+					+ prjLabel.toUpperCase()
+					+ sep
+					+ "MDM" + sep + "datamodel" + parentPath + rvobject.getLabel() + "_" + rvobject.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+			return super.getSourceURL(fileName);
     	}else{
     		return super.getSourceURL(path);
     	}

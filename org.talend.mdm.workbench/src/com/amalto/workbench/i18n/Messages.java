@@ -3159,6 +3159,11 @@ public class Messages extends NLS {
 
     public static String noKeystoreFile_error;
 
+    public static String import_schema_failed;
+    
+    public static String no_schema_available;
+    
+    public static String invalid_schema;
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor

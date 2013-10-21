@@ -13,6 +13,7 @@
 package com.amalto.workbench.dialogs;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -88,7 +89,10 @@ public class SelectImportedModulesDialog extends Dialog {
 	private TreeObject treeObject;
 
 	private TypesTreeContentProvider typeprovider = new TypeContentProvider();
+
 	private SchemaTreeContentProvider entityprovider = new SchemaContentProvider();
+
+	private DocumentBuilderFactory documentBuilderFactory;
 
 	private class TypeContentProvider extends TypesTreeContentProvider {
 
@@ -146,7 +150,8 @@ public class SelectImportedModulesDialog extends Dialog {
 
 	}
 
-	public SelectImportedModulesDialog(Shell parentShell, TreeObject treeObj, String title) {
+	public SelectImportedModulesDialog(Shell parentShell, TreeObject treeObj,
+			String title) {
 		super(parentShell);
 		this.shell = parentShell;
 		this.treeObject = treeObj;
@@ -246,8 +251,7 @@ public class SelectImportedModulesDialog extends Dialog {
 		item.addSelectionListener(listen);
 		return item;
 	}
-	
-	
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		parent.getShell().setText(this.title);
@@ -292,12 +296,7 @@ public class SelectImportedModulesDialog extends Dialog {
 					return;
 				}
 				URL url = getSourceURL("file:///" + filename);
-				XSDSchema schema = createSchema(url);
-				if (null == schema) {
-					return;
-				}
-				addEntity(schema);
-				addTypes(schema);
+				addSchema(url, true);
 			}
 		});
 		if (Util.IsEnterPrise()) {
@@ -331,11 +330,7 @@ public class SelectImportedModulesDialog extends Dialog {
 						List<String> urls = dlg.getMDMDataModelUrls();
 						for (String datamodel : urls) {
 							URL url = getSourceURL("type:" + datamodel);
-							XSDSchema schema = createSchema(url);
-							if (null == schema) {
-								return;
-							}
-							addTypes(schema);
+							addSchema(url, false);
 						}
 					}
 				}
@@ -361,17 +356,21 @@ public class SelectImportedModulesDialog extends Dialog {
 				int ret = dlg.open();
 				if (ret == Window.OK) {
 					File dir = new File(repository.toString());
-					for (File file : dir.listFiles()) {
-						if (file.getName().endsWith(".xsd")) {//$NON-NLS-1$
-							XSDSchema schema = createSchema(getSourceURL("file:///"
-									+ file.getPath()));
-							if (null == schema) {
-								return;
-							}
-							addEntity(schema);
-							addTypes(schema);
-							file.deleteOnExit();
+					File[] fs = dir.listFiles(new FileFilter() {
+
+						public boolean accept(File pathname) {
+							return pathname.getName().endsWith(".xsd");
 						}
+					});
+					if (null == fs || fs.length == 0) {
+						MessageDialog.openWarning(getShell(),
+								Messages.import_schema_failed,
+								Messages.no_schema_available);
+						return;
+					}
+					for (File file : fs) {
+						URL url = getSourceURL("file:///" + file.getPath());
+						addSchema(url, true);
 					}
 				}
 			}
@@ -408,12 +407,8 @@ public class SelectImportedModulesDialog extends Dialog {
 				if (ret == Window.CANCEL) {
 					return;
 				}
-				XSDSchema schema = createSchema(getSourceURL(id.getValue()));
-				if (null == schema) {
-					return;
-				}
-				addEntity(schema);
-				addTypes(schema);
+				URL url = getSourceURL(id.getValue());
+				addSchema(url, true);
 			}
 		});
 		entityViewer.setInput(addContent);
@@ -421,17 +416,28 @@ public class SelectImportedModulesDialog extends Dialog {
 		return composite;
 	}
 
-	protected XSDSchema createSchema(URL url) {
+	protected void addSchema(java.net.URL url, boolean addEntity) {
+		try {
+			XSDSchema schema = createSchema(url);
+			if (addEntity) {
+				addEntity(schema);
+			}
+			addTypes(schema);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			MessageDialog.openError(getShell(), Messages.import_schema_failed,
+					Messages.invalid_schema);
+		}
+	}
+
+	protected XSDSchema createSchema(URL url) throws Exception {
 		InputStream stream = null;
 		try {
 			stream = url.openStream();
 			return createSchema(stream);
-		} catch (Exception e) {
-			log.error(e.getMessage());
 		} finally {
 			IOUtils.closeQuietly(stream);
 		}
-		return null;
 	}
 
 	private static final String DEFAULT_PROTOCAL = "(http|https|file|ftp):(\\//|\\\\)(.*):(.*)";//$NON-NLS-1$
@@ -449,20 +455,16 @@ public class SelectImportedModulesDialog extends Dialog {
 		return null;
 	}
 
-	protected XSDSchema createSchema(InputStream stream) {
-		try {
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
-					.newInstance();
+	protected XSDSchema createSchema(InputStream stream) throws Exception {
+		if (null == documentBuilderFactory) {
+			documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			documentBuilderFactory.setNamespaceAware(true);
 			documentBuilderFactory.setValidating(false);
-			DocumentBuilder documentBuilder = documentBuilderFactory
-					.newDocumentBuilder();
-			Document document = documentBuilder.parse(stream);
-			return XSDSchemaImpl.createSchema(document.getDocumentElement());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			return null;
 		}
+		DocumentBuilder documentBuilder = documentBuilderFactory
+				.newDocumentBuilder();
+		Document document = documentBuilder.parse(stream);
+		return XSDSchemaImpl.createSchema(document.getDocumentElement());
 	}
 
 	private void resolveSchemaList(List<String> schemaList,
