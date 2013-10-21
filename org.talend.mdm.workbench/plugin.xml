@@ -491,11 +491,6 @@
                name="saaj-impl.jar"
                required="true">
       </libraryNeeded>   
-      
-      
-      
-      
-      
             <libraryNeeded
             context="MDM"
             language="java"
@@ -505,6 +500,8 @@
       </libraryNeeded>
             <libraryNeeded
                   context="MDM"
+                  language="java"
+                  message="Required for using this component."
                   name="jaas.jar"
                   required="true">
             </libraryNeeded>
