@@ -115,7 +115,7 @@ public class DeployAllDialog extends Dialog {
                 treeViewer.enableReconciliation(reconciliationBun.getSelection());
             }
         });
-        reconciliationBun.setText(Messages.DeployAllDialog_reconcliation);
+        reconciliationBun.setText(Messages.DeployAllDialog_reconciliation);
         reconciliationBun.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 
         Composite container = new Composite(mainContainer, SWT.BORDER);

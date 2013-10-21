@@ -146,7 +146,7 @@ public class Messages extends NLS {
 
     public static String DeployAllDialog_label_selectserver;
 
-    public static String DeployAllDialog_reconcliation;
+    public static String DeployAllDialog_reconciliation;
 
     public static String DeployAllDialog_selectAll;
 
@@ -841,6 +841,7 @@ public class Messages extends NLS {
     public static String UndeployAction;
 
     public static String UndeployMatchRuleAction_label;
+
     public static String ConsistencyConflictDialog_btnNewButton_text;
 
     public static String ConsistencyConflict_modifiedLocally;
@@ -850,7 +851,9 @@ public class Messages extends NLS {
     public static String ConsistencyConflict_showTimeStampColumn;
 
     public static String ConsistencyConflict_undefined;
+
     public static String ConsistencyConflictDialog_onlyShowConflictObjs;
+
     public static String NO_XSD_RESOURCE;
 
     public static String ConsistencyConflictt_Deployed;
