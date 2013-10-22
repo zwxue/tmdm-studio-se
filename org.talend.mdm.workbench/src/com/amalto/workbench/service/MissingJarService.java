@@ -33,14 +33,10 @@ import com.amalto.workbench.i18n.Messages;
 public class MissingJarService {
 
     private MissingJarService() {
-        if (missingJars == null) {
-            missingJars = getMissingJarList();
-        }
+
     }
 
     private static MissingJarService instance = new MissingJarService();
-
-    private List<String> missingJars;
 
     public static MissingJarService getInstance() {
         return instance;
@@ -58,11 +54,14 @@ public class MissingJarService {
     }
 
     public boolean checkMissingJar(boolean showUI) {
-        if (missingJars == null) {
+        if (getMissingJarList() == null) {
             return true;
         }
         if (showUI) {
             showMissingJarDialog();
+            if (getMissingJarList() == null) {
+                return true;
+            }
         }
         return false;
 
@@ -79,9 +78,8 @@ public class MissingJarService {
 
                 ExternalModulesInstallDialogWithProgress dialog = new ExternalModulesInstallDialogWithProgress(shell,
                         Messages.MissingJarDialog_title, Messages.MissingJarDialog_text, SWT.APPLICATION_MODAL);
-                dialog.showDialog(true, missingJars.toArray(new String[0]));
+                dialog.showDialog(true, getMissingJarList().toArray(new String[0]));
             }
         });
-
     }
 }
