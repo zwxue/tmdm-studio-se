@@ -487,7 +487,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     }// createCharacteristicsContent
 
-	private LabelProvider getLabelProvider(XSDSchemaContent content) {
+	private LabelProvider getContentLabelProvider(XSDSchemaContent content) {
 		if (content instanceof XSDElementDeclaration) {
 			return new XSDTreeLabelProvider();
 		} else if (content instanceof XSDTypeDefinition) {
@@ -497,9 +497,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 		}
 	}
 
-	private boolean compare(XSDSchemaContent xc1, XSDSchemaContent xc2) {
+	private boolean compareSchemaContent(XSDSchemaContent xc1, XSDSchemaContent xc2) {
 		if (xc1.getClass().equals(xc2.getClass())) {
-			LabelProvider provider = getLabelProvider(xc1);
+			LabelProvider provider = getContentLabelProvider(xc1);
 			if (null != provider
 					&& provider.getText(xc1).equals(provider.getText(xc2))) {
 				return true;
@@ -508,11 +508,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 		return false;
 	}
 
-	public XSDSchemaContent contain(List<XSDSchemaContent> list,
+	private XSDSchemaContent getContainedSchemaContent(List<XSDSchemaContent> list,
 			XSDSchemaContent content) {
-		for (XSDSchemaContent e : list) {
-			if (compare(e, content)) {
-				return e;
+		for (XSDSchemaContent xsdContent : list) {
+			if (compareSchemaContent(xsdContent, content)) {
+				return xsdContent;
 			}
 		}
 		return null;
@@ -529,7 +529,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 			List<XSDSchemaContent> exists = new ArrayList<XSDSchemaContent>(
 					tmp);
 			for (XSDSchemaContent content : addtional) {
-				XSDSchemaContent exist = contain(exists, content);
+				XSDSchemaContent exist = getContainedSchemaContent(exists, content);
 				if (null == exist) {
 					exists.add(content);
 				} else {
@@ -542,7 +542,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 						} else {
 							continue;
 						}
-						LabelProvider provider = getLabelProvider(exist);
+						LabelProvider provider = getContentLabelProvider(exist);
 						String message = Messages.bind(
 								Messages.conflict_messages, type,
 								provider.getText(exist));
