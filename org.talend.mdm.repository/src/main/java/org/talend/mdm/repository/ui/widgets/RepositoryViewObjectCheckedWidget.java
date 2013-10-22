@@ -139,9 +139,11 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     private MDMServerDef curServerDef;
 
+    private boolean isServerOk;
+
     /**
      * if type==null, return all type
-     *
+     * 
      * @param parent
      * @param type
      * @param commands
@@ -169,6 +171,8 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     }
 
     public void updateCurrentServerDef(final MDMServerDef curServerDef) {
+        doCheckServerConnection(curServerDef);
+
         new UIJob("Switch Server") { //$NON-NLS-1$
 
             @Override
@@ -181,6 +185,10 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
             }
         }.schedule();
 
+    }
+
+    private void doCheckServerConnection(MDMServerDef serverDef) {
+        isServerOk = RepositoryResourceUtil.checkServerConnection(getShell(), serverDef);
     }
 
     public List<AbstractDeployCommand> getSelectedCommands() {
@@ -255,7 +263,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     /**
      * DOC hbhong Comment method "initInput".
-     *
+     * 
      * @param type
      * @return
      */
@@ -312,10 +320,10 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
     public void enableReconciliation(boolean enable) {
         this.reconciliation = enable;
-
         treeViewer.refresh();
         treeViewer.expandAll();
         selectObjects(new InitDeployCheckHandler());
+
     }
 
     private void addCategoryViewObject(List<IRepositoryViewObject> result, IRepositoryNodeConfiguration conf) {
@@ -590,6 +598,9 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
     Map<IRepositoryViewObject, ConsistencyData> consistencyMap = new HashMap<IRepositoryViewObject, ConsistencyData>();
 
     private synchronized ConsistencyData getConsistencyData(MDMServerDef serverDef, IRepositoryViewObject viewObj) {
+        if (!isServerOk) {
+            return null;
+        }
         ConsistencyData consistencyData = consistencyMap.get(viewObj);
         if (consistencyData != null) {
             return consistencyData;

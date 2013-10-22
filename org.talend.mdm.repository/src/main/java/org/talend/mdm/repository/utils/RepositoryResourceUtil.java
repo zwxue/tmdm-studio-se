@@ -38,7 +38,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -85,6 +87,7 @@ import org.talend.mdm.repository.core.service.IInteractiveHandler;
 import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.ContainerItem;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -110,7 +113,7 @@ import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class RepositoryResourceUtil {
 
@@ -128,6 +131,20 @@ public class RepositoryResourceUtil {
     static XmiResourceManager resourceManager = new XmiResourceManager();
 
     private static final String DIVIDE = "/"; //$NON-NLS-1$
+
+    public static boolean checkServerConnection(Shell shell, final MDMServerDef serverDef) {
+        try {
+            ServerDefService.checkMDMConnection(serverDef);
+            return true;
+        } catch (Exception e) {
+            log.debug(e.getMessage(), e);
+            if (shell != null) {
+                String title = Messages.bind(Messages.Server_cannot_connected, serverDef.getUrl());
+                MessageDialog.openError(shell, title, Messages.AbstractDataClusterAction_ConnectFailed);
+            }
+        }
+        return false;
+    }
 
     public static boolean createItem(Item item, String propLabel) {
         return createItem(item, propLabel, VersionUtils.DEFAULT_VERSION);
@@ -825,8 +842,8 @@ public class RepositoryResourceUtil {
         if (item == null) {
             throw new IllegalArgumentException();
         }
-        if(item instanceof WorkspaceRootItem){
-        	return item;
+        if (item instanceof WorkspaceRootItem) {
+            return item;
         }
         Property property = item.getProperty();
         if (property != null) {
@@ -974,7 +991,7 @@ public class RepositoryResourceUtil {
 
     /**
      * convert viewObj's children to RepositoryNode type and add to node as its children
-     *
+     * 
      * @param viewObj
      * @param node RepositoryNode Object corresponding to viewObj
      */
@@ -1111,7 +1128,7 @@ public class RepositoryResourceUtil {
     public static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /**
-     *
+     * 
      * @param viewObj
      * @return A decrypted serverDef
      */
@@ -1124,7 +1141,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     *
+     * 
      * @param item
      * @return A decrypted serverDef
      */
@@ -1148,7 +1165,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     *
+     * 
      * @param item
      * @param def need A decrypted serverDef
      */

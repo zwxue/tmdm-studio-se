@@ -69,9 +69,11 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
             lockDirtyDialog.saveDirtyObjects();
             // deploy
             MDMServerDef serverDef = dialog.getSelectedServerDef();
-            IStatus status = DeployService.getInstance().deployAnotherVersion(serverDef, viewObjs);
-            if (status.isMultiStatus()) {
-                showDeployStatus(status);
+            if (doCheckServerConnection(serverDef)) {
+                IStatus status = DeployService.getInstance().deployAnotherVersion(serverDef, viewObjs);
+                if (status.isMultiStatus()) {
+                    showDeployStatus(status);
+                }
             }
         }
     }

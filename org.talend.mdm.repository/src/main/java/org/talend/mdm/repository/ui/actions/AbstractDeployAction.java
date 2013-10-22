@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -35,6 +36,7 @@ import org.talend.mdm.repository.ui.dialogs.deploy.DeployStatusDialog;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 /**
@@ -51,7 +53,15 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     protected IStatus deploy(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs, int defaultCmdType) {
-        return DeployService.getInstance().deploy(serverDef, viewObjs, defaultCmdType);
+        if (doCheckServerConnection(serverDef)) {
+            return DeployService.getInstance().deploy(serverDef, viewObjs, defaultCmdType);
+        } else {
+            return Status.CANCEL_STATUS;
+        }
+    }
+
+    protected boolean doCheckServerConnection(MDMServerDef serverDef) {
+        return RepositoryResourceUtil.checkServerConnection(getShell(), serverDef);
     }
 
     protected void showDeployStatus(IStatus status) {
