@@ -71,9 +71,11 @@ public class RepositoryViewObjectResourceChangeManager implements PropertyChange
                 Item item = (Item) newValue;
                 for (AbstractRepositoryResourceChangeListener listener : getListeners()) {
                     if (listener.isHandleProperty(propertyName) && listener.isHandleItem(item)) {
-                        listener.setCurrentItem(item);
-                        listener.setCurrentPropertyName(propertyName);
-                        listener.schedule();
+                        try {
+                            listener.run(propertyName, item);
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
                     }
                 }
             }

@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.core.impl.jobmodel;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
@@ -21,6 +20,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.commons.ui.gmf.util.DisplayUtils;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
 import org.talend.core.model.properties.Property;
@@ -89,7 +89,7 @@ public class JobResourceListener extends AbstractRepositoryResourceChangeListene
     }
 
     @Override
-    protected void run(String propertyName, Item item, IProgressMonitor monitor) throws Exception {
+    protected void run(String propertyName, final Item item) throws Exception {
         boolean jobSaved = false;
         boolean jobCreated = false;
 
@@ -116,16 +116,24 @@ public class JobResourceListener extends AbstractRepositoryResourceChangeListene
 
         if (jobSaved) {
             // create a new object but without GUI info since it won't be used here certainly
-            IRepositoryViewObject viewObject = new RepositoryViewObject(item.getProperty(), true);
-            MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObject);
-            if (viewObject != null && serverDef != null && isOpenInEditor(viewObject)) {
-                CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
-                IRepositoryViewObject cacheViewObject = ContainerCacheService.get(item.getProperty());
-                if (cacheViewObject != null) {
-                    viewObject = cacheViewObject;
+            final IRepositoryViewObject viewObject = new RepositoryViewObject(item.getProperty(), true);
+            final MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObject);
+            DisplayUtils.getDisplay().syncExec(new Runnable() {
+
+                public void run() {
+                    if (viewObject != null && serverDef != null && isOpenInEditor(viewObject)) {
+                        CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
+                        final IRepositoryViewObject cacheViewObject = ContainerCacheService.get(item.getProperty());
+                        if (cacheViewObject != null) {
+                            MDMRepositoryView.show().getCommonViewer().refresh(cacheViewObject);
+                        } else {
+                            MDMRepositoryView.show().getCommonViewer().refresh(viewObject);
+                        }
+                    }
+
                 }
-                MDMRepositoryView.show().getCommonViewer().refresh(viewObject);
-            }
+            });
+
         }
 
     }
