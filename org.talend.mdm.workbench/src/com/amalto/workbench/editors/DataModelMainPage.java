@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,6 +42,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IElementComparer;
@@ -51,6 +50,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -58,6 +58,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -71,21 +72,25 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -482,48 +487,105 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     }// createCharacteristicsContent
 
-    protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
-    	if(null == addtional || addtional.isEmpty()){
-        	return;
-        }
-    	TimerTask task = new TimerTask() {
+	private LabelProvider getLabelProvider(XSDSchemaContent content) {
+		if (content instanceof XSDElementDeclaration) {
+			return new XSDTreeLabelProvider();
+		} else if (content instanceof XSDTypeDefinition) {
+			return new TypesLabelProvider();
+		} else {
+			return null;
+		}
+	}
 
-            @Override
-            public void run() {
-                getSite().getShell().getDisplay().asyncExec(new Runnable() {
+	private boolean compare(XSDSchemaContent xc1, XSDSchemaContent xc2) {
+		if (xc1.getClass().equals(xc2.getClass())) {
+			LabelProvider provider = getLabelProvider(xc1);
+			if (null != provider
+					&& provider.getText(xc1).equals(provider.getText(xc2))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-                    public void run() {
-                        try {
-                            validateSchema();
-                            markDirtyWithoutCommit();
-                            for(XSDSchemaContent content : addtional){
-                            	xsdSchema.getContents().add(content);
-                            }
-                            setXsdSchema(xsdSchema);
-                            getSchemaRoleFilterFromSchemaTree().setDataModelFilter(dataModelFilter);
-                            
-                            // refresh types
-                            viewer.setInput(getSite());
-                            typesViewer.setInput(getSite());
-                            MessageDialog.openInformation(getSite().getShell(), Messages.ImportXSDSche,
-                                    Messages.ImportingXSDSchemaCompleted);
-                        } catch (Exception ex) {
-                            log.error(ex.getMessage(), ex);
-                            String detail = "";//$NON-NLS-1$
-                            if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
-                                detail += " , " + Messages.bind(Messages.Dueto, ex.getMessage()); //$NON-NLS-1$
-                            }
-                            MessageDialog.openError(getSite().getShell(), Messages._Error,
-                                    Messages.bind(Messages.ImportingXSDSchemaFailed, detail));
-                        }
-                    }
-                });
-            }
-        };
-        Timer timer = new Timer(true);
-        timer.schedule(task, 0);
+	public XSDSchemaContent contain(List<XSDSchemaContent> list,
+			XSDSchemaContent content) {
+		for (XSDSchemaContent e : list) {
+			if (compare(e, content)) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
+	protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
+		if (null == addtional || addtional.isEmpty()) {
+			return;
+		}
+		try {
+			int flag = ConflictDialog.NONE;
+			boolean dialogPopup = false;
+			List<XSDSchemaContent> tmp = xsdSchema.getContents();
+			List<XSDSchemaContent> exists = new ArrayList<XSDSchemaContent>(
+					tmp);
+			for (XSDSchemaContent content : addtional) {
+				XSDSchemaContent exist = contain(exists, content);
+				if (null == exist) {
+					exists.add(content);
+				} else {
+					if (!dialogPopup) {
+						String type = null;
+						if (exist instanceof XSDElementDeclaration) {
+							type = "Entity";
+						} else if (exist instanceof XSDTypeDefinition) {
+							type = "Type";
+						} else {
+							continue;
+						}
+						LabelProvider provider = getLabelProvider(exist);
+						String message = Messages.bind(
+								Messages.conflict_messages, type,
+								provider.getText(exist));
+						ConflictDialog dialog = new ConflictDialog(getSite()
+								.getShell(), message);
+						if (dialog.open() == Dialog.OK) {
+							flag = dialog.getStatus();
+							dialogPopup = dialog.applyAll;
+						} else {
+							popupImportDialog();
+							return;
+						}
+					}
+					if (flag == ConflictDialog.OVERWRITE) {
+						exists.remove(exist);
+						exists.add(content);
+					}
+				}
+			}
+			tmp.clear();
+			tmp.addAll(exists);
+			validateSchema();
+			markDirtyWithoutCommit();
+			setXsdSchema(xsdSchema);
+			getSchemaRoleFilterFromSchemaTree().setDataModelFilter(
+					dataModelFilter);
 
-    }
+			// refresh types
+			viewer.setInput(getSite());
+			typesViewer.setInput(getSite());
+			MessageDialog.openInformation(getSite().getShell(),
+					Messages.ImportXSDSche,
+					Messages.ImportingXSDSchemaCompleted);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			String detail = "";//$NON-NLS-1$
+			if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
+				detail += " , " + Messages.bind(Messages.Dueto, ex.getMessage()); //$NON-NLS-1$
+			}
+			MessageDialog.openError(getSite().getShell(), Messages._Error,
+					Messages.bind(Messages.ImportingXSDSchemaFailed, detail));
+		}
+	}
 
     public void validateSchema() throws IllegalAccessException {
         final String msg_omit[] = { Messages.XsdOmit1, Messages.XsdOmit2, Messages.XsdOmit3, Messages.XsdOmit4, Messages.XsdOmit5 };
@@ -2464,6 +2526,94 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return Messages.SortDescText;
     }
 
+	public static class ConflictDialog extends Dialog {
+
+		public static int NONE = 0;
+		public static int OVERWRITE = 1;
+		public static int IGNORE = 2;
+		private String message;
+		private int status = NONE;
+		private boolean applyAll;
+
+		public ConflictDialog(Shell parentShell, String dialogMessage) {
+			super(parentShell);
+			message = dialogMessage;
+			setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
+		}
+
+		public int getStatus() {
+			return status;
+		}
+
+		Button createButton(Composite composite, String label, int style,
+				SelectionListener listener) {
+			Button button = new Button(composite, style);
+			button.setText(label);
+			GridDataFactory.fillDefaults().grab(true, true).applyTo(button);
+			if (null != listener) {
+				button.addSelectionListener(listener);
+			}
+			return button;
+		}
+
+		protected Control createContents(Composite parent) {
+			parent.getShell().setText(Messages.conflicts_occur);
+			Composite composite = new Composite(parent, 0);
+			GridLayout layout = new GridLayout();
+			layout.marginHeight = 10;
+			layout.marginWidth = 30;
+			layout.verticalSpacing = 5;
+			layout.horizontalSpacing = 3;
+			layout.numColumns = 2;
+			layout.makeColumnsEqualWidth = true;
+			composite.setLayout(layout);
+			GridDataFactory.fillDefaults().applyTo(composite);
+			{
+				CLabel label = new CLabel(composite, SWT.CENTER);
+				label.setText(message);
+				GridDataFactory.fillDefaults().grab(true, false).span(2, 1)
+						.applyTo(label);
+			}
+			createButton(composite, Messages.conflict_overwrite, SWT.PUSH,
+					new SelectionAdapter() {
+
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							if (applyAll) {
+								status = OVERWRITE;
+							}
+							setReturnCode(Dialog.OK);
+							ConflictDialog.this.close();
+						}
+
+					});
+			createButton(composite, Messages.conflict_ignore, SWT.PUSH,
+					new SelectionAdapter() {
+
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							if (applyAll) {
+								status = IGNORE;
+							}
+							setReturnCode(Dialog.OK);
+							ConflictDialog.this.close();
+						}
+
+					});
+			createButton(composite, Messages.conflict_apply_all, SWT.CHECK,
+					new SelectionAdapter() {
+
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							applyAll = ((Button) e.widget).getSelection();
+						}
+
+					});
+			applyDialogFont(composite);
+			initializeDialogUnits(composite);
+			return composite;
+		}
+	}
     private class DoubleClickListener implements IDoubleClickListener {
 
         private TreeViewer viewer;
@@ -2808,19 +2958,42 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                SelectImportedModulesDialog dlg = createSelectImportedModulesDialog();
-                dlg.create();
-                dlg.setBlockOnOpen(true);
-                dlg.open();
-                if (dlg.getReturnCode() == Window.OK) {
-                    doImportSchema(dlg.getXSDContents());
-                }
+            	popupImportDialog();
             }
 
         });
 
     }
 
+    
+	private void popupImportDialog() {
+		Display.getDefault().syncExec(new Runnable(){
+
+			public void run() {
+				IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+						.getActivePage().getActiveEditor();
+				if (part.isDirty()) {
+					if (MessageDialog.openConfirm(getSite().getShell(),
+							Messages.SaveResource, Messages.bind(
+									Messages.modifiedChanges, getXObject()
+											.getDisplayName()))) {
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+								.getActivePage().saveEditor(part, false);
+					} else {
+						return;
+					}
+				}
+				SelectImportedModulesDialog dlg = createSelectImportedModulesDialog();
+				dlg.create();
+				dlg.setBlockOnOpen(true);
+				dlg.open();
+				if (dlg.getReturnCode() == Window.OK) {
+					doImportSchema(dlg.getXSDContents());
+				}
+			}
+		});
+	}
+    
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
         return new SelectImportedModulesDialog(getSite().getShell(), xobject, Messages.ImportXSDSchema);
     }

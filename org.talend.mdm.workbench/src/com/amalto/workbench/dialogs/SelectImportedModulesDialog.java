@@ -418,6 +418,9 @@ public class SelectImportedModulesDialog extends Dialog {
 
 	protected void addSchema(java.net.URL url, boolean addEntity) {
 		try {
+			addContent.clear();
+			entityViewer.refresh();
+			typeViewer.refresh();
 			XSDSchema schema = createSchema(url);
 			if (addEntity) {
 				addEntity(schema);

@@ -3164,6 +3164,17 @@ public class Messages extends NLS {
     public static String no_schema_available;
     
     public static String invalid_schema;
+    
+    public static String conflict_apply_all;
+    
+    public static String conflict_messages;
+    
+    public static String conflicts_occur;
+    
+    public static String conflict_overwrite;
+    
+    public static String conflict_ignore;
+    
     // //////////////////////////////////////////////////////////////////////////
     //
     // Constructor
