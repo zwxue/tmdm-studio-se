@@ -25,6 +25,8 @@ import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.service.MissingJarService;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -40,7 +42,10 @@ public class DeployToAction extends AbstractDeployAction {
 
     @Override
     protected void doRun() {
-
+        boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+        if (!checkMissingJar) {
+            return;
+        }
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
 
         SelectServerDefDialog dialog = getSelectServerDefDialog(viewObjs);

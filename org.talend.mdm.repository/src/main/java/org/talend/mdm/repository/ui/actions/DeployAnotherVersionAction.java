@@ -25,6 +25,8 @@ import org.talend.mdm.repository.ui.dialogs.SelectVersionDialog;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
+import com.amalto.workbench.service.MissingJarService;
+
 /**
  * DOC Administrator class global comment. Detailled comment
  */
@@ -34,11 +36,16 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
         super(Messages.DeployAnotherVersionAction_deployAnother);
     }
 
+    @Override
     protected void doRun() {
-
-        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
-        if (viewObjs.size() == 0)
+        boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+        if (!checkMissingJar) {
             return;
+        }
+        List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
+        if (viewObjs.size() == 0) {
+            return;
+        }
         // open the version dialog
         SelectVersionDialog versionDialog = new SelectVersionDialog(getShell(),
                 Messages.DeployAnotherVersionAction_selectAnother, viewObjs.get(0));

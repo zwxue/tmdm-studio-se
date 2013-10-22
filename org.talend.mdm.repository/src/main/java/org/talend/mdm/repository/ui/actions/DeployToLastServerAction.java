@@ -26,6 +26,8 @@ import org.talend.mdm.repository.models.FolderRepositoryObject;
 import org.talend.mdm.repository.ui.dialogs.lock.LockedDirtyObjectDialog;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
+import com.amalto.workbench.service.MissingJarService;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -40,7 +42,10 @@ public class DeployToLastServerAction extends AbstractDeployAction {
 
     @Override
     protected void doRun() {
-
+        boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+        if (!checkMissingJar) {
+            return;
+        }
         List<IRepositoryViewObject> viewObjs = getSelectedRepositoryViewObject();
         LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
                 Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
