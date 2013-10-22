@@ -61,6 +61,10 @@ public class DeployAllAction extends AbstractDeployAction {
 
     @Override
     protected void doRun() {
+        boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+        if (!checkMissingJar) {
+            return;
+        }
         if (isDeployAll) {
             runWithType(null);
         } else {
@@ -77,10 +81,6 @@ public class DeployAllAction extends AbstractDeployAction {
     }
 
     public void runWithType(ERepositoryObjectType type) {
-        boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
-        if (!checkMissingJar) {
-            return;
-        }
         DeployAllDialog dialog = new DeployAllDialog(getShell(), type);
         if (dialog.open() == IDialogConstants.OK_ID) {
             List<AbstractDeployCommand> selectededCommands = dialog.getSelectedCommands();
