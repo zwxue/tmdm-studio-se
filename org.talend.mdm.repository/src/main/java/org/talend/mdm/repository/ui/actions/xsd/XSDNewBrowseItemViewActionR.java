@@ -13,8 +13,6 @@
 package org.talend.mdm.repository.ui.actions.xsd;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorInput;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -22,7 +20,6 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
-import org.talend.mdm.repository.ui.editors.DataModelMainPage2;
 import org.talend.mdm.repository.ui.editors.IRepositoryViewEditorInput;
 
 import com.amalto.workbench.actions.XSDNewBrowseItemViewAction;
@@ -34,19 +31,18 @@ public class XSDNewBrowseItemViewActionR extends XSDNewBrowseItemViewAction {
         super(page);
     }
 
+    @Override
     protected void pageSave() {
-        if (page instanceof DataModelMainPage2)
-            ((DataModelMainPage2) page).setGenView(true);
         page.SaveWithForce(new NullProgressMonitor());
 
         //
-        if(page.getEditorInput() instanceof IRepositoryViewEditorInput) {            
+        if(page.getEditorInput() instanceof IRepositoryViewEditorInput) {
             IRepositoryViewEditorInput editorInput = (IRepositoryViewEditorInput) page.getEditorInput();
             IRepositoryViewObject viewObject = editorInput.getViewObject();
-            
+
             Item item = viewObject.getProperty().getItem();
             MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
-            
+
             DeployService deployService = DeployService.getInstance();
             if (deployService.isAutoDeploy()) {
                 deployService.autoDeploy(page.getSite().getShell(), viewObject);

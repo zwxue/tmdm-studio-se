@@ -155,19 +155,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 	public void doSave(IProgressMonitor monitor) {
 		InputStream stream = null;
 		try {
-			IFile file = getXSDFile(xobject);
 			EditorPart part = (EditorPart) getSelectedPage();
 			String xsd = null;
 			if (null != part) {
-				if (part instanceof DataModelMainPage) {// save
-														// DataModelMainPage's
-														// contents to file
+                if (part instanceof DataModelMainPage) {
 					DataModelMainPage dmp = (DataModelMainPage) getSelectedPage();
 					xsd = dmp.getXSDSchemaString();
-					file.setCharset("utf-8", null);//$NON-NLS-1$
-					ByteArrayInputStream inputStream = new ByteArrayInputStream(
-							xsd.getBytes("utf-8"));//$NON-NLS-1$
-					file.setContents(inputStream, IFile.FORCE, null);
 				} else if (part instanceof StructuredTextEditor) {
 					xsd = ((StructuredTextEditor) part).getTextViewer().getDocument().get();
 				}
@@ -177,7 +170,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 				WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
 				wsDataModel.setXsdSchema(xsd);
 				if (mainPage != null) {
-					mainPage.save(xsd);
+                    mainPage.save(xsd);
 				}
 				fileContents = xsd.getBytes("utf-8"); //$NON-NLS-1$
 			}
@@ -613,10 +606,10 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 
             /*
              * **please don't remove this annotation util the problem is really resolve.
-             * 
+             *
              * Here add a property listener to source editor to achieve a effect that when source editor is modified by
              * user, notify the model editor that it should be in dirty state.
-             * 
+             *
              * this is not a perfect resolution of issue TMDM-6403, because we have not find the real reason that lead
              * to that result. the more detailed thing is the variable 'fSynchronizationStamp' in class
              * 'ResourceTextFileBuffer' is updated in some place and this variable finally affect the variable

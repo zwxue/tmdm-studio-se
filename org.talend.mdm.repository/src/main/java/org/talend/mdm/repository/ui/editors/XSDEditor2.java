@@ -91,7 +91,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        dMainPage = new DataModelMainPage2(treeObject, xsdFile);
+        dMainPage = new DataModelMainPage2(treeObject);
         try {
             addPage(dMainPage, xobjectEditorinput);
         } catch (PartInitException e) {
@@ -203,7 +203,6 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         } else if (serverObject.getLastServerDef() != null) {
             CommandManager.getInstance().pushCommand(ICommand.CMD_MODIFY, viewObject);
         }
-
     }
 
     private int validateModel(IRepositoryViewObject viewObject) {
@@ -225,7 +224,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.amalto.workbench.editors.xsdeditor.XSDEditor#getAdapter(java.lang.Class)
      */
     @Override
@@ -247,7 +246,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor#init(org.eclipse.ui.IEditorSite,
      * org.eclipse.ui.IEditorInput)
      */

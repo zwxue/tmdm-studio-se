@@ -12,25 +12,22 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.navigator.CommonViewer;
-import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
-import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
+import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDefaultValueRuleActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDNewBrowseItemViewActionR;
@@ -46,9 +43,7 @@ import org.talend.mdm.repository.ui.dialogs.SelectImportedModulesDialog2;
 import org.talend.mdm.repository.ui.dialogs.datamodel.DataModelFilterDialogR;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
-import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
-import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
@@ -74,46 +69,36 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
     private static Logger log = Logger.getLogger(DataModelMainPage2.class);
 
-    private final IFile xsdFile;
-
-    private boolean isGenView = false;
-
     /**
      * DOC hbhong DataModelMainPage2 constructor comment.
      *
      * @param obj
      */
-    public DataModelMainPage2(TreeObject obj, IFile xsdFile) {
+    public DataModelMainPage2(TreeObject obj) {
         super(obj);
-        this.xsdFile = xsdFile;
     }
 
     @Override
     protected void doSave(WSDataModel wsObject) throws Exception {
         XObjectEditorInput2 editorInput = (XObjectEditorInput2) getEditorInput();
 
-        if (isGenView && xsdFile != null) {
-            String xsd = getXSDSchemaString();
-            xsdFile.setCharset("utf-8", null);//$NON-NLS-1$
-            xsdFile.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
-        }
-
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
-        MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
-        EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(wsObject, serverObject);
-        if (eObj != null) {
-            IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-            try {
-            factory.save(serverObjectItem);
-            } catch (PersistenceException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
+
+        updateSchemaToItem(serverObjectItem);//
+
+        RepositoryResourceUtil.saveItem(serverObjectItem);
 
         refreshDirtyCue();
 
     }
 
+    //
+    protected Item updateSchemaToItem(Item item) {
+        WSDataModelE wsDataModelE = ((WSDataModelItem) item).getWsDataModel();
+        WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
+        wsDataModelE.setXsdSchema(wsDataModel.getXsdSchema());
+        return item;
+    }
 
     private void refreshDirtyCue() {
         IEditorInput input = getEditorInput();
@@ -175,10 +160,6 @@ public class DataModelMainPage2 extends DataModelMainPage {
         this.newBrowseItemAction = new XSDNewBrowseItemViewActionR(this);
     }
 
-    public void setGenView(boolean isGenView) {
-        this.isGenView = isGenView;
-    }
-
     @Override
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
         return new SelectImportedModulesDialog2(getSite().getShell(), xobject, Messages.ImportXSDSchema);
@@ -222,8 +203,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
         ItemState state = viewObj.getProperty().getItem().getState();
         String itemPath = state.getPath();
-        if (!itemPath.isEmpty())
+        if (!itemPath.isEmpty()) {
             path = itemPath + path;
+        }
 
         return path;
     }

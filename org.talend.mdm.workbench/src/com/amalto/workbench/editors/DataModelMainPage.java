@@ -517,7 +517,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 		}
 		return null;
 	}
-	
+
 	protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
 		if (null == addtional || addtional.isEmpty()) {
 			return;
@@ -603,7 +603,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         error = validateDiagnoses(msg_omit);
 
         if (!error.equals("")) {//$NON-NLS-1$
-            throw new IllegalAccessException(error);
+            IllegalAccessException illegalAccessException = new IllegalAccessException(error);
+            log.error(illegalAccessException.getMessage(), illegalAccessException);
+            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.ErrorCommittingPage,
+                    CommonUtil.getErrMsgFromException(illegalAccessException));
         }
 
         validateType();
@@ -1041,8 +1044,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                 xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
 
             }
-            if (xsdSchema == null || (xsd != null && !xsd.equals(wsObject.getXsdSchema()))) {
+            if (xsdSchema == null || (xsd != null && !xsd.equals(wsObject.getXsdSchema()))
+                    || (xsd != null && !xsd.equals(getXSDSchemaString()))) {//
                 xsdSchema = Util.createXsdSchema(schema, xobject);
+                getSchemaContentProvider().setXsdSchema(xsdSchema);//
             }
             wsObject.setXsdSchema(schema);
 
@@ -1067,9 +1072,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             dirty = false;
         } catch (Exception e) {
             dirty = true;
-            log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages.ErrorCommittingPage,
-                    CommonUtil.getErrMsgFromException(e));
         }
         firePropertyChange(PROP_DIRTY);
         return dirty ? 1 : 0;
@@ -2555,7 +2557,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 			return button;
 		}
 
-		protected Control createContents(Composite parent) {
+		@Override
+        protected Control createContents(Composite parent) {
 			parent.getShell().setText(Messages.conflicts_occur);
 			Composite composite = new Composite(parent, 0);
 			GridLayout layout = new GridLayout();
@@ -2970,7 +2973,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     }
 
-    
+
 	private void popupImportDialog() {
 		Display.getDefault().syncExec(new Runnable(){
 
@@ -2998,7 +3001,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 			}
 		});
 	}
-    
+
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
         return new SelectImportedModulesDialog(getSite().getShell(), xobject, Messages.ImportXSDSchema);
     }
