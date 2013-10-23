@@ -190,7 +190,6 @@ public class DeployAllDialog extends Dialog {
         }
         if (defaultServerDef != null) {
             comboViewer.setSelection(new StructuredSelection(defaultServerDef));
-            treeViewer.updateCurrentServerDef(defaultServerDef);
         }
     }
 
