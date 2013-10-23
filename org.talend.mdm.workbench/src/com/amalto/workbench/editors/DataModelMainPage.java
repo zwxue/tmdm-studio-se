@@ -41,6 +41,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IconAndMessageDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -58,7 +59,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -2526,18 +2526,17 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return Messages.SortDescText;
     }
 
-	public static class ConflictDialog extends Dialog {
+	public static class ConflictDialog extends IconAndMessageDialog {
 
 		public static int NONE = 0;
 		public static int OVERWRITE = 1;
 		public static int IGNORE = 2;
-		private String message;
 		private int status = NONE;
 		private boolean applyAll;
 
 		public ConflictDialog(Shell parentShell, String dialogMessage) {
 			super(parentShell);
-			message = dialogMessage;
+			super.message = dialogMessage;
 			setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
 		}
 
@@ -2549,7 +2548,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 				SelectionListener listener) {
 			Button button = new Button(composite, style);
 			button.setText(label);
-			GridDataFactory.fillDefaults().grab(true, true).applyTo(button);
+			GridDataFactory.fillDefaults().grab(false, false).applyTo(button);
 			if (null != listener) {
 				button.addSelectionListener(listener);
 			}
@@ -2569,10 +2568,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 			composite.setLayout(layout);
 			GridDataFactory.fillDefaults().applyTo(composite);
 			{
-				CLabel label = new CLabel(composite, SWT.CENTER);
-				label.setText(message);
-				GridDataFactory.fillDefaults().grab(true, false).span(2, 1)
-						.applyTo(label);
+				Composite meCom = new Composite(composite, SWT.None);
+				GridDataFactory.fillDefaults().hint(SWT.DEFAULT, 40)
+						.grab(true, false).span(2, 1).applyTo(meCom);
+				meCom.setLayout(new GridLayout(2, false));
+				createMessageArea(meCom);
 			}
 			createButton(composite, Messages.conflict_overwrite, SWT.PUSH,
 					new SelectionAdapter() {
@@ -2612,6 +2612,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 			applyDialogFont(composite);
 			initializeDialogUnits(composite);
 			return composite;
+		}
+
+		@Override
+		protected Image getImage() {
+			return getWarningImage();
 		}
 	}
     private class DoubleClickListener implements IDoubleClickListener {
