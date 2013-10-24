@@ -875,7 +875,7 @@ public class ImportServerObjectWizard extends Wizard {
                         if (serverDef == null) {
                             return;
                         }
-                        txtServer.setText(serverDef.getUrl());
+                        txtServer.setText(serverDef.getName());
 
                         String url = serverDef.getUrl();
                         String user = serverDef.getUser();
