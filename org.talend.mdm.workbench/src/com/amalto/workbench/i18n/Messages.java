@@ -2869,6 +2869,12 @@ public class Messages extends NLS {
 
     public static String MissingJarDialog_title;
 
+    public static String MissingJarService_InstallJarTitle;
+
+    public static String MissingJarService_OperationAborted;
+
+    public static String MissingJarService_RestartStudioMsg;
+
     public static String MoveUpSelectedItem;
 
     public static String MovedownSelectedItem;
