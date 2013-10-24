@@ -144,6 +144,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.service.MissingJarService;
+import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -372,7 +373,7 @@ public class Util {
             throws XtentisException {
         boolean checkResult = MissingJarService.getInstance().checkMissingJar(showMissingJarDialog);
         if (!checkResult) {
-            throw new XtentisException("Missing dependency libraries."); //$NON-NLS-1$
+            throw new MissingJarsException("Missing dependency libraries."); //$NON-NLS-1$
         }
         try {
 

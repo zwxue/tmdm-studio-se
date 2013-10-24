@@ -75,6 +75,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.providers.ViewerLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.service.MissingJarsException;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 
@@ -373,14 +374,11 @@ public class ServerExplorer extends ViewPart {
                         ServerDefService.checkMDMConnection(serverDef);
                         MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
                                 Messages.ServerExplorer_ConnectSuccessful);
+                    } catch (MissingJarsException e) {
+                        return;
                     } catch (XtentisException e) {
-                        String message = e.getMessage();
-                        if (message != null && message.startsWith("Missing dependency libraries")) { //$NON-NLS-1$
-                            return;
-                        } else {
-                            MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
-                                    Messages.ServerExplorer_ConnectSSLFailed);
-                        }
+                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
+                                Messages.ServerExplorer_ConnectSSLFailed);
                     } catch (MalformedURLException e) {
                         MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
                                 Messages.ServerExplorer_ConnectFailed);
