@@ -195,7 +195,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 
 	@Override
 	protected void pageChange(int newPageIndex) {
-		resetTreeSelection();
+        resetTreeSelection(newPageIndex);
 
 		super.pageChange(newPageIndex);
 		doUpdateSourceLocation = newPageIndex == SOURCE_PAGE_INDEX;
@@ -770,31 +770,33 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 		}
 	}
 
-	private void resetTreeSelection() {
-		DataModelMainPage dataModelEditorPage = getDataModelEditorPage();
-		if (dataModelEditorPage != null) {
-			TreeViewer treeViewer = dataModelEditorPage.getTreeViewer();
-			IStructuredSelection selection = (IStructuredSelection) treeViewer
-					.getSelection();
-			if (!selection.isEmpty()) {
-				Object firstElement = selection.getFirstElement();
-				if ((firstElement instanceof XSDIdentityConstraintDefinition)) {
-					XSDIdentityConstraintDefinition cdf = (XSDIdentityConstraintDefinition) firstElement;
-					XSDConcreteComponent container = cdf.getContainer();
-					treeViewer.setSelection(new StructuredSelection(container));
-				} else if ((firstElement instanceof XSDXPathDefinition)) {
-					XSDXPathDefinition pathdef = (XSDXPathDefinition) firstElement;
-					XSDConcreteComponent container = pathdef.getContainer()
-							.getContainer();
-					treeViewer.setSelection(new StructuredSelection(container));
-				} else if (firstElement instanceof XSDAnnotation) {
-					XSDAnnotation annotation = (XSDAnnotation) firstElement;
-					XSDConcreteComponent container = annotation.getContainer();
-					treeViewer.setSelection(new StructuredSelection(container));
-				}
-			}
-		}
-	}
+    private void resetTreeSelection(int newPageIndex) {
+        DataModelMainPage dataModelEditorPage = getDataModelEditorPage();
+        if (dataModelEditorPage != null) {
+            TreeViewer treeViewer = dataModelEditorPage.getTreeViewer();
+            if (newPageIndex != SOURCE_PAGE_INDEX) {
+                treeViewer.setSelection(null);
+            } else {
+                IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
+                if (!selection.isEmpty()) {
+                    Object firstElement = selection.getFirstElement();
+                    if ((firstElement instanceof XSDIdentityConstraintDefinition)) {
+                        XSDIdentityConstraintDefinition cdf = (XSDIdentityConstraintDefinition) firstElement;
+                        XSDConcreteComponent container = cdf.getContainer();
+                        treeViewer.setSelection(new StructuredSelection(container));
+                    } else if ((firstElement instanceof XSDXPathDefinition)) {
+                        XSDXPathDefinition pathdef = (XSDXPathDefinition) firstElement;
+                        XSDConcreteComponent container = pathdef.getContainer().getContainer();
+                        treeViewer.setSelection(new StructuredSelection(container));
+                    } else if (firstElement instanceof XSDAnnotation) {
+                        XSDAnnotation annotation = (XSDAnnotation) firstElement;
+                        XSDConcreteComponent container = annotation.getContainer();
+                        treeViewer.setSelection(new StructuredSelection(container));
+                    }
+                }
+            }
+        }
+    }
 
 	@Override
 	public void setFocus() {
