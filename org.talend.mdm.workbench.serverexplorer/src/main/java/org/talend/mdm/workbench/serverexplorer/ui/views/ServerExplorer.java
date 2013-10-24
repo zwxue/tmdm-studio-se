@@ -80,7 +80,7 @@ import com.amalto.workbench.views.ServerView;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class ServerExplorer extends ViewPart {
 
@@ -116,7 +116,7 @@ public class ServerExplorer extends ViewPart {
 
     /**
      * Create contents of the view part.
-     *
+     * 
      * @param parent
      */
     @Override
@@ -374,8 +374,13 @@ public class ServerExplorer extends ViewPart {
                         MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
                                 Messages.ServerExplorer_ConnectSuccessful);
                     } catch (XtentisException e) {
-                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
-                                Messages.ServerExplorer_ConnectSSLFailed);
+                        String message = e.getMessage();
+                        if (message != null && message.startsWith("Missing dependency libraries")) { //$NON-NLS-1$
+                            return;
+                        } else {
+                            MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
+                                    Messages.ServerExplorer_ConnectSSLFailed);
+                        }
                     } catch (MalformedURLException e) {
                         MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
                                 Messages.ServerExplorer_ConnectFailed);
