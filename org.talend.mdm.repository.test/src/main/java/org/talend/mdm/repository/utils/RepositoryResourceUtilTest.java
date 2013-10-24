@@ -261,7 +261,7 @@ public class RepositoryResourceUtilTest {
         verify(mockProperty, times(1)).setVersion(Mockito.anyString());
         verify(mockProperty, times(1)).setAuthor(user);
         verify(mockProperty, times(1)).setLabel(propLabel);
-        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class), Mockito.any(Boolean.class));
+        verify(repositoryFactory, times(1)).create(Mockito.any(Item.class), Mockito.any(IPath.class));
         verify(mockResourceProvider, times(1)).handleReferenceFile(mockItem);
 
         verify(repositoryFactory, times(1)).unlock(mockItem);
@@ -746,6 +746,7 @@ public class RepositoryResourceUtilTest {
         }
         IFolder mockFolder = mock(IFolder.class);
         when(mockFolder.members()).thenReturn(mockResources);
+        when(mockFolder.exists()).thenReturn(true);
 
         PowerMockito.mockStatic(RepositoryResourceUtil.class);
         PowerMockito.doReturn(false).when(RepositoryResourceUtil.class, "isDeletedFolder", mockResources[0]);
