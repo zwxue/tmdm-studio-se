@@ -1072,6 +1072,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
             dirty = false;
         } catch (Exception e) {
             dirty = true;
+            log.error(e.getMessage(), e);
         }
         firePropertyChange(PROP_DIRTY);
         return dirty ? 1 : 0;

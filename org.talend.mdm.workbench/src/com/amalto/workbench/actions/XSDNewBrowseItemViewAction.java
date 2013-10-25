@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDElementDeclaration;
 
@@ -52,16 +53,14 @@ public class XSDNewBrowseItemViewAction extends Action {
 
     @Override
     public void run() {
-		IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage().getActiveEditor();
+		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage();
+        IEditorPart part = activePage.getActiveEditor();
 		if (part.isDirty()) {
-			boolean save = MessageDialog.openConfirm(page.getSite().getShell(),
-					Messages.SaveResource, Messages.bind(
-							Messages.modifiedChanges, page.getXObject()
-									.getDisplayName()));
+            boolean save = MessageDialog.openConfirm(page.getSite().getShell(), Messages.SaveResource,
+                    Messages.bind(Messages.modifiedChanges, page.getXObject().getDisplayName()));
 			if (save) {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-						.getActivePage().saveEditor(part, false);
+                activePage.saveEditor(part, false);
 			} else {
 				return;
 			}
@@ -84,11 +83,6 @@ public class XSDNewBrowseItemViewAction extends Action {
             WizardDialog dialog = new WizardDialog(page.getSite().getShell(), wizard);
             dialog.open();
         }
-    }
-
-    protected void pageSave() {
-        IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
     }
 
     private AddBrowseItemsWizard getAddBrowseItemsWizard(List<XSDElementDeclaration> declList) {

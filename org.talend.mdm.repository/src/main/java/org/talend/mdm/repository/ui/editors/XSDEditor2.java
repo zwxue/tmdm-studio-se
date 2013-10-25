@@ -192,11 +192,12 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         if (isEE()) {
             IMatchRuleMapInfoService mapInfoService = ServiceUtil.getService(IMatchRuleMapInfoService.class);
             mapInfoService.saveMatchRuleMapInfo(item);
+            dMainPage.updateSchemaToItem(item);
             RepositoryResourceUtil.saveItem(item);
             getMapinfoCommandStack().saveIsDone();
             firePropertyChange(PROP_DIRTY);
         }
-        //
+
         DeployService deployService = DeployService.getInstance();
         if (deployService.isAutoDeploy()) {
             deployService.autoDeploy(getSite().getShell(), viewObject);

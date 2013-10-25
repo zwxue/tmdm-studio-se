@@ -12,25 +12,17 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.Item;
-import org.talend.core.model.properties.ItemState;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDefaultValueRuleActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDDeleteConceptActionR;
-import org.talend.mdm.repository.ui.actions.xsd.XSDNewBrowseItemViewActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationFKFilterActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyActionR;
 import org.talend.mdm.repository.ui.actions.xsd.XSDSetAnnotationForeignKeyInfoActionR;
@@ -156,68 +148,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
     }
 
     @Override
-    protected void createNewBrowseItemViewAction() {
-        this.newBrowseItemAction = new XSDNewBrowseItemViewActionR(this);
-    }
-
-    @Override
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
         return new SelectImportedModulesDialog2(getSite().getShell(), xobject, Messages.ImportXSDSchema);
     }
-
-
-    private List<String> resolveAddList(List<String> addList) {
-        List<String> result = new ArrayList<String>();
-        for (String fileName : addList) {
-            String fileProtocolPrefix = "file:///"; //$NON-NLS-1$
-            if (fileName.startsWith(fileProtocolPrefix)) {
-                fileName = fileName.replaceFirst(fileProtocolPrefix, ""); //$NON-NLS-1$
-                result.add(fileName);
-                continue;
-            }
-
-            String suffix = "/types"; //$NON-NLS-1$
-            if (!fileName.endsWith(suffix)) {
-                result.add(fileName);
-                continue;
-            }
-
-            String name = fileName.substring(0, fileName.indexOf(suffix));
-            IRepositoryViewObject viewObj = getViewObjForDataModel(name);
-            String prjLabel = viewObj.getProjectLabel();
-
-            String parentPath = buildParentPath(viewObj);
-            String sep = "" + IPath.SEPARATOR; //$NON-NLS-1$
-
-            fileName = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + sep + prjLabel.toUpperCase() + sep
-                    + "MDM" + sep + "datamodel" + parentPath + viewObj.getLabel() + "_" + viewObj.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
-
-            result.add(fileName);
-        }
-
-        return result;
-    }
-
-    private String buildParentPath(IRepositoryViewObject viewObj) {
-        String path = "" + IPath.SEPARATOR; //$NON-NLS-1$
-
-        ItemState state = viewObj.getProperty().getItem().getState();
-        String itemPath = state.getPath();
-        if (!itemPath.isEmpty()) {
-            path = itemPath + path;
-        }
-
-        return path;
-    }
-    private IRepositoryViewObject getViewObjForDataModel(String name) {
-        List<IRepositoryViewObject> vObjs = RepositoryResourceUtil.findAllViewObjects(IServerObjectRepositoryType.TYPE_DATAMODEL);
-        IRepositoryViewObject theViewObj = null;
-        for (IRepositoryViewObject obj : vObjs) {
-            if (obj.getLabel().equals(name)) {
-                theViewObj = obj;
-            }
-        }
-        return theViewObj;
-    }
-
 }
