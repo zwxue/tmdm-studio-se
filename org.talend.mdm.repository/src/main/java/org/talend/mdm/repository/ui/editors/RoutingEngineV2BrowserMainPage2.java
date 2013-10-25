@@ -13,12 +13,15 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.talend.mdm.repository.core.service.RepositoryWebServiceAdapter;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 
 import com.amalto.workbench.editors.RoutingEngineV2BrowserMainPage;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSRoutingEngineV2Status;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class RoutingEngineV2BrowserMainPage2 extends RoutingEngineV2BrowserMainPage {
@@ -42,4 +45,25 @@ public class RoutingEngineV2BrowserMainPage2 extends RoutingEngineV2BrowserMainP
         }
         return null;
     }
+
+	@Override
+	protected void refreshData() {
+		try {
+			WSRoutingEngineV2Status status = getServerRoutingStatus();
+			statusLabel.setText(status.getValue());
+			idText.setFocus();
+
+		} catch (Exception e) {
+			MDMServerDef serverDef = ((XObjectBrowserInput2) getEditorInput())
+					.getServerDef();
+			updateButtons();
+			log.error(e.getMessage(), e);
+			MessageDialog
+					.openError(
+							this.getSite().getShell(),
+							com.amalto.workbench.i18n.Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
+							Messages.bind(Messages.Server_cannot_connected,
+									serverDef.getName()));
+		}
+	}
 }

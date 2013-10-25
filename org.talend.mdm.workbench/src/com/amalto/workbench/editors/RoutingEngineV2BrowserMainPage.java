@@ -545,14 +545,14 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         }
     }
 
-    private WSRoutingEngineV2Status getServerRoutingStatus() throws RemoteException {
+    protected WSRoutingEngineV2Status getServerRoutingStatus() throws RemoteException {
         XtentisPort port = getPort();
         WSRoutingEngineV2Status status = port.routingEngineV2Action(new WSRoutingEngineV2Action(
                 WSRoutingEngineV2ActionCode.STATUS));
         return status;
     }
 
-    private void updateButtons() {
+    protected void updateButtons() {
         try {
             WSRoutingEngineV2Status status = getServerRoutingStatus();
             startButton.setEnabled(status != WSRoutingEngineV2Status.RUNNING);
