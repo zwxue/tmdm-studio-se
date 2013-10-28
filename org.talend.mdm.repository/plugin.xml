@@ -715,10 +715,14 @@
             icon="resources/demoprojects/product-icon-mdm-16px.gif"
             id="org.talend.demo.project.mdmce"
             name="MDM_CE_DEMOS"
-            order="40"
+            order="40"            
             projectUrl="resources/demoprojects/MDM_CE_DEMOS/">
+         <validator
+               class="org.talend.mdm.repository.extension.DemoProjectValidator">
+         </validator>
       </demoProvider>
    </extension>
+   
       <extension
          point="org.talend.repository.items.importexport.handler">
       <importItemsProvider
