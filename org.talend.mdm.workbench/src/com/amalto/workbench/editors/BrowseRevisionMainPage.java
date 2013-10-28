@@ -253,6 +253,13 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
             refreshing = false;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            if(null != e.getMessage()){
+            	if(e.getMessage().contains("Connection refused")){
+            		MessageDialog.openError(this.getSite().getShell(), Messages.BrowseRevisionMainPage_ErrorRefreshingPage,
+                            Messages.bind(Messages.BrowseRevisionMainPage_ErrorRefreshingPageX, Messages.ConnectFailed));
+            		 return;
+            	}
+            }
             MessageDialog.openError(this.getSite().getShell(), Messages.BrowseRevisionMainPage_ErrorRefreshingPage,
                     Messages.bind(Messages.BrowseRevisionMainPage_ErrorRefreshingPageX, e.getLocalizedMessage()));
         }

@@ -415,13 +415,21 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             return ress.toArray(new LineItem[ress.size()]);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) { //$NON-NLS-1$
-                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_26,
-                        Messages.DataClusterBrowserMainPage_27);
-            } else {
-                MessageDialog.openError(this.getSite().getShell(), Messages.DataClusterBrowserMainPage_28,
-                        e.getLocalizedMessage());
-            }
+			if ((e.getLocalizedMessage() != null)
+					&& e.getLocalizedMessage().contains("10000")) { //$NON-NLS-1$
+				MessageDialog.openError(this.getSite().getShell(),
+						Messages.DataClusterBrowserMainPage_26,
+						Messages.DataClusterBrowserMainPage_27);
+			} else if (e.getMessage().contains("Connection refused")) {
+				MessageDialog.openError(this.getSite().getShell(),
+						Messages.DataClusterBrowserMainPage_28,
+						Messages.ConnectFailed);
+			} else {
+				MessageDialog.openError(this.getSite().getShell(),
+						Messages.DataClusterBrowserMainPage_28,
+						e.getLocalizedMessage());
+			}
+            
             return null;
         } finally {
             try {
@@ -626,7 +634,11 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             return false;
         } catch (RemoteException e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_connectionError);
+            if (null != e.getMessage() && e.getMessage().contains("Connection refused")) {
+            	MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.ConnectFailed);
+			} else {
+				MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_connectionError);
+			}
             return false;
         } catch (Exception e) {
             log.error(e.getMessage(), e);

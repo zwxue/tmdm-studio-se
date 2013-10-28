@@ -185,6 +185,13 @@ public class EditXObjectAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            if(null != e.getMessage()){
+            	if(e.getMessage().contains("Connection refused")){
+            		 MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+                             Messages.bind(Messages.EditXObjectAction_ErrorMsg2, Messages.ConnectFailed));
+            		 return;
+            	}
+            }
             MessageDialog.openError(view.getSite().getShell(), Messages._Error,
                     Messages.bind(Messages.EditXObjectAction_ErrorMsg2, e.getLocalizedMessage()));
         }

@@ -538,10 +538,23 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             idText.setFocus();
 
         } catch (Exception e) {
-            updateButtons();
-            log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
-                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX, e.getLocalizedMessage()));
+			updateButtons();
+			log.error(e.getMessage(), e);
+			if (e.getMessage().contains("Connection refused")) {
+				MessageDialog
+						.openError(
+								this.getSite().getShell(),
+								Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
+								Messages.ConnectFailed);
+			} else {
+				MessageDialog
+						.openError(
+								this.getSite().getShell(),
+								Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
+								Messages.bind(
+										Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX,
+										e.getLocalizedMessage()));
+			}
         }
     }
 

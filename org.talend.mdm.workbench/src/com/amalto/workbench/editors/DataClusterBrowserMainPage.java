@@ -332,6 +332,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 }
                             } catch (Exception e) {
                                 log.error(e.getMessage(), e);
+                                if(null != e.getMessage()){
+                                	if(e.getMessage().contains("Connection refused")){
+                                		MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
+                                                Messages.bind(Messages.DataClusterBrowserMainPage_34, Messages.ConnectFailed));
+                                		 return;
+                                	}
+                                }
                                 MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
                                         Messages.bind(Messages.DataClusterBrowserMainPage_34, e.getLocalizedMessage()));
                                 return;
@@ -402,7 +409,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
+				if (null != e.getMessage() && e.getMessage().contains("Connection refused")) {
+					MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
+	                        Messages.bind(Messages.DataClusterBrowserMainPage_42, Messages.ConnectFailed));
+					return;
+				}
+				MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
                         Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
                 return;
             }
@@ -470,6 +482,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
+                if (null != e.getMessage() && e.getMessage().contains("Connection refused")) {
+                	MessageDialog.openError(shell, Messages._Error,
+                            Messages.bind(Messages.DataClusterBrowserMainPage_48, Messages.ConnectFailed));
+					return;
+				}
                 MessageDialog.openError(shell, Messages._Error,
                         Messages.bind(Messages.DataClusterBrowserMainPage_48, e.getLocalizedMessage()));
             }
