@@ -74,7 +74,7 @@ import com.amalto.workbench.webservices.WSDigest;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
- *
+ * 
  */
 public class ConsistencyConflictDialog extends Dialog {
 
@@ -102,7 +102,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
          */
         public Color getForeground(Object element) {
@@ -111,7 +111,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
          */
         public Color getBackground(Object element) {
@@ -308,7 +308,7 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Create the dialog.
-     *
+     * 
      * @param parentShell
      * @param conflictCount
      */
@@ -316,12 +316,12 @@ public class ConsistencyConflictDialog extends Dialog {
         super(parentShell);
         this.conflictCount = conflictCount;
         this.viewObjMap = viewObjMap;
-        setShellStyle(getShellStyle() | SWT.RESIZE);
+        setShellStyle(SWT.TITLE | SWT.RESIZE);
     }
 
     /**
      * Create contents of the dialog.
-     *
+     * 
      * @param parent
      */
     @Override
@@ -728,10 +728,13 @@ public class ConsistencyConflictDialog extends Dialog {
 
     /**
      * Getter for result.
-     *
+     * 
      * @return the result
      */
     public ConsistencyCheckResult getResult() {
+        if (result == null) {
+            result = new ConsistencyService.ConsistencyCheckResult();
+        }
         return this.result;
     }
 
