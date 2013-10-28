@@ -52,6 +52,7 @@ import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.webservices.WSDataModel;
 
 /**
@@ -77,7 +78,9 @@ public class DataModelMainPage2 extends DataModelMainPage {
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
 
         updateSchemaToItem(serverObjectItem);//
-
+        
+        xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
+        
         RepositoryResourceUtil.saveItem(serverObjectItem);
 
         refreshDirtyCue();
