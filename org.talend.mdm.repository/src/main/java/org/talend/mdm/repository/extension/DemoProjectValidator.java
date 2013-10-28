@@ -12,11 +12,11 @@
 // ============================================================================
 package org.talend.mdm.repository.extension;
 
-import org.apache.axis.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.talend.core.PluginChecker;
 import org.talend.core.runtime.repository.demo.IDemoProjectValidator;
+
+import com.amalto.workbench.utils.Util;
 
 /**
  * created by glzhou on 2013-10-28 Detailled comment This class will validate if the CE demo project should be available
@@ -35,15 +35,7 @@ public class DemoProjectValidator implements IDemoProjectValidator {
      * )
      */
     public boolean validate(IConfigurationElement element) {
-        String id = element.getAttribute("id"); //$NON-NLS-1$        
-        if (StringUtils.isEmpty(id)) {
-            log.error("Missing id attributes"); //$NON-NLS-1$
-            return false;
-        }
-        if (id.equals("org.talend.demo.project.mdmce") && !PluginChecker.isPluginLoaded("org.talend.rcp.branding.tombundle")) { //CE //$NON-NLS-1$
-            return false;
-        }
-        return true;
+        return !Util.IsEnterPrise();
     }
 
 }
