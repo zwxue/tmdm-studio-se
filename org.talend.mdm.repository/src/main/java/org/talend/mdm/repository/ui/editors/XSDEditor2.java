@@ -93,7 +93,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         }
         dMainPage = new DataModelMainPage2(treeObject);
         try {
-            addPage(dMainPage, xobjectEditorinput);
+            MODEL_PAGE_INDEX = addPage(dMainPage, xobjectEditorinput);
         } catch (PartInitException e) {
             log.error(e.getMessage(), e);
         }

@@ -98,6 +98,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
 
 	public static final String CONTRUIBUTIONID_DATAMODELPAGE = "org.talend.mdm.workbench.propertyContributor.datamodel";//$NON-NLS-1$
 
+    protected static int MODEL_PAGE_INDEX = -1;
+
 	private TreeExpandHelper expandHelper = new TreeExpandHelper();
 
 	protected int preActivePageIndex = -1;
@@ -774,9 +776,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor implements
         DataModelMainPage dataModelEditorPage = getDataModelEditorPage();
         if (dataModelEditorPage != null) {
             TreeViewer treeViewer = dataModelEditorPage.getTreeViewer();
-            if (newPageIndex != SOURCE_PAGE_INDEX) {
+            if (newPageIndex == MODEL_PAGE_INDEX) {
                 treeViewer.setSelection(null);
-            } else {
+            } else if (newPageIndex == SOURCE_PAGE_INDEX) {
                 IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
                 if (!selection.isEmpty()) {
                     Object firstElement = selection.getFirstElement();
