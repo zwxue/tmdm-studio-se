@@ -40,11 +40,13 @@ class SchemaTopElementNameSelectorOnPattern implements SchemaTopElementNameSelec
 
     public boolean isSatisfiedElement(Object parentElement, Object element) {
 
-        if (nameFitlerDes == null || !nameFitlerDes.isEnable())
+        if (nameFitlerDes == null || !nameFitlerDes.isEnable()) {
             return true;
+        }
 
-        if (isTopElement(element))
+        if (isTopElement(element)) {
             return checkElementLabel(element);
+        }
 
         return true;
     }
@@ -52,9 +54,10 @@ class SchemaTopElementNameSelectorOnPattern implements SchemaTopElementNameSelec
     private boolean checkElementLabel(Object element) {
 
         for (Pattern eachPattern : patterns) {
-            Matcher matcher = eachPattern.matcher(labelExtractor.getLabel(element));
-            if (matcher.matches())
+            Matcher matcher = eachPattern.matcher(labelExtractor.getLabel(element).toLowerCase());
+            if (matcher.matches()) {
                 return true;
+            }
         }
 
         return false;
@@ -72,6 +75,7 @@ class SchemaTopElementNameSelectorOnPattern implements SchemaTopElementNameSelec
             eachPattern = eachPattern.replaceAll("\\*", ".*");//$NON-NLS-1$//$NON-NLS-2$
             eachPattern = eachPattern.replaceAll("\\+", ".+");//$NON-NLS-1$//$NON-NLS-2$
             eachPattern = eachPattern.replaceAll("\\?", ".?");//$NON-NLS-1$//$NON-NLS-2$
+            eachPattern = eachPattern.toLowerCase();
             patterns.add(Pattern.compile(eachPattern));
         }
     }
