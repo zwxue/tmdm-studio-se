@@ -14,6 +14,7 @@ package com.amalto.workbench.providers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -31,7 +32,6 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -399,7 +399,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 throw new InterruptedException(Messages.XtentisServerObjectsRetriever_21);
 
             log.error(e.getMessage(), e);
-            throw new InvocationTargetException(new XtentisException(e.getLocalizedMessage()));
+            throw new InvocationTargetException(new RemoteException(e.getLocalizedMessage(),e));
         }
     }// run
 

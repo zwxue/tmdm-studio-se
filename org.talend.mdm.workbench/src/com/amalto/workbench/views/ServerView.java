@@ -1092,7 +1092,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             return false;
         } catch (InvocationTargetException e) {
             log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.getSite().getShell(), Messages._Error, CommonUtil.getErrMsgFromException(e.getCause()));
+            if(!Util.handleConnectionException(this, e, null)){
+            	ErrorExceptionDialog.openError(this.getSite().getShell(), Messages._Error, CommonUtil.getErrMsgFromException(e.getCause()));
+            }
             return false;
         }
     }
