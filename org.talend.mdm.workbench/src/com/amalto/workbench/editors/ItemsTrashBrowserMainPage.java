@@ -457,8 +457,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_17,
                         Messages.ItemsTrashBrowserMainPage_18);
             } else {
-                MessageDialog
-                        .openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_19, e.getLocalizedMessage());
+            	if(!Util.handleConnectionException(this, e, null)){
+                     MessageDialog.openError(this.getSite().getShell(), Messages.ItemsTrashBrowserMainPage_19, e.getLocalizedMessage());
+                }
             }
             return null;
         } finally {
@@ -594,7 +595,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-                MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_29 + e.getLocalizedMessage());
+            	if(!Util.handleConnectionException(shell, e, null)) {
+                    MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_29 + e.getLocalizedMessage());
+                }
             }
         }
 
@@ -651,7 +654,9 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_35 + e.getLocalizedMessage());
+                if(!Util.handleConnectionException(shell, e, null)) {
+                    MessageDialog.openError(shell, Messages._Error, Messages.ItemsTrashBrowserMainPage_35 + e.getLocalizedMessage());
+                }
             }
         }
 

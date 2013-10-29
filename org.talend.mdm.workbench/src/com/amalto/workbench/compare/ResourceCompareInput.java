@@ -510,7 +510,9 @@ public class ResourceCompareInput extends CompareEditorInput {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(null, Messages._Error, Messages.bind(Messages.ResourceCompareInput_ErrorMsg, e.getLocalizedMessage()));
+			if (!Util.handleConnectionException((Shell)null, e, null)) {
+				MessageDialog.openError(null, Messages._Error, Messages.bind(Messages.ResourceCompareInput_ErrorMsg, e.getLocalizedMessage()));
+			}
         }
 
     }

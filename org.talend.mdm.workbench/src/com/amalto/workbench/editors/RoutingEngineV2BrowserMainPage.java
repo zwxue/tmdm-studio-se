@@ -540,21 +540,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         } catch (Exception e) {
 			updateButtons();
 			log.error(e.getMessage(), e);
-			if (e.getMessage().contains("Connection refused")) {
-				MessageDialog
-						.openError(
+			if (!Util.handleConnectionException(this.getSite().getShell(),e,Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage))
+				MessageDialog.openError(
 								this.getSite().getShell(),
 								Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
-								Messages.ConnectFailed);
-			} else {
-				MessageDialog
-						.openError(
-								this.getSite().getShell(),
-								Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPage,
-								Messages.bind(
-										Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX,
-										e.getLocalizedMessage()));
-			}
+								Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorRefreshingPageXX,e.getLocalizedMessage()));
         }
     }
 
@@ -782,7 +772,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000")) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.RoutingEngineV2BrowserMainPage_TooManyResults,
                         Messages.RoutingEngineV2BrowserMainPage_ErrorMsg1);
-            } else {
+            } else if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
                 MessageDialog.openError(this.getSite().getShell(), Messages.ErrorTitle1, e.getLocalizedMessage());
             }
             return null;
@@ -973,9 +963,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     monitor.done();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorDel,
-                            Messages.RoutingEngineV2BrowserMainPage_WarningMsg1 + e.getLocalizedMessage());
-                }// try
+					if (!Util.handleConnectionException(shell, e,Messages.RoutingEngineV2BrowserMainPage_ErrorDel)) {
+                        MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorDel,
+                                Messages.RoutingEngineV2BrowserMainPage_WarningMsg1 + e.getLocalizedMessage());
+                    }                }// try
 
             }// run
         }// class DeleteItemsWithProgress
@@ -1118,8 +1109,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                         monitor.worked(1);
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
-                        MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
-                                Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg6, e.getLocalizedMessage()));
+                        if(!Util.handleConnectionException(shell, e, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting)) {
+                            MessageDialog.openError(shell, Messages.RoutingEngineV2BrowserMainPage_ErrorExecuting,
+                                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg6, e.getLocalizedMessage()));
+                        }
                     }// try
 
                 }// for
@@ -1249,8 +1242,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
-                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg7, e.getLocalizedMessage()));
+            if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg7, e.getLocalizedMessage()));
+            }
         }
     }
 
@@ -1260,9 +1255,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.STOP));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
-                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg8, e.getLocalizedMessage()));
-        }
+            if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg8, e.getLocalizedMessage()));
+            }
+       }
     }
 
     private void suspendSubscriptionEngine() {
@@ -1271,8 +1268,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.SUSPEND));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), Messages._Error,
-                    Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg9, e.getLocalizedMessage()));
+            if(!Util.handleConnectionException(this.getSite().getShell(), e, null)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages._Error,
+                        Messages.bind(Messages.RoutingEngineV2BrowserMainPage_ErrorMsg9, e.getLocalizedMessage()));
+            }
         }
     }
 

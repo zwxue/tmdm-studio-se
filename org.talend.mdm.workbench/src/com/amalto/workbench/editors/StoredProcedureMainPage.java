@@ -384,15 +384,16 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                         resultsViewer.setInput(results);
                     }
                 } catch (Exception ex) {
-                	String message = ex.getMessage();
-                	Set<String> messages = getMessages(message);
-                	StringBuilder builder = new StringBuilder();
-                	for (String currentMessage : messages) {
-						builder.append(currentMessage + '\n');
-					}
-                	
-					MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), Messages._Error, builder.toString());
-                }
+                	if(!Util.handleConnectionException(StoredProcedureMainPage.this.getSite().getShell(), ex, null)) {
+                		String message = ex.getMessage();
+                    	Set<String> messages = getMessages(message);
+                    	StringBuilder builder = new StringBuilder();
+                    	for (String currentMessage : messages) {
+    						builder.append(currentMessage + '\n');
+    					}
+                		MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), Messages._Error, builder.toString());  	
+                    }
+				}
             }
         });
     }

@@ -146,8 +146,10 @@ public class ProjectDecisionDialog extends Dialog {
             overwriteButton.setSelection(doOverwrite);
 
         } catch (Exception e) {
-            MessageDialog.openError(ProjectDecisionDialog.this.getShell(), Messages.ProjectDecisionDialog_ErrorTitle,
+        	if(!Util.handleConnectionException(this.getShell(), e, null)){
+                MessageDialog.openError(ProjectDecisionDialog.this.getShell(), Messages.ProjectDecisionDialog_ErrorTitle,
                     Messages.bind(Messages.ProjectDecisionDialog_ErrorMsg, e.getMessage()));
+            }
         }
 
         return composite;

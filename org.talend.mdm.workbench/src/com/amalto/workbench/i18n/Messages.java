@@ -3181,7 +3181,13 @@ public class Messages extends NLS {
     
     public static String conflict_ignore;
     
+    public static String ConnectFailedTitle;
+    
     public static String ConnectFailed;
+    
+    public static String ConnectNotFound;
+    
+    public static String ConnectUnauthorized;
     
     // //////////////////////////////////////////////////////////////////////////
     //

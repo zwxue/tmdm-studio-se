@@ -810,20 +810,9 @@ public class ImportServerObjectWizard extends Wizard {
 			try {
 				getContainer().run(true, false, new RetriveProcess());
 			} catch (InvocationTargetException e) {
-				if (null != e.getTargetException()
-						&& null != e.getTargetException().getMessage()) {
-					if (e.getTargetException().getMessage()
-							.contains("Connection refused")) {
-						MessageDialog
-								.openWarning(
-										getShell(),
-										Messages.Common_Warning,
-										Messages.AbstractDataClusterAction_ConnectFailed);
-					}
-				} else {
-					MessageDialog.openWarning(getShell(),
-							Messages.Common_Warning,
-							Messages.AbstractDataClusterAction_ConnectFailed);
+				if (!Util.handleConnectionException(getShell(),
+						e.getTargetException(), null)) {
+					MessageDialog.openWarning(getShell(),Messages.Common_Warning,Messages.AbstractDataClusterAction_ConnectFailed);
 				}
 				log.error(e);
 			} catch (InterruptedException e) {

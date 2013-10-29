@@ -1481,9 +1481,10 @@ public class TransformerMainPage extends AMainPageV2 {
                         String jndi;
 
                         jndi = pluginsCombo.getText();
-
-                        MessageDialog.openError(getSite().getShell(), Messages.TransformerMainPage_ErrorDialogTitle + jndi,
-                                Messages.bind(Messages.TransformerMainPage_ErrorMsg2, jndi));
+                        if(!Util.handleConnectionException(getSite().getShell(), ex, null)) {
+                        	MessageDialog.openError(getSite().getShell(), Messages.TransformerMainPage_ErrorDialogTitle + jndi,
+                                    Messages.bind(Messages.TransformerMainPage_ErrorMsg2, jndi));
+                            }
                         return;
                     }
                 }

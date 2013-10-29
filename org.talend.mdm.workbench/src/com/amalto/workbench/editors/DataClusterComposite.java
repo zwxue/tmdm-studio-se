@@ -420,11 +420,7 @@ public class DataClusterComposite extends Composite implements IPagingListener {
 				MessageDialog.openError(this.getSite().getShell(),
 						Messages.DataClusterBrowserMainPage_26,
 						Messages.DataClusterBrowserMainPage_27);
-			} else if (e.getMessage().contains("Connection refused")) {
-				MessageDialog.openError(this.getSite().getShell(),
-						Messages.DataClusterBrowserMainPage_28,
-						Messages.ConnectFailed);
-			} else {
+			} else if (!Util.handleConnectionException(this.getSite().getShell(), e, Messages.DataClusterBrowserMainPage_28)) {
 				MessageDialog.openError(this.getSite().getShell(),
 						Messages.DataClusterBrowserMainPage_28,
 						e.getLocalizedMessage());
@@ -634,10 +630,8 @@ public class DataClusterComposite extends Composite implements IPagingListener {
             return false;
         } catch (RemoteException e) {
             log.error(e.getMessage(), e);
-            if (null != e.getMessage() && e.getMessage().contains("Connection refused")) {
-            	MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.ConnectFailed);
-			} else {
-				MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_connectionError);
+			if (!Util.handleConnectionException(getSite().getShell(), e, null)) {
+				MessageDialog.openError(getSite().getShell(), Messages._Error, Messages.DataClusterBrowser_connectionError);			
 			}
             return false;
         } catch (Exception e) {

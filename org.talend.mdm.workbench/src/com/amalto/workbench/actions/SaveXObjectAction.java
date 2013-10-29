@@ -148,8 +148,10 @@ public class SaveXObjectAction extends Action {
         } catch (Exception e) {
 
             log.error(e.getMessage(), e);
-            ErrorExceptionDialog.openError(this.editor.getSite().getShell(), Messages.ErrorTitle2,
+            if(!Util.handleConnectionException(this.editor, e, null)){
+                ErrorExceptionDialog.openError(this.editor.getSite().getShell(), Messages.ErrorTitle2,
                     CommonUtil.getErrMsgFromException(e));
+            }
             state = 1;
         }
     }

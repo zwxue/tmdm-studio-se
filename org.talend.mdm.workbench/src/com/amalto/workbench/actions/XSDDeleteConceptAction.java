@@ -102,9 +102,12 @@ public class XSDDeleteConceptAction extends UndoAction {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(page.getSite().getShell(), Messages._Error,
-                    Messages.bind(Messages.XSDDeleteConceptAction_ErrorMsg, e.getLocalizedMessage()));
-
+			if (!Util.handleConnectionException(page.getSite().getShell(), e, Messages.XSDDeleteConceptAction_ErrorMsg)) {
+				MessageDialog.openError(page.getSite().getShell(),
+						Messages._Error, Messages.bind(
+								Messages.XSDDeleteConceptAction_ErrorMsg,
+								e.getLocalizedMessage()));
+			}
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

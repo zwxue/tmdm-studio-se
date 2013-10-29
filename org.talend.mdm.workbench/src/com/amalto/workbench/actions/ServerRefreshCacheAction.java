@@ -59,7 +59,10 @@ public class ServerRefreshCacheAction extends Action {
             doRun();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), Messages._Error, Messages.bind(Messages.ServerRefreshCacheAction_ErrorMsg, e.getLocalizedMessage()));
+			if (!Util.handleConnectionException(view.getSite().getShell(), e,null)) {
+				MessageDialog.openError(view.getSite().getShell(),
+						Messages._Error, Messages.bind(Messages.ServerRefreshCacheAction_ErrorMsg,e.getLocalizedMessage()));
+			}
         }
     }
 

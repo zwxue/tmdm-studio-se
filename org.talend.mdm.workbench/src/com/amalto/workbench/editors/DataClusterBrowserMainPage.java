@@ -332,15 +332,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 }
                             } catch (Exception e) {
                                 log.error(e.getMessage(), e);
-                                if(null != e.getMessage()){
-                                	if(e.getMessage().contains("Connection refused")){
-                                		MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
-                                                Messages.bind(Messages.DataClusterBrowserMainPage_34, Messages.ConnectFailed));
-                                		 return;
-                                	}
+                                if(!Util.handleConnectionException(shell, e, Messages.DataClusterBrowserMainPage_33)){
+                                	 MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
+                                             Messages.bind(Messages.DataClusterBrowserMainPage_34, e.getLocalizedMessage()));
                                 }
-                                MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_33,
-                                        Messages.bind(Messages.DataClusterBrowserMainPage_34, e.getLocalizedMessage()));
                                 return;
                             }
                         }// if
@@ -409,13 +404,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-				if (null != e.getMessage() && e.getMessage().contains("Connection refused")) {
+				if (!Util.handleConnectionException(shell, e, Messages.DataClusterBrowserMainPage_41)) {
 					MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
-	                        Messages.bind(Messages.DataClusterBrowserMainPage_42, Messages.ConnectFailed));
-					return;
+	                        Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
+	                
 				}
-				MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_41,
-                        Messages.bind(Messages.DataClusterBrowserMainPage_42, e.getLocalizedMessage()));
                 return;
             }
         }
@@ -482,13 +475,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                if (null != e.getMessage() && e.getMessage().contains("Connection refused")) {
+				if (!Util.handleConnectionException(shell, e, null)) {
                 	MessageDialog.openError(shell, Messages._Error,
-                            Messages.bind(Messages.DataClusterBrowserMainPage_48, Messages.ConnectFailed));
-					return;
-				}
-                MessageDialog.openError(shell, Messages._Error,
-                        Messages.bind(Messages.DataClusterBrowserMainPage_48, e.getLocalizedMessage()));
+                            Messages.bind(Messages.DataClusterBrowserMainPage_48, e.getLocalizedMessage()));
+                }
             }
         }
     }
@@ -553,8 +543,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error,
+                if(!Util.handleConnectionException(shell, e, null)) {
+                    MessageDialog.openError(shell, Messages._Error,
                         Messages.bind(Messages.DataClusterBrowserMainPage_59, e.getLocalizedMessage()));
+                }
             }
         }
     }
@@ -692,8 +684,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     monitor.done();
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_78,
+                    if(!Util.handleConnectionException(shell, e, null)) {
+                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_78,
                             Messages.bind(Messages.DataClusterBrowserMainPage_79, e.getLocalizedMessage()));
+                    }
                 }// try
 
             }// run
@@ -847,8 +841,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 Messages.bind(Messages.DataClusterBrowserMainPage_referedRecord, constraintMsg));
                     } else {
                         log.error(e.getMessage(), e);
-                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_96,
+                        if(!Util.handleConnectionException(shell, e, null)) {
+                            MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_96,
                                 Messages.bind(Messages.DataClusterBrowserMainPage_97, e.getLocalizedMessage()));
+                        }
                     }
                 }// try
 
@@ -949,8 +945,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                MessageDialog.openError(shell, Messages._Error,
+                if(!Util.handleConnectionException(shell, e, null)) {
+                    MessageDialog.openError(shell, Messages._Error,
                         Messages.bind(Messages.DataClusterBrowserMainPage_103, e.getLocalizedMessage()));
+                }
             }
         }
 
@@ -1068,8 +1066,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                 .getConcept(), lineItem.getIds())));
                     } catch (Exception e) {
                         log.error(e.getMessage(), e);
-                        MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127,
+                        if(!Util.handleConnectionException(shell, e, null)) {
+                            MessageDialog.openError(shell, Messages.DataClusterBrowserMainPage_127,
                                 Messages.bind(Messages.DataClusterBrowserMainPage_128, itemID));
+                        }
                     }// try
                     monitor.worked(1);
                 }// for

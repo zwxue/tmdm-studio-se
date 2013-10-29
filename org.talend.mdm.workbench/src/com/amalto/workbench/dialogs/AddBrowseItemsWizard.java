@@ -300,8 +300,10 @@ public class AddBrowseItemsWizard extends Wizard {
                 newBrowseItemView(browse);
                 modifyRolesWithAttachedBrowseItem(browse, roles);
             } catch (RemoteException e) {
-                MessageDialog.openError(page.getSite().getShell(), Messages._Error,
+            	if(!Util.handleConnectionException(page, e, null)){
+                    MessageDialog.openError(page.getSite().getShell(), Messages._Error,
                         Messages.bind(Messages.ErrorOccuredSaveView, e.getLocalizedMessage()));
+                }
                 return false;
             }
         }

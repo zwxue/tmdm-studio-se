@@ -573,8 +573,10 @@ public class NewXObjectAction extends Action {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+            if(!Util.handleConnectionException(view, e, null)){
+                MessageDialog.openError(view.getSite().getShell(), Messages._Error,
                     Messages.bind(Messages.NewXObjectAction_ErrorMsg14, IConstants.TALEND, e.getLocalizedMessage()));
+            }
         }
     }
 

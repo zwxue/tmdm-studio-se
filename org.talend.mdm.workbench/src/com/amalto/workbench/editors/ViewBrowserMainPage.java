@@ -330,8 +330,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle2,
-                    Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg2, e.getLocalizedMessage()));
+            if(!Util.handleConnectionException(this.getSite().getShell(), e, Messages.ViewBrowserMainPage_ErrorTitle2)) {
+                MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle2,
+                        Messages.bind(Messages.ViewBrowserMainPage_ErrorMsg2, e.getLocalizedMessage()));
+            }
         }
     }
 
@@ -407,7 +409,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
                 MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle4,
                         Messages.ViewBrowserMainPage_ErrorMsg4);
-            else
+            else if(!Util.handleConnectionException(this.getSite().getShell(), e, Messages.ViewBrowserMainPage_ErrorTitle5))
                 MessageDialog.openError(this.getSite().getShell(), Messages.ViewBrowserMainPage_ErrorTitle5, e.getLocalizedMessage());
             return null;
         } finally {

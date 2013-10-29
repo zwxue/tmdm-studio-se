@@ -683,8 +683,10 @@ public class PasteXObjectAction extends Action {
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            MessageDialog.openError(view.getSite().getShell(), Messages._Error,
+            if(!Util.handleConnectionException(view, e, null)){
+                MessageDialog.openError(view.getSite().getShell(), Messages._Error,
                     Messages.PasteXObjectAction_ErrorMsg + e.getLocalizedMessage());
+            }
         } finally {
             keyTrackMap.clear();
             // refresh view

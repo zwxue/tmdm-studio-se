@@ -93,7 +93,9 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDAnnotation;
@@ -2944,7 +2946,7 @@ public class Util {
         return xsdSchema;
     }
 
-    private static String ENTERPRISE_ID = "org.talend.mdm.workbench.enterprise";//$NON-NLS-1$
+    public final static String ENTERPRISE_ID = "org.talend.mdm.workbench.enterprise";//$NON-NLS-1$
 
     public static boolean IsEnterPrise() {
         return Platform.getBundle(ENTERPRISE_ID) != null;
@@ -3265,6 +3267,58 @@ public class Util {
 
     }
 
+    // connection refuse or ssl error
+	private static String CONNECT_FAIL = "http.client.failed";//$NON-NLS-1$
+	// 401
+	private static String UNAUTHORIZE = "http.client.unauthorized";//$NON-NLS-1$
+	// 404
+	private static String NOT_FOUND = "http.not.found";//$NON-NLS-1$
+    
+    
+	public static boolean handleConnectionException(IWorkbenchPart part, Throwable t,
+			String title) {
+		return handleConnectionException(part.getSite().getShell(), t, title);
+	}
+	
+	public static boolean handleConnectionException(final Shell shell, Throwable t,
+			String title) {
+		if (null == t) {
+			return false;
+		}
+		if (t instanceof com.sun.xml.rpc.client.ClientTransportException) {
+			String key = ((com.sun.xml.rpc.client.ClientTransportException) t).getKey();
+			if (null == title)
+				title = Messages.ConnectFailedTitle; 
+			String message = null;
+			if (CONNECT_FAIL.equals(key)) {
+				message = Messages.ConnectFailed;
+			} else if (UNAUTHORIZE.equals(key)) {
+				message = Messages.ConnectUnauthorized;
+			} else if (NOT_FOUND.equals(key)) {
+				message = Messages.ConnectNotFound;
+			} else {
+				return false;
+			}
+			if (null == Display.getCurrent()) {
+				final String fTitle = title;
+				final String fMessage = message;
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						MessageDialog.openWarning(shell, fTitle, fMessage);
+					}
+				});
+			} else {
+				MessageDialog.openWarning(shell, title, message);
+			}
+			return true;
+		}
+		if (t instanceof RemoteException) {
+			return handleConnectionException(shell, t.getCause(), title);
+		}
+		return false;
+	}
+    
+    
     public static List<String> getAllCustomTypeNames(XSDSchema schema) {
 
         List<String> customTypeNames = new ArrayList<String>();
