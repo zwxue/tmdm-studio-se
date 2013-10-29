@@ -62,13 +62,14 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.service.MissingJarService;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class OpenObjectAction extends AbstractRepositoryAction {
 
@@ -82,7 +83,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * DOC hbhong OpenObjectAction constructor comment.
-     *
+     * 
      * @param text
      */
     public OpenObjectAction() {
@@ -163,7 +164,11 @@ public class OpenObjectAction extends AbstractRepositoryAction {
             Item item = viewObject.getProperty().getItem();
             if (item instanceof ContainerItem) {
                 if (viewObject.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_SERVICECONFIGURATION)) {// service
-                                                                                                                         // configuration
+                    boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+                    if (!checkMissingJar) {
+                        return;
+                    }
+                    // configuration
                     MDMServerDef serverDef = openServerDialog(null);
                     openServiceConfig(serverDef);
                 } else {
@@ -298,6 +303,10 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     public boolean doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
         if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
+            boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+            if (!checkMissingJar) {
+                return false;
+            }
             MDMServerDef serverDef = openServerDialog(serverObject.getLastServerDef());
             if (serverDef != null) {
                 XObjectBrowserInput input = (XObjectBrowserInput) editorInput;
@@ -316,7 +325,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     /**
      * return a decrypted server def
-     *
+     * 
      * @param serverObject
      * @return a decrypted server def
      */

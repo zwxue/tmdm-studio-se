@@ -35,8 +35,9 @@ import org.talend.mdm.workbench.serverexplorer.ui.actions.IEventMgrService;
 import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.service.MissingJarService;
 
-public class MDMEventManagerAction extends AbstractRepositoryAction  implements IEventMgrService{
+public class MDMEventManagerAction extends AbstractRepositoryAction implements IEventMgrService {
 
     private static Log log = LogFactory.getLog(MDMEventManagerAction.class);
 
@@ -54,6 +55,10 @@ public class MDMEventManagerAction extends AbstractRepositoryAction  implements 
 
     @Override
     protected void doRun() {
+        boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
+        if (!checkMissingJar) {
+            return;
+        }
         MDMServerDef serverDef = getServerDef();
         if (serverDef != null) {
             IRepositoryViewObject eventViewObj = getEventMangerViewObject();
@@ -75,8 +80,9 @@ public class MDMEventManagerAction extends AbstractRepositoryAction  implements 
     }
 
     private MDMServerDef getServerDef() {
-        if (mdmServerDef != null)
+        if (mdmServerDef != null) {
             return mdmServerDef;
+        }
 
         SelectServerDefDialog dlg = new SelectServerDefDialog(getShell());
         dlg.create();
