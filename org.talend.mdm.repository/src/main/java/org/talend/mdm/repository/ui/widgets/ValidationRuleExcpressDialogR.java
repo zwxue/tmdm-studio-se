@@ -30,8 +30,9 @@ public class ValidationRuleExcpressDialogR extends ValidationRuleExcpressDialog 
         super(parentShell, treeParent, title, value, conceptName, isAbsoluteXPath, isSchematron);
     }
 
+    @Override
     protected SchematronExpressBuilder getBuilder() {
-        return new SchematronExpressBuilderR(composite, value, conceptName, isAbsoluteXPath, isSchematron, page);
+        return new SchematronExpressBuilderR(composite, value, conceptName, isAbsoluteXPath, isSchematron);
     }
 
 }

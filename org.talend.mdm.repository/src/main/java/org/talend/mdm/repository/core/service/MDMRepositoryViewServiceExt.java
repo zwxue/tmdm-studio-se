@@ -28,11 +28,11 @@ import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
-import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 
 
- 
+
 public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt {
 
     private static Logger log = Logger.getLogger(MDMRepositoryViewServiceExt.class);
@@ -53,7 +53,7 @@ public class MDMRepositoryViewServiceExt implements IMDMRepositoryViewServiceExt
         return MDMRepositoryView.show().getSite();
     }
 
-    public XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName) {
+    public XSDSchema getDataModelXsd(TreeObject pObject, String filter, String dataModelName) {
 
         WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
         XSDSchema xsd = null;

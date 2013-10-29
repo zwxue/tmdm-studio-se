@@ -16,17 +16,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.xsd.XSDSchema;
 import org.talend.mdm.repository.core.service.RepositoryQueryService;
 import org.talend.mdm.repository.model.mdmserverobject.WSDataModelE;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.dialogs.datamodel.IXPathSelectionFilter;
-import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
 
@@ -39,7 +35,7 @@ public class XpathSelectDialog2 extends XpathSelectDialog {
 
     /**
      * DOC hbhong XpathSelectDialog2 constructor comment.
-     * 
+     *
      * @param parentShell
      * @param parent
      * @param title
@@ -75,30 +71,11 @@ public class XpathSelectDialog2 extends XpathSelectDialog {
         }
         this.dataModelName = modelDisplay;
         try {
-            XSDSchema xsd = null;
-            IEditorPart[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getDirtyEditors();
-            if (null != editors) {
-                for (IEditorPart editorpart : editors) {
-                    if (editorpart instanceof XSDEditor) {
-                        XSDEditor xeditor = (XSDEditor) editorpart;
-                        DataModelMainPage mainPage = xeditor.getdMainPage();
-                        if (mainPage.getDataModel().getName().equals(dataModelName)) {
-                            xsd = mainPage.getXSDSchema();
-                            break;
-                        }
-                    }
-                }
-            }
+            XSDSchema xsd = Util.getXSDSchemaOfDirtyEditor(dataModelName);
             if (null == xsd) {
                 WSDataModelE wsDataModel = RepositoryQueryService.findDataModelByName(dataModelName);
                 if (wsDataModel != null) {
-                    String schema = null;
-
-                    if (page != null) {
-                        schema = page.getXSDSchemaString();
-                    } else {
-                        schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
-                    }
+                    String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
                     xsd = Util.createXsdSchema(schema, pObject);
                 }
             }

@@ -125,7 +125,6 @@ public class ValidationRuleDialog extends Dialog {
         viewer.setXpath(true);
         // viewer.setMainPage(page);
         
-        viewer.setDataModelMainPage(page);
         String modelName = page.getDataModel().getName();
         viewer.setDatamodelName(modelName);
         viewer.setConceptName(conceptName);
@@ -184,8 +183,9 @@ public class ValidationRuleDialog extends Dialog {
             log.error(e1.getMessage(), e1);
 
         }
-        if (e.getAttributes().getNamedItem("name") != null)//$NON-NLS-1$
+        if (e.getAttributes().getNamedItem("name") != null){ //$NON-NLS-1$
             name = e.getAttributes().getNamedItem("name").getTextContent();//$NON-NLS-1$
+        }
         text.setText("Product Type".equals(name) ? "" : name);//$NON-NLS-1$//$NON-NLS-2$
         
         ckName = name;

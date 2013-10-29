@@ -53,7 +53,6 @@ import org.eclipse.xsd.XSDSchema;
 import com.amalto.workbench.detailtabs.sections.util.MDMRepositoryViewExtensionService;
 import com.amalto.workbench.dialogs.datamodel.IXPathSelectionFilter;
 import com.amalto.workbench.dialogs.datamodel.IXPathSelectionFilter.FilterResult;
-import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -109,15 +108,11 @@ public class XpathSelectDialog extends Dialog {
 
     protected static String context;
 
-    private XSDSchema xsdSchema;
-
     private List<String> avaiList;
 
     private boolean isAbsolutePath = false;
 
     private boolean lock;
-    
-    protected DataModelMainPage page;
 
     private final IXPathSelectionFilter selectionFilter;
 
@@ -361,7 +356,6 @@ public class XpathSelectDialog extends Dialog {
     }// changeDomTree(
 
     protected void provideViwerContent(XSDSchema xsdSchema, String filter) {
-        this.xsdSchema = xsdSchema;
         drillDownAdapter = new DrillDownAdapter(domViewer);
         domViewer.setLabelProvider(new XSDTreeLabelProvider(selectionFilter));
         XPathTreeContentProvider provider = new XPathTreeContentProvider(this.site, xsdSchema, parent, filter);
@@ -452,9 +446,4 @@ public class XpathSelectDialog extends Dialog {
     public static void setContext(String c) {
         context = c;
     }
-
-    public void setDataModelPage(DataModelMainPage page) {
-        this.page = page;
-    }
-
 }

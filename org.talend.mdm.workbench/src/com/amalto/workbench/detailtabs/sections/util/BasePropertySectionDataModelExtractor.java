@@ -15,7 +15,6 @@ package com.amalto.workbench.detailtabs.sections.util;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.BasePropertySection;
-import com.amalto.workbench.detailtabs.sections.XSDComponentSection;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.utils.Util;
@@ -45,10 +44,11 @@ public class BasePropertySectionDataModelExtractor extends BasePropertySectionGl
     }
 
     public XSDSchema getDataModel(String dataModelName) {
-        if (propSection instanceof XSDComponentSection) {
-            return ((XSDComponentSection) propSection).getEditedObj().getSchema();
+        XSDSchema xsd = Util.getXSDSchemaOfDirtyEditor(dataModelName);
+        if (xsd == null) {
+            xsd = MDMRepositoryViewExtensionService.getDataModelXsd(propSection.getTreeObject(), "", dataModelName);
         }
-        return Util.getXSDSchema(propSection.getTreeObject(), dataModelName);
+        return xsd;
     }
 
     public String getDefaultDataModel() {

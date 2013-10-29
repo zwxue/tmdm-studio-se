@@ -39,7 +39,7 @@ public class TisTableViewerR extends TisTableViewer {
 
     /**
      * DOC hbhong TisTableViewerR constructor comment.
-     * 
+     *
      * @param columns
      * @param toolkit
      * @param parent
@@ -59,12 +59,12 @@ public class TisTableViewerR extends TisTableViewer {
 
     @Override
     protected XpathWidget getNewXpathWidget(Composite parent) {
-        return new XpathWidgetR(parent, false, page);
+        return new XpathWidgetR(parent, false);
     }
 
     @Override
     protected CellEditor createValidationRuleEditor() {
-        return new ValidationRuleEditorR(table); 
+        return new ValidationRuleEditorR(table);
     }
 
     public class ValidationRuleEditorR extends ValidationRuleEditor {
@@ -75,7 +75,7 @@ public class TisTableViewerR extends TisTableViewer {
 
         @Override
         public void createValidationRuleWidget(Composite parent) {
-            validationRule = new ValidationRuleWidgetR(parent, getCurrentTreeParent(), conceptName, page);
+            validationRule = new ValidationRuleWidgetR(parent, getCurrentTreeParent(), conceptName);
         }
     }
 

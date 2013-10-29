@@ -25,17 +25,17 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
-import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.models.TreeObject;
 
 public class MDMRepositoryViewExtensionService {
 
     private static Log log = LogFactory.getLog(MDMRepositoryViewExtensionService.class);
 
-    private static final String PLUGIN = "org.talend.mdm.workbench"; //$NON-NLS-1$ 
+    private static final String PLUGIN = "org.talend.mdm.workbench"; //$NON-NLS-1$
 
-    private static final String EXTENSION_POINT = "repositoryViewService"; //$NON-NLS-1$ 
+    private static final String EXTENSION_POINT = "repositoryViewService"; //$NON-NLS-1$
 
-    private static final String PROP_CLASS = "class"; //$NON-NLS-1$ 
+    private static final String PROP_CLASS = "class"; //$NON-NLS-1$
 
     public static IMDMRepositoryViewServiceExt getRepositoryViewService() {
         IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -63,45 +63,50 @@ public class MDMRepositoryViewExtensionService {
 
     public static List<String> findAllRoleNames() {
         IMDMRepositoryViewServiceExt service = getRepositoryViewService();
-        if (service != null)
+        if (service != null) {
             return service.findAllRoleNames();
-        else
+        } else {
             return null;
+        }
     }
 
     public static List<String> findAllWorkflowNames() {
         IMDMRepositoryViewServiceExt service = getRepositoryViewService();
-        if (service != null)
+        if (service != null) {
             return service.findAllWorkflowNames();
-        else
+        } else {
             return null;
+        }
 
     }
 
     public static List<String> findAllDataModelNames() {
         IMDMRepositoryViewServiceExt service = getRepositoryViewService();
-        if (service != null)
+        if (service != null) {
             return service.findAllDataModelNames();
-        else
+        } else {
             return null;
+        }
 
     }
 
-    public static XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName) {
+    public static XSDSchema getDataModelXsd(TreeObject pObject, String filter, String dataModelName) {
         IMDMRepositoryViewServiceExt service = getRepositoryViewService();
-        if (service != null)
+        if (service != null) {
             return service.getDataModelXsd(pObject, filter, dataModelName);
-        else
+        } else {
             return null;
+        }
 
     }
 
     public static IWorkbenchPartSite getMDMRepositoryViewSite() {
         IMDMRepositoryViewServiceExt service = getRepositoryViewService();
-        if (service != null)
+        if (service != null) {
             return service.getMDMRepositoryViewSite();
-        else
+        } else {
             return null;
+        }
 
     }
 

@@ -20,7 +20,6 @@ import org.talend.mdm.repository.ui.dialogs.xpath.XpathSelectDialog2;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 
 import com.amalto.workbench.editors.AMainPageV2;
-import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.widgets.XpathWidget;
 
 /**
@@ -28,8 +27,6 @@ import com.amalto.workbench.widgets.XpathWidget;
  */
 public class XpathWidgetR extends XpathWidget {
 
-    private DataModelMainPage page;
-    
     /**
      * DOC hbhong XpathWidgetR constructor comment.
      * 
@@ -58,19 +55,7 @@ public class XpathWidgetR extends XpathWidget {
         super(parent, null, isMulti);
     }
     
-    /**
-     * 
-     * 
-     * @param parent
-     * @param treeParent
-     * @param isMulti
-     * @param page
-     */
-    public XpathWidgetR(Composite parent, boolean isMulti, DataModelMainPage page) {
-        super(parent, null, isMulti);
-        this.page = page;
-    }
-
+    @Override
     public void widgetSelected(SelectionEvent e) {
 
         if (accommodation != null) {
@@ -90,7 +75,6 @@ public class XpathWidgetR extends XpathWidget {
             }
         }
 
-        dlg.setDataModelPage(page);
         dlg.setLock(isLock());
         dlg.setBlockOnOpen(true);
         dlg.open();

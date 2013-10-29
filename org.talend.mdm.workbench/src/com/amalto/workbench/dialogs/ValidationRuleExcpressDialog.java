@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.widgets.SchematronExpressBuilder;
 
@@ -41,8 +40,6 @@ public class ValidationRuleExcpressDialog extends Dialog {
     protected boolean isSchematron;
 
     protected Composite composite;
-    
-    protected DataModelMainPage page;
     
     public ValidationRuleExcpressDialog(Shell parentShell, TreeParent treeParent,String title, String value, String conceptName) {
         this(parentShell, treeParent, title, value, conceptName, false, true);
@@ -86,9 +83,4 @@ public class ValidationRuleExcpressDialog extends Dialog {
     protected SchematronExpressBuilder getBuilder() {
         return new SchematronExpressBuilder(composite, value, conceptName, isAbsoluteXPath, isSchematron);
     }
-
-    public void setPage(DataModelMainPage page) {
-        this.page = page;
-    }
-    
 }

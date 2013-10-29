@@ -17,7 +17,7 @@ import java.util.List;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDSchema;
 
-import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.models.TreeObject;
 
 public interface IMDMRepositoryViewServiceExt {
 
@@ -27,7 +27,7 @@ public interface IMDMRepositoryViewServiceExt {
 
     public List<String> findAllDataModelNames();
 
-    public XSDSchema getDataModelXsd(TreeParent pObject, String filter, String dataModelName);
+    public XSDSchema getDataModelXsd(TreeObject pObject, String filter, String dataModelName);
 
     public IWorkbenchPartSite getMDMRepositoryViewSite();
 

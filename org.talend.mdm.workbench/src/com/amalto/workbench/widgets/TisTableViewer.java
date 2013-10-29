@@ -46,7 +46,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.amalto.workbench.detailtabs.sections.IMDMRepositoryViewServiceExt;
 import com.amalto.workbench.detailtabs.sections.util.MDMRepositoryViewExtensionService;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
-import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.i18n.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -72,8 +71,6 @@ public class TisTableViewer extends ComplexTableViewer {
     private boolean addMulti;// 'addAll' and 'deleteAll' button will be added if this field is not null
 
     private boolean isXpath;
-
-    protected DataModelMainPage page;
 
     public boolean isAddMulti() {
         return addMulti;
@@ -304,11 +301,13 @@ public class TisTableViewer extends ComplexTableViewer {
                 if (indexs.length > 0) {
                     // enable all paste buttons
                     HashSet<Button> btns = pastBtns.get(String.valueOf(columns.size()));
-                    if (btns != null)
+                    if (btns != null) {
                         for (Button btn : btns) {
-                            if (btn != null)
+                            if (btn != null) {
                                 btn.setEnabled(true);
+                            }
                         }
+                    }
                     // add to workbenchclipboard
                     WorkbenchClipboard.getWorkbenchClipboard().setLines(String.valueOf(columns.size()), copyLines);
                 }
@@ -345,8 +344,9 @@ public class TisTableViewer extends ComplexTableViewer {
                 if (mainPage != null) {
                     mainPage.setComitting(false);
                 }
-                if (dirty)
+                if (dirty) {
                     markDirty();
+                }
             };
         });
         HashSet<Button> btns = pastBtns.get(String.valueOf(columns.size()));
@@ -414,8 +414,9 @@ public class TisTableViewer extends ComplexTableViewer {
                         if (keyvalue.key.equals(columns.get(columnIndex).getName())) {
                             String val = keyvalue.value;
                             if (columns.get(columnIndex).isNillable()) {
-                                if (columns.get(columnIndex).getNillValue().equals(val))
+                                if (columns.get(columnIndex).getNillValue().equals(val)) {
                                     val = columns.get(columnIndex).getNillDisplay();
+                                }
                             }
                             return val;
                         }
@@ -446,8 +447,9 @@ public class TisTableViewer extends ComplexTableViewer {
             @SuppressWarnings("unchecked")
             public void modify(Object element, String property, Object value) {
                 if (value instanceof Integer) {
-                    if (Integer.valueOf(value.toString()) == -1)
+                    if (Integer.valueOf(value.toString()) == -1) {
                         return;
+                    }
                 }
                 // modify the text and combo cell value
                 TableItem item = (TableItem) element;
@@ -583,10 +585,5 @@ public class TisTableViewer extends ComplexTableViewer {
     protected XpathSelectDialog getNewXpathDlgInstance() {
         return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.SelectMultipleXPaths,
                 ServerView.show().getSite(), true, getDatamodelName());
-    }
-
-    public void setDataModelMainPage(DataModelMainPage page) {
-        this.page = page;
-
     }
 }
