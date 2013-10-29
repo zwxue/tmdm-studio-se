@@ -828,7 +828,9 @@ public class RepositoryResourceUtil {
                 IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
                 try {
                     IRepositoryViewObject newViewObj = factory.getLastVersion(viewObj.getId());
-                    ContainerCacheService.put(newViewObj);
+                    if (newViewObj != null) {
+                        ContainerCacheService.put(newViewObj);
+                    }
                     return newViewObj;
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
