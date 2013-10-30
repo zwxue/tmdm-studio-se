@@ -717,9 +717,6 @@
             name="MDM_CE_DEMOS"
             order="40"            
             projectUrl="resources/demoprojects/MDM_CE_DEMOS/">
-         <validator
-               class="org.talend.mdm.repository.extension.DemoProjectValidator">
-         </validator>
       </demoProvider>
    </extension>
    
