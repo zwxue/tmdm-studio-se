@@ -109,21 +109,30 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
-                ERepositoryObjectType type = viewObject.getRepositoryObjectType();
-                if (type != null) {
-                    IInteractiveHandler handler = InteractiveService.findHandler(type);
-                    if (handler != null) {
-                        List<IRepositoryViewObject> associatedObjects = handler.getAssociatedObjects(viewObject);
-                        if (associatedObjects != null) {
-                            for (IRepositoryViewObject associatedObj : associatedObjects) {
-                                viewObjs.add(associatedObj);
-                            }
+                viewObjs.addAll(getAssociatedObjects(viewObject));
+                viewObjs.add(0, viewObject);
+            }
+        }
+        return viewObjs;
+    }
+
+    protected List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject viewObject) {
+        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        if (viewObject != null) {
+            ERepositoryObjectType type = viewObject.getRepositoryObjectType();
+            if (type != null) {
+                IInteractiveHandler handler = InteractiveService.findHandler(type);
+                if (handler != null) {
+                    List<IRepositoryViewObject> associatedObjects = handler.getAssociatedObjects(viewObject);
+                    if (associatedObjects != null) {
+                        for (IRepositoryViewObject associatedObj : associatedObjects) {
+                            viewObjs.add(associatedObj);
                         }
                     }
                 }
-                viewObjs.add(viewObject);
             }
         }
+
         return viewObjs;
     }
 

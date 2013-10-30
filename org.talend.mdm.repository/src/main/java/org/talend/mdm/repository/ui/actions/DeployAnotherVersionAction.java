@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.DeployService;
@@ -53,26 +54,29 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
         if (versionDialog.open() == IDialogConstants.OK_ID) {
             if (versionDialog.getSelection() != null) {
                 viewObjs = new ArrayList<IRepositoryViewObject>();
-                viewObjs.add(versionDialog.getSelection());
+                IRepositoryViewObject modelviewObj = versionDialog.getSelection();
+                viewObjs.add(modelviewObj);
+                viewObjs.addAll(getAssociatedObjects(modelviewObj));
             }
-        } else {
-            return;
-        }
-        SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
-        if (dialog.open() == IDialogConstants.OK_ID) {
-            // save editors
-            LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
-                    Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
-            if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
-                return;
-            }
-            lockDirtyDialog.saveDirtyObjects();
-            // deploy
-            MDMServerDef serverDef = dialog.getSelectedServerDef();
-            if (doCheckServerConnection(serverDef)) {
-                IStatus status = DeployService.getInstance().deployAnotherVersion(serverDef, viewObjs);
-                if (status.isMultiStatus()) {
-                    showDeployStatus(status);
+
+            SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
+            if (dialog.open() == IDialogConstants.OK_ID) {
+                // save editors
+                LockedDirtyObjectDialog lockDirtyDialog = new LockedDirtyObjectDialog(getShell(),
+                        Messages.AbstractDeployAction_promptToSaveEditors, viewObjs);
+                if (lockDirtyDialog.needShowDialog() && lockDirtyDialog.open() == IDialogConstants.CANCEL_ID) {
+                    return;
+                }
+                lockDirtyDialog.saveDirtyObjects();
+                // deploy
+                MDMServerDef serverDef = dialog.getSelectedServerDef();
+                if (doCheckServerConnection(serverDef)) {
+                    IStatus status = DeployService.getInstance().deployAnotherVersion(serverDef, viewObjs);
+                    updateChangedStatus(status);
+                    if (status.isMultiStatus()) {
+                        showDeployStatus(status);
+                    }
+                    updateLastServer(status, new NullProgressMonitor());
                 }
             }
         }
