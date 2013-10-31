@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdmserverobject:WSRoutingRuleE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t4HnA3dIEeGMK_tLGnzsJg" name="CheckAvailabilityOnCreate" description="Check availability of Product on create" synchronous="true" concept="*" serviceJNDI="amalto/local/service/callJob" parameters="&#xA;&lt;configuration> &#xA;    &lt;url>ltj://CheckAvailability/0.1&lt;/url>  &#xA;    &lt;contextParam> &#xA;        &lt;name>exchangeMessage&lt;/name>  &#xA;        &lt;value>{exchange_data}&lt;/value> &#xA;    &lt;/contextParam> &#xA;&lt;/configuration>&#xA;" condition="OpIsCreate And ContainerIsProduct And ModelIsProduct And EntityIsProduct">
+  <wsRoutingRuleExpressions xmi:id="_t4HnBHdIEeGMK_tLGnzsJg" name="OpIsCreate" xpath="Update/OperationType" value="CREATE">
+    <wsOperator xmi:id="_t4HnBXdIEeGMK_tLGnzsJg" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_t4HnBndIEeGMK_tLGnzsJg" name="ContainerIsProduct" xpath="Update/DataCluster" value="Product">
+    <wsOperator xmi:id="_t4HnB3dIEeGMK_tLGnzsJg" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_t4HnCHdIEeGMK_tLGnzsJg" name="ModelIsProduct" xpath="Update/DataModel" value="Product">
+    <wsOperator xmi:id="_t4HnCXdIEeGMK_tLGnzsJg" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+  <wsRoutingRuleExpressions xmi:id="_t4HnCndIEeGMK_tLGnzsJg" name="EntityIsProduct" xpath="Update/Concept" value="Product">
+    <wsOperator xmi:id="_t4HnC3dIEeGMK_tLGnzsJg" value="EQUALS"/>
+  </wsRoutingRuleExpressions>
+</mdmserverobject:WSRoutingRuleE>

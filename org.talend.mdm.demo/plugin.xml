@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
+  <extension
+         point="org.talend.core.runtime.demoProjects_provider">
+      <demoProvider
+            descHtml="resources/demoprojects/mdm_ce_demos.html"
+            description="%demo.description"
+            icon="resources/demoprojects/product-icon-mdm-16px.gif"
+            id="org.talend.demo.project.mdmce"
+            name="MDM_CE_DEMOS"
+            order="40"            
+            projectUrl="resources/demoprojects/MDM_CE_DEMOS/">
+      </demoProvider>
+   </extension>
 
 </plugin>
