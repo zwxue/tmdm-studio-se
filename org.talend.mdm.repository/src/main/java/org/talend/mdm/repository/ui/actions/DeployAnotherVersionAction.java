@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.service.DeployService;
@@ -72,11 +71,9 @@ public class DeployAnotherVersionAction extends AbstractDeployAction {
                 MDMServerDef serverDef = dialog.getSelectedServerDef();
                 if (doCheckServerConnection(serverDef)) {
                     IStatus status = DeployService.getInstance().deployAnotherVersion(serverDef, viewObjs);
-                    updateChangedStatus(status);
                     if (status.isMultiStatus()) {
                         showDeployStatus(status);
                     }
-                    updateLastServer(status, new NullProgressMonitor());
                 }
             }
         }

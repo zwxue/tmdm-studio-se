@@ -109,8 +109,8 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
         for (Object obj : getSelectedObject()) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObject = (IRepositoryViewObject) obj;
+                viewObjs.add(viewObject);
                 viewObjs.addAll(getAssociatedObjects(viewObject));
-                viewObjs.add(0, viewObject);
             }
         }
         return viewObjs;
