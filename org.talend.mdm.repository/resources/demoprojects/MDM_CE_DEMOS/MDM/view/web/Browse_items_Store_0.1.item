@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mdmserverobject:WSViewE xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:mdmserverobject="http://www.talend.org/mdmserverobject" xmi:id="_t9eBE3dIEeGMK_tLGnzsJg" name="Browse_items_Store" description="[EN:Store][FR:Magasin]" transformerPK="">  
-  <searchableBusinessElements>Store/Id</searchableBusinessElements>
-  <searchableBusinessElements>Store/Address</searchableBusinessElements>
-  <viewableBusinessElements>Store/Id</viewableBusinessElements>
-  <viewableBusinessElements>Store/Address</viewableBusinessElements>
-  <isTransformerActive xmi:id="_t9eBFHdIEeGMK_tLGnzsJg"/>
-</mdmserverobject:WSViewE>
