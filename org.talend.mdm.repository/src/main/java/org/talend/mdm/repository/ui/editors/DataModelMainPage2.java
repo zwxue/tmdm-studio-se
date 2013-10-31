@@ -17,6 +17,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSDataModelItem;
@@ -64,7 +65,7 @@ public class DataModelMainPage2 extends DataModelMainPage {
 
     /**
      * DOC hbhong DataModelMainPage2 constructor comment.
-     *
+     * 
      * @param obj
      */
     public DataModelMainPage2(TreeObject obj) {
@@ -78,9 +79,14 @@ public class DataModelMainPage2 extends DataModelMainPage {
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
 
         updateSchemaToItem(serverObjectItem);//
-        
+
         xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
-        
+        Item newItem = RepositoryResourceUtil.assertItem(serverObjectItem);
+        if (newItem != serverObjectItem) {
+            editorInput.updateViewObject(ContainerCacheService.get(newItem.getProperty()));
+            getEditorSite();
+            serverObjectItem = (MDMServerObjectItem) newItem;
+        }
         RepositoryResourceUtil.saveItem(serverObjectItem);
 
         refreshDirtyCue();

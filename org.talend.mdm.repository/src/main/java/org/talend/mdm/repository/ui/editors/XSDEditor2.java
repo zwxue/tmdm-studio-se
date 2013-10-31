@@ -131,8 +131,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
                     } else if (needValidate) {
                         needValidate = false;
-                        XSDEditorInput2 editorInput = (XSDEditorInput2) getEditorInput();
-                        IRepositoryViewObject viewObject = editorInput.getViewObject();
+                        IRepositoryViewObject viewObject = getCurrentViewObject();
                         validateModel(viewObject);
 
                     }
@@ -182,11 +181,14 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
         }
     }
 
+    private IRepositoryViewObject getCurrentViewObject() {
+        return ((IRepositoryViewEditorInput) xsdInput).getViewObject();
+    }
+
     @Override
     public void doSave(IProgressMonitor monitor) {
         super.doSave(monitor);
-        XSDEditorInput2 editorInput = (XSDEditorInput2) getEditorInput();
-        IRepositoryViewObject viewObject = editorInput.getViewObject();
+        IRepositoryViewObject viewObject = getCurrentViewObject();
         Item item = viewObject.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (isEE()) {
@@ -225,7 +227,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see com.amalto.workbench.editors.xsdeditor.XSDEditor#getAdapter(java.lang.Class)
      */
     @Override
@@ -247,7 +249,7 @@ public class XSDEditor2 extends XSDEditor implements ISvnHistory {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.wst.xsd.ui.internal.adt.editor.CommonMultiPageEditor#init(org.eclipse.ui.IEditorSite,
      * org.eclipse.ui.IEditorInput)
      */

@@ -23,7 +23,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 
 public class XObjectEditorInput2 extends XObjectEditorInput implements IRepositoryViewEditorInput {
 
-    private final IRepositoryViewObject viewObject;
+    private IRepositoryViewObject viewObject;
 
     private String version;
 
@@ -46,6 +46,10 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
     public IRepositoryViewObject getViewObject() {
         return viewObject;
+    }
+
+    public void updateViewObject(IRepositoryViewObject viewObj) {
+        this.viewObject = viewObj;
     }
 
     protected void init(Item item) {
@@ -73,8 +77,9 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
     }
 
     public Item getInputItem() {
-        if (viewObject != null && viewObject.getProperty() != null)
+        if (viewObject != null && viewObject.getProperty() != null) {
             return viewObject.getProperty().getItem();
+        }
         return null;
     }
 
@@ -88,14 +93,15 @@ public class XObjectEditorInput2 extends XObjectEditorInput implements IReposito
 
     @Override
     public String getName() {
-        if (getVersion() != null)
+        if (getVersion() != null) {
             return super.getName() + " " + getVersion(); //$NON-NLS-1$
+        }
         return super.getName();
     }
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see com.amalto.workbench.providers.XObjectEditorInput#getAdapter(java.lang.Class)
      */
     @Override
