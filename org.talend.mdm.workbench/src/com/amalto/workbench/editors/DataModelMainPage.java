@@ -487,105 +487,96 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     }// createCharacteristicsContent
 
-	private LabelProvider getContentLabelProvider(XSDSchemaContent content) {
-		if (content instanceof XSDElementDeclaration) {
-			return new XSDTreeLabelProvider();
-		} else if (content instanceof XSDTypeDefinition) {
-			return new TypesLabelProvider();
-		} else {
-			return null;
-		}
-	}
+    private LabelProvider getContentLabelProvider(XSDSchemaContent content) {
+        if (content instanceof XSDElementDeclaration) {
+            return new XSDTreeLabelProvider();
+        } else if (content instanceof XSDTypeDefinition) {
+            return new TypesLabelProvider();
+        } else {
+            return null;
+        }
+    }
 
-	private boolean compareSchemaContent(XSDSchemaContent xc1, XSDSchemaContent xc2) {
-		if (xc1.getClass().equals(xc2.getClass())) {
-			LabelProvider provider = getContentLabelProvider(xc1);
-			if (null != provider
-					&& provider.getText(xc1).equals(provider.getText(xc2))) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean compareSchemaContent(XSDSchemaContent xc1, XSDSchemaContent xc2) {
+        if (xc1.getClass().equals(xc2.getClass())) {
+            LabelProvider provider = getContentLabelProvider(xc1);
+            if (null != provider && provider.getText(xc1).equals(provider.getText(xc2))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private XSDSchemaContent getContainedSchemaContent(List<XSDSchemaContent> list,
-			XSDSchemaContent content) {
-		for (XSDSchemaContent xsdContent : list) {
-			if (compareSchemaContent(xsdContent, content)) {
-				return xsdContent;
-			}
-		}
-		return null;
-	}
+    private XSDSchemaContent getContainedSchemaContent(List<XSDSchemaContent> list, XSDSchemaContent content) {
+        for (XSDSchemaContent xsdContent : list) {
+            if (compareSchemaContent(xsdContent, content)) {
+                return xsdContent;
+            }
+        }
+        return null;
+    }
 
-	protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
-		if (null == addtional || addtional.isEmpty()) {
-			return;
-		}
-		try {
-			int flag = ConflictDialog.NONE;
-			boolean dialogPopup = false;
-			List<XSDSchemaContent> tmp = xsdSchema.getContents();
-			List<XSDSchemaContent> exists = new ArrayList<XSDSchemaContent>(
-					tmp);
-			for (XSDSchemaContent content : addtional) {
-				XSDSchemaContent exist = getContainedSchemaContent(exists, content);
-				if (null == exist) {
-					exists.add(content);
-				} else {
-					if (!dialogPopup) {
-						String type = null;
-						if (exist instanceof XSDElementDeclaration) {
-							type = "Entity";
-						} else if (exist instanceof XSDTypeDefinition) {
-							type = "Type";
-						} else {
-							continue;
-						}
-						LabelProvider provider = getContentLabelProvider(exist);
-						String message = Messages.bind(
-								Messages.conflict_messages, type,
-								provider.getText(exist));
-						ConflictDialog dialog = new ConflictDialog(getSite()
-								.getShell(), message);
-						if (dialog.open() == Dialog.OK) {
-							flag = dialog.getStatus();
-							dialogPopup = dialog.applyAll;
-						} else {
-							popupImportDialog();
-							return;
-						}
-					}
-					if (flag == ConflictDialog.OVERWRITE) {
-						exists.remove(exist);
-						exists.add(content);
-					}
-				}
-			}
-			tmp.clear();
-			tmp.addAll(exists);
-			validateSchema();
-			markDirtyWithoutCommit();
-			setXsdSchema(xsdSchema);
-			getSchemaRoleFilterFromSchemaTree().setDataModelFilter(
-					dataModelFilter);
+    protected void doImportSchema(final Collection<XSDSchemaContent> addtional) {
+        if (null == addtional || addtional.isEmpty()) {
+            return;
+        }
+        try {
+            int flag = ConflictDialog.NONE;
+            boolean dialogPopup = false;
+            List<XSDSchemaContent> tmp = xsdSchema.getContents();
+            List<XSDSchemaContent> exists = new ArrayList<XSDSchemaContent>(tmp);
+            for (XSDSchemaContent content : addtional) {
+                XSDSchemaContent exist = getContainedSchemaContent(exists, content);
+                if (null == exist) {
+                    exists.add(content);
+                } else {
+                    if (!dialogPopup) {
+                        String type = null;
+                        if (exist instanceof XSDElementDeclaration) {
+                            type = "Data Model Entity";
+                        } else if (exist instanceof XSDTypeDefinition) {
+                            type = "Data Model Type";
+                        } else {
+                            continue;
+                        }
+                        LabelProvider provider = getContentLabelProvider(exist);
+                        String message = Messages.bind(Messages.conflict_messages, type, provider.getText(exist));
+                        ConflictDialog dialog = new ConflictDialog(getSite().getShell(), message);
+                        if (dialog.open() == Dialog.OK) {
+                            flag = dialog.getStatus();
+                            dialogPopup = dialog.applyAll;
+                        } else {
+                            popupImportDialog();
+                            return;
+                        }
+                    }
+                    if (flag == ConflictDialog.OVERWRITE) {
+                        exists.remove(exist);
+                        exists.add(content);
+                    }
+                }
+            }
+            tmp.clear();
+            tmp.addAll(exists);
+            validateSchema();
+            markDirtyWithoutCommit();
+            setXsdSchema(xsdSchema);
+            getSchemaRoleFilterFromSchemaTree().setDataModelFilter(dataModelFilter);
 
-			// refresh types
-			viewer.setInput(getSite());
-			typesViewer.setInput(getSite());
-			MessageDialog.openInformation(getSite().getShell(),
-					Messages.ImportXSDSche,
-					Messages.ImportingXSDSchemaCompleted);
-		} catch (Exception ex) {
-			log.error(ex.getMessage(), ex);
-			String detail = "";//$NON-NLS-1$
-			if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
-				detail += " , " + Messages.bind(Messages.Dueto, ex.getMessage()); //$NON-NLS-1$
-			}
-			MessageDialog.openError(getSite().getShell(), Messages._Error,
-					Messages.bind(Messages.ImportingXSDSchemaFailed, detail));
-		}
-	}
+            // refresh types
+            viewer.setInput(getSite());
+            typesViewer.setInput(getSite());
+            MessageDialog.openInformation(getSite().getShell(), Messages.ImportXSDSche, Messages.ImportingXSDSchemaCompleted);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+            String detail = "";//$NON-NLS-1$
+            if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
+                detail += " , " + Messages.bind(Messages.Dueto, ex.getMessage()); //$NON-NLS-1$
+            }
+            MessageDialog.openError(getSite().getShell(), Messages._Error,
+                    Messages.bind(Messages.ImportingXSDSchemaFailed, detail));
+        }
+    }
 
     public void validateSchema() throws IllegalAccessException {
         final String msg_omit[] = { Messages.XsdOmit1, Messages.XsdOmit2, Messages.XsdOmit3, Messages.XsdOmit4, Messages.XsdOmit5 };
@@ -804,7 +795,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
          */
         public boolean equals(Object a, Object b) {
@@ -818,7 +809,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
         /*
          * (non-Javadoc)
-         *
+         * 
          * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
          */
         public int hashCode(Object element) {
@@ -1714,7 +1705,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * check whether the model field is UUID or AUTO_INCREMENT type.
-     *
+     * 
      * @param obj
      * @return
      */
@@ -1858,7 +1849,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /**
      * Returns and XSDSchema Object from an xsd
-     *
+     * 
      * @param schema
      * @return
      * @throws Exception
@@ -2079,7 +2070,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
                             for (String key : nameList) {
                                 customTypeList.add(customTypesMap.get(key));
                             }
-//                            doImportSchema();
+                            // doImportSchema();
                         } catch (SecurityException e) {
                             MessageDialog.openError(sash.getShell(), Messages._Error, e.getMessage());
                         }
@@ -2529,100 +2520,102 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
         return Messages.SortDescText;
     }
 
-	public static class ConflictDialog extends IconAndMessageDialog {
+    public static class ConflictDialog extends IconAndMessageDialog {
 
-		public static int NONE = 0;
-		public static int OVERWRITE = 1;
-		public static int IGNORE = 2;
-		private int status = NONE;
-		private boolean applyAll;
+        public static int NONE = 0;
 
-		public ConflictDialog(Shell parentShell, String dialogMessage) {
-			super(parentShell);
-			super.message = dialogMessage;
-			setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
-		}
+        public static int OVERWRITE = 1;
 
-		public int getStatus() {
-			return status;
-		}
+        public static int IGNORE = 2;
 
-		Button createButton(Composite composite, String label, int style,
-				SelectionListener listener) {
-			Button button = new Button(composite, style);
-			button.setText(label);
-			GridDataFactory.fillDefaults().grab(false, false).applyTo(button);
-			if (null != listener) {
-				button.addSelectionListener(listener);
-			}
-			return button;
-		}
+        private int status = NONE;
 
-		@Override
+        private boolean applyAll;
+
+        public ConflictDialog(Shell parentShell, String dialogMessage) {
+            super(parentShell);
+            super.message = dialogMessage;
+            setShellStyle(SWT.CLOSE | SWT.APPLICATION_MODAL);
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        Button createButton(Composite composite, String label, int style, SelectionListener listener) {
+            Button button = new Button(composite, style);
+            button.setText(label);
+            GridDataFactory.fillDefaults().grab(false, false).applyTo(button);
+            if (null != listener) {
+                button.addSelectionListener(listener);
+            }
+            return button;
+        }
+
+        @Override
         protected Control createContents(Composite parent) {
-			parent.getShell().setText(Messages.conflicts_occur);
-			Composite composite = new Composite(parent, 0);
-			GridLayout layout = new GridLayout();
-			layout.marginHeight = 10;
-			layout.marginWidth = 30;
-			layout.verticalSpacing = 5;
-			layout.horizontalSpacing = 3;
-			layout.numColumns = 2;
-			layout.makeColumnsEqualWidth = true;
-			composite.setLayout(layout);
-			GridDataFactory.fillDefaults().applyTo(composite);
-			{
-				Composite meCom = new Composite(composite, SWT.None);
-				GridDataFactory.fillDefaults().hint(SWT.DEFAULT, 40)
-						.grab(true, false).span(2, 1).applyTo(meCom);
-				meCom.setLayout(new GridLayout(2, false));
-				createMessageArea(meCom);
-			}
-			createButton(composite, Messages.conflict_overwrite, SWT.PUSH,
-					new SelectionAdapter() {
+            parent.getShell().setText(Messages.conflicts_occur);
+            Composite composite = new Composite(parent, 0);
 
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							if (applyAll) {
-								status = OVERWRITE;
-							}
-							setReturnCode(Dialog.OK);
-							ConflictDialog.this.close();
-						}
+            GridLayout layout = new GridLayout();
+            layout.marginHeight = 10;
+            layout.marginWidth = 30;
+            layout.verticalSpacing = 5;
+            layout.horizontalSpacing = 5;
+            layout.numColumns = 2;
+            layout.makeColumnsEqualWidth = true;
+            composite.setLayout(layout);
+            GridDataFactory.fillDefaults().applyTo(composite);
+            {
+                Composite meCom = new Composite(composite, SWT.None);
+                GridDataFactory.fillDefaults().hint(400, 40).grab(true, true).span(2, 1).applyTo(meCom);
+                meCom.setLayout(new GridLayout(2, false));
+                createMessageArea(meCom);
+            }
+            createButton(composite, Messages.conflict_overwrite, SWT.PUSH, new SelectionAdapter() {
 
-					});
-			createButton(composite, Messages.conflict_ignore, SWT.PUSH,
-					new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (applyAll) {
+                        status = OVERWRITE;
+                    }
+                    setReturnCode(Dialog.OK);
+                    ConflictDialog.this.close();
+                }
 
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							if (applyAll) {
-								status = IGNORE;
-							}
-							setReturnCode(Dialog.OK);
-							ConflictDialog.this.close();
-						}
+            });
+            createButton(composite, Messages.conflict_ignore, SWT.PUSH, new SelectionAdapter() {
 
-					});
-			createButton(composite, Messages.conflict_apply_all, SWT.CHECK,
-					new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (applyAll) {
+                        status = IGNORE;
+                    }
+                    setReturnCode(Dialog.OK);
+                    ConflictDialog.this.close();
+                }
 
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							applyAll = ((Button) e.widget).getSelection();
-						}
+            });
+            createButton(composite, Messages.conflict_apply_all, SWT.CHECK, new SelectionAdapter() {
 
-					});
-			applyDialogFont(composite);
-			initializeDialogUnits(composite);
-			return composite;
-		}
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    applyAll = ((Button) e.widget).getSelection();
+                }
 
-		@Override
-		protected Image getImage() {
-			return getWarningImage();
-		}
-	}
+            });
+            applyDialogFont(composite);
+            initializeDialogUnits(composite);
+            return composite;
+        }
+
+        @Override
+        protected Image getImage() {
+            return getWarningImage();
+        }
+
+    }
+
     private class DoubleClickListener implements IDoubleClickListener {
 
         private TreeViewer viewer;
@@ -2967,41 +2960,36 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-            	popupImportDialog();
+                popupImportDialog();
             }
 
         });
 
     }
 
+    private void popupImportDialog() {
+        Display.getDefault().syncExec(new Runnable() {
 
-	private void popupImportDialog() {
-		Display.getDefault().syncExec(new Runnable(){
-
-			public void run() {
-				IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-						.getActivePage().getActiveEditor();
-				if (part.isDirty()) {
-					if (MessageDialog.openConfirm(getSite().getShell(),
-							Messages.SaveResource, Messages.bind(
-									Messages.modifiedChanges, getXObject()
-											.getDisplayName()))) {
-						PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-								.getActivePage().saveEditor(part, false);
-					} else {
-						return;
-					}
-				}
-				SelectImportedModulesDialog dlg = createSelectImportedModulesDialog();
-				dlg.create();
-				dlg.setBlockOnOpen(true);
-				dlg.open();
-				if (dlg.getReturnCode() == Window.OK) {
-					doImportSchema(dlg.getXSDContents());
-				}
-			}
-		});
-	}
+            public void run() {
+                IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+                if (part.isDirty()) {
+                    if (MessageDialog.openConfirm(getSite().getShell(), Messages.SaveResource,
+                            Messages.bind(Messages.modifiedChanges, getXObject().getDisplayName()))) {
+                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().saveEditor(part, false);
+                    } else {
+                        return;
+                    }
+                }
+                SelectImportedModulesDialog dlg = createSelectImportedModulesDialog();
+                dlg.create();
+                dlg.setBlockOnOpen(true);
+                dlg.open();
+                if (dlg.getReturnCode() == Window.OK) {
+                    doImportSchema(dlg.getXSDContents());
+                }
+            }
+        });
+    }
 
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
         return new SelectImportedModulesDialog(getSite().getShell(), xobject, Messages.ImportXSDSchema);
@@ -3138,7 +3126,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener, IGo
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
     public void gotoMarker(IMarker marker) {
