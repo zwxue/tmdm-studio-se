@@ -19,59 +19,52 @@ import org.talend.repository.items.importexport.manager.ResourcesManager;
 
 public class MdmImportHandler extends ImportRepTypeHandler {
 
-	private ProxyRepositoryFactory factory = ProxyRepositoryFactory
-			.getInstance();
-	private static Logger log = Logger.getLogger(MdmImportHandler.class);
+    private ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
 
-	@Override
-	public void afterImportingItemRecords(IProgressMonitor monitor,
-			ResourcesManager resManager, ItemRecord selectedItemRecord) {
-		super.afterImportingItemRecords(monitor, resManager, selectedItemRecord);
+    private static Logger log = Logger.getLogger(MdmImportHandler.class);
 
-		try {
-			IRepositoryViewObject object = factory.getSpecificVersion(
-					selectedItemRecord.getItemId(),
-					selectedItemRecord.getItemVersion(), true);
-			if (null != object) {
-				update(object, selectedItemRecord);
-			}
-		} catch (PersistenceException e) {
-			log.error(e.getMessage(), e);
-		}
-	}
+    @Override
+    public void afterImportingItemRecords(IProgressMonitor monitor, ResourcesManager resManager, ItemRecord selectedItemRecord) {
+        super.afterImportingItemRecords(monitor, resManager, selectedItemRecord);
 
-	protected void update(IRepositoryViewObject object,
-			ItemRecord selectedItemRecord) throws PersistenceException {
-		Property property = object.getProperty();
-		Item item = property.getItem();
-		boolean needSave = false;
-		if (item instanceof MDMServerObjectItem) {
-			MDMServerObject serverObj = ((MDMServerObjectItem) item)
-					.getMDMServerObject();
-			if (serverObj.getLastServerDef() != null) {
-				serverObj.setLastServerDef(null);
-				needSave = true;
-			}
+        try {
+            IRepositoryViewObject object = factory.getSpecificVersion(selectedItemRecord.getItemId(),
+                    selectedItemRecord.getItemVersion(), true);
+            if (null != object) {
+                update(object, selectedItemRecord);
+            }
+        } catch (PersistenceException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 
-		} else {
-			EMap<?, ?> additionalProperties = property
-					.getAdditionalProperties();
-			if (additionalProperties != null) {
-				additionalProperties
-						.remove(RepositoryResourceUtil.PROP_LAST_SERVER_DEF);
-				needSave = true;
-			}
-		}
-		if (needSave) {
-			factory.save(item);
-		}
-		if (selectedItemRecord.isValid()) {
-			String[] split = selectedItemRecord.getLabel().split(" "); //$NON-NLS-1$
-			String name = split.length > 0 ? split[0] : null;
-			if (name != null) {
-				CommandManager.getInstance().pushCommand(ICommand.CMD_ADD,
-						selectedItemRecord.getItemId(), name);
-			}
-		}
-	}
+    protected void update(IRepositoryViewObject object, ItemRecord selectedItemRecord) throws PersistenceException {
+        Property property = object.getProperty();
+        Item item = property.getItem();
+        boolean needSave = false;
+        if (item instanceof MDMServerObjectItem) {
+            MDMServerObject serverObj = ((MDMServerObjectItem) item).getMDMServerObject();
+            if (serverObj.getLastServerDef() != null) {
+                serverObj.setLastServerDef(null);
+                needSave = true;
+            }
+
+        } else {
+            EMap<?, ?> additionalProperties = property.getAdditionalProperties();
+            if (additionalProperties != null) {
+                additionalProperties.remove(RepositoryResourceUtil.PROP_LAST_SERVER_DEF);
+                needSave = true;
+            }
+        }
+        if (needSave) {
+            factory.save(item, true);
+        }
+        if (selectedItemRecord.isValid()) {
+            String[] split = selectedItemRecord.getLabel().split(" "); //$NON-NLS-1$
+            String name = split.length > 0 ? split[0] : null;
+            if (name != null) {
+                CommandManager.getInstance().pushCommand(ICommand.CMD_ADD, selectedItemRecord.getItemId(), name);
+            }
+        }
+    }
 }

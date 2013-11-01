@@ -146,7 +146,7 @@ public class JobResourceListener extends AbstractRepositoryResourceChangeListene
             ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
             try {
                 item = RepositoryResourceUtil.assertItem(item);
-                factory.save(item);
+                factory.save(item, true);
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
             }
