@@ -603,6 +603,13 @@
             name="xsdlib.jar"
             required="true">
       </libraryNeeded>
-   </extension> 
+   </extension>
+  <extension
+        point="org.talend.core.repository.login.task">
+     <loginTask
+           class="com.amalto.workbench.task.CheckMissingJarLoginTask"
+           priority="normal">
+     </loginTask>
+  </extension> 
 
 </plugin>

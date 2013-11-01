@@ -56,8 +56,18 @@ public class MissingJarService {
 
     private boolean needRestart = false;
 
+    private boolean isOkForFirstTime = true;
+
+    public void initialCheck() {
+        isOkForFirstTime = getMissingJarList() == null;
+    }
+
     public boolean checkMissingJar(boolean showUI) {
         if (getMissingJarList() == null) {
+            if (!isOkForFirstTime) {
+                needRestart = true;
+                isOkForFirstTime = true;
+            }
             if (needRestart) {
                 showRestartConfirmDialog();
                 return false;
