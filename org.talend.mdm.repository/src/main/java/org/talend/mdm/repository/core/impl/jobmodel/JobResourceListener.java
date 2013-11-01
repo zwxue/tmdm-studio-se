@@ -91,7 +91,7 @@ public class JobResourceListener implements PropertyChangeListener {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
      */
     public void propertyChange(PropertyChangeEvent event) {
@@ -151,7 +151,7 @@ public class JobResourceListener implements PropertyChangeListener {
             RepositoryResourceUtil.setLastServerDef(item, null);
             ProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
             try {
-                factory.save(item);
+                factory.save(item, true);
             } catch (PersistenceException e) {
                 log.error(e.getMessage(), e);
             }
