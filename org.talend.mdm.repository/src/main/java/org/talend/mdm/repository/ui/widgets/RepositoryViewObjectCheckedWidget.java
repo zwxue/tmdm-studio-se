@@ -499,7 +499,8 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
         public void handle(CompareResultEnum compareResult, IRepositoryViewObject viewObj) {
 
             if (compareResult == CompareResultEnum.SAME || compareResult == CompareResultEnum.CONFLICT
-                    || compareResult == CompareResultEnum.MODIFIED_LOCALLY) {
+                    || compareResult == CompareResultEnum.MODIFIED_LOCALLY
+                    || compareResult == CompareResultEnum.POTENTIAL_CONFLICT) {
                 treeViewer.setChecked(viewObj, false);
             }
 
