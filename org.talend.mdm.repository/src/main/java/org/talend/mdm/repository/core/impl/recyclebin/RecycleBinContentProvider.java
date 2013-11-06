@@ -66,8 +66,7 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
 
     private static final Pattern jobPattern = Pattern.compile("(process)((/(\\w*))+)"); //$NON-NLS-1$
 
-    // TODO
-    private static final Pattern matchRulePattern = Pattern.compile("(TDQ_Libraries/Rules/SQL)((/(\\w*))+)"); //$NON-NLS-1$
+    private static final Pattern matchRulePattern = Pattern.compile("(TDQ_Libraries/Rules/Match)((/(\\w*))+)"); //$NON-NLS-1$
 
     private static Logger log = Logger.getLogger(RecycleBinContentProvider.class);
 
@@ -86,10 +85,6 @@ public class RecycleBinContentProvider extends AbstractContentProvider {
     private void buildAllDeletedFolders(FolderRepositoryObject rootViewObj) {
         List<String> paths = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
         String[] deletedFolderPaths = sortFolderPath(paths);
-        // System.out.println("Deleted Folders:");
-        // for (Object obj : deletedFolderPaths) {
-        // System.out.println(obj);
-        // }
         containerMap.clear();
         rootViewObj.getChildren().clear();
 

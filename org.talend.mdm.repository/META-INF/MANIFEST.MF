@@ -46,6 +46,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.httpcomponents.httpcore,
  org.talend.core.ui,
  org.talend.dataquality,
+ org.talend.dataquality.record.linkage.ui,
  org.talend.dataprofiler.core,
  org.talend.repository.items.importexport
 Bundle-ActivationPolicy: lazy

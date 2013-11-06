@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.actions;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorReference;
 import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.FolderItem;
 import org.talend.core.model.properties.FolderType;
 import org.talend.core.model.properties.Item;
@@ -28,6 +30,7 @@ import org.talend.core.model.properties.TDQItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
+import org.talend.dataquality.record.linkage.ui.service.IMatchRuleChangeService;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
@@ -89,6 +92,10 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         }
 
         selectedObject.removeAll(lockedObjs);
+        // handle delete event for DQ match rule object
+        if (!handleDeleteEvent(selectedObject)) {
+            return;
+        }
         for (Object obj : selectedObject) {
             if (obj instanceof IRepositoryViewObject) {
                 IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
@@ -112,6 +119,45 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         if (lockedObjs.size() > 0) {
             MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
         }
+    }
+
+    private void collectSelectedMatchRuleObjs(Object obj, List<IRepositoryViewObject> matchRules) {
+        IRepositoryViewObject viewObj = (IRepositoryViewObject) obj;
+        if (viewObj instanceof FolderRepositoryObject) {
+            for (IRepositoryViewObject child : ((FolderRepositoryObject) viewObj).getChildren()) {
+                collectSelectedMatchRuleObjs(child, matchRules);
+            }
+        } else if (viewObj.getRepositoryObjectType() == ERepositoryObjectType.TDQ_RULES_MATCHER) {
+            matchRules.add(viewObj);
+        }
+    }
+
+    private boolean handleDeleteEvent(List<Object> selectedObject) {
+        List<IRepositoryViewObject> matchRules = new LinkedList<IRepositoryViewObject>();
+        for (Object object : selectedObject) {
+            collectSelectedMatchRuleObjs(object, matchRules);
+        }
+
+        if (!matchRules.isEmpty()) {
+            IMatchRuleChangeService changeService = getMatchRuleChangeService();
+            if (changeService == null) {
+                return true;
+            } else {
+                boolean isOk = changeService.objectChange(null, matchRules, null,
+                        IMatchRuleChangeService.ChangeEvent.BEFORE_DELETE);
+                return isOk;
+            }
+        }
+        return true;
+    }
+
+    private IMatchRuleChangeService getMatchRuleChangeService() {
+        if (GlobalServiceRegister.getDefault().isServiceRegistered(IMatchRuleChangeService.class)) {
+            IMatchRuleChangeService service = (IMatchRuleChangeService) GlobalServiceRegister.getDefault().getService(
+                    IMatchRuleChangeService.class);
+            return service;
+        }
+        return null;
     }
 
     private boolean isServerObject(IRepositoryViewObject viewObj) {
