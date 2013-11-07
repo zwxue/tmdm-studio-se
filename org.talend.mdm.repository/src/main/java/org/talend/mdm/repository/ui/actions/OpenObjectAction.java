@@ -214,6 +214,7 @@ public class OpenObjectAction extends AbstractRepositoryAction {
 
     private void openItem(IRepositoryViewObject viewObject) {
         Item item = viewObject.getProperty().getItem();
+        item = RepositoryResourceUtil.assertItem(item);
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
         if (configuration != null) {
             IRepositoryNodeActionProvider actionProvider = configuration.getActionProvider();

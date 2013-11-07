@@ -99,7 +99,7 @@ import com.amalto.workbench.views.MDMPerspective;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class MDMRepositoryView extends CommonNavigator implements ITabbedPropertySheetPageContributor {
 
@@ -506,7 +506,9 @@ public class MDMRepositoryView extends CommonNavigator implements ITabbedPropert
 
         private void lock(IRepositoryViewObject workflowViewObject) {
             try {
-                factory.isEditableAndLockIfPossible(workflowViewObject);
+                Item item = workflowViewObject.getProperty().getItem();
+                item = RepositoryResourceUtil.assertItem(item);
+                factory.isEditableAndLockIfPossible(item);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
