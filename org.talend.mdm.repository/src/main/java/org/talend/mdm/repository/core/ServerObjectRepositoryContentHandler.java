@@ -13,6 +13,7 @@ import org.talend.core.repository.utils.XmiResourceManager;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 public class ServerObjectRepositoryContentHandler extends AbstractRepositoryContentHandler implements IServerObjectRepositoryType {
 
@@ -46,6 +47,7 @@ public class ServerObjectRepositoryContentHandler extends AbstractRepositoryCont
 
     public Resource save(Item item) throws PersistenceException {
         IRepositoryNodeConfiguration configuration = RepositoryNodeConfigurationManager.getConfiguration(item);
+        item = RepositoryResourceUtil.assertItem(item);
         if (configuration != null) {
             return configuration.getResourceProvider().save(item);
         } else if (item instanceof MDMServerObjectItem) {
