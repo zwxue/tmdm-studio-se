@@ -357,28 +357,78 @@ public class ConsistencyService {
         Map<IRepositoryViewObject, WSDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
         int conflictCount = getConflictCount(viewObjMap);
         if (conflictCount > 0) {
+            ConsistencyCheckResult result = null;
             if (isWarnUserWhenConflict()) {
                 ConfirmConflictMessageDialog confirmDialog = new ConfirmConflictMessageDialog(getShell(), conflictCount);
                 int returnValue = confirmDialog.open();
                 if (returnValue == IDialogConstants.OK_ID) {
                     int strategy = confirmDialog.getStrategy();
-                    return getCheckResultByStrategy(strategy, viewObjMap);
+                    result = getCheckResultByStrategy(strategy, viewObjMap);
                 } else if (returnValue == IDialogConstants.DETAILS_ID) {
                     ConsistencyConflictDialog dialog = new ConsistencyConflictDialog(getShell(), conflictCount, viewObjMap);
                     dialog.open();
-                    return dialog.getResult();
+                    result = dialog.getResult();
                 } else {
-                    return new ConsistencyCheckResult();
+                    result = new ConsistencyCheckResult();
                 }
             } else {
                 int strategy = getConflictStrategy();
-                return getCheckResultByStrategy(strategy, viewObjMap);
+                result = getCheckResultByStrategy(strategy, viewObjMap);
             }
+            correctCheckResult(result);
+            return result;
 
         } else {
             return new ConsistencyCheckResult(viewObjs);
         }
 
+    }
+
+    private void correctCheckResult(ConsistencyCheckResult result) {
+        correctCheckResultForAssociatedObj(result.getToDeployObjects(), result.getToSkipObjects());
+        correctCheckResultForAssociatedObj(result.getToSkipObjects(), result.getToDeployObjects());
+    }
+
+    private List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject viewObj) {
+        ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+        if (type != null) {
+            IInteractiveHandler handler = InteractiveService.findHandler(type);
+            if (handler != null) {
+                return handler.getAssociatedObjects(viewObj);
+            }
+        }
+        return null;
+
+    }
+
+    private void correctCheckResultForAssociatedObj(List<IRepositoryViewObject> sourceObjs, List<IRepositoryViewObject> targetObjs) {
+        if (sourceObjs != null && targetObjs != null) {
+            for (IRepositoryViewObject viewObj : sourceObjs.toArray(new IRepositoryViewObject[0])) {
+                List<IRepositoryViewObject> associatedObjects = getAssociatedObjects(viewObj);
+                List correctedAssociatedObjs = getAssociatedObjects(associatedObjects, targetObjs);
+                if (correctedAssociatedObjs != null && !correctedAssociatedObjs.isEmpty()) {
+                    targetObjs.removeAll(correctedAssociatedObjs);
+                    sourceObjs.addAll(correctedAssociatedObjs);
+                }
+            }
+        }
+    }
+
+    private List<IRepositoryViewObject> getAssociatedObjects(List<IRepositoryViewObject> associatedObjects,
+            List<IRepositoryViewObject> targetObjs) {
+        if (associatedObjects == null) {
+            return null;
+        }
+        List<IRepositoryViewObject> returnObjs = new LinkedList<IRepositoryViewObject>();
+        for (IRepositoryViewObject viewObj : targetObjs) {
+            for (IRepositoryViewObject associateObj : associatedObjects) {
+                if (viewObj.getRepositoryObjectType() == associateObj.getRepositoryObjectType()
+                        && viewObj.getLabel().equals(associateObj.getLabel())) {
+                    returnObjs.add(viewObj);
+                }
+            }
+        }
+        return returnObjs;
     }
 
     private ConsistencyCheckResult getCheckResultByStrategy(int strategy, Map<IRepositoryViewObject, WSDigest> viewObjMap) {
