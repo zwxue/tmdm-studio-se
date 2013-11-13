@@ -22,6 +22,8 @@ import org.eclipse.core.runtime.MultiStatus;
  */
 public interface IDataContentProcess {
 
+    int MAX_EXPORT_COUNT = 10000;
+
     public static final String RULE_FILE_NAME = ".list"; //$NON-NLS-1$
 
     public void run() throws InterruptedException;

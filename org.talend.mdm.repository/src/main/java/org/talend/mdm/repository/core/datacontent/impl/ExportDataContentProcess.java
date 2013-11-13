@@ -28,7 +28,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.exolab.castor.xml.Marshaller;
@@ -40,6 +42,7 @@ import org.talend.mdm.repository.utils.IOUtil;
 import org.talend.repository.utils.ZipFileUtils;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
@@ -173,20 +176,24 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
 
         }
 
-        protected void exportCluster(XtentisPort port, String tempFolderPath, String dName, IProgressMonitor monitor) {
+        protected int exportCluster(XtentisPort port, String tempFolderPath, String dName, IProgressMonitor monitor) {
 
             String encodedID = null;
             WSDataClusterPK pk = new WSDataClusterPK(dName);
             try {
                 List<String> items = new ArrayList<String>();
                 WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
-                        new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, Integer.MAX_VALUE))
-                        .getResults();
+                        new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, MAX_EXPORT_COUNT)).getResults();
                 if (results == null) {
-                    return;
+                    return -1;
                 }
                 monitor.beginTask(Messages.ExportDataClusterAction_exportContent, results.length + 10);
                 monitor.subTask(Messages.ExportDataClusterAction_exporting);
+                int totalSize = 0;
+                if (results.length > 0) {
+                    totalSize = Integer.parseInt(Util.parse(results[0].getWsItemPK().getConceptName()).getDocumentElement()
+                            .getTextContent());
+                }
                 for (WSItemPKsByCriteriaResponseResults item : results) {
                     if (item.getWsItemPK().getIds() == null) {
                         continue;
@@ -206,9 +213,11 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
                     items.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
                     monitor.worked(1);
                 }
+                return totalSize;
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
+            return -1;
         }
 
         /*
@@ -217,12 +226,20 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-            //
-            exportCluster(port, tempFolderPath, dName, monitor);
+            final int totalSize = exportCluster(port, tempFolderPath, dName, monitor);
             zipFile(tempFolderPath, outputPath, monitor);
             IOUtil.cleanFolder(new File(tempFolderPath));
             monitor.done();
+            if (totalSize >= MAX_EXPORT_COUNT) {
+                Display.getDefault().asyncExec(new Runnable() {
+
+                    public void run() {
+                        MessageDialog.openWarning(Display.getDefault().getActiveShell(), Messages.Common_Warning, Messages.bind(
+                                Messages.ExportDataContentProcess_greaterThanMaxExportLimit, totalSize, MAX_EXPORT_COUNT));
+                    }
+                });
+
+            }
         }
 
         protected void writeString(String exportFolder, String outputStr, String filename) {
