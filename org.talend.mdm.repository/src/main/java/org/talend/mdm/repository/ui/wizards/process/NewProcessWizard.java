@@ -121,7 +121,7 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
 
     /**
      * DOC hbhong Comment method "createProcessStep".
-     * 
+     *
      * @param steps
      * @param processType
      */
@@ -180,18 +180,13 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
 
             break;
         case TYPE_OTHER:
-            WSTransformerProcessStepE updateStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_UPDATE_REPORT,
-                    null, processName, createJob);
-            WSTransformerProcessStepE escapeStep2 = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_ESCAPE, null,
-                    processName, createJob);
-            steps.add(updateStep2);
-            steps.add(escapeStep2);
-
-            // job name can't contains #,$ etc
-            processName = processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
-            callJobStep = ProcessStepFactory.createProcessStep(ProcessStepFactory.STEP_REDIRECT, null, processName, createJob);
-            steps.add(callJobStep);
-
+            if (createJob) {
+                // job name can't contains #,$ etc
+                processName = processName.replaceAll("#|\\$", ""); //$NON-NLS-1$ //$NON-NLS-2$
+                callJobStep = ProcessStepFactory
+                        .createProcessStep(ProcessStepFactory.STEP_REDIRECT, null, processName, createJob);
+                steps.add(callJobStep);
+            }
             break;
         case TYPE_SMARTVIEW:
             WSTransformerProcessStepE xsltStep = ProcessStepFactory.createSmartViewStep();
@@ -208,8 +203,9 @@ public class NewProcessWizard extends Wizard implements ITransformerV2NodeConsDe
 
     public void generateJobTemplate() {
         int type = inputProcessNamePage.getProcessType();
-        if (type == TYPE_SMARTVIEW)// don't create job if smartview
+        if (type == TYPE_SMARTVIEW) {// don't create job if smartview
             return;
+        }
         String[] messages = configReturnMessagePage.getMessageParams();
         String infoType = null;
         String pMessage = null;
