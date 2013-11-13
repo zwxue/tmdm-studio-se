@@ -685,7 +685,7 @@
          point="org.eclipse.ui.commands">
       <command
             id="org.talend.mdm.repository.show.welcomeEditor.command"
-            name="Get Started With Talend MDM">
+            name="Getting started with Talend MDM">
       </command>
    </extension>
    <extension
