@@ -47,19 +47,23 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
         return true;
     }
 
+    private boolean isCanceled = true;
+
     @Override
     protected void doRun() {
-        for (Object obj : getSelectedObject()) {
-            if (obj instanceof IRepositoryViewObject) {
-                viewObject = (IRepositoryViewObject) obj;
-                Wizard wizard = getEditWizard(viewObject);
+        Object obj = getSelectedObject().get(0);
+        if (obj instanceof IRepositoryViewObject) {
+            viewObject = (IRepositoryViewObject) obj;
+            Wizard wizard = getEditWizard(viewObject);
 
-                WizardDialog dlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
-                if (dlg.open() == Window.OK) {
-                    commonViewer.refresh(obj);
-                }
-
+            WizardDialog dlg = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
+            if (dlg.open() == Window.OK) {
+                isCanceled = false;
+                commonViewer.refresh(obj);
+            } else {
+                isCanceled = true;
             }
+
         }
 
     }
@@ -78,5 +82,9 @@ public class MDMEditPropertyAction extends AbstractRepositoryAction {
             return true;
         }
         return false;
+    }
+
+    protected boolean isCanceled() {
+        return this.isCanceled;
     }
 }

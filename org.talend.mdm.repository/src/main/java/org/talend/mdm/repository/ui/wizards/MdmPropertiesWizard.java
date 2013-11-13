@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Text;
 import org.talend.commons.exception.LoginException;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.commons.ui.runtime.exception.MessageBoxExceptionHandler;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryObject;
@@ -40,6 +41,7 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.WSResourceItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.mdm.repository.utils.ValidateUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.ui.wizards.PropertiesWizard;
@@ -78,9 +80,9 @@ public class MdmPropertiesWizard extends PropertiesWizard {
             return false;
         }
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
-        MDMServerObjectItem item = (MDMServerObjectItem) object.getProperty().getItem();
+        Item item = object.getProperty().getItem();
         String newName = object.getLabel();
-        MDMServerObject serverObject = item.getMDMServerObject();
+        MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
         if (serverObject != null) {
             String oldName = serverObject.getName();
             try {
@@ -89,8 +91,8 @@ public class MdmPropertiesWizard extends PropertiesWizard {
 
                     serverObject.setName(newName);
                     beforeSave(object, oldVersion);
-
-                    factory.save(object.getProperty().getItem(), false);
+                    item = RepositoryResourceUtil.assertItem(item);
+                    factory.save(item, false);
                     afterSave(object, oldVersion);
                     if (!oldName.equals(newName) && serverObject.getLastServerDef() != null) {
                         CommandManager.getInstance().pushCommand(ICommand.CMD_RENAME, object.getId(),

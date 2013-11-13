@@ -37,35 +37,35 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
 
     private static Logger log = Logger.getLogger(MDMEditViewProcessPropertyAction.class);
 
-    private String oldProcessName;
-
-    private IRepositoryViewObject parent;
-
     @Override
     protected void doRun() {
         Object object = getSelectedObject().get(0);
+        String oldPath = null;
+        String oldProcessName = null;
         if (object instanceof IRepositoryViewObject) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) object;
-            parent = ContainerCacheService.getParent(viewObj);
+
+            oldPath = viewObj.getProperty().getItem().getState().getPath();
             oldProcessName = viewObj.getProperty().getLabel();
+            super.doRun();
+            if (!isCanceled()) {
+                if (viewObject != null) {
+                    moveViewOrProcess(oldProcessName, oldPath);
+                }
+            }
         }
 
-        super.doRun();
-
-        if (viewObject != null) {
-            moveViewOrProcess();
-        }
     }
 
-    private void moveViewOrProcess() {
+    private void moveViewOrProcess(String oldProcessName, String oldPath) {
         Item item = viewObject.getProperty().getItem();
         String label = item.getProperty().getLabel();
         ERepositoryObjectType type = viewObject.getRepositoryObjectType();
 
-        String path = getNewPath(type, label, oldProcessName);
+        String newPath = getNewPath(type, label, oldProcessName);
 
-        if (path != null) {
-            moveToOtherTypeNode(viewObject, path);
+        if (newPath != null && oldPath != null && !newPath.equals(oldPath)) {
+            moveToOtherTypeNode(viewObject, oldPath, newPath);
         }
     }
 
@@ -118,19 +118,20 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
         return path;
     }
 
-    private void moveToOtherTypeNode(IRepositoryViewObject viewObj, String path) {
+    private void moveToOtherTypeNode(IRepositoryViewObject viewObj, String oldPath, String newPath) {
         MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
-        item.getState().setPath(path);
+        item.getState().setPath(newPath);
 
         waitSomeTime(viewObj);
 
         IProxyRepositoryFactory factory = getFactory();
         try {
             if (factory.isEditableAndLockIfPossible(item)) {
-                IPath ipath = new Path(path);
+                IPath ipath = new Path(newPath);
                 factory.moveObject(viewObj, ipath);
-
-                refreshTree(viewObj);
+                ERepositoryObjectType type = viewObj.getRepositoryObjectType();
+                refreshTree(type, oldPath);
+                refreshTree(type, newPath);
             }
         } catch (PersistenceException e) {
             log.error(e.getMessage(), e);
@@ -153,26 +154,13 @@ public class MDMEditViewProcessPropertyAction extends MDMEditPropertyAction {
         }
     }
 
-    private void refreshTree(IRepositoryViewObject viewObj) {
-        MDMServerObjectItem item = (MDMServerObjectItem) viewObj.getProperty().getItem();
-        final ERepositoryObjectType repositoryObjectType = viewObj.getRepositoryObjectType();
-        final String newPath = item.getState().getPath();
+    private void refreshTree(final ERepositoryObjectType type, final String path) {
 
         Display.getCurrent().asyncExec(new Runnable() {
 
             public void run() {
-                IRepositoryViewObject iRepositoryViewObject = ContainerCacheService.get(repositoryObjectType, newPath);
+                IRepositoryViewObject iRepositoryViewObject = ContainerCacheService.get(type, path);
                 commonViewer.refresh(iRepositoryViewObject);
-
-                String parentPath = parent.getPath();
-                int index = parentPath.indexOf("/"); //$NON-NLS-1$
-                if (index != -1) {
-                    parentPath = parentPath.substring(0, index);
-                }
-
-                IRepositoryViewObject iRepositoryViewObject2 = ContainerCacheService
-                        .get(repositoryObjectType, parentPath);
-                commonViewer.refresh(iRepositoryViewObject2);
             }
         });
     }
