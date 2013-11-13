@@ -440,6 +440,8 @@ public class Messages extends NLS {
 
     public static String ExportDataContentProcess_CanNotConnectServer;
 
+    public static String ExportDataContentProcess_greaterThanMaxExportLimit;
+
     public static String ExportObjectAction_error;
 
     public static String XSDSetAnnotationRoles;
