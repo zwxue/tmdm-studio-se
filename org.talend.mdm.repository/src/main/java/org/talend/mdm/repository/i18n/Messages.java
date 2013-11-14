@@ -180,7 +180,11 @@ public class Messages extends NLS {
 
     public static String DuplicateAction_duplicate;
 
+    public static String NewDataModelAction_CanNotCreateModel;
+
     public static String NewDataModelAction_newDataModel;
+
+    public static String NewDataModelAction_UserAuthority;
 
     public static String NewMenuAction_newMenu;
 

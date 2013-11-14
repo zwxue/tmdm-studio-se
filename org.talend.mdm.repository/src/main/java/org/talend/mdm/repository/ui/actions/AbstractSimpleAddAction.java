@@ -14,7 +14,6 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -55,28 +54,30 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
     protected abstract String getDialogTitle();
 
+    @Override
     protected void doRun() {
         getParentItem();
 
         String key = getInputName();
         if (key != null) {
             Item item = createServerObject(key);
-            commonViewer.refresh(selectObj);
-            commonViewer.expandToLevel(selectObj, 1);
+            getCommonViewer().refresh(selectObj);
+            getCommonViewer().expandToLevel(selectObj, 1);
             if (runOpenActionAfterCreation(item)) {
                 openEditor(item);
             }
         }
-        
+
     }
 
     private String getInputName() {
         InputDialog dlg = new InputDialog(getShell(), getDialogTitle(), Messages.Common_inputName, null, new IInputValidator() {
 
             public String isValid(String newText) {
-                if (newText == null || newText.trim().length() == 0)
+                if (newText == null || newText.trim().length() == 0) {
                     return Messages.Common_nameCanNotBeEmpty;
-                if (!ValidateUtil.matchCommonRegex(newText)) {//$NON-NLS-1$
+                }
+                if (!ValidateUtil.matchCommonRegex(newText)) {
                     return Messages.Common_nameInvalid;
                 }
                 if (RepositoryResourceUtil.isExistByName(parentItem.getRepObjType(), newText.trim())) {
@@ -86,20 +87,23 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
             };
         });
         dlg.setBlockOnOpen(true);
-        if (dlg.open() == Window.CANCEL)
+        if (dlg.open() == Window.CANCEL) {
             return null;
-        
+        }
+
         String key = dlg.getValue();
         return key;
     }
-    
+
     protected void getParentItem() {
         parentItem = null;
-        selectObj = getSelectedObject().get(0);
-        if (selectObj instanceof IRepositoryViewObject) {
-            Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
-            if (pItem instanceof ContainerItem) {
-                parentItem = (ContainerItem) pItem;
+        if (!getSelectedObject().isEmpty()) {
+            selectObj = getSelectedObject().get(0);
+            if (selectObj instanceof IRepositoryViewObject) {
+                Item pItem = ((IRepositoryViewObject) selectObj).getProperty().getItem();
+                if (pItem instanceof ContainerItem) {
+                    parentItem = (ContainerItem) pItem;
+                }
             }
         }
     }
@@ -109,8 +113,9 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
     }
 
     protected void openEditor(Item item) {
-        if (item == null)
+        if (item == null) {
             return;
+        }
         IRepositoryViewObject viewObject = ContainerCacheService.get(item.getProperty());
         OpenObjectAction action = new OpenObjectAction();
         List<Object> selObjects = new ArrayList<Object>();
@@ -121,6 +126,7 @@ public abstract class AbstractSimpleAddAction extends AbstractRepositoryAction {
 
     protected abstract Item createServerObject(String key);
 
+    @Override
     public String getGroupName() {
         return GROUP_EDIT;
     }

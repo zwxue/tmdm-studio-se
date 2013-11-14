@@ -23,6 +23,7 @@ package org.talend.mdm.repository.ui.actions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
@@ -33,7 +34,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.intro.IIntroSite;
+import org.eclipse.ui.intro.config.IIntroAction;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
@@ -71,7 +75,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
  * DOC hbhong class global comment. Detailled comment <br/>
  * 
  */
-public class OpenObjectAction extends AbstractRepositoryAction {
+public class OpenObjectAction extends AbstractRepositoryAction implements IIntroAction {
 
     private static Logger log = Logger.getLogger(OpenObjectAction.class);
 
@@ -351,6 +355,22 @@ public class OpenObjectAction extends AbstractRepositoryAction {
         selObjs.add(viewObj);
         setSelObjects(selObjs);
         run();
+    }
+
+    public void run(IIntroSite site, Properties params) {
+        PlatformUI.getWorkbench().getIntroManager().closeIntro(PlatformUI.getWorkbench().getIntroManager().getIntro());
+        Object id = params.get("nodeId"); //$NON-NLS-1$
+        if (id != null) {
+            try {
+                IRepositoryViewObject selectedObj = factory.getLastVersion((String) id);
+                List selObjs = new ArrayList(1);
+                selObjs.add(selectedObj);
+                setSelObjects(selObjs);
+                run();
+            } catch (PersistenceException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
     }
 
 }
