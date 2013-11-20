@@ -35,7 +35,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 
@@ -64,11 +67,14 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     private com.amalto.workbench.editors.XObjectEditor.TdEditorToolBar toolBar;
 
+    public static final String CONTRIBUTTION_ID = "org.talend.mdm.workbench.editorContribution.XObjectEditor";
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.forms.editor.FormEditor#addPages()
      */
+    @Override
     protected void addPages() {
 
         updateTitle();
@@ -79,8 +85,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         this.initialXObject = new TreeObject(xobject.getDisplayName(), xobject.getServerRoot(), xobject.getType(),
                 xobject.getWsKey(), xobject.getWsObject(), xobject.getAdditionalInfo());
 
-        if (!xobject.isXObject())
+        if (!xobject.isXObject()) {
             return;
+        }
 
         // register model listener
         xobject.addListener(this);
@@ -92,6 +99,14 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
         addPageForXObject(xobject);
 
+        registerAction();
+    }
+
+
+    private void registerAction() {
+        IEditorSite editorSite = getEditorSite();
+        IKeyBindingService keyBindingService = editorSite.getKeyBindingService();
+        keyBindingService.registerAction(ActionFactory.SAVE.create(editorSite.getWorkbenchWindow()));
     }
 
     public void setName(String name) {
@@ -99,7 +114,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     }
     /**
      * DOC hbhong Comment method "addPageForXObject".
-     * 
+     *
      * @throws PartInitException
      */
     protected void addPageForXObject(TreeObject xobject) {
@@ -180,6 +195,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     }
 
     // Overloaded - Fixes issues with getEditor()
+    @Override
     public int addPage(IFormPage page) throws PartInitException {
         // ((DataModelMainPage)page).markDirty();
         formPages.add(page);
@@ -189,9 +205,10 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
      */
+    @Override
     public void doSave(IProgressMonitor monitor) {
 
         this.saveInProgress = true;
@@ -207,8 +224,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
             monitor.beginTask(Messages.bind(Messages.XObjectEditor_Saving, this.getEditorInput().getName()), numPages + 1);
             for (int i = 0; i < numPages; i++) {
                 if ((formPages.get(i)) instanceof AFormPage) {
-                    if (!((AFormPage) (formPages.get(i))).beforeDoSave())
+                    if (!((AFormPage) (formPages.get(i))).beforeDoSave()) {
                         return;
+                    }
                 }
                 (formPages.get(i)).doSave(monitor);
                 monitor.worked(1);
@@ -233,13 +251,15 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ui.ISaveablePart#isSaveAsAllowed()
      */
+    @Override
     public boolean isSaveAsAllowed() {
         return false;
     }
 
+    @Override
     public void doSaveAs() {
     }
 
@@ -249,6 +269,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         setContentDescription("");//$NON-NLS-1$
     }
 
+    @Override
     public void dispose() {
         // save space
         TreeObject xobject = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
@@ -267,18 +288,20 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         TreeObject xobject = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
         switch (type) {
         case IXObjectModelListener.DELETE:
-            if (xobject.equals(child))
+            if (xobject.equals(child)) {
                 this.close(false);
+            }
             break;
         case IXObjectModelListener.SAVE:
-            if (saveInProgress)
+            if (saveInProgress) {
                 this.editorDirtyStateChanged();
-            else
+            } else {
                 /*
                  * MessageDialog.openWarning( this.getSite().getShell(), "Warning underlying data changed",
                  * "The current displayed data may not be in sync with the data persisted on the server." );
                  */
                 break;
+            }
         case IXObjectModelListener.UPDATE:
             if (xobject.equals(child)) {
                 AFormPage activePage = ((AFormPage) getActivePageInstance());
@@ -303,6 +326,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         return initialXObject;
     }
 
+    @Override
     protected void pageChange(int newPageIndex) {
         AFormPage page = (AFormPage) formPages.get(0);
         boolean isdirty = page.isDirty();
@@ -335,40 +359,41 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     public Image getTitleImage() {
         TreeObject object = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
 
-        if (object.getType() == TreeObject._SERVER_)
+        if (object.getType() == TreeObject._SERVER_) {
             return ImageCache.getCreatedImage("icons/talend-picto-small.gif");//$NON-NLS-1$
-        else if (object.getType() == TreeObject.DATA_CLUSTER)
+        } else if (object.getType() == TreeObject.DATA_CLUSTER) {
             return ImageCache.getCreatedImage(EImage.DATA_CLUSTER.getPath());
-        else if (object.getType() == TreeObject.DATA_MODEL)
+        } else if (object.getType() == TreeObject.DATA_MODEL) {
             return ImageCache.getCreatedImage(EImage.DATA_MODEL.getPath());
-        else if (object.getType() == TreeObject.MENU)
+        } else if (object.getType() == TreeObject.MENU) {
             return ImageCache.getCreatedImage(EImage.MENU.getPath());
-        else if (object.getType() == TreeObject.TRANSFORMER)
+        } else if (object.getType() == TreeObject.TRANSFORMER) {
             return ImageCache.getCreatedImage(EImage.TRANSFORMER.getPath());
-        else if (object.getType() == TreeObject.ROLE)
+        } else if (object.getType() == TreeObject.ROLE) {
             return ImageCache.getCreatedImage(EImage.ROLE.getPath());
-        else if (object.getType() == TreeObject.STORED_PROCEDURE)
+        } else if (object.getType() == TreeObject.STORED_PROCEDURE) {
             return ImageCache.getCreatedImage(EImage.STORED_PROCEDURE.getPath());
-        else if (object.getType() == TreeObject.ROUTING_RULE)
+        } else if (object.getType() == TreeObject.ROUTING_RULE) {
             return ImageCache.getCreatedImage(EImage.ROUTING_RULE.getPath());
-        else if (object.getType() == TreeObject.VIEW)
+        } else if (object.getType() == TreeObject.VIEW) {
             return ImageCache.getCreatedImage(EImage.VIEW.getPath());
-        else if (object.getType() == TreeObject.DOCUMENT)
+        } else if (object.getType() == TreeObject.DOCUMENT) {
             return ImageCache.getCreatedImage(EImage.DOCUMENTS.getPath());
-        else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
+        } else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE) {
             return ImageCache.getCreatedImage(EImage.SUBSCRIPTION_ENGINE.getPath());
-        else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
+        } else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN) {
             return ImageCache.getCreatedImage(EImage.SYNCHRONIZATIONPLAN.getPath());
-        else if (object.getType() == TreeObject.UNIVERSE)
+        } else if (object.getType() == TreeObject.UNIVERSE) {
             return ImageCache.getCreatedImage(EImage.UNIVERSE.getPath());
-        else if (object.getType() == TreeObject.SERVICE_CONFIGURATION)
+        } else if (object.getType() == TreeObject.SERVICE_CONFIGURATION) {
             return ImageCache.getCreatedImage(EImage.SERVICE_CONFIGURATION.getPath());
-        else if (object.getType() == TreeObject.RESOURCES || object.getType() == TreeObject.DATA_MODEL_RESOURCE
+        } else if (object.getType() == TreeObject.RESOURCES || object.getType() == TreeObject.DATA_MODEL_RESOURCE
                 || object.getType() == TreeObject.DATA_MODEL_TYPES_RESOURCE
-                || object.getType() == TreeObject.CUSTOM_TYPES_RESOURCE || object.getType() == TreeObject.PICTURES_RESOURCE)
+                || object.getType() == TreeObject.CUSTOM_TYPES_RESOURCE || object.getType() == TreeObject.PICTURES_RESOURCE) {
             return ImageCache.getCreatedImage(EImage.RESOURCES.getPath());
-        else if (object.getType() == TreeObject.JOB)
+        } else if (object.getType() == TreeObject.JOB) {
             return ImageCache.getCreatedImage(EImage.JOB.getPath());
+        }
 
         return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
     }
@@ -377,11 +402,13 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         return xmlEditor;
     }
 
+    @Override
     public int getCurrentPage() {
 
         return super.getCurrentPage();
     }
 
+    @Override
     protected Composite createPageContainer(Composite parent) {
         GridLayout gridLayout = new GridLayout();
         gridLayout.verticalSpacing = 0;
@@ -428,7 +455,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
 
     /**
      * DOC bzhou Comment method "getToolBar".
-     * 
+     *
      * @return
      */
     public TdEditorToolBar getToolBar() {
@@ -493,7 +520,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         }
 
         /**
-         * 
+         *
          * DOC mzhao TdEditorToolBar class global comment. Detailled comment
          */
         private class RefreshSectionAction extends Action {
