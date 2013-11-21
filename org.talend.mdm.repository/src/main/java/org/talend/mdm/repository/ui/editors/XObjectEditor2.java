@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
@@ -55,6 +56,10 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
     @Override
     public void doSave(IProgressMonitor monitor) {
 
+        if (monitor == null) {
+            monitor = new NullProgressMonitor();
+        }
+
         this.saveInProgress = true;
         try {
             // For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data
@@ -68,8 +73,9 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
             monitor.beginTask(Messages.bind(Messages.XObjectEditor2_saving, this.getEditorInput().getName()), numPages + 1);
             for (int i = 0; i < numPages; i++) {
                 if ((formPages.get(i)) instanceof AFormPage) {
-                    if (!((AFormPage) (formPages.get(i))).beforeDoSave())
+                    if (!((AFormPage) (formPages.get(i))).beforeDoSave()) {
                         return;
+                    }
                 }
                 (formPages.get(i)).doSave(monitor);
                 monitor.worked(1);
@@ -122,8 +128,9 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
     }
 
     public void autoDeployProcess(DeployService deployService) {
-        if (deployService == null)
+        if (deployService == null) {
             return;
+        }
 
         IEditorInput input = getEditorInput();
         XObjectEditorInput2 theInput = null;

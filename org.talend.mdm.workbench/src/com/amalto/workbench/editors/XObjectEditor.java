@@ -35,10 +35,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 
@@ -66,8 +63,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
     protected XMLEditor xmlEditor;
 
     private com.amalto.workbench.editors.XObjectEditor.TdEditorToolBar toolBar;
-
-    public static final String CONTRIBUTTION_ID = "org.talend.mdm.workbench.editorContribution.XObjectEditor";
 
     /*
      * (non-Javadoc)
@@ -98,15 +93,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener, 
         }
 
         addPageForXObject(xobject);
-
-        registerAction();
-    }
-
-
-    private void registerAction() {
-        IEditorSite editorSite = getEditorSite();
-        IKeyBindingService keyBindingService = editorSite.getKeyBindingService();
-        keyBindingService.registerAction(ActionFactory.SAVE.create(editorSite.getWorkbenchWindow()));
     }
 
     public void setName(String name) {
