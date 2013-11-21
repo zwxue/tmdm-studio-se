@@ -19,6 +19,7 @@ import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +55,7 @@ import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesPackage;
@@ -353,6 +355,16 @@ public class ConsistencyService {
 
     public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, Collection<IRepositoryViewObject> viewObjs)
             throws XtentisException, RemoteException {
+        Map<IRepositoryViewObject, Integer> viewObCmdOpjMap = new HashMap<IRepositoryViewObject, Integer>();
+        for (IRepositoryViewObject viewObj : viewObjs) {
+            viewObCmdOpjMap.put(viewObj, ICommand.CMD_MODIFY);
+        }
+        return checkConsistency(serverDef, viewObCmdOpjMap);
+    }
+
+    public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, Map<IRepositoryViewObject, Integer> viewObCmdOpjMap)
+            throws XtentisException, RemoteException {
+        Collection<IRepositoryViewObject> viewObjs = viewObCmdOpjMap.keySet();
         updateCurrentlDigestValue(viewObjs);
         Map<IRepositoryViewObject, WSDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
         int conflictCount = getConflictCount(viewObjMap);
@@ -363,9 +375,10 @@ public class ConsistencyService {
                 int returnValue = confirmDialog.open();
                 if (returnValue == IDialogConstants.OK_ID) {
                     int strategy = confirmDialog.getStrategy();
-                    result = getCheckResultByStrategy(strategy, viewObjMap);
+                    result = getCheckResultByStrategy(strategy, viewObjMap, viewObCmdOpjMap);
                 } else if (returnValue == IDialogConstants.DETAILS_ID) {
-                    ConsistencyConflictDialog dialog = new ConsistencyConflictDialog(getShell(), conflictCount, viewObjMap);
+                    ConsistencyConflictDialog dialog = new ConsistencyConflictDialog(getShell(), conflictCount, viewObjMap,
+                            viewObCmdOpjMap);
                     dialog.open();
                     result = dialog.getResult();
                 } else {
@@ -373,7 +386,7 @@ public class ConsistencyService {
                 }
             } else {
                 int strategy = getConflictStrategy();
-                result = getCheckResultByStrategy(strategy, viewObjMap);
+                result = getCheckResultByStrategy(strategy, viewObjMap, viewObCmdOpjMap);
             }
             correctCheckResult(result);
             return result;
@@ -431,7 +444,8 @@ public class ConsistencyService {
         return returnObjs;
     }
 
-    private ConsistencyCheckResult getCheckResultByStrategy(int strategy, Map<IRepositoryViewObject, WSDigest> viewObjMap) {
+    private ConsistencyCheckResult getCheckResultByStrategy(int strategy, Map<IRepositoryViewObject, WSDigest> viewObjMap,
+            Map<IRepositoryViewObject, Integer> viewObCmdOpjMap) {
         List<IRepositoryViewObject> toDeployObjs = new LinkedList<IRepositoryViewObject>();
         List<IRepositoryViewObject> toSkipObjs = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryViewObject viewObj : viewObjMap.keySet()) {
@@ -444,9 +458,21 @@ public class ConsistencyService {
                 String rd = dt.getDigestValue();
                 String cd = getCurrentDigestValue(item);
                 CompareResultEnum result = getCompareResult(cd, ld, rd);
+                // update isDeleteOp
+                boolean isDeletedOp = false;
+                Integer cmdOp = viewObCmdOpjMap.get(viewObj);
+                if (cmdOp != null) {
+                    isDeletedOp = cmdOp == ICommand.CMD_DELETE;
+                }
+                //
                 if (result == CompareResultEnum.SAME) {
                     if (strategy == CONFLICT_STRATEGY_DEFAULT || strategy == CONFLICT_STRATEGY_SKIP_DIFFERENCE) {
-                        toSkipObjs.add(viewObj);
+                        if (isDeletedOp) {
+                            toDeployObjs.add(viewObj);
+                        } else {
+                            toSkipObjs.add(viewObj);
+                        }
+
                     } else if (strategy == CONFLICT_STRATEGY_OVERWRITE) {
                         toDeployObjs.add(viewObj);
                     }

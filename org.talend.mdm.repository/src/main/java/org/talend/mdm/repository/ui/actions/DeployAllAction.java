@@ -100,7 +100,8 @@ public class DeployAllAction extends AbstractDeployAction {
                 MDMServerDef serverDef = dialog.getServerDef();
                 try {
                     // consistency check
-                    ConsistencyCheckResult consistencyCheckResult = deployService.checkConsistency(serverDef, validObjects);
+                    ConsistencyCheckResult consistencyCheckResult = deployService.checkConsistency(serverDef, validObjects,
+                            selectededCommands);
                     if (consistencyCheckResult.isCanceled()) {
                         return;
                     } else {

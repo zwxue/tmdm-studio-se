@@ -29,13 +29,14 @@ import java.util.Set;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -43,7 +44,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -61,12 +61,15 @@ import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IRepositoryNodeConfiguration;
 import org.talend.mdm.repository.core.IRepositoryNodeLabelProvider;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
+import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.ConsistencyService;
 import org.talend.mdm.repository.core.service.ConsistencyService.CompareResultEnum;
 import org.talend.mdm.repository.core.service.ConsistencyService.ConsistencyCheckResult;
 import org.talend.mdm.repository.extension.RepositoryNodeConfigurationManager;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.models.FolderRepositoryObject;
+import org.talend.mdm.repository.plugin.RepositoryPlugin;
+import org.talend.mdm.repository.ui.navigator.MDMRepositoryLabelProvider;
 import org.talend.mdm.repository.utils.EclipseResourceManager;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
@@ -85,119 +88,108 @@ public class ConsistencyConflictDialog extends Dialog {
 
     private static final Color COLOR_LIGHT_GREEN = EclipseResourceManager.getColor(223, 255, 186);
 
-    private class ViewerLabelProvider implements ITableLabelProvider, IColorProvider {
+    private TreeViewerColumn localTimeColumn;
 
-        public void addListener(ILabelProviderListener listener) {
+    private TreeViewerColumn serverTimeColumn;
+
+    private Color getBackgroundColor(IRepositoryViewObject viewObj) {
+        CompareResultEnum cresult = getCompareResult(viewObj);
+        if (!isSkipObj(viewObj)) {
+            if (cresult == CompareResultEnum.CONFLICT || cresult == CompareResultEnum.POTENTIAL_CONFLICT) {
+                return COLOR_LIGHT_RED;
+            }
+            if (cresult == CompareResultEnum.MODIFIED_LOCALLY) {
+                return COLOR_LIGHT_GREEN;
+            }
         }
 
-        public void dispose() {
-        }
+        return null;
+    }
 
-        public boolean isLabelProperty(Object element, String property) {
-            return false;
-        }
+    class CommonLabelProvider extends ColumnLabelProvider {
 
-        public void removeListener(ILabelProviderListener listener) {
-        }
+        static final String BLANK = ""; //$NON-NLS-1$
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
-         */
-        public Color getForeground(Object element) {
-            return null;
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
-         */
+        @Override
         public Color getBackground(Object element) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
-            CompareResultEnum cresult = getCompareResult(viewObj);
-            if (!isSkipObj(viewObj)) {
-                if (cresult == CompareResultEnum.CONFLICT || cresult == CompareResultEnum.POTENTIAL_CONFLICT) {
-                    return COLOR_LIGHT_RED;
-                }
-                if (cresult == CompareResultEnum.MODIFIED_LOCALLY) {
-                    return COLOR_LIGHT_GREEN;
-                }
-            }
-
-            return null;
+            return getBackgroundColor(viewObj);
         }
 
-        public Image getColumnImage(Object element, int columnIndex) {
-            if (element instanceof IRepositoryViewObject) {
-                switch (columnIndex) {
-                case 0:
-                    IRepositoryNodeLabelProvider labelProvider = getLabelProvider((IRepositoryViewObject) element);
-                    if (labelProvider != null) {
-                        return labelProvider.getImage(element);
-                    }
+        protected boolean isViewObject(Object element) {
+            return !(element instanceof FolderRepositoryObject);
+        }
+    }
 
-                }
+    class OperationProvider extends CommonLabelProvider {
 
+        @Override
+        public String getText(Object element) {
+            if (isViewObject(element)) {
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+                return getOperationLabel(viewObj);
             }
-            return null;
+            return BLANK;
         }
 
-        public String getColumnText(Object element, int columnIndex) {
+    }
+
+    class TimeStampColumnProvider extends CommonLabelProvider {
+
+        private SimpleDateFormat df = new SimpleDateFormat("yy/MM/dd HH:mm:ss"); //$NON-NLS-1$
+
+        private final boolean isLocal;
+
+        public TimeStampColumnProvider(boolean isLocal) {
+            this.isLocal = isLocal;
+        }
+
+        @Override
+        public String getText(Object element) {
             IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
-            if (element instanceof FolderRepositoryObject) {
-                if (columnIndex == 0) {
-                    return getViewObjName(viewObj);
-                }
-            } else {
-                switch (columnIndex) {
-                // name
-                case 0:
-                    return getViewObjName(viewObj);
-                    // compare result:
-                case 1:
-                    CompareResultEnum compareResult = getCompareResult(viewObj);
-                    switch (compareResult) {
-                    case NOT_EXIST_IN_SERVER:
-                        return Messages.ConsistencyConflictDialog_notExist;
-                    case SAME:
-                        return Messages.ConsistencyConflict_Same;
-                    case CONFLICT:
-                        return Messages.ConsistencyConflict_Conflict;
-                    case POTENTIAL_CONFLICT:
-                        return Messages.ConsistencyConflict_potentialConflict;
-                    case MODIFIED_LOCALLY:
-                        return Messages.ConsistencyConflict_modifiedLocally;
-                    case NOT_SUPPORT:
-                        return Messages.ConsistencyConflict_undefined;
-                    }
-                    break;
-                // operation
-                case 2:
-                    return getOperationLabel(viewObj);
-
-                    // local timestamp
-                case 3:
+            if (isViewObject(element)) {
+                if (isLocal) {
                     Item item = viewObj.getProperty().getItem();
                     long localTimestamp = ConsistencyService.getInstance().getLocalTimestamp(item);
                     if (localTimestamp > 0) {
                         return df.format(new Date(localTimestamp));
                     }
-                    break;
-                // remote timestamp
-                case 4:
+                } else {
                     WSDigest dt = viewObjMap.get(viewObj);
                     if (dt != null) {
                         return df.format(new Date(dt.getTimeStamp()));
                     }
-                    break;
                 }
             }
-            return ""; //$NON-NLS-1$
+            return BLANK;
         }
 
-        private SimpleDateFormat df = new SimpleDateFormat("yy/MM/dd HH:mm:ss"); //$NON-NLS-1$
+    }
+
+    class CompareResultColumnProvider extends CommonLabelProvider {
+
+        @Override
+        public String getText(Object element) {
+            IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+            if (isViewObject(element)) {
+                CompareResultEnum compareResult = getCompareResult(viewObj);
+                switch (compareResult) {
+                case NOT_EXIST_IN_SERVER:
+                    return Messages.ConsistencyConflictDialog_notExist;
+                case SAME:
+                    return Messages.ConsistencyConflict_Same;
+                case CONFLICT:
+                    return Messages.ConsistencyConflict_Conflict;
+                case POTENTIAL_CONFLICT:
+                    return Messages.ConsistencyConflict_potentialConflict;
+                case MODIFIED_LOCALLY:
+                    return Messages.ConsistencyConflict_modifiedLocally;
+                case NOT_SUPPORT:
+                    return Messages.ConsistencyConflict_undefined;
+                }
+            }
+            return BLANK;
+        }
 
     }
 
@@ -306,16 +298,23 @@ public class ConsistencyConflictDialog extends Dialog {
 
     private ViewObjectComparator treeComparator;
 
+    private final Map<IRepositoryViewObject, Integer> viewObCmdOpjMap;
+
+    private TreeViewerColumn operationColumn;
+
     /**
      * Create the dialog.
      * 
      * @param parentShell
      * @param conflictCount
+     * @param viewObCmdOpjMap
      */
-    public ConsistencyConflictDialog(Shell parentShell, int conflictCount, Map<IRepositoryViewObject, WSDigest> viewObjMap) {
+    public ConsistencyConflictDialog(Shell parentShell, int conflictCount, Map<IRepositoryViewObject, WSDigest> viewObjMap,
+            Map<IRepositoryViewObject, Integer> viewObCmdOpjMap) {
         super(parentShell);
         this.conflictCount = conflictCount;
         this.viewObjMap = viewObjMap;
+        this.viewObCmdOpjMap = viewObCmdOpjMap;
         setShellStyle(SWT.TITLE | SWT.RESIZE);
     }
 
@@ -344,27 +343,8 @@ public class ConsistencyConflictDialog extends Dialog {
         tree.setHeaderVisible(true);
         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        tc0 = new TreeColumn(tree, SWT.NONE);
-        tc0.setWidth(160);
-        tc0.setText(Messages.ConsistencyConflict_name);
-
-        tc1 = new TreeColumn(tree, SWT.NONE);
-        tc1.setWidth(120);
-        tc1.setText(Messages.ConsistencyConflict_compareResult);
-
-        tc2 = new TreeColumn(tree, SWT.NONE);
-        tc2.setWidth(80);
-        tc2.setText(Messages.ConsistencyConflictDialog_Operation);
-
-        tc3 = new TreeColumn(tree, SWT.NONE);
-        tc3.setText(Messages.ConsistencyConflict_retrievalTimestamp);
-
-        tc4 = new TreeColumn(tree, SWT.NONE);
-        tc4.setText(Messages.ConsistencyConflict_serverTimestamp);
-
-        treeViewer.setLabelProvider(new ViewerLabelProvider());
         treeViewer.setContentProvider(new TreeContentProvider());
-
+        installColumns();
         Composite composite = new Composite(container, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
         composite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1));
@@ -432,12 +412,51 @@ public class ConsistencyConflictDialog extends Dialog {
         return container;
     }
 
+    private void installColumns() {
+
+        treeViewer.getTree().setHeaderVisible(true);
+        nameColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        nameColumn.getColumn().setWidth(320);
+        nameColumn.getColumn().setText(Messages.ConsistencyConflict_name);
+        ILabelDecorator labelDecorator = RepositoryPlugin.getDefault().getWorkbench().getDecoratorManager().getLabelDecorator();
+        DecoratingStyledCellLabelProvider consistencyLabelProvider = new DecoratingStyledCellLabelProvider(
+                new MDMRepositoryLabelProvider(), labelDecorator, null) {
+
+            @Override
+            public Color getBackground(Object element) {
+                IRepositoryViewObject viewObj = (IRepositoryViewObject) element;
+                return getBackgroundColor(viewObj);
+            }
+
+        };
+        nameColumn.setLabelProvider(consistencyLabelProvider);
+        resultColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        resultColumn.getColumn().setWidth(120);
+        resultColumn.getColumn().setText(Messages.ConsistencyConflict_compareResult);
+        resultColumn.setLabelProvider(new CompareResultColumnProvider());
+        //
+        operationColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        operationColumn.getColumn().setWidth(120);
+        operationColumn.getColumn().setText(Messages.ConsistencyConflictDialog_Operation);
+        operationColumn.setLabelProvider(new OperationProvider());
+        //
+        localTimeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        localTimeColumn.getColumn().setText(Messages.ConsistencyConflict_retrievalTimestamp);
+        localTimeColumn.setLabelProvider(new TimeStampColumnProvider(true));
+        //
+        serverTimeColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+        serverTimeColumn.getColumn().setText(Messages.ConsistencyConflict_serverTimestamp);
+        serverTimeColumn.setLabelProvider(new TimeStampColumnProvider(false));
+        //
+        showTimeStampColumns(false);
+    }
+
     private void configSorter() {
         this.treeComparator = new ViewObjectComparator();
         treeViewer.setComparator(treeComparator);
-        hookTreeSorter(0, tc0);
-        hookTreeSorter(1, tc1);
-        hookTreeSorter(2, tc2);
+        hookTreeSorter(0, nameColumn.getColumn());
+        hookTreeSorter(1, resultColumn.getColumn());
+        hookTreeSorter(2, operationColumn.getColumn());
 
     }
 
@@ -567,10 +586,11 @@ public class ConsistencyConflictDialog extends Dialog {
 
     protected void showTimeStampColumns(boolean selection) {
         int width = selection ? 120 : 0;
-        tc3.setWidth(width);
-        tc4.setWidth(width);
-        tc3.setResizable(selection);
-        tc4.setResizable(selection);
+        localTimeColumn.getColumn().setWidth(width);
+        serverTimeColumn.getColumn().setWidth(width);
+        localTimeColumn.getColumn().setResizable(selection);
+        serverTimeColumn.getColumn().setResizable(selection);
+        treeViewer.refresh();
     }
 
     private void installCellEditor() {
@@ -619,22 +639,30 @@ public class ConsistencyConflictDialog extends Dialog {
 
     private ConsistencyCheckResult result;
 
-    private TreeColumn tc3;
+    private TreeViewerColumn nameColumn;
 
-    private TreeColumn tc4;
-
-    private TreeColumn tc1;
-
-    private TreeColumn tc2;
-
-    private TreeColumn tc0;
+    private TreeViewerColumn resultColumn;
 
     private void initOperations() {
         for (IRepositoryViewObject viewObj : viewObjMap.keySet()) {
-            if (getCompareResult(viewObj) == CompareResultEnum.SAME) {
-                toSkipObjs.add(viewObj);
+            boolean isDeletedOp = false;
+            Integer cmdOp = viewObCmdOpjMap.get(viewObj);
+            if (cmdOp != null) {
+                isDeletedOp = cmdOp == ICommand.CMD_DELETE;
+            }
+            CompareResultEnum compareResult = getCompareResult(viewObj);
+            if (isDeletedOp) {
+                if (compareResult == CompareResultEnum.SAME || compareResult == CompareResultEnum.MODIFIED_LOCALLY) {
+                    toDeployObjs.add(viewObj);
+                } else {
+                    toSkipObjs.add(viewObj);
+                }
             } else {
-                toDeployObjs.add(viewObj);
+                if (compareResult == CompareResultEnum.SAME) {
+                    toSkipObjs.add(viewObj);
+                } else {
+                    toDeployObjs.add(viewObj);
+                }
             }
         }
     }

@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -168,7 +169,8 @@ public class DeployService {
         List<IRepositoryViewObject> invalidObjects = validateResult.getInvalidObjects(selectedButton);
         try {
             // consistency check
-            ConsistencyCheckResult consistencyCheckResult = checkConsistency(serverDef, validObjects);
+            ConsistencyCheckResult consistencyCheckResult = ConsistencyService.getInstance().checkConsistency(serverDef,
+                    validObjects);
             if (consistencyCheckResult == null || consistencyCheckResult.isCanceled()) {
                 return Status.CANCEL_STATUS;
             }
@@ -263,9 +265,27 @@ public class DeployService {
 
     }
 
-    public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs)
-            throws RemoteException, XtentisException {
-        return ConsistencyService.getInstance().checkConsistency(serverDef, viewObjs);
+    /**
+     * work for updater server operation.
+     * 
+     * @param serverDef
+     * @param viewObjs
+     * @param selectededCommands
+     * @return
+     * @throws RemoteException
+     * @throws XtentisException
+     */
+    public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs,
+            List<AbstractDeployCommand> selectededCommands) throws RemoteException, XtentisException {
+
+        Map<IRepositoryViewObject, Integer> viewObCmdOpjMap = new HashMap<IRepositoryViewObject, Integer>();
+        for (AbstractDeployCommand cmd : selectededCommands) {
+            IRepositoryViewObject viewObj = cmd.getViewObject();
+            if (viewObj != null && viewObjs.contains(viewObj)) {
+                viewObCmdOpjMap.put(viewObj, cmd.getCommandType());
+            }
+        }
+        return ConsistencyService.getInstance().checkConsistency(serverDef, viewObCmdOpjMap);
     }
 
     public IModelValidateResult validateModel(List<IRepositoryViewObject> viewObjs) {
