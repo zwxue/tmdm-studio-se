@@ -23,13 +23,10 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.AbstractRepositoryAction;
 import org.talend.mdm.repository.core.service.DeployService;
-import org.talend.mdm.repository.core.service.IInteractiveHandler;
-import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.deploy.DeployStatusDialog;
@@ -117,23 +114,7 @@ public abstract class AbstractDeployAction extends AbstractRepositoryAction {
     }
 
     protected List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject viewObject) {
-        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
-        if (viewObject != null) {
-            ERepositoryObjectType type = viewObject.getRepositoryObjectType();
-            if (type != null) {
-                IInteractiveHandler handler = InteractiveService.findHandler(type);
-                if (handler != null) {
-                    List<IRepositoryViewObject> associatedObjects = handler.getAssociatedObjects(viewObject);
-                    if (associatedObjects != null) {
-                        for (IRepositoryViewObject associatedObj : associatedObjects) {
-                            viewObjs.add(associatedObj);
-                        }
-                    }
-                }
-            }
-        }
-
-        return viewObjs;
+        return DeployService.getInstance().getAssociatedObjects(viewObject);
     }
 
     protected void doSaveEditorsThing() {

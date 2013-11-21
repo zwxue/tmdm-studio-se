@@ -37,6 +37,7 @@ import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.progress.IProgressService;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
+import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -320,6 +321,26 @@ public class DeployService {
         return PlatformUI.getPreferenceStore().getBoolean(PreferenceConstants.P_AUTO_DEPLOY);
     }
 
+    public List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject viewObject) {
+        List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
+        if (viewObject != null) {
+            ERepositoryObjectType type = viewObject.getRepositoryObjectType();
+            if (type != null) {
+                IInteractiveHandler handler = InteractiveService.findHandler(type);
+                if (handler != null) {
+                    List<IRepositoryViewObject> associatedObjects = handler.getAssociatedObjects(viewObject);
+                    if (associatedObjects != null) {
+                        for (IRepositoryViewObject associatedObj : associatedObjects) {
+                            viewObjs.add(associatedObj);
+                        }
+                    }
+                }
+            }
+        }
+
+        return viewObjs;
+    }
+
     public void autoDeploy(Shell shell, IRepositoryViewObject viewObj) {
         if (shell == null || viewObj == null) {
             throw new IllegalArgumentException();
@@ -327,8 +348,8 @@ public class DeployService {
         MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObj);
         if (serverDef != null) {
 
-            List<IRepositoryViewObject> viewObjs = new ArrayList<IRepositoryViewObject>();
-            viewObjs.add(viewObj);
+            List<IRepositoryViewObject> viewObjs = getAssociatedObjects(viewObj);
+            viewObjs.add(0, viewObj);
 
             IStatus status = deploy(serverDef, viewObjs, ICommand.CMD_MODIFY, false);
             if (!status.isOK()) {
