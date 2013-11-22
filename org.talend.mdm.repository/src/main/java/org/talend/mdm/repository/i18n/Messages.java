@@ -374,6 +374,8 @@ public class Messages extends NLS {
 
     public static String ImportObjectAction_label;
 
+    public static String ImportRepositoryObjectCheckTreeViewer_errorLabel;
+
     public static String ConfigRedirectURLPage_description;
 
     public static String ConfigRedirectURLPage_enableRedirect;
@@ -509,6 +511,8 @@ public class Messages extends NLS {
     public static String ExportObjectAction_label;
 
     public static String MDMExportRepositoryItemsWizard_exportItem;
+
+    public static String MDMImportRepositoryItemsWizard_errorMsg;
 
     public static String MDMImportRepositoryItemsWizard_refreshServer;
 

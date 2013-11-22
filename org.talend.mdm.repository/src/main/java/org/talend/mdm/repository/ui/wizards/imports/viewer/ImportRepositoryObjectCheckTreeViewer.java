@@ -17,21 +17,29 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.service.ContainerCacheService;
+import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.ui.widgets.AbstractNodeCheckTreeViewer;
 import org.talend.mdm.repository.utils.RepositoryTransformUtil;
 import org.talend.repository.imports.ImportItemUtil;
@@ -46,6 +54,8 @@ import com.amalto.workbench.widgets.FilteredCheckboxTree;
 public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     private ImportItemUtil repositoryUtil;
+
+    private TableViewer errorsListViewer;
 
     /**
      * DOC hbhong RepositoryObjectCheckTreeViewer constructor comment.
@@ -209,4 +219,35 @@ public class ImportRepositoryObjectCheckTreeViewer extends AbstractNodeCheckTree
 
     }
 
+    @Override
+    protected void createOtherControl(Composite itemComposite) {
+        Composite composite = new Composite(itemComposite, SWT.NONE);
+        GridLayout layout = new GridLayout();
+        layout.makeColumnsEqualWidth = false;
+        layout.marginWidth = 0;
+        composite.setLayout(layout);
+        GridData gridData = new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.FILL_BOTH);
+        gridData.heightHint = 100;
+        composite.setLayoutData(gridData);
+
+        Label title = new Label(composite, SWT.NONE);
+        title.setText(Messages.ImportRepositoryObjectCheckTreeViewer_errorLabel);
+        title.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+        errorsListViewer = new TableViewer(composite, SWT.BORDER);
+        errorsListViewer.getControl().setLayoutData(gridData);
+
+        errorsListViewer.setContentProvider(new ArrayContentProvider());
+        errorsListViewer.setLabelProvider(new LabelProvider());
+        errorsListViewer.setSorter(new ViewerSorter());
+    }
+
+    public void updateErrors(final List<String> errors) {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            public void run() {
+                errorsListViewer.setInput(errors);
+            }
+        });
+    }
 }

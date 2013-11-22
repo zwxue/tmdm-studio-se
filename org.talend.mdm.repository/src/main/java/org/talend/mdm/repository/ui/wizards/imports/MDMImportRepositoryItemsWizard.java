@@ -58,9 +58,12 @@ import org.talend.commons.exception.PersistenceException;
 import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ItemState;
+import org.talend.core.model.properties.JobDocumentationItem;
+import org.talend.core.model.properties.JobletDocumentationItem;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.core.model.repository.RepositoryViewObject;
 import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
@@ -90,6 +93,8 @@ import org.talend.repository.imports.ImportItemUtil;
 import org.talend.repository.imports.ItemRecord;
 import org.talend.repository.imports.ResourcesManager;
 import org.talend.repository.imports.ResourcesManagerFactory;
+import org.talend.repository.model.ERepositoryStatus;
+
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
 import com.amalto.workbench.export.ImportItemsWizard;
 import com.amalto.workbench.utils.Util;
@@ -101,6 +106,8 @@ import com.amalto.workbench.widgets.WidgetFactory;
 public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
 
     private ImportItemUtil repositoryUtil = new ImportItemUtil();
+
+    private final List<String> errors = new ArrayList<String>();
 
     private List<ItemRecord> selectedItems = new ArrayList<ItemRecord>();
 
@@ -114,59 +121,54 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         super(sel);
     }
 
-	@Override
-	protected void exchangeImport() {
-		ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
-		dlg.setBlockOnOpen(true);
-		if (dlg.open() == Window.OK) {
+    @Override
+    protected void exchangeImport() {
+        ImportExchangeOptionsDialog dlg = getExchangeOptionsDialog();
+        dlg.setBlockOnOpen(true);
+        if (dlg.open() == Window.OK) {
 
-			File directory = new File(zipFileRepository.toString());
-			File[] files = directory.listFiles(new FileFilter() {
-				public boolean accept(File pathname) {
-					return pathname.getName().endsWith(".xsd");
-				}
-			});
-			if (null != files && files.length > 0) {
-				try {
-					MDMRepositoryView view = MDMRepositoryView.show();
-					for (File file : files) {
-						final String label = file.getName().substring(0,
-								file.getName().lastIndexOf('.'));
-						final WSDataModelItem item = MdmpropertiesFactory.eINSTANCE
-								.createWSDataModelItem();
-						ItemState itemState = PropertiesFactory.eINSTANCE
-								.createItemState();
-						item.setState(itemState);
-						WSDataModelE dataModel = MdmserverobjectFactory.eINSTANCE
-								.createWSDataModelE();
-						dataModel.setName(label);
-						InputStream stream = null;
-						try {
-							stream = new FileInputStream(file);
-							dataModel.setXsdSchema(IOUtils.toString(stream));
-							item.setWsDataModel(dataModel);
-						} catch (Exception e) {
-							log.error(e.getMessage());
-						}
-						IOUtils.closeQuietly(stream);
-						item.getState().setPath("");
-						RepositoryResourceUtil.createItem(item, label);
-						view.refreshRootNode(IServerObjectRepositoryType.TYPE_DATAMODEL);
-					}
-				} catch (Exception ex) {
-					log.error(ex.getMessage());
-				}
-				WizardDialog dialog = (WizardDialog) MDMImportRepositoryItemsWizard.this
-						.getContainer();
-				dialog.close();
-			} else {
-				MessageDialog.openWarning(getShell(), null,
-						Messages.NO_XSD_RESOURCE);
-			}
-		}
-	}
+            File directory = new File(zipFileRepository.toString());
+            File[] files = directory.listFiles(new FileFilter() {
 
-	@Override
+                public boolean accept(File pathname) {
+                    return pathname.getName().endsWith(".xsd"); //$NON-NLS-1$
+                }
+            });
+            if (null != files && files.length > 0) {
+                try {
+                    MDMRepositoryView view = MDMRepositoryView.show();
+                    for (File file : files) {
+                        final String label = file.getName().substring(0, file.getName().lastIndexOf('.'));
+                        final WSDataModelItem item = MdmpropertiesFactory.eINSTANCE.createWSDataModelItem();
+                        ItemState itemState = PropertiesFactory.eINSTANCE.createItemState();
+                        item.setState(itemState);
+                        WSDataModelE dataModel = MdmserverobjectFactory.eINSTANCE.createWSDataModelE();
+                        dataModel.setName(label);
+                        InputStream stream = null;
+                        try {
+                            stream = new FileInputStream(file);
+                            dataModel.setXsdSchema(IOUtils.toString(stream));
+                            item.setWsDataModel(dataModel);
+                        } catch (Exception e) {
+                            log.error(e.getMessage());
+                        }
+                        IOUtils.closeQuietly(stream);
+                        item.getState().setPath(""); //$NON-NLS-1$
+                        RepositoryResourceUtil.createItem(item, label);
+                        view.refreshRootNode(IServerObjectRepositoryType.TYPE_DATAMODEL);
+                    }
+                } catch (Exception ex) {
+                    log.error(ex.getMessage());
+                }
+                WizardDialog dialog = (WizardDialog) MDMImportRepositoryItemsWizard.this.getContainer();
+                dialog.close();
+            } else {
+                MessageDialog.openWarning(getShell(), null, Messages.NO_XSD_RESOURCE);
+            }
+        }
+    }
+
+    @Override
     public boolean performFinish() {
         if (!showLockedObjDialog(getCheckedObjects())) {
             return false;
@@ -425,7 +427,7 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         if (manager != null) {
             items.addAll(repositoryUtil.populateItems(manager, isOverride, monitor));
         }
-
+        updateErrors(items);
         selectedItems.addAll(items);
 
         if (this.noVaildItems(items)) {
@@ -447,6 +449,49 @@ public class MDMImportRepositoryItemsWizard extends ImportItemsWizard {
         }
         monitor.done();
 
+    }
+
+    private void updateErrors(final Collection<ItemRecord> items) {
+        errors.clear();
+        for (ItemRecord itemRecord : items) {
+
+            if (itemRecord.getExistingItemWithSameId() != null
+                    && itemRecord.getExistingItemWithSameId() instanceof RepositoryViewObject) {
+                RepositoryViewObject reObject = (RepositoryViewObject) itemRecord.getExistingItemWithSameId();
+                if (itemRecord.getProperty() != null && reObject != null) {
+                    if (itemRecord.getProperty().getId().equals(reObject.getId())
+                            && itemRecord.getProperty().getLabel().equals(reObject.getLabel())) {
+                        for (String error : itemRecord.getErrors()) {
+                            errors.add(Messages.bind(Messages.MDMImportRepositoryItemsWizard_errorMsg, itemRecord.getItemName(),
+                                    error));
+                        }
+                    } else {
+
+                        // if item is locked, cannot overwrite
+                        ERepositoryStatus status = reObject.getRepositoryStatus();
+                        if (status == ERepositoryStatus.LOCK_BY_OTHER || status == ERepositoryStatus.LOCK_BY_USER) {
+                            for (String error : itemRecord.getErrors()) {
+                                errors.add(Messages.bind(Messages.MDMImportRepositoryItemsWizard_errorMsg,
+                                        itemRecord.getItemName(), error));
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (itemRecord.getProperty() != null) {
+                    Item item = itemRecord.getProperty().getItem();
+                    if (item != null && (item instanceof JobDocumentationItem || item instanceof JobletDocumentationItem)) {
+                        continue;
+                    }
+                    for (String error : itemRecord.getErrors()) {
+                        errors.add(Messages.bind(Messages.MDMImportRepositoryItemsWizard_errorMsg, itemRecord.getItemName(),
+                                error));
+                    }
+                }
+            }
+        }
+        //
+        checkTreeViewer.updateErrors(errors);
     }
 
     @Override

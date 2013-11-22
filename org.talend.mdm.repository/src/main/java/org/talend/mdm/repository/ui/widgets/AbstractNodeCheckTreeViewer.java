@@ -214,9 +214,12 @@ public abstract class AbstractNodeCheckTreeViewer {
 
         // force loading all nodes
         setCreatedViewer();
-
+        createOtherControl(itemComposite);
         refresh();
         return itemComposite;
+    }
+
+    protected void createOtherControl(Composite itemComposite) {
     }
 
     /**
