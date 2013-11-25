@@ -13,6 +13,7 @@
 package org.talend.mdm.repository.ui.editors;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.core.model.properties.Item;
@@ -36,6 +37,7 @@ import org.talend.mdm.repository.ui.dialogs.SelectImportedModulesDialog2;
 import org.talend.mdm.repository.ui.dialogs.datamodel.DataModelFilterDialogR;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.ui.wizards.view.AddBrowseItemsWizardR;
+import org.talend.mdm.repository.utils.Bean2EObjUtil;
 import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 
 import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
@@ -86,8 +88,12 @@ public class DataModelMainPage2 extends DataModelMainPage {
             editorInput.updateViewObject(ContainerCacheService.get(newItem.getProperty()));
             getEditorSite();
             serverObjectItem = (MDMServerObjectItem) newItem;
+
         }
-        RepositoryResourceUtil.saveItem(serverObjectItem);
+        EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(wsObject, serverObjectItem.getMDMServerObject());
+        if (eObj != null) {
+            RepositoryResourceUtil.saveItem(serverObjectItem);
+        }
 
         refreshDirtyCue();
 
@@ -160,4 +166,5 @@ public class DataModelMainPage2 extends DataModelMainPage {
     protected SelectImportedModulesDialog createSelectImportedModulesDialog() {
         return new SelectImportedModulesDialog2(getSite().getShell(), xobject, Messages.ImportXSDSchema);
     }
+
 }
