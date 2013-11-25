@@ -28,10 +28,13 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.progress.IProgressService;
@@ -39,6 +42,8 @@ import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
+import org.talend.designer.core.ui.MultiPageTalendEditor;
+import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CompoundCommand;
@@ -85,7 +90,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         * 
+         *
          * @param severity
          * @param pluginId
          * @param message
@@ -182,6 +187,7 @@ public class DeployService {
             // update consistency value
             try {
                 updateServerConsistencyStatus(serverDef, mainStatus);
+                updateJobEditorStatus(validObjects);
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
             } catch (RemoteException e) {
@@ -197,6 +203,36 @@ public class DeployService {
             MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title,
                     Messages.AbstractDataClusterAction_ConnectFailed);
             return Status.CANCEL_STATUS;
+        }
+    }
+
+    private void updateJobEditorStatus(List<IRepositoryViewObject> validObjects) {
+        List<Item> processItems = new LinkedList<Item>();
+        for (IRepositoryViewObject viewObj : validObjects) {
+            if (viewObj.getRepositoryObjectType().equals(ERepositoryObjectType.PROCESS)) {
+                processItems.add(viewObj.getProperty().getItem());
+            }
+        }
+
+        if (processItems.size() == 0) {
+            return;
+        }
+
+        IEditorPart[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getDirtyEditors();
+
+        for (IEditorPart part : editors) {
+            if (part instanceof MultiPageTalendEditor) {
+                MultiPageTalendEditor mptEditor = (MultiPageTalendEditor) part;
+                IEditorInput editorInput = mptEditor.getEditorInput();
+                if (editorInput instanceof ProcessEditorInput) {
+                    ProcessEditorInput input = (ProcessEditorInput) editorInput;
+                    Item processItem = input.getItem();
+                    if (processItems.contains(processItem)) {
+                        mptEditor.doSave(new NullProgressMonitor());
+                        mptEditor.refreshName();
+                    }
+                }
+            }
         }
     }
 
@@ -268,7 +304,7 @@ public class DeployService {
 
     /**
      * work for updater server operation.
-     * 
+     *
      * @param serverDef
      * @param viewObjs
      * @param selectededCommands
