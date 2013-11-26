@@ -13,17 +13,14 @@
 package org.talend.mdm.engines.client.ui.actions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -42,9 +39,7 @@ import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
-import org.talend.designer.core.ui.MultiPageTalendEditor;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
-import org.talend.mdm.engines.client.utils.WorkbenchUtil;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmmetadata.MdmmetadataFactory;
 import org.talend.repository.model.IProxyRepositoryFactory;
@@ -144,18 +139,12 @@ public final class DeployOnMDMAction extends AContextualAction {
                     Property property = item.getProperty();
 
                     if (property != null) {
+                        boolean eDeliver = property.eDeliver();
+                        property.eSetDeliver(false);
                         property.getAdditionalProperties().put(PROP_LAST_SERVER_DEF, mdmServer.getName());
                         factory.save(item);
+                        property.eSetDeliver(eDeliver);
                     }
-                    Collection<IEditorPart> editors = WorkbenchUtil.getSelectDirtyEditor((IStructuredSelection) getSelection(), ERepositoryObjectType.PROCESS);
-    				
-    				for (IEditorPart part : editors) {
-    					if (part instanceof MultiPageTalendEditor) {
-    						MultiPageTalendEditor mptEditor = (MultiPageTalendEditor) part;
-    						mptEditor.doSave(new NullProgressMonitor());
-    						mptEditor.refreshName();
-    					}
-    				}
                     refreshMdmRepositoryViewTree();
                     service.removeDeployPhaseCommandOf(ERepositoryObjectType.PROCESS, item);
                 }
