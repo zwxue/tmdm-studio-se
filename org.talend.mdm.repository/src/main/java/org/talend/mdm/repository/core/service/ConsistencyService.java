@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.talend.core.model.properties.ByteArray;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.properties.ProcessItem;
+import org.talend.core.model.properties.Property;
 import org.talend.core.model.properties.ReferenceFileItem;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -80,7 +81,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
- * 
+ *
  */
 public class ConsistencyService {
 
@@ -491,7 +492,7 @@ public class ConsistencyService {
 
     /**
      * DOC HHB Comment method "getCompareResult".
-     * 
+     *
      * @param cd current digest value
      * @param ld local digest value
      * @param rd remote digest value
@@ -656,7 +657,11 @@ public class ConsistencyService {
         }
         if (!viewObj.getRepositoryObjectType().equals(IServerObjectRepositoryType.TYPE_MATCH_RULE_MAPINFO)) {
             item = RepositoryResourceUtil.assertItem(item);
+            Property property = item.getProperty();
+            boolean eDeliver = property.eDeliver();
+            property.eSetDeliver(false);
             RepositoryResourceUtil.saveItem(item);
+            property.eSetDeliver(eDeliver);
         }
     }
 
@@ -720,9 +725,13 @@ public class ConsistencyService {
         if (item instanceof MDMServerObjectItem) {
             ((MDMServerObjectItem) item).getMDMServerObject().setDigestValue(digestValue);
         } else if (item instanceof ProcessItem) {
+            Property property = item.getProperty();
+            boolean eDeliver = property.eDeliver();
+            property.eSetDeliver(false);
             EMap additionalProperties = item.getProperty().getAdditionalProperties();
             additionalProperties.removeKey(CURRENT_DIGEST_VALUE);
             additionalProperties.put(DIGEST_VALUE, digestValue);
+            property.eSetDeliver(eDeliver);
         }
     }
 
@@ -730,7 +739,11 @@ public class ConsistencyService {
         if (item instanceof MDMServerObjectItem) {
             ((MDMServerObjectItem) item).getMDMServerObject().setCurrentDigestValue(digestValue);
         } else if (item instanceof ProcessItem) {
-            item.getProperty().getAdditionalProperties().put(CURRENT_DIGEST_VALUE, digestValue);
+            Property property = item.getProperty();
+            boolean eDeliver = property.eDeliver();
+            property.eSetDeliver(false);
+            property.getAdditionalProperties().put(CURRENT_DIGEST_VALUE, digestValue);
+            property.eSetDeliver(eDeliver);
         }
     }
 
@@ -742,7 +755,7 @@ public class ConsistencyService {
 
     /**
      * caculate and update local digest value
-     * 
+     *
      * @param viewObj
      */
     public void updateLocalDigestValue(IRepositoryViewObject viewObj) {
@@ -761,7 +774,11 @@ public class ConsistencyService {
         if (item instanceof MDMServerObjectItem) {
             ((MDMServerObjectItem) item).getMDMServerObject().setTimestamp(timestamp);
         } else if (item instanceof ProcessItem) {
-            item.getProperty().getAdditionalProperties().put(TIMESTAMP, timestamp);
+            Property property = item.getProperty();
+            boolean eDeliver = property.eDeliver();
+            property.eSetDeliver(false);
+            property.getAdditionalProperties().put(TIMESTAMP, timestamp);
+            property.eSetDeliver(eDeliver);
         }
     }
 

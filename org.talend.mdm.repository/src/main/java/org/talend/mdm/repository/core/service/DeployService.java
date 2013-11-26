@@ -187,7 +187,6 @@ public class DeployService {
             // update consistency value
             try {
                 updateServerConsistencyStatus(serverDef, mainStatus);
-                updateJobEditorStatus(validObjects);
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
             } catch (RemoteException e) {
@@ -203,36 +202,6 @@ public class DeployService {
             MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), title,
                     Messages.AbstractDataClusterAction_ConnectFailed);
             return Status.CANCEL_STATUS;
-        }
-    }
-
-    private void updateJobEditorStatus(List<IRepositoryViewObject> validObjects) {
-        List<Item> processItems = new LinkedList<Item>();
-        for (IRepositoryViewObject viewObj : validObjects) {
-            if (viewObj.getRepositoryObjectType().equals(ERepositoryObjectType.PROCESS)) {
-                processItems.add(viewObj.getProperty().getItem());
-            }
-        }
-
-        if (processItems.size() == 0) {
-            return;
-        }
-
-        IEditorPart[] editors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getDirtyEditors();
-
-        for (IEditorPart part : editors) {
-            if (part instanceof MultiPageTalendEditor) {
-                MultiPageTalendEditor mptEditor = (MultiPageTalendEditor) part;
-                IEditorInput editorInput = mptEditor.getEditorInput();
-                if (editorInput instanceof ProcessEditorInput) {
-                    ProcessEditorInput input = (ProcessEditorInput) editorInput;
-                    Item processItem = input.getItem();
-                    if (processItems.contains(processItem)) {
-                        mptEditor.doSave(new NullProgressMonitor());
-                        mptEditor.refreshName();
-                    }
-                }
-            }
         }
     }
 
