@@ -596,6 +596,7 @@ public class ConsistencyService {
     }
 
     private IFile getReferenceFile(Item item) {
+        item = RepositoryResourceUtil.assertItem(item);
         List refResources = item.getReferenceResources();
         if (refResources != null && !refResources.isEmpty()) {
             ReferenceFileItem fileItem = (ReferenceFileItem) refResources.get(0);
