@@ -28,13 +28,10 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.progress.IProgressService;
@@ -42,8 +39,6 @@ import org.talend.core.GlobalServiceRegister;
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
-import org.talend.designer.core.ui.MultiPageTalendEditor;
-import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.CompoundCommand;
@@ -90,7 +85,7 @@ public class DeployService {
 
         /**
          * DOC hbhong DeployStatus constructor comment.
-         *
+         * 
          * @param severity
          * @param pluginId
          * @param message
@@ -273,7 +268,7 @@ public class DeployService {
 
     /**
      * work for updater server operation.
-     *
+     * 
      * @param serverDef
      * @param viewObjs
      * @param selectededCommands
@@ -353,6 +348,14 @@ public class DeployService {
         MDMServerDef serverDef = RepositoryResourceUtil.getLastServerDef(viewObj);
         if (serverDef != null) {
 
+            if (!serverDef.isEnabled()) {
+                MessageDialog
+                        .openWarning(
+                                shell,
+                                null,
+                                Messages.DeployService_CanNotDeployToDisabledServer);
+                return;
+            }
             List<IRepositoryViewObject> viewObjs = getAssociatedObjects(viewObj);
             viewObjs.add(0, viewObj);
 

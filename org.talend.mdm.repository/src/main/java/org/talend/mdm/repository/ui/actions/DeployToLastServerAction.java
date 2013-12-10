@@ -17,6 +17,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.service.DeployService;
@@ -53,9 +55,15 @@ public class DeployToLastServerAction extends AbstractDeployAction {
             return;
         }
         lockDirtyDialog.saveDirtyObjects();
-        // deploy
-        MDMServerDef currentServerDef = getLastServer(viewObjs);
         //
+        MDMServerDef currentServerDef = getLastServer(viewObjs);
+        // check last server
+        if (!currentServerDef.isEnabled()) {
+            MessageDialog.openWarning(Display.getDefault().getActiveShell(), null,
+                    Messages.DeployService_CanNotDeployToDisabledServer);
+            return;
+        }
+        // deploy
         IStatus status = deploy(currentServerDef, viewObjs, ICommand.CMD_MODIFY);
         if (status.getSeverity() != IStatus.CANCEL) {
             if (status.isMultiStatus()) {

@@ -119,7 +119,11 @@ public class Messages extends NLS {
 
     public static String ServerExplorer_ConnectSuccessful;
 
+    public static String ServerExplorer_Disable;
+
     public static String ServerExplorer_EditServer;
+
+    public static String ServerExplorer_Enable;
 
     public static String ServerExplorer_RefreshServerCache;
 

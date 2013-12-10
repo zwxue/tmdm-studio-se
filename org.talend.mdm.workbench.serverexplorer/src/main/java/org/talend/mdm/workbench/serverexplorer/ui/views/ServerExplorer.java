@@ -38,6 +38,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -107,6 +108,10 @@ public class ServerExplorer extends ViewPart {
     private AddServerDefAction addServerDefAction;
 
     private List<Action> allActions = new LinkedList<Action>();
+
+    private EnableServerDefAction toEnableServerAction;
+
+    private EnableServerDefAction toDisableServerAction;
 
     public AddServerDefAction getAddServerDefAction() {
         return this.addServerDefAction;
@@ -215,6 +220,9 @@ public class ServerExplorer extends ViewPart {
         allActions.add(new RefreshServerCacheAction());
         allActions.add(new ShowServerConsoleAction());
         allActions.add(new ShowServerMatchConsoleAction());
+        toEnableServerAction = new EnableServerDefAction(true);
+        toDisableServerAction = new EnableServerDefAction(false);
+
     }
 
     private IMenuListener getMenuListener() {
@@ -227,6 +235,20 @@ public class ServerExplorer extends ViewPart {
                     manager.add(addServerDefAction);
                 } else {
                     addAllActions(manager);
+                    IRepositoryViewObject viewObject = getCurSelectedViewObject();
+                    if (viewObject != null) {
+                        MDMServerDefItem mdmItem = getMDMItem(viewObject);
+                        if (mdmItem != null) {
+                            MDMServerDef serverDef = mdmItem.getServerDef();
+                            manager.add(new Separator());
+                            if (serverDef.isEnabled()) {
+                                manager.add(toDisableServerAction);
+                            } else {
+                                manager.add(toEnableServerAction);
+                            }
+                        }
+                    }
+
                 }
             }
         };
@@ -249,7 +271,7 @@ public class ServerExplorer extends ViewPart {
     }
 
     public void refreshServerDefs() {
-        List<IRepositoryViewObject> viewObjects = ServerDefService.getAllServerDefViewObjects();
+        List<IRepositoryViewObject> viewObjects = ServerDefService.getAllServerDefViewObjects(true);
         if (viewObjects != null) {
             treeViewer.setInput(viewObjects);
         }
@@ -497,6 +519,31 @@ public class ServerExplorer extends ViewPart {
                     //
                     synchronizeMDMServerView();
                 }
+            }
+        }
+    }
+
+    class EnableServerDefAction extends Action {
+
+        private boolean toEnable;
+
+        public EnableServerDefAction(boolean toEnable) {
+            this.toEnable = toEnable;
+            if (toEnable) {
+                setText(Messages.ServerExplorer_Enable);
+            } else {
+                setText(Messages.ServerExplorer_Disable);
+            }
+        }
+
+        @Override
+        public void run() {
+            IRepositoryViewObject viewObject = getCurSelectedViewObject();
+            if (viewObject != null) {
+                MDMServerDefItem serverDefItem = getMDMItem(viewObject);
+                serverDefItem.getServerDef().setEnabled(toEnable);
+                ServerDefService.saveServeDef(serverDefItem);
+                refreshServerDefs();
             }
         }
     }

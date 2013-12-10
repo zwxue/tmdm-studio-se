@@ -12,8 +12,12 @@
 // ============================================================================
 package org.talend.mdm.workbench.serverexplorer.ui.providers;
 
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
@@ -23,7 +27,9 @@ import org.talend.mdm.workbench.serverexplorer.plugin.MDMServerExplorerPlugin;
 /**
  * DOC hbhong class global comment. Detailled comment
  */
-public class ViewerLabelProvider extends LabelProvider {
+public class ViewerLabelProvider extends LabelProvider implements IColorProvider {
+
+    private static final Color COLOR_GRAY = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
     static final Image IMG_SERVER_DEF = AbstractUIPlugin.imageDescriptorFromPlugin(MDMServerExplorerPlugin.PLUGIN_ID,
             "icons/server.png").createImage(); //$NON-NLS-1$
@@ -49,6 +55,21 @@ public class ViewerLabelProvider extends LabelProvider {
         if (viewObject != null) {
             return (MDMServerDefItem) (viewObject.getProperty().getItem());
         }
+        return null;
+    }
+
+    public Color getForeground(Object element) {
+        if (element instanceof IRepositoryViewObject) {
+            MDMServerDefItem mdmItem = getMDMItem((IRepositoryViewObject) element);
+            if (mdmItem != null) {
+                MDMServerDef serverDef = mdmItem.getServerDef();
+                return serverDef.isEnabled() ? null : COLOR_GRAY;
+            }
+        }
+        return null;
+    }
+
+    public Color getBackground(Object element) {
         return null;
     }
 

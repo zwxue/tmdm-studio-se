@@ -158,6 +158,8 @@ public class Messages extends NLS {
 
     public static String DeployAllLinkAction_authorityMessage;
 
+    public static String DeployService_CanNotDeployToDisabledServer;
+
     public static String DeployService_conflictCancelStatus;
 
     public static String DeployService_processTitle;

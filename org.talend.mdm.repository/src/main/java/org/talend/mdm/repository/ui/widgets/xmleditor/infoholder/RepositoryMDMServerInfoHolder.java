@@ -33,7 +33,7 @@ public class RepositoryMDMServerInfoHolder extends RepositoryExternalInfoHolder<
 
     @Override
     public WSMDMConfig[] getExternalInfo() {
-        List<MDMServerDef> allServerDefs = ServerDefService.getAllServerDefs();
+        List<MDMServerDef> allServerDefs = ServerDefService.getAllServerDefs(true);
         WSMDMConfig[] configs = new WSMDMConfig[allServerDefs.size()];
         int i = 0;
         for (MDMServerDef def : allServerDefs) {

@@ -79,27 +79,37 @@ public class ServerDefService implements ILegendServerDefService {
     public static ERepositoryObjectType REPOSITORY_TYPE_SERVER_DEF = ERepositoryObjectType.valueOf(ERepositoryObjectType.class,
             "MDM.ServerDef"); //$NON-NLS-1$
 
+    public static List<IRepositoryViewObject> getAllServerDefViewObjects() {
+        return getAllServerDefViewObjects(false);
+    }
+
     /**
      * Warning: the return result is a encrypted List
      * 
      * @return
      */
-    public static List<IRepositoryViewObject> getAllServerDefViewObjects() {
+    public static List<IRepositoryViewObject> getAllServerDefViewObjects(boolean includeDisabledServer) {
         IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
         try {
             List<IRepositoryViewObject> viewObjects = factory.getAll(REPOSITORY_TYPE_SERVER_DEF);
             if (viewObjects != null) {
+                List<IRepositoryViewObject> serverDefViewObjs = new ArrayList<IRepositoryViewObject>();
                 for (IRepositoryViewObject viewObj : viewObjects) {
-                    if (tmpPasswordCache.containsKey(viewObj.getId())) {
-                        String tmpPasswd = tmpPasswordCache.get(viewObj.getId());
-                        Item item = viewObj.getProperty().getItem();
-                        MDMServerDef serverDef = ((MDMServerDefItem) item).getServerDef();
-                        if (serverDef != null) {
+                    Item item = viewObj.getProperty().getItem();
+                    MDMServerDef serverDef = ((MDMServerDefItem) item).getServerDef();
+                    if (serverDef != null) {
+                        if (tmpPasswordCache.containsKey(viewObj.getId())) {
+                            String tmpPasswd = tmpPasswordCache.get(viewObj.getId());
                             serverDef.setTempPasswd(tmpPasswd);
                         }
                     }
+                    if (serverDef != null) {
+                        if (includeDisabledServer || serverDef.isEnabled()) {
+                            serverDefViewObjs.add(viewObj);
+                        }
+                    }
                 }
-                return viewObjects;
+                return serverDefViewObjs;
             }
             return null;
 
@@ -115,13 +125,17 @@ public class ServerDefService implements ILegendServerDefService {
      * @return
      */
     public static List<MDMServerDef> getAllServerDefs() {
-        List<IRepositoryViewObject> viewObjects = getAllServerDefViewObjects();
+        return getAllServerDefs(false);
+    }
+
+    public static List<MDMServerDef> getAllServerDefs(boolean includeDisabledServer) {
+        List<IRepositoryViewObject> viewObjects = getAllServerDefViewObjects(includeDisabledServer);
         if (viewObjects != null) {
             List<MDMServerDef> serverDefs = new ArrayList<MDMServerDef>(viewObjects.size());
             for (IRepositoryViewObject viewObj : viewObjects) {
                 Item item = viewObj.getProperty().getItem();
                 MDMServerDef serverDef = ((MDMServerDefItem) item).getServerDef();
-                if (serverDef != null) {
+                if (serverDef != null && (includeDisabledServer || serverDef.isEnabled())) {
                     serverDefs.add(serverDef.getDecryptedServerDef());
                 }
             }
@@ -154,7 +168,7 @@ public class ServerDefService implements ILegendServerDefService {
         if (name == null) {
             throw new IllegalArgumentException();
         }
-        List<MDMServerDef> serverDefs = getAllServerDefs();
+        List<MDMServerDef> serverDefs = getAllServerDefs(true);
         if (serverDefs != null) {
             for (MDMServerDef def : serverDefs) {
                 if (def.getName().equalsIgnoreCase(name)) {
@@ -174,7 +188,7 @@ public class ServerDefService implements ILegendServerDefService {
         if (name == null) {
             throw new IllegalArgumentException();
         }
-        List<MDMServerDef> serverDefs = getAllServerDefs();
+        List<MDMServerDef> serverDefs = getAllServerDefs(true);
         if (serverDefs != null) {
             for (MDMServerDef def : serverDefs) {
                 if (def.getName().equalsIgnoreCase(name)) {

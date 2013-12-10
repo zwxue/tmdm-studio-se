@@ -1182,8 +1182,8 @@ public class RepositoryResourceUtil {
         if (item != null) {
             if (item instanceof MDMServerObjectItem) {
                 MDMServerDef lastServerDef = ((MDMServerObjectItem) item).getMDMServerObject().getLastServerDef();
-                if (lastServerDef != null) {
-                    return lastServerDef.getDecryptedServerDef();
+                if (lastServerDef != null && lastServerDef.getName() != null) {
+                    return ServerDefService.findServerDefByName(lastServerDef.getName());
                 }
             }
             Property property = item.getProperty();

@@ -24,6 +24,7 @@ import org.talend.core.model.metadata.builder.connection.AbstractMetadataObject;
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUniverse <em>Universe</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUrl <em>Url</em>}</li>
  *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#getUser <em>User</em>}</li>
+ *   <li>{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#isEnabled <em>Enabled</em>}</li>
  * </ul>
  * </p>
  *
@@ -242,6 +243,33 @@ public interface MDMServerDef extends AbstractMetadataObject {
 	void setUser(String value);
 
 	/**
+     * Returns the value of the '<em><b>Enabled</b></em>' attribute.
+     * The default value is <code>"true"</code>.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Enabled</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Enabled</em>' attribute.
+     * @see #setEnabled(boolean)
+     * @see org.talend.mdm.repository.model.mdmmetadata.MdmmetadataPackage#getMDMServerDef_Enabled()
+     * @model default="true"
+     * @generated
+     */
+    boolean isEnabled();
+
+    /**
+     * Sets the value of the '{@link org.talend.mdm.repository.model.mdmmetadata.MDMServerDef#isEnabled <em>Enabled</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Enabled</em>' attribute.
+     * @see #isEnabled()
+     * @generated
+     */
+    void setEnabled(boolean value);
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @model

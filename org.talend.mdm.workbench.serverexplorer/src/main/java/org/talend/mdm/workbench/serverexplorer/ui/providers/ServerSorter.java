@@ -30,7 +30,14 @@ public class ServerSorter extends ViewerSorter {
         if (mdmItem1 != null && mdmItem2 != null) {
             MDMServerDef serverDef1 = mdmItem1.getServerDef();
             MDMServerDef serverDef2 = mdmItem2.getServerDef();
-            return serverDef1.getName().toLowerCase().compareTo(serverDef2.getName().toLowerCase());
+            boolean enabled1 = serverDef1.isEnabled();
+            boolean enabled2 = serverDef2.isEnabled();
+            if (enabled1 == enabled2) {
+                return serverDef1.getName().toLowerCase().compareTo(serverDef2.getName().toLowerCase());
+            } else {
+                return enabled1 ? -1 : 1;
+            }
+
         }
         return 0;
     }
