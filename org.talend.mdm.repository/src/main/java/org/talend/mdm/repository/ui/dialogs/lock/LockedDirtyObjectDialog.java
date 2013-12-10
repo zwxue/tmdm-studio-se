@@ -13,9 +13,11 @@
 package org.talend.mdm.repository.ui.dialogs.lock;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -70,7 +72,7 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
     protected void initInput(List<IRepositoryViewObject> inputObjs) {
         lockedObjs = new LinkedList<IRepositoryViewObject>();
         for (IRepositoryViewObject viewObject : inputObjs) {
-            if (isDirtyMdmViewObj(viewObject)) {
+            if (isDirtyMdmViewObj(inputObjs, viewObject)) {
                 lockedObjs.add(viewObject);
             }
         }
@@ -79,9 +81,19 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
 
     private Map<String, IEditorPart> editorRefMap;
 
-    private boolean isDirtyMdmViewObj(IRepositoryViewObject viewObj) {
+    private boolean isDirtyMdmViewObj(List<IRepositoryViewObject> inputObjs, IRepositoryViewObject viewObj) {
         if (editorRefMap == null) {
             editorRefMap = new HashMap<String, IEditorPart>();
+            // collect all ids
+            Set<String> ids = new HashSet<String>();
+            for (IRepositoryViewObject viewObject : inputObjs) {
+                String id = viewObject.getId();
+                if (id != null) {
+                    ids.add(id);
+                }
+            }
+
+            //
             IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
             for (IEditorReference ref : activePage.getEditorReferences()) {
                 try {
@@ -95,9 +107,12 @@ public class LockedDirtyObjectDialog extends LockedObjectDialog {
                     } else if (editorInput instanceof ProcessEditorInput) {
                         id = ((ProcessEditorInput) editorInput).getId();
                     }
-                    IEditorPart editor = ref.getEditor(false);
-                    if (id != null && editor != null && editor.isDirty()) {
-                        editorRefMap.put(id, editor);
+
+                    if (id != null && ids.contains(id)) {
+                        IEditorPart editor = ref.getEditor(false);
+                        if (editor != null && editor.isDirty()) {
+                            editorRefMap.put(id, editor);
+                        }
                     }
                 } catch (PartInitException e) {
                     log.error(e.getMessage(), e);
