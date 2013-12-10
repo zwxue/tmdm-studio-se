@@ -707,6 +707,37 @@ public class RepositoryResourceUtil {
         }
     }
 
+    public static boolean isDeletedFolder(ERepositoryObjectType type, FolderRepositoryObject parentObj, String path) {
+        String fullPath = parentObj.getProperty().getItem().getState().getPath();
+        if (path != null && !path.isEmpty()) {
+            if (!path.startsWith(DIVIDE) && !fullPath.endsWith(DIVIDE)) {
+                fullPath += DIVIDE + path;
+            } else {
+                fullPath += path;
+            }
+            return isDeletedFolder(type, fullPath);
+
+        }
+        return false;
+    }
+
+    public static boolean isDeletedFolder(ERepositoryObjectType type, String path) {
+
+        String rootPath = ERepositoryObjectType.getFolderName(type);
+        if (!rootPath.isEmpty()) {
+            if (path != null && !path.isEmpty()) {
+                if (!path.startsWith(DIVIDE)) {
+                    path = DIVIDE + path;
+                }
+                rootPath += path;
+
+            }
+        }
+        List<String> deletedFolderPaths = ProjectManager.getInstance().getCurrentProject().getEmfProject().getDeletedFolders();
+        return deletedFolderPaths.contains(rootPath);
+
+    }
+
     public static List<IRepositoryViewObject> findViewObjects(ERepositoryObjectType type, Item parentItem,
             boolean useRepositoryViewObject) {
         return findViewObjects(type, parentItem, useRepositoryViewObject, false);
