@@ -83,6 +83,14 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         List<Object> selectedObject = getSelectedObject();
         int size = selectedObject.size();
         if (size > 0) {
+            if (hasOpenedObject(selectedObject)) {
+                MessageDialog
+                        .openWarning(
+                                getShell(),
+                                Messages.RemoveFromRepositoryAction_Title,
+                                Messages.RemoveFromRepositoryAction_CanNotDeleteFolder);
+                return;
+            }
             if (!MessageDialog.openConfirm(getShell(), Messages.RemoveFromRepositoryAction_Title, Messages.bind(
                     Messages.RemoveFromRepositoryAction_confirm, size, size > 1 ? Messages.RemoveFromRepositoryAction_instances
                             : Messages.RemoveFromRepositoryAction_instance))) {
@@ -119,6 +127,28 @@ public class RemoveFromRepositoryAction extends AbstractRepositoryAction {
         if (lockedObjs.size() > 0) {
             MessageDialog.openError(getShell(), Messages.AbstractRepositoryAction_lockedObjTitle, getAlertMsg());
         }
+    }
+
+
+    private boolean hasOpenedObject(List selectedObject) {
+        if (selectedObject != null) {
+            for (Object object : selectedObject) {
+                if (object instanceof FolderRepositoryObject) {
+                    boolean result = hasOpenedObject(((FolderRepositoryObject) object).getChildren());
+                    if (result) {
+                        return true;
+                    }
+                } else {
+                    if (object instanceof IRepositoryViewObject
+                            && !factory.getRepositoryContext().isEditableAsReadOnly()
+                            && (!factory.isPotentiallyEditable((IRepositoryViewObject) object) || factory
+                                    .isUserReadOnlyOnCurrentProject())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void collectSelectedMatchRuleObjs(Object obj, List<IRepositoryViewObject> matchRules) {
