@@ -45,4 +45,6 @@ public interface IInteractiveHandler {
 
     List<IRepositoryViewObject> getAssociatedObjects(IRepositoryViewObject obj);
 
+    boolean isShownInResultDialog(IRepositoryViewObject viewObj);
+
 }
