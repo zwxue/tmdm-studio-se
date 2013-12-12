@@ -368,7 +368,7 @@ public class ImportServerObjectWizard extends Wizard {
             String fileExtension = fileInfo[2];
 
             String fileName = fileInfo[3];
-
+            fileQName = URLEncoder.encode(fileQName, "UTF-8"); //$NON-NLS-1$
             WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
             resource.setName(fileName);
             resource.setFileExtension(fileExtension);
