@@ -99,7 +99,7 @@ public class MDMExportRepositoryItemsWizard extends ExportItemsWizard {
             toReturn = new ArrayList<Item>();
             for (IRepositoryViewObject obj : objs) {
                 Item item = obj.getProperty().getItem();
-                if (!(item instanceof ContainerItem)) {
+                if (item != null && !(item instanceof ContainerItem)) {
                     item = RepositoryResourceUtil.assertItem(item);
                     toReturn.add(item);
                 }
