@@ -371,7 +371,7 @@ public class ImportServerObjectWizard extends Wizard {
             String fileExtension = fileInfo[2];
 
             String fileName = fileInfo[3];
-
+            fileQName = URLEncoder.encode(fileQName, "UTF-8"); //$NON-NLS-1$
             WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
             resource.setName(fileName);
             resource.setFileExtension(fileExtension);
@@ -805,23 +805,22 @@ public class ImportServerObjectWizard extends Wizard {
         getContainer().run(true, false, new ImportProcess());
     }
 
-	private void retriveServerRoot() {
-		if (serverDef != null) {
-			try {
-				getContainer().run(true, false, new RetriveProcess());
-			} catch (InvocationTargetException e) {
-				if (!Util.handleConnectionException(getShell(),
-						e.getTargetException(), null)) {
-					MessageDialog.openWarning(getShell(),Messages.Common_Warning,Messages.AbstractDataClusterAction_ConnectFailed);
-				}
-				log.error(e);
-			} catch (InterruptedException e) {
-				MessageDialog.openWarning(getShell(), Messages.Common_Warning,
-						Messages.AbstractDataClusterAction_ConnectFailed);
-				log.error(e);
-			}
-		}
-	}
+    private void retriveServerRoot() {
+        if (serverDef != null) {
+            try {
+                getContainer().run(true, false, new RetriveProcess());
+            } catch (InvocationTargetException e) {
+                if (!Util.handleConnectionException(getShell(), e.getTargetException(), null)) {
+                    MessageDialog.openWarning(getShell(), Messages.Common_Warning,
+                            Messages.AbstractDataClusterAction_ConnectFailed);
+                }
+                log.error(e);
+            } catch (InterruptedException e) {
+                MessageDialog.openWarning(getShell(), Messages.Common_Warning, Messages.AbstractDataClusterAction_ConnectFailed);
+                log.error(e);
+            }
+        }
+    }
 
     class SelectItemsPage extends WizardPage {
 
