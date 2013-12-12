@@ -125,6 +125,8 @@ import com.amalto.workbench.widgets.WidgetFactory;
  */
 public class ImportServerObjectWizard extends Wizard {
 
+    private static final String UTF8 = "UTF-8"; //$NON-NLS-1$
+
     static Logger log = Logger.getLogger(ImportServerObjectWizard.class);
 
     private TreeObjectCheckTreeViewer treeViewer;
@@ -236,8 +238,10 @@ public class ImportServerObjectWizard extends Wizard {
                 result[4] = versionM.group(2);
             }
             return result;
+        } else {
+            log.error("Canot not analyse picture resouce info from input:" + input); //$NON-NLS-1$
+            return null;
         }
-        return null;
 
     }
 
@@ -273,7 +277,7 @@ public class ImportServerObjectWizard extends Wizard {
         if (response.getStatusLine().getStatusCode() == 200) {
             HttpEntity entity = response.getEntity();
 
-            String encodedID = URLEncoder.encode(treeObj.getDisplayName(), "UTF-8");//$NON-NLS-1$
+            String encodedID = URLEncoder.encode(treeObj.getDisplayName(), UTF8);
             File tempFolder = IOUtil.getWorkspaceTempFolder();
             String filename = tempFolder.getAbsolutePath() + File.separator + encodedID + ".bar";//$NON-NLS-1$
             InputStream is = entity.getContent();
@@ -369,9 +373,10 @@ public class ImportServerObjectWizard extends Wizard {
             String dirName = fileInfo[0];
             String fileQName = fileInfo[1];
             String fileExtension = fileInfo[2];
-
             String fileName = fileInfo[3];
-            fileQName = URLEncoder.encode(fileQName, "UTF-8"); //$NON-NLS-1$
+            // encode the dirName and fileName
+            String encodedDirName = URLEncoder.encode(dirName, UTF8);
+            fileQName = URLEncoder.encode(fileQName, UTF8);
             WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
             resource.setName(fileName);
             resource.setFileExtension(fileExtension);
@@ -379,7 +384,7 @@ public class ImportServerObjectWizard extends Wizard {
             strBuf.append(serverDef.getProtocol())
                     .append(serverDef.getHost())
                     .append(":").append(serverDef.getPort()) //$NON-NLS-1$ 
-                    .append("/imageserver/upload/").append(dirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    .append("/imageserver/upload/").append(encodedDirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             String url = strBuf.toString();
             byte[] bytes = HttpClientUtil.downloadFile(url, serverDef.getUser(), serverDef.getPasswd());
             resource.setFileContent(bytes);
