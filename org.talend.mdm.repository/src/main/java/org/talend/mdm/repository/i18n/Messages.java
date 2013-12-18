@@ -244,6 +244,8 @@ public class Messages extends NLS {
 
     public static String RemoveFromRepositoryAction_AlterLockMsg;
 
+    public static String RemoveFromRepositoryAction_CanNotDeleteFolder;
+
     public static String RemoveFromRepositoryAction_confirm;
 
     public static String RemoveFromRepositoryAction_instance;
