@@ -86,4 +86,8 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return null;
     }
 
+    public boolean isShownInResultDialog(IRepositoryViewObject viewObj) {
+        return true;
+    }
+
 }

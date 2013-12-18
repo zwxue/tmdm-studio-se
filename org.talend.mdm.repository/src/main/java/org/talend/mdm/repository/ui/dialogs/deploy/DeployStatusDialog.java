@@ -37,6 +37,8 @@ import org.talend.mdm.repository.core.command.ICommand;
 import org.talend.mdm.repository.core.command.deploy.job.BatchDeployJobCommand;
 import org.talend.mdm.repository.core.service.DeployService.DeployCategoryStatus;
 import org.talend.mdm.repository.core.service.DeployService.DeployStatus;
+import org.talend.mdm.repository.core.service.IInteractiveHandler;
+import org.talend.mdm.repository.core.service.InteractiveService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.ui.dialogs.message.MultiStatusDialog;
@@ -227,20 +229,39 @@ public class DeployStatusDialog extends MultiStatusDialog {
         for (IStatus status : children) {
             collectTypeStatus(map, status);
         }
+
         MultiStatus retStatus = new MultiStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, "", null); //$NON-NLS-1$
         for (Entry<ERepositoryObjectType, List<IStatus>> entry : map.entrySet()) {
             ERepositoryObjectType key = entry.getKey();
-            MultiStatus submultiStatus = new DeployCategoryStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, Messages.bind(
-                    Messages.MultiStatusDialog_MultiStatus_Messages, key.getLabel()), null);
-            for (IStatus status : entry.getValue()) {
-                submultiStatus.add(status);
+            IInteractiveHandler handler = InteractiveService.findHandler(key);
+            if (handler != null) {
+                MultiStatus submultiStatus = new DeployCategoryStatus(RepositoryPlugin.PLUGIN_ID, Status.OK, Messages.bind(
+                        Messages.MultiStatusDialog_MultiStatus_Messages, key.getLabel()), null);
+                for (IStatus status : entry.getValue()) {
+                    if (isShown(handler, status)) {
+                        submultiStatus.add(status);
+                    }
+                }
+                if (submultiStatus.getChildren().length > 0) {
+                    retStatus.add(submultiStatus);
+                }
             }
-            retStatus.add(submultiStatus);
+
         }
         isShowWarningMsg = map.containsKey(IServerObjectRepositoryType.TYPE_VIEW)
                 && (!map.containsKey(IServerObjectRepositoryType.TYPE_DATAMODEL));
         map.clear();
         return retStatus;
+    }
+
+    private boolean isShown(IInteractiveHandler handler, IStatus status) {
+        if (status instanceof DeployStatus) {
+            IRepositoryViewObject viewObject = ((DeployStatus) status).getCommand().getViewObject();
+            if (viewObject != null) {
+                return handler.isShownInResultDialog(viewObject);
+            }
+        }
+        return true;
     }
 
     /*
