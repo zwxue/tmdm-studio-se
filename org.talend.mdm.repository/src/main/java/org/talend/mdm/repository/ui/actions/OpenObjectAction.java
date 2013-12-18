@@ -230,6 +230,9 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
                     }
                     // do extra action
                     MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
+                    if (!checkMissingJar(serverObject)) {
+                        return;
+                    }
                     boolean selected = doSelectServer(serverObject, editorInput);
                     if (!selected) {
                         return;
@@ -306,12 +309,22 @@ public class OpenObjectAction extends AbstractRepositoryAction implements IIntro
         return serverRoot;
     }
 
-    public boolean doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
-        if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
+    private boolean checkMissingJar(MDMServerObject serverObject) {
+        int type = serverObject.getType();
+        switch (type) {
+        case TreeObject.DATA_CLUSTER:
+        case TreeObject.TRANSFORMER:
+        case TreeObject.ROUTING_RULE:
             boolean checkMissingJar = MissingJarService.getInstance().checkMissingJar(true);
             if (!checkMissingJar) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    public boolean doSelectServer(MDMServerObject serverObject, IRepositoryViewEditorInput editorInput) {
+        if (serverObject.getType() == TreeObject.DATA_CLUSTER) {// Data Cluster
             MDMServerDef serverDef = openServerDialog(serverObject.getLastServerDef());
             if (serverDef != null) {
                 XObjectBrowserInput input = (XObjectBrowserInput) editorInput;
