@@ -821,6 +821,9 @@ public class RepositoryResourceUtil {
         if (item == null) {
             throw new IllegalArgumentException();
         }
+        if (item instanceof WorkspaceRootItem) {
+            return item;
+        }
         Property property = item.getProperty();
         if (property != null) {
 
