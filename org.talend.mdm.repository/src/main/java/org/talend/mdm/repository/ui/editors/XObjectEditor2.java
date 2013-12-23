@@ -24,16 +24,19 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.commons.exception.PersistenceException;
+import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
+import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
 import org.talend.mdm.repository.model.mdmserverobject.MDMServerObject;
 import org.talend.mdm.repository.ui.navigator.MDMRepositoryView;
 import org.talend.mdm.repository.utils.Bean2EObjUtil;
+import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import org.talend.repository.model.IProxyRepositoryFactory;
 
 import com.amalto.workbench.editors.AFormPage;
@@ -105,6 +108,11 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
         if (eObj != null) {
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
+                Item newItem = RepositoryResourceUtil.assertItem(serverObjectItem);
+                if (newItem != serverObjectItem) {
+                    editorInput.updateViewObject(ContainerCacheService.get(newItem.getProperty()));
+                    serverObjectItem = (MDMServerObjectItem) newItem;
+                }
                 factory.save(serverObjectItem);
                 // TODO should call the following,but the page in editor has many call to remote webService ,it will
                 // search ServerRoot which cause a NPE
