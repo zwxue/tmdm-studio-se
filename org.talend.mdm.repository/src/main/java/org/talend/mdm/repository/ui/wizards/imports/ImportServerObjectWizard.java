@@ -239,7 +239,6 @@ public class ImportServerObjectWizard extends Wizard {
             }
             return result;
         } else {
-            log.error("Canot not analyse picture resouce info from input:" + input); //$NON-NLS-1$
             return null;
         }
 
@@ -367,32 +366,37 @@ public class ImportServerObjectWizard extends Wizard {
      * @throws IOException
      */
     private WSResourceE handlePictureResourceObject(TreeObject treeObj) throws IOException {
-        String[] fileInfo = getPicResourceFileInfo(treeObj.getName());
+        if (treeObj != null) {
+            if (treeObj instanceof TreeParent) {
+                return null;
+            }
+            String[] fileInfo = getPicResourceFileInfo(treeObj.getName());
 
-        if (fileInfo != null) {
-            String dirName = fileInfo[0];
-            String fileQName = fileInfo[1];
-            String fileExtension = fileInfo[2];
-            String fileName = fileInfo[3];
-            // encode the dirName and fileName
-            String encodedDirName = URLEncoder.encode(dirName, UTF8);
-            fileQName = URLEncoder.encode(fileQName, UTF8);
-            WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
-            resource.setName(fileName);
-            resource.setFileExtension(fileExtension);
-            StringBuffer strBuf = new StringBuffer();
-            strBuf.append(serverDef.getProtocol())
-                    .append(serverDef.getHost())
-                    .append(":").append(serverDef.getPort()) //$NON-NLS-1$ 
-                    .append("/imageserver/upload/").append(encodedDirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            String url = strBuf.toString();
-            byte[] bytes = HttpClientUtil.downloadFile(url, serverDef.getUser(), serverDef.getPasswd());
-            resource.setFileContent(bytes);
-            // add imageCatalog
-            resource.setImageCatalog(dirName);
+            if (fileInfo != null) {
+                String dirName = fileInfo[0];
+                String fileQName = fileInfo[1];
+                String fileExtension = fileInfo[2];
+                String fileName = fileInfo[3];
+                // encode the dirName and fileName
+                String encodedDirName = URLEncoder.encode(dirName, UTF8);
+                fileQName = URLEncoder.encode(fileQName, UTF8);
+                WSResourceE resource = MdmserverobjectFactory.eINSTANCE.createWSResourceE();
+                resource.setName(fileName);
+                resource.setFileExtension(fileExtension);
+                StringBuffer strBuf = new StringBuffer();
+                strBuf.append(serverDef.getProtocol())
+                        .append(serverDef.getHost())
+                        .append(":").append(serverDef.getPort()) //$NON-NLS-1$ 
+                        .append("/imageserver/upload/").append(encodedDirName).append("/").append(fileQName).append(".").append(fileExtension); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                String url = strBuf.toString();
+                byte[] bytes = HttpClientUtil.downloadFile(url, serverDef.getUser(), serverDef.getPasswd());
+                resource.setFileContent(bytes);
+                // add imageCatalog
+                resource.setImageCatalog(dirName);
 
-            treeObj.setName(fileName);
-            return resource;
+                treeObj.setName(fileName);
+                return resource;
+            }
         }
         return null;
     }
@@ -404,6 +408,9 @@ public class ImportServerObjectWizard extends Wizard {
         List<IRepositoryViewObject> viewObjs = new LinkedList<IRepositoryViewObject>();
         for (Object obj : objs) {
             TreeObject treeObj = (TreeObject) obj;
+            if (treeObj != null && treeObj instanceof TreeParent) {
+                continue;
+            }
             String treeObjName = treeObj.getName();
             ERepositoryObjectType type = RepositoryQueryService.getRepositoryObjectType(treeObj.getType());
             if (type != null && treeObjName != null) {
