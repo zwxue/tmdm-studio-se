@@ -24,12 +24,10 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.core.runtime.CoreRuntimePlugin;
 import org.talend.mdm.repository.core.command.CommandManager;
 import org.talend.mdm.repository.core.command.ICommand;
-import org.talend.mdm.repository.core.service.ContainerCacheService;
 import org.talend.mdm.repository.core.service.DeployService;
 import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerObjectItem;
@@ -102,17 +100,19 @@ public class XObjectEditor2 extends XObjectEditor implements ISvnHistory {
     private boolean saveResourceToRepository() {
         XObjectEditorInput2 editorInput = (XObjectEditorInput2) this.getEditorInput();
         TreeObject xobject = (TreeObject) editorInput.getModel();
+
+        IRepositoryViewObject viewObject = editorInput.getViewObject();
+        IRepositoryViewObject refreshViewObject = RepositoryResourceUtil.assertViewObject(viewObject);
+        if (viewObject != refreshViewObject) {
+            editorInput.updateViewObject(refreshViewObject);
+        }
+
         MDMServerObjectItem serverObjectItem = (MDMServerObjectItem) editorInput.getInputItem();
         MDMServerObject serverObject = serverObjectItem.getMDMServerObject();
         EObject eObj = Bean2EObjUtil.getInstance().convertFromBean2EObj(xobject.getWsObject(), serverObject);
         if (eObj != null) {
             IProxyRepositoryFactory factory = CoreRuntimePlugin.getInstance().getProxyRepositoryFactory();
             try {
-                Item newItem = RepositoryResourceUtil.assertItem(serverObjectItem);
-                if (newItem != serverObjectItem) {
-                    editorInput.updateViewObject(ContainerCacheService.get(newItem.getProperty()));
-                    serverObjectItem = (MDMServerObjectItem) newItem;
-                }
                 factory.save(serverObjectItem);
                 // TODO should call the following,but the page in editor has many call to remote webService ,it will
                 // search ServerRoot which cause a NPE
