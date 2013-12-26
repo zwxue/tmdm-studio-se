@@ -74,7 +74,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.command.AbstractCommand#getCommandType()
      */
     @Override
@@ -84,7 +84,7 @@ public class UpdateLastServerCommand extends AbstractCommand {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.command.AbstractCommand#execute(java.lang.Object,
      * org.eclipse.core.runtime.IProgressMonitor)
      */
@@ -140,11 +140,16 @@ public class UpdateLastServerCommand extends AbstractCommand {
                     }
 
                     factory.save(item);
-
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
                 } finally {
                     RepositoryViewObjectResourceChangeManager.startListening();
+                }
+            } else {// save under command line
+                try {
+                    factory.save(item);
+                } catch (PersistenceException e) {
+                    log.error(e.getMessage(), e);
                 }
             }
         }

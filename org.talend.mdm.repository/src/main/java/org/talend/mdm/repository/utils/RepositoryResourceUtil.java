@@ -1229,6 +1229,19 @@ public class RepositoryResourceUtil {
 
     }
 
+    public static boolean isSameMDMServerDef(MDMServerDef aServerDef, MDMServerDef bServerDef) {
+        if (aServerDef == null && bServerDef == null) {
+            return true;
+        }
+        
+        if (aServerDef != null && bServerDef != null) {
+            if (aServerDef.getName().equals(bServerDef.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isOpenedItemInEditor(IRepositoryViewObject objectToMove) {
         try {
             if (objectToMove != null) {

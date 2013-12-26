@@ -41,7 +41,7 @@ import org.talend.mdm.workbench.serverexplorer.ui.dialogs.SelectServerDefDialog;
 
 /**
  * created by changguopiao on 2013-7-18 Detailled comment
- * 
+ *
  */
 public class UndeployAction extends AbstractBridgeRepositoryAction {
 
@@ -50,7 +50,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     /**
      * DOC changguopiao UnloadAndDeleteAction constructor comment.
-     * 
+     *
      * @param text
      */
     public UndeployAction() {
@@ -63,7 +63,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.action.Action#getImageDescriptor()
      */
     @Override
@@ -73,7 +73,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.AbstractRepositoryAction#getGroupName()
      */
     @Override
@@ -95,7 +95,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.mdm.repository.core.bridge.AbstractBridgeRepositoryAction#doRun()
      */
     @Override
@@ -127,7 +127,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
                 String id = viewObj.getId();
                 CommandStack stack = cmanager.findCommandStack(id);
                 if (stack != null) {
-                    if (isSameMDMServerDef(lastServerDef, serverDef)) {
+                    if (RepositoryResourceUtil.isSameMDMServerDef(lastServerDef, serverDef)) {
                         List<ICommand> commands = stack.getCommands(ICommand.PHASE_RESTORE);
                         for (ICommand cmd : commands) {
                             cmd.execute(null, monitor);
@@ -173,7 +173,7 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
             MDMServerDef tmpServer = RepositoryResourceUtil.getLastServerDef(viewObject);
             if (defServer == null) {
                 defServer = tmpServer;
-            } else if (tmpServer != null && !isSameMDMServerDef(defServer, tmpServer)) {
+            } else if (tmpServer != null && !RepositoryResourceUtil.isSameMDMServerDef(defServer, tmpServer)) {
                 defServer = null;
                 break;
             }
@@ -181,18 +181,5 @@ public class UndeployAction extends AbstractBridgeRepositoryAction {
         dialog.create();
         dialog.setSelectServer(defServer);
         return dialog;
-    }
-
-    private boolean isSameMDMServerDef(MDMServerDef aServerDef, MDMServerDef bServerDef) {
-        if (aServerDef == null && bServerDef == null) {
-            return true;
-        }
-
-        if (aServerDef != null && bServerDef != null) {
-            if (aServerDef.getName().equals(bServerDef.getName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

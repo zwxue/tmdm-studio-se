@@ -82,7 +82,7 @@ public class DeployToAction extends AbstractDeployAction {
 
     /**
      * set the default selection in SelectServerDefDialog
-     * 
+     *
      * @param viewObjs current selected view objects
      * @param dialog
      */
@@ -92,7 +92,7 @@ public class DeployToAction extends AbstractDeployAction {
             MDMServerDef tmpServer = RepositoryResourceUtil.getLastServerDef(viewObject);
             if (defServer == null) {
                 defServer = tmpServer;
-            } else if (tmpServer != null && !isSameMDMServerDef(defServer, tmpServer)) {
+            } else if (tmpServer != null && !RepositoryResourceUtil.isSameMDMServerDef(defServer, tmpServer)) {
                 defServer = null;
                 break;
             }
@@ -100,21 +100,5 @@ public class DeployToAction extends AbstractDeployAction {
 
         dialog.create();
         dialog.setSelectServer(defServer);
-    }
-
-    private boolean isSameMDMServerDef(MDMServerDef aServerDef, MDMServerDef bServerDef) {
-        if (aServerDef == null && bServerDef == null) {
-            return true;
-        }
-
-        if (aServerDef != null && bServerDef != null) {
-            if (aServerDef.getName().equals(bServerDef.getName())
-            // && aServerDef.getUrl().equals(bServerDef.getUrl())
-            ) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
