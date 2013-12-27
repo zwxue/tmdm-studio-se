@@ -56,12 +56,11 @@ import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
 
 /**
- *
+ * 
  * @author achen
- *
+ * 
  */
 public class TisTableViewer extends ComplexTableViewer {
-
 
     static HashMap<String, HashSet<Button>> pastBtns = new HashMap<String, HashSet<Button>>();
 
@@ -74,6 +73,8 @@ public class TisTableViewer extends ComplexTableViewer {
     private boolean isXpath;
 
     protected DataModelMainPage page;
+
+    protected String entityName;
 
     public boolean isAddMulti() {
         return addMulti;
@@ -93,6 +94,16 @@ public class TisTableViewer extends ComplexTableViewer {
 
     public TisTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit, Composite parent) {
         super(columns, toolkit, parent);
+    }
+
+    private void updateEntityName(String entityName) {
+        if (entityName != null) {
+            this.entityName = entityName;
+        }
+    }
+
+    public String getEntityName() {
+        return entityName;
     }
 
     @Override
@@ -159,6 +170,8 @@ public class TisTableViewer extends ComplexTableViewer {
 
                     if (xpathDialog.getReturnCode() == Window.OK) {
                         datamodelName = xpathDialog.getDataModelName();
+                        String entityName = xpathDialog.getEntityName();
+                        updateEntityName(entityName);
                         String[] xpaths = xpathDialog.getXpath().split("&");//$NON-NLS-1$
                         for (String xpath : xpaths) {
                             // check uniqueness by concatenating all the values
@@ -190,8 +203,8 @@ public class TisTableViewer extends ComplexTableViewer {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 List<Line> input = (List<Line>) viewer.getInput();
                 TableItem[] items = viewer.getTable().getSelection();
-                for (int i = 0; i < items.length; i++) {
-                    input.remove(items[i].getData());
+                for (TableItem item : items) {
+                    input.remove(item.getData());
                 }
                 viewer.setInput(input);
                 markDirty();
@@ -304,11 +317,13 @@ public class TisTableViewer extends ComplexTableViewer {
                 if (indexs.length > 0) {
                     // enable all paste buttons
                     HashSet<Button> btns = pastBtns.get(String.valueOf(columns.size()));
-                    if (btns != null)
+                    if (btns != null) {
                         for (Button btn : btns) {
-                            if (btn != null)
+                            if (btn != null) {
                                 btn.setEnabled(true);
+                            }
                         }
+                    }
                     // add to workbenchclipboard
                     WorkbenchClipboard.getWorkbenchClipboard().setLines(String.valueOf(columns.size()), copyLines);
                 }
@@ -345,8 +360,9 @@ public class TisTableViewer extends ComplexTableViewer {
                 if (mainPage != null) {
                     mainPage.setComitting(false);
                 }
-                if (dirty)
+                if (dirty) {
                     markDirty();
+                }
             };
         });
         HashSet<Button> btns = pastBtns.get(String.valueOf(columns.size()));
@@ -361,8 +377,7 @@ public class TisTableViewer extends ComplexTableViewer {
             if (columns.get(i).isText()) {
                 editors[i] = new TextCellEditor(table);
             } else if (columns.get(i).isCombo()) {
-                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(),
-                        SWT.READ_ONLY);
+                editors[i] = new ComboBoxCellEditor(table, columns.get(i).getComboValues(), SWT.READ_ONLY);
             } else if (columns.get(i).isXPATH()) {
                 editors[i] = new XpathCellEditor(table);
             } else if (columns.get(i).isMultiMessage()) {
@@ -414,8 +429,9 @@ public class TisTableViewer extends ComplexTableViewer {
                         if (keyvalue.key.equals(columns.get(columnIndex).getName())) {
                             String val = keyvalue.value;
                             if (columns.get(columnIndex).isNillable()) {
-                                if (columns.get(columnIndex).getNillValue().equals(val))
+                                if (columns.get(columnIndex).getNillValue().equals(val)) {
                                     val = columns.get(columnIndex).getNillDisplay();
+                                }
                             }
                             return val;
                         }
@@ -446,8 +462,9 @@ public class TisTableViewer extends ComplexTableViewer {
             @SuppressWarnings("unchecked")
             public void modify(Object element, String property, Object value) {
                 if (value instanceof Integer) {
-                    if (Integer.valueOf(value.toString()) == -1)
+                    if (Integer.valueOf(value.toString()) == -1) {
                         return;
+                    }
                 }
                 // modify the text and combo cell value
                 TableItem item = (TableItem) element;
@@ -581,8 +598,8 @@ public class TisTableViewer extends ComplexTableViewer {
     }
 
     protected XpathSelectDialog getNewXpathDlgInstance() {
-        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.SelectMultipleXPaths,
-                ServerView.show().getSite(), true, getDatamodelName());
+        return new XpathSelectDialog(table.getShell(), getCurrentTreeParent(), Messages.SelectMultipleXPaths, ServerView.show()
+                .getSite(), true, getDatamodelName());
     }
 
     public void setDataModelMainPage(DataModelMainPage page) {
