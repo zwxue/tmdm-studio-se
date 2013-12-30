@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -92,9 +91,9 @@ import com.amalto.workbench.utils.MDMServerDef;
 
 /**
  * Page of the Job Scripts Export Wizard. <br/>
- *
+ * 
  * $Id: DeployOnMDMExportWizardPage.java 1 2007-04-26 11:29:00 cantoine
- *
+ * 
  */
 public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResourceExportPage1 {
 
@@ -148,11 +147,11 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private IStructuredSelection selection;
 
-    private boolean saveflag= true;
+    private boolean saveflag = true;
 
     /**
      * Create an instance of this class.
-     *
+     * 
      * @param name java.lang.String
      */
     protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
@@ -217,7 +216,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create an instance of this class.
-     *
+     * 
      * @param selection the selection
      */
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
@@ -261,7 +260,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the export options specification widgets.
-     *
+     * 
      */
     @Override
     protected void createOptionsGroupButtons(Group optionsGroup) {
@@ -278,7 +277,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Create the buttons for the group that determine if the entire or selected directory structure should be created.
-     *
+     * 
      * @param optionsGroup
      * @param font
      */
@@ -364,7 +363,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Ensures that the target output file and its containing directory are both valid and able to be used. Answer a
      * boolean indicating validity.
-     *
+     * 
      * @param type
      */
     protected boolean ensureTargetIsValid(ExportFileResource p, int type) {
@@ -533,9 +532,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     IProcessor.NO_STATISTICS, IProcessor.NO_TRACES);
         }
 
-        if(!saveflag){
-        	saveflag = true;
-        	return false;
+        if (!saveflag) {
+            saveflag = true;
+            return false;
         }
         // about to invoke the operation so save our state
         doSaveWidgetValues();
@@ -705,7 +704,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     }
                 });
 
-                recordDeployException(new RuntimeException(new RemoteException(e.getMessage(), e)));
+                recordDeployException(new RuntimeException(e.getMessage(), e));
 
                 setDeploySucceed(false);
                 return false;
@@ -725,7 +724,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * The Finish button was pressed. Try to do the required work now and answer a boolean indicating success. If false
      * is returned then the wizard will not close.
-     *
+     * 
      * @returns boolean
      */
     @Override
@@ -760,9 +759,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     }
 
     /**
-     *
+     * 
      * DOC aiming Comment method "reBuildJobZipFile".
-     *
+     * 
      * @param type
      */
     private void reBuildJobZipFile(ExportFileResource p, int type) {
@@ -807,7 +806,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * process each job,unzip to a temp folder , copy the necessary folder for each job , and zip to the MDM temp folder
      * for uploading.
-     *
+     * 
      * @param type
      */
     protected void processForEachJob(ExportFileResource p, int type) {
@@ -903,7 +902,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Get the export operation.
-     *
+     * 
      * @param resourcesToExport
      * @return
      */
@@ -923,9 +922,9 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns the root folder name.
-     *
+     * 
      * @param type
-     *
+     * 
      * @return
      */
     private String getRootFolderName(ExportFileResource p, int type) {
@@ -955,7 +954,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Answer the string to display in self as the destination type.
-     *
+     * 
      * @return java.lang.String
      */
     @Override
@@ -965,7 +964,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /**
      * Returns resources to be exported. This returns file - for just the files use getSelectedResources.
-     *
+     * 
      * @return a collection of resources currently selected for export (element type: <code>IResource</code>)
      * @throws ProcessorException
      */
@@ -1085,7 +1084,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     /**
      * Answer the suffix that files exported from this wizard should have. If this suffix is a file extension (which is
      * typically the case) then it must include the leading period character.
-     *
+     * 
      */
     protected String getOutputSuffix(int type) {
         if (type == 0) {
@@ -1134,7 +1133,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.wizards.datatransfer.WizardFileSystemResourceExportPage1#destinationEmptyMessage()
      */
     @Override
@@ -1168,7 +1167,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1#validateDestinationGroup()
      */
     @Override
