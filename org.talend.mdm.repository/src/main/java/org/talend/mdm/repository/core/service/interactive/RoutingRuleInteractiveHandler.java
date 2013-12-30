@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -42,7 +40,8 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.RoutingRuleInteractiveHandler_label;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    @Override
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             port.putRoutingRule(new WSPutRoutingRule((WSRoutingRule) wsObj));
             return true;
@@ -51,7 +50,7 @@ public class RoutingRuleInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         WSRoutingRulePK pk = new WSRoutingRulePK();
         String name = cmd.getObjName();
         pk.setPk(name);

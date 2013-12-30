@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -54,7 +53,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
 
     /**
      * DOC hbhong TransformerMainPage2 constructor comment.
-     *
+     * 
      * @param editor
      */
     public TransformerMainPage2(FormEditor editor) {
@@ -88,7 +87,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     }
 
     @Override
-    protected void initPlugin() throws RemoteException {
+    protected void initPlugin() {
 
         for (AbstractPluginDetail detail : RepositoryWebServiceAdapter.findAllTransformerPluginV2Details()) {
 
@@ -170,7 +169,7 @@ public class TransformerMainPage2 extends TransformerMainPage {
     }
 
     @Override
-    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) throws RemoteException {
+    protected WSTransformerPluginV2Details getWsTransformerPluginV2Details(String jndi) {
         return RepositoryWebServiceAdapter.findTransformerPluginV2Detail(jndi);
     }
 

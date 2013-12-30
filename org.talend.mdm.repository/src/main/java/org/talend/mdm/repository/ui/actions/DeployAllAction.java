@@ -12,8 +12,9 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.actions;
 
-import java.rmi.RemoteException;
 import java.util.List;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
@@ -122,7 +123,7 @@ public class DeployAllAction extends AbstractDeployAction {
                         deployService.updateServerConsistencyStatus(serverDef, status);
                     } catch (XtentisException e) {
                         log.error(e.getMessage(), e);
-                    } catch (RemoteException e) {
+                    } catch (WebServiceException e) {
                         log.error(e.getMessage(), e);
                     }
                     // add canceled object to status

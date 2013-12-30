@@ -31,6 +31,35 @@
       </delegate>
    </extension>
    
+    <extension
+         id="matchRuleMapInfo"
+         name="MatchRule MapInfo Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="false"
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.MatchRuleMapInfoDelegatingValidator"
+            manual="true"
+            markerId="org.talend.mdm.error.datamodel.model"
+            version="2">
+         <include>
+            <rules>
+               <fileext
+                     caseSensitive="false"
+                     ext="mapinfo">
+               </fileext>
+            </rules>
+         </include>
+      </validator>
+   </extension>
+  
+   <extension
+         point="org.eclipse.wst.validation.validatorDelegates">
+      <delegate
+            class="org.talend.mdm.repository.core.validate.datamodel.wstext.MatchRuleMapInfoValidator"
+            name="DataModel  Delegate Validator"
+            target="org.talend.mdm.repository.core.validate.datamodel.wstext.MatchRuleMapInfoDelegatingValidator">
+      </delegate>
+   </extension>
    <extension
          id="org.talend.mdm.error.datamodel.xsdparse"
          name="MDM XSD parsing"

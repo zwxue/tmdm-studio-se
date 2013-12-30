@@ -85,6 +85,8 @@ public class Messages extends NLS {
 
     public static String ServerDefDialog_CheckConnection;
 
+    public static String ServerDefDialog_ConnectFailedWithDetail;
+
     public static String ServerDefDialog_Name;
 
     public static String ServerDefDialog_NameCanNotBeEmpty;

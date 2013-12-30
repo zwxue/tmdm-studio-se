@@ -168,6 +168,11 @@ public class MDMValidationRunner extends WorkspaceJob {
                     if (file != null) {
                         files.add(file);
                     }
+                    //
+                    //                    file = RepositoryResourceUtil.findReferenceFile(type, item, "mapinfo"); //$NON-NLS-1$
+                    // if (file != null) {
+                    // files.add(file);
+                    // }
 
                 }
                 viewObjMap.put(viewObj, file);

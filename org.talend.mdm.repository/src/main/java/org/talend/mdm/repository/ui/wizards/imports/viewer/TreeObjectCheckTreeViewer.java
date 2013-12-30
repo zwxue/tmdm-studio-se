@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.imports.viewer;
 
-import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +19,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.ws.WebServiceException;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -68,7 +69,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
         /**
          * DOC hbhong TreeObjectContentProvider constructor comment.
-         *
+         * 
          * @param site
          * @param invisibleRoot
          */
@@ -94,9 +95,9 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
 
     /**
      * DOC hbhong TreeObjectCheckTreeViewer constructor comment.
-     *
+     * 
      * @param serverDef
-     *
+     * 
      * @param serverRoot
      */
     public TreeObjectCheckTreeViewer(TreeParent serverRoot) {
@@ -267,7 +268,7 @@ public class TreeObjectCheckTreeViewer extends AbstractNodeCheckTreeViewer {
                 }
                 map.put(treeObject, consistencyData);
             }
-        } catch (RemoteException e) {
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);

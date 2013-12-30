@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.wsimpl.transformplugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
 
@@ -32,13 +35,11 @@ public abstract class AbstractPluginDetail extends WSTransformerPluginV2Details 
 
     public abstract String getJNDIName();
 
-    private WSTransformerPluginV2VariableDescriptor[] getNewVarDescriptor(String[] names) {
+    private List<WSTransformerPluginV2VariableDescriptor> getNewVarDescriptor(String[] names) {
         if (names != null) {
-            WSTransformerPluginV2VariableDescriptor[] vars = new WSTransformerPluginV2VariableDescriptor[names.length];
-            int i = 0;
+            List<WSTransformerPluginV2VariableDescriptor> vars = new ArrayList<WSTransformerPluginV2VariableDescriptor>();
             for (String name : names) {
-                vars[i] = new WSTransformerPluginV2VariableDescriptor(name, false, null, null, null);
-                i++;
+                vars.add(new WSTransformerPluginV2VariableDescriptor(name, false, null, null, null));
             }
             return vars;
         }

@@ -12,8 +12,9 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
 import java.util.List;
+
+import javax.xml.ws.WebServiceException;
 
 import org.talend.core.model.properties.Item;
 import org.talend.core.model.repository.IRepositoryViewObject;
@@ -48,12 +49,12 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return wsObj;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         return false;
         // do nothing
     }
 
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws WebServiceException, XtentisException {
         return true;
         // do nothing
     }
@@ -65,7 +66,7 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
      * org.talend.mdm.repository.core.service.IInteractiveHandler#deploy(com.amalto.workbench.webservices.XtentisPort,
      * org.talend.core.model.properties.Item, org.talend.mdm.repository.model.mdmserverobject.MDMServerObject)
      */
-    public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean deploy(AbstractDeployCommand cmd) throws XtentisException {
         IRepositoryViewObject viewObj = cmd.getViewObject();
         Item item = viewObj.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();
@@ -74,7 +75,7 @@ public abstract class AbstractInteractiveHandler implements IInteractiveHandler 
         return doDeployWSObject(port, wsObj);
     }
 
-    public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean remove(AbstractDeployCommand cmd) throws XtentisException {
         XtentisPort port = getPort(cmd.getServerDef());
         return doRemove(port, cmd);
     }

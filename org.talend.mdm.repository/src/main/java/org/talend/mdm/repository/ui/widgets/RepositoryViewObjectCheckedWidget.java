@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.widgets;
 
-import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +24,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -649,7 +650,7 @@ public class RepositoryViewObjectCheckedWidget extends Composite {
 
             }
             consistencyMap.put(viewObj, consistencyData);
-        } catch (RemoteException e) {
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
         } catch (XtentisException e) {
             log.error(e.getMessage(), e);

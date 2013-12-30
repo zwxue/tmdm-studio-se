@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.core.command.deploy;
 
-import java.rmi.RemoteException;
+import javax.xml.ws.WebServiceException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -52,12 +52,8 @@ public abstract class DefaultDeployCommand extends AbstractDeployCommand {
 
             } catch (OperationCanceledException e) {
                 return DeployStatus.getInfoStatus(this, Messages.bind(Messages.Deploy_cancel_text, typeLabel, objectName));
-            } catch (RemoteException e) {
-                Exception ex = (Exception) e.getCause();
-                if (null == ex) {
-                    ex = e;
-                }
-                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, ex);
+            } catch (WebServiceException e) {
+                return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, e);
             } catch (XtentisException e) {
                 return getDetailErrorMsg(Messages.Deploy_fail_cause_text, typeLabel, objectName, e);
             } catch (RuntimeException e) {

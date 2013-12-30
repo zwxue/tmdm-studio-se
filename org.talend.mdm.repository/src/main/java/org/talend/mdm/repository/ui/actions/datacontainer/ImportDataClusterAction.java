@@ -13,7 +13,8 @@
 package org.talend.mdm.repository.ui.actions.datacontainer;
 
 import java.io.File;
-import java.rmi.RemoteException;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.MultiStatus;
@@ -105,7 +106,7 @@ public class ImportDataClusterAction extends AbstractDataClusterAction {
                     }
                 } catch (XtentisException e) {
                     log.error(e.getMessage(), e);
-                } catch (RemoteException e) {
+                } catch (WebServiceException e) {
                     MessageDialog.openError(getShell(), Messages.ImportDataClusterAction_importTitle,
                             Messages.AbstractDataClusterAction_ConnectFailed);
                 } finally {

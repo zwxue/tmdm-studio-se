@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean deploy(AbstractDeployCommand cmd) throws XtentisException {
         setToDefaultValue();
 
         if (cmd instanceof BatchDeployJobCommand) {
@@ -146,7 +145,7 @@ public class JobInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         MDMServerDef serverDef = cmd.getServerDef();
         String name = cmd.getObjName();
         String version = cmd.getViewObject().getVersion();

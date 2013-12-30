@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             port.putDataModel(new WSPutDataModel((WSDataModel) wsObj));
             return true;
@@ -92,7 +91,7 @@ public class DataModelInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         WSDataModelPK pk = new WSDataModelPK();
         String name = cmd.getObjName();
         pk.setPk(name);

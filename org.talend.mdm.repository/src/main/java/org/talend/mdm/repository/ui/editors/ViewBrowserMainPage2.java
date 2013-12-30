@@ -14,6 +14,7 @@ package org.talend.mdm.repository.ui.editors;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -44,7 +45,7 @@ public class ViewBrowserMainPage2 extends ViewBrowserMainPage {
     }
 
     @Override
-    protected WSDataClusterPK[] getDataClusterPKs() throws MalformedURLException, XtentisException {
+    protected List<WSDataClusterPK> getDataClusterPKs() throws MalformedURLException, XtentisException {
         MDMServerDef d = getServerDef();
         return Util.getAllDataClusterPKs(new URL(d.getUrl()), d.getUniverse(), d.getUser(), d.getPasswd());
     }

@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.talend.core.model.properties.Item;
@@ -35,11 +34,11 @@ public interface IInteractiveHandler {
 
     Object convert(Item item, MDMServerObject serverObj);
 
-    boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException;
+    boolean deploy(AbstractDeployCommand cmd) throws XtentisException;
 
-    boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException;
+    boolean remove(AbstractDeployCommand cmd) throws XtentisException;
 
-    boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException, XtentisException;
+    boolean doDeployWSObject(XtentisPort port, Object wsObj) throws XtentisException;
 
     void assertPropertyIsInited(Item item);
 

@@ -12,7 +12,8 @@
 // ============================================================================
 package org.talend.mdm.repository.core.command.deploy;
 
-import java.rmi.RemoteException;
+import javax.xml.ws.WebServiceException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
@@ -24,6 +25,8 @@ import org.talend.mdm.repository.i18n.Messages;
 import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.plugin.RepositoryPlugin;
 import org.talend.mdm.repository.utils.UserExceptionStackFilter;
+
+import com.amalto.workbench.utils.Util;
 
 /**
  * DOC hbhong class global comment. Detailled comment
@@ -52,8 +55,8 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
     protected IStatus getDetailErrorMsg(String bindMsg, String typeLabel, String objectName, Exception e) {
         Throwable cause = null;
 
-        if (e instanceof RemoteException) {
-            cause = ((RemoteException) e).detail;
+        if (e instanceof WebServiceException) {
+            cause = Util.analyseWebServiceException((WebServiceException) e);
         } else {
             cause = e.getCause();
         }
@@ -65,7 +68,6 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
             status = DeployStatus.getErrorStatus(this, Messages.bind(bindMsg, typeLabel, objectName, e.getMessage()), e);
         }
 
-
         return status;
     }
 
@@ -76,8 +78,7 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
 
         IStatus status = null;
         if (exceptionMsgs.length == 1) {
-            status = DeployStatus.getErrorStatus(this,
-                    Messages.bind(bindMsg, typeLabel, objectName, exceptionMsgs[0]), e);
+            status = DeployStatus.getErrorStatus(this, Messages.bind(bindMsg, typeLabel, objectName, exceptionMsgs[0]), e);
 
             return status;
         }
@@ -92,4 +93,3 @@ public abstract class AbstractDeployCommand extends AbstractCommand {
     }
 
 }
-

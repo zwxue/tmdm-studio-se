@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -42,7 +40,8 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.MenuInteractiveHandler_label;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    @Override
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             port.putMenu(new WSPutMenu((WSMenu) wsObj));
             return true;
@@ -51,7 +50,7 @@ public class MenuInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         WSMenuPK pk = new WSMenuPK();
         String name = cmd.getObjName();
         pk.setPk(name);

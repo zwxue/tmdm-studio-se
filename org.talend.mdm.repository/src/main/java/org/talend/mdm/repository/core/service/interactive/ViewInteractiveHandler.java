@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -42,7 +40,8 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.ViewInteractiveHandler_label;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    @Override
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             port.putView(new WSPutView((WSView) wsObj));
             return true;
@@ -50,7 +49,8 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    @Override
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         WSViewPK pk = new WSViewPK();
         String name = cmd.getObjName();
         pk.setPk(name);
@@ -58,6 +58,5 @@ public class ViewInteractiveHandler extends AbstractInteractiveHandler {
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.View.getName());
         return true;
     }
-
 
 }

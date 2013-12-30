@@ -31,20 +31,23 @@ public class WSRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
      */
     @Override
     public Object[] getPropertys(Object obj) {
-        if (obj == null || !(obj instanceof WSRoutingRule))
+        if (obj == null || !(obj instanceof WSRoutingRule)) {
             throw new IllegalArgumentException();
+        }
         WSRoutingRule rule = (WSRoutingRule) obj;
         return new Object[] { rule.getName(), rule.getDescription(), rule.isSynchronous(), rule.getConcept(),
-                rule.getServiceJNDI(), rule.getParameters(), rule.getCondition(), rule.getDeactive(),
+                rule.getServiceJNDI(), rule.getParameters(), rule.getCondition(), rule.isDeactive(),
                 rule.getWsRoutingRuleExpressions() };
     }
 
     class WSRoutinRuleExpressionHVCalculator extends RoutingRuleExpressionHVCalculator {
 
         // 1-name 2-xpath 3-value 4-wsOperator
+        @Override
         public Object[] getPropertys(Object obj) {
-            if (obj == null || !(obj instanceof WSRoutingRuleExpression))
+            if (obj == null || !(obj instanceof WSRoutingRuleExpression)) {
                 throw new IllegalArgumentException();
+            }
             WSRoutingRuleExpression expression = (WSRoutingRuleExpression) obj;
             return new Object[] { expression.getName(), expression.getXpath(), expression.getValue(), expression.getWsOperator() };
         }
@@ -52,11 +55,12 @@ public class WSRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
 
     IHashValueCalculator routinRuleArrayExpressionHVCalculator;
 
-
+    @Override
     protected IHashValueCalculator getRoutinRuleExpressionHVCalculator() {
         if (routinRuleArrayExpressionHVCalculator == null) {
 
-            routinRuleArrayExpressionHVCalculator = new ArrayCollectionHashValueCalculator(new WSRoutinRuleExpressionHVCalculator());
+            routinRuleArrayExpressionHVCalculator = new ArrayCollectionHashValueCalculator(
+                    new WSRoutinRuleExpressionHVCalculator());
         }
         return routinRuleArrayExpressionHVCalculator;
     }
@@ -66,14 +70,17 @@ public class WSRoutingRuleHVCalculator extends RoutingRuleHVCalculator {
     class WSRoutingRuleOperatorHVCalculator extends RoutingRuleOperatorHVCalculator {
 
         // 1 value
+        @Override
         public Object[] getPropertys(Object obj) {
-            if (obj == null || !(obj instanceof WSRoutingRuleOperator))
+            if (obj == null || !(obj instanceof WSRoutingRuleOperator)) {
                 throw new IllegalArgumentException();
+            }
             WSRoutingRuleOperator operator = (WSRoutingRuleOperator) obj;
-            return new Object[] { operator.getValue() };
+            return new Object[] { operator.value() };
         }
     };
 
+    @Override
     protected IHashValueCalculator getRoutingRuleOperatorHVCalculator() {
         if (routingRuleOperatorHVCalculator == null) {
             routingRuleOperatorHVCalculator = new WSRoutingRuleOperatorHVCalculator();

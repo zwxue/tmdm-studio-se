@@ -16,6 +16,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class Bean2EObjUtil {
 
     BidiMap classMap = new DualHashBidiMap();
 
-    Map<Field, EStructuralFeature> fieldMap = new HashMap<Field, EStructuralFeature>();
+    Map<Object, EStructuralFeature> fieldMap = new HashMap<Object, EStructuralFeature>();
 
     BeanClassUtil beanClassUtil = new BeanClassUtil(this);
 
@@ -63,7 +64,7 @@ public class Bean2EObjUtil {
             return;
         }
         EClass eCls;
-        eCls = guessEClassByClassName(cls);
+        eCls = emfClassUtil.guessEClassByClassName(cls);
         if (eCls != null) {
             classMap.put(cls, eCls);
             beanClassUtil.refactorClassStructure(cls);
@@ -72,39 +73,39 @@ public class Bean2EObjUtil {
     }
 
     private void guessField(Class cls, EClass eCls) {
-        Map<Field, Method[]> map = beanClassUtil.findFieldMap(cls);
+        Map<Object, Method[]> map = beanClassUtil.findFieldMap(cls);
 
         if (map != null) {
             EList<EStructuralFeature> features = eCls.getEAllStructuralFeatures();
-            for (Field field : map.keySet()) {
-                String fieldName = field.getName();
-                boolean found = false;
+            if (cls.isEnum()) {
                 for (EStructuralFeature feature : features) {
                     String featureName = feature.getName();
-                    if (fieldName.equals(featureName)) {
-                        fieldMap.put(field, feature);
-                        found = true;
-                        //                        System.out.println("\t Found Field Map:" + fieldName + "\n\tfield=" + field + "\n\tfeature=" + feature); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    if ("value".equals(featureName)) { //$NON-NLS-1$
+                        fieldMap.put(cls, feature);
                         break;
                     }
                 }
-                if (!found) {
-                    log.debug("\t Failed to Found Field Map:" + fieldName); //$NON-NLS-1$
+            } else {
+
+                for (Object fieldObj : map.keySet()) {
+                    Field field = (Field) fieldObj;
+                    String fieldName = field.getName();
+                    boolean found = false;
+                    for (EStructuralFeature feature : features) {
+                        String featureName = feature.getName();
+                        if (fieldName.equals(featureName)) {
+                            fieldMap.put(field, feature);
+                            found = true;
+                            //                        System.out.println("\t Found Field Map:" + fieldName + "\n\tfield=" + field + "\n\tfeature=" + feature); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        log.debug("\t Failed to Found Field Map:" + fieldName); //$NON-NLS-1$
+                    }
                 }
             }
         }
-    }
-
-    private EClass guessEClassByClassName(Class cls) {
-        String eClassName = cls.getSimpleName() + "E"; //$NON-NLS-1$
-        for (EClass eCls : emfClassUtil.getAllEClass()) {
-            if (eCls.getName().equals(eClassName)) {
-                //                System.out.println(">>For class:" + cls.getName() + " (Found:)=> " + eCls.getName()); //$NON-NLS-1$ //$NON-NLS-2$
-                return eCls;
-            }
-        }
-        log.debug(">>For class:" + cls.getName() + " Not Found corresponding EClass "); //$NON-NLS-1$//$NON-NLS-2$
-        return null;
     }
 
     public EObject convertFromBean2EObj(Object bean, EObject eObj) {
@@ -114,112 +115,84 @@ public class Bean2EObjUtil {
             eObj = MdmserverobjectFactory.eINSTANCE.create(eCls);
         }
         if (eCls != null) {
-            Map<Field, Method[]> beanFieldMap = beanClassUtil.findFieldMap(beanCls);
+            Map<Object, Method[]> beanFieldMap = beanClassUtil.findFieldMap(beanCls);
             if (beanFieldMap == null) {
                 return null;
             }
-            for (Field field : beanFieldMap.keySet()) {
-                try {
-                    EStructuralFeature feature = fieldMap.get(field);
-                    // System.out.println("Field>>\t" + field + "\n\tfeature>>" + feature);
-                    if (feature == null) {
-                        dumpMap();
+            if (beanCls.isEnum()) {
+                Method[] methods = beanFieldMap.get(beanCls);
+                EStructuralFeature feature = fieldMap.get(beanCls);
+                if (feature != null) {
+                    try {
+                        Object value = methods[0].invoke(bean);
+                        eObj.eSet(feature, value);
+                    } catch (IllegalArgumentException e) {
+                        log.error(e.getMessage(), e);
+                    } catch (IllegalAccessException e) {
+                        log.error(e.getMessage(), e);
+                    } catch (InvocationTargetException e) {
+                        log.error(e.getMessage(), e);
                     }
-                    if (feature != null) {
-                        Method getMethod = beanFieldMap.get(field)[0];
-                        Object value = getMethod.invoke(bean);
-                        if (beanClassUtil.isColletionField(field)) {
-                            if (value != null) {
-                                ((EList) eObj.eGet(feature)).clear();
-                                for (Object childObj : (Object[]) value) {
-                                    if (childObj != null) {
-                                        Object eChildObj = null;
-                                        if (beanClassUtil.isJavaClass(childObj.getClass())) {
-                                            eChildObj = childObj;
-                                        } else {
-                                            eChildObj = convertFromBean2EObj(childObj, null);
-                                        }
-                                        if (eChildObj != null) {
-                                            ((EList) eObj.eGet(feature)).add(eChildObj);
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            Object eValue = null;
-                            if (beanClassUtil.isJavaField(field)) {
-                                eValue = value;
-                            } else {
-                                // a object reference
-                                if (value != null) {
-                                    eValue = convertFromBean2EObj(value, null);
-                                } else {
-                                    eValue = null;
-                                }
-                            }
-                            eObj.eSet(feature, eValue);
-                        }
-                    }
-                } catch (IllegalArgumentException e) {
-                    log.error(e.getMessage(), e);
-                } catch (IllegalAccessException e) {
-                    log.error(e.getMessage(), e);
-                } catch (InvocationTargetException e) {
-                    log.error(e.getMessage(), e);
                 }
-            }
-            return eObj;
-        }
-        return null;
-    }
-
-    public Object convertFromEObj2Bean(EObject eObj) {
-        EClass eCls = eObj.eClass();
-        Class beanCls = (Class) classMap.getKey(eCls);
-
-        if (beanCls != null) {
-            try {
-                Object bean = beanCls.newInstance();
-                Map<Field, Method[]> beanFieldMap = beanClassUtil.findFieldMap(beanCls);
-                if (beanFieldMap == null) {
-                    return null;
-                }
-                for (Field field : beanFieldMap.keySet()) {
+            } else {
+                for (Object fieldObj : beanFieldMap.keySet()) {
+                    Field field = (Field) fieldObj;
                     try {
                         EStructuralFeature feature = fieldMap.get(field);
+                        // System.out.println("Field>>\t" + field + "\n\tfeature>>" + feature);
+                        if (feature == null) {
+                            dumpMap();
+                        }
                         if (feature != null) {
-                            Method setMethod = beanFieldMap.get(field)[1];
-
-                            Object value = eObj.eGet(feature);
-                            if (value != null) {
-                                if (feature.isMany()) {
-
-                                    EList list = (EList) value;
-                                    Object newInstance = Array.newInstance(field.getType().getComponentType(), list.size());
-                                    Object[] children = (Object[]) newInstance;
-                                    int i = 0;
-                                    for (Object echildObj : list) {
-                                        Object childObj = null;
-                                        if (echildObj != null && beanClassUtil.isJavaClass(echildObj.getClass())) {
-                                            childObj = echildObj;
-                                        } else {
-                                            childObj = convertFromEObj2Bean((EObject) echildObj);
+                            Method getMethod = beanFieldMap.get(field)[0];
+                            Object value = getMethod.invoke(bean);
+                            if (beanClassUtil.isCollectionField(field)) {
+                                if (value != null) {
+                                    ((EList) eObj.eGet(feature)).clear();
+                                    for (Object childObj : (Collection) value) {
+                                        if (childObj != null) {
+                                            Object eChildObj = null;
+                                            if (beanClassUtil.isJavaClass(childObj.getClass())) {
+                                                eChildObj = childObj;
+                                            } else {
+                                                eChildObj = convertFromBean2EObj(childObj, null);
+                                            }
+                                            if (eChildObj != null) {
+                                                ((EList) eObj.eGet(feature)).add(eChildObj);
+                                            }
                                         }
-                                        children[i] = childObj;
-                                        i++;
                                     }
-                                    setMethod.invoke(bean, newInstance);
-
-                                } else {
-                                    Object eValue = null;
-                                    if (beanClassUtil.isJavaField(field)) {
-                                        eValue = value;
-                                    } else {
-                                        // a object reference
-                                        eValue = convertFromEObj2Bean((EObject) value);
-                                    }
-                                    setMethod.invoke(bean, eValue);
                                 }
+                            } else if (beanClassUtil.isArrayField(field)) {
+                                if (value != null) {
+                                    ((EList) eObj.eGet(feature)).clear();
+                                    for (Object childObj : (Object[]) value) {
+                                        if (childObj != null) {
+                                            Object eChildObj = null;
+                                            if (beanClassUtil.isJavaClass(childObj.getClass())) {
+                                                eChildObj = childObj;
+                                            } else {
+                                                eChildObj = convertFromBean2EObj(childObj, null);
+                                            }
+                                            if (eChildObj != null) {
+                                                ((EList) eObj.eGet(feature)).add(eChildObj);
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                Object eValue = null;
+                                if (beanClassUtil.isJavaField(field)) {
+                                    eValue = value;
+                                } else {
+                                    // a object reference
+                                    if (value != null) {
+                                        eValue = convertFromBean2EObj(value, null);
+                                    } else {
+                                        eValue = null;
+                                    }
+                                }
+                                eObj.eSet(feature, eValue);
                             }
                         }
                     } catch (IllegalArgumentException e) {
@@ -230,7 +203,105 @@ public class Bean2EObjUtil {
                         log.error(e.getMessage(), e);
                     }
                 }
-                return bean;
+            }
+            return eObj;
+        }
+        return null;
+    }
+
+    public Object convertFromEObj2Bean(EObject eObj) {
+        EClass eCls = eObj.eClass();
+        Class beanCls = (Class) classMap.getKey(eCls);
+        if (beanCls != null) {
+            Map<Object, Method[]> beanFieldMap = beanClassUtil.findFieldMap(beanCls);
+            if (beanFieldMap == null) {
+                return null;
+            }
+
+            try {
+                if (beanCls.isEnum()) {
+                    EStructuralFeature feature = fieldMap.get(beanCls);
+                    if (feature != null) {
+                        Method convertMethod = beanFieldMap.get(beanCls)[1];
+                        Object value = eObj.eGet(feature);
+                        try {
+                            return convertMethod.invoke(null, value);
+                        } catch (IllegalArgumentException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (InvocationTargetException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                } else {
+                    Object bean = null;
+                    bean = beanCls.newInstance();
+
+                    for (Object fieldObj : beanFieldMap.keySet()) {
+                        Field field = (Field) fieldObj;
+                        try {
+                            EStructuralFeature feature = fieldMap.get(field);
+                            if (feature != null) {
+                                Method setMethod = beanFieldMap.get(field)[1];
+
+                                Object value = eObj.eGet(feature);
+                                if (value != null) {
+                                    if (feature.isMany()) {
+                                        EList list = (EList) value;
+                                        if (beanClassUtil.isCollectionField(field)) {
+                                            Object collectionObj = setMethod.invoke(bean);
+                                            if (collectionObj instanceof Collection) {
+                                                for (Object echildObj : list) {
+                                                    Object childObj = null;
+                                                    if (echildObj != null && beanClassUtil.isJavaClass(echildObj.getClass())) {
+                                                        childObj = echildObj;
+                                                    } else {
+                                                        childObj = convertFromEObj2Bean((EObject) echildObj);
+                                                    }
+                                                    ((Collection) collectionObj).add(childObj);
+                                                }
+                                            }
+
+                                        } else if (beanClassUtil.isArrayField(field)) {
+
+                                            Object newInstance = Array.newInstance(field.getType().getComponentType(),
+                                                    list.size());
+                                            Object[] children = (Object[]) newInstance;
+                                            int i = 0;
+                                            for (Object echildObj : list) {
+                                                Object childObj = null;
+                                                if (echildObj != null && beanClassUtil.isJavaClass(echildObj.getClass())) {
+                                                    childObj = echildObj;
+                                                } else {
+                                                    childObj = convertFromEObj2Bean((EObject) echildObj);
+                                                }
+                                                children[i] = childObj;
+                                                i++;
+                                            }
+                                            setMethod.invoke(bean, newInstance);
+                                        }
+
+                                    } else {
+                                        Object eValue = null;
+                                        if (beanClassUtil.isJavaField(field)) {
+                                            eValue = value;
+                                        } else {
+                                            // a object reference
+                                            eValue = convertFromEObj2Bean((EObject) value);
+                                        }
+                                        setMethod.invoke(bean, eValue);
+                                    }
+                                }
+                            }
+                        } catch (IllegalArgumentException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (IllegalAccessException e) {
+                            log.error(e.getMessage(), e);
+                        } catch (InvocationTargetException e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
+                    return bean;
+                }
             } catch (InstantiationException e) {
                 log.error(e.getMessage(), e);
             } catch (IllegalAccessException e) {

@@ -24,6 +24,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 public class RoutingEngineV2BrowserMainPage2 extends RoutingEngineV2BrowserMainPage {
 
     private static Logger log = Logger.getLogger(RoutingEngineV2BrowserMainPage2.class);
+
     public RoutingEngineV2BrowserMainPage2(FormEditor editor) {
         super(editor);
     }
@@ -33,13 +34,9 @@ public class RoutingEngineV2BrowserMainPage2 extends RoutingEngineV2BrowserMainP
         return input.getServerDef();
     }
 
-    protected XtentisPort getPort() {
-        try {
-            MDMServerDef serverDef = getServerDef();
-            return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-        } catch (XtentisException e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
+    @Override
+    protected XtentisPort getPort() throws XtentisException {
+        MDMServerDef serverDef = getServerDef();
+        return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
     }
 }

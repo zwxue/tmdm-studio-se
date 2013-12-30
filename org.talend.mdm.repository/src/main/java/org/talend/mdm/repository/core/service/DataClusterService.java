@@ -16,8 +16,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Properties;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -62,10 +63,10 @@ public class DataClusterService {
             WSPutDataCluster wsDataCluster = new WSPutDataCluster(new WSDataCluster(dName, "", "")); //$NON-NLS-1$ //$NON-NLS-2$
             port.putDataCluster(wsDataCluster);
             return true;
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
-            return false;
+        } catch (WebServiceException ex) {
+            log.error(ex.getMessage(), ex);
         }
+        return false;
     }
 
     private String getIndexFilePath(String folderPath) {
@@ -89,10 +90,10 @@ public class DataClusterService {
         return new ExportDataContentCommandProcess(port, tempFolderPath, dName, fPath);
     }
 
-    public boolean isExistDataCluster(XtentisPort port, String dName) throws RemoteException {
+    public boolean isExistDataCluster(XtentisPort port, String dName) {
         WSExistsDataCluster wsExistsDataCluster = new WSExistsDataCluster(new WSDataClusterPK(dName));
         WSBoolean wsBoolean = port.existsDataCluster(wsExistsDataCluster);
-        return wsBoolean.is_true();
+        return wsBoolean.isTrue();
     }
 
     public String loadIndexFile(String folderPath) {

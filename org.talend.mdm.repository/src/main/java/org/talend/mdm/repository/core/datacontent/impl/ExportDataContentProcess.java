@@ -20,9 +20,10 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,7 +48,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSItem;
-import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
+import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.Results;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -95,7 +96,7 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
         try {
             DataProcessRule rule = DataProcessRuleFactory.createProcessRouterFromRemote(port, dName);
             return rule;
-        } catch (RemoteException e) {
+        } catch (WebServiceException e) {
             throw new InvocationTargetException(e, Messages.ExportDataContentProcess_CanNotConnectServer);
         }
     }
@@ -182,19 +183,19 @@ public class ExportDataContentProcess extends AbstractDataContentProcess {
             WSDataClusterPK pk = new WSDataClusterPK(dName);
             try {
                 List<String> items = new ArrayList<String>();
-                WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByCriteria(
+                List<Results> results = port.getItemPKsByCriteria(
                         new WSGetItemPKsByCriteria(pk, null, null, null, (long) -1, (long) -1, 0, MAX_EXPORT_COUNT)).getResults();
                 if (results == null) {
                     return -1;
                 }
-                monitor.beginTask(Messages.ExportDataClusterAction_exportContent, results.length + 10);
+                monitor.beginTask(Messages.ExportDataClusterAction_exportContent, results.size() + 10);
                 monitor.subTask(Messages.ExportDataClusterAction_exporting);
                 int totalSize = 0;
-                if (results.length > 0) {
-                    totalSize = Integer.parseInt(Util.parse(results[0].getWsItemPK().getConceptName()).getDocumentElement()
+                if (results.size() > 0) {
+                    totalSize = Integer.parseInt(Util.parse(results.get(0).getWsItemPK().getConceptName()).getDocumentElement()
                             .getTextContent());
                 }
-                for (WSItemPKsByCriteriaResponseResults item : results) {
+                for (Results item : results) {
                     if (item.getWsItemPK().getIds() == null) {
                         continue;
                     }

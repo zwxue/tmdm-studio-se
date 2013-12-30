@@ -22,7 +22,6 @@
 package org.talend.mdm.workbench.serverexplorer.ui.views;
 
 import java.net.MalformedURLException;
-import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -360,8 +359,6 @@ public class ServerExplorer extends ViewPart {
                                 returnMsg = Messages.ServerExplorer_ConnectSSLFailed;
                             } catch (MalformedURLException e) {
                                 returnMsg = Messages.ServerExplorer_ConnectFailed;
-                            } catch (RemoteException e) {
-                                returnMsg = Messages.ServerExplorer_ConnectFailed;
                             }
                             MessageDialog.openInformation(getSite().getShell(), Messages.ServerExplorer_RefreshServerCache,
                                     returnMsg);
@@ -402,9 +399,6 @@ public class ServerExplorer extends ViewPart {
                         MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
                                 Messages.ServerExplorer_ConnectSSLFailed);
                     } catch (MalformedURLException e) {
-                        MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
-                                Messages.ServerExplorer_ConnectFailed);
-                    } catch (RemoteException e) {
                         MessageDialog.openError(getSite().getShell(), Messages.ServerExplorer_CheckConnection,
                                 Messages.ServerExplorer_ConnectFailed);
                     }

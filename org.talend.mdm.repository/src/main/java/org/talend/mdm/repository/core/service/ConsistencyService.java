@@ -15,7 +15,6 @@ package org.talend.mdm.repository.core.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,7 +80,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * created by HHB on 2013-7-18 Detailled comment
- *
+ * 
  */
 public class ConsistencyService {
 
@@ -355,7 +354,7 @@ public class ConsistencyService {
     }
 
     public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, Collection<IRepositoryViewObject> viewObjs)
-            throws XtentisException, RemoteException {
+            throws XtentisException {
         Map<IRepositoryViewObject, Integer> viewObCmdOpjMap = new HashMap<IRepositoryViewObject, Integer>();
         for (IRepositoryViewObject viewObj : viewObjs) {
             viewObCmdOpjMap.put(viewObj, ICommand.CMD_MODIFY);
@@ -364,7 +363,7 @@ public class ConsistencyService {
     }
 
     public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, Map<IRepositoryViewObject, Integer> viewObCmdOpjMap)
-            throws XtentisException, RemoteException {
+            throws XtentisException {
         Collection<IRepositoryViewObject> viewObjs = viewObCmdOpjMap.keySet();
         updateCurrentlDigestValue(viewObjs);
         Map<IRepositoryViewObject, WSDigest> viewObjMap = queryServerDigestValue(serverDef, viewObjs);
@@ -492,7 +491,7 @@ public class ConsistencyService {
 
     /**
      * DOC HHB Comment method "getCompareResult".
-     *
+     * 
      * @param cd current digest value
      * @param ld local digest value
      * @param rd remote digest value
@@ -639,7 +638,7 @@ public class ConsistencyService {
         return total;
     }
 
-    public void updateDigestValue(MDMServerDef serverDef, IRepositoryViewObject viewObj) throws XtentisException, RemoteException {
+    public void updateDigestValue(MDMServerDef serverDef, IRepositoryViewObject viewObj) throws XtentisException {
         XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
         updateLocalDigestValue(viewObj);
         Item item = viewObj.getProperty().getItem();
@@ -687,8 +686,7 @@ public class ConsistencyService {
         return objectName;
     }
 
-    public <T> Map<T, WSDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException,
-            RemoteException {
+    public <T> Map<T, WSDigest> queryServerDigestValue(MDMServerDef serverDef, Collection<T> objs) throws XtentisException {
         Map<T, WSDigest> result = new LinkedHashMap<T, WSDigest>();
         XtentisPort port = RepositoryWebServiceAdapter.getXtentisPort(serverDef);
         if (isSupportConsistency(port)) {
@@ -755,7 +753,7 @@ public class ConsistencyService {
 
     /**
      * caculate and update local digest value
-     *
+     * 
      * @param viewObj
      */
     public void updateLocalDigestValue(IRepositoryViewObject viewObj) {
@@ -802,8 +800,8 @@ public class ConsistencyService {
         return getPreferenceStore().getInt(PreferenceConstants.P_CONFLICT_STRATEGY);
     }
 
-    private boolean isSupportConsistency(XtentisPort port) throws RemoteException {
+    private boolean isSupportConsistency(XtentisPort port) {
         WSBoolean isXmlDB = port.isXmlDB();
-        return !isXmlDB.is_true();
+        return !isXmlDB.isTrue();
     }
 }

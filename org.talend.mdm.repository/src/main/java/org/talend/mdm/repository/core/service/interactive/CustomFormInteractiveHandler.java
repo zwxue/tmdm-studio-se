@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
@@ -60,7 +58,8 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
         return Messages._CustomeLayout;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    @Override
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             port.putCustomForm(new WSPutCustomForm((WSCustomForm) wsObj));
             return true;
@@ -68,10 +67,8 @@ public class CustomFormInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-
-
-
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    @Override
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         IRepositoryViewObject viewObj = cmd.getViewObject();
         Item item = viewObj.getProperty().getItem();
         MDMServerObject serverObject = ((MDMServerObjectItem) item).getMDMServerObject();

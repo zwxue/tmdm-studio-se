@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -42,7 +40,8 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
         return Messages.DataContainerInteractiveHandler_title;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    @Override
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             WSPutDataCluster wsPutDataCluster = new WSPutDataCluster((WSDataCluster) wsObj);
             port.putDataCluster(wsPutDataCluster);
@@ -52,7 +51,7 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         WSDataClusterPK pk = new WSDataClusterPK();
         String name = cmd.getObjName();
         pk.setPk(name);
@@ -60,6 +59,5 @@ public class DataContainerInteractiveHandler extends AbstractInteractiveHandler 
         TreeObjectUtil.deleteSpecificationFromAttachedRole(port, name, EXtentisObjects.DataCluster.getName());
         return true;
     }
-
 
 }

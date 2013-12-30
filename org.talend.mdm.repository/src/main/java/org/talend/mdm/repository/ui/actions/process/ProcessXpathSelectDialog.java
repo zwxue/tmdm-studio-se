@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.actions.process;
 
 import java.awt.Panel;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -64,6 +63,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 /**
  * @deprecated replace by XpathSelectDialog2, can be deleted.
  */
+@Deprecated
 public class ProcessXpathSelectDialog extends Dialog {
 
     // private static Log log = LogFactory.getLog(XpathSelectDialog.class);
@@ -125,23 +125,27 @@ public class ProcessXpathSelectDialog extends Dialog {
         this.site = site;
         this.isMulti = isMulti;
         this.isAbsolutePath = isAbsolutePath;
-        if (dataModelName != null)
+        if (dataModelName != null) {
             this.dataModelName = dataModelName;// default dataModel
-        if (this.site == null)
+        }
+        if (this.site == null) {
             this.site = ServerView.show().getSite();
+        }
     }
 
     public String getEntityName() {
 
-        if (xpath == null || "".equals(xpath))//$NON-NLS-1$
+        if (xpath == null || "".equals(xpath)) {
             return "";//$NON-NLS-1$
+        }
 
         String[] parts = xpath.split("/");//$NON-NLS-1$
 
         for (String eachPart : parts) {
 
-            if ("".equals(eachPart))//$NON-NLS-1$
+            if ("".equals(eachPart)) {
                 continue;
+            }
 
             return eachPart;
         }
@@ -158,23 +162,26 @@ public class ProcessXpathSelectDialog extends Dialog {
         for (int i = 0; i < items.length; i++) {
             item = items[i];
             XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
-            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration))
+            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration)) {
                 continue;
+            }
             do {
                 component = (XSDConcreteComponent) item.getData();
                 if (component instanceof XSDParticle) {
-                    if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
+                    if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration) {
                         path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
+                    }
                 } else if (component instanceof XSDElementDeclaration) {
                     path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;//$NON-NLS-1$//$NON-NLS-2$
                 }
                 item = item.getParentItem();
 
             } while (item != null);
-            if (i == 0)
+            if (i == 0) {
                 totalXpath = path;
-            else
+            } else {
                 totalXpath += "&" + path;//$NON-NLS-1$
+            }
             path = "";//$NON-NLS-1$
         }// for(i=0
         if (context != null && conceptName != null) {
@@ -195,6 +202,7 @@ public class ProcessXpathSelectDialog extends Dialog {
         return totalXpath;
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
         parent.getShell().setText(this.title);
         Composite composite = (Composite) super.createDialogArea(parent);
@@ -226,7 +234,7 @@ public class ProcessXpathSelectDialog extends Dialog {
             }
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                changeDomTree(tree, filterText.getText());//$NON-NLS-1$
+                changeDomTree(tree, filterText.getText());
             }
         });
         schemaLabel = new Label(composite, SWT.NONE);
@@ -244,10 +252,11 @@ public class ProcessXpathSelectDialog extends Dialog {
         filterText = new Text(composite, SWT.BORDER);
         filterText.setEditable(true);
         filterText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        if (conceptName != null)
+        if (conceptName != null) {
             filterText.setText(conceptName);
-        else
+        } else {
             filterText.setText("");//$NON-NLS-1$
+        }
         filterText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
@@ -261,10 +270,11 @@ public class ProcessXpathSelectDialog extends Dialog {
             domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         }
         int index = avaiList.indexOf(dataModelName);
-        if (index < 0)
+        if (index < 0) {
             dataModelCombo.select(0);
-        else
+        } else {
             dataModelCombo.select(index);
+        }
 
         changeDomTree(tree, filterText.getText());
 
@@ -276,8 +286,9 @@ public class ProcessXpathSelectDialog extends Dialog {
 
     private void changeDomTree(final TreeParent pObject, String filter) {
         String modelDisplay = dataModelCombo.getText();
-        if (modelDisplay.length() == 0)
+        if (modelDisplay.length() == 0) {
             return;
+        }
         this.dataModelName = modelDisplay;
         // this.selectedDataModelName = modelDisplay;
         // xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
@@ -290,11 +301,8 @@ public class ProcessXpathSelectDialog extends Dialog {
             // log.error(e3.getMessage(), e3);
         }
         WSDataModel wsDataModel = null;
-        try {
-            wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
-        } catch (RemoteException e2) {
-            // log.error(e2.getMessage(), e2);
-        }
+        wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+
         try {
             // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
             String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
@@ -326,24 +334,28 @@ public class ProcessXpathSelectDialog extends Dialog {
         domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
         domViewer.setSorter(new ViewerSorter() {
 
+            @Override
             public int category(Object element) {
                 // we want facets before Base TypeDefinitions in
                 // SimpleTypeDefinition
-                if (element instanceof XSDFacet)
+                if (element instanceof XSDFacet) {
                     return 100;
+                }
                 // unique keys after element declarations and before other keys
                 if (element instanceof XSDIdentityConstraintDefinition) {
                     XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
                         return 300;
-                    else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
+                    } else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL)) {
                         return 301;
-                    else
+                    } else {
                         return 302;
+                    }
                 }
                 return 200;
             }
 
+            @Override
             public int compare(Viewer theViewer, Object e1, Object e2) {
                 int cat1 = category(e1);
                 int cat2 = category(e2);
@@ -353,6 +365,7 @@ public class ProcessXpathSelectDialog extends Dialog {
         domViewer.setInput(site);
     }
 
+    @Override
     protected Control createButtonBar(Composite parent) {
         Control btnBar = super.createButtonBar(parent);
         getButton(IDialogConstants.OK_ID).setText(Messages.ProcessXpathXX_Add);

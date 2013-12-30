@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.talend.core.model.properties.Item;
@@ -48,7 +46,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean deploy(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean deploy(AbstractDeployCommand cmd) throws XtentisException {
         return processImage(cmd, false);
     }
 
@@ -58,7 +56,7 @@ public class ResourceInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean remove(AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean remove(AbstractDeployCommand cmd) throws XtentisException {
         return processImage(cmd, true);
     }
 

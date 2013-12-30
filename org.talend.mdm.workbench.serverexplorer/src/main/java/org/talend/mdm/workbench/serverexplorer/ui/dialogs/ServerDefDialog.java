@@ -14,7 +14,7 @@ package org.talend.mdm.workbench.serverexplorer.ui.dialogs;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.RemoteException;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -251,7 +251,7 @@ public class ServerDefDialog extends TitleAreaDialog {
     }
 
     private void updateUniverseValues() {
-        if (newUserName.equals("") || newPassword.equals("")) {
+        if (newUserName.equals("") || newPassword.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
             return;
         }
 
@@ -259,10 +259,10 @@ public class ServerDefDialog extends TitleAreaDialog {
 
             try {
                 XtentisPort port = Util.getPort(new URL(newUrl), null, newUserName, newPassword);
-                WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
+                List<WSUniversePK> universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
                 universeCombo.removeAll();
                 universeCombo.add(""); //$NON-NLS-1$
-                if (universePKs != null && universePKs.length > 0) {
+                if (universePKs != null && universePKs.size() > 0) {
                     for (WSUniversePK universePK : universePKs) {
                         String universe = universePK.getPk();
                         universeCombo.add(universe);
@@ -348,10 +348,8 @@ public class ServerDefDialog extends TitleAreaDialog {
                 ServerDefService.checkMDMConnection(tmpServerDef.getDecryptedServerDef());
                 setMessage(Messages.ServerExplorer_ConnectSuccessful);
             } catch (XtentisException e) {
-                setErrorMessage(Messages.ServerExplorer_ConnectSSLFailed);
-            } catch (MalformedURLException e) {
                 setErrorMessage(Messages.ServerExplorer_ConnectFailed);
-            } catch (RemoteException e) {
+            } catch (MalformedURLException e) {
                 setErrorMessage(Messages.ServerExplorer_ConnectFailed);
             }
         }

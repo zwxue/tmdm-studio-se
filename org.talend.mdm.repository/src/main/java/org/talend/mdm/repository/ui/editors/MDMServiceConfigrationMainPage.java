@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
-
-
-import java.rmi.RemoteException;
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,27 +24,30 @@ import org.talend.mdm.repository.model.mdmserverobject.WSServiceConfigurationE;
 import org.talend.mdm.repository.model.mdmserverobject.WSServicePutConfigurationE;
 
 import com.amalto.workbench.editors.ServiceConfigrationMainPage;
-import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
 import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
-import com.amalto.workbench.webservices.WSServiceConfiguration;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
-import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
  * DOC jsxie class global comment. Detailled comment
  */
+/**
+ * created by HHB on 2013-12-20 this class is not used, the super class ServiceConfigurationMainPage instead of this
+ * class
+ * 
+ */
+@Deprecated
 public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage {
 
     private static Log log = LogFactory.getLog(MDMServiceConfigrationMainPage.class);
-    
+
     public MDMServiceConfigrationMainPage(FormEditor editor) {
         super(editor);
     }
 
-
-    protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
+    @Override
+    protected WSServiceGetDocument getServiceDocument(String jndiName) {
         return RepositoryWebServiceAdapter.getServiceDocument(jndiName);
     }
 
@@ -86,69 +87,71 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
                 serviceConfigurationsText.setText(configContent);
                 errorLabel.setText("");//$NON-NLS-1$
             }
-        } catch (RemoteException e1) {
+        } catch (WebServiceException e1) {
             log.error(e1.getMessage(), e1);
         }
 
     }
 
+    @Override
     protected void saveChanges() {
 
-        XObjectEditorInput2 editorInput = (XObjectEditorInput2) getEditorInput();
-
-        TreeObject xobject = (TreeObject) editorInput.getModel();
-        WSServiceConfiguration object = (WSServiceConfiguration) xobject.getWsObject();
-
-        for (WSServicePutConfiguration config : object.getServicePutConfigurations()) {
-            if (config.getJndiName().equals(serviceNameCombo.getText())) {
-                config.setConfiguration(serviceConfigurationsText.getText());
-            }
-        }
-
-        doSaveChanges();
+        // XObjectEditorInput2 editorInput = (XObjectEditorInput2) getEditorInput();
+        //
+        // TreeObject xobject = (TreeObject) editorInput.getModel();
+        // WSServiceConfiguration object = (WSServiceConfiguration) xobject.getWsObject();
+        //
+        // for (WSServicePutConfiguration config : object.getServicePutConfigurations()) {
+        // if (config.getJndiName().equals(serviceNameCombo.getText())) {
+        // config.setConfiguration(serviceConfigurationsText.getText());
+        // }
+        // }
+        //
+        // doSaveChanges();
     }
 
+    @Override
     protected void setForServiceNameCombo() {
         for (String item : getComboList()) {
             serviceNameCombo.add(item);
         }
     }
 
+    @Override
     protected void doSaveChanges() {
 
     }
 
+    @Override
     protected String getContentsCheckResult() {
 
-        if (serviceNameCombo.getText().trim().length() == 0)
+        if (serviceNameCombo.getText().trim().length() == 0) {
             return CHECKMSG_NOSELECTION;
+        }
 
         WSCheckServiceConfigResponse result;
-        try {
-            port = getPort();
-            if (port == null)
-                return null;
-            result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
-                    serviceConfigurationsText.getText()));
-
-            if (result.getCheckResult()) {
-                return CHECKMSG_SUCCESSFULCONN;
-            } else {
-                return CHECKMSG_ERRORCONN;
-            }
-        } catch (RemoteException e) {
-            log.error(e.getMessage(), e);
-            return e.getLocalizedMessage();
+        port = getPort();
+        if (port == null) {
+            return null;
         }
+        result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
+                serviceConfigurationsText.getText()));
+
+        if (result.isCheckResult()) {
+            return CHECKMSG_SUCCESSFULCONN;
+        } else {
+            return CHECKMSG_ERRORCONN;
+        }
+
     }
 
+    @Override
     protected String getDoc() {
 
         WSServiceGetDocument document = null;
         try {
             document = getServiceDocument(serviceNameCombo.getText().trim());
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
         }
 
@@ -157,13 +160,13 @@ public class MDMServiceConfigrationMainPage extends ServiceConfigrationMainPage 
 
     }
 
+    @Override
     protected String getDesc() {
 
         WSServiceGetDocument document = null;
         try {
             document = getServiceDocument(serviceNameCombo.getText().trim());
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
+        } catch (WebServiceException e) {
             log.error(e.getMessage(), e);
         }
         String desc = document.getDescription();

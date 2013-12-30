@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.core.service;
 
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -184,7 +185,7 @@ public class DeployService {
                 updateServerConsistencyStatus(serverDef, mainStatus);
             } catch (XtentisException e) {
                 log.error(e.getMessage(), e);
-            } catch (RemoteException e) {
+            } catch (WebServiceException e) {
                 log.error(e.getMessage(), e);
             }
             //
@@ -201,7 +202,7 @@ public class DeployService {
     }
 
     public void updateServerConsistencyStatus(MDMServerDef serverDef, IStatus mainStatus) throws XtentisException,
-            RemoteException {
+            WebServiceException {
         if (mainStatus.isMultiStatus()) {
             Set<IRepositoryViewObject> viewObjs = new HashSet<IRepositoryViewObject>();
             for (IStatus childStatus : mainStatus.getChildren()) {
@@ -237,7 +238,7 @@ public class DeployService {
     }
 
     private void updateServerConsistencyStatus(MDMServerDef serverDef, Collection<IRepositoryViewObject> viewObjs)
-            throws XtentisException, RemoteException {
+            throws XtentisException, WebServiceException {
         ConsistencyService consistencyService = ConsistencyService.getInstance();
         for (IRepositoryViewObject viewObj : viewObjs) {
             consistencyService.updateDigestValue(serverDef, viewObj);
@@ -273,11 +274,10 @@ public class DeployService {
      * @param viewObjs
      * @param selectededCommands
      * @return
-     * @throws RemoteException
      * @throws XtentisException
      */
     public ConsistencyCheckResult checkConsistency(MDMServerDef serverDef, List<IRepositoryViewObject> viewObjs,
-            List<AbstractDeployCommand> selectededCommands) throws RemoteException, XtentisException {
+            List<AbstractDeployCommand> selectededCommands) throws XtentisException {
 
         Map<IRepositoryViewObject, Integer> viewObCmdOpjMap = new HashMap<IRepositoryViewObject, Integer>();
         for (AbstractDeployCommand cmd : selectededCommands) {
@@ -349,11 +349,7 @@ public class DeployService {
         if (serverDef != null) {
 
             if (!serverDef.isEnabled()) {
-                MessageDialog
-                        .openWarning(
-                                shell,
-                                null,
-                                Messages.DeployService_CanNotDeployToDisabledServer);
+                MessageDialog.openWarning(shell, null, Messages.DeployService_CanNotDeployToDisabledServer);
                 return;
             }
             List<IRepositoryViewObject> viewObjs = getAssociatedObjects(viewObj);

@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.core.datacontent;
 
 import java.io.File;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -36,9 +35,8 @@ public class DataProcessRuleFactory {
      * @param port
      * @param dataClusterName
      * @return
-     * @throws RemoteException
      */
-    public static DataProcessRule createProcessRouterFromRemote(XtentisPort port, String dataClusterName) throws RemoteException {
+    public static DataProcessRule createProcessRouterFromRemote(XtentisPort port, String dataClusterName) {
 
         WSGetConceptsInDataCluster param = new WSGetConceptsInDataCluster(new WSDataClusterPK(dataClusterName));
         WSStringArray concepts = port.getConceptsInDataCluster(param);

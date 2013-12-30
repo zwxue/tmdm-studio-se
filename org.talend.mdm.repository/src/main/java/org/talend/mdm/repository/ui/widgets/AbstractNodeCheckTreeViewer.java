@@ -52,7 +52,7 @@ import org.talend.mdm.repository.utils.RepositoryResourceUtil;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
+import com.amalto.workbench.webservices.WSVersioningUniverseVersions.TagStructure;
 import com.amalto.workbench.widgets.FilteredCheckboxTree;
 import com.amalto.workbench.widgets.VersionTagWidget;
 
@@ -73,7 +73,7 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     protected FilteredCheckboxTree filteredCheckboxTree;
 
-    private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
+    private ArrayList<TagStructure> hisEntries;
 
     protected boolean isTagEditable;
 
@@ -438,7 +438,7 @@ public abstract class AbstractNodeCheckTreeViewer {
 
     }
 
-    public void refreshHistoryTable(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
+    public void refreshHistoryTable(ArrayList<TagStructure> hisEntries) {
         this.vwidget.refreshData(hisEntries);
     }
 
@@ -455,7 +455,7 @@ public abstract class AbstractNodeCheckTreeViewer {
         viewer = filteredCheckboxTree.getViewer();
     }
 
-    public void setHisEntries(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
+    public void setHisEntries(ArrayList<TagStructure> hisEntries) {
 
         this.hisEntries = hisEntries;
 

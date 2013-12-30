@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
-import java.rmi.RemoteException;
 import java.util.Arrays;
 
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +37,7 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
 
     /**
      * DOC hbhong RoutingRuleMainPage2 constructor comment.
-     *
+     * 
      * @param editor
      */
     public RoutingRuleMainPage2(FormEditor editor) {
@@ -46,7 +45,7 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
     }
 
     @Override
-    protected void initServiceNameCombo() throws RemoteException, XtentisException {
+    protected void initServiceNameCombo() throws XtentisException {
         for (String name : RepositoryWebServiceAdapter.getServiceNames()) {
             serviceNameCombo.add(name);
         }
@@ -61,7 +60,6 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
         ExternalInfoHolder<?> mdmServerInfoHolder = RepositoryExternalInfoHolder.getAllMDMServerInfoHolder2(null);
         ExternalInfoHolder<?> workflowInfoHolder = RepositoryExternalInfoHolder.getAllWorkflowInfoHolder(null);
         ExternalInfoHolder<?> allDataModelHolderProxy = RepositoryExternalInfoHolder.getAllDataModelInfoHolderProxy(null);
-
 
         initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });//$NON-NLS-1$
         initExternalInfoHolderForEachType("smtp", new ExternalInfoHolder<?>[] { allProcessNamesHolder });//$NON-NLS-1$
@@ -89,7 +87,7 @@ public class RoutingRuleMainPage2 extends RoutingRuleMainPage {
     }
 
     @Override
-    protected WSServiceGetDocument getServiceDocument(String jndiName) throws RemoteException {
+    protected WSServiceGetDocument getServiceDocument(String jndiName) {
         return RepositoryWebServiceAdapter.getServiceDocument(jndiName);
     }
 

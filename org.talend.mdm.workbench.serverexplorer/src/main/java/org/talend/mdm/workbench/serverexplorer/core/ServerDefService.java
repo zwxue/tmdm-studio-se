@@ -14,7 +14,6 @@ package org.talend.mdm.workbench.serverexplorer.core;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,8 +36,6 @@ import org.talend.mdm.repository.model.mdmmetadata.MDMServerDef;
 import org.talend.mdm.repository.model.mdmproperties.MDMServerDefItem;
 import org.talend.mdm.repository.model.mdmproperties.MdmpropertiesFactory;
 import org.talend.repository.model.IProxyRepositoryFactory;
-
-import sun.security.validator.ValidatorException;
 
 import com.amalto.workbench.service.ILegendServerDefService;
 import com.amalto.workbench.utils.Util;
@@ -254,22 +251,22 @@ public class ServerDefService implements ILegendServerDefService {
      * @return
      * @throws Exception
      */
-    public static void checkMDMConnection(MDMServerDef serverDef) throws MalformedURLException, XtentisException, RemoteException {
+    public static void checkMDMConnection(MDMServerDef serverDef) throws MalformedURLException, XtentisException {
         checkMDMConnection(serverDef.getUrl(), serverDef.getUser(), serverDef.getPasswd(), serverDef.getUniverse());
     }
 
     public static void checkMDMConnection(String endpointaddress, String username, String password, String universe)
-            throws MalformedURLException, XtentisException, RemoteException {
+            throws MalformedURLException, XtentisException {
         try {
             XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
             port.ping(new WSPing("ServerExplorer")); //$NON-NLS-1$
-        } catch (RemoteException e) {
-            String msg = e.getCause().getMessage();
-            if (msg.contains(ValidatorException.class.getName())) {
-                throw new XtentisException(msg.substring(msg.indexOf(ValidatorException.class.getName())));
-            } else {
-                throw e;
+        } catch (javax.xml.ws.WebServiceException e) {
+            XtentisException xtentisException = Util.convertWebServiceException(e);
+            if (xtentisException != null) {
+                throw xtentisException;
             }
+            log.error(e.getMessage(), e);
+
         }
 
     }
@@ -293,8 +290,6 @@ public class ServerDefService implements ILegendServerDefService {
             XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
             WSString ret = port.refreshCache(new WSRefreshCache("ALL"));//$NON-NLS-1$
             return ret.getValue();
-        } catch (RemoteException e) {
-            log.debug(e.getMessage(), e);
         } catch (MalformedURLException e) {
             log.error(e.getMessage(), e);
         } catch (XtentisException e) {

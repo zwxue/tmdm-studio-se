@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.wizards.view;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,7 +66,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
 
     /**
      * DOC hbhong AddBrowseItemsWizardR constructor comment.
-     *
+     * 
      * @param launchPage
      * @param list
      */
@@ -81,7 +80,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
     }
 
     @Override
-    protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) throws RemoteException {
+    protected void modifyRolesWithAttachedBrowseItem(String browseItem, List<Line> roles) {
         for (Line line : roles) {
             List<KeyValue> keyValues = line.keyValues;
             String roleName = keyValues.get(0).value;
@@ -140,8 +139,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             if (decl.getAnnotation() != null) {
                 labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
             }
-            if (labels.size() == 0)
-             {
+            if (labels.size() == 0) {
                 labels.put("EN", decl.getName());//$NON-NLS-1$
             }
             for (String lan : labels.keySet()) {
@@ -174,10 +172,8 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
             log.error(e.getMessage(), e);
             return idList;
         }
-        String[] ids = wsConceptKey.getFields();
-        for (int i = 0; i < ids.length; i++) {
-            String id = ids[i];
-
+        List<String> ids = wsConceptKey.getFields();
+        for (String id : ids) {
             // need to care about more case
             if (id.startsWith("/")) {//$NON-NLS-1$
                 id = id.substring(1);
@@ -196,8 +192,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
         }
         if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             String labelValue = null;
-            List childrenList = Util.getComplexTypeDefinitionChildren(
-                    (XSDComplexTypeDefinition) decl.getTypeDefinition(), true);
+            List childrenList = Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) decl.getTypeDefinition(), true);
             if (childrenList == null) {
                 return fields;
             }
@@ -233,7 +228,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
     }
 
     @Override
-    protected void newBrowseItemView(String browseItem) throws RemoteException {
+    protected void newBrowseItemView(String browseItem) {
         if (toRecreateBrowserView(browseItem)) {
             IRepositoryViewObject viewObject = RepositoryResourceUtil.findViewObjectByName(IServerObjectRepositoryType.TYPE_VIEW,
                     browseItem);
@@ -248,8 +243,7 @@ public class AddBrowseItemsWizardR extends AddBrowseItemsWizard {
                     ProxyRepositoryFactory.getInstance().deleteObjectPhysical(viewObject);
                 } catch (PersistenceException e) {
                     log.error(e.getMessage(), e);
-                    RemoteException rx = new RemoteException(e.getMessage());
-                    throw rx;
+                    return;
                 }
             }
 

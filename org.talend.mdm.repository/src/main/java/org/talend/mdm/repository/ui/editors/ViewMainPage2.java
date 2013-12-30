@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.ui.editors;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
@@ -35,7 +34,6 @@ import com.amalto.workbench.widgets.TisTableViewer;
  */
 public class ViewMainPage2 extends ViewMainPage {
 
-
     /**
      * DOC hbhong ViewMainPage2 constructor comment.
      * 
@@ -46,7 +44,7 @@ public class ViewMainPage2 extends ViewMainPage {
     }
 
     @Override
-    protected void initProcessCombo() throws RemoteException, XtentisException {
+    protected void initProcessCombo() throws XtentisException {
         List<String> processNames = RepositoryQueryService.findAllProcessNames();
         cboProcessList.setItems(processNames.toArray(new String[0]));
     }
@@ -67,8 +65,7 @@ public class ViewMainPage2 extends ViewMainPage {
     }
 
     @Override
-    protected WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws RemoteException,
-            XtentisException {
+    protected WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
         return RepositoryResourceUtil.getBusinessConceptKey(businessConcepKey);
     }
 

@@ -13,8 +13,10 @@
 package org.talend.mdm.repository.utils;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.ecore.EClass;
@@ -30,6 +32,17 @@ public class EMFClassUtil {
     private List<EClass> definedClass = new LinkedList<EClass>();
 
     private EMFClassUtil() {
+        initFixedMap();
+    }
+
+    Map<String, String> fixedNamedMap = new HashMap<String, String>();
+
+    private void initFixedMap() {
+        fixedNamedMap.put("WSMenuEntryDescriptions", "WSMenuMenuEntriesDescriptionsE");
+        fixedNamedMap.put("", "");
+        fixedNamedMap.put("", "");
+        fixedNamedMap.put("", "");
+        fixedNamedMap.put("", "");
     }
 
     private static EMFClassUtil instance = new EMFClassUtil();
@@ -43,7 +56,30 @@ public class EMFClassUtil {
         return instance;
     }
 
-    public List<EClass> getAllEClass() {
+    public EClass guessEClassByClassName(Class cls) {
+        String simpleName = cls.getSimpleName();
+        String eClassName = null;
+        Class enclosingClass = cls.getEnclosingClass();
+        while (enclosingClass != null) {
+            String enclosingName = enclosingClass.getSimpleName();
+            simpleName = enclosingName + simpleName;
+            enclosingClass = enclosingClass.getEnclosingClass();
+        }
+        eClassName = fixedNamedMap.get(simpleName);
+        if (eClassName == null) {
+            eClassName = simpleName + "E"; //$NON-NLS-1$
+        }
+        for (EClass eCls : getAllEClass()) {
+            if (eCls.getName().equals(eClassName)) {
+                //                System.out.println(">>For class:" + cls.getName() + " (Found:)=> " + eCls.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+                return eCls;
+            }
+        }
+        log.debug(">>For class:" + simpleName + " Not Found corresponding EClass "); //$NON-NLS-1$//$NON-NLS-2$
+        return null;
+    }
+
+    private List<EClass> getAllEClass() {
         if (definedClass.isEmpty()) {
             Class cls = MdmserverobjectPackage.Literals.class;
             for (Field field : cls.getDeclaredFields()) {

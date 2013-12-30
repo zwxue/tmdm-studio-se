@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -42,7 +40,8 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.TransformerInteractiveHandler_label;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    @Override
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             port.putTransformerV2(new WSPutTransformerV2((WSTransformerV2) wsObj));
             return true;
@@ -50,7 +49,8 @@ public class TransformerInteractiveHandler extends AbstractInteractiveHandler {
         return false;
     }
 
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    @Override
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         WSTransformerV2PK pk = new WSTransformerV2PK();
         String name = cmd.getObjName();
         pk.setPk(name);

@@ -19,7 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -113,7 +113,7 @@ import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 
 /**
  * DOC hbhong class global comment. Detailled comment <br/>
- *
+ * 
  */
 public class RepositoryResourceUtil {
 
@@ -843,11 +843,9 @@ public class RepositoryResourceUtil {
         if (viewObj == null) {
             throw new IllegalArgumentException();
         }
-        if (viewObj instanceof RepositoryViewObject
+        if (viewObj instanceof IRepositoryViewObject
                 && !(viewObj instanceof FolderRepositoryObject || viewObj instanceof WSRootRepositoryObject)) {
-
             boolean reload = false;
-
             Property property = viewObj.getProperty();
             if (property != null) {
                 Item item = property.getItem();
@@ -1025,7 +1023,7 @@ public class RepositoryResourceUtil {
 
     /**
      * convert viewObj's children to RepositoryNode type and add to node as its children
-     *
+     * 
      * @param viewObj
      * @param node RepositoryNode Object corresponding to viewObj
      */
@@ -1162,7 +1160,7 @@ public class RepositoryResourceUtil {
     public static final String PROP_LAST_SERVER_DEF = "lastServerDef"; //$NON-NLS-1$
 
     /**
-     *
+     * 
      * @param viewObj
      * @return A decrypted serverDef
      */
@@ -1175,7 +1173,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     *
+     * 
      * @param item
      * @return A decrypted serverDef
      */
@@ -1199,7 +1197,7 @@ public class RepositoryResourceUtil {
     }
 
     /**
-     *
+     * 
      * @param item
      * @param def need A decrypted serverDef
      */
@@ -1288,8 +1286,7 @@ public class RepositoryResourceUtil {
         return false;
     }
 
-    public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws RemoteException,
-            XtentisException {
+    public static WSConceptKey getBusinessConceptKey(WSGetBusinessConceptKey businessConcepKey) throws XtentisException {
         String pk = businessConcepKey.getWsDataModelPK().getPk();
         String concept = businessConcepKey.getConcept();
         WSDataModelE dataModel = RepositoryQueryService.findDataModelByName(pk);
@@ -1305,13 +1302,12 @@ public class RepositoryResourceUtil {
                         key.setSelector(selector.getValue());
                         //
                         EList<XSDXPathDefinition> fields = idDef.getFields();
-                        String[] keyFields = new String[fields.size()];
-                        int i = 0;
+                        List<String> keyFields = new ArrayList<String>();
                         for (XSDXPathDefinition pathDef : fields) {
-                            keyFields[i] = pathDef.getValue();
-                            i++;
+                            keyFields.add(pathDef.getValue());
                         }
-                        key.setFields(keyFields);
+                        key.getFields().clear();
+                        key.getFields().addAll(keyFields);
                         return key;
                     }
                 }

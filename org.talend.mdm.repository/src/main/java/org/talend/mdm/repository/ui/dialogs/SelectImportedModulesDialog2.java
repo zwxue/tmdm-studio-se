@@ -13,7 +13,6 @@
 package org.talend.mdm.repository.ui.dialogs;
 
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -35,31 +34,30 @@ import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
- * DOC Administrator  class global comment. Detailled comment
+ * DOC Administrator class global comment. Detailled comment
  */
 public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
 
-	MDMServerDef serverDef;
+    MDMServerDef serverDef;
 
-	public SelectImportedModulesDialog2(Shell parentShell, TreeObject treeObj,
-			String title) {
-		super(parentShell, treeObj, title);
+    public SelectImportedModulesDialog2(Shell parentShell, TreeObject treeObj, String title) {
+        super(parentShell, treeObj, title);
 
-	}
+    }
 
     @Override
     protected XtentisPort getPort() throws XtentisException {
         SelectServerDefDialog dialog = new SelectServerDefDialog(getShell());
-            if (dialog.open() == IDialogConstants.OK_ID) {
-                MDMServerDef serverDef = dialog.getSelectedServerDef();
-                this.serverDef = serverDef;
-                return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
-            }
+        if (dialog.open() == IDialogConstants.OK_ID) {
+            MDMServerDef serverDef = dialog.getSelectedServerDef();
+            this.serverDef = serverDef;
+            return RepositoryWebServiceAdapter.getXtentisPort(serverDef);
+        }
         return null;
     }
 
     @Override
-    protected boolean resolveSchemaList(List<String> schemaList) throws XtentisException, RemoteException {
+    protected boolean resolveSchemaList(List<String> schemaList) throws XtentisException {
         List<String> newList = RepositoryQueryService.findAllDataModelNames();
         for (String string : newList) {
             schemaList.add(string);
@@ -67,50 +65,44 @@ public class SelectImportedModulesDialog2 extends SelectImportedModulesDialog {
 
         return true;
     }
-    
-    
+
     @Override
-	protected URL getSourceURL(String path) {
-    	if(null == path){
-    		return null;
-    	}
-    	if(path.startsWith("type:")){
-			String modelName = path.substring(5);
-			IRepositoryViewObject rvobject = RepositoryResourceUtil
-					.findViewObjectByName(
-							IServerObjectRepositoryType.TYPE_DATAMODEL,
-							modelName);
-			if (null == rvobject) {
-				return null;
-			}
-			String prjLabel = rvobject.getProjectLabel();
+    protected URL getSourceURL(String path) {
+        if (null == path) {
+            return null;
+        }
+        if (path.startsWith("type:")) {
+            String modelName = path.substring(5);
+            IRepositoryViewObject rvobject = RepositoryResourceUtil.findViewObjectByName(
+                    IServerObjectRepositoryType.TYPE_DATAMODEL, modelName);
+            if (null == rvobject) {
+                return null;
+            }
+            String prjLabel = rvobject.getProjectLabel();
 
-			String parentPath = buildParentPath(rvobject);
-			if (!parentPath.startsWith("/")) {
-				parentPath = "/" + parentPath;
-			}
-			String sep = "" + IPath.SEPARATOR; //$NON-NLS-1$
+            String parentPath = buildParentPath(rvobject);
+            if (!parentPath.startsWith("/")) {
+                parentPath = "/" + parentPath;
+            }
+            String sep = "" + IPath.SEPARATOR; //$NON-NLS-1$
 
-			String fileName = "file:///"
-					+ ResourcesPlugin.getWorkspace().getRoot().getLocation()
-							.toOSString()
-					+ sep
-					+ prjLabel.toUpperCase()
-					+ sep
-					+ "MDM" + sep + "datamodel" + parentPath + rvobject.getLabel() + "_" + rvobject.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
-			return super.getSourceURL(fileName);
-    	}else{
-    		return super.getSourceURL(path);
-    	}
-	}
+            String fileName = "file:///" + ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + sep
+                    + prjLabel.toUpperCase() + sep
+                    + "MDM" + sep + "datamodel" + parentPath + rvobject.getLabel() + "_" + rvobject.getVersion() + ".xsd"; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ //$NON-NLS-4$
+            return super.getSourceURL(fileName);
+        } else {
+            return super.getSourceURL(path);
+        }
+    }
 
     private String buildParentPath(IRepositoryViewObject viewObj) {
         String path = "" + IPath.SEPARATOR; //$NON-NLS-1$
 
         ItemState state = viewObj.getProperty().getItem().getState();
         String itemPath = state.getPath();
-        if (!itemPath.isEmpty())
+        if (!itemPath.isEmpty()) {
             path = itemPath + path;
+        }
 
         return path;
     }

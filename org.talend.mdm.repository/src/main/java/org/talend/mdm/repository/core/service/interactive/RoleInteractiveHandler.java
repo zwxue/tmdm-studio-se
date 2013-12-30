@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.mdm.repository.core.service.interactive;
 
-import java.rmi.RemoteException;
-
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.mdm.repository.core.IServerObjectRepositoryType;
 import org.talend.mdm.repository.core.command.deploy.AbstractDeployCommand;
@@ -27,6 +25,7 @@ import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.XtentisPort;
+
 /**
  * DOC hbhong class global comment. Detailled comment
  */
@@ -41,7 +40,8 @@ public class RoleInteractiveHandler extends AbstractInteractiveHandler {
         return Messages.RoleInteractiveHandler_label;
     }
 
-    public boolean doDeployWSObject(XtentisPort port, Object wsObj) throws RemoteException {
+    @Override
+    public boolean doDeployWSObject(XtentisPort port, Object wsObj) {
         if (wsObj != null) {
             port.putRole(new WSPutRole((WSRole) wsObj));
             return true;
@@ -50,7 +50,7 @@ public class RoleInteractiveHandler extends AbstractInteractiveHandler {
     }
 
     @Override
-    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws RemoteException, XtentisException {
+    public boolean doRemove(XtentisPort port, AbstractDeployCommand cmd) throws XtentisException {
         WSRolePK pk = new WSRolePK();
         String name = cmd.getObjName();
         pk.setPk(name);

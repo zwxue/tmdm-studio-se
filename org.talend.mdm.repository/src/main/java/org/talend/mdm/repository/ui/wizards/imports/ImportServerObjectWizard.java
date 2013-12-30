@@ -21,7 +21,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,6 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -733,7 +734,7 @@ public class ImportServerObjectWizard extends Wizard {
                 // Data Models
                 TreeParent models = new TreeParent(Messages.ImportServerObjectWizard_customForm, parent, TreeObject.CUSTOM_FORM,
                         null, null);
-                WSCustomFormPK[] xdmPKs = null;
+                List<WSCustomFormPK> xdmPKs = null;
 
                 xdmPKs = port.getCustomFormPKs(new WSGetCustomFormPKs("")).getWsCustomFormPK(); //$NON-NLS-1$
 
@@ -746,7 +747,7 @@ public class ImportServerObjectWizard extends Wizard {
                             wsobj = port.getCustomForm(new WSGetCustomForm(xdmPK));
                             TreeObject obj = new TreeObject(wsobj.getName(), parent, TreeObject.CUSTOM_FORM, xdmPK, wsobj);
                             models.addChild(obj);
-                        } catch (RemoteException e) {
+                        } catch (WebServiceException e) {
                             log.error(e.getMessage(), e);
                         }
                     }
@@ -898,12 +899,12 @@ public class ImportServerObjectWizard extends Wizard {
                                 // get Version
                                 XtentisPort port;
                                 port = Util.getPort(new URL(url), null, user, password);
-                                WSUniversePK[] universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
+                                List<WSUniversePK> universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
 
                                 CCombo universeCombo = comboVersion.getCombo();
                                 universeCombo.removeAll();
                                 universeCombo.add(""); //$NON-NLS-1$
-                                if (universePKs != null && universePKs.length > 0) {
+                                if (universePKs != null && universePKs.size() > 0) {
                                     for (WSUniversePK universePK : universePKs) {
                                         String universe = universePK.getPk();
                                         universeCombo.add(universe);
